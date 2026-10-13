@@ -27,6 +27,31 @@ public sealed class PantheonProbe : MonoBehaviour {
     private Hkmp.Game.GameManager engine;
     private EntityManager manager;
     private int attemptNumber;
+    private int pendingCameraPositions;
+    private readonly Queue<string> cameraHistory=new();
+    private void CameraHistory(string value) {
+        if(cameraHistory.Count>=256)cameraHistory.Dequeue();
+        cameraHistory.Enqueue(DateTime.UtcNow.ToString("O")+" "+value);
+    }
+    private void CameraPositionTrace(string value) {
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_RING")=="1")CameraHistory(value);
+        else if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_TRACE")=="1")Mark(value);
+    }
+    private IEnumerator TrackCameraPosition(IEnumerator routine) {
+        pendingCameraPositions++;
+        CameraPositionTrace("CAMERA POSITION begin scene="+GameManager.instance.sceneName);
+        try {while(routine.MoveNext())yield return routine.Current;}
+        finally {pendingCameraPositions--;CameraPositionTrace("CAMERA POSITION end scene="+GameManager.instance.sceneName+" mode="+GameCameras.instance.cameraController.mode);}
+    }
+    private void CameraTrace(string label) {
+        var camera=GameCameras.instance.cameraController;var hero=HeroController.instance;
+        var subscribers=Field<Delegate>(hero,"heroInPosition")?.GetInvocationList()??Array.Empty<Delegate>();
+        Mark("CAMERA "+label+" mode="+camera.mode+" enabled="+camera.enabled+" active="+camera.gameObject.activeInHierarchy+" pending="+pendingCameraPositions+
+            " input="+hero.acceptingInput+" timescale="+Time.timeScale+" game="+GameManager.instance.gameState+" ui="+UIManager.instance.uiState+
+            " hazard="+hero.cState.hazardDeath+" hazardRespawning="+hero.cState.hazardRespawning+
+            " down="+runtime?.Down+" reset="+runtime?.Resetting+" teleporting="+Field<bool>(camera,"teleporting")+" subscribers="+string.Join(",",subscribers.Select(s=>s.Target?.GetType().Name+":"+s.Method.Name))+" heroMatches="+(Field<HeroController>(camera,"hero_ctrl")==hero));
+        if(label.StartsWith("FROZEN"))foreach(var item in cameraHistory)Mark("CAMERA HISTORY "+item);
+    }
     private readonly List<ClientPlayerAlreadyInScene> snapshots = new();
     private readonly object logLock = new object();
     private static T Field<T>(object o, string n) {
@@ -108,13 +133,50 @@ public sealed class PantheonProbe : MonoBehaviour {
         private readonly PantheonProbe p;
         internal Log(PantheonProbe p){this.p=p;}
         public void Info(string s)=>p.Mark("ENGINE "+s);
-        public void Debug(string s){}
+        public void Debug(string s){if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1"&&(s.Contains("Setting FSM state")||s.Contains("Restoring FSM")||s.Contains("Making entity")||s.Contains("Set Active of host")))p.Mark("COLLIDER TRANSFER "+s);}
         public void Fine(string s){}
         public void Warn(string s)=>p.Mark("ENGINE WARN "+s);
         public void Error(string s){p.Mark("ENGINE ERROR "+s);p.Flag(p.role+".failed",s);}
     }
     private IEnumerator Start() {
         role=Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE");root=Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT");host=role=="host";
+        On.CameraController.DoPositionToHero += (orig,camera,direct)=>TrackCameraPosition(orig(camera,direct));
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1") {
+            On.HutongGames.PlayMaker.Fsm.OnEnable += (orig,fsm)=> {
+                if(fsm.GameObject!=null&&fsm.GameObject.name=="Hornet Boss 1")Mark("COLLIDER ENABLE before fsm="+fsm.Name+" state="+fsm.ActiveState?.Name+" restart="+fsm.RestartOnEnable);
+                orig(fsm);
+                if(fsm.GameObject!=null&&fsm.GameObject.name=="Hornet Boss 1")Mark("COLLIDER ENABLE after fsm="+fsm.Name+" state="+fsm.ActiveState?.Name);
+            };
+            On.HutongGames.PlayMaker.Fsm.SetState += (orig,fsm,state)=> {
+                if(fsm.GameObject!=null&&fsm.GameObject.name=="Hornet Boss 1")Mark("COLLIDER SETSTATE before fsm="+fsm.Name+" state="+fsm.ActiveState?.Name+" target="+state);
+                orig(fsm,state);
+                if(fsm.GameObject!=null&&fsm.GameObject.name=="Hornet Boss 1")Mark("COLLIDER SETSTATE after fsm="+fsm.Name+" state="+fsm.ActiveState?.Name);
+            };
+            On.HutongGames.PlayMaker.Actions.FindChild.OnEnter += (orig,action)=> {
+                var before=action.storeResult?.Value;orig(action);
+                if(action.Owner!=null&&action.Owner.name=="Hornet Boss 1")
+                    Mark("COLLIDER FIND owner="+action.Owner.name+" fsm="+action.Fsm.Name+" state="+action.State.Name+" variable="+action.storeResult.Name+
+                        " before="+EntityReferences.Capture(before)+" after="+EntityReferences.Capture(action.storeResult.Value)+" target="+EntityReferences.Capture(action.Fsm.GetOwnerDefaultTarget(action.gameObject)));
+            };
+            On.HutongGames.PlayMaker.Actions.SetCollider.OnEnter += (orig,action)=> {
+                var target=action.gameObject==null?null:action.Fsm.GetOwnerDefaultTarget(action.gameObject);
+                if(action.gameObject!=null&&target==null) {
+                    Mark("COLLIDER NULL owner="+(action.Owner!=null?action.Owner.name:"destroyed")+" fsm="+action.Fsm.Name+" state="+action.State.Name+" option="+action.gameObject.OwnerOption+
+                        " variable="+action.gameObject.GameObject?.Name+" vars="+string.Join(",",action.Fsm.Variables.GameObjectVariables.Select(v=>v.Name+":"+(v.Value!=null?v.Value.name:ReferenceEquals(v.Value,null)?"null":"destroyed"))));
+                }
+                orig(action);
+            };
+        }
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_TRACE")=="1") {
+            On.CameraController.SetMode += (orig,camera,mode)=> {Mark("CAMERA MODE "+mode+" scene="+GameManager.instance?.sceneName+" stack="+Environment.StackTrace);orig(camera,mode);};
+            On.CameraController.SceneInit += (orig,camera)=> {orig(camera);if(HeroController.instance!=null)CameraTrace("SceneInit");};
+        }
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_RING")=="1") {
+            On.CameraController.SetMode += (orig,camera,mode)=> {
+                if(camera.mode!=mode)CameraHistory(camera.mode+"->"+mode+" scene="+GameManager.instance?.sceneName+" stack="+Environment.StackTrace);
+                orig(camera,mode);
+            };
+        }
         var stack=new Stack<IEnumerator>();stack.Push(Run());var end=DateTime.UtcNow.AddMinutes(12);
         while(stack.Count!=0) {
             bool moved;object current=null;
@@ -135,6 +197,119 @@ public sealed class PantheonProbe : MonoBehaviour {
         }
         yield return Until(()=>Has("server.stopped"),"final server stopped");
         if(!Has(role+".failed"))Flag(role+".done");
+    }
+    private void ColliderReferences(GameObject boss,string label) {
+        if(boss==null){Mark("COLLIDER REFS "+label+" native boss destroyed");return;}
+        foreach(var fsm in boss.GetComponentsInChildren<PlayMakerFSM>(true)) {
+            Mark("COLLIDER REFS "+label+" owner="+fsm.name+" fsm="+fsm.FsmName+" state="+fsm.ActiveStateName+
+                " vars="+string.Join(",",fsm.FsmVariables.GameObjectVariables.Select(v=>v.Name+":"+(v.Value!=null?v.Value.name+"["+EntityReferences.Capture(v.Value)+"]":ReferenceEquals(v.Value,null)?"null":"destroyed"))));
+            foreach(var action in fsm.FsmStates.SelectMany(s=>s.Actions).OfType<FindChild>()) {
+                Mark("COLLIDER BIND "+label+" fsm="+fsm.FsmName+" state="+action.State.Name+" store="+action.storeResult.Name+" path="+action.childName.Value+
+                    " target="+(action.Fsm.GetOwnerDefaultTarget(action.gameObject)!=null?action.Fsm.GetOwnerDefaultTarget(action.gameObject).name:"null"));
+            }
+        }
+    }
+    private IEnumerator ColliderReconnectChecks() {
+        for(var attempt=0;attempt<6;attempt++) {
+            var key="collider-cycle."+attempt;
+            var boss=Entities.Values.Single(e=>e.Type==EntityType.Hornet);
+            var native=boss.Object.Host;
+            if(manager.IsSceneHost) {
+                var control=native.GetComponents<PlayMakerFSM>().Single(f=>f.FsmName=="Control");
+                if(attempt==0)File.WriteAllLines(Path.Combine(root,role+"-hornet-fsm.txt"),control.FsmStates.SelectMany(s=>s.Actions.Select(a=>s.Name+" / "+a.GetType().Name+" / "+string.Join(",",a.GetType().GetFields(BindingFlags.Instance|BindingFlags.Public).Select(field=>field.Name+"="+field.GetValue(a))))));
+                yield return WaitForNeedleThrow(control,"before reconnect "+attempt);
+                ColliderReferences(native,"before "+attempt);Flag("phase."+key);
+            }else yield return Until(()=>Has("phase."+key),"authority reaches native needle throw "+attempt,110);
+            yield return Both("phase."+key);
+            engine.ClientManager.Disconnect();ColliderReferences(native,"disconnected "+attempt);
+            yield return Both("disconnected."+key);
+            ConnectLocal("collider"+role);
+            yield return Until(()=>runtime.Connected&&manager.IsSceneHostDetermined,"needle-phase reconnect "+attempt);
+            yield return Both("connected."+key);
+            ColliderReferences(native,"reconnected "+attempt);
+            yield return RoomChecks(key);
+            if(manager.IsSceneHost) {
+                var control=native.GetComponents<PlayMakerFSM>().Single(f=>f.FsmName=="Control");
+                yield return WaitForNeedleThrow(control,"after reconnect "+attempt);
+                foreach(var variable in new[]{"Needle","Needle Tink"})
+                    if(control.FsmVariables.FindFsmGameObject(variable).Value==null)throw new Exception("Native throw missing "+variable+" after reconnect "+attempt);
+                yield return Until(()=>control.ActiveStateName=="Throw Recover","native Throw Recover after reconnect "+attempt,20);
+                Flag("throw-recovered."+key);
+            }else yield return Until(()=>Has("throw-recovered."+key),"authority throw and recovery after reconnect "+attempt,130);
+            yield return new WaitForSecondsRealtime(2);
+            if(Has("host.failed")||Has("guest.failed"))throw new Exception("Collider reconnect log failure");
+            yield return Both("settled."+key);
+        }
+    }
+    private IEnumerator WaitForNeedleThrow(PlayMakerFSM control,string label) {
+        var end=Time.realtimeSinceStartup+100;var last="";
+        while(Time.realtimeSinceStartup<end) {
+            var hero=HeroController.instance;var body=hero.GetComponent<Rigidbody2D>();
+            // Keep a real target on the arena floor. An unattended invulnerable
+            // hero can be knocked into the ceiling and stop the native AI from
+            // selecting Throw; no boss state or attack selection is forced.
+            if(!hero.cState.hazardDeath&&!hero.cState.hazardRespawning) {
+                hero.RegainControl();hero.StartAnimationControl();body.gravityScale=0;body.velocity=Vector2.zero;
+                hero.transform.position=new Vector3(22.5f,28.4f,0);
+            }
+            if(control.ActiveStateName!=last){last=control.ActiveStateName;Mark("NATIVE NEEDLE "+label+" state="+last+" hero="+hero.transform.position+" boss="+control.transform.position+
+                " body="+control.GetComponent<Rigidbody2D>().bodyType+" gravity="+control.GetComponent<Rigidbody2D>().gravityScale+
+                " colliders="+string.Join(",",control.GetComponents<Collider2D>().Select(c=>c.GetType().Name+":"+c.enabled+"/trigger="+c.isTrigger)));}
+            if(control.transform.position.y<0)throw new Exception("Native Hornet fell out of its arena "+label+" state="+last);
+            if(last=="Throw"||last=="Thrown") {Mark("PASS native needle throw "+label);yield break;}
+            yield return null;
+        }
+        throw new Exception("Timeout: native needle throw "+label+" state="+last);
+    }
+    private IEnumerator DetachedReferenceCheck() {
+        if(manager.IsSceneHost) {
+            var boss=Entities.Values.Single(e=>e.Type==EntityType.Hornet).Object.Host;
+            var control=boss.GetComponents<PlayMakerFSM>().Single(f=>f.FsmName=="Control");
+            var needleVariable=control.FsmVariables.FindFsmGameObject("Needle");
+            yield return Until(()=>needleVariable.Value!=null&&needleVariable.Value.activeInHierarchy&&!needleVariable.Value.transform.IsChildOf(boss.transform),"native thrown needle detaches",100);
+            var needle=needleVariable.Value;
+            var tinkVariable=control.FsmVariables.FindFsmGameObject("Needle Tink");
+            var originalTink=tinkVariable.Value;
+            if(originalTink==null||originalTink.GetComponent<Collider2D>()==null)throw new Exception("Native thrown needle has no live tink collider before initialization");
+            Mark("COLLIDER HIERARCHY native-detached needle="+EntityReferences.Capture(needle)+" needleParent="+(needle.transform.parent!=null?needle.transform.parent.name:"root")+
+                " tink="+EntityReferences.Capture(originalTink)+" tinkParent="+(originalTink.transform.parent!=null?originalTink.transform.parent.name:"root"));
+            ColliderReferences(boss,"detached-before-init");
+            EntityInitializer.InitializeFsm(control);
+            ColliderReferences(boss,"detached-after-init");
+            if(needleVariable.Value!=needle)throw new Exception("Reference initialization erased live detached native needle");
+            if(tinkVariable.Value!=originalTink)throw new Exception("Reference initialization erased live detached native needle tink");
+            Mark("PASS initialization preserves detached native needle and tink references");Flag("detached-reference-checked");
+        }else yield return Until(()=>Has("detached-reference-checked"),"authority detached reference check",110);
+        yield return Both("detached-reference");
+        Mark("FINAL PASS live detached native reference initialization");yield return Finish();
+    }
+    private IEnumerator CameraHazardChecks() {
+        yield return Until(()=>manager.IsSceneHostDetermined&&HeroController.instance.acceptingInput&&GameCameras.instance.cameraController.mode!=CameraController.CameraMode.FROZEN,"camera initially ready",15);
+        yield return new WaitForSecondsRealtime(3);
+        var hero=HeroController.instance;var camera=GameCameras.instance.cameraController;
+        var spikes=Object.FindObjectsOfType<DamageHero>().Where(h=>h.gameObject.scene.name=="GG_Vengefly"&&h.hazardType==2)
+            .SelectMany(h=>h.GetComponents<Collider2D>()).Where(c=>c.enabled&&c.gameObject.activeInHierarchy).ToArray();
+        foreach(var c in spikes)Mark("HAZARD COLLIDER "+c.name+" bounds="+c.bounds);
+        if(spikes.Length==0)throw new Exception("No native Vengefly spike collider");
+        hero.takeNoDamage=true;var health=PlayerData.instance.health;
+        hero.transform.position=new Vector3(45.2f,13.4f,0);
+        var end=Time.realtimeSinceStartup+6;
+        while(!hero.cState.hazardDeath&&Time.realtimeSinceStartup<end)yield return null;
+        var atOriginalPoint=hero.cState.hazardDeath;
+        if(!atOriginalPoint) {
+            var c=spikes.OrderBy(s=>s.bounds.SqrDistance(hero.transform.position)).First();
+            hero.transform.position=c.bounds.center;
+            yield return Until(()=>hero.cState.hazardDeath,"actual native spike collision",8);
+        }
+        Mark("HAZARD COLLISION originalPoint="+atOriginalPoint+" pos="+hero.transform.position+" health="+PlayerData.instance.health+" ready="+runtime.Playable);
+        yield return Until(()=>camera.mode==CameraController.CameraMode.FROZEN,"native hazard freezes camera",3);
+        CameraTrace("FROZEN native-hazard");
+        yield return Until(()=>!hero.cState.hazardDeath&&!hero.cState.hazardRespawning&&hero.acceptingInput&&camera.mode!=CameraController.CameraMode.FROZEN,"native hazard restores input and camera",15);
+        if(PlayerData.instance.health!=health)throw new Exception("Invulnerable hazard lost health");
+        CameraTrace("RECOVERED native-hazard");
+        yield return Both("camera-hazard-checked");
+        Mark("FINAL PASS actual native spike collision, transient frozen camera and original recovery; originalPoint="+atOriginalPoint);
+        yield return Finish();
     }
     private void DelayInitialSnapshot() {
         var net=Field<NetClient>(engine.ClientManager,"_netClient");
@@ -184,7 +359,14 @@ public sealed class PantheonProbe : MonoBehaviour {
         var players=Field<Dictionary<ushort,Hkmp.Game.Client.ClientPlayerData>>(engine.ClientManager,"_playerData");
         if(!players.Values.Any(p=>p.IsInLocalScene&&p.PlayerObject!=null&&p.PlayerObject.activeInHierarchy&&p.PlayerObject.GetComponentsInChildren<Renderer>(true).Any(r=>r.enabled&&!r.forceRenderingOff&&r.gameObject.activeInHierarchy)))
             throw new Exception("Remote knight invisible "+key);
-        if(GameCameras.instance.cameraController.mode==CameraController.CameraMode.FROZEN)throw new Exception("Frozen camera "+key);
+        if(GameCameras.instance.cameraController.mode==CameraController.CameraMode.FROZEN) {
+            CameraTrace("FROZEN "+key);
+            var hero=HeroController.instance;
+            if(!hero.cState.hazardDeath&&!hero.cState.hazardRespawning)throw new Exception("Frozen camera without native hazard recovery "+key);
+            yield return Until(()=>!hero.cState.hazardDeath&&!hero.cState.hazardRespawning&&hero.acceptingInput&&
+                GameCameras.instance.cameraController.mode!=CameraController.CameraMode.FROZEN,"native hazard camera recovery "+key,15);
+            CameraTrace("RECOVERED "+key);
+        }
         Mark("PASS visible bosses/knight and unfrozen camera "+key);
         if(!manager.IsSceneHost) {
             var snapshot=snapshots.Last(s=>s.Visit==Hkmp.CoopContext.LocalVisit&&s.SceneName==Hkmp.CoopContext.LocalScene);
@@ -298,16 +480,24 @@ public sealed class PantheonProbe : MonoBehaviour {
             if(role==first)yield return Defeat(sequence.GetSceneAt(3),sequence.GetSceneAt(4));
             else yield return Until(()=>In(sequence.GetSceneAt(4)),"replica follows native completion",100);
             SafeHero();yield return Both("hornet-entered");yield return RoomChecks("lifecycle-hornet");
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_REFERENCE_BASELINE")=="1"){yield return DetachedReferenceCheck();yield break;}
             // Native scene switch and same-session rejoin must not retain Moss
             // entities, duplicate scene hooks, or a previous visit's callbacks.
             if(Entities.Values.Any(e=>e.SourceScene==sequence.GetSceneAt(3)))throw new Exception("Prior room entities survived transition");
-            engine.ClientManager.Disconnect();yield return Both("lifecycle-disconnected");
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1")ColliderReferences(Entities.Values.Single(e=>e.Type==EntityType.Hornet).Object.Host,"initial-before-disconnect");
+            engine.ClientManager.Disconnect();
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1")ColliderReferences(Object.FindObjectsOfType<PlayMakerFSM>(true).First(f=>f.name=="Hornet Boss 1").gameObject,"initial-after-disconnect");
+            yield return Both("lifecycle-disconnected");
             ConnectLocal("liferetry"+role);yield return Until(()=>runtime.Connected,"reconnect after destroyed-loop cleanup");
             yield return Until(()=>manager.IsSceneHostDetermined,"rejoined room authority");
             yield return Both("lifecycle-reconnected");yield return RoomChecks("lifecycle-retry");
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1")ColliderReferences(Entities.Values.Single(e=>e.Type==EntityType.Hornet).Object.Host,"retry-first");
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS")=="1")yield return ColliderReconnectChecks();
             Mark("FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio");yield return Finish();yield break;
         }
-        for(var attempt=0;attempt<2;attempt++) {
+        var reentryStress=Environment.GetEnvironmentVariable("HOLLOWCONNECT_NATIVE_REENTRY_STRESS")=="1";
+        var attemptCount=int.TryParse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_NATIVE_ATTEMPTS"),out var requestedAttempts)?Math.Max(2,Math.Min(20,requestedAttempts)):2;
+        for(var attempt=0;attempt<attemptCount;attempt++) {
             attemptNumber=attempt;
             var nativeEntrance=Environment.GetEnvironmentVariable("HOLLOWCONNECT_NATIVE_ENTRANCE")=="1";
             BossSequenceController.Reset();
@@ -337,6 +527,7 @@ public sealed class PantheonProbe : MonoBehaviour {
                 }
             }
             yield return Both("startroom."+attempt);
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_HAZARD")=="1"){yield return CameraHazardChecks();yield break;}
             if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_EARLY_TRANSFER")=="1") {
                 if(role!=first) {
                     yield return Until(()=>manager.IsSceneHost&&manager.IsSceneHostDetermined,"early transfer determines remaining player's authority",8);
@@ -357,6 +548,7 @@ public sealed class PantheonProbe : MonoBehaviour {
                 var scene=sequence.GetSceneAt(index);var key=attempt+"."+index;
                 yield return Until(()=>In(scene),"native sequence room "+key);SafeHero();
                 yield return Both("room."+key);yield return RoomChecks(key);
+                if(reentryStress&&attempt>0&&index==0){yield return Both("entry-stress."+attempt);break;}
                 if(index==0&&Environment.GetEnvironmentVariable("HOLLOWCONNECT_PENDING_PEER_CHECK")=="1") {
                     if(role!=first) {
                         var target=float.Parse(File.ReadAllText(Path.Combine(root,"peer-anchor."+attempt)),System.Globalization.CultureInfo.InvariantCulture);
@@ -390,9 +582,9 @@ public sealed class PantheonProbe : MonoBehaviour {
                 else {yield return Until(()=>Has("advance."+key),"teammate fights next boss "+key,130);runtime.Down=false;}
             }
             Enter("Town");yield return Until(()=>In("Town"),"leave attempt");SafeHero();yield return Both("left."+attempt);
-            if(attempt==0){engine.ClientManager.Disconnect();yield return Until(()=>!runtime.Connected,"disconnect between attempts");yield return Both("disconnected");
+            if(attempt==0||reentryStress&&attempt<attemptCount-1){engine.ClientManager.Disconnect();yield return Until(()=>!runtime.Connected,"disconnect between attempts");yield return Both("disconnected."+attempt);
                 ConnectLocal("retry"+role);
-                yield return Until(()=>runtime.Connected,"reconnect between attempts");yield return Both("reconnected");}
+                yield return Until(()=>runtime.Connected,"reconnect between attempts");yield return Both("reconnected."+attempt);}
         }
         if(Has(role+".failed"))yield break;
         if(AudioListener.volume!=0)throw new Exception("Audio not muted");

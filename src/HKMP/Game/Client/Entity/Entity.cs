@@ -110,6 +110,7 @@ internal class Entity {
     /// Whether the unity game object for the host entity was originally active.
     /// </summary>
     private bool _originalIsActive;
+    private readonly Dictionary<PlayMakerFSM, bool> _suspendedRestartFlags = new();
 
     /// <summary>
     /// Whether the entity is controlled, i.e. in control by updates from the server.
@@ -312,7 +313,16 @@ internal class Entity {
         // stops native coroutines/tweens; enabling it again resets launch
         // parameters (GrimmballControl.Force, for example). Freeze only objects
         // whose authority has not been established, or dormant remote sources.
-        if (!preserveHostActivation) Object.Host.SetActive(false);
+        if (!preserveHostActivation) {
+            // An already-running native scene is registered again on reconnect.
+            // Disabling a RestartOnEnable FSM resets its variables and state;
+            // reenabling then runs the entrance instead of the current fight.
+            foreach (var fsm in _fsms.Host.Where(f => f != null && f.Fsm.Started && !string.IsNullOrEmpty(f.ActiveStateName))) {
+                _suspendedRestartFlags[fsm] = fsm.Fsm.RestartOnEnable;
+                fsm.Fsm.RestartOnEnable = false;
+            }
+            Object.Host.SetActive(false);
+        }
         Object.Client.SetActive(false);
         
         // Room completion is owned by EntityManager, including empty boss arrays.
@@ -550,6 +560,15 @@ internal class Entity {
             }
             
             addedComponentsString += $" {type}";
+        }
+        // Every native rigidbody needs these values to continue its current
+        // attack on takeover, even when the historical registry omitted them.
+        var nativeBody = Object.Host.GetComponent<Rigidbody2D>();
+        if (nativeBody != null) {
+            if (!_components.ContainsKey(EntityComponentType.Velocity))
+                _components[EntityComponentType.Velocity] = new VelocityComponent(_netClient, Id, Object, nativeBody);
+            if (!_components.ContainsKey(EntityComponentType.GravityScale))
+                _components[EntityComponentType.GravityScale] = new GravityScaleComponent(_netClient, Id, Object, nativeBody);
         }
 
         Logger.Debug(addedComponentsString);
@@ -997,9 +1016,11 @@ internal class Entity {
     public void InitializeHost() {
         if (destroyed || Object.Host == null) return;
         WaitingForEntrance.Remove(this);
+        foreach (var fsm in _fsms.Host) if (fsm != null) EntityInitializer.InitializeFsm(fsm);
         _isControlled = false;
         _isSceneHostDetermined = true;
         Object.Host.SetActive(_originalIsActive);
+        RestoreRestartFlags();
 
         // Also update the last active variable to account for this potential change
         // Otherwise we might trigger the update sending of activity twice
@@ -1181,6 +1202,10 @@ internal class Entity {
                     if (resolved != null || snapshot.Objects[i].Length == 0) fsm.FsmVariables.GameObjectVariables[i].Value = resolved;
                 }
             }
+            // Restore local owner/child bindings after the snapshot overlay.
+            // A detached child can still be alive despite no longer being
+            // found beneath its former parent during initialization.
+            EntityInitializer.InitializeFsm(fsm);
 
             // Before setting the state, we replace the actions of the to-be state to only include the ones that
             // should be executed again (including actions with "everyFrame" on true or that continuously check
@@ -1203,6 +1228,7 @@ internal class Entity {
             try { fsm.SetState(snapshot.CurrentState); }
             finally { state.Actions = oldActions; }
         }
+        RestoreRestartFlags();
     }
 
     /// <summary>
@@ -1570,6 +1596,7 @@ internal class Entity {
         WaitingForEntrance.Remove(this);
         entranceEvents.Clear();
         _pendingReferences.Clear();
+        RestoreRestartFlags();
         MonoBehaviourUtil.Instance.OnUpdateEvent -= OnUpdate;
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Client));
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Host));
@@ -1589,6 +1616,10 @@ internal class Entity {
     private void Cleanup(System.Action operation) {
         try { operation(); }
         catch (Exception e) { Logger.Warn($"Entity cleanup ({Id}, {Type}): {e}"); }
+    }
+    private void RestoreRestartFlags() {
+        foreach (var pair in _suspendedRestartFlags) if (pair.Key != null) pair.Key.Fsm.RestartOnEnable = pair.Value;
+        _suspendedRestartFlags.Clear();
     }
 
     /// <summary>

@@ -17,6 +17,7 @@ internal class GravityScaleComponent : EntityComponent {
     /// The last value of the gravity scale.
     /// </summary>
     private float _lastScale;
+    private bool _published;
     
     /// <summary>
     /// The gravity scale received from updates to this component. Used to keep track of the gravity scale as we
@@ -54,7 +55,8 @@ internal class GravityScaleComponent : EntityComponent {
         }
 
         var newGravityScale = _rigidbody.gravityScale;
-        if (!newGravityScale.Equals(_lastScale)) {
+        if (!_published || !newGravityScale.Equals(_lastScale)) {
+            _published = true;
             _lastScale = newGravityScale;
             
             var data = new EntityNetworkData {
@@ -68,6 +70,7 @@ internal class GravityScaleComponent : EntityComponent {
 
     /// <inheritdoc />
     public override void InitializeHost() {
+        _published = false;
         if (_receivedGravityScale.HasValue && _rigidbody != null && GameObject.Host != null && GameObject.Host.activeInHierarchy) {
             _rigidbody.gravityScale = _receivedGravityScale.Value;
             _receivedGravityScale = null;

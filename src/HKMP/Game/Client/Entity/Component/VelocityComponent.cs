@@ -17,6 +17,8 @@ internal class VelocityComponent : EntityComponent {
     /// The last value of 'velocity' for the rigidbody.
     /// </summary>
     private Vector2 _lastVelocity;
+    private bool _published;
+    private float _nextSample;
 
     /// <summary>
     /// The velocity received from updates to this component. Used to keep track of the velocity as we cannot
@@ -53,8 +55,11 @@ internal class VelocityComponent : EntityComponent {
             _receivedVelocity = null;
         }
 
+        if (Time.unscaledTime < _nextSample) return;
+        _nextSample = Time.unscaledTime + .05f;
         var newVelocity = _rigidbody.velocity;
-        if (newVelocity != _lastVelocity) {
+        if (!_published || newVelocity != _lastVelocity) {
+            _published = true;
             _lastVelocity = newVelocity;
             
             var data = new EntityNetworkData {
@@ -69,6 +74,7 @@ internal class VelocityComponent : EntityComponent {
 
     /// <inheritdoc />
     public override void InitializeHost() {
+        _published = false; _nextSample = 0;
         // Restore the saved physics before resuming FSM actions. Deferring
         // this until Update can overwrite a new state's native stop/lunge.
         if (_receivedVelocity.HasValue && _rigidbody != null && GameObject.Host != null && GameObject.Host.activeInHierarchy) {

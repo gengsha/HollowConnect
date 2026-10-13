@@ -3,9 +3,9 @@ $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $taskCases=@(
     @{Name='final-native-host-013';Mode='pantheon';Existing=[bool]$ReuseNativeHost;Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host'}},
-    @{Name='final-native-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest'}},
-    @{Name='final-lifecycle-host-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host'}},
-    @{Name='final-lifecycle-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest'}},
+    @{Name='final-native-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest';HOLLOWCONNECT_CAMERA_TRACE='1'}},
+    @{Name='final-lifecycle-host-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host';HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS='1'}},
+    @{Name='final-lifecycle-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest';HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS='1'}},
     @{Name='final-boss-013';Mode='boss';Env=@{}},
     @{Name='final-boss-late-013';Mode='boss';Env=@{HOLLOWCONNECT_SMOKE_BOSS_LATE='1';HOLLOWCONNECT_SMOKE_HANDOFF_DELAY='2.5'}},
     @{Name='final-grimm-host-013';Mode='grimm-motion';Env=@{HOLLOWCONNECT_GRIMM_SCENE='GG_Grimm';HOLLOWCONNECT_GRIMM_AUTHORITY='host';HOLLOWCONNECT_GRIMM_ENTRY_DELAY='3'}},
@@ -41,7 +41,7 @@ foreach($taskCase in $taskCases){
     }
     Start-Sleep -Seconds 2
     if(@(Get-ChildItem -LiteralPath $taskDir -Filter '*.failed').Count){throw ('Failure: '+$taskCase.Name)}
-    & (Join-Path $PSScriptRoot 'Assert-ProbeLogs.ps1') -RunPath $taskDir
+    & (Join-Path $PSScriptRoot 'Assert-ProbeLogs.ps1') -RunPath $taskDir -RequireRuntimeFiles
     foreach($taskRole in 'host','guest'){
         $taskLog=Join-Path $taskDir ($taskRole+'.log')
         if(!(Select-String -LiteralPath $taskLog -SimpleMatch 'FINAL PASS' -Quiet)){throw ('Missing final pass '+$taskCase.Name+' '+$taskRole)}

@@ -88,6 +88,7 @@ internal static class EntityInitializer {
                 if (!action.Enabled) {
                     continue;
                 }
+                if (BindCachedReference(action)) continue;
 
                 // Initialization binds references only. Replaying native events,
                 // parenting/destruction or attack setup from unrelated init
@@ -116,6 +117,28 @@ internal static class EntityInitializer {
                 EntityFsmActions.ApplyNetworkDataFromAction(null, action);
             }
         }
+        // Some init states find a child of an object bound by a later init
+        // state. Retry only reference lookups, without replaying state actions.
+        foreach (var state in statesToInit)
+            foreach (var action in state.Actions.OfType<FindChild>())
+                if (action.Enabled) BindCachedReference(action);
+    }
+
+    private static bool BindCachedReference(FsmStateAction action) {
+        if (action is FindChild child) {
+            if (child.storeResult == null || child.storeResult.IsNone || child.Fsm == null) return true;
+            var target = child.Fsm.GetOwnerDefaultTarget(child.gameObject);
+            var found = target == null ? null : target.transform.Find(child.childName.Value);
+            if (found != null) child.storeResult.Value = found.gameObject;
+            return true;
+        }
+        if (action is GetParent parent) {
+            if (parent.storeResult == null || parent.storeResult.IsNone || parent.Fsm == null) return true;
+            var target = parent.Fsm.GetOwnerDefaultTarget(parent.gameObject);
+            if (target != null && target.transform.parent != null) parent.storeResult.Value = target.transform.parent.gameObject;
+            return true;
+        }
+        return false;
     }
 
     // An FSM may bind its own object in an Idle state, rather than an Init
