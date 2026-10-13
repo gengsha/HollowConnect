@@ -7,7 +7,7 @@ $taskCases=@(
     @{Name='final-lifecycle-host-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host'}},
     @{Name='final-lifecycle-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest'}},
     @{Name='final-boss-013';Mode='boss';Env=@{}},
-    @{Name='final-boss-late-013';Mode='boss';Env=@{HOLLOWCONNECT_SMOKE_BOSS_LATE='1'}},
+    @{Name='final-boss-late-013';Mode='boss';Env=@{HOLLOWCONNECT_SMOKE_BOSS_LATE='1';HOLLOWCONNECT_SMOKE_HANDOFF_DELAY='2.5'}},
     @{Name='final-grimm-host-013';Mode='grimm-motion';Env=@{HOLLOWCONNECT_GRIMM_SCENE='GG_Grimm';HOLLOWCONNECT_GRIMM_AUTHORITY='host';HOLLOWCONNECT_GRIMM_ENTRY_DELAY='3'}},
     @{Name='final-grimm-guest-013';Mode='grimm-motion';Env=@{HOLLOWCONNECT_GRIMM_SCENE='GG_Grimm';HOLLOWCONNECT_GRIMM_AUTHORITY='guest';HOLLOWCONNECT_GRIMM_ENTRY_DELAY='3'}},
     @{Name='final-rescue-013';Mode='rescue';Env=@{}},
@@ -39,11 +39,12 @@ foreach($taskCase in $taskCases){
         if([DateTime]::UtcNow -ge $taskDeadline){throw ('Timeout: '+$taskCase.Name)}
         Start-Sleep -Seconds 1
     }
+    Start-Sleep -Seconds 2
     if(@(Get-ChildItem -LiteralPath $taskDir -Filter '*.failed').Count){throw ('Failure: '+$taskCase.Name)}
+    & (Join-Path $PSScriptRoot 'Assert-ProbeLogs.ps1') -RunPath $taskDir
     foreach($taskRole in 'host','guest'){
         $taskLog=Join-Path $taskDir ($taskRole+'.log')
         if(!(Select-String -LiteralPath $taskLog -SimpleMatch 'FINAL PASS' -Quiet)){throw ('Missing final pass '+$taskCase.Name+' '+$taskRole)}
-        if(Select-String -LiteralPath $taskLog -Pattern '(^| )FAIL | ERROR ' -Quiet){throw ('Probe error '+$taskCase.Name+' '+$taskRole)}
     }
     foreach($taskBinary in @(Get-Content -LiteralPath (Join-Path $taskDir 'binaries.json') -Raw | ConvertFrom-Json)){
         $taskProduction=Join-Path $taskRoot ('src/HollowConnect/bin/Release/net472/'+$taskBinary.name)

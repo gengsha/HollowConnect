@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect.Smoke</AssemblyName></PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoMod.RuntimeDetour"><HintPath>../../vendor/references/MonoMod.RuntimeDetour.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.AudioModule"><HintPath>../../vendor/references/UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MMHOOK_PlayMaker"><HintPath>../../vendor/references/MMHOOK_PlayMaker.dll</HintPath><Private>false</Private></Reference>
     <ProjectReference Include="../../src/HollowConnect/HollowConnect.csproj" />

@@ -168,9 +168,7 @@ public sealed class DeathProbe : MonoBehaviour {
         } else {
             yield return OrdinaryDeath(manager);
         }
-        engine.ClientManager.Disconnect(); Flag(role + ".offline");
-        yield return Until(() => Has((host ? "guest" : "host") + ".offline"), "both disconnected normally");
-        if (host) engine.ServerManager.Stop();
+        yield return ProbeShutdown.Run(engine,root,role);
         Log("FINAL PASS native personal death " + scene); Flag(role + ".done");
     }
     private IEnumerator FeedbackOrdering() {

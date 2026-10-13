@@ -18,6 +18,7 @@ $taskRuns=@()
 foreach($taskDefinition in $taskDefinitions){
     $taskName=$taskDefinition[0]
     $taskDir=Join-Path $taskRoot ('.test-results/'+$taskName)
+    & (Join-Path $PSScriptRoot 'Assert-ProbeLogs.ps1') -RunPath $taskDir
     $taskHashes=@(Get-Content -LiteralPath (Join-Path $taskDir 'binaries.json') -Raw | ConvertFrom-Json)
     foreach($taskHash in $taskHashes){
         if($taskHash.sha256 -ne (Get-FileHash -LiteralPath (Join-Path $taskRoot ('src/HollowConnect/bin/Release/net472/'+$taskHash.name)) -Algorithm SHA256).Hash){throw ('Not final DLL '+$taskName)}
@@ -27,7 +28,7 @@ foreach($taskDefinition in $taskDefinitions){
         $taskLogPath=Join-Path $taskDir ($taskRole+'.log')
         $taskLines=@(Get-Content -LiteralPath $taskLogPath)
         if(!(Test-Path -LiteralPath (Join-Path $taskDir ($taskRole+'.done'))) -or (Test-Path -LiteralPath (Join-Path $taskDir ($taskRole+'.failed')))){throw ('Incomplete or failed '+$taskName+' '+$taskRole)}
-        if(!($taskLines -match 'FINAL PASS') -or ($taskLines -match '(^| )FAIL | ERROR ')){throw ('Invalid logs '+$taskName+' '+$taskRole)}
+        if(!($taskLines -match 'FINAL PASS')){throw ('Invalid logs '+$taskName+' '+$taskRole)}
         # Publish only probe assertions and lifecycle telemetry, not raw logs
         # which can contain connection identities or network endpoints.
         $taskEvidenceName=$taskName+'-'+$taskRole+'.txt'

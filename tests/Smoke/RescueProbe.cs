@@ -79,8 +79,8 @@ public sealed class RescueProbe : MonoBehaviour {
         yield return Ordering();
         Flag(role + ".ordered"); yield return Until(() => Has((host ? "guest" : "host") + ".ordered"), "ordering probes complete");
         for (var i = 0; i < 4; i++) yield return Trial(i);
-        engine.ClientManager.Disconnect(); Flag(role + ".offline"); yield return Until(() => Has((host ? "guest" : "host") + ".offline"), "both disconnected");
-        if (host) engine.ServerManager.Stop(); Log("FINAL PASS rescue soul and native feedback"); Flag(role + ".done");
+        yield return ProbeShutdown.Run(engine,root,role);
+        Log("FINAL PASS rescue soul and native feedback"); Flag(role + ".done");
     }
     private IEnumerator Ordering() {
         var pd = PlayerData.instance; pd.SetInt("MPCharge", 0); pd.SetInt("MPReserve", 0); pd.SetBool("soulLimited", false);

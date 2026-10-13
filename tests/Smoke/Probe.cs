@@ -18,6 +18,7 @@ public sealed class ProbeMod : Mod {
     public override string GetVersion() => "test-only";
     public override void Initialize() {
         if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"))) return;
+        ProbeLogGuard.Install(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT"), Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"));
         On.GameManager.SaveGame += (orig, gm) => { };
         On.GameManager.SaveGame_Action1 += (orig, gm, callback) => callback?.Invoke(true);
         On.GameManager.SaveGame_int_Action1 += (orig, gm, slot, callback) => callback?.Invoke(true);
@@ -489,6 +490,7 @@ public sealed class Probe : MonoBehaviour {
             Mark("FAIL disconnected transition retained a coroutine or hero lock"); Flag(role + ".failed"); yield break;
         }
         Mark("PASS disconnect cancels pending " + (host ? "warp" : "checkpoint") + " and restores hero");
+        yield return ProbeShutdown.Run(engine,root,role);
         Mark("FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, F6 personal bench return for guest and scene authority without combat reset, native shade nail rescue, both wipe orders and F7/F8 warp");
         Flag(role + ".done");
     }

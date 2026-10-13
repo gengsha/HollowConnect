@@ -196,11 +196,7 @@ public sealed class GrimmMotionProbe : MonoBehaviour {
         Flag(role + ".sampled");
         yield return Until(() => Has((host ? "guest" : "host") + ".sampled"), "both motion probes finished");
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRIMM_HANDOFF") == "1") yield return Handoff();
-        // Keep the server running until both clients have disconnected normally.
-        // Killing the server first would hide a shutdown transport failure.
-        engine.ClientManager.Disconnect(); Flag(role + ".offline");
-        yield return Until(() => Has((host ? "guest" : "host") + ".offline"), "both clients disconnected normally");
-        if (host) engine.ServerManager.Stop();
+        yield return ProbeShutdown.Run(engine,root,role);
         yield return new WaitForSecondsRealtime(.3f);
         Mark("FINAL PASS Grimm native motion " + scene); Flag(role + ".done");
     }

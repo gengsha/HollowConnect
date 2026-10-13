@@ -23,6 +23,12 @@ public sealed class BossProbe : MonoBehaviour {
     private bool StayAuthority => Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_BOSS_CONTROL") == "stay";
     private bool LateGuest => Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_BOSS_LATE") == "1";
     private GameObject detachedReplicaTerrain;
+    private MonoMod.RuntimeDetour.Hook takeoverTrace;
+    private MonoMod.RuntimeDetour.Hook makeHostTrace;
+    private void TraceParts(ulong id, string label) {
+        foreach(var p in EntityReferences.Parts(id).Where(p=>p.Host!=null && p.Host.name.Contains("Terrain")))
+            Mark("PART "+label+" path="+p.Path+" owner="+EntityReferences.Owner(p.Host)?.Id+" host="+EntityIdentity.Path(p.Host.transform)+"/"+p.Host.activeSelf+" client="+(p.Client==null?"null":EntityIdentity.Path(p.Client.transform)+"/"+p.Client.activeSelf));
+    }
     private static T Field<T>(object o, string n) => (T)o.GetType().GetField(n, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(o);
     private void Mark(string s) => File.AppendAllText(Path.Combine(root, role + ".log"), DateTime.UtcNow.ToString("O") + " " + s + "\n");
     private void Flag(string n, string v = "ready") => File.WriteAllText(Path.Combine(root, n), v);
@@ -73,6 +79,19 @@ public sealed class BossProbe : MonoBehaviour {
     }
     private IEnumerator Start() {
         role = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"); root = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT"); host = role == "host";
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_TAKEOVER_TRACE")=="1") {
+            takeoverTrace=new MonoMod.RuntimeDetour.Hook(typeof(Hkmp.Game.Client.Entity.Component.CombatStateComponent).GetMethod("PrepareTakeover",BindingFlags.Instance|BindingFlags.NonPublic),
+                (Action<Action<Hkmp.Game.Client.Entity.Component.CombatStateComponent>,Hkmp.Game.Client.Entity.Component.CombatStateComponent>)((orig,component)=> {
+                    var id=Field<ulong>(component,"id");TraceParts(id,"BEFORE PREPARE");orig(component);TraceParts(id,"AFTER PREPARE");
+                }));
+            makeHostTrace=new MonoMod.RuntimeDetour.Hook(typeof(Entity).GetMethod("MakeHost"),
+                (Action<Action<Entity>,Entity>)((orig,entity)=> {TraceParts(entity.Id,"BEFORE MAKEHOST");orig(entity);TraceParts(entity.Id,"AFTER MAKEHOST");}));
+            On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += (orig,action)=> {
+                var go=action.Fsm.GetOwnerDefaultTarget(action.gameObject);
+                if(go!=null&&go.name.Contains("Terrain"))Mark("ACTIVATE terrain="+go.GetInstanceID()+" native="+(EntityReferences.Owner(go)?.Object.Host==go)+" fsm="+action.Fsm.Name+" state="+action.State.Name+" active="+action.activate.Value);
+                orig(action);
+            };
+        }
         On.HutongGames.PlayMaker.Actions.SetVelocity2d.OnFixedUpdate += (orig,action)=> {
             orig(action);
             if(action.Fsm!=null&&action.Fsm.Name=="FalseyControl")nativeVelocityTicks++;
@@ -125,6 +144,7 @@ public sealed class BossProbe : MonoBehaviour {
             Flag("authority-pose",boss.Object.Host.transform.position.x.ToString(System.Globalization.CultureInfo.InvariantCulture)+","+boss.Object.Host.transform.position.y.ToString(System.Globalization.CultureInfo.InvariantCulture));
             Flag("host.head-damaged");
             yield return Until(() => Has("guest.phase-observed"), "guest observed exposed phase and health");
+            if(float.TryParse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_HANDOFF_DELAY"),out var handoffDelay))yield return new WaitForSecondsRealtime(handoffDelay);
             if (StayAuthority) {
                 // Control for the terrain diagnostic: identical native armor/head
                 // damage, without any authority transfer or forced FSM/transform.
@@ -140,7 +160,8 @@ public sealed class BossProbe : MonoBehaviour {
                 yield return ProbeShutdown.Run(engine, root, role);
                 Mark("FINAL PASS native False Knight same-authority terrain control"); Flag(role + ".done"); yield break;
             }
-            Enter("Town"); yield return Until(() => In("Town"), "old authority leaves during exposed phase"); Freeze(); Flag("host.left");
+            Mark("HANDOFF REQUEST state="+control.ActiveStateName+" elapsed exposure may expire during native fade");
+            Enter("Town"); yield return Until(() => In("Town"), "old authority leaves after exposed phase observation"); Freeze(); Flag("host.left");
             yield return Until(() => Has("guest.continued"), "new authority continues native phase and combat");
             if (Has("guest.failed")) { Flag(role + ".failed"); yield break; }
             Enter("Crossroads_10"); yield return Until(() => In("Crossroads_10"), "old authority rejoins ongoing boss fight"); Freeze();
@@ -174,16 +195,40 @@ public sealed class BossProbe : MonoBehaviour {
                 yield return ProbeShutdown.Run(engine, root, role);
                 Mark("FINAL PASS native False Knight same-authority terrain control"); Flag(role + ".done"); yield break;
             }
-            yield return Until(() => Has("host.left") && manager.IsSceneHost, "authority transfers during exposed phase", 10);
+            yield return Until(() => Has("host.left") && manager.IsSceneHost, "authority transfers after exposed phase observation", 10);
             var control = Control(boss); var hm = boss.Object.Host.GetComponent<HealthManager>();
+            Mark("HANDOFF PHASE native="+control.ActiveStateName+" snapshot="+Snapshot(boss).CurrentState);
             Mark("TAKEOVER position="+boss.Object.Host.transform.position+" scale="+boss.Object.Host.transform.lossyScale+" old-authority="+File.ReadAllText(Path.Combine(root,"authority-pose")));
             ArenaPose(boss, "AFTER HANDOFF", true);
             var terrain = control.FsmVariables.GetFsmGameObject("Terrain Block").Value;
+            var expectedHeadHealth=33;
+            if(LateGuest && control.ActiveStateName!="Opened") {
+                // Native Opened has a five-second Wait. A genuine late entry
+                // plus scene fade can outlive it; inactive terrain is then
+                // correct, not a failed takeover. Verify natural recovery and
+                // drive a second exposure with native damage, never SetState.
+                if(!Check(terrain!=null&&!terrain.activeInHierarchy&&
+                    !Object.FindObjectsOfType<Collider2D>().Any(c=>c.name=="FK Terrain Block"&&c.enabled),
+                    "elapsed exposure has no active terrain or stale replica collider"))yield break;
+                if(!Check(head.Object.Host.GetComponent<HealthManager>().hp==33&&hm.hp==65&&!hm.isDead,
+                    "timed-out exposure still preserves last authoritative armor and head health"))yield break;
+                var recoveredPosition=boss.Object.Host.transform.position;
+                yield return Until(()=>Vector2.Distance(boss.Object.Host.transform.position,recoveredPosition)>.3f && !hm.IsInvincible,
+                    "native boss resumes combat when exposure expires before takeover",20);
+                if(Has(role+".failed"))yield break;
+                hm.ApplyExtraDamage(hm.hp);
+                yield return Until(()=>control.ActiveStateName=="Opened"&&head.Object.Host.activeInHierarchy,
+                    "native armor damage exposes a second head after timed-out late transfer",20);
+                if(Has(role+".failed"))yield break;
+                var reopened=head.Object.Host.GetComponent<HealthManager>();expectedHeadHealth=reopened.hp-7;reopened.ApplyExtraDamage(7);
+                Mark("REOPENED native head health="+reopened.hp+" expected="+expectedHeadHealth+" armor="+hm.hp);
+                terrain=control.FsmVariables.GetFsmGameObject("Terrain Block").Value;
+            }
             if (!Check(terrain != null && terrain.activeInHierarchy &&
                 Object.FindObjectsOfType<Collider2D>().Count(c => c.name == "FK Terrain Block" && c.enabled) == 1,
                 "detached native terrain reference owns the only active collider after handoff")) yield break;
             var headHealth = head.Object.Host.GetComponent<HealthManager>();
-            if (!Check(control.ActiveStateName == "Opened" && headHealth.hp == 33 && hm.hp == 65 && !hm.isDead &&
+            if (!Check(control.ActiveStateName == "Opened" && headHealth.hp == expectedHeadHealth && headHealth.hp>0 && hm.hp == 65 && !hm.isDead &&
                 boss.Object.Host.activeInHierarchy && head.Object.Host.activeInHierarchy, "handoff preserves live exposed phase and both health values")) yield break;
             headHealth.ApplyExtraDamage(headHealth.hp);
             yield return Until(() => control.FsmVariables.GetFsmInt("Stunned Amount").Value == 1 && control.FsmVariables.GetFsmInt("Rages").Value == 1 &&
