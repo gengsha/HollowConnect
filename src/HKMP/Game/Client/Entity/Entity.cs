@@ -194,6 +194,15 @@ internal class Entity {
             staging.SetActive(false);
             var clone = UnityEngine.Object.Instantiate(hostObject, staging.transform, true);
             clone.SetActive(false);
+            // iTween is a runtime controller, not prefab state. Its private
+            // arguments live in a global table keyed to the ORIGINAL target.
+            // A copied component's first Awake cannot retrieve arguments for
+            // the clone. Remove it while the staging hierarchy is still
+            // inactive, before Awake; deferred Destroy is too late for a
+            // snapshot delivered in the same frame. Do not call iTween.Stop:
+            // copied public IDs can still refer to the native tween's table.
+            foreach (var tween in clone.GetComponentsInChildren<iTween>(true))
+                UnityEngine.Object.DestroyImmediate(tween);
             clone.transform.SetParent(null, true);
             clone.transform.position = hostObject.transform.position;
             clone.transform.rotation = hostObject.transform.rotation;

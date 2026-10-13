@@ -292,6 +292,36 @@ public sealed class PantheonProbe : MonoBehaviour {
             Mark("PASS native identity survives detach and cloned metadata has a separate identity");
         } finally {Object.Destroy(copy);Object.Destroy(source);Object.Destroy(parent);}
     }
+    private IEnumerator TweenCloneChecks() {
+        var source=new GameObject("HollowConnect tween fixture");
+        var child=new GameObject("HollowConnect tween child");child.transform.SetParent(source.transform);
+        Entity entity=null;
+        try {
+            iTween.MoveBy(source,iTween.Hash("amount",new Vector3(10,0,0),"time",10f,"easetype",iTween.EaseType.linear));
+            iTween.ScaleTo(child,iTween.Hash("scale",new Vector3(2,2,2),"time",10f,"easetype",iTween.EaseType.linear));
+            yield return null;yield return null;
+            var nativeTweens=source.GetComponentsInChildren<iTween>();
+            if(nativeTweens.Length!=2||nativeTweens.Any(t=>!t.isRunning))throw new Exception("Tween clone fixture has no running native tweens");
+            var ids=nativeTweens.Select(t=>t.id).ToArray();
+            entity=new Entity(Field<NetClient>(engine.ClientManager,"_netClient"),0xfffffffffffffff0UL,EntityType.DynamicHazard,source,preserveHostActivation:true);
+            var clone=entity.Object.Client;
+            Mark("TWEEN CLONE before activation copied="+clone.GetComponentsInChildren<iTween>(true).Length+" native="+nativeTweens.Length);
+            entity.InitializeClient();entity.UpdateIsActive(true);
+            yield return null;yield return null;
+            if(Has(role+".failed"))throw new Exception("Copied runtime tween failed replica activation");
+            if(clone.GetComponentsInChildren<iTween>(true).Length!=0)throw new Exception("Replica retained native runtime tween components");
+            if(nativeTweens.Any(t=>t==null||!t.isRunning)||!nativeTweens.Select(t=>t.id).SequenceEqual(ids))throw new Exception("Replica cleanup disturbed native tween state");
+            foreach(var tween in nativeTweens)if(!iTween.tweens.Cast<Hashtable>().Any(args=>(string)args["id"]==tween.id&&(GameObject)args["target"]==tween.gameObject))
+                throw new Exception("Replica cleanup removed native tween arguments");
+            var start=clone.transform.position;
+            iTween.MoveBy(clone,iTween.Hash("amount",new Vector3(2,0,0),"time",.3f,"easetype",iTween.EaseType.linear));
+            yield return new WaitForSecondsRealtime(.6f);
+            if(clone.transform.position.x<start.x+1.5f)throw new Exception("Fresh replica tween did not animate");
+            Mark("PASS runtime tween cloning: replica activation clean, native arguments intact, fresh replica tween moves");
+        } finally {
+            entity?.Destroy();iTween.Stop(source);iTween.Stop(child);Object.Destroy(source);
+        }
+    }
     private IEnumerator WaitForNativeDash(PlayMakerFSM control) {
         var end=Time.realtimeSinceStartup+100;var last="";
         while(Time.realtimeSinceStartup<end) {
@@ -491,6 +521,12 @@ public sealed class PantheonProbe : MonoBehaviour {
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved character");SafeHero();
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STATIC_IDENTITY_CHECK")=="1")StaticIdentityChecks();
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_TWEEN_CLONE_CHECK")=="1") {
+            yield return TweenCloneChecks();yield return Both("tween-clone-checked");
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_TWEEN_CLONE_ONLY")=="1") {
+                Mark("FINAL PASS runtime tween clone lifecycle; muted audio");Flag(role+".done");yield break;
+            }
+        }
         if(host){engine.ServerManager.Start(29650,false);Flag("server.started");}else yield return Until(()=>Has("server.started"),"server ready");
         ConnectLocal("pantheon"+role);
         yield return Until(()=>runtime.Connected,"handshake");yield return Both("connected");
