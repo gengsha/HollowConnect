@@ -1,0 +1,415 @@
+2026-10-13T09:44:52.7454007Z PASS menu
+2026-10-13T09:44:59.4118186Z PASS unsaved character
+2026-10-13T09:45:01.3720213Z PASS handshake
+2026-10-13T09:45:01.4552062Z PASS both connected
+2026-10-13T09:45:25.7653937Z PASS first entrant starts fighting
+2026-10-13T09:45:27.5915510Z PASS native atrium
+2026-10-13T09:45:28.6401861Z PASS native pantheon selection UI
+2026-10-13T09:45:35.4121659Z PASS native door entrance cinematic
+2026-10-13T09:45:47.1387367Z PASS native door loads first boss
+2026-10-13T09:45:47.1397931Z PASS first boss entry
+2026-10-13T09:45:47.1419339Z PASS both startroom.0
+2026-10-13T09:45:47.1426910Z PASS native sequence room 0.0
+2026-10-13T09:45:47.1482851Z PASS both room.0.0
+2026-10-13T09:45:50.2383787Z PASS room authority 0.0
+2026-10-13T09:45:53.2460024Z PASS early room-level updates drained 0.0
+2026-10-13T09:45:53.2481376Z ROOM 0.0 scene=GG_Vengefly visit=4 authority=False hero=(45.3, 13.5, 0.0) camera=(46.1, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:45:53.3000907Z PASS camera authority state 0.0
+2026-10-13T09:45:53.3022334Z PASS camera lock state converges 0.0
+2026-10-13T09:45:53.3048497Z PASS visible bosses/knight and unfrozen camera 0.0
+2026-10-13T09:45:53.3139322Z PASS duplicate initial snapshot does not reset boss 0.0
+2026-10-13T09:45:53.3171668Z PASS stale room/peer leave and duplicate connect preserve avatar 0.0
+2026-10-13T09:45:53.3226808Z PASS both checked.0.0
+2026-10-13T09:45:53.3344879Z PASS damage published 0.0
+2026-10-13T09:45:53.3706118Z PASS same boss HP 0.0
+2026-10-13T09:45:53.3721764Z PASS both hpchecked.0.0
+2026-10-13T09:46:10.2448948Z PASS teammate fights next boss 0.0
+2026-10-13T09:46:18.3308113Z PASS native sequence room 0.1
+2026-10-13T09:46:18.3329555Z PASS both room.0.1
+2026-10-13T09:46:21.4208467Z PASS room authority 0.1
+2026-10-13T09:46:24.4276986Z PASS early room-level updates drained 0.1
+2026-10-13T09:46:24.4290952Z ROOM 0.1 scene=GG_Gruz_Mother visit=5 authority=False hero=(90.1, 15.4, 0.0) camera=(94.2, 20.1, -38.1) mode=LOCKED
+2026-10-13T09:46:24.4325394Z PASS camera authority state 0.1
+2026-10-13T09:46:24.4344341Z PASS camera lock state converges 0.1
+2026-10-13T09:46:24.4430826Z PASS visible bosses/knight and unfrozen camera 0.1
+2026-10-13T09:46:24.4604322Z PASS duplicate initial snapshot does not reset boss 0.1
+2026-10-13T09:46:24.4672004Z PASS stale room/peer leave and duplicate connect preserve avatar 0.1
+2026-10-13T09:46:24.4707779Z PASS both checked.0.1
+2026-10-13T09:46:24.4885499Z PASS damage published 0.1
+2026-10-13T09:46:24.5131041Z PASS same boss HP 0.1
+2026-10-13T09:46:24.5391154Z PASS both hpchecked.0.1
+2026-10-13T09:46:41.6647604Z PASS teammate fights next boss 0.1
+2026-10-13T09:46:50.0653797Z PASS native sequence room 0.2
+2026-10-13T09:46:50.0670457Z PASS both room.0.2
+2026-10-13T09:46:53.1364906Z PASS room authority 0.2
+2026-10-13T09:46:56.3038110Z PASS early room-level updates drained 0.2
+2026-10-13T09:46:56.3050417Z ROOM 0.2 scene=GG_False_Knight visit=6 authority=False hero=(23.8, 27.4, 0.0) camera=(32.7, 31.4, -38.1) mode=LOCKED
+2026-10-13T09:46:56.3272449Z PASS camera authority state 0.2
+2026-10-13T09:46:56.3282623Z PASS camera lock state converges 0.2
+2026-10-13T09:46:56.3293404Z PASS visible bosses/knight and unfrozen camera 0.2
+2026-10-13T09:46:56.3322617Z PASS duplicate initial snapshot does not reset boss 0.2
+2026-10-13T09:46:56.3364692Z PASS stale room/peer leave and duplicate connect preserve avatar 0.2
+2026-10-13T09:46:56.3390617Z PASS both checked.0.2
+2026-10-13T09:46:56.7464281Z PASS damage published 0.2
+2026-10-13T09:46:57.2429297Z PASS same boss HP 0.2
+2026-10-13T09:46:57.2442505Z PASS both hpchecked.0.2
+2026-10-13T09:47:43.5790847Z PASS teammate fights next boss 0.2
+2026-10-13T09:47:47.9058903Z PASS native sequence room 0.3
+2026-10-13T09:47:47.9075814Z PASS both room.0.3
+2026-10-13T09:47:50.9608765Z PASS room authority 0.3
+2026-10-13T09:47:53.9634973Z PASS early room-level updates drained 0.3
+2026-10-13T09:47:53.9642881Z ROOM 0.3 scene=GG_Mega_Moss_Charger visit=7 authority=False hero=(43.9, 7.4, 0.0) camera=(44.9, 11.0, -38.1) mode=LOCKED
+2026-10-13T09:47:53.9700428Z PASS camera authority state 0.3
+2026-10-13T09:47:53.9718871Z PASS camera lock state converges 0.3
+2026-10-13T09:47:53.9732052Z PASS visible bosses/knight and unfrozen camera 0.3
+2026-10-13T09:47:53.9774381Z PASS duplicate initial snapshot does not reset boss 0.3
+2026-10-13T09:47:53.9810703Z PASS stale room/peer leave and duplicate connect preserve avatar 0.3
+2026-10-13T09:47:53.9839057Z PASS both checked.0.3
+2026-10-13T09:47:53.9912129Z PASS damage published 0.3
+2026-10-13T09:47:54.0108036Z PASS same boss HP 0.3
+2026-10-13T09:47:54.0129159Z PASS both hpchecked.0.3
+2026-10-13T09:48:12.5971848Z PASS teammate fights next boss 0.3
+2026-10-13T09:48:22.6060705Z PASS native sequence room 0.4
+2026-10-13T09:48:22.6076431Z PASS both room.0.4
+2026-10-13T09:48:25.6446648Z PASS room authority 0.4
+2026-10-13T09:48:28.6484870Z PASS early room-level updates drained 0.4
+2026-10-13T09:48:28.6501397Z ROOM 0.4 scene=GG_Hornet_1 visit=8 authority=False hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T09:48:28.6532819Z PASS camera authority state 0.4
+2026-10-13T09:48:28.6543154Z PASS camera lock state converges 0.4
+2026-10-13T09:48:28.6557146Z PASS visible bosses/knight and unfrozen camera 0.4
+2026-10-13T09:48:28.6592420Z PASS duplicate initial snapshot does not reset boss 0.4
+2026-10-13T09:48:28.6613841Z PASS stale room/peer leave and duplicate connect preserve avatar 0.4
+2026-10-13T09:48:28.6637495Z PASS both checked.0.4
+2026-10-13T09:48:28.6713256Z PASS damage published 0.4
+2026-10-13T09:48:28.6836141Z PASS same boss HP 0.4
+2026-10-13T09:48:28.6856413Z PASS both hpchecked.0.4
+2026-10-13T09:48:28.7007824Z PASS authority nail baseline 0.4.host
+2026-10-13T09:48:29.1773833Z PASS both nail-stop.0.4.host
+2026-10-13T09:48:30.1827873Z PASS authority accepted real nail 0.4.host
+2026-10-13T09:48:30.1843717Z PASS real nail HP converges 0.4.host
+2026-10-13T09:48:30.1862844Z PASS both nail-checked.0.4.host
+2026-10-13T09:48:30.2139656Z PASS authority nail baseline 0.4.guest
+2026-10-13T09:48:31.1211294Z PASS both nail-stop.0.4.guest
+2026-10-13T09:48:32.1382574Z PASS authority accepted real nail 0.4.guest
+2026-10-13T09:48:32.1396173Z PASS real nail HP converges 0.4.guest
+2026-10-13T09:48:32.1420482Z PASS both nail-checked.0.4.guest
+2026-10-13T09:48:37.1744607Z PASS Hornet completion reaches spa
+2026-10-13T09:48:37.6757759Z PASS both spa.0
+2026-10-13T09:48:37.6778303Z PASS spa has teammate and room authority
+2026-10-13T09:48:40.2241972Z PASS both spa-ready.0
+2026-10-13T09:48:41.7442649Z PASS leave attempt
+2026-10-13T09:48:41.7464295Z PASS both left.0
+2026-10-13T09:48:41.8255788Z PASS disconnect between attempts
+2026-10-13T09:48:41.8338898Z PASS both disconnected.0
+2026-10-13T09:48:42.0979398Z PASS reconnect between attempts
+2026-10-13T09:48:42.1238885Z PASS both reconnected.0
+2026-10-13T09:48:54.7429434Z PASS first entrant starts fighting
+2026-10-13T09:48:55.9559851Z PASS native atrium
+2026-10-13T09:48:56.9756625Z PASS native pantheon selection UI
+2026-10-13T09:49:03.3944416Z PASS native door entrance cinematic
+2026-10-13T09:49:03.9000970Z PASS native door loads first boss
+2026-10-13T09:49:03.9013683Z PASS first boss entry
+2026-10-13T09:49:03.9090186Z PASS both startroom.1
+2026-10-13T09:49:03.9095427Z PASS native sequence room 1.0
+2026-10-13T09:49:03.9119557Z PASS both room.1.0
+2026-10-13T09:49:07.1218211Z PASS room authority 1.0
+2026-10-13T09:49:10.1234877Z PASS early room-level updates drained 1.0
+2026-10-13T09:49:10.1249952Z ROOM 1.0 scene=GG_Vengefly visit=14 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:49:10.1554237Z PASS camera authority state 1.0
+2026-10-13T09:49:10.1554237Z PASS camera lock state converges 1.0
+2026-10-13T09:49:10.1568624Z PASS visible bosses/knight and unfrozen camera 1.0
+2026-10-13T09:49:10.1605234Z PASS duplicate initial snapshot does not reset boss 1.0
+2026-10-13T09:49:10.1633499Z PASS stale room/peer leave and duplicate connect preserve avatar 1.0
+2026-10-13T09:49:10.1659019Z PASS both checked.1.0
+2026-10-13T09:49:10.1727799Z PASS damage published 1.0
+2026-10-13T09:49:10.1947754Z PASS same boss HP 1.0
+2026-10-13T09:49:10.1962670Z PASS both hpchecked.1.0
+2026-10-13T09:49:10.2042282Z PASS both entry-stress.1
+2026-10-13T09:49:11.2146435Z PASS leave attempt
+2026-10-13T09:49:11.2163403Z PASS both left.1
+2026-10-13T09:49:11.2241998Z PASS disconnect between attempts
+2026-10-13T09:49:11.2271651Z PASS both disconnected.1
+2026-10-13T09:49:11.5356541Z PASS reconnect between attempts
+2026-10-13T09:49:11.5771563Z PASS both reconnected.1
+2026-10-13T09:49:23.7504699Z PASS first entrant starts fighting
+2026-10-13T09:49:24.7596881Z PASS native atrium
+2026-10-13T09:49:25.8232257Z PASS native pantheon selection UI
+2026-10-13T09:49:32.3073853Z PASS native door entrance cinematic
+2026-10-13T09:49:32.8169248Z PASS native door loads first boss
+2026-10-13T09:49:32.8174289Z PASS first boss entry
+2026-10-13T09:49:32.8205696Z PASS both startroom.2
+2026-10-13T09:49:32.8217693Z PASS native sequence room 2.0
+2026-10-13T09:49:32.8262715Z PASS both room.2.0
+2026-10-13T09:49:35.9280333Z PASS room authority 2.0
+2026-10-13T09:49:38.9332506Z PASS early room-level updates drained 2.0
+2026-10-13T09:49:38.9338369Z ROOM 2.0 scene=GG_Vengefly visit=19 authority=False hero=(48.2, 13.4, 0.0) camera=(47.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:49:38.9745750Z PASS camera authority state 2.0
+2026-10-13T09:49:38.9761103Z PASS camera lock state converges 2.0
+2026-10-13T09:49:38.9761103Z PASS visible bosses/knight and unfrozen camera 2.0
+2026-10-13T09:49:38.9812674Z PASS duplicate initial snapshot does not reset boss 2.0
+2026-10-13T09:49:38.9839033Z PASS stale room/peer leave and duplicate connect preserve avatar 2.0
+2026-10-13T09:49:38.9872881Z PASS both checked.2.0
+2026-10-13T09:49:38.9976495Z PASS damage published 2.0
+2026-10-13T09:49:39.0180821Z PASS same boss HP 2.0
+2026-10-13T09:49:39.0190989Z PASS both hpchecked.2.0
+2026-10-13T09:49:39.0327453Z PASS both entry-stress.2
+2026-10-13T09:49:40.2009292Z PASS leave attempt
+2026-10-13T09:49:40.2032536Z PASS both left.2
+2026-10-13T09:49:40.2140261Z PASS disconnect between attempts
+2026-10-13T09:49:40.2180681Z PASS both disconnected.2
+2026-10-13T09:49:40.6512081Z PASS reconnect between attempts
+2026-10-13T09:49:40.6643658Z PASS both reconnected.2
+2026-10-13T09:49:53.2582634Z PASS first entrant starts fighting
+2026-10-13T09:49:54.2670366Z PASS native atrium
+2026-10-13T09:49:55.2937816Z PASS native pantheon selection UI
+2026-10-13T09:50:01.7246092Z PASS native door entrance cinematic
+2026-10-13T09:50:02.2328870Z PASS native door loads first boss
+2026-10-13T09:50:02.2328870Z PASS first boss entry
+2026-10-13T09:50:02.2342331Z PASS both startroom.3
+2026-10-13T09:50:02.2357727Z PASS native sequence room 3.0
+2026-10-13T09:50:02.2419262Z PASS both room.3.0
+2026-10-13T09:50:05.4098545Z PASS room authority 3.0
+2026-10-13T09:50:08.4164976Z PASS early room-level updates drained 3.0
+2026-10-13T09:50:08.4170164Z ROOM 3.0 scene=GG_Vengefly visit=24 authority=False hero=(41.9, 13.7, 0.0) camera=(45.0, 16.0, -38.1) mode=LOCKED
+2026-10-13T09:50:08.4709387Z PASS camera authority state 3.0
+2026-10-13T09:50:08.4728711Z PASS camera lock state converges 3.0
+2026-10-13T09:50:08.4739218Z PASS visible bosses/knight and unfrozen camera 3.0
+2026-10-13T09:50:08.4773348Z PASS duplicate initial snapshot does not reset boss 3.0
+2026-10-13T09:50:08.4797817Z PASS stale room/peer leave and duplicate connect preserve avatar 3.0
+2026-10-13T09:50:08.4826065Z PASS both checked.3.0
+2026-10-13T09:50:08.5023149Z PASS damage published 3.0
+2026-10-13T09:50:08.5227883Z PASS same boss HP 3.0
+2026-10-13T09:50:08.5251503Z PASS both hpchecked.3.0
+2026-10-13T09:50:08.5392302Z PASS both entry-stress.3
+2026-10-13T09:50:09.6907843Z PASS leave attempt
+2026-10-13T09:50:09.6929097Z PASS both left.3
+2026-10-13T09:50:09.7169211Z PASS disconnect between attempts
+2026-10-13T09:50:09.7235630Z PASS both disconnected.3
+2026-10-13T09:50:10.1961171Z PASS reconnect between attempts
+2026-10-13T09:50:10.2048440Z PASS both reconnected.3
+2026-10-13T09:50:23.1009235Z PASS first entrant starts fighting
+2026-10-13T09:50:24.0283843Z PASS native atrium
+2026-10-13T09:50:25.0528940Z PASS native pantheon selection UI
+2026-10-13T09:50:31.5664696Z PASS native door entrance cinematic
+2026-10-13T09:50:32.0749204Z PASS native door loads first boss
+2026-10-13T09:50:32.0761520Z PASS first boss entry
+2026-10-13T09:50:32.0788524Z PASS both startroom.4
+2026-10-13T09:50:32.0809560Z PASS native sequence room 4.0
+2026-10-13T09:50:32.0851814Z PASS both room.4.0
+2026-10-13T09:50:35.5449162Z PASS room authority 4.0
+2026-10-13T09:50:38.5511735Z PASS early room-level updates drained 4.0
+2026-10-13T09:50:38.5522101Z ROOM 4.0 scene=GG_Vengefly visit=29 authority=False hero=(48.2, 13.4, 0.0) camera=(47.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:50:38.6143517Z PASS camera authority state 4.0
+2026-10-13T09:50:38.6158910Z PASS camera lock state converges 4.0
+2026-10-13T09:50:38.6169712Z PASS visible bosses/knight and unfrozen camera 4.0
+2026-10-13T09:50:38.6211854Z PASS duplicate initial snapshot does not reset boss 4.0
+2026-10-13T09:50:38.6242363Z PASS stale room/peer leave and duplicate connect preserve avatar 4.0
+2026-10-13T09:50:38.6294014Z PASS both checked.4.0
+2026-10-13T09:50:38.6389613Z PASS damage published 4.0
+2026-10-13T09:50:38.6765535Z PASS same boss HP 4.0
+2026-10-13T09:50:38.6786695Z PASS both hpchecked.4.0
+2026-10-13T09:50:38.6847603Z PASS both entry-stress.4
+2026-10-13T09:50:39.8469146Z PASS leave attempt
+2026-10-13T09:50:39.8504245Z PASS both left.4
+2026-10-13T09:50:39.8723555Z PASS disconnect between attempts
+2026-10-13T09:50:39.8753447Z PASS both disconnected.4
+2026-10-13T09:50:40.2171802Z PASS reconnect between attempts
+2026-10-13T09:50:40.2223147Z PASS both reconnected.4
+2026-10-13T09:50:52.6000196Z PASS first entrant starts fighting
+2026-10-13T09:50:53.5261928Z PASS native atrium
+2026-10-13T09:50:54.5514752Z PASS native pantheon selection UI
+2026-10-13T09:51:00.9833011Z PASS native door entrance cinematic
+2026-10-13T09:51:01.4965426Z PASS native door loads first boss
+2026-10-13T09:51:01.4975832Z PASS first boss entry
+2026-10-13T09:51:01.5006822Z PASS both startroom.5
+2026-10-13T09:51:01.5017377Z PASS native sequence room 5.0
+2026-10-13T09:51:01.5080107Z PASS both room.5.0
+2026-10-13T09:51:04.7248639Z PASS room authority 5.0
+2026-10-13T09:51:07.7377254Z PASS early room-level updates drained 5.0
+2026-10-13T09:51:07.7382416Z ROOM 5.0 scene=GG_Vengefly visit=34 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:51:07.7791256Z PASS camera authority state 5.0
+2026-10-13T09:51:07.7796428Z PASS camera lock state converges 5.0
+2026-10-13T09:51:07.7806796Z PASS visible bosses/knight and unfrozen camera 5.0
+2026-10-13T09:51:07.7848338Z PASS duplicate initial snapshot does not reset boss 5.0
+2026-10-13T09:51:07.7879880Z PASS stale room/peer leave and duplicate connect preserve avatar 5.0
+2026-10-13T09:51:07.7905840Z PASS both checked.5.0
+2026-10-13T09:51:07.7989755Z PASS damage published 5.0
+2026-10-13T09:51:07.8240689Z PASS same boss HP 5.0
+2026-10-13T09:51:07.8256189Z PASS both hpchecked.5.0
+2026-10-13T09:51:07.8420234Z PASS both entry-stress.5
+2026-10-13T09:51:09.0872595Z PASS leave attempt
+2026-10-13T09:51:09.0889899Z PASS both left.5
+2026-10-13T09:51:09.1056088Z PASS disconnect between attempts
+2026-10-13T09:51:09.1443476Z PASS both disconnected.5
+2026-10-13T09:51:09.5478330Z PASS reconnect between attempts
+2026-10-13T09:51:09.5852192Z PASS both reconnected.5
+2026-10-13T09:51:21.8844252Z PASS first entrant starts fighting
+2026-10-13T09:51:22.9052868Z PASS native atrium
+2026-10-13T09:51:23.9291883Z PASS native pantheon selection UI
+2026-10-13T09:51:30.4615662Z PASS native door entrance cinematic
+2026-10-13T09:51:30.9741404Z PASS native door loads first boss
+2026-10-13T09:51:30.9752416Z PASS first boss entry
+2026-10-13T09:51:30.9769813Z PASS both startroom.6
+2026-10-13T09:51:30.9779879Z PASS native sequence room 6.0
+2026-10-13T09:51:30.9980348Z PASS both room.6.0
+2026-10-13T09:51:34.1401955Z PASS room authority 6.0
+2026-10-13T09:51:37.1420949Z PASS early room-level updates drained 6.0
+2026-10-13T09:51:37.1425460Z ROOM 6.0 scene=GG_Vengefly visit=39 authority=False hero=(48.2, 13.4, 0.0) camera=(47.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:51:37.1777278Z PASS camera authority state 6.0
+2026-10-13T09:51:37.1787523Z PASS camera lock state converges 6.0
+2026-10-13T09:51:37.1798097Z PASS visible bosses/knight and unfrozen camera 6.0
+2026-10-13T09:51:37.1918772Z PASS duplicate initial snapshot does not reset boss 6.0
+2026-10-13T09:51:37.1953976Z PASS stale room/peer leave and duplicate connect preserve avatar 6.0
+2026-10-13T09:51:37.1976864Z PASS both checked.6.0
+2026-10-13T09:51:37.2065860Z PASS damage published 6.0
+2026-10-13T09:51:37.2429253Z PASS same boss HP 6.0
+2026-10-13T09:51:37.2450249Z PASS both hpchecked.6.0
+2026-10-13T09:51:37.2527789Z PASS both entry-stress.6
+2026-10-13T09:51:38.6928587Z PASS leave attempt
+2026-10-13T09:51:38.6951010Z PASS both left.6
+2026-10-13T09:51:38.7202981Z PASS disconnect between attempts
+2026-10-13T09:51:38.7253582Z PASS both disconnected.6
+2026-10-13T09:51:39.0735937Z PASS reconnect between attempts
+2026-10-13T09:51:39.0851780Z PASS both reconnected.6
+2026-10-13T09:51:51.4917290Z PASS first entrant starts fighting
+2026-10-13T09:51:52.4291507Z PASS native atrium
+2026-10-13T09:51:53.4504476Z PASS native pantheon selection UI
+2026-10-13T09:51:59.9044129Z PASS native door entrance cinematic
+2026-10-13T09:52:00.4117506Z PASS native door loads first boss
+2026-10-13T09:52:00.4128912Z PASS first boss entry
+2026-10-13T09:52:00.4147727Z PASS both startroom.7
+2026-10-13T09:52:00.4158396Z PASS native sequence room 7.0
+2026-10-13T09:52:00.4228631Z PASS both room.7.0
+2026-10-13T09:52:03.4687845Z PASS room authority 7.0
+2026-10-13T09:52:06.4710343Z PASS early room-level updates drained 7.0
+2026-10-13T09:52:06.4720462Z ROOM 7.0 scene=GG_Vengefly visit=44 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:52:06.5034689Z PASS camera authority state 7.0
+2026-10-13T09:52:06.5039727Z PASS camera lock state converges 7.0
+2026-10-13T09:52:06.5052508Z PASS visible bosses/knight and unfrozen camera 7.0
+2026-10-13T09:52:06.5094802Z PASS duplicate initial snapshot does not reset boss 7.0
+2026-10-13T09:52:06.5139367Z PASS stale room/peer leave and duplicate connect preserve avatar 7.0
+2026-10-13T09:52:06.5225571Z PASS both checked.7.0
+2026-10-13T09:52:06.5327502Z PASS damage published 7.0
+2026-10-13T09:52:06.5609250Z PASS same boss HP 7.0
+2026-10-13T09:52:06.5625175Z PASS both hpchecked.7.0
+2026-10-13T09:52:06.5698861Z PASS both entry-stress.7
+2026-10-13T09:52:07.7232941Z PASS leave attempt
+2026-10-13T09:52:07.7254765Z PASS both left.7
+2026-10-13T09:52:07.7348679Z PASS disconnect between attempts
+2026-10-13T09:52:07.7591201Z PASS both disconnected.7
+2026-10-13T09:52:08.1011704Z PASS reconnect between attempts
+2026-10-13T09:52:08.1131508Z PASS both reconnected.7
+2026-10-13T09:52:21.1204016Z PASS first entrant starts fighting
+2026-10-13T09:52:22.2413449Z PASS native atrium
+2026-10-13T09:52:23.2688525Z PASS native pantheon selection UI
+2026-10-13T09:52:29.7841065Z PASS native door entrance cinematic
+2026-10-13T09:52:30.2965467Z PASS native door loads first boss
+2026-10-13T09:52:30.2965467Z PASS first boss entry
+2026-10-13T09:52:30.3045993Z PASS both startroom.8
+2026-10-13T09:52:30.3061213Z PASS native sequence room 8.0
+2026-10-13T09:52:30.3141371Z PASS both room.8.0
+2026-10-13T09:52:33.5694366Z PASS room authority 8.0
+2026-10-13T09:52:36.5712737Z PASS early room-level updates drained 8.0
+2026-10-13T09:52:36.5728326Z ROOM 8.0 scene=GG_Vengefly visit=49 authority=False hero=(48.2, 13.4, 0.0) camera=(47.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:52:36.6211162Z PASS camera authority state 8.0
+2026-10-13T09:52:36.6221675Z PASS camera lock state converges 8.0
+2026-10-13T09:52:36.6230103Z PASS visible bosses/knight and unfrozen camera 8.0
+2026-10-13T09:52:36.6274024Z PASS duplicate initial snapshot does not reset boss 8.0
+2026-10-13T09:52:36.6313208Z PASS stale room/peer leave and duplicate connect preserve avatar 8.0
+2026-10-13T09:52:36.6356901Z PASS both checked.8.0
+2026-10-13T09:52:36.6751171Z PASS damage published 8.0
+2026-10-13T09:52:36.7038914Z PASS same boss HP 8.0
+2026-10-13T09:52:36.7062005Z PASS both hpchecked.8.0
+2026-10-13T09:52:36.7132100Z PASS both entry-stress.8
+2026-10-13T09:52:38.1522856Z PASS leave attempt
+2026-10-13T09:52:38.1553560Z PASS both left.8
+2026-10-13T09:52:38.1654236Z PASS disconnect between attempts
+2026-10-13T09:52:38.1746300Z PASS both disconnected.8
+2026-10-13T09:52:38.5567189Z PASS reconnect between attempts
+2026-10-13T09:52:38.5664519Z PASS both reconnected.8
+2026-10-13T09:52:51.3147884Z PASS first entrant starts fighting
+2026-10-13T09:52:52.5549283Z PASS native atrium
+2026-10-13T09:52:53.5824709Z PASS native pantheon selection UI
+2026-10-13T09:53:00.0851423Z PASS native door entrance cinematic
+2026-10-13T09:53:00.5949761Z PASS native door loads first boss
+2026-10-13T09:53:00.5949761Z PASS first boss entry
+2026-10-13T09:53:00.6006308Z PASS both startroom.9
+2026-10-13T09:53:00.6016736Z PASS native sequence room 9.0
+2026-10-13T09:53:00.6075928Z PASS both room.9.0
+2026-10-13T09:53:03.9754288Z PASS room authority 9.0
+2026-10-13T09:53:06.9813785Z PASS early room-level updates drained 9.0
+2026-10-13T09:53:06.9831760Z ROOM 9.0 scene=GG_Vengefly visit=54 authority=False hero=(48.2, 14.4, 0.0) camera=(47.0, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:53:07.0431341Z PASS camera authority state 9.0
+2026-10-13T09:53:07.0448866Z PASS camera lock state converges 9.0
+2026-10-13T09:53:07.0459209Z PASS visible bosses/knight and unfrozen camera 9.0
+2026-10-13T09:53:07.0496156Z PASS duplicate initial snapshot does not reset boss 9.0
+2026-10-13T09:53:07.0526820Z PASS stale room/peer leave and duplicate connect preserve avatar 9.0
+2026-10-13T09:53:07.0554204Z PASS both checked.9.0
+2026-10-13T09:53:07.0710830Z PASS damage published 9.0
+2026-10-13T09:53:07.1063626Z PASS same boss HP 9.0
+2026-10-13T09:53:07.1085454Z PASS both hpchecked.9.0
+2026-10-13T09:53:07.1277832Z PASS both entry-stress.9
+2026-10-13T09:53:08.6589153Z PASS leave attempt
+2026-10-13T09:53:08.6615498Z PASS both left.9
+2026-10-13T09:53:08.6715627Z PASS disconnect between attempts
+2026-10-13T09:53:08.6748014Z PASS both disconnected.9
+2026-10-13T09:53:09.1223523Z PASS reconnect between attempts
+2026-10-13T09:53:09.1250258Z PASS both reconnected.9
+2026-10-13T09:53:22.0737521Z PASS first entrant starts fighting
+2026-10-13T09:53:23.3405518Z PASS native atrium
+2026-10-13T09:53:24.3653744Z PASS native pantheon selection UI
+2026-10-13T09:53:30.8843811Z PASS native door entrance cinematic
+2026-10-13T09:53:31.4040796Z PASS native door loads first boss
+2026-10-13T09:53:31.4050864Z PASS first boss entry
+2026-10-13T09:53:31.4344365Z PASS both startroom.10
+2026-10-13T09:53:31.4358305Z PASS native sequence room 10.0
+2026-10-13T09:53:31.4391821Z PASS both room.10.0
+2026-10-13T09:53:34.7648071Z PASS room authority 10.0
+2026-10-13T09:53:37.7707670Z PASS early room-level updates drained 10.0
+2026-10-13T09:53:37.7712709Z ROOM 10.0 scene=GG_Vengefly visit=59 authority=False hero=(42.5, 14.8, 0.0) camera=(45.5, 15.8, -38.1) mode=LOCKED
+2026-10-13T09:53:37.8525517Z PASS camera authority state 10.0
+2026-10-13T09:53:37.8541139Z PASS camera lock state converges 10.0
+2026-10-13T09:53:37.8551812Z PASS visible bosses/knight and unfrozen camera 10.0
+2026-10-13T09:53:37.8589294Z PASS duplicate initial snapshot does not reset boss 10.0
+2026-10-13T09:53:37.8739219Z PASS stale room/peer leave and duplicate connect preserve avatar 10.0
+2026-10-13T09:53:37.8790232Z PASS both checked.10.0
+2026-10-13T09:53:37.8953710Z PASS damage published 10.0
+2026-10-13T09:53:37.9225545Z PASS same boss HP 10.0
+2026-10-13T09:53:37.9248852Z PASS both hpchecked.10.0
+2026-10-13T09:53:37.9347802Z PASS both entry-stress.10
+2026-10-13T09:53:39.8445676Z PASS leave attempt
+2026-10-13T09:53:39.8466772Z PASS both left.10
+2026-10-13T09:53:39.8685946Z PASS disconnect between attempts
+2026-10-13T09:53:39.8776978Z PASS both disconnected.10
+2026-10-13T09:53:40.3561339Z PASS reconnect between attempts
+2026-10-13T09:53:40.3583556Z PASS both reconnected.10
+2026-10-13T09:53:53.0769337Z PASS first entrant starts fighting
+2026-10-13T09:53:54.1732269Z PASS native atrium
+2026-10-13T09:53:55.1989824Z PASS native pantheon selection UI
+2026-10-13T09:54:01.6849612Z PASS native door entrance cinematic
+2026-10-13T09:54:02.1998673Z PASS native door loads first boss
+2026-10-13T09:54:02.2011110Z PASS first boss entry
+2026-10-13T09:54:02.2030248Z PASS both startroom.11
+2026-10-13T09:54:02.2036495Z PASS native sequence room 11.0
+2026-10-13T09:54:02.2127611Z PASS both room.11.0
+2026-10-13T09:54:05.4535738Z PASS room authority 11.0
+2026-10-13T09:54:08.4560136Z PASS early room-level updates drained 11.0
+2026-10-13T09:54:08.4568826Z ROOM 11.0 scene=GG_Vengefly visit=64 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T09:54:08.5064607Z PASS camera authority state 11.0
+2026-10-13T09:54:08.5082719Z PASS camera lock state converges 11.0
+2026-10-13T09:54:08.5093042Z PASS visible bosses/knight and unfrozen camera 11.0
+2026-10-13T09:54:08.5138437Z PASS duplicate initial snapshot does not reset boss 11.0
+2026-10-13T09:54:08.5170546Z PASS stale room/peer leave and duplicate connect preserve avatar 11.0
+2026-10-13T09:54:08.5202268Z PASS both checked.11.0
+2026-10-13T09:54:08.5280285Z PASS damage published 11.0
+2026-10-13T09:54:08.5764631Z PASS same boss HP 11.0
+2026-10-13T09:54:08.5787973Z PASS both hpchecked.11.0
+2026-10-13T09:54:08.5850951Z PASS both entry-stress.11
+2026-10-13T09:54:09.9095940Z PASS leave attempt
+2026-10-13T09:54:09.9128037Z PASS both left.11
+2026-10-13T09:54:09.9229056Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio
+2026-10-13T09:54:09.9493298Z PASS both probe-checked
+2026-10-13T09:54:09.9600861Z PASS final client disconnect
+2026-10-13T09:54:09.9686933Z PASS both probe-disconnected
+2026-10-13T09:54:10.0105925Z PASS server acknowledges final disconnects
+2026-10-13T09:54:10.0236038Z PASS final server stopped

@@ -1,232 +1,233 @@
-2026-10-13T07:14:27.2963376Z PASS menu ready
-2026-10-13T07:14:31.5145204Z PASS unsaved character ready
-2026-10-13T07:14:32.3613722Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7
-2026-10-13T07:14:32.3950295Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0
-2026-10-13T07:14:32.4096312Z PASS connected
-2026-10-13T07:14:32.4772788Z PASS both connected
-2026-10-13T07:14:33.7546931Z ENGINE Room prepared: GG_Grimm, visit=2, epoch=0, entities=2
-2026-10-13T07:14:33.8695055Z PASS arena entered
-2026-10-13T07:14:33.9053634Z ENGINE Room snapshot committed: GG_Grimm, visit=2, epoch=0, authority=True, peers=0
-2026-10-13T07:14:33.9068702Z PASS authority ready
-2026-10-13T07:14:36.8472699Z PASS both in arena
-2026-10-13T07:15:17.2663461Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.2678817Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.2689488Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.2710096Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.2720529Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.2741359Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.3468399Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.3486323Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.3517853Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.3528297Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.3528297Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.3574596Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.6684424Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:17.6684424Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:17.6694785Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:17.6743130Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:17.6748388Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:17.6753492Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:17.8584021Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.8594082Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.8604560Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.8614907Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.8625280Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.8635617Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:17.9393830Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.9404238Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.9404238Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.9450743Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.9460948Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:17.9460948Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:18.2587890Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.2598363Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.2640189Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.2640189Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.2650515Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.2650515Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.4626612Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:18.4643713Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:18.4654093Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:18.4675258Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:18.4685615Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:18.4707806Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:18.5430793Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:18.5445203Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:18.5491578Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:18.5491578Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:18.5502067Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:18.5502067Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:18.8627620Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.8684501Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.8684501Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.8694643Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.8694643Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:18.8694643Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:19.0664011Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.0674159Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.0685089Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.0701827Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.0711888Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.0732392Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.1475922Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.1475922Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.1525263Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.1525263Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.1535441Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.1535441Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.4692415Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:19.4692415Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:19.4702491Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:19.4712533Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:19.4762827Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:19.4767887Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:19.6662350Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.6677468Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.6693159Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.6703218Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.6713469Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.6730099Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:19.7492643Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.7492643Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.7504491Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.7504491Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.7515440Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:19.7572794Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:20.0675096Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.0715112Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.0725321Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.0725321Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.0725321Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.0735491Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.5462758Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:20.5477861Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:20.5495295Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:20.5500403Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:20.5510832Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:20.5521325Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:20.6306477Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:20.6316502Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:20.6316502Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:20.6330373Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:20.6330373Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:20.6330373Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:20.9499335Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.9509389Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.9519454Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.9519454Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.9519454Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:20.9533380Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:21.1490440Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.1500499Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.1510512Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.1524321Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.1534444Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.1544544Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.2320348Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.2330379Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.2330379Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.2340729Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.2340729Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.2352610Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.5528630Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:21.5533676Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:21.5533676Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:21.5543729Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:21.5543729Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:21.5554573Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:21.7489738Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.7500767Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.7522320Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.7532430Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.7542501Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.7556945Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:21.8325828Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.8337348Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.8337348Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.8348369Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.8348369Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:21.8348369Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:22.1508255Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:22.1508255Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:22.1545209Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:22.1555292Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:22.1555292Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:22.1565321Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:22.6328850Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:22.6338869Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:22.6348931Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:22.6364559Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:22.6374585Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:22.6384866Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:22.7154609Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:22.7154609Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:22.7164667Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:22.7164667Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:22.7212587Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:22.7212587Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.0334539Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.0375594Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.0375594Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.0385630Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.0385630Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.0397605Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.2356516Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.2361579Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.2371736Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.2383560Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.2394821Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.2413917Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.3182981Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.3182981Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.3195991Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.3201050Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.3206110Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.3253838Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.6374329Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.6374329Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.6384427Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.6384427Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.6435689Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.6435689Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:23.8369929Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.8393282Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.8403354Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.8413756Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.8442724Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.8456390Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:23.9194119Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.9199257Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.9199257Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.9251508Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.9251508Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:23.9261794Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:24.2415539Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:24.2420579Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:24.2420579Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:24.2430904Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:24.2496846Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:24.2511592Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:24.7173365Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:24.7183701Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:24.7194161Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:24.7204596Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:24.7219629Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
-2026-10-13T07:15:24.7230051Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
-2026-10-13T07:15:24.7979179Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:24.7989502Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:24.8031201Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:24.8031201Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:24.8041618Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:24.8041618Z PASS native fire force and coroutine survive network registration
-2026-10-13T07:15:25.1196554Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:25.1206908Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:25.1206908Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:25.1217285Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:25.1217285Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:25.1295600Z PASS native balloon projectile accelerates horizontally
-2026-10-13T07:15:46.8522149Z PASS multiple native balloon launches retain horizontal motion
-2026-10-13T07:15:46.8532545Z PASS native firebats travel horizontally
-2026-10-13T07:15:46.8542915Z PASS both motion probes finished
-2026-10-13T07:15:46.8889817Z PASS both clients disconnected normally
-2026-10-13T07:15:47.1948501Z FINAL PASS Grimm native motion GG_Grimm
+2026-10-13T15:02:44.6848154Z PASS menu ready
+2026-10-13T15:02:48.8368679Z PASS unsaved character ready
+2026-10-13T15:02:49.6912009Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7
+2026-10-13T15:02:49.7276475Z PASS connected
+2026-10-13T15:02:49.7399057Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0
+2026-10-13T15:02:49.8172719Z PASS both connected
+2026-10-13T15:02:51.1456554Z ENGINE Room prepared: GG_Grimm, visit=2, epoch=0, entities=2
+2026-10-13T15:02:51.2942766Z PASS arena entered
+2026-10-13T15:02:51.2942766Z PASS selected in-memory character never reopens profile menu
+2026-10-13T15:02:51.3232432Z ENGINE Room snapshot committed: GG_Grimm, visit=2, epoch=0, authority=True, peers=0
+2026-10-13T15:02:51.3254110Z PASS authority ready
+2026-10-13T15:02:54.1552520Z PASS both in arena
+2026-10-13T15:02:54.1565365Z FIXTURE stationary invulnerable target (80, 8), in arena and farther than native Balloon Check minimum 6 from (85.77, 13.5); no boss FSM state or transform forced
+2026-10-13T15:03:36.1359837Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.1374084Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.1384436Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.1384436Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.1399509Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.1419625Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.2151786Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.2198200Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.2198200Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.2211031Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.2222136Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.2222136Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.5398006Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:36.5409190Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:36.5419441Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:36.5419441Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:36.5419441Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:36.5434429Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:36.7375409Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.7385524Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.7385524Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.7400593Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.7421081Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.7432613Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:36.8179033Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.8179033Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.8229065Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.8241005Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.8251045Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:36.8251045Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:37.1391418Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:37.1391418Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:37.1401449Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:37.1401449Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:37.1458822Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:37.1458822Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:37.6165375Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:37.6175116Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:37.6185139Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:37.6200205Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:37.6212414Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:37.6225806Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:37.7010925Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:37.7010925Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:37.7021156Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:37.7021156Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:37.7035038Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:37.7035038Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.0332235Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.0332235Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.0343157Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.0353256Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.0353256Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.0363446Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.2209319Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.2232535Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.2244107Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.2264152Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.2279222Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.2289281Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.3050339Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.3050339Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.3060524Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.3070541Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.3111604Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.3121875Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.6221538Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.6234101Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.6291589Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.6291589Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.6301665Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.6311811Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:38.8198345Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.8208988Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.8219016Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.8229016Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.8243510Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.8258871Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:38.9092326Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.9097367Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.9097367Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.9107530Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.9117833Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:38.9124343Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:39.2204270Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:39.2252103Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:39.2252103Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:39.2262396Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:39.2262396Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:39.2272438Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:39.7012032Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:39.7022210Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:39.7042653Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:39.7052903Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:39.7063184Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:39.7063184Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:39.7815764Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:39.7872064Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:39.7872064Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:39.7882144Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:39.7882144Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:39.7882144Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:40.1055384Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.1055384Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.1065417Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.1065417Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.1065417Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.1080368Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.3039812Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:40.3049997Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:40.3060510Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:40.3074623Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:40.3084718Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:40.3084718Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:40.3844098Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:40.3885776Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:40.3897778Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:40.3908013Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:40.3908013Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:40.3918190Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:40.7033989Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.7085165Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.7085165Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.7085165Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.7100239Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:40.7100239Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:41.1984924Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.1999998Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.2012749Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.2022826Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.2033015Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.2033015Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.2816416Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.2821467Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.2831502Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.2831502Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.2841561Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.2841561Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.6009701Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:41.6019741Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:41.6030343Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:41.6030343Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:41.6044330Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:41.6044330Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:41.7929614Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.7950108Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.7960109Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.7970135Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.7981788Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.7991862Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:41.8770118Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.8770118Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.8780302Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.8780302Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.8780302Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:41.8791156Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:42.1958488Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.1968907Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.1979156Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.1979156Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.1989373Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.1989373Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.3964651Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:42.3974722Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:42.3984781Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:42.3999851Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:42.4010325Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:42.4020445Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:42.4805734Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:42.4816923Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:42.4816923Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:42.4822028Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:42.4827234Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:42.4832404Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:42.7978081Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.7991528Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.7997024Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.8031656Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.8041708Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:42.8041708Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:43.2778709Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.2788743Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.2803804Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.2818841Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.2828851Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.2840976Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.3648316Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.3648316Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.3658392Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.3668937Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.3668937Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.3678959Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.6809327Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:43.6809327Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:43.6819727Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:43.6819727Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:43.6834190Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:43.6839235Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:43.8798307Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.8811708Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.8811708Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.8824702Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.8837546Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.8850431Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-13T15:03:43.9601697Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.9651728Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.9664223Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.9664223Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.9675233Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:43.9675233Z PASS native fire force and coroutine survive network registration
+2026-10-13T15:03:44.2843126Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:44.2843126Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:44.2843126Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:44.2855478Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:44.2855478Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:03:44.2868796Z PASS native balloon projectile accelerates horizontally
+2026-10-13T15:04:04.1654094Z PASS multiple native balloon launches retain horizontal motion
+2026-10-13T15:04:04.1654094Z PASS native firebats travel horizontally
+2026-10-13T15:04:04.1781202Z PASS both motion probes finished
+2026-10-13T15:04:04.5877278Z FINAL PASS Grimm native motion GG_Grimm

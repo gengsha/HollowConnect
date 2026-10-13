@@ -1,0 +1,788 @@
+2026-10-13T13:02:13.1712815Z PASS menu
+2026-10-13T13:02:17.3579185Z PASS unsaved character
+2026-10-13T13:02:17.4432953Z PASS server ready
+2026-10-13T13:02:18.3468914Z PASS handshake
+2026-10-13T13:02:18.3492890Z PASS both connected
+2026-10-13T13:02:18.9598331Z PASS moss room
+2026-10-13T13:02:18.9908401Z PASS first moss authority
+2026-10-13T13:02:20.0574023Z PASS both moss
+2026-10-13T13:02:20.0608418Z PASS room authority lifecycle-moss
+2026-10-13T13:02:23.0617815Z PASS early room-level updates drained lifecycle-moss
+2026-10-13T13:02:23.0633629Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=True hero=(43.9, 7.4, 0.0) camera=(45.0, 10.9, -38.1) mode=FOLLOWING
+2026-10-13T13:02:23.0808386Z PASS camera authority state lifecycle-moss
+2026-10-13T13:02:23.0818571Z PASS camera lock state converges lifecycle-moss
+2026-10-13T13:02:23.0834404Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-13T13:02:23.0874038Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-13T13:02:26.1389706Z PASS both checked.lifecycle-moss
+2026-10-13T13:02:26.1424786Z PASS damage published lifecycle-moss
+2026-10-13T13:02:26.1434813Z PASS same boss HP lifecycle-moss
+2026-10-13T13:02:26.1765522Z PASS both hpchecked.lifecycle-moss
+2026-10-13T13:02:26.1832650Z PASS replica loop target destroyed
+2026-10-13T13:02:26.1842878Z PASS both destroyed-loop
+2026-10-13T13:02:35.9124128Z COLLIDER ENABLE before fsm=Stun Control state= restart=True
+2026-10-13T13:02:35.9134158Z COLLIDER ENABLE after fsm=Stun Control state=Init
+2026-10-13T13:02:35.9147848Z COLLIDER ENABLE before fsm=Control state= restart=True
+2026-10-13T13:02:35.9157918Z COLLIDER ENABLE after fsm=Control state=Pause
+2026-10-13T13:02:36.1141851Z COLLIDER ENABLE before fsm=Control state= restart=True
+2026-10-13T13:02:36.1151933Z COLLIDER ENABLE after fsm=Control state=Pause
+2026-10-13T13:02:36.1151933Z COLLIDER ENABLE before fsm=Stun Control state= restart=True
+2026-10-13T13:02:36.1161995Z COLLIDER ENABLE after fsm=Stun Control state=Init
+2026-10-13T13:02:36.1270133Z COLLIDER FIND owner=Hornet Boss 1 fsm=Control state=Pause variable=Needle before=e:4568293017055036489 after=e:4568293017055036489 target=e:7214630437068105499
+2026-10-13T13:02:36.1270133Z COLLIDER FIND owner=Hornet Boss 1 fsm=Control state=Pause variable=Needle Tink before=e:4568293017055036489/Needle%20Tink#0 after=e:4568293017055036489/Needle%20Tink#0 target=e:4568293017055036489
+2026-10-13T13:02:36.2294568Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-13T13:02:36.2335096Z PASS both hornet-entered
+2026-10-13T13:02:36.2335096Z PASS room authority lifecycle-hornet
+2026-10-13T13:02:39.2360122Z PASS early room-level updates drained lifecycle-hornet
+2026-10-13T13:02:39.2371607Z ROOM lifecycle-hornet scene=GG_Hornet_1 visit=3 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=FOLLOWING
+2026-10-13T13:02:39.2412219Z PASS camera authority state lifecycle-hornet
+2026-10-13T13:02:39.2424282Z PASS camera lock state converges lifecycle-hornet
+2026-10-13T13:02:39.2434297Z PASS visible bosses/knight and unfrozen camera lifecycle-hornet
+2026-10-13T13:02:39.2446130Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-hornet
+2026-10-13T13:02:42.1832893Z PASS both checked.lifecycle-hornet
+2026-10-13T13:02:42.1854631Z PASS damage published lifecycle-hornet
+2026-10-13T13:02:42.1864699Z PASS same boss HP lifecycle-hornet
+2026-10-13T13:02:42.2101329Z PASS both hpchecked.lifecycle-hornet
+2026-10-13T13:02:42.2122019Z COLLIDER REFS initial-before-disconnect owner=Hornet Boss 1 fsm=Control state=G Dash vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:02:42.2137089Z COLLIDER BIND initial-before-disconnect fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:42.2137089Z COLLIDER BIND initial-before-disconnect fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:02:42.2151224Z COLLIDER BIND initial-before-disconnect fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:42.2165384Z COLLIDER REFS initial-before-disconnect owner=Hornet Boss 1 fsm=Stun Control state=Idle vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:02:42.2165384Z COLLIDER REFS initial-before-disconnect owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:02:42.2176623Z COLLIDER REFS initial-before-disconnect owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:02:42.2176623Z COLLIDER REFS initial-before-disconnect owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:02:42.2191195Z COLLIDER REFS initial-before-disconnect owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:02:42.2203594Z COLLIDER REFS initial-before-disconnect owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:02:42.2203594Z COLLIDER REFS initial-before-disconnect owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:02:42.2215704Z COLLIDER REFS initial-before-disconnect owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:02:42.2226729Z COLLIDER REFS initial-before-disconnect owner=A Dash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:42.2231772Z COLLIDER REFS initial-before-disconnect owner=Flash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:42.2231772Z COLLIDER REFS initial-before-disconnect owner=Throw Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:42.2241888Z COLLIDER REFS initial-before-disconnect owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:02:42.2254827Z COLLIDER REFS initial-before-disconnect owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:02:42.2254827Z COLLIDER REFS initial-before-disconnect owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:02:42.2526278Z COLLIDER REFS initial-after-disconnect owner=Hornet Boss 1 fsm=Control state=G Dash vars=A Dash Effect:A Dash Effect[p:GG_Hornet_1
+2026-10-13T13:02:42.2541342Z COLLIDER BIND initial-after-disconnect fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:42.2541342Z COLLIDER BIND initial-after-disconnect fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:02:42.2553548Z COLLIDER BIND initial-after-disconnect fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:42.2567303Z COLLIDER REFS initial-after-disconnect owner=Hornet Boss 1 fsm=Stun Control state=Idle vars=Self:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2577330Z COLLIDER REFS initial-after-disconnect owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2589992Z COLLIDER REFS initial-after-disconnect owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:02:42.2589992Z COLLIDER REFS initial-after-disconnect owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2602300Z COLLIDER REFS initial-after-disconnect owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2612351Z COLLIDER REFS initial-after-disconnect owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2612351Z COLLIDER REFS initial-after-disconnect owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2622469Z COLLIDER REFS initial-after-disconnect owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:02:42.2632513Z COLLIDER REFS initial-after-disconnect owner=A Dash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:42.2644077Z COLLIDER REFS initial-after-disconnect owner=Flash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:42.2644077Z COLLIDER REFS initial-after-disconnect owner=Throw Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:42.2658025Z COLLIDER REFS initial-after-disconnect owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2668027Z COLLIDER REFS initial-after-disconnect owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:42.2668027Z COLLIDER REFS initial-after-disconnect owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[p:GG_Hornet_1
+2026-10-13T13:02:42.2913657Z PASS both lifecycle-disconnected
+2026-10-13T13:02:42.5120732Z PASS reconnect after destroyed-loop cleanup
+2026-10-13T13:02:42.5295203Z COLLIDER ENABLE before fsm=Control state=G Dash restart=False
+2026-10-13T13:02:42.5305277Z COLLIDER ENABLE after fsm=Control state=G Dash
+2026-10-13T13:02:42.5305277Z COLLIDER ENABLE before fsm=Stun Control state=Idle restart=False
+2026-10-13T13:02:42.5315295Z COLLIDER ENABLE after fsm=Stun Control state=Idle
+2026-10-13T13:02:42.5335346Z PASS rejoined room authority
+2026-10-13T13:02:45.5392243Z PASS both lifecycle-reconnected
+2026-10-13T13:02:45.5402300Z PASS room authority lifecycle-retry
+2026-10-13T13:02:48.5435148Z PASS early room-level updates drained lifecycle-retry
+2026-10-13T13:02:48.5435148Z ROOM lifecycle-retry scene=GG_Hornet_1 visit=4 authority=True hero=(19.5, 29.9, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T13:02:48.5477070Z PASS camera authority state lifecycle-retry
+2026-10-13T13:02:48.5487143Z PASS camera lock state converges lifecycle-retry
+2026-10-13T13:02:48.5497167Z PASS visible bosses/knight and unfrozen camera lifecycle-retry
+2026-10-13T13:02:48.5507196Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-retry
+2026-10-13T13:02:48.5700579Z PASS both checked.lifecycle-retry
+2026-10-13T13:02:48.5712741Z PASS damage published lifecycle-retry
+2026-10-13T13:02:48.5723728Z PASS same boss HP lifecycle-retry
+2026-10-13T13:02:48.5863998Z PASS both hpchecked.lifecycle-retry
+2026-10-13T13:02:48.5874082Z COLLIDER REFS retry-first owner=Hornet Boss 1 fsm=Control state=In Air vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:02:48.5874082Z COLLIDER BIND retry-first fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:48.5884102Z COLLIDER BIND retry-first fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:02:48.5884102Z COLLIDER BIND retry-first fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:48.5894948Z COLLIDER REFS retry-first owner=Hornet Boss 1 fsm=Stun Control state=Idle vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:02:48.5905017Z COLLIDER REFS retry-first owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:02:48.5905017Z COLLIDER REFS retry-first owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:02:48.5915256Z COLLIDER REFS retry-first owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:02:48.5915256Z COLLIDER REFS retry-first owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:02:48.5925305Z COLLIDER REFS retry-first owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:02:48.5935334Z COLLIDER REFS retry-first owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:02:48.5935334Z COLLIDER REFS retry-first owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:02:48.5945616Z COLLIDER REFS retry-first owner=A Dash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:48.5955664Z COLLIDER REFS retry-first owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:02:48.5955664Z COLLIDER REFS retry-first owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:02:48.5967621Z COLLIDER REFS retry-first owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:02:48.5977797Z COLLIDER REFS retry-first owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:02:48.5977797Z COLLIDER REFS retry-first owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Throw Effect[e:7214630437068105499/Throw%20Effect#0]
+2026-10-13T13:02:48.5987931Z COLLIDER REFS retry-first owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:02:48.6080456Z NATIVE NEEDLE before reconnect 0 state=In Air hero=(22.5, 28.4, 0.0) boss=(26.2, 31.4, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:48.7312898Z NATIVE NEEDLE before reconnect 0 state=Land hero=(22.5, 28.4, 0.0) boss=(26.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:48.9801235Z NATIVE NEEDLE before reconnect 0 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(26.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:49.2318785Z NATIVE NEEDLE before reconnect 0 state=Run hero=(22.5, 28.4, 0.0) boss=(26.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:49.7401503Z NATIVE NEEDLE before reconnect 0 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(30.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:50.2966328Z NATIVE NEEDLE before reconnect 0 state=G Dash hero=(22.5, 28.4, 0.0) boss=(30.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:50.9223147Z NATIVE NEEDLE before reconnect 0 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(21.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:51.1461521Z NATIVE NEEDLE before reconnect 0 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(20.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:51.2591088Z NATIVE NEEDLE before reconnect 0 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(20.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:51.5092545Z NATIVE NEEDLE before reconnect 0 state=Run hero=(22.5, 28.4, 0.0) boss=(20.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:51.9687834Z NATIVE NEEDLE before reconnect 0 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(16.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:52.3041995Z NATIVE NEEDLE before reconnect 0 state=In Air hero=(22.5, 28.4, 0.0) boss=(16.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:53.1896293Z NATIVE NEEDLE before reconnect 0 state=Land hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:53.4401594Z NATIVE NEEDLE before reconnect 0 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:53.6916169Z NATIVE NEEDLE before reconnect 0 state=Run hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:54.2132429Z NATIVE NEEDLE before reconnect 0 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(31.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:54.9915935Z NATIVE NEEDLE before reconnect 0 state=Thrown hero=(22.5, 28.4, 0.0) boss=(31.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:02:54.9927577Z PASS native needle throw before reconnect 0
+2026-10-13T13:02:54.9932629Z COLLIDER REFS before 0 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:02:54.9932629Z COLLIDER BIND before 0 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:54.9947820Z COLLIDER BIND before 0 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:02:54.9958934Z COLLIDER BIND before 0 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:54.9958934Z COLLIDER REFS before 0 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:02:54.9968950Z COLLIDER REFS before 0 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:02:54.9968950Z COLLIDER REFS before 0 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:02:54.9980832Z COLLIDER REFS before 0 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:02:54.9990902Z COLLIDER REFS before 0 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:02:54.9990902Z COLLIDER REFS before 0 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:02:55.0000934Z COLLIDER REFS before 0 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:02:55.0000934Z COLLIDER REFS before 0 owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:02:55.0012954Z COLLIDER REFS before 0 owner=A Dash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:55.0012954Z COLLIDER REFS before 0 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:02:55.0023016Z COLLIDER REFS before 0 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:02:55.0023016Z COLLIDER REFS before 0 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:02:55.0033115Z COLLIDER REFS before 0 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:02:55.0033115Z COLLIDER REFS before 0 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:02:55.0156832Z PASS both phase.collider-cycle.0
+2026-10-13T13:02:55.0207301Z COLLIDER REFS disconnected 0 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[p:GG_Hornet_1
+2026-10-13T13:02:55.0217325Z COLLIDER BIND disconnected 0 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:55.0217325Z COLLIDER BIND disconnected 0 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:02:55.0232386Z COLLIDER BIND disconnected 0 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:55.0232386Z COLLIDER REFS disconnected 0 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0242436Z COLLIDER REFS disconnected 0 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0255945Z COLLIDER REFS disconnected 0 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:02:55.0262404Z COLLIDER REFS disconnected 0 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0272492Z COLLIDER REFS disconnected 0 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0272492Z COLLIDER REFS disconnected 0 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0285585Z COLLIDER REFS disconnected 0 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0295777Z COLLIDER REFS disconnected 0 owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:02:55.0295777Z COLLIDER REFS disconnected 0 owner=A Dash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T13:02:55.0306024Z COLLIDER REFS disconnected 0 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0316051Z COLLIDER REFS disconnected 0 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0326078Z COLLIDER REFS disconnected 0 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[p:GG_Hornet_1
+2026-10-13T13:02:55.0336106Z COLLIDER REFS disconnected 0 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0336106Z COLLIDER REFS disconnected 0 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:02:55.0504801Z PASS both disconnected.collider-cycle.0
+2026-10-13T13:02:55.2733720Z COLLIDER ENABLE before fsm=Control state=Thrown restart=False
+2026-10-13T13:02:55.2733720Z COLLIDER ENABLE after fsm=Control state=Thrown
+2026-10-13T13:02:55.2748365Z COLLIDER ENABLE before fsm=Stun Control state=Stop restart=False
+2026-10-13T13:02:55.2760401Z COLLIDER ENABLE after fsm=Stun Control state=Stop
+2026-10-13T13:02:55.2779798Z PASS needle-phase reconnect 0
+2026-10-13T13:02:58.2772729Z PASS both connected.collider-cycle.0
+2026-10-13T13:02:58.2772729Z COLLIDER REFS reconnected 0 owner=Hornet Boss 1 fsm=Control state=Hard Land vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:02:58.2788550Z COLLIDER BIND reconnected 0 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:58.2788550Z COLLIDER BIND reconnected 0 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:02:58.2798551Z COLLIDER BIND reconnected 0 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:02:58.2798551Z COLLIDER REFS reconnected 0 owner=Hornet Boss 1 fsm=Stun Control state=Idle vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:02:58.2808577Z COLLIDER REFS reconnected 0 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:02:58.2808577Z COLLIDER REFS reconnected 0 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:02:58.2818599Z COLLIDER REFS reconnected 0 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:02:58.2818599Z COLLIDER REFS reconnected 0 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:02:58.2833677Z COLLIDER REFS reconnected 0 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:02:58.2833677Z COLLIDER REFS reconnected 0 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:02:58.2845715Z COLLIDER REFS reconnected 0 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:02:58.2845715Z COLLIDER REFS reconnected 0 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:02:58.2845715Z COLLIDER REFS reconnected 0 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:02:58.2860226Z COLLIDER REFS reconnected 0 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:02:58.2870331Z COLLIDER REFS reconnected 0 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:02:58.2870331Z COLLIDER REFS reconnected 0 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:02:58.2880363Z COLLIDER REFS reconnected 0 owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Throw Effect[e:7214630437068105499/Throw%20Effect#0]
+2026-10-13T13:02:58.2880363Z COLLIDER REFS reconnected 0 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:02:58.2890396Z PASS room authority collider-cycle.0
+2026-10-13T13:03:01.2924391Z PASS early room-level updates drained collider-cycle.0
+2026-10-13T13:03:01.2934411Z ROOM collider-cycle.0 scene=GG_Hornet_1 visit=5 authority=True hero=(16.2, 31.5, 0.0) camera=(26.4, 33.2, -38.1) mode=LOCKED
+2026-10-13T13:03:01.2975303Z PASS camera authority state collider-cycle.0
+2026-10-13T13:03:01.2985490Z PASS camera lock state converges collider-cycle.0
+2026-10-13T13:03:01.2995591Z PASS visible bosses/knight and unfrozen camera collider-cycle.0
+2026-10-13T13:03:01.3018240Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.0
+2026-10-13T13:03:01.3215312Z PASS both checked.collider-cycle.0
+2026-10-13T13:03:01.3236204Z PASS damage published collider-cycle.0
+2026-10-13T13:03:01.3236204Z PASS same boss HP collider-cycle.0
+2026-10-13T13:03:01.3553990Z PASS both hpchecked.collider-cycle.0
+2026-10-13T13:03:01.3566885Z NATIVE NEEDLE after reconnect 0 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(15.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:01.5049495Z NATIVE NEEDLE after reconnect 0 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(15.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:01.7545751Z NATIVE NEEDLE after reconnect 0 state=Run hero=(22.5, 28.4, 0.0) boss=(15.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:01.7620190Z NATIVE NEEDLE after reconnect 0 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(15.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:02.5420620Z NATIVE NEEDLE after reconnect 0 state=Thrown hero=(22.5, 28.4, 0.0) boss=(16.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:02.5420620Z PASS native needle throw after reconnect 0
+2026-10-13T13:03:03.9875034Z PASS native Throw Recover after reconnect 0
+2026-10-13T13:03:05.9943901Z PASS both settled.collider-cycle.0
+2026-10-13T13:03:05.9953942Z NATIVE NEEDLE before reconnect 1 state=Run hero=(22.5, 28.4, 0.0) boss=(27.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:06.4871271Z NATIVE NEEDLE before reconnect 1 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(31.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:06.8220315Z NATIVE NEEDLE before reconnect 1 state=In Air hero=(22.5, 28.4, 0.0) boss=(31.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:07.1549236Z NATIVE NEEDLE before reconnect 1 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(30.2, 36.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:07.6073344Z NATIVE NEEDLE before reconnect 1 state=A Dash hero=(22.5, 28.4, 0.0) boss=(30.2, 36.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:03:08.2966010Z NATIVE NEEDLE before reconnect 1 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.0, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:08.7986328Z NATIVE NEEDLE before reconnect 1 state=Idle hero=(22.5, 28.4, 0.0) boss=(20.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:08.9817116Z NATIVE NEEDLE before reconnect 1 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(20.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:09.3167487Z NATIVE NEEDLE before reconnect 1 state=In Air hero=(22.5, 28.4, 0.0) boss=(20.9, 29.3, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:10.1953043Z NATIVE NEEDLE before reconnect 1 state=Land hero=(22.5, 28.4, 0.0) boss=(28.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:10.4477720Z NATIVE NEEDLE before reconnect 1 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(28.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:10.6984798Z NATIVE NEEDLE before reconnect 1 state=Run hero=(22.5, 28.4, 0.0) boss=(28.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:11.0808777Z NATIVE NEEDLE before reconnect 1 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(31.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:11.8593955Z NATIVE NEEDLE before reconnect 1 state=Thrown hero=(22.5, 28.4, 0.0) boss=(31.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:11.8593955Z PASS native needle throw before reconnect 1
+2026-10-13T13:03:11.8606559Z COLLIDER REFS before 1 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:03:11.8606559Z COLLIDER BIND before 1 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:11.8619586Z COLLIDER BIND before 1 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:03:11.8619586Z COLLIDER BIND before 1 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:11.8634656Z COLLIDER REFS before 1 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:03:11.8634656Z COLLIDER REFS before 1 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:03:11.8644837Z COLLIDER REFS before 1 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:03:11.8644837Z COLLIDER REFS before 1 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:03:11.8654874Z COLLIDER REFS before 1 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:03:11.8665096Z COLLIDER REFS before 1 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:03:11.8670139Z COLLIDER REFS before 1 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:03:11.8670139Z COLLIDER REFS before 1 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:03:11.8680200Z COLLIDER REFS before 1 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:03:11.8690246Z COLLIDER REFS before 1 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:03:11.8690246Z COLLIDER REFS before 1 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:03:11.8700295Z COLLIDER REFS before 1 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:03:11.8700295Z COLLIDER REFS before 1 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:03:11.8700295Z COLLIDER REFS before 1 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:03:11.8758877Z PASS both phase.collider-cycle.1
+2026-10-13T13:03:11.8811303Z COLLIDER REFS disconnected 1 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[p:GG_Hornet_1
+2026-10-13T13:03:11.8826375Z COLLIDER BIND disconnected 1 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:11.8831407Z COLLIDER BIND disconnected 1 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:03:11.8841486Z COLLIDER BIND disconnected 1 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:11.8851523Z COLLIDER REFS disconnected 1 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8851523Z COLLIDER REFS disconnected 1 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8861529Z COLLIDER REFS disconnected 1 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:03:11.8871668Z COLLIDER REFS disconnected 1 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8871668Z COLLIDER REFS disconnected 1 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8882534Z COLLIDER REFS disconnected 1 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8894580Z COLLIDER REFS disconnected 1 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8894580Z COLLIDER REFS disconnected 1 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:03:11.8904665Z COLLIDER REFS disconnected 1 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8904665Z COLLIDER REFS disconnected 1 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8914720Z COLLIDER REFS disconnected 1 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[p:GG_Hornet_1
+2026-10-13T13:03:11.8924732Z COLLIDER REFS disconnected 1 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8934757Z COLLIDER REFS disconnected 1 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.8934757Z COLLIDER REFS disconnected 1 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:11.9033524Z PASS both disconnected.collider-cycle.1
+2026-10-13T13:03:12.1282185Z COLLIDER ENABLE before fsm=Control state=Thrown restart=False
+2026-10-13T13:03:12.1293115Z COLLIDER ENABLE after fsm=Control state=Thrown
+2026-10-13T13:03:12.1303227Z COLLIDER ENABLE before fsm=Stun Control state=Stop restart=False
+2026-10-13T13:03:12.1303227Z COLLIDER ENABLE after fsm=Stun Control state=Stop
+2026-10-13T13:03:12.1459768Z PASS needle-phase reconnect 1
+2026-10-13T13:03:15.1745643Z PASS both connected.collider-cycle.1
+2026-10-13T13:03:15.1756394Z COLLIDER REFS reconnected 1 owner=Hornet Boss 1 fsm=Control state=Sphere Antic A vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:03:15.1766437Z COLLIDER BIND reconnected 1 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:15.1766437Z COLLIDER BIND reconnected 1 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:03:15.1776458Z COLLIDER BIND reconnected 1 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:15.1776458Z COLLIDER REFS reconnected 1 owner=Hornet Boss 1 fsm=Stun Control state=Idle vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:03:15.1786518Z COLLIDER REFS reconnected 1 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:03:15.1796573Z COLLIDER REFS reconnected 1 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:03:15.1796573Z COLLIDER REFS reconnected 1 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:03:15.1806648Z COLLIDER REFS reconnected 1 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:03:15.1806648Z COLLIDER REFS reconnected 1 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:03:15.1816927Z COLLIDER REFS reconnected 1 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:03:15.1816927Z COLLIDER REFS reconnected 1 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:03:15.1832001Z COLLIDER REFS reconnected 1 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:03:15.1837089Z COLLIDER REFS reconnected 1 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:03:15.1837089Z COLLIDER REFS reconnected 1 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:03:15.1847194Z COLLIDER REFS reconnected 1 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:03:15.1847194Z COLLIDER REFS reconnected 1 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:03:15.1862041Z COLLIDER REFS reconnected 1 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:03:15.1862041Z COLLIDER REFS reconnected 1 owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Throw Effect[e:7214630437068105499/Throw%20Effect#0]
+2026-10-13T13:03:15.1872046Z PASS room authority collider-cycle.1
+2026-10-13T13:03:18.1899266Z PASS early room-level updates drained collider-cycle.1
+2026-10-13T13:03:18.1899266Z ROOM collider-cycle.1 scene=GG_Hornet_1 visit=6 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T13:03:18.1934522Z PASS camera authority state collider-cycle.1
+2026-10-13T13:03:18.1949677Z PASS camera lock state converges collider-cycle.1
+2026-10-13T13:03:18.1949677Z PASS visible bosses/knight and unfrozen camera collider-cycle.1
+2026-10-13T13:03:18.1970105Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.1
+2026-10-13T13:03:18.2146146Z PASS both checked.collider-cycle.1
+2026-10-13T13:03:18.2166687Z PASS damage published collider-cycle.1
+2026-10-13T13:03:18.2176764Z PASS same boss HP collider-cycle.1
+2026-10-13T13:03:18.2456395Z PASS both hpchecked.collider-cycle.1
+2026-10-13T13:03:18.2456395Z NATIVE NEEDLE after reconnect 1 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(26.5, 35.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:18.4242485Z NATIVE NEEDLE after reconnect 1 state=A Dash hero=(22.5, 28.4, 0.0) boss=(26.5, 35.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:03:18.9953870Z NATIVE NEEDLE after reconnect 1 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.2, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:19.4960969Z NATIVE NEEDLE after reconnect 1 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(21.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:19.7480320Z NATIVE NEEDLE after reconnect 1 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(21.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:19.9992944Z NATIVE NEEDLE after reconnect 1 state=Evade hero=(22.5, 28.4, 0.0) boss=(21.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:20.2467416Z NATIVE NEEDLE after reconnect 1 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(16.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:20.4987785Z NATIVE NEEDLE after reconnect 1 state=Idle hero=(22.5, 28.4, 0.0) boss=(16.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:20.6448040Z NATIVE NEEDLE after reconnect 1 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(16.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:21.2024629Z NATIVE NEEDLE after reconnect 1 state=G Dash hero=(22.5, 28.4, 0.0) boss=(16.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:21.8290248Z NATIVE NEEDLE after reconnect 1 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(25.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:22.0518167Z NATIVE NEEDLE after reconnect 1 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(26.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:22.1672172Z NATIVE NEEDLE after reconnect 1 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(26.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:22.4167913Z NATIVE NEEDLE after reconnect 1 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(26.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:22.6688597Z NATIVE NEEDLE after reconnect 1 state=Evade hero=(22.5, 28.4, 0.0) boss=(26.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:22.9158280Z NATIVE NEEDLE after reconnect 1 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:23.1684628Z NATIVE NEEDLE after reconnect 1 state=Idle hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:23.4373397Z NATIVE NEEDLE after reconnect 1 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:23.9972874Z NATIVE NEEDLE after reconnect 1 state=G Dash hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:24.6244350Z NATIVE NEEDLE after reconnect 1 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(23.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:24.8479364Z NATIVE NEEDLE after reconnect 1 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(22.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:24.9595308Z NATIVE NEEDLE after reconnect 1 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(22.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:25.2109874Z NATIVE NEEDLE after reconnect 1 state=Run hero=(22.5, 28.4, 0.0) boss=(22.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:25.9233533Z NATIVE NEEDLE after reconnect 1 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(16.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:26.7025026Z NATIVE NEEDLE after reconnect 1 state=Thrown hero=(22.5, 28.4, 0.0) boss=(16.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:26.7030070Z PASS native needle throw after reconnect 1
+2026-10-13T13:03:28.1154171Z PASS native Throw Recover after reconnect 1
+2026-10-13T13:03:30.1307399Z PASS both settled.collider-cycle.1
+2026-10-13T13:03:30.1317415Z NATIVE NEEDLE before reconnect 2 state=In Air hero=(22.5, 28.4, 0.0) boss=(26.3, 37.2, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:30.5117008Z NATIVE NEEDLE before reconnect 2 state=Land hero=(22.5, 28.4, 0.0) boss=(29.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:30.7633223Z NATIVE NEEDLE before reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(29.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:31.0148837Z NATIVE NEEDLE before reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(29.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:31.4417841Z NATIVE NEEDLE before reconnect 2 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(26.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:31.7761668Z NATIVE NEEDLE before reconnect 2 state=In Air hero=(22.5, 28.4, 0.0) boss=(26.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:32.1031625Z NATIVE NEEDLE before reconnect 2 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(28.4, 36.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:32.5541576Z NATIVE NEEDLE before reconnect 2 state=A Dash hero=(22.5, 28.4, 0.0) boss=(28.4, 36.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:03:33.2073478Z NATIVE NEEDLE before reconnect 2 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.1, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:33.7100801Z NATIVE NEEDLE before reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(21.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:33.9605805Z NATIVE NEEDLE before reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(21.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:34.6666647Z NATIVE NEEDLE before reconnect 2 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(15.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:35.2234176Z NATIVE NEEDLE before reconnect 2 state=G Dash hero=(22.5, 28.4, 0.0) boss=(16.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:35.8487935Z NATIVE NEEDLE before reconnect 2 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(25.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:36.0732097Z NATIVE NEEDLE before reconnect 2 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(26.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:36.1913056Z NATIVE NEEDLE before reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:36.4431317Z NATIVE NEEDLE before reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:36.9654308Z NATIVE NEEDLE before reconnect 2 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(31.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:37.5218815Z NATIVE NEEDLE before reconnect 2 state=G Dash hero=(22.5, 28.4, 0.0) boss=(31.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:38.1470019Z NATIVE NEEDLE before reconnect 2 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(22.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:38.3688259Z NATIVE NEEDLE before reconnect 2 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(21.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:38.4813790Z NATIVE NEEDLE before reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(21.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:38.7342706Z NATIVE NEEDLE before reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(21.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:39.1355449Z NATIVE NEEDLE before reconnect 2 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(17.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:39.9160960Z NATIVE NEEDLE before reconnect 2 state=Thrown hero=(22.5, 28.4, 0.0) boss=(17.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:39.9172268Z PASS native needle throw before reconnect 2
+2026-10-13T13:03:39.9172268Z COLLIDER REFS before 2 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:03:39.9182355Z COLLIDER BIND before 2 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:39.9182355Z COLLIDER BIND before 2 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:03:39.9195923Z COLLIDER BIND before 2 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:39.9195923Z COLLIDER REFS before 2 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:03:39.9206016Z COLLIDER REFS before 2 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:03:39.9206016Z COLLIDER REFS before 2 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:03:39.9216036Z COLLIDER REFS before 2 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:03:39.9216036Z COLLIDER REFS before 2 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:03:39.9230868Z COLLIDER REFS before 2 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:03:39.9230868Z COLLIDER REFS before 2 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:03:39.9230868Z COLLIDER REFS before 2 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:03:39.9244465Z COLLIDER REFS before 2 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:03:39.9256238Z COLLIDER REFS before 2 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:03:39.9256238Z COLLIDER REFS before 2 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:03:39.9256238Z COLLIDER REFS before 2 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:03:39.9271383Z COLLIDER REFS before 2 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:03:39.9271383Z COLLIDER REFS before 2 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:03:39.9401436Z PASS both phase.collider-cycle.2
+2026-10-13T13:03:39.9461296Z COLLIDER REFS disconnected 2 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[p:GG_Hornet_1
+2026-10-13T13:03:39.9461296Z COLLIDER BIND disconnected 2 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:39.9474230Z COLLIDER BIND disconnected 2 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:03:39.9474230Z COLLIDER BIND disconnected 2 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:39.9486342Z COLLIDER REFS disconnected 2 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9496340Z COLLIDER REFS disconnected 2 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9506361Z COLLIDER REFS disconnected 2 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:03:39.9506361Z COLLIDER REFS disconnected 2 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9516395Z COLLIDER REFS disconnected 2 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9516395Z COLLIDER REFS disconnected 2 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9531466Z COLLIDER REFS disconnected 2 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9531466Z COLLIDER REFS disconnected 2 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:03:39.9542096Z COLLIDER REFS disconnected 2 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9551598Z COLLIDER REFS disconnected 2 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9551598Z COLLIDER REFS disconnected 2 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[p:GG_Hornet_1
+2026-10-13T13:03:39.9561606Z COLLIDER REFS disconnected 2 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9571632Z COLLIDER REFS disconnected 2 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9581654Z COLLIDER REFS disconnected 2 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:03:39.9732941Z PASS both disconnected.collider-cycle.2
+2026-10-13T13:03:40.2013846Z COLLIDER ENABLE before fsm=Control state=Thrown restart=False
+2026-10-13T13:03:40.2018896Z COLLIDER ENABLE after fsm=Control state=Thrown
+2026-10-13T13:03:40.2018896Z COLLIDER ENABLE before fsm=Stun Control state=Stop restart=False
+2026-10-13T13:03:40.2033979Z COLLIDER ENABLE after fsm=Stun Control state=Stop
+2026-10-13T13:03:40.2198055Z PASS needle-phase reconnect 2
+2026-10-13T13:03:43.2280537Z PASS both connected.collider-cycle.2
+2026-10-13T13:03:43.2291572Z COLLIDER REFS reconnected 2 owner=Hornet Boss 1 fsm=Control state=Idle vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:03:43.2301608Z COLLIDER BIND reconnected 2 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:43.2301608Z COLLIDER BIND reconnected 2 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:03:43.2315601Z COLLIDER BIND reconnected 2 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:03:43.2315601Z COLLIDER REFS reconnected 2 owner=Hornet Boss 1 fsm=Stun Control state=Idle vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:03:43.2330674Z COLLIDER REFS reconnected 2 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:03:43.2330674Z COLLIDER REFS reconnected 2 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:03:43.2340813Z COLLIDER REFS reconnected 2 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:03:43.2350860Z COLLIDER REFS reconnected 2 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:03:43.2350860Z COLLIDER REFS reconnected 2 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:03:43.2362506Z COLLIDER REFS reconnected 2 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:03:43.2375441Z COLLIDER REFS reconnected 2 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:03:43.2375441Z COLLIDER REFS reconnected 2 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:03:43.2385528Z COLLIDER REFS reconnected 2 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:03:43.2399371Z COLLIDER REFS reconnected 2 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:03:43.2399371Z COLLIDER REFS reconnected 2 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:03:43.2409452Z COLLIDER REFS reconnected 2 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:03:43.2419524Z COLLIDER REFS reconnected 2 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:03:43.2419524Z COLLIDER REFS reconnected 2 owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Throw Effect[e:7214630437068105499/Throw%20Effect#0]
+2026-10-13T13:03:43.2434597Z PASS room authority collider-cycle.2
+2026-10-13T13:03:46.2469898Z PASS early room-level updates drained collider-cycle.2
+2026-10-13T13:03:46.2469898Z ROOM collider-cycle.2 scene=GG_Hornet_1 visit=7 authority=True hero=(25.5, 29.9, 0.0) camera=(26.3, 33.3, -38.1) mode=LOCKED
+2026-10-13T13:03:46.2511320Z PASS camera authority state collider-cycle.2
+2026-10-13T13:03:46.2521367Z PASS camera lock state converges collider-cycle.2
+2026-10-13T13:03:46.2531390Z PASS visible bosses/knight and unfrozen camera collider-cycle.2
+2026-10-13T13:03:46.2553380Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.2
+2026-10-13T13:03:46.2720384Z PASS both checked.collider-cycle.2
+2026-10-13T13:03:46.2744672Z PASS damage published collider-cycle.2
+2026-10-13T13:03:46.2754848Z PASS same boss HP collider-cycle.2
+2026-10-13T13:03:46.3035993Z PASS both hpchecked.collider-cycle.2
+2026-10-13T13:03:46.3041044Z NATIVE NEEDLE after reconnect 2 state=Sphere hero=(22.5, 28.4, 0.0) boss=(16.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:47.1507668Z NATIVE NEEDLE after reconnect 2 state=Sphere Recover hero=(22.5, 28.4, 0.0) boss=(16.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:47.3181300Z NATIVE NEEDLE after reconnect 2 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(16.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:47.6544983Z NATIVE NEEDLE after reconnect 2 state=In Air hero=(22.5, 28.4, 0.0) boss=(16.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:47.9733763Z NATIVE NEEDLE after reconnect 2 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(18.1, 36.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:48.4272830Z NATIVE NEEDLE after reconnect 2 state=A Dash hero=(22.5, 28.4, 0.0) boss=(18.1, 36.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:03:49.0688690Z NATIVE NEEDLE after reconnect 2 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.9, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:49.5634710Z NATIVE NEEDLE after reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(23.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:49.8131500Z NATIVE NEEDLE after reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(23.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:50.5054265Z NATIVE NEEDLE after reconnect 2 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(29.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:50.8407289Z NATIVE NEEDLE after reconnect 2 state=In Air hero=(22.5, 28.4, 0.0) boss=(29.4, 29.3, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:51.7205085Z NATIVE NEEDLE after reconnect 2 state=Land hero=(22.5, 28.4, 0.0) boss=(32.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:51.9696802Z NATIVE NEEDLE after reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(32.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:52.2267114Z NATIVE NEEDLE after reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(32.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:52.7465417Z NATIVE NEEDLE after reconnect 2 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(28.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:53.0810983Z NATIVE NEEDLE after reconnect 2 state=In Air hero=(22.5, 28.4, 0.0) boss=(28.2, 29.3, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:53.2456363Z NATIVE NEEDLE after reconnect 2 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(27.1, 33.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:53.6881276Z NATIVE NEEDLE after reconnect 2 state=A Dash hero=(22.5, 28.4, 0.0) boss=(27.1, 33.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:03:54.2492414Z NATIVE NEEDLE after reconnect 2 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(21.9, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:54.7406065Z NATIVE NEEDLE after reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(20.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:54.9901990Z NATIVE NEEDLE after reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(20.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:55.6500770Z NATIVE NEEDLE after reconnect 2 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(15.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:56.4318440Z NATIVE NEEDLE after reconnect 2 state=Thrown hero=(22.5, 28.4, 0.0) boss=(16.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:03:56.4333519Z PASS native needle throw after reconnect 2
+2026-10-13T13:03:57.8394022Z PASS native Throw Recover after reconnect 2
+2026-10-13T13:03:59.8485716Z PASS both settled.collider-cycle.2
+2026-10-13T13:03:59.8497501Z NATIVE NEEDLE before reconnect 3 state=A Dash hero=(22.5, 28.4, 0.0) boss=(24.1, 30.6, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:04:00.2755681Z NATIVE NEEDLE before reconnect 3 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(27.8, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:00.7778762Z NATIVE NEEDLE before reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(29.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:01.0294687Z NATIVE NEEDLE before reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(29.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:01.6908436Z NATIVE NEEDLE before reconnect 3 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(34.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:02.2478002Z NATIVE NEEDLE before reconnect 3 state=G Dash hero=(22.5, 28.4, 0.0) boss=(34.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:02.5968736Z NATIVE NEEDLE before reconnect 3 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(25.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:02.8216350Z NATIVE NEEDLE before reconnect 3 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(24.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:02.9340801Z NATIVE NEEDLE before reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(24.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:03.1846138Z NATIVE NEEDLE before reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(24.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:03.8842982Z NATIVE NEEDLE before reconnect 3 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(29.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:04.4406845Z NATIVE NEEDLE before reconnect 3 state=G Dash hero=(22.5, 28.4, 0.0) boss=(29.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:05.0668389Z NATIVE NEEDLE before reconnect 3 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(21.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:05.2912496Z NATIVE NEEDLE before reconnect 3 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(20.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:05.4047029Z NATIVE NEEDLE before reconnect 3 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(20.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:05.6579572Z NATIVE NEEDLE before reconnect 3 state=Evade hero=(22.5, 28.4, 0.0) boss=(20.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:05.8723047Z NATIVE NEEDLE before reconnect 3 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:06.1232335Z NATIVE NEEDLE before reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:06.3729541Z NATIVE NEEDLE before reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:07.0345613Z NATIVE NEEDLE before reconnect 3 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(20.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:07.3695226Z NATIVE NEEDLE before reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(21.0, 29.3, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:08.2499891Z NATIVE NEEDLE before reconnect 3 state=Land hero=(22.5, 28.4, 0.0) boss=(29.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:08.5025268Z NATIVE NEEDLE before reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(29.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:08.7545038Z NATIVE NEEDLE before reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(29.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:09.1756324Z NATIVE NEEDLE before reconnect 3 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(25.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:09.7315785Z NATIVE NEEDLE before reconnect 3 state=G Dash hero=(22.5, 28.4, 0.0) boss=(25.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:10.3562114Z NATIVE NEEDLE before reconnect 3 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(16.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:10.5813772Z NATIVE NEEDLE before reconnect 3 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(15.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:10.6930860Z NATIVE NEEDLE before reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(15.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:10.9457894Z NATIVE NEEDLE before reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:11.4035081Z NATIVE NEEDLE before reconnect 3 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(19.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:12.1833590Z NATIVE NEEDLE before reconnect 3 state=Thrown hero=(22.5, 28.4, 0.0) boss=(19.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:12.1833590Z PASS native needle throw before reconnect 3
+2026-10-13T13:04:12.1853526Z COLLIDER REFS before 3 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:04:12.1863595Z COLLIDER BIND before 3 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:12.1863595Z COLLIDER BIND before 3 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:04:12.1873789Z COLLIDER BIND before 3 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:12.1873789Z COLLIDER REFS before 3 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:04:12.1887890Z COLLIDER REFS before 3 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:04:12.1892933Z COLLIDER REFS before 3 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:04:12.1902960Z COLLIDER REFS before 3 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:04:12.1902960Z COLLIDER REFS before 3 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:04:12.1913041Z COLLIDER REFS before 3 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:04:12.1923265Z COLLIDER REFS before 3 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:04:12.1923265Z COLLIDER REFS before 3 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:04:12.1933293Z COLLIDER REFS before 3 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:04:12.1938364Z COLLIDER REFS before 3 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:04:12.1938364Z COLLIDER REFS before 3 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:04:12.1951530Z COLLIDER REFS before 3 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:04:12.1951530Z COLLIDER REFS before 3 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:04:12.1965223Z COLLIDER REFS before 3 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:04:12.2218065Z PASS both phase.collider-cycle.3
+2026-10-13T13:04:12.2333238Z COLLIDER REFS disconnected 3 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[p:GG_Hornet_1
+2026-10-13T13:04:12.2349426Z COLLIDER BIND disconnected 3 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:12.2349426Z COLLIDER BIND disconnected 3 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:04:12.2361378Z COLLIDER BIND disconnected 3 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:12.2371438Z COLLIDER REFS disconnected 3 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2371438Z COLLIDER REFS disconnected 3 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2381647Z COLLIDER REFS disconnected 3 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:04:12.2391665Z COLLIDER REFS disconnected 3 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2401684Z COLLIDER REFS disconnected 3 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2401684Z COLLIDER REFS disconnected 3 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2411706Z COLLIDER REFS disconnected 3 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2421742Z COLLIDER REFS disconnected 3 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:04:12.2436814Z COLLIDER REFS disconnected 3 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2436814Z COLLIDER REFS disconnected 3 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2446980Z COLLIDER REFS disconnected 3 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[p:GG_Hornet_1
+2026-10-13T13:04:12.2458921Z COLLIDER REFS disconnected 3 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2469687Z COLLIDER REFS disconnected 3 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2479753Z COLLIDER REFS disconnected 3 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:12.2564609Z PASS both disconnected.collider-cycle.3
+2026-10-13T13:04:12.4830400Z COLLIDER ENABLE before fsm=Control state=Thrown restart=False
+2026-10-13T13:04:12.4844931Z COLLIDER ENABLE after fsm=Control state=Thrown
+2026-10-13T13:04:12.4844931Z COLLIDER ENABLE before fsm=Stun Control state=Stop restart=False
+2026-10-13T13:04:12.4856999Z COLLIDER ENABLE after fsm=Stun Control state=Stop
+2026-10-13T13:04:12.5597886Z PASS needle-phase reconnect 3
+2026-10-13T13:04:15.5898498Z PASS both connected.collider-cycle.3
+2026-10-13T13:04:15.5910399Z COLLIDER REFS reconnected 3 owner=Hornet Boss 1 fsm=Control state=A Dash vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:04:15.5910399Z COLLIDER BIND reconnected 3 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:15.5920476Z COLLIDER BIND reconnected 3 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:04:15.5930501Z COLLIDER BIND reconnected 3 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:15.5935564Z COLLIDER REFS reconnected 3 owner=Hornet Boss 1 fsm=Stun Control state=Idle vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:04:15.5935564Z COLLIDER REFS reconnected 3 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:04:15.5945632Z COLLIDER REFS reconnected 3 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:04:15.5945632Z COLLIDER REFS reconnected 3 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:04:15.5960363Z COLLIDER REFS reconnected 3 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:04:15.5970380Z COLLIDER REFS reconnected 3 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:04:15.5970380Z COLLIDER REFS reconnected 3 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:04:15.5983636Z COLLIDER REFS reconnected 3 owner=Evade Range fsm=Fluctuate state=On vars=
+2026-10-13T13:04:15.5983636Z COLLIDER REFS reconnected 3 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:04:15.5997427Z COLLIDER REFS reconnected 3 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:04:15.5997427Z COLLIDER REFS reconnected 3 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:04:15.6009980Z COLLIDER REFS reconnected 3 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:04:15.6009980Z COLLIDER REFS reconnected 3 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:04:15.6024027Z COLLIDER REFS reconnected 3 owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Throw Effect[e:7214630437068105499/Throw%20Effect#0]
+2026-10-13T13:04:15.6030652Z COLLIDER REFS reconnected 3 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:04:15.6042679Z PASS room authority collider-cycle.3
+2026-10-13T13:04:18.6064175Z PASS early room-level updates drained collider-cycle.3
+2026-10-13T13:04:18.6074285Z ROOM collider-cycle.3 scene=GG_Hornet_1 visit=8 authority=True hero=(22.8, 31.5, 0.0) camera=(26.3, 33.3, -38.1) mode=LOCKED
+2026-10-13T13:04:18.6116969Z PASS camera authority state collider-cycle.3
+2026-10-13T13:04:18.6116969Z PASS camera lock state converges collider-cycle.3
+2026-10-13T13:04:18.6132046Z PASS visible bosses/knight and unfrozen camera collider-cycle.3
+2026-10-13T13:04:18.6153116Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.3
+2026-10-13T13:04:18.6417264Z PASS both checked.collider-cycle.3
+2026-10-13T13:04:18.6432338Z PASS damage published collider-cycle.3
+2026-10-13T13:04:18.6442537Z PASS same boss HP collider-cycle.3
+2026-10-13T13:04:18.6647748Z PASS both hpchecked.collider-cycle.3
+2026-10-13T13:04:18.6659163Z NATIVE NEEDLE after reconnect 3 state=A Dash hero=(22.5, 28.4, 0.0) boss=(23.7, 31.8, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:04:19.1645812Z NATIVE NEEDLE after reconnect 3 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(18.1, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:19.6661831Z NATIVE NEEDLE after reconnect 3 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(16.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:19.9142716Z NATIVE NEEDLE after reconnect 3 state=Evade hero=(22.5, 28.4, 0.0) boss=(16.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:19.9622053Z NATIVE NEEDLE after reconnect 3 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:20.2152093Z NATIVE NEEDLE after reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:20.4668061Z NATIVE NEEDLE after reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:20.5018170Z NATIVE NEEDLE after reconnect 3 state=Sphere Antic G hero=(22.5, 28.4, 0.0) boss=(15.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:21.3369592Z NATIVE NEEDLE after reconnect 3 state=Sphere hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:22.3346209Z NATIVE NEEDLE after reconnect 3 state=Sphere Recover hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:22.5056215Z NATIVE NEEDLE after reconnect 3 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(16.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:23.0599324Z NATIVE NEEDLE after reconnect 3 state=G Dash hero=(22.5, 28.4, 0.0) boss=(16.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:23.6875902Z NATIVE NEEDLE after reconnect 3 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(25.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:23.9099955Z NATIVE NEEDLE after reconnect 3 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(26.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:24.0232169Z NATIVE NEEDLE after reconnect 3 state=Idle hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:24.2136240Z NATIVE NEEDLE after reconnect 3 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:24.5498661Z NATIVE NEEDLE after reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:24.7721296Z NATIVE NEEDLE after reconnect 3 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(28.6, 35.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:25.2255246Z NATIVE NEEDLE after reconnect 3 state=A Dash hero=(22.5, 28.4, 0.0) boss=(28.6, 35.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:04:25.8409046Z NATIVE NEEDLE after reconnect 3 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.1, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:26.3409455Z NATIVE NEEDLE after reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(20.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:26.5931519Z NATIVE NEEDLE after reconnect 3 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(20.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:26.8440873Z NATIVE NEEDLE after reconnect 3 state=Evade hero=(22.5, 28.4, 0.0) boss=(20.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:27.0785540Z NATIVE NEEDLE after reconnect 3 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:27.3288179Z NATIVE NEEDLE after reconnect 3 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:27.6654410Z NATIVE NEEDLE after reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:28.5579166Z NATIVE NEEDLE after reconnect 3 state=Land hero=(22.5, 28.4, 0.0) boss=(17.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:28.8103048Z NATIVE NEEDLE after reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(17.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:29.0613679Z NATIVE NEEDLE after reconnect 3 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(17.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:29.3103653Z NATIVE NEEDLE after reconnect 3 state=Evade hero=(22.5, 28.4, 0.0) boss=(17.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:29.4178490Z NATIVE NEEDLE after reconnect 3 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:29.6709123Z NATIVE NEEDLE after reconnect 3 state=Idle hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:29.9946180Z NATIVE NEEDLE after reconnect 3 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:30.3279316Z NATIVE NEEDLE after reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:31.2174922Z NATIVE NEEDLE after reconnect 3 state=Land hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:31.4695248Z NATIVE NEEDLE after reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:31.7189100Z NATIVE NEEDLE after reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(28.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:32.3341815Z NATIVE NEEDLE after reconnect 3 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(33.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:33.1133257Z NATIVE NEEDLE after reconnect 3 state=Thrown hero=(22.5, 28.4, 0.0) boss=(33.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:33.1148104Z PASS native needle throw after reconnect 3
+2026-10-13T13:04:34.5206266Z PASS native Throw Recover after reconnect 3
+2026-10-13T13:04:36.5442227Z PASS both settled.collider-cycle.3
+2026-10-13T13:04:36.5442227Z NATIVE NEEDLE before reconnect 4 state=In Air hero=(22.5, 28.4, 0.0) boss=(26.1, 36.7, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:36.6961645Z NATIVE NEEDLE before reconnect 4 state=Sphere Antic A hero=(22.5, 28.4, 0.0) boss=(23.0, 33.6, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:37.2811894Z NATIVE NEEDLE before reconnect 4 state=Sphere A hero=(22.5, 28.4, 0.0) boss=(21.9, 32.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:38.5610008Z NATIVE NEEDLE before reconnect 4 state=Sphere Recover A hero=(22.5, 28.4, 0.0) boss=(21.9, 32.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:38.8096235Z NATIVE NEEDLE before reconnect 4 state=In Air hero=(22.5, 28.4, 0.0) boss=(21.9, 32.2, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:39.3444266Z NATIVE NEEDLE before reconnect 4 state=Land hero=(22.5, 28.4, 0.0) boss=(21.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:39.6046268Z NATIVE NEEDLE before reconnect 4 state=Idle hero=(22.5, 28.4, 0.0) boss=(21.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:39.7655702Z NATIVE NEEDLE before reconnect 4 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(21.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:40.3214170Z NATIVE NEEDLE before reconnect 4 state=G Dash hero=(22.5, 28.4, 0.0) boss=(21.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:40.6688902Z NATIVE NEEDLE before reconnect 4 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(30.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:40.8921508Z NATIVE NEEDLE before reconnect 4 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(31.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:41.0030732Z NATIVE NEEDLE before reconnect 4 state=Idle hero=(22.5, 28.4, 0.0) boss=(31.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:41.1888711Z NATIVE NEEDLE before reconnect 4 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(31.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:41.5216208Z NATIVE NEEDLE before reconnect 4 state=In Air hero=(22.5, 28.4, 0.0) boss=(31.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:42.4110240Z NATIVE NEEDLE before reconnect 4 state=Land hero=(22.5, 28.4, 0.0) boss=(33.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:42.6601419Z NATIVE NEEDLE before reconnect 4 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(33.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:42.9131427Z NATIVE NEEDLE before reconnect 4 state=Run hero=(22.5, 28.4, 0.0) boss=(33.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:43.5569867Z NATIVE NEEDLE before reconnect 4 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(28.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:43.8858075Z NATIVE NEEDLE before reconnect 4 state=In Air hero=(22.5, 28.4, 0.0) boss=(28.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:44.1473759Z NATIVE NEEDLE before reconnect 4 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(27.1, 35.9, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:44.5980456Z NATIVE NEEDLE before reconnect 4 state=A Dash hero=(22.5, 28.4, 0.0) boss=(27.1, 35.9, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-13T13:04:45.2130064Z NATIVE NEEDLE before reconnect 4 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.0, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:45.7134560Z NATIVE NEEDLE before reconnect 4 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(21.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:45.9669974Z NATIVE NEEDLE before reconnect 4 state=Evade hero=(22.5, 28.4, 0.0) boss=(21.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:46.2099379Z NATIVE NEEDLE before reconnect 4 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:46.4606243Z NATIVE NEEDLE before reconnect 4 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:47.2422742Z NATIVE NEEDLE before reconnect 4 state=Thrown hero=(22.5, 28.4, 0.0) boss=(16.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-13T13:04:47.2422742Z PASS native needle throw before reconnect 4
+2026-10-13T13:04:47.2437846Z COLLIDER REFS before 4 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:Area Title[p:DontDestroyOnLoad
+2026-10-13T13:04:47.2437846Z COLLIDER BIND before 4 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:47.2447906Z COLLIDER BIND before 4 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:04:47.2457989Z COLLIDER BIND before 4 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:47.2457989Z COLLIDER REFS before 4 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:04:47.2469242Z COLLIDER REFS before 4 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:04:47.2469242Z COLLIDER REFS before 4 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:04:47.2479344Z COLLIDER REFS before 4 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:04:47.2479344Z COLLIDER REFS before 4 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:04:47.2493487Z COLLIDER REFS before 4 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:04:47.2493487Z COLLIDER REFS before 4 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:04:47.2504716Z COLLIDER REFS before 4 owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:04:47.2504716Z COLLIDER REFS before 4 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:04:47.2514960Z COLLIDER REFS before 4 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:04:47.2514960Z COLLIDER REFS before 4 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:04:47.2514960Z COLLIDER REFS before 4 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:04:47.2531488Z COLLIDER REFS before 4 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:04:47.2531488Z COLLIDER REFS before 4 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:04:47.2673445Z PASS both phase.collider-cycle.4
+2026-10-13T13:04:47.2737081Z COLLIDER REFS disconnected 4 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[p:GG_Hornet_1
+2026-10-13T13:04:47.2747296Z COLLIDER BIND disconnected 4 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:47.2747296Z COLLIDER BIND disconnected 4 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:04:47.2762265Z COLLIDER BIND disconnected 4 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:47.2762265Z COLLIDER REFS disconnected 4 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2775492Z COLLIDER REFS disconnected 4 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2775492Z COLLIDER REFS disconnected 4 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:04:47.2799814Z COLLIDER REFS disconnected 4 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2799814Z COLLIDER REFS disconnected 4 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2809838Z COLLIDER REFS disconnected 4 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2819853Z COLLIDER REFS disconnected 4 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2819853Z COLLIDER REFS disconnected 4 owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:04:47.2834955Z COLLIDER REFS disconnected 4 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2834955Z COLLIDER REFS disconnected 4 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2834955Z COLLIDER REFS disconnected 4 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[p:GG_Hornet_1
+2026-10-13T13:04:47.2849969Z COLLIDER REFS disconnected 4 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2859986Z COLLIDER REFS disconnected 4 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.2870017Z COLLIDER REFS disconnected 4 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:04:47.3041960Z PASS both disconnected.collider-cycle.4
+2026-10-13T13:04:50.5964703Z PASS needle-phase reconnect 4
+2026-10-13T13:04:50.6074933Z PASS both connected.collider-cycle.4
+2026-10-13T13:04:50.6088246Z COLLIDER REFS reconnected 4 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:null,Area Title:null,Dust HardLand:Dust HardLand[e:7214630437068105499/Dust%20HardLand#0],Flash Effect:Flash Effect[e:7214630437068105499/Flash%20Effect#0],G Dash Effect:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0],Hero Obj:Knight[hero],Hit ADash:Hit ADash[e:7214630437068105499/Hit%20ADash#0],Hit GDash:Hit GDash[e:7214630437068105499/Hit%20GDash#0],Hornet Saver:null,Needle:Needle[e:6622943944039214165],Needle Tink:Needle Tink[p:GG_Hornet_1
+2026-10-13T13:04:50.6088246Z COLLIDER BIND reconnected 4 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:50.6098723Z COLLIDER BIND reconnected 4 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:04:50.6098723Z COLLIDER BIND reconnected 4 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:04:50.6112191Z COLLIDER REFS reconnected 4 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:04:50.6122525Z COLLIDER REFS reconnected 4 owner=A Dash Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:04:50.6122525Z COLLIDER REFS reconnected 4 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:04:50.6132554Z COLLIDER REFS reconnected 4 owner=Sphere Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:04:50.6137605Z COLLIDER REFS reconnected 4 owner=Evade Check fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:04:50.6147780Z COLLIDER REFS reconnected 4 owner=Run Away Check fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:04:50.6147780Z COLLIDER REFS reconnected 4 owner=Evade Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:04:50.6158001Z COLLIDER REFS reconnected 4 owner=Evade Range fsm=Fluctuate state= vars=
+2026-10-13T13:04:50.6168048Z COLLIDER REFS reconnected 4 owner=A Sphere Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:04:50.6168048Z COLLIDER REFS reconnected 4 owner=Refight Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:04:50.6178135Z COLLIDER REFS reconnected 4 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:04:50.6188227Z COLLIDER REFS reconnected 4 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:04:50.6188227Z COLLIDER REFS reconnected 4 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:04:50.6198265Z COLLIDER REFS reconnected 4 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:04:50.6198265Z COLLIDER REFS reconnected 4 owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Throw Effect[e:7214630437068105499/Throw%20Effect#0]
+2026-10-13T13:04:50.6210885Z PASS room authority collider-cycle.4
+2026-10-13T13:04:53.6241452Z PASS early room-level updates drained collider-cycle.4
+2026-10-13T13:04:53.6251727Z ROOM collider-cycle.4 scene=GG_Hornet_1 visit=9 authority=False hero=(25.5, 29.9, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T13:04:53.6311938Z PASS camera authority state collider-cycle.4
+2026-10-13T13:04:53.6325650Z PASS camera lock state converges collider-cycle.4
+2026-10-13T13:04:53.6335861Z PASS visible bosses/knight and unfrozen camera collider-cycle.4
+2026-10-13T13:04:53.6379798Z PASS duplicate initial snapshot does not reset boss collider-cycle.4
+2026-10-13T13:04:53.6400253Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.4
+2026-10-13T13:04:53.6506850Z PASS both checked.collider-cycle.4
+2026-10-13T13:04:53.6594118Z PASS damage published collider-cycle.4
+2026-10-13T13:04:53.6876632Z PASS same boss HP collider-cycle.4
+2026-10-13T13:04:53.6876632Z PASS both hpchecked.collider-cycle.4
+2026-10-13T13:05:06.4029310Z PASS authority throw and recovery after reconnect 4
+2026-10-13T13:05:08.4067544Z PASS both settled.collider-cycle.4
+2026-10-13T13:05:18.1733274Z PASS authority reaches native needle throw 5
+2026-10-13T13:05:18.1743479Z PASS both phase.collider-cycle.5
+2026-10-13T13:05:18.1821187Z COLLIDER ENABLE before fsm=Control state=Thrown restart=False
+2026-10-13T13:05:18.1829710Z COLLIDER ENABLE after fsm=Control state=Thrown
+2026-10-13T13:05:18.1842075Z COLLIDER ENABLE before fsm=Stun Control state=Stop restart=False
+2026-10-13T13:05:18.1842075Z COLLIDER ENABLE after fsm=Stun Control state=Stop
+2026-10-13T13:05:18.1920155Z COLLIDER SETSTATE before fsm=Control state=Thrown target=Throw Antic
+2026-10-13T13:05:18.1930180Z COLLIDER SETSTATE after fsm=Control state=Throw Antic
+2026-10-13T13:05:18.1935234Z COLLIDER SETSTATE before fsm=Stun Control state=Stop target=Stop
+2026-10-13T13:05:18.1945240Z COLLIDER SETSTATE after fsm=Stun Control state=Stop
+2026-10-13T13:05:18.1975661Z COLLIDER REFS disconnected 5 owner=Hornet Boss 1 fsm=Control state=Throw Antic vars=A Dash Effect:A Dash Effect[p:GG_Hornet_1
+2026-10-13T13:05:18.1985705Z COLLIDER BIND disconnected 5 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:05:18.1985705Z COLLIDER BIND disconnected 5 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:05:18.1998940Z COLLIDER BIND disconnected 5 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:05:18.2010198Z COLLIDER REFS disconnected 5 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2022545Z COLLIDER REFS disconnected 5 owner=A Dash Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2032819Z COLLIDER REFS disconnected 5 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:05:18.2032819Z COLLIDER REFS disconnected 5 owner=Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2046475Z COLLIDER REFS disconnected 5 owner=Evade Check fsm=FSM state=Detect vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2061126Z COLLIDER REFS disconnected 5 owner=Run Away Check fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2061126Z COLLIDER REFS disconnected 5 owner=Evade Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2074090Z COLLIDER REFS disconnected 5 owner=Evade Range fsm=Fluctuate state=Off vars=
+2026-10-13T13:05:18.2085837Z COLLIDER REFS disconnected 5 owner=A Sphere Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2085837Z COLLIDER REFS disconnected 5 owner=Refight Range fsm=FSM state=Detect vars=Collider:null,Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2097589Z COLLIDER REFS disconnected 5 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[p:GG_Hornet_1
+2026-10-13T13:05:18.2107599Z COLLIDER REFS disconnected 5 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2118862Z COLLIDER REFS disconnected 5 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2118862Z COLLIDER REFS disconnected 5 owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[p:GG_Hornet_1
+2026-10-13T13:05:18.2144851Z PASS both disconnected.collider-cycle.5
+2026-10-13T13:05:21.5151472Z PASS needle-phase reconnect 5
+2026-10-13T13:05:21.5165980Z PASS both connected.collider-cycle.5
+2026-10-13T13:05:21.5176099Z COLLIDER REFS reconnected 5 owner=Hornet Boss 1 fsm=Control state=Thrown vars=A Dash Effect:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0],Area Title:null,Area Title:null,Dust HardLand:Dust HardLand[e:7214630437068105499/Dust%20HardLand#0],Flash Effect:Flash Effect[e:7214630437068105499/Flash%20Effect#0],G Dash Effect:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0],Hero Obj:Knight[hero],Hit ADash:Hit ADash[e:7214630437068105499/Hit%20ADash#0],Hit GDash:Hit GDash[e:7214630437068105499/Hit%20GDash#0],Hornet Saver:null,Needle:Needle[e:6622943944039214165],Needle Tink:Needle Tink[p:GG_Hornet_1
+2026-10-13T13:05:21.5186436Z COLLIDER BIND reconnected 5 fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:05:21.5196484Z COLLIDER BIND reconnected 5 fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T13:05:21.5196484Z COLLIDER BIND reconnected 5 fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T13:05:21.5196484Z COLLIDER REFS reconnected 5 owner=Hornet Boss 1 fsm=Stun Control state=Stop vars=Self:Hornet Boss 1[e:7214630437068105499]
+2026-10-13T13:05:21.5211461Z COLLIDER REFS reconnected 5 owner=A Dash Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Range[e:7214630437068105499/A%20Dash%20Range#0]
+2026-10-13T13:05:21.5211461Z COLLIDER REFS reconnected 5 owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T13:05:21.5222941Z COLLIDER REFS reconnected 5 owner=Sphere Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Sphere Range[e:7214630437068105499/Sphere%20Range#0]
+2026-10-13T13:05:21.5232987Z COLLIDER REFS reconnected 5 owner=Evade Check fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Check[e:7214630437068105499/Evade%20Check#0]
+2026-10-13T13:05:21.5232987Z COLLIDER REFS reconnected 5 owner=Run Away Check fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Run Away Check[e:7214630437068105499/Run%20Away%20Check#0]
+2026-10-13T13:05:21.5243120Z COLLIDER REFS reconnected 5 owner=Evade Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Evade Range[e:7214630437068105499/Evade%20Range#0]
+2026-10-13T13:05:21.5243120Z COLLIDER REFS reconnected 5 owner=Evade Range fsm=Fluctuate state= vars=
+2026-10-13T13:05:21.5253269Z COLLIDER REFS reconnected 5 owner=A Sphere Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:A Sphere Range[e:7214630437068105499/A%20Sphere%20Range#0]
+2026-10-13T13:05:21.5253269Z COLLIDER REFS reconnected 5 owner=Refight Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1[e:7214630437068105499],Self:Refight Range[e:7214630437068105499/Refight%20Range#0]
+2026-10-13T13:05:21.5266637Z COLLIDER REFS reconnected 5 owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass#0],Grass Escape:Grass Escape[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Grass%20Escape#0],Leave Anim:Leave Anim[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Leave%20Anim#0],Needle Tink:null,Self:null,Thread:Thread[e:7214630437068105499/Corpse%20Hornet%20GG%28Clone%29#0/Thread#0]
+2026-10-13T13:05:21.5277953Z COLLIDER REFS reconnected 5 owner=Flash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Flash Effect[e:7214630437068105499/Flash%20Effect#0]
+2026-10-13T13:05:21.5277953Z COLLIDER REFS reconnected 5 owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:A Dash Effect[e:7214630437068105499/A%20Dash%20Effect#0]
+2026-10-13T13:05:21.5288082Z COLLIDER REFS reconnected 5 owner=G Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:G Dash Effect[e:7214630437068105499/G%20Dash%20Effect#0]
+2026-10-13T13:05:21.5288082Z COLLIDER REFS reconnected 5 owner=Throw Effect fsm=FSM state= vars=Parent:Hornet Boss 1[e:7214630437068105499],Self:Throw Effect[e:7214630437068105499/Throw%20Effect#0]
+2026-10-13T13:05:21.5298366Z PASS room authority collider-cycle.5
+2026-10-13T13:05:24.5321583Z PASS early room-level updates drained collider-cycle.5
+2026-10-13T13:05:24.5331637Z ROOM collider-cycle.5 scene=GG_Hornet_1 visit=10 authority=False hero=(22.5, 34.7, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T13:05:24.5390369Z PASS camera authority state collider-cycle.5
+2026-10-13T13:05:24.5400484Z PASS camera lock state converges collider-cycle.5
+2026-10-13T13:05:24.5410562Z PASS visible bosses/knight and unfrozen camera collider-cycle.5
+2026-10-13T13:05:24.5523232Z PASS duplicate initial snapshot does not reset boss collider-cycle.5
+2026-10-13T13:05:24.5543440Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.5
+2026-10-13T13:05:24.5555266Z PASS both checked.collider-cycle.5
+2026-10-13T13:05:24.5629928Z PASS damage published collider-cycle.5
+2026-10-13T13:05:24.5856139Z PASS same boss HP collider-cycle.5
+2026-10-13T13:05:24.5870130Z PASS both hpchecked.collider-cycle.5
+2026-10-13T13:05:28.0765763Z PASS authority throw and recovery after reconnect 5
+2026-10-13T13:05:30.0909037Z PASS both settled.collider-cycle.5
+2026-10-13T13:05:30.0919411Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio
+2026-10-13T13:05:30.0929416Z PASS both probe-checked
+2026-10-13T13:05:30.0987105Z COLLIDER ENABLE before fsm=Control state=Thrown restart=False
+2026-10-13T13:05:30.1001554Z COLLIDER ENABLE after fsm=Control state=Thrown
+2026-10-13T13:05:30.1001554Z COLLIDER ENABLE before fsm=Stun Control state=Stop restart=False
+2026-10-13T13:05:30.1016417Z COLLIDER ENABLE after fsm=Stun Control state=Stop
+2026-10-13T13:05:30.1032045Z COLLIDER SETSTATE before fsm=Control state=Thrown target=A Dash
+2026-10-13T13:05:30.1045969Z COLLIDER SETSTATE after fsm=Control state=A Dash
+2026-10-13T13:05:30.1045969Z COLLIDER SETSTATE before fsm=Stun Control state=Stop target=Idle
+2026-10-13T13:05:30.1057996Z COLLIDER SETSTATE after fsm=Stun Control state=Idle
+2026-10-13T13:05:30.1081867Z PASS final client disconnect
+2026-10-13T13:05:30.1091965Z PASS both probe-disconnected
+2026-10-13T13:05:30.1229156Z PASS final server stopped

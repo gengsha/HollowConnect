@@ -1,0 +1,57 @@
+2026-10-13T10:25:45.6468770Z PASS menu
+2026-10-13T10:25:50.0322369Z PASS unsaved character
+2026-10-13T10:25:51.1120879Z PASS handshake
+2026-10-13T10:25:51.1273389Z PASS both connected
+2026-10-13T10:25:51.8109772Z PASS first enters moss
+2026-10-13T10:25:52.9547888Z PASS moss room
+2026-10-13T10:25:52.9558307Z PASS both moss
+2026-10-13T10:25:56.0179638Z PASS room authority lifecycle-moss
+2026-10-13T10:25:59.0200563Z PASS early room-level updates drained lifecycle-moss
+2026-10-13T10:25:59.0212222Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=False hero=(43.9, 7.4, 0.0) camera=(44.9, 11.0, -38.1) mode=LOCKED
+2026-10-13T10:25:59.0243132Z PASS camera authority state lifecycle-moss
+2026-10-13T10:25:59.0261060Z PASS camera lock state converges lifecycle-moss
+2026-10-13T10:25:59.0266212Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-13T10:25:59.0301596Z PASS duplicate initial snapshot does not reset boss lifecycle-moss
+2026-10-13T10:25:59.0325064Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-13T10:25:59.0363325Z PASS both checked.lifecycle-moss
+2026-10-13T10:25:59.0416244Z PASS damage published lifecycle-moss
+2026-10-13T10:25:59.0665884Z PASS same boss HP lifecycle-moss
+2026-10-13T10:25:59.0683307Z PASS both hpchecked.lifecycle-moss
+2026-10-13T10:25:59.0753991Z FIXTURE native loop audio destroyed before replica exit
+2026-10-13T10:25:59.0813724Z PASS both destroyed-loop
+2026-10-13T10:26:09.0151375Z PASS replica follows native completion
+2026-10-13T10:26:09.1444901Z PASS both hornet-entered
+2026-10-13T10:26:12.0567782Z PASS room authority lifecycle-hornet
+2026-10-13T10:26:15.0585555Z PASS early room-level updates drained lifecycle-hornet
+2026-10-13T10:26:15.0590602Z ROOM lifecycle-hornet scene=GG_Hornet_1 visit=3 authority=False hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T10:26:15.0619912Z PASS camera authority state lifecycle-hornet
+2026-10-13T10:26:15.0629995Z PASS camera lock state converges lifecycle-hornet
+2026-10-13T10:26:15.0629995Z PASS visible bosses/knight and unfrozen camera lifecycle-hornet
+2026-10-13T10:26:15.0657733Z PASS duplicate initial snapshot does not reset boss lifecycle-hornet
+2026-10-13T10:26:15.0679806Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-hornet
+2026-10-13T10:26:15.0787668Z PASS both checked.lifecycle-hornet
+2026-10-13T10:26:15.0840511Z PASS damage published lifecycle-hornet
+2026-10-13T10:26:15.1220681Z PASS same boss HP lifecycle-hornet
+2026-10-13T10:26:15.1238150Z PASS both hpchecked.lifecycle-hornet
+2026-10-13T10:26:15.1571072Z PASS both lifecycle-disconnected
+2026-10-13T10:26:15.3882130Z PASS reconnect after destroyed-loop cleanup
+2026-10-13T10:26:18.4124113Z PASS rejoined room authority
+2026-10-13T10:26:18.4154002Z PASS both lifecycle-reconnected
+2026-10-13T10:26:18.4165391Z PASS room authority lifecycle-retry
+2026-10-13T10:26:21.4190551Z PASS early room-level updates drained lifecycle-retry
+2026-10-13T10:26:21.4195589Z ROOM lifecycle-retry scene=GG_Hornet_1 visit=4 authority=False hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T10:26:21.4264723Z PASS camera authority state lifecycle-retry
+2026-10-13T10:26:21.4274936Z PASS camera lock state converges lifecycle-retry
+2026-10-13T10:26:21.4282519Z PASS visible bosses/knight and unfrozen camera lifecycle-retry
+2026-10-13T10:26:21.4315790Z PASS duplicate initial snapshot does not reset boss lifecycle-retry
+2026-10-13T10:26:21.4336494Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-retry
+2026-10-13T10:26:21.4356146Z PASS both checked.lifecycle-retry
+2026-10-13T10:26:21.4443449Z PASS damage published lifecycle-retry
+2026-10-13T10:26:21.4545569Z PASS same boss HP lifecycle-retry
+2026-10-13T10:26:21.4566251Z PASS both hpchecked.lifecycle-retry
+2026-10-13T10:26:21.4571450Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio
+2026-10-13T10:26:21.4623599Z PASS both probe-checked
+2026-10-13T10:26:21.4720844Z PASS final client disconnect
+2026-10-13T10:26:21.4741609Z PASS both probe-disconnected
+2026-10-13T10:26:21.4827490Z PASS server acknowledges final disconnects
+2026-10-13T10:26:21.5005976Z PASS final server stopped

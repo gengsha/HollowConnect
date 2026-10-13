@@ -1,0 +1,36 @@
+2026-10-13T08:08:14.2257659Z PASS menu ready
+2026-10-13T08:08:18.3987005Z PASS unsaved character ready
+2026-10-13T08:08:18.3987005Z PASS server started
+2026-10-13T08:08:19.2399891Z PASS connected
+2026-10-13T08:08:19.2409917Z PASS both connected
+2026-10-13T08:08:23.5507018Z PASS arena entered
+2026-10-13T08:08:23.5736806Z PASS authority ready
+2026-10-13T08:08:23.5751953Z PASS both in arena
+2026-10-13T08:08:23.5778040Z DIAGNOSTIC authority=False pos=(92.0, 8.3, 0.0) active=False hp=850 hero=(70.0, 8.0, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=0
+2026-10-13T08:08:26.5786340Z DIAGNOSTIC authority=False pos=(92.0, 8.3, 0.0) active=True hp=800 hero=(70.0, 8.0, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=0
+2026-10-13T08:08:29.5817065Z DIAGNOSTIC authority=False pos=(73.9, 17.3, 0.0) active=True hp=800 hero=(69.3, 9.5, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=0
+2026-10-13T08:08:32.5842968Z DIAGNOSTIC authority=False pos=(82.5, 8.3, 0.0) active=True hp=800 hero=(69.3, 9.5, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=13
+2026-10-13T08:08:35.5859387Z DIAGNOSTIC authority=False pos=(77.8, 8.3, 0.0) active=True hp=800 hero=(72.3, 11.0, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=78
+2026-10-13T08:08:38.5870722Z DIAGNOSTIC authority=False pos=(78.2, 15.0, 0.0) active=True hp=800 hero=(75.3, 12.5, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=78
+2026-10-13T08:08:41.5870121Z DIAGNOSTIC authority=False pos=(78.1, 15.0, 0.0) active=True hp=800 hero=(75.3, 12.5, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=78
+2026-10-13T08:08:44.5893906Z DIAGNOSTIC authority=False pos=(80.1, 8.3, 0.0) active=True hp=800 hero=(75.3, 12.5, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=78
+2026-10-13T08:08:47.5919188Z DIAGNOSTIC authority=False pos=(80.1, 8.3, 0.0) active=True hp=800 hero=(72.3, 14.0, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=78
+2026-10-13T08:08:50.5940100Z DIAGNOSTIC authority=False pos=(74.0, 17.3, 0.0) active=True hp=800 hero=(70.2, 15.2, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=78
+2026-10-13T08:08:53.5957565Z DIAGNOSTIC authority=False pos=(93.7, 8.3, 0.0) active=True hp=800 hero=(70.2, 15.2, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=135
+2026-10-13T08:08:56.5978006Z DIAGNOSTIC authority=False pos=(93.3, 8.3, 0.0) active=True hp=800 hero=(70.2, 15.2, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=202
+2026-10-13T08:08:59.5977141Z DIAGNOSTIC authority=False pos=(72.0, 8.3, 0.0) active=True hp=800 hero=(70.2, 15.2, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=267
+2026-10-13T08:09:02.6008389Z DIAGNOSTIC authority=False pos=(71.6, 9.9, 0.0) active=True hp=599 hero=(70.2, 15.2, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=267
+2026-10-13T08:09:05.6022765Z DIAGNOSTIC authority=False pos=(85.8, 13.5, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=287
+2026-10-13T08:09:08.6044175Z DIAGNOSTIC authority=False pos=(85.8, 13.5, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=1123
+2026-10-13T08:09:11.6075969Z DIAGNOSTIC authority=False pos=(85.8, 13.5, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=2193
+2026-10-13T08:09:14.6103355Z DIAGNOSTIC authority=False pos=(85.8, 13.5, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=2989
+2026-10-13T08:09:17.6123649Z DIAGNOSTIC authority=False pos=(80.9, 8.3, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=2998
+2026-10-13T08:09:20.6136715Z DIAGNOSTIC authority=False pos=(92.1, 8.3, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=3059
+2026-10-13T08:09:23.6208873Z DIAGNOSTIC authority=False pos=(70.1, 8.3, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=3092
+2026-10-13T08:09:26.6207295Z DIAGNOSTIC authority=False pos=(74.0, 16.8, 0.0) active=True hp=599 hero=(70.3, 15.6, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=3092
+2026-10-13T08:09:29.6229184Z DIAGNOSTIC authority=False pos=(72.4, 12.2, 0.0) active=True hp=599 hero=(70.5, 16.1, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=3092
+2026-10-13T08:09:32.6235506Z DIAGNOSTIC authority=False pos=(93.1, 8.3, 0.0) active=True hp=599 hero=(70.6, 16.5, 0.0) state=Control=,constrain_x=,Stun=,Constrain Y= launches=0 matches=3102
+2026-10-13T08:09:33.5904990Z PASS replica follows moving native projectiles
+2026-10-13T08:09:33.5937228Z PASS both motion probes finished
+2026-10-13T08:09:33.6481695Z PASS both clients disconnected normally
+2026-10-13T08:09:33.9499057Z FINAL PASS Grimm native motion GG_Grimm

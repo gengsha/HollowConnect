@@ -2,6 +2,22 @@
 $root = Split-Path -Parent $PSScriptRoot
 $version = '0.1.13'
 $env:MSBuildEnableWorkloadResolver = 'false'
+$taskEvidencePath=Join-Path $root 'docs/evidence/runtime-room-0.1.13.json'
+$taskEvidence=Get-Content -LiteralPath $taskEvidencePath -Raw | ConvertFrom-Json
+$taskBlockers=Get-Content -LiteralPath (Join-Path $root 'docs/evidence/runtime-blockers-0.1.13.json') -Raw | ConvertFrom-Json
+if($taskBlockers.version -ne $version -or @($taskBlockers.findings | Where-Object {$_.resolved -ne $true}).Count){throw 'Unresolved runtime blocker; no release package created.'}
+if($taskEvidence.releaseReady -ne $true -or $taskEvidence.engineVersion -ne '3.0.0-hc10' -or @($taskEvidence.runs).Count -ne 12){throw 'Final runtime acceptance is incomplete or blocked; no release package created.'}
+foreach($taskRun in $taskEvidence.runs){
+    if(!$taskRun.bothPassed){throw 'A runtime acceptance case failed; no release package created.'}
+    if(@($taskRun.binaries).Count -ne 3){throw 'Runtime DLL evidence is incomplete; no release package created.'}
+    foreach($taskRequired in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll'){
+        if(@($taskRun.binaries | Where-Object {$_.name -eq $taskRequired}).Count -ne 1){throw 'Runtime DLL evidence is missing or duplicated; no release package created.'}
+    }
+    & (Join-Path $root 'tests/Smoke/Assert-ProbeLogs.ps1') -RunPath (Join-Path $root ('.test-results/'+$taskRun.name)) -RequireRuntimeFiles
+    foreach($taskBinary in $taskRun.binaries){
+        if((Get-FileHash -LiteralPath (Join-Path $root ('src/HollowConnect/bin/Release/net472/'+$taskBinary.name)) -Algorithm SHA256).Hash -ne $taskBinary.sha256){throw 'Production DLL differs from accepted runtime; no release package created.'}
+    }
+}
 & dotnet build (Join-Path $root 'src\HollowConnect.Installer\HollowConnect.Installer.csproj') -c Release --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Installer build failed.' }
 $package = Join-Path $root "dist\HollowConnect-$version"
@@ -19,6 +35,7 @@ Copy-Item -LiteralPath (Join-Path $root 'docs') -Destination $package -Recurse -
 $manifest = [ordered]@{
     version = $version
     installerRevision = 3
+    buildInformation = @('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll') | ForEach-Object { @{name=$_;productVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $output $_)).ProductVersion} }
     gameVersion = '1.5.78.11833 Windows / Unity 2020.2.2f1'
     vanillaAssemblySha256 = 'FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0'
     apiAssemblySha256 = '5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D'

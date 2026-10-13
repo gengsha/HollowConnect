@@ -1,0 +1,71 @@
+2026-10-13T10:56:14.9165663Z PASS menu
+2026-10-13T10:56:19.5369316Z PASS unsaved character
+2026-10-13T10:56:19.6688689Z PASS server ready
+2026-10-13T10:56:20.6888842Z PASS handshake
+2026-10-13T10:56:20.6914809Z PASS both connected
+2026-10-13T10:56:43.0712725Z PASS first entrant starts fighting
+2026-10-13T10:56:44.1800198Z PASS native atrium
+2026-10-13T10:56:45.2004481Z PASS native pantheon selection UI
+2026-10-13T10:56:51.5637149Z PASS native door entrance cinematic
+2026-10-13T10:57:02.1591210Z PASS native door loads first boss
+2026-10-13T10:57:02.1591210Z PASS first boss entry
+2026-10-13T10:57:02.1876708Z PASS both startroom.0
+2026-10-13T10:57:05.3192647Z PASS camera initially ready
+2026-10-13T10:57:08.3255248Z HAZARD COLLIDER Cloud Hazard bounds=Center: (47.8, 5.6, 0.0), Extents: (56.6, 2.9, 0.0)
+2026-10-13T10:57:11.3616850Z HAZARD COLLISION originalPoint=True pos=(38.9, 10.3, 0.0) health=5 ready=True
+2026-10-13T10:57:11.3759969Z PASS native hazard freezes camera
+2026-10-13T10:57:11.3800066Z CAMERA FROZEN native-hazard mode=FROZEN enabled=True active=True pending=0 input=True timescale=0.1232666 game=PLAYING ui=PLAYING hazard=True hazardRespawning=False down=False reset=False teleporting=False subscribers=HeroController:<Start>b__383_0,CameraController:PositionToHero heroMatches=True
+2026-10-13T10:57:11.3810728Z CAMERA HISTORY 2026-10-13T10:56:19.5211604Z FROZEN->LOCKED scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3820741Z CAMERA HISTORY 2026-10-13T10:56:19.5335104Z CAMERA POSITION begin scene=Town
+2026-10-13T10:57:11.3830765Z CAMERA HISTORY 2026-10-13T10:56:19.5448459Z LOCKED->FROZEN scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3840786Z CAMERA HISTORY 2026-10-13T10:56:19.6439501Z FROZEN->LOCKED scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3860834Z CAMERA HISTORY 2026-10-13T10:56:19.6439501Z CAMERA POSITION end scene=Town mode=LOCKED
+2026-10-13T10:57:11.3870859Z CAMERA HISTORY 2026-10-13T10:56:20.6414631Z LOCKED->FOLLOWING scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.ReleaseLock (CameraLockArea lockarea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3885962Z CAMERA HISTORY 2026-10-13T10:56:20.7275760Z FOLLOWING->LOCKED scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3901045Z CAMERA HISTORY 2026-10-13T10:56:21.7860540Z LOCKED->FOLLOWING scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.ReleaseLock (CameraLockArea lockarea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3911250Z CAMERA HISTORY 2026-10-13T10:56:21.8028353Z FOLLOWING->LOCKED scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3921272Z CAMERA HISTORY 2026-10-13T10:56:43.0790351Z LOCKED->FROZEN scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.FreezeInPlace (System.Boolean freezeTargetAlso) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3921272Z CAMERA HISTORY 2026-10-13T10:56:44.1721416Z CAMERA POSITION begin scene=GG_Atrium
+2026-10-13T10:57:11.3941316Z CAMERA HISTORY 2026-10-13T10:56:44.1838202Z CAMERA POSITION begin scene=GG_Atrium
+2026-10-13T10:57:11.3951338Z CAMERA HISTORY 2026-10-13T10:56:44.1966626Z FROZEN->LOCKED scene=GG_Atrium stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3962958Z CAMERA HISTORY 2026-10-13T10:56:44.1966626Z LOCKED->FROZEN scene=GG_Atrium stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3972986Z CAMERA HISTORY 2026-10-13T10:56:44.2859201Z FROZEN->FOLLOWING scene=GG_Atrium stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.3983149Z CAMERA HISTORY 2026-10-13T10:56:44.2859201Z CAMERA POSITION end scene=GG_Atrium mode=FOLLOWING
+2026-10-13T10:57:11.3993205Z CAMERA HISTORY 2026-10-13T10:56:44.3002492Z FOLLOWING->LOCKED scene=GG_Atrium stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.4003199Z CAMERA HISTORY 2026-10-13T10:56:44.3002492Z CAMERA POSITION end scene=GG_Atrium mode=LOCKED
+2026-10-13T10:57:11.4003199Z CAMERA HISTORY 2026-10-13T10:56:45.2101574Z LOCKED->FOLLOWING scene=GG_Atrium stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.ReleaseLock (CameraLockArea lockarea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.4017569Z CAMERA HISTORY 2026-10-13T10:56:45.2114422Z FOLLOWING->LOCKED scene=GG_Atrium stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.4027575Z CAMERA HISTORY 2026-10-13T10:57:02.1069701Z CAMERA POSITION begin scene=GG_Vengefly
+2026-10-13T10:57:11.4037604Z CAMERA HISTORY 2026-10-13T10:57:02.1124867Z LOCKED->FROZEN scene=GG_Vengefly stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.4037604Z CAMERA HISTORY 2026-10-13T10:57:02.2132550Z FROZEN->FOLLOWING scene=GG_Vengefly stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.4052360Z CAMERA HISTORY 2026-10-13T10:57:02.2132550Z CAMERA POSITION end scene=GG_Vengefly mode=FOLLOWING
+2026-10-13T10:57:11.4064633Z CAMERA HISTORY 2026-10-13T10:57:05.3257245Z FOLLOWING->LOCKED scene=GG_Vengefly stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:11.4076055Z CAMERA HISTORY 2026-10-13T10:57:11.3749940Z LOCKED->FROZEN scene=GG_Vengefly stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.FreezeInPlace (System.Boolean freezeTargetAlso) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+  at GameManager+<PlayerDeadFromHazard>d__180.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+  at HeroController+<DieFromHazard>d__533.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T10:57:13.5353130Z PASS native hazard restores input and camera
+2026-10-13T10:57:13.5364063Z CAMERA RECOVERED native-hazard mode=LOCKED enabled=True active=True pending=0 input=True timescale=1 game=PLAYING ui=PLAYING hazard=False hazardRespawning=False down=False reset=False teleporting=False subscribers=HeroController:<Start>b__383_0,CameraController:PositionToHero heroMatches=True
+2026-10-13T10:57:13.7447040Z PASS both camera-hazard-checked
+2026-10-13T10:57:13.7452080Z FINAL PASS actual native spike collision, transient frozen camera and original recovery; originalPoint=True
+2026-10-13T10:57:13.7478069Z PASS both probe-checked
+2026-10-13T10:57:13.8181275Z PASS final client disconnect
+2026-10-13T10:57:13.8215411Z PASS both probe-disconnected
+2026-10-13T10:57:13.8350784Z PASS final server stopped

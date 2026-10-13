@@ -1,17 +1,17 @@
-2026-10-13T07:13:48.0787818Z PASS menu ready
-2026-10-13T07:13:52.2965274Z PASS unsaved character ready
-2026-10-13T07:13:53.1713860Z PASS boss test handshake
-2026-10-13T07:13:53.2195658Z PASS both connected
-2026-10-13T07:13:54.5520603Z PASS native False Knight room
-2026-10-13T07:13:54.6075830Z PASS boss authority initialized
-2026-10-13T07:13:56.5838661Z PASS both in arena
-2026-10-13T07:14:01.1998522Z PASS arena trigger starts native boss AI
-2026-10-13T07:14:05.4988250Z PASS native armor damage exposes head without terminal death
-2026-10-13T07:14:05.4993309Z PASS armor phase remains alive and resets phase health
-2026-10-13T07:14:05.4993309Z PASS exposed head takes partial native damage
-2026-10-13T07:14:05.5700141Z PASS guest observed exposed phase and health
-2026-10-13T07:14:06.4602844Z PASS old authority leaves during exposed phase
-2026-10-13T07:14:15.2114943Z PASS new authority continues native phase and combat
-2026-10-13T07:14:16.1247117Z PASS old authority rejoins ongoing boss fight
-2026-10-13T07:14:16.1922085Z PASS returning client receives continued armor health and phase count
-2026-10-13T07:14:16.3103398Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence
+2026-10-13T15:01:15.0541964Z PASS menu ready
+2026-10-13T15:01:19.2184789Z PASS unsaved character ready
+2026-10-13T15:01:20.1145561Z PASS boss test handshake
+2026-10-13T15:01:20.1503276Z PASS both connected
+2026-10-13T15:01:21.5330472Z PASS native False Knight room
+2026-10-13T15:01:21.5815224Z PASS boss authority initialized
+2026-10-13T15:01:23.5169970Z PASS both in arena
+2026-10-13T15:01:28.1411152Z PASS arena trigger starts native boss AI
+2026-10-13T15:01:32.4387196Z PASS native armor damage exposes head without terminal death
+2026-10-13T15:01:32.4387196Z PASS armor phase remains alive and resets phase health
+2026-10-13T15:01:32.4387196Z PASS exposed head takes partial native damage
+2026-10-13T15:01:32.5305984Z PASS guest observed exposed phase and health
+2026-10-13T15:01:33.3842282Z PASS old authority leaves after exposed phase observation
+2026-10-13T15:01:42.3993795Z PASS new authority continues native phase and combat
+2026-10-13T15:01:43.2484559Z PASS old authority rejoins ongoing boss fight
+2026-10-13T15:01:43.3116068Z PASS returning client receives continued armor health and phase count
+2026-10-13T15:01:43.3937596Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence

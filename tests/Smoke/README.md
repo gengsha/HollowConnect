@@ -4,7 +4,21 @@
 
 所有测试模式创建 SilentProbe，启动及每帧将 AudioListener.volume 设为 0；只静音隔离测试进程，不修改用户音量配置。
 
+已载入内存角色的游戏内探针连接时设置 `_autoConnect`，保留已选角色；从菜单开始的 JoinProbe 则仍走真正选档/新档路径。格林探针观察 ProfileMenu 请求，正常游戏内检查必须为零；`HOLLOWCONNECT_GRIMM_MENU_BASELINE=1` 保留旧夹具路径并在实际菜单请求后明确失败，用于对照，不触发 Boss 战或计入验收。原生崩溃标记在发布日志扫描中独立失败。
+
+`Run-Camera-Gate.ps1` 顺序执行真实 Unity 镜头判定的三组对照：主动冻结且没有危险复位状态必须立即失败，实际尖刺碰撞后明确阻塞原生危险复位协程必须在 15 秒真实时间后失败，正常原生尖刺复位必须自行恢复。两组故障注入保留 `.failed`，只在失败原因为预期精确原因且没有其他运行错误时，才记为判定对照成立；不计入 12 组战斗验收，也不强制解冻。`-ReuseNonHazard` 复用并重新核对已完成的第一组；`-ReuseAll` 重新核对三组现有日志、标记与生产哈希并生成证据，不启动新游戏。早先停止模拟时间的夹具被游戏恢复时间倍率，未形成持续故障，其失败单独保留。
+
+`HOLLOWCONNECT_TWEEN_CLONE_CHECK=1` 在真实 Unity 父子物体上启动两条 iTween，经生产 Entity 构造复制并激活显示副本；要求无复制来的运行组件、无激活异常、原动画 ID / 参数仍完整且新副本动画实际运动。`HOLLOWCONNECT_TWEEN_CLONE_ONLY=1` 可只运行此项。旧引擎稳定触发 RetrieveArgs / Awake 空引用，保留为失败基线；两种最终生命周期专项均包含此检查。
+
 0.1.13 增加房间生命周期专项：`HOLLOWCONNECT_LIFECYCLE_CHECK=1` 在真实苔藓冲锋者显示副本执行原生持续音效动作，控制其音源先销毁，然后击杀权威 Boss 并沿原生行程进入大黄蜂；验证旧实体清除、唯一模拟权、Boss / 队友可见、镜头锁一致，并在大黄蜂房内断线重连再次检查。原始 0.1.12 DLL 在该销毁顺序下清理抛错、后续登记失效。故障注入不是完整自然游玩复现。
+
+`HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS=1` 再追加六轮真实大黄蜂 Throw / Thrown 时断线、同房重连，要求每轮自然再次投针、Needle / Needle Tink 有效并进入 Throw Recover。固定原生免伤靶子留在场内；等待原生招式而不强设 Boss 状态。两组最终生命周期专项都必须启用，零样本失败。
+
+重连压力测试还比较双方所有静态实体 ID，防止 Boss ID 一致但脱离层级的飞针 ID 已经分叉。原构建在首次同房重连即失败；单纯检查引用非空无法发现此问题。`HOLLOWCONNECT_STATIC_IDENTITY_CHECK=1` 用真实 Unity 对象检查脱离父级仍保留身份、复制的元数据不继承原对象身份，两组最终生命周期专项均启用。
+
+`HOLLOWCONNECT_PAUSE_MOTION_CHECK=1` 等待原生 A Dash 且速度大于 10，断线后让同一原权威先重连，要求继续移动并自然完成冲刺。`HOLLOWCONNECT_PAUSE_MOTION_ONLY=1` 可只做这项定向诊断；最终两组生命周期专项启用前者，并继续六轮投针检查。旧实现的真实基线在相同 FSM 状态恢复成零速度，8 秒内不能完成；没有强设 Boss 状态或速度。
+
+`HOLLOWCONNECT_CAMERA_HAZARD=1` 诊断使用真实虫王房 Cloud Hazard，记录原生危险死亡的冻结来源，调用与普通房间验收相同的恢复判定。只允许 hazardDeath / hazardRespawning 中的冻结在 15 秒内恢复；非危险状态或持续冻结仍失败，不改变生产镜头。`HOLLOWCONNECT_CAMERA_RING=1` 保存最近模式调用来源，在冻结时输出，正式两种原生入口均启用。
 
 `HOLLOWCONNECT_NATIVE_ENTRANCE=1` 让内存角色经实际一门选单、入口动画和对白进入战斗。测试仅启用新角色锁住的门，并调用门选单状态；不强迫任何 Boss FSM。对白通过原生 NEXT 输入事件推进。主客两种先入顺序各跑两轮，完成大黄蜂后进入温泉；大黄蜂另检查双方实际骨钉伤害进入同一权威血量。其他房通过 HealthManager 额外伤害推进，迟转场条件仍由测试 Down 标志控制，不能当作全程实际操控通关。
 
@@ -62,4 +76,10 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 ## 救援反馈专用探针
 
 `HOLLOWCONNECT_SMOKE_MODE=rescue` 使用两个隔离客户端与真实 UDP 连接，交替由主机/客机用实际骨钉命中救援暗影，验证只有服务器确认的救人者增加 33 灵魂、受救者一血不获奖励、满槽/储备/个人灵魂限制以及旧暗影记录保留。通过生产接收函数注入合成事件，检查名单先于救援、重复确认、旧死亡、错误会话/轮次和全队重试中的拒绝。暂停时检查原版 Death/Death Glow、粒子波、两段音效资源与原生混音通道以及 2.5 秒清理。`shade-inspect` 仅在未保存新角色中反序列化原版素材以查看资源，不执行暗影回收 FSM。
+
+所有模式统一安装 `ProbeLogGuard`，引擎 ERROR、模组异常或 Spawn expired 立即使本轮失败。运行器和汇总器调用 `Assert-ProbeLogs.ps1` 扫描全部独立日志；测试完成后的失败标记仍有效。`tests/LogGate.Tests.ps1` 验证十四种日志门槛情形，包括异常堆栈的空行/新时间戳边界。最终正式组使用双方断开并等待服务器确认的结束屏障。
+
+假骑士迟入场用 `HOLLOWCONNECT_SMOKE_BOSS_LATE=1` 在露头后延迟 2.2 秒加载；`HOLLOWCONNECT_SMOKE_HANDOFF_DELAY` 另延迟旧权威离房。原生露头只有 5 秒，测试必须允许其自然超时，按实际阶段检查地形、血量与继续战斗，再用原生伤害驱动第二次露头，不强设 FSM。可选 `HOLLOWCONNECT_SMOKE_TAKEOVER_TRACE=1` 只在测试插件中记录接管前后子物体身份与原生 Activate 动作。
+
+格林运动夹具每帧维持原定固定无敌靶子在场内 `(80,8)`，防止零重力靶子被固体碰撞推出场外，令原生 AD Pos 永远无合法落点。靶子还须距气球中心 `(85.77,13.5)` 至少 6 单位；先前 `(85,8)` 导致原生 Balloon Retry，因此该轮失败保留。此条件仅约束测试角色，不修改 Boss 的 FSM 或位置。
 

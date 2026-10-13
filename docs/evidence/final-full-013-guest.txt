@@ -1,56 +1,56 @@
-2026-10-13T07:18:41.9638385Z PASS mod and menu ready
-2026-10-13T07:18:46.2230865Z PASS fresh unsaved game entered
-2026-10-13T07:18:46.5687360Z PASS host server ready
-2026-10-13T07:18:48.3880329Z PASS real UDP addon handshake
-2026-10-13T07:18:48.3900649Z PASS both clients connected
-2026-10-13T07:18:51.3749671Z PASS actual enemy scene entered
-2026-10-13T07:18:51.3764746Z PASS both clients in enemy room
-2026-10-13T07:18:53.3930383Z PASS host enemy damage
-2026-10-13T07:18:53.4322412Z PASS remote absolute enemy health
-2026-10-13T07:18:53.4322412Z PASS networked Mantis Claw grant
-2026-10-13T07:18:53.4445261Z PASS authority moved enemy
-2026-10-13T07:18:53.4833806Z PASS remote enemy position and invincibility
-2026-10-13T07:18:53.4882349Z PASS nail attack requested
-2026-10-13T07:18:54.6483314Z PASS authority received remote nail
-2026-10-13T07:18:54.6533991Z PASS nail damage synchronized back to guest
-2026-10-13T07:18:54.6591921Z PASS live teammate map coordinate
-2026-10-13T07:18:54.6711280Z PASS teammate map icon exists without equipped compass
-2026-10-13T07:18:54.6763485Z PASS map projection equals actual game compass
-2026-10-13T07:18:54.6886051Z PASS guest voluntary return requested
-2026-10-13T07:18:54.8930617Z PASS F6 does nothing while alive
-2026-10-13T07:18:54.9009698Z PASS guest shade before voluntary return
-2026-10-13T07:18:59.7412622Z PASS guest F6 returns only self to personal bench
-2026-10-13T07:18:59.7424295Z PASS guest native bench camera positioning finishes
-2026-10-13T07:18:59.7473913Z PASS own bench reached; camera and renderer restored; party attempt unchanged
-2026-10-13T07:18:59.7547221Z PASS survivor continued combat during guest bench return
-2026-10-13T07:19:00.6544324Z PASS guest rejoins ongoing combat after F6
-2026-10-13T07:19:00.6854938Z PASS guest reentry preserves ongoing enemy health
-2026-10-13T07:19:05.7169900Z PASS room authority gave up; guest continues as authority
-2026-10-13T07:19:05.7195650Z PASS surviving guest keeps enemy health and deals more damage after authority gives up
-2026-10-13T07:19:06.6738747Z PASS old authority rejoined current combat snapshot
-2026-10-13T07:19:07.4807827Z PASS guest becomes actual scene authority
-2026-10-13T07:19:07.4807827Z PASS authority transfer preserved enemy health
-2026-10-13T07:19:08.2360777Z PASS host current health snapshot verified
-2026-10-13T07:19:09.6650159Z PASS host late death snapshot verified
-2026-10-13T07:19:09.6665270Z PASS first down requested
-2026-10-13T07:19:09.6745109Z PASS lethal TakeDamage enters guest shade state
-2026-10-13T07:19:10.2793301Z PASS shade stays at death anchor; camera frozen; body hidden without bench respawn
-2026-10-13T07:19:12.0621689Z PASS guest rescued with exactly one health
-2026-10-13T07:19:12.0631984Z PASS one-health revive restores hero and camera in place
-2026-10-13T07:19:12.0763202Z PASS second down requested
-2026-10-13T07:19:12.1262355Z PASS single new attempt number
-2026-10-13T07:19:16.9449917Z PASS team checkpoint barrier released
-2026-10-13T07:19:19.0005665Z PASS host teleport verified
-2026-10-13T07:19:19.0081539Z PASS both ready for reverse death order
-2026-10-13T07:19:19.0363078Z PASS host down first arrived
-2026-10-13T07:19:19.0523887Z PASS reverse order increments attempt once
-2026-10-13T07:19:23.9128202Z PASS reverse order retry releases both clients
-2026-10-13T07:19:24.3139930Z PASS replayed completed wipe is ignored after release
-2026-10-13T07:19:24.3252832Z PASS both ready for shade disconnect cleanup
-2026-10-13T07:19:24.3594618Z PASS host shade visible before disconnect
-2026-10-13T07:19:24.3926309Z PASS disconnect removes remote shade
-2026-10-13T07:19:24.3936867Z PASS both finished shade cleanup
-2026-10-13T07:19:24.6830424Z PASS host reconnected before transition cancellation
-2026-10-13T07:19:25.3602133Z PASS native checkpoint load finishes after disconnect
-2026-10-13T07:19:25.8624736Z PASS disconnect cancels pending checkpoint and restores hero
-2026-10-13T07:19:25.8624736Z FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, F6 personal bench return for guest and scene authority without combat reset, native shade nail rescue, both wipe orders and F7/F8 warp
+2026-10-13T15:07:09.6338038Z PASS mod and menu ready
+2026-10-13T15:07:13.7651250Z PASS fresh unsaved game entered
+2026-10-13T15:07:13.7781175Z PASS host server ready
+2026-10-13T15:07:15.6934611Z PASS real UDP addon handshake
+2026-10-13T15:07:15.6969352Z PASS both clients connected
+2026-10-13T15:07:18.6874202Z PASS actual enemy scene entered
+2026-10-13T15:07:18.6889275Z PASS both clients in enemy room
+2026-10-13T15:07:20.6967391Z PASS host enemy damage
+2026-10-13T15:07:20.7226002Z PASS remote absolute enemy health
+2026-10-13T15:07:20.7393963Z PASS networked Mantis Claw grant
+2026-10-13T15:07:20.7536729Z PASS authority moved enemy
+2026-10-13T15:07:20.7909724Z PASS remote enemy position and invincibility
+2026-10-13T15:07:20.7943884Z PASS nail attack requested
+2026-10-13T15:07:21.9547858Z PASS authority received remote nail
+2026-10-13T15:07:21.9598059Z PASS nail damage synchronized back to guest
+2026-10-13T15:07:21.9644255Z PASS live teammate map coordinate
+2026-10-13T15:07:21.9774473Z PASS teammate map icon exists without equipped compass
+2026-10-13T15:07:21.9807041Z PASS map projection equals actual game compass
+2026-10-13T15:07:21.9851785Z PASS guest voluntary return requested
+2026-10-13T15:07:22.1874319Z PASS F6 does nothing while alive
+2026-10-13T15:07:22.1960478Z PASS guest shade before voluntary return
+2026-10-13T15:07:26.9545486Z PASS guest F6 returns only self to personal bench
+2026-10-13T15:07:26.9881887Z PASS guest native bench camera positioning finishes
+2026-10-13T15:07:26.9896966Z PASS own bench reached; camera and renderer restored; party attempt unchanged
+2026-10-13T15:07:26.9977651Z PASS survivor continued combat during guest bench return
+2026-10-13T15:07:27.8823201Z PASS guest rejoins ongoing combat after F6
+2026-10-13T15:07:27.8960683Z PASS guest reentry preserves ongoing enemy health
+2026-10-13T15:07:32.9904579Z PASS room authority gave up; guest continues as authority
+2026-10-13T15:07:32.9928134Z PASS surviving guest keeps enemy health and deals more damage after authority gives up
+2026-10-13T15:07:33.9194378Z PASS old authority rejoined current combat snapshot
+2026-10-13T15:07:34.7294978Z PASS guest becomes actual scene authority
+2026-10-13T15:07:34.7294978Z PASS authority transfer preserved enemy health
+2026-10-13T15:07:35.4869600Z PASS host current health snapshot verified
+2026-10-13T15:07:36.8833256Z PASS host late death snapshot verified
+2026-10-13T15:07:36.8937882Z PASS first down requested
+2026-10-13T15:07:36.9076304Z PASS lethal TakeDamage enters guest shade state
+2026-10-13T15:07:37.5135597Z PASS shade stays at death anchor; camera frozen; body hidden without bench respawn
+2026-10-13T15:07:39.2932149Z PASS guest rescued with exactly one health
+2026-10-13T15:07:39.2932149Z PASS one-health revive restores hero and camera in place
+2026-10-13T15:07:39.3024053Z PASS second down requested
+2026-10-13T15:07:39.3546043Z PASS single new attempt number
+2026-10-13T15:07:44.1284653Z PASS team checkpoint barrier released
+2026-10-13T15:07:46.1667411Z PASS host teleport verified
+2026-10-13T15:07:46.1677473Z PASS both ready for reverse death order
+2026-10-13T15:07:46.2023046Z PASS host down first arrived
+2026-10-13T15:07:46.2178351Z PASS reverse order increments attempt once
+2026-10-13T15:07:51.0972345Z PASS reverse order retry releases both clients
+2026-10-13T15:07:51.5006630Z PASS replayed completed wipe is ignored after release
+2026-10-13T15:07:51.5018375Z PASS both ready for shade disconnect cleanup
+2026-10-13T15:07:51.5445284Z PASS host shade visible before disconnect
+2026-10-13T15:07:51.5764374Z PASS disconnect removes remote shade
+2026-10-13T15:07:51.5776909Z PASS both finished shade cleanup
+2026-10-13T15:07:51.8708219Z PASS host reconnected before transition cancellation
+2026-10-13T15:07:52.5040593Z PASS native checkpoint load finishes after disconnect
+2026-10-13T15:07:53.0052271Z PASS disconnect cancels pending checkpoint and restores hero
+2026-10-13T15:07:53.2441473Z FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, F6 personal bench return for guest and scene authority without combat reset, native shade nail rescue, both wipe orders and F7/F8 warp

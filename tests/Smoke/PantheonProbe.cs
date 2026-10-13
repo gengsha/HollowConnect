@@ -28,6 +28,17 @@ public sealed class PantheonProbe : MonoBehaviour {
     private EntityManager manager;
     private int attemptNumber;
     private int pendingCameraPositions;
+    private bool stallHazardRecovery, hazardRecoveryStalled;
+    private IEnumerator StallHazardRecovery(IEnumerator routine) {
+        while(routine.MoveNext()) {
+            yield return routine.Current;
+            if(stallHazardRecovery) {
+                hazardRecoveryStalled=true;
+                Mark("CAMERA GATE native hazard recovery blocked before HazardRespawn");
+                while(stallHazardRecovery)yield return null;
+            }
+        }
+    }
     private readonly Queue<string> cameraHistory=new();
     private void CameraHistory(string value) {
         if(cameraHistory.Count>=256)cameraHistory.Dequeue();
@@ -141,6 +152,8 @@ public sealed class PantheonProbe : MonoBehaviour {
     private IEnumerator Start() {
         role=Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE");root=Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT");host=role=="host";
         On.CameraController.DoPositionToHero += (orig,camera,direct)=>TrackCameraPosition(orig(camera,direct));
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_GATE_NEGATIVE")=="persistent")
+            On.GameManager.PlayerDeadFromHazard += (orig,gm,waitTime)=>StallHazardRecovery(orig(gm,waitTime));
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1") {
             On.HutongGames.PlayMaker.Fsm.OnEnable += (orig,fsm)=> {
                 if(fsm.GameObject!=null&&fsm.GameObject.name=="Hornet Boss 1")Mark("COLLIDER ENABLE before fsm="+fsm.Name+" state="+fsm.ActiveState?.Name+" restart="+fsm.RestartOnEnable);
@@ -181,7 +194,7 @@ public sealed class PantheonProbe : MonoBehaviour {
         while(stack.Count!=0) {
             bool moved;object current=null;
             try { if(DateTime.UtcNow>end)throw new TimeoutException("Pantheon probe deadline");moved=stack.Peek().MoveNext();if(moved)current=stack.Peek().Current; }
-            catch(Exception e){Mark("FAIL "+e);Flag(role+".failed",e.ToString());yield break;}
+            catch(Exception e){stallHazardRecovery=false;Mark("FAIL "+e);Flag(role+".failed",e.ToString());yield break;}
             if(!moved){stack.Pop();continue;}if(current is IEnumerator nested)stack.Push(nested);else yield return current;
         }
     }
@@ -365,6 +378,9 @@ public sealed class PantheonProbe : MonoBehaviour {
         foreach(var c in spikes)Mark("HAZARD COLLIDER "+c.name+" bounds="+c.bounds);
         if(spikes.Length==0)throw new Exception("No native Vengefly spike collider");
         hero.takeNoDamage=true;var health=PlayerData.instance.health;
+        // Enable the test-only stall only after initial native entry is ready.
+        // The real coroutine still freezes the camera from a real collision.
+        stallHazardRecovery=Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_GATE_NEGATIVE")=="persistent";
         hero.transform.position=new Vector3(45.2f,13.4f,0);
         var end=Time.realtimeSinceStartup+6;
         while(!hero.cState.hazardDeath&&Time.realtimeSinceStartup<end)yield return null;
@@ -377,6 +393,17 @@ public sealed class PantheonProbe : MonoBehaviour {
         Mark("HAZARD COLLISION originalPoint="+atOriginalPoint+" pos="+hero.transform.position+" health="+PlayerData.instance.health+" ready="+runtime.Playable);
         yield return Until(()=>camera.mode==CameraController.CameraMode.FROZEN,"native hazard freezes camera",3);
         CameraTrace("FROZEN native-hazard");
+        Mark("CAMERA GATE old single-frame FROZEN assertion would reject this actual native hazard");
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_GATE_NEGATIVE")=="persistent") {
+            // Explicitly block the native coroutine before HazardRespawn;
+            // scaled time can be restored by the game and is not a reliable
+            // fault injection. Do not alter hazard flags or camera mode.
+            yield return Until(()=>hazardRecoveryStalled,"native hazard coroutine stalled",6);
+            Mark("CAMERA GATE injected persistent native hazard; expect bounded rejection");
+            try {yield return RequireRecoveredCamera("injected-persistent-hazard");}
+            finally {stallHazardRecovery=false;}
+            throw new Exception("Camera gate incorrectly accepted a persistent native hazard");
+        }
         // Exercise the same bounded recovery gate as normal room acceptance,
         // while the real hazard animation is still holding the camera frozen.
         yield return RequireRecoveredCamera("native-hazard");
@@ -385,6 +412,17 @@ public sealed class PantheonProbe : MonoBehaviour {
         yield return Both("camera-hazard-checked");
         Mark("FINAL PASS actual native spike collision, shared room camera gate and original recovery; originalPoint="+atOriginalPoint);
         yield return Finish();
+    }
+    private IEnumerator CameraNonHazardFreezeCheck() {
+        yield return Until(()=>manager.IsSceneHostDetermined&&HeroController.instance.acceptingInput&&
+            !HeroController.instance.cState.hazardDeath&&!HeroController.instance.cState.hazardRespawning&&
+            GameCameras.instance.cameraController.mode!=CameraController.CameraMode.FROZEN,"camera ready for negative freeze fixture",15);
+        var hero=HeroController.instance;hero.GetComponent<Rigidbody2D>().gravityScale=0;
+        hero.GetComponent<Rigidbody2D>().velocity=Vector2.zero;hero.transform.position=new Vector3(45,20,0);
+        GameCameras.instance.cameraController.FreezeInPlace();
+        Mark("CAMERA GATE injected non-hazard freeze; expect immediate rejection");
+        yield return RequireRecoveredCamera("injected-nonhazard");
+        throw new Exception("Camera gate incorrectly accepted a non-hazard freeze");
     }
     private void DelayInitialSnapshot() {
         var net=Field<NetClient>(engine.ClientManager,"_netClient");
@@ -641,6 +679,9 @@ public sealed class PantheonProbe : MonoBehaviour {
                 }
             }
             yield return Both("startroom."+attempt);
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_GATE_NEGATIVE")=="nonhazard"){
+                yield return CameraNonHazardFreezeCheck();yield break;
+            }
             if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_HAZARD")=="1"){yield return CameraHazardChecks();yield break;}
             if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_EARLY_TRANSFER")=="1") {
                 if(role!=first) {

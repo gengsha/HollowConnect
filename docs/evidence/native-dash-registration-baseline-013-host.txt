@@ -1,0 +1,42 @@
+2026-10-13T14:26:45.7549112Z PASS menu
+2026-10-13T14:26:49.9675918Z PASS unsaved character
+2026-10-13T14:26:50.9516467Z PASS handshake
+2026-10-13T14:26:50.9538662Z PASS both connected
+2026-10-13T14:26:51.9674705Z PASS moss room
+2026-10-13T14:26:52.0025394Z PASS first moss authority
+2026-10-13T14:26:53.0438772Z PASS both moss
+2026-10-13T14:26:53.0472836Z PASS room authority lifecycle-moss
+2026-10-13T14:26:56.0486149Z PASS early room-level updates drained lifecycle-moss
+2026-10-13T14:26:56.0513721Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=True hero=(43.9, 7.4, 0.0) camera=(44.9, 11.1, -38.1) mode=FOLLOWING
+2026-10-13T14:26:56.0548808Z PASS camera authority state lifecycle-moss
+2026-10-13T14:26:56.0553845Z PASS camera lock state converges lifecycle-moss
+2026-10-13T14:26:56.0573890Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-13T14:26:56.0617302Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-13T14:26:59.1249134Z PASS both checked.lifecycle-moss
+2026-10-13T14:26:59.1269179Z PASS damage published lifecycle-moss
+2026-10-13T14:26:59.1284252Z PASS same boss HP lifecycle-moss
+2026-10-13T14:26:59.1609317Z PASS both hpchecked.lifecycle-moss
+2026-10-13T14:26:59.1651986Z PASS replica loop target destroyed
+2026-10-13T14:26:59.1666717Z PASS both destroyed-loop
+2026-10-13T14:27:09.2099829Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-13T14:27:09.2110006Z PASS both hornet-entered
+2026-10-13T14:27:09.2115251Z PASS room authority lifecycle-hornet
+2026-10-13T14:27:12.2125850Z PASS early room-level updates drained lifecycle-hornet
+2026-10-13T14:27:12.2137887Z ROOM lifecycle-hornet scene=GG_Hornet_1 visit=3 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=FOLLOWING
+2026-10-13T14:27:12.2172055Z PASS camera authority state lifecycle-hornet
+2026-10-13T14:27:12.2182912Z PASS camera lock state converges lifecycle-hornet
+2026-10-13T14:27:12.2182912Z PASS visible bosses/knight and unfrozen camera lifecycle-hornet
+2026-10-13T14:27:12.2207507Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-hornet
+2026-10-13T14:27:15.1215149Z PASS both checked.lifecycle-hornet
+2026-10-13T14:27:15.1236143Z PASS damage published lifecycle-hornet
+2026-10-13T14:27:15.1256211Z PASS same boss HP lifecycle-hornet
+2026-10-13T14:27:15.1705768Z PASS both hpchecked.lifecycle-hornet
+2026-10-13T14:27:15.1720684Z NATIVE DASH wait state=ADash Antic velocity=(0.0, 0.0) pos=(34.2, 37.2, 0.0)
+2026-10-13T14:27:15.2174965Z NATIVE DASH wait state=A Dash velocity=(-23.5, -18.7) pos=(33.7, 36.8, 0.0)
+2026-10-13T14:27:15.2185027Z PASS native moving dash before registration pause
+2026-10-13T14:27:15.2250001Z PASS both dash-pause
+2026-10-13T14:27:15.2560972Z PASS both lifecycle-disconnected
+2026-10-13T14:27:15.5311311Z PASS reconnect after destroyed-loop cleanup
+2026-10-13T14:27:15.5497722Z PASS rejoined room authority
+2026-10-13T14:27:15.5510473Z NATIVE DASH resumed state=A Dash velocity=(0.0, 0.0) pos=(31.8, 35.3, 0.0) before=(33.7, 36.8, 0.0)
+2026-10-13T14:27:23.5543667Z FAIL System.Exception: Timeout: native dash moves and completes after registration pause

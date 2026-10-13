@@ -12,4 +12,4 @@ PASS a real file lock during API rollback still restores HKMP and other API file
 PASS EXE uninstall after updates restores the first installation baseline
 PASS standalone EXE automatic discovery runs through Windows PowerShell without developer tools
 RESULT 13 passed, 0 failed
-Evidence: E:\projects\hollowConnect\.test-results\installer-portable-20261013-143824-034
+Evidence: E:\projects\hollowConnect\.test-results\installer-portable-20261013-214017-622

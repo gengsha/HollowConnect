@@ -1,0 +1,124 @@
+2026-10-13T08:53:26.5350740Z PASS menu
+2026-10-13T08:53:30.8682447Z PASS unsaved character
+2026-10-13T08:53:31.1795107Z PASS server ready
+2026-10-13T08:53:32.0708594Z PASS handshake
+2026-10-13T08:53:32.0723672Z PASS both connected
+2026-10-13T08:53:54.6137370Z PASS first entrant starts fighting
+2026-10-13T08:53:55.6918910Z PASS native atrium
+2026-10-13T08:53:56.7195970Z PASS native pantheon selection UI
+2026-10-13T08:54:03.0934427Z PASS native door entrance cinematic
+2026-10-13T08:54:13.6799024Z PASS native door loads first boss
+2026-10-13T08:54:13.6799024Z PASS first boss entry
+2026-10-13T08:54:13.6971311Z PASS both startroom.0
+2026-10-13T08:54:13.6981907Z PASS native sequence room 0.0
+2026-10-13T08:54:13.6991977Z PASS both room.0.0
+2026-10-13T08:54:16.8311538Z PASS room authority 0.0
+2026-10-13T08:54:19.8328500Z PASS early room-level updates drained 0.0
+2026-10-13T08:54:19.8339225Z ROOM 0.0 scene=GG_Vengefly visit=4 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T08:54:19.8616427Z PASS camera authority state 0.0
+2026-10-13T08:54:19.8621470Z PASS camera lock state converges 0.0
+2026-10-13T08:54:19.8644897Z PASS visible bosses/knight and unfrozen camera 0.0
+2026-10-13T08:54:19.8678083Z PASS duplicate initial snapshot does not reset boss 0.0
+2026-10-13T08:54:19.8705142Z PASS stale room/peer leave and duplicate connect preserve avatar 0.0
+2026-10-13T08:54:19.8726955Z PASS both checked.0.0
+2026-10-13T08:54:19.8779880Z PASS damage published 0.0
+2026-10-13T08:54:19.9166082Z PASS same boss HP 0.0
+2026-10-13T08:54:19.9189332Z PASS both hpchecked.0.0
+2026-10-13T08:54:36.5640871Z PASS teammate fights next boss 0.0
+2026-10-13T08:54:44.3001349Z PASS native sequence room 0.1
+2026-10-13T08:54:44.3016423Z PASS both room.0.1
+2026-10-13T08:54:47.3299846Z PASS room authority 0.1
+2026-10-13T08:54:50.3314219Z PASS early room-level updates drained 0.1
+2026-10-13T08:54:50.3319270Z ROOM 0.1 scene=GG_Gruz_Mother visit=5 authority=False hero=(90.1, 15.4, 0.0) camera=(94.2, 20.0, -38.1) mode=LOCKED
+2026-10-13T08:54:50.3339314Z PASS camera authority state 0.1
+2026-10-13T08:54:50.3349380Z PASS camera lock state converges 0.1
+2026-10-13T08:54:50.3354425Z PASS visible bosses/knight and unfrozen camera 0.1
+2026-10-13T08:54:50.3377218Z PASS duplicate initial snapshot does not reset boss 0.1
+2026-10-13T08:54:50.3397543Z PASS stale room/peer leave and duplicate connect preserve avatar 0.1
+2026-10-13T08:54:50.3415631Z PASS both checked.0.1
+2026-10-13T08:54:50.3472434Z PASS damage published 0.1
+2026-10-13T08:54:50.3783380Z PASS same boss HP 0.1
+2026-10-13T08:54:50.3892845Z PASS both hpchecked.0.1
+2026-10-13T08:55:06.4201794Z PASS teammate fights next boss 0.1
+2026-10-13T08:55:14.3945804Z PASS native sequence room 0.2
+2026-10-13T08:55:14.3955861Z PASS both room.0.2
+2026-10-13T08:55:18.1916245Z PASS room authority 0.2
+2026-10-13T08:55:21.1957131Z PASS early room-level updates drained 0.2
+2026-10-13T08:55:21.1957131Z ROOM 0.2 scene=GG_False_Knight visit=6 authority=False hero=(23.8, 27.4, 0.0) camera=(32.5, 31.4, -38.1) mode=LOCKED
+2026-10-13T08:55:21.2000204Z PASS camera authority state 0.2
+2026-10-13T08:55:21.2016749Z PASS camera lock state converges 0.2
+2026-10-13T08:55:21.2016749Z PASS visible bosses/knight and unfrozen camera 0.2
+2026-10-13T08:55:21.2049589Z PASS duplicate initial snapshot does not reset boss 0.2
+2026-10-13T08:55:21.2066410Z PASS stale room/peer leave and duplicate connect preserve avatar 0.2
+2026-10-13T08:55:21.2079231Z PASS both checked.0.2
+2026-10-13T08:55:21.2120642Z PASS damage published 0.2
+2026-10-13T08:55:21.2455370Z PASS same boss HP 0.2
+2026-10-13T08:55:21.2466774Z PASS both hpchecked.0.2
+2026-10-13T08:56:06.4206098Z PASS teammate fights next boss 0.2
+2026-10-13T08:56:10.2260967Z PASS native sequence room 0.3
+2026-10-13T08:56:10.2271046Z PASS both room.0.3
+2026-10-13T08:56:13.2550452Z PASS room authority 0.3
+2026-10-13T08:56:16.2563638Z PASS early room-level updates drained 0.3
+2026-10-13T08:56:16.2563638Z ROOM 0.3 scene=GG_Mega_Moss_Charger visit=7 authority=False hero=(46.9, 7.4, 0.0) camera=(45.9, 11.0, -38.1) mode=LOCKED
+2026-10-13T08:56:16.2584323Z PASS camera authority state 0.3
+2026-10-13T08:56:16.2600823Z PASS camera lock state converges 0.3
+2026-10-13T08:56:16.2600823Z PASS visible bosses/knight and unfrozen camera 0.3
+2026-10-13T08:56:16.2627385Z PASS duplicate initial snapshot does not reset boss 0.3
+2026-10-13T08:56:16.2649605Z PASS stale room/peer leave and duplicate connect preserve avatar 0.3
+2026-10-13T08:56:16.2663895Z PASS both checked.0.3
+2026-10-13T08:56:16.2705195Z PASS damage published 0.3
+2026-10-13T08:56:16.3073323Z PASS same boss HP 0.3
+2026-10-13T08:56:16.3083360Z PASS both hpchecked.0.3
+2026-10-13T08:56:34.3561124Z PASS teammate fights next boss 0.3
+2026-10-13T08:56:44.1852498Z PASS native sequence room 0.4
+2026-10-13T08:56:44.1862557Z PASS both room.0.4
+2026-10-13T08:56:47.2202147Z PASS room authority 0.4
+2026-10-13T08:56:50.2215488Z PASS early room-level updates drained 0.4
+2026-10-13T08:56:50.2215488Z ROOM 0.4 scene=GG_Hornet_1 visit=8 authority=False hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T08:56:50.2249681Z PASS camera authority state 0.4
+2026-10-13T08:56:50.2259798Z PASS camera lock state converges 0.4
+2026-10-13T08:56:50.2259798Z PASS visible bosses/knight and unfrozen camera 0.4
+2026-10-13T08:56:50.2289780Z PASS duplicate initial snapshot does not reset boss 0.4
+2026-10-13T08:56:50.2299967Z PASS stale room/peer leave and duplicate connect preserve avatar 0.4
+2026-10-13T08:56:50.2315042Z PASS both checked.0.4
+2026-10-13T08:56:50.2378655Z PASS damage published 0.4
+2026-10-13T08:56:50.2662237Z PASS same boss HP 0.4
+2026-10-13T08:56:50.2770394Z PASS both hpchecked.0.4
+2026-10-13T08:56:50.2816620Z PASS authority nail baseline 0.4.host
+2026-10-13T08:56:50.7443618Z PASS both nail-stop.0.4.host
+2026-10-13T08:56:51.7464068Z PASS authority accepted real nail 0.4.host
+2026-10-13T08:56:51.7474151Z PASS real nail HP converges 0.4.host
+2026-10-13T08:56:51.7484210Z PASS both nail-checked.0.4.host
+2026-10-13T08:56:51.7573263Z PASS authority nail baseline 0.4.guest
+2026-10-13T08:56:52.2140966Z PASS both nail-stop.0.4.guest
+2026-10-13T08:56:53.2191780Z PASS authority accepted real nail 0.4.guest
+2026-10-13T08:56:53.2206625Z PASS real nail HP converges 0.4.guest
+2026-10-13T08:56:53.2216645Z PASS both nail-checked.0.4.guest
+2026-10-13T08:56:57.7134337Z PASS Hornet completion reaches spa
+2026-10-13T08:56:57.7384962Z PASS both spa.0
+2026-10-13T08:57:00.7457616Z PASS spa has teammate and room authority
+2026-10-13T08:57:00.7468706Z PASS both spa-ready.0
+2026-10-13T08:57:01.9784072Z PASS leave attempt
+2026-10-13T08:57:01.9795828Z PASS both left.0
+2026-10-13T08:57:01.9962554Z PASS disconnect between attempts
+2026-10-13T08:57:02.0008638Z PASS both disconnected
+2026-10-13T08:57:02.1914111Z PASS reconnect between attempts
+2026-10-13T08:57:02.1924194Z PASS both reconnected
+2026-10-13T08:57:14.4470459Z PASS first entrant starts fighting
+2026-10-13T08:57:15.4483957Z PASS native atrium
+2026-10-13T08:57:16.4635005Z PASS native pantheon selection UI
+2026-10-13T08:57:22.8490774Z PASS native door entrance cinematic
+2026-10-13T08:57:23.3560904Z PASS native door loads first boss
+2026-10-13T08:57:23.3570911Z PASS first boss entry
+2026-10-13T08:57:23.3570911Z PASS both startroom.1
+2026-10-13T08:57:23.3583758Z PASS native sequence room 1.0
+2026-10-13T08:57:23.3612538Z PASS both room.1.0
+2026-10-13T08:57:26.3174680Z PASS room authority 1.0
+2026-10-13T08:57:29.3213107Z PASS early room-level updates drained 1.0
+2026-10-13T08:57:29.3223310Z ROOM 1.0 scene=GG_Vengefly visit=14 authority=False hero=(42.2, 14.0, 0.0) camera=(45.0, 15.8, -38.1) mode=LOCKED
+2026-10-13T08:57:29.3457827Z PASS camera authority state 1.0
+2026-10-13T08:57:29.3468650Z PASS camera lock state converges 1.0
+2026-10-13T08:57:29.3481614Z PASS visible bosses/knight and unfrozen camera 1.0
+2026-10-13T08:57:29.3502205Z PASS duplicate initial snapshot does not reset boss 1.0
+2026-10-13T08:57:29.3526468Z PASS stale room/peer leave and duplicate connect preserve avatar 1.0
+2026-10-13T08:58:14.3560431Z FAIL System.Exception: Timeout: both checked.1.0

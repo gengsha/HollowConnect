@@ -1,15 +1,16 @@
-2026-10-13T07:15:57.9760168Z PASS menu ready
-2026-10-13T07:16:02.1914106Z PASS unsaved character ready
-2026-10-13T07:16:03.0595032Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7
-2026-10-13T07:16:03.0922501Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0
-2026-10-13T07:16:03.1233773Z PASS connected
-2026-10-13T07:16:03.1417696Z PASS both connected
-2026-10-13T07:16:07.3830992Z ENGINE Room prepared: GG_Grimm, visit=2, epoch=0, entities=2
-2026-10-13T07:16:07.5024199Z PASS arena entered
-2026-10-13T07:16:07.5572657Z ENGINE Room snapshot committed: GG_Grimm, visit=2, epoch=0, authority=False, peers=1
-2026-10-13T07:16:07.5728359Z PASS authority ready
-2026-10-13T07:16:07.5739190Z PASS both in arena
-2026-10-13T07:17:17.5788515Z PASS replica follows moving native projectiles
-2026-10-13T07:17:17.5911164Z PASS both motion probes finished
-2026-10-13T07:17:17.6238979Z PASS both clients disconnected normally
-2026-10-13T07:17:17.9302527Z FINAL PASS Grimm native motion GG_Grimm
+2026-10-13T15:04:17.0697471Z PASS menu ready
+2026-10-13T15:04:21.1857136Z PASS unsaved character ready
+2026-10-13T15:04:22.0551068Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7
+2026-10-13T15:04:22.0899826Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0
+2026-10-13T15:04:22.1029973Z PASS connected
+2026-10-13T15:04:22.2726194Z PASS both connected
+2026-10-13T15:04:26.4826902Z ENGINE Room prepared: GG_Grimm, visit=2, epoch=0, entities=2
+2026-10-13T15:04:26.5943469Z PASS arena entered
+2026-10-13T15:04:26.5943469Z PASS selected in-memory character never reopens profile menu
+2026-10-13T15:04:26.6442998Z ENGINE Room snapshot committed: GG_Grimm, visit=2, epoch=0, authority=False, peers=1
+2026-10-13T15:04:26.6580422Z PASS authority ready
+2026-10-13T15:04:26.6690056Z PASS both in arena
+2026-10-13T15:04:26.6700085Z FIXTURE stationary invulnerable target (80, 8), in arena and farther than native Balloon Check minimum 6 from (85.77, 13.5); no boss FSM state or transform forced
+2026-10-13T15:05:36.6741690Z PASS replica follows moving native projectiles
+2026-10-13T15:05:36.6842145Z PASS both motion probes finished
+2026-10-13T15:05:37.0628705Z FINAL PASS Grimm native motion GG_Grimm

@@ -1,0 +1,24 @@
+2026-10-13T08:46:27.3266458Z PASS menu ready
+2026-10-13T08:46:31.6901237Z PASS unsaved character ready
+2026-10-13T08:46:32.6391444Z PASS boss test handshake
+2026-10-13T08:46:32.6759892Z PASS both connected
+2026-10-13T08:46:34.0364159Z PASS native False Knight room
+2026-10-13T08:46:34.0884611Z PASS boss authority initialized
+2026-10-13T08:46:38.6534069Z PASS arena trigger starts native boss AI
+2026-10-13T08:46:40.1166396Z ACTIVATE terrain=136832 native=False fsm=FalseyControl state=Roll End active=True
+2026-10-13T08:46:42.9504075Z PASS native armor damage exposes head without terminal death
+2026-10-13T08:46:42.9519145Z PASS armor phase remains alive and resets phase health
+2026-10-13T08:46:42.9529308Z PASS exposed head takes partial native damage
+2026-10-13T08:46:42.9619796Z AUTHORITY exposed position=(39.7, 31.6, 0.0) scale=(-1.3, 1.3, 1.3)
+2026-10-13T08:46:42.9632350Z BEFORE HANDOFF position=(39.7, 31.6, 0.0) scale=(-1.3, 1.3, 1.3)
+2026-10-13T08:46:42.9660151Z ARENA BEFORE HANDOFF FK Terrain Block path=False%20Knight%20New%28Clone%29#0/FK%20Terrain%20Block#0 id=-100626 active=False self=False pos=(26.1, 46.6, 0.0) bounds=Center: (26.1, 46.6, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T08:46:42.9670214Z ARENA BEFORE HANDOFF Battle Gate path=Battle%20Gate#0 id=129026 active=True self=True pos=(46.2, 28.1, 0.0) bounds=Center: (46.2, 28.1, 0.0), Extents: (0.3, 2.1, 0.0) enabled=True trigger=False
+2026-10-13T08:46:42.9680356Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137028 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (64.0, 24.3, 0.0), Extents: (1.0, 1.8, 0.0) enabled=True trigger=False
+2026-10-13T08:46:42.9680356Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137046 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (36.7, 25.8, 0.0), Extents: (27.7, 0.2, 0.0) enabled=True trigger=False
+2026-10-13T08:46:42.9693467Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137048 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (39.7, 22.5, 0.0), Extents: (25.4, 0.1, 0.0) enabled=True trigger=False
+2026-10-13T08:46:42.9698514Z ARENA BEFORE HANDOFF FK Terrain Block path=FK%20Terrain%20Block#0 id=137054 active=True self=True pos=(39.7, 31.6, 0.0) bounds=Center: (39.2, 28.0, 0.0), Extents: (1.7, 1.3, 0.0) enabled=True trigger=False
+2026-10-13T08:46:42.9708521Z TERRAIN REFERENCE Terrain Block=FK%20Terrain%20Block#0
+2026-10-13T08:46:46.6997909Z PASS guest observed exposed phase and health
+2026-10-13T08:46:47.9495304Z ACTIVATE terrain=136832 native=False fsm=FalseyControl state=Stun Fail active=False
+2026-10-13T08:46:49.1200124Z PASS old authority leaves during exposed phase
+2026-10-13T08:47:34.1219281Z FAIL new authority continues native phase and combat

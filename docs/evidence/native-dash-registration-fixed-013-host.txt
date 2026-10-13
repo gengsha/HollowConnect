@@ -1,0 +1,96 @@
+2026-10-13T14:28:03.9687963Z PASS menu
+2026-10-13T14:28:08.1620259Z PASS unsaved character
+2026-10-13T14:28:08.1675375Z PASS native identity survives detach and cloned metadata has a separate identity
+2026-10-13T14:28:09.1442890Z PASS handshake
+2026-10-13T14:28:09.1822033Z PASS both connected
+2026-10-13T14:28:10.1673769Z PASS moss room
+2026-10-13T14:28:10.1999049Z PASS first moss authority
+2026-10-13T14:28:11.2768993Z PASS both moss
+2026-10-13T14:28:11.2806178Z PASS room authority lifecycle-moss
+2026-10-13T14:28:14.2838301Z PASS early room-level updates drained lifecycle-moss
+2026-10-13T14:28:14.2851572Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=True hero=(43.9, 7.4, 0.0) camera=(44.8, 10.9, -38.1) mode=FOLLOWING
+2026-10-13T14:28:14.2886404Z PASS camera authority state lifecycle-moss
+2026-10-13T14:28:14.2899708Z PASS camera lock state converges lifecycle-moss
+2026-10-13T14:28:14.2913898Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-13T14:28:14.2949969Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-13T14:28:17.3526921Z PASS both checked.lifecycle-moss
+2026-10-13T14:28:17.3549124Z PASS damage published lifecycle-moss
+2026-10-13T14:28:17.3559152Z PASS same boss HP lifecycle-moss
+2026-10-13T14:28:17.3885026Z PASS both hpchecked.lifecycle-moss
+2026-10-13T14:28:17.3924838Z PASS replica loop target destroyed
+2026-10-13T14:28:17.3939389Z PASS both destroyed-loop
+2026-10-13T14:28:27.4329320Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-13T14:28:27.4343760Z PASS both hornet-entered
+2026-10-13T14:28:27.4343760Z PASS room authority lifecycle-hornet
+2026-10-13T14:28:30.4367653Z PASS early room-level updates drained lifecycle-hornet
+2026-10-13T14:28:30.4367653Z ROOM lifecycle-hornet scene=GG_Hornet_1 visit=3 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=FOLLOWING
+2026-10-13T14:28:30.4407645Z PASS camera authority state lifecycle-hornet
+2026-10-13T14:28:30.4417937Z PASS camera lock state converges lifecycle-hornet
+2026-10-13T14:28:30.4427960Z PASS visible bosses/knight and unfrozen camera lifecycle-hornet
+2026-10-13T14:28:30.4438466Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-hornet
+2026-10-13T14:28:33.3368479Z PASS both checked.lifecycle-hornet
+2026-10-13T14:28:33.3383652Z PASS damage published lifecycle-hornet
+2026-10-13T14:28:33.3383652Z PASS same boss HP lifecycle-hornet
+2026-10-13T14:28:33.3908117Z PASS both hpchecked.lifecycle-hornet
+2026-10-13T14:28:33.3928364Z NATIVE DASH wait state=Thrown velocity=(0.0, 0.0) pos=(35.6, 28.6, 0.0)
+2026-10-13T14:28:34.3558349Z NATIVE DASH wait state=Throw Recover velocity=(0.0, 0.0) pos=(35.6, 28.6, 0.0)
+2026-10-13T14:28:34.6917800Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(35.6, 28.6, 0.0)
+2026-10-13T14:28:34.9402383Z NATIVE DASH wait state=Run velocity=(8.0, 0.0) pos=(35.6, 28.6, 0.0)
+2026-10-13T14:28:35.1858816Z NATIVE DASH wait state=Jump Antic velocity=(0.0, 0.0) pos=(37.7, 28.6, 0.0)
+2026-10-13T14:28:35.5182925Z NATIVE DASH wait state=In Air velocity=(-14.8, 41.0) pos=(37.4, 28.6, 0.0)
+2026-10-13T14:28:36.2427648Z NATIVE DASH wait state=Sphere Antic A velocity=(-11.6, -20.0) pos=(26.4, 33.6, 0.0)
+2026-10-13T14:28:36.8286445Z NATIVE DASH wait state=Sphere A velocity=(0.0, 0.0) pos=(25.6, 32.2, 0.0)
+2026-10-13T14:28:37.8265370Z NATIVE DASH wait state=Sphere Recover A velocity=(0.0, 0.0) pos=(25.6, 32.2, 0.0)
+2026-10-13T14:28:38.0782570Z NATIVE DASH wait state=In Air velocity=(0.0, 0.0) pos=(25.6, 32.2, 0.0)
+2026-10-13T14:28:38.3464176Z NATIVE DASH wait state=Land velocity=(0.0, 0.0) pos=(25.6, 28.6, 0.0)
+2026-10-13T14:28:38.5964500Z NATIVE DASH wait state=Evade Antic velocity=(0.0, 0.0) pos=(25.6, 28.6, 0.0)
+2026-10-13T14:28:38.8494582Z NATIVE DASH wait state=Evade velocity=(22.0, 0.0) pos=(25.6, 28.6, 0.0)
+2026-10-13T14:28:39.0950876Z NATIVE DASH wait state=Evade Land velocity=(0.0, 0.0) pos=(30.9, 28.6, 0.0)
+2026-10-13T14:28:39.3487746Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(30.9, 28.6, 0.0)
+2026-10-13T14:28:39.6005497Z NATIVE DASH wait state=Run velocity=(8.0, 0.0) pos=(30.9, 28.6, 0.0)
+2026-10-13T14:28:40.0569709Z NATIVE DASH wait state=Throw Antic velocity=(0.0, 0.0) pos=(34.6, 28.6, 0.0)
+2026-10-13T14:28:40.8381605Z NATIVE DASH wait state=Thrown velocity=(0.0, 0.0) pos=(34.6, 28.6, 0.0)
+2026-10-13T14:28:42.2456566Z NATIVE DASH wait state=Throw Recover velocity=(0.0, 0.0) pos=(34.6, 28.6, 0.0)
+2026-10-13T14:28:42.5817839Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(34.6, 28.6, 0.0)
+2026-10-13T14:28:42.8307459Z NATIVE DASH wait state=Run velocity=(-8.0, 0.0) pos=(34.6, 28.6, 0.0)
+2026-10-13T14:28:43.5366895Z NATIVE DASH wait state=Jump Antic velocity=(0.0, 0.0) pos=(29.0, 28.6, 0.0)
+2026-10-13T14:28:43.8693939Z NATIVE DASH wait state=In Air velocity=(-8.2, 41.0) pos=(29.0, 28.6, 0.0)
+2026-10-13T14:28:44.6009487Z NATIVE DASH wait state=Sphere Antic A velocity=(-6.4, -20.0) pos=(22.9, 33.6, 0.0)
+2026-10-13T14:28:45.1850833Z NATIVE DASH wait state=Sphere A velocity=(0.0, 0.0) pos=(22.5, 32.2, 0.0)
+2026-10-13T14:28:46.4606788Z NATIVE DASH wait state=Sphere Recover A velocity=(0.0, 0.0) pos=(22.5, 32.2, 0.0)
+2026-10-13T14:28:46.7139555Z NATIVE DASH wait state=In Air velocity=(0.0, 0.0) pos=(22.5, 32.2, 0.0)
+2026-10-13T14:28:47.2510624Z NATIVE DASH wait state=Land velocity=(0.0, 0.0) pos=(22.5, 28.6, 0.0)
+2026-10-13T14:28:47.5098671Z NATIVE DASH wait state=Evade Antic velocity=(0.0, 0.0) pos=(22.5, 28.6, 0.0)
+2026-10-13T14:28:47.7598634Z NATIVE DASH wait state=Evade velocity=(-22.0, 0.0) pos=(22.5, 28.6, 0.0)
+2026-10-13T14:28:48.0085218Z NATIVE DASH wait state=Evade Land velocity=(0.0, 0.0) pos=(17.2, 28.6, 0.0)
+2026-10-13T14:28:48.2616289Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(17.2, 28.6, 0.0)
+2026-10-13T14:28:48.5108594Z NATIVE DASH wait state=Run velocity=(8.0, 0.0) pos=(17.2, 28.6, 0.0)
+2026-10-13T14:28:49.1069457Z NATIVE DASH wait state=Jump Antic velocity=(0.0, 0.0) pos=(22.0, 28.6, 0.0)
+2026-10-13T14:28:49.7126450Z NATIVE DASH wait state=In Air velocity=(4.3, 39.2) pos=(22.1, 29.3, 0.0)
+2026-10-13T14:28:50.4029751Z NATIVE DASH wait state=ADash Antic velocity=(0.0, 0.0) pos=(25.0, 34.6, 0.0)
+2026-10-13T14:28:50.8424224Z NATIVE DASH wait state=A Dash velocity=(-10.5, -28.1) pos=(25.0, 34.6, 0.0)
+2026-10-13T14:28:50.8424224Z PASS native moving dash before registration pause
+2026-10-13T14:28:50.8551575Z PASS both dash-pause
+2026-10-13T14:28:50.8864726Z PASS both lifecycle-disconnected
+2026-10-13T14:28:51.0912065Z PASS reconnect after destroyed-loop cleanup
+2026-10-13T14:28:51.1110646Z PASS rejoined room authority
+2026-10-13T14:28:51.1120667Z NATIVE DASH resumed state=A Dash velocity=(-10.5, -28.1) pos=(24.0, 31.8, 0.0) before=(25.0, 34.6, 0.0)
+2026-10-13T14:28:51.2534846Z PASS native dash moves and completes after registration pause
+2026-10-13T14:28:54.3607914Z PASS both lifecycle-reconnected
+2026-10-13T14:28:54.3607914Z PASS room authority lifecycle-retry
+2026-10-13T14:28:57.3649963Z PASS early room-level updates drained lifecycle-retry
+2026-10-13T14:28:57.3649963Z ROOM lifecycle-retry scene=GG_Hornet_1 visit=4 authority=True hero=(25.8, 30.1, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T14:28:57.3683872Z PASS camera authority state lifecycle-retry
+2026-10-13T14:28:57.3696618Z PASS camera lock state converges lifecycle-retry
+2026-10-13T14:28:57.3707580Z PASS visible bosses/knight and unfrozen camera lifecycle-retry
+2026-10-13T14:28:57.3718366Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-retry
+2026-10-13T14:28:57.3784138Z PASS both checked.lifecycle-retry
+2026-10-13T14:28:57.3796226Z PASS damage published lifecycle-retry
+2026-10-13T14:28:57.3809905Z PASS same boss HP lifecycle-retry
+2026-10-13T14:28:57.4157178Z PASS both hpchecked.lifecycle-retry
+2026-10-13T14:28:57.4167455Z FINAL PASS native moving dash survives same-scene registration pause
+2026-10-13T14:28:57.4183670Z PASS both probe-checked
+2026-10-13T14:28:57.4247795Z PASS final client disconnect
+2026-10-13T14:28:57.4281293Z PASS both probe-disconnected
+2026-10-13T14:28:57.4386401Z PASS server acknowledges final disconnects
+2026-10-13T14:28:57.4470015Z PASS final server stopped

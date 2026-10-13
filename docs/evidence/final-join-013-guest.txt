@@ -1,24 +1,24 @@
-2026-10-13T07:19:36.4081340Z PASS menu ready
-2026-10-13T07:19:52.6944022Z PASS host waiting in Tutorial
-2026-10-13T07:19:53.7486592Z PASS initial connected from menu
-2026-10-13T07:19:58.4741425Z PASS initial opening sequence
-2026-10-13T07:20:09.2698799Z PASS initial new game in Tutorial
-2026-10-13T07:20:09.2721341Z PASS both players in Tutorial
-2026-10-13T07:20:09.5870399Z PASS initial peer has active visible knight renderer
-2026-10-13T07:20:09.6081858Z PASS initial scene authority initialized
-2026-10-13T07:20:09.6273972Z PASS both directions visible
-2026-10-13T07:20:13.5454340Z PASS guest returned to title
-2026-10-13T07:20:14.1545413Z PASS reconnect connected from menu
-2026-10-13T07:20:18.8291813Z PASS reconnect opening sequence
-2026-10-13T07:20:30.9276051Z PASS reconnect new game in Tutorial
-2026-10-13T07:20:30.9309674Z PASS reconnected peer has active visible knight renderer
-2026-10-13T07:20:31.7429184Z PASS reconnected scene authority initialized
-2026-10-13T07:20:31.7614033Z PASS both reconnected directions visible
-2026-10-13T07:20:43.5651034Z PASS old room closes and guest returns to title
-2026-10-13T07:20:44.7175539Z PASS rehost connected from menu
-2026-10-13T07:20:49.4363617Z PASS rehost opening sequence
-2026-10-13T07:21:00.6416988Z PASS rehost new game in Tutorial
-2026-10-13T07:21:00.6444867Z PASS both joined reopened room
-2026-10-13T07:21:01.1212910Z PASS reopened room has visible teammate
-2026-10-13T07:21:01.1346660Z PASS reopened room has fresh session and scene authority
-2026-10-13T07:21:01.2543854Z FINAL PASS
+2026-10-13T15:08:05.9237336Z PASS menu ready
+2026-10-13T15:08:22.1884574Z PASS host waiting in Tutorial
+2026-10-13T15:08:22.9882350Z PASS initial connected from menu
+2026-10-13T15:08:27.6887179Z PASS initial opening sequence
+2026-10-13T15:08:38.4050894Z PASS initial new game in Tutorial
+2026-10-13T15:08:38.4163119Z PASS both players in Tutorial
+2026-10-13T15:08:38.6824081Z PASS initial peer has active visible knight renderer
+2026-10-13T15:08:38.7002954Z PASS initial scene authority initialized
+2026-10-13T15:08:38.7086874Z PASS both directions visible
+2026-10-13T15:08:42.2206583Z PASS guest returned to title
+2026-10-13T15:08:42.6726576Z PASS reconnect connected from menu
+2026-10-13T15:08:47.3248713Z PASS reconnect opening sequence
+2026-10-13T15:08:57.6020860Z PASS reconnect new game in Tutorial
+2026-10-13T15:08:57.6034625Z PASS reconnected peer has active visible knight renderer
+2026-10-13T15:08:57.8670065Z PASS reconnected scene authority initialized
+2026-10-13T15:08:57.8754858Z PASS both reconnected directions visible
+2026-10-13T15:09:04.9061706Z PASS old room closes and guest returns to title
+2026-10-13T15:09:05.3176561Z PASS rehost connected from menu
+2026-10-13T15:09:09.9724243Z PASS rehost opening sequence
+2026-10-13T15:09:20.2615839Z PASS rehost new game in Tutorial
+2026-10-13T15:09:20.2722172Z PASS both joined reopened room
+2026-10-13T15:09:20.5303535Z PASS reopened room has visible teammate
+2026-10-13T15:09:20.5375150Z PASS reopened room has fresh session and scene authority
+2026-10-13T15:09:20.5884947Z FINAL PASS

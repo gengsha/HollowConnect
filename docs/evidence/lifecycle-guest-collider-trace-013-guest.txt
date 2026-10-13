@@ -1,0 +1,54 @@
+2026-10-13T10:25:45.6345868Z PASS menu
+2026-10-13T10:25:50.0251403Z PASS unsaved character
+2026-10-13T10:25:50.1283037Z PASS server ready
+2026-10-13T10:25:51.1132413Z PASS handshake
+2026-10-13T10:25:51.1159216Z PASS both connected
+2026-10-13T10:25:51.7853042Z PASS moss room
+2026-10-13T10:25:51.8088348Z PASS first moss authority
+2026-10-13T10:25:52.9573380Z PASS both moss
+2026-10-13T10:25:52.9607076Z PASS room authority lifecycle-moss
+2026-10-13T10:25:55.9643658Z PASS early room-level updates drained lifecycle-moss
+2026-10-13T10:25:55.9656362Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=True hero=(43.9, 7.4, 0.0) camera=(44.8, 10.9, -38.1) mode=FOLLOWING
+2026-10-13T10:25:55.9790935Z PASS camera authority state lifecycle-moss
+2026-10-13T10:25:55.9801178Z PASS camera lock state converges lifecycle-moss
+2026-10-13T10:25:55.9821943Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-13T10:25:55.9854603Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-13T10:25:59.0363325Z PASS both checked.lifecycle-moss
+2026-10-13T10:25:59.0381954Z PASS damage published lifecycle-moss
+2026-10-13T10:25:59.0396902Z PASS same boss HP lifecycle-moss
+2026-10-13T10:25:59.0696441Z PASS both hpchecked.lifecycle-moss
+2026-10-13T10:25:59.0774111Z PASS replica loop target destroyed
+2026-10-13T10:25:59.0794837Z PASS both destroyed-loop
+2026-10-13T10:26:09.1314639Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-13T10:26:09.1444901Z PASS both hornet-entered
+2026-10-13T10:26:09.1454984Z PASS room authority lifecycle-hornet
+2026-10-13T10:26:12.1481793Z PASS early room-level updates drained lifecycle-hornet
+2026-10-13T10:26:12.1491836Z ROOM lifecycle-hornet scene=GG_Hornet_1 visit=3 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=FOLLOWING
+2026-10-13T10:26:12.1522613Z PASS camera authority state lifecycle-hornet
+2026-10-13T10:26:12.1542417Z PASS camera lock state converges lifecycle-hornet
+2026-10-13T10:26:12.1547829Z PASS visible bosses/knight and unfrozen camera lifecycle-hornet
+2026-10-13T10:26:12.1568823Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-hornet
+2026-10-13T10:26:15.0820428Z PASS both checked.lifecycle-hornet
+2026-10-13T10:26:15.0835469Z PASS damage published lifecycle-hornet
+2026-10-13T10:26:15.0840511Z PASS same boss HP lifecycle-hornet
+2026-10-13T10:26:15.1243207Z PASS both hpchecked.lifecycle-hornet
+2026-10-13T10:26:15.1571072Z PASS both lifecycle-disconnected
+2026-10-13T10:26:15.3872631Z PASS reconnect after destroyed-loop cleanup
+2026-10-13T10:26:15.4073899Z PASS rejoined room authority
+2026-10-13T10:26:18.4154002Z PASS both lifecycle-reconnected
+2026-10-13T10:26:18.4154002Z PASS room authority lifecycle-retry
+2026-10-13T10:26:21.4190551Z PASS early room-level updates drained lifecycle-retry
+2026-10-13T10:26:21.4195589Z ROOM lifecycle-retry scene=GG_Hornet_1 visit=4 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T10:26:21.4236666Z PASS camera authority state lifecycle-retry
+2026-10-13T10:26:21.4245416Z PASS camera lock state converges lifecycle-retry
+2026-10-13T10:26:21.4255523Z PASS visible bosses/knight and unfrozen camera lifecycle-retry
+2026-10-13T10:26:21.4274936Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-retry
+2026-10-13T10:26:21.4423269Z PASS both checked.lifecycle-retry
+2026-10-13T10:26:21.4443449Z PASS damage published lifecycle-retry
+2026-10-13T10:26:21.4451606Z PASS same boss HP lifecycle-retry
+2026-10-13T10:26:21.4590763Z PASS both hpchecked.lifecycle-retry
+2026-10-13T10:26:21.4590763Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio
+2026-10-13T10:26:21.4618528Z PASS both probe-checked
+2026-10-13T10:26:21.4678325Z PASS final client disconnect
+2026-10-13T10:26:21.4746655Z PASS both probe-disconnected
+2026-10-13T10:26:21.5005976Z PASS final server stopped

@@ -1,0 +1,70 @@
+2026-10-13T11:08:20.3222539Z PASS menu
+2026-10-13T11:08:26.2518237Z PASS unsaved character
+2026-10-13T11:08:26.4736516Z PASS server ready
+2026-10-13T11:08:28.5400031Z PASS handshake
+2026-10-13T11:08:28.5450319Z PASS both connected
+2026-10-13T11:08:29.9345065Z PASS moss room
+2026-10-13T11:08:29.9767069Z PASS first moss authority
+2026-10-13T11:08:31.5899058Z PASS both moss
+2026-10-13T11:08:31.6009810Z PASS room authority lifecycle-moss
+2026-10-13T11:08:34.6047086Z PASS early room-level updates drained lifecycle-moss
+2026-10-13T11:08:34.6090160Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=True hero=(43.9, 7.4, 0.0) camera=(44.9, 11.0, -38.1) mode=FOLLOWING
+2026-10-13T11:08:34.6185837Z PASS camera authority state lifecycle-moss
+2026-10-13T11:08:34.6206544Z PASS camera lock state converges lifecycle-moss
+2026-10-13T11:08:34.6226394Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-13T11:08:34.6330027Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-13T11:08:37.7235185Z PASS both checked.lifecycle-moss
+2026-10-13T11:08:37.7265634Z PASS damage published lifecycle-moss
+2026-10-13T11:08:37.7304686Z PASS same boss HP lifecycle-moss
+2026-10-13T11:08:37.7677829Z PASS both hpchecked.lifecycle-moss
+2026-10-13T11:08:37.7755918Z PASS replica loop target destroyed
+2026-10-13T11:08:37.7816765Z PASS both destroyed-loop
+2026-10-13T11:08:48.8488409Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-13T11:08:48.8605174Z PASS both hornet-entered
+2026-10-13T11:08:48.8605174Z PASS room authority lifecycle-hornet
+2026-10-13T11:08:51.8652036Z PASS early room-level updates drained lifecycle-hornet
+2026-10-13T11:08:51.8663852Z ROOM lifecycle-hornet scene=GG_Hornet_1 visit=3 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=FOLLOWING
+2026-10-13T11:08:51.8758945Z PASS camera authority state lifecycle-hornet
+2026-10-13T11:08:51.8824452Z PASS camera lock state converges lifecycle-hornet
+2026-10-13T11:08:51.8834955Z PASS visible bosses/knight and unfrozen camera lifecycle-hornet
+2026-10-13T11:08:51.8871839Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-hornet
+2026-10-13T11:08:54.4556267Z PASS both checked.lifecycle-hornet
+2026-10-13T11:08:54.4589250Z PASS damage published lifecycle-hornet
+2026-10-13T11:08:54.4609688Z PASS same boss HP lifecycle-hornet
+2026-10-13T11:08:54.5427322Z PASS both hpchecked.lifecycle-hornet
+2026-10-13T11:08:54.6269908Z PASS both lifecycle-disconnected
+2026-10-13T11:08:55.1246848Z PASS reconnect after destroyed-loop cleanup
+2026-10-13T11:08:58.1788267Z PASS rejoined room authority
+2026-10-13T11:08:58.1905600Z PASS both lifecycle-reconnected
+2026-10-13T11:08:58.1915847Z PASS room authority lifecycle-retry
+2026-10-13T11:09:01.1937464Z PASS early room-level updates drained lifecycle-retry
+2026-10-13T11:09:01.1942512Z ROOM lifecycle-retry scene=GG_Hornet_1 visit=4 authority=False hero=(19.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T11:09:01.2113517Z PASS camera authority state lifecycle-retry
+2026-10-13T11:09:01.2149468Z PASS camera lock state converges lifecycle-retry
+2026-10-13T11:09:01.2160971Z PASS visible bosses/knight and unfrozen camera lifecycle-retry
+2026-10-13T11:09:01.2254076Z PASS duplicate initial snapshot does not reset boss lifecycle-retry
+2026-10-13T11:09:01.2302705Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-retry
+2026-10-13T11:09:01.2349110Z PASS both checked.lifecycle-retry
+2026-10-13T11:09:01.2461428Z PASS damage published lifecycle-retry
+2026-10-13T11:09:01.2753360Z PASS same boss HP lifecycle-retry
+2026-10-13T11:09:01.2774991Z PASS both hpchecked.lifecycle-retry
+2026-10-13T11:09:01.2801382Z COLLIDER REFS retry-first owner=Hornet Boss 1 fsm=Control state= vars=A Dash Effect:A Dash Effect,Area Title:null,Area Title:null,Dust HardLand:Dust HardLand,Flash Effect:Flash Effect,G Dash Effect:G Dash Effect,Hero Obj:Knight,Hit ADash:Hit ADash,Hit GDash:Hit GDash,Hornet Saver:null,Needle:Needle,Needle Tink:null,Self:Hornet Boss 1,Sphere Ball:Sphere Ball,Throw Effect:Throw Effect
+2026-10-13T11:09:01.2822416Z COLLIDER BIND retry-first fsm=Control state=Init store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T11:09:01.2833897Z COLLIDER BIND retry-first fsm=Control state=Pause store=Needle path=Needle target=Hornet Boss 1
+2026-10-13T11:09:01.2848925Z COLLIDER BIND retry-first fsm=Control state=Pause store=Needle Tink path=Needle Tink target=Needle
+2026-10-13T11:09:01.2858957Z COLLIDER REFS retry-first owner=Hornet Boss 1 fsm=Stun Control state= vars=Self:Hornet Boss 1
+2026-10-13T11:09:01.2884661Z COLLIDER REFS retry-first owner=A Dash Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1,Self:A Dash Range
+2026-10-13T11:09:01.2910767Z COLLIDER REFS retry-first owner=Sphere Ball fsm=Grow state= vars=
+2026-10-13T11:09:01.2921190Z COLLIDER REFS retry-first owner=Sphere Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1,Self:Sphere Range
+2026-10-13T11:09:01.2936590Z COLLIDER REFS retry-first owner=Evade Check fsm=FSM state= vars=Parent:Hornet Boss 1,Self:Evade Check
+2026-10-13T11:09:01.2946619Z COLLIDER REFS retry-first owner=Run Away Check fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1,Self:Run Away Check
+2026-10-13T11:09:01.2972656Z COLLIDER REFS retry-first owner=Evade Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1,Self:Evade Range
+2026-10-13T11:09:01.2994243Z COLLIDER REFS retry-first owner=Evade Range fsm=Fluctuate state= vars=
+2026-10-13T11:09:01.3014817Z COLLIDER REFS retry-first owner=G Dash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T11:09:01.3053742Z COLLIDER REFS retry-first owner=Flash Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T11:09:01.3102606Z COLLIDER REFS retry-first owner=Throw Effect fsm=FSM state= vars=Parent:null,Self:null
+2026-10-13T11:09:01.3112944Z COLLIDER REFS retry-first owner=A Sphere Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1,Self:A Sphere Range
+2026-10-13T11:09:01.3123278Z COLLIDER REFS retry-first owner=Refight Range fsm=FSM state= vars=Collider:null,Parent:Hornet Boss 1,Self:Refight Range
+2026-10-13T11:09:01.3146003Z COLLIDER REFS retry-first owner=Corpse Hornet GG(Clone) fsm=Control state= vars=Grass:Grass,Grass Escape:Grass Escape,Leave Anim:Leave Anim,Needle Tink:null,Self:null,Thread:Thread
+2026-10-13T11:09:01.3161079Z COLLIDER REFS retry-first owner=A Dash Effect fsm=FSM state= vars=Parent:Hornet Boss 1,Self:A Dash Effect
+2026-10-13T11:09:51.3208232Z FAIL System.Exception: Timeout: authority reaches native needle throw 0

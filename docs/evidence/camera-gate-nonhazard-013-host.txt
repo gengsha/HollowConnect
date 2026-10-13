@@ -1,0 +1,33 @@
+2026-10-13T15:23:40.8728047Z PASS menu
+2026-10-13T15:23:44.9796753Z PASS unsaved character
+2026-10-13T15:23:45.8549561Z PASS handshake
+2026-10-13T15:23:45.9103132Z PASS both connected
+2026-10-13T15:23:46.8732972Z PASS first boss entry
+2026-10-13T15:23:51.1772440Z PASS late snapshot captured
+2026-10-13T15:23:51.1793656Z PASS both startroom.0
+2026-10-13T15:23:51.1808788Z PASS camera ready for negative freeze fixture
+2026-10-13T15:23:51.1808788Z CAMERA GATE injected non-hazard freeze; expect immediate rejection
+2026-10-13T15:23:51.1832738Z CAMERA FROZEN injected-nonhazard mode=FROZEN enabled=True active=True pending=0 input=True timescale=1 game=PLAYING ui=PLAYING hazard=False hazardRespawning=False down=False reset=False teleporting=False subscribers=HeroController:<Start>b__383_0,CameraController:PositionToHero heroMatches=True
+2026-10-13T15:23:51.1845702Z CAMERA HISTORY 2026-10-13T15:23:44.9694447Z FROZEN->LOCKED scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1855859Z CAMERA HISTORY 2026-10-13T15:23:44.9766472Z CAMERA POSITION begin scene=Town
+2026-10-13T15:23:51.1855859Z CAMERA HISTORY 2026-10-13T15:23:45.0639853Z LOCKED->FROZEN scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1865932Z CAMERA HISTORY 2026-10-13T15:23:45.1628385Z FROZEN->LOCKED scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1877506Z CAMERA HISTORY 2026-10-13T15:23:45.1628385Z CAMERA POSITION end scene=Town mode=LOCKED
+2026-10-13T15:23:51.1877506Z CAMERA HISTORY 2026-10-13T15:23:45.8073171Z LOCKED->FOLLOWING scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.ReleaseLock (CameraLockArea lockarea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1877506Z CAMERA HISTORY 2026-10-13T15:23:45.8929251Z FOLLOWING->LOCKED scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1896251Z CAMERA HISTORY 2026-10-13T15:23:45.9264625Z LOCKED->FROZEN scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.FreezeInPlace (System.Boolean freezeTargetAlso) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1896251Z CAMERA HISTORY 2026-10-13T15:23:46.8727922Z CAMERA POSITION begin scene=GG_Vengefly
+2026-10-13T15:23:51.1896251Z CAMERA HISTORY 2026-10-13T15:23:46.9132882Z FROZEN->LOCKED scene=GG_Vengefly stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.LockToArea (CameraLockArea lockArea) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1909991Z CAMERA HISTORY 2026-10-13T15:23:47.1263058Z LOCKED->FOLLOWING scene=GG_Vengefly stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController+<DoPositionToHero>d__74.MoveNext () [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1921568Z CAMERA HISTORY 2026-10-13T15:23:47.1263058Z CAMERA POSITION end scene=GG_Vengefly mode=FOLLOWING
+2026-10-13T15:23:51.1921568Z CAMERA HISTORY 2026-10-13T15:23:51.1808788Z FOLLOWING->FROZEN scene=GG_Vengefly stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
+  at CameraController.FreezeInPlace (System.Boolean freezeTargetAlso) [0x00000] in <2b54cdaf7a934f0eb297d50c4090ea9f>:0
+2026-10-13T15:23:51.1931619Z FAIL System.Exception: Frozen camera without native hazard recovery injected-nonhazard

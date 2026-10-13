@@ -1,0 +1,17 @@
+2026-10-13T14:07:13.3910974Z PASS menu
+2026-10-13T14:07:17.5551094Z PASS unsaved character
+2026-10-13T14:07:18.4830505Z PASS handshake
+2026-10-13T14:07:18.5215555Z PASS both connected
+2026-10-13T14:07:19.1357395Z PASS first enters moss
+2026-10-13T14:07:20.1718547Z PASS moss room
+2026-10-13T14:07:20.1738592Z PASS both moss
+2026-10-13T14:07:23.2393429Z PASS room authority lifecycle-moss
+2026-10-13T14:07:26.2412785Z PASS early room-level updates drained lifecycle-moss
+2026-10-13T14:07:26.2426787Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=False hero=(43.9, 7.4, 0.0) camera=(44.9, 11.0, -38.1) mode=LOCKED
+2026-10-13T14:07:26.2461021Z PASS camera authority state lifecycle-moss
+2026-10-13T14:07:26.2471051Z PASS camera lock state converges lifecycle-moss
+2026-10-13T14:07:26.2476096Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-13T14:07:26.2524301Z PASS duplicate initial snapshot does not reset boss lifecycle-moss
+2026-10-13T14:07:26.2544469Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-13T14:07:26.2571546Z PASS both identities.lifecycle-moss
+2026-10-13T14:07:26.2581603Z FAIL System.Exception: Static entity identities diverged lifecycle-moss local=4129537347362395435:CameraLockArea

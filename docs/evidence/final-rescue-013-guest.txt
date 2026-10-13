@@ -1,64 +1,63 @@
-2026-10-13T07:17:28.4398538Z PASS menu ready
-2026-10-13T07:17:32.6681084Z PASS fresh unsaved Town entered
-2026-10-13T07:17:32.7435864Z PASS server ready
-2026-10-13T07:17:34.6221872Z PASS real UDP handshake
-2026-10-13T07:17:34.6319947Z PASS both connected
-2026-10-13T07:17:36.0833230Z PASS native entry and snapshot ready
-2026-10-13T07:17:36.5097114Z PASS both ready
-2026-10-13T07:17:36.5378631Z PASS Alive roster before reliable rescue still rewards and presents exactly once
-2026-10-13T07:17:37.1427467Z PASS native effect survives hit-stop
-2026-10-13T07:17:37.1427467Z PASS native Death and Death Glow advance in unscaled time
-2026-10-13T07:17:37.1531964Z PASS native shade particle wave emitted
-2026-10-13T07:17:37.1542216Z PASS both original own-shade break audio assets attached
-2026-10-13T07:17:37.1552428Z PASS break audio respects native mixer
-2026-10-13T07:17:37.1552428Z PASS visual clone has no native recovery FSM or collision
-2026-10-13T07:17:37.1587870Z PASS old rescue cannot reward or revive a later death
-2026-10-13T07:17:37.1618436Z PASS a new accepted death earns one new reward
-2026-10-13T07:17:37.1628459Z PASS wrong-session event cannot reward
-2026-10-13T07:17:37.1638795Z PASS wrong-round event cannot reward
-2026-10-13T07:17:37.1638795Z PASS wipe in progress rejects rescue reward
-2026-10-13T07:17:37.1649575Z PASS old rescue after voluntary death grants no soul
-2026-10-13T07:17:39.8708551Z PASS all accepted effects clean up while paused
-2026-10-13T07:17:39.8815306Z PASS ordering probes complete
-2026-10-13T07:17:39.8847785Z PASS trial0 ready
-2026-10-13T07:17:39.8888661Z PASS trial0 victim down
-2026-10-13T07:17:40.7403082Z PASS trial0 one-health revival
-2026-10-13T07:17:40.7413108Z PASS trial0 victim receives no rescue soul
-2026-10-13T07:17:40.7439454Z PASS trial0 both clients see one native rescue break
-2026-10-13T07:17:40.7449499Z PASS trial0 personal geo shade and soul limitation remain intact
-2026-10-13T07:17:40.7623862Z PASS trial0 both checked
-2026-10-13T07:17:43.4682250Z PASS trial0 feedback fully retired
-2026-10-13T07:17:43.4695815Z PASS trial1 ready
-2026-10-13T07:17:43.5024880Z PASS trial1 teammate down received
-2026-10-13T07:17:43.5038790Z PASS trial1 visible rescue shade
-2026-10-13T07:17:43.5038790Z PASS trial1 wrong death and self rescue rejected
-2026-10-13T07:17:44.2574645Z PASS trial1 rejected request and missed swing grant no reward
-2026-10-13T07:17:44.3083562Z PASS trial1 actual nail rescue accepted
-2026-10-13T07:17:44.3093945Z PASS trial1 rescuer soul and reserve match native cap
-2026-10-13T07:17:44.3143668Z PASS trial1 reliable replay grants no additional soul or effect
-2026-10-13T07:17:44.3171264Z PASS trial1 both clients see one native rescue break
-2026-10-13T07:17:44.3171264Z PASS trial1 personal geo shade and soul limitation remain intact
-2026-10-13T07:17:44.3192881Z PASS trial1 both checked
-2026-10-13T07:17:47.0241756Z PASS trial1 feedback fully retired
-2026-10-13T07:17:47.0371670Z PASS trial2 ready
-2026-10-13T07:17:47.0392211Z PASS trial2 victim down
-2026-10-13T07:17:47.8681793Z PASS trial2 one-health revival
-2026-10-13T07:17:47.8691979Z PASS trial2 victim receives no rescue soul
-2026-10-13T07:17:47.8719137Z PASS trial2 both clients see one native rescue break
-2026-10-13T07:17:47.8724203Z PASS trial2 personal geo shade and soul limitation remain intact
-2026-10-13T07:17:47.8803206Z PASS trial2 both checked
-2026-10-13T07:17:50.5827655Z PASS trial2 feedback fully retired
-2026-10-13T07:17:50.5935534Z PASS trial3 ready
-2026-10-13T07:17:50.6280480Z PASS trial3 teammate down received
-2026-10-13T07:17:50.6280480Z PASS trial3 visible rescue shade
-2026-10-13T07:17:50.6293531Z PASS trial3 wrong death and self rescue rejected
-2026-10-13T07:17:51.3812239Z PASS trial3 rejected request and missed swing grant no reward
-2026-10-13T07:17:51.4493168Z PASS trial3 actual nail rescue accepted
-2026-10-13T07:17:51.4493168Z PASS trial3 rescuer soul and reserve match native cap
-2026-10-13T07:17:51.4534445Z PASS trial3 reliable replay grants no additional soul or effect
-2026-10-13T07:17:51.4559639Z PASS trial3 both clients see one native rescue break
-2026-10-13T07:17:51.4559639Z PASS trial3 personal geo shade and soul limitation remain intact
-2026-10-13T07:17:51.4582039Z PASS trial3 both checked
-2026-10-13T07:17:54.1615866Z PASS trial3 feedback fully retired
-2026-10-13T07:17:54.1902904Z PASS both disconnected
-2026-10-13T07:17:54.1912984Z FINAL PASS rescue soul and native feedback
+2026-10-13T15:05:52.4678948Z PASS menu ready
+2026-10-13T15:05:56.8914416Z PASS fresh unsaved Town entered
+2026-10-13T15:05:56.9917395Z PASS server ready
+2026-10-13T15:05:58.8781235Z PASS real UDP handshake
+2026-10-13T15:05:58.8806616Z PASS both connected
+2026-10-13T15:06:00.3784264Z PASS native entry and snapshot ready
+2026-10-13T15:06:00.7473673Z PASS both ready
+2026-10-13T15:06:00.7769783Z PASS Alive roster before reliable rescue still rewards and presents exactly once
+2026-10-13T15:06:01.3803019Z PASS native effect survives hit-stop
+2026-10-13T15:06:01.3813192Z PASS native Death and Death Glow advance in unscaled time
+2026-10-13T15:06:01.3813192Z PASS native shade particle wave emitted
+2026-10-13T15:06:01.3826827Z PASS both original own-shade break audio assets attached
+2026-10-13T15:06:01.3840163Z PASS break audio respects native mixer
+2026-10-13T15:06:01.3850264Z PASS visual clone has no native recovery FSM or collision
+2026-10-13T15:06:01.3875597Z PASS old rescue cannot reward or revive a later death
+2026-10-13T15:06:01.3910983Z PASS a new accepted death earns one new reward
+2026-10-13T15:06:01.3921023Z PASS wrong-session event cannot reward
+2026-10-13T15:06:01.3921023Z PASS wrong-round event cannot reward
+2026-10-13T15:06:01.3931192Z PASS wipe in progress rejects rescue reward
+2026-10-13T15:06:01.3941275Z PASS old rescue after voluntary death grants no soul
+2026-10-13T15:06:04.0978289Z PASS all accepted effects clean up while paused
+2026-10-13T15:06:04.0998403Z PASS ordering probes complete
+2026-10-13T15:06:04.1127366Z PASS trial0 ready
+2026-10-13T15:06:04.1174487Z PASS trial0 victim down
+2026-10-13T15:06:04.9481629Z PASS trial0 one-health revival
+2026-10-13T15:06:04.9481629Z PASS trial0 victim receives no rescue soul
+2026-10-13T15:06:04.9509888Z PASS trial0 both clients see one native rescue break
+2026-10-13T15:06:04.9519911Z PASS trial0 personal geo shade and soul limitation remain intact
+2026-10-13T15:06:04.9644924Z PASS trial0 both checked
+2026-10-13T15:06:07.6696133Z PASS trial0 feedback fully retired
+2026-10-13T15:06:07.6706270Z PASS trial1 ready
+2026-10-13T15:06:07.7094365Z PASS trial1 teammate down received
+2026-10-13T15:06:07.7110763Z PASS trial1 visible rescue shade
+2026-10-13T15:06:07.7110763Z PASS trial1 wrong death and self rescue rejected
+2026-10-13T15:06:08.4660416Z PASS trial1 rejected request and missed swing grant no reward
+2026-10-13T15:06:08.5138483Z PASS trial1 actual nail rescue accepted
+2026-10-13T15:06:08.5148542Z PASS trial1 rescuer soul and reserve match native cap
+2026-10-13T15:06:08.5195260Z PASS trial1 reliable replay grants no additional soul or effect
+2026-10-13T15:06:08.5210555Z PASS trial1 both clients see one native rescue break
+2026-10-13T15:06:08.5221309Z PASS trial1 personal geo shade and soul limitation remain intact
+2026-10-13T15:06:08.5241818Z PASS trial1 both checked
+2026-10-13T15:06:11.2265482Z PASS trial1 feedback fully retired
+2026-10-13T15:06:11.2320373Z PASS trial2 ready
+2026-10-13T15:06:11.2342574Z PASS trial2 victim down
+2026-10-13T15:06:12.0631330Z PASS trial2 one-health revival
+2026-10-13T15:06:12.0642482Z PASS trial2 victim receives no rescue soul
+2026-10-13T15:06:12.0662656Z PASS trial2 both clients see one native rescue break
+2026-10-13T15:06:12.0672708Z PASS trial2 personal geo shade and soul limitation remain intact
+2026-10-13T15:06:12.0796733Z PASS trial2 both checked
+2026-10-13T15:06:14.7837810Z PASS trial2 feedback fully retired
+2026-10-13T15:06:14.7847927Z PASS trial3 ready
+2026-10-13T15:06:14.8130138Z PASS trial3 teammate down received
+2026-10-13T15:06:14.8130138Z PASS trial3 visible rescue shade
+2026-10-13T15:06:14.8143966Z PASS trial3 wrong death and self rescue rejected
+2026-10-13T15:06:15.5645323Z PASS trial3 rejected request and missed swing grant no reward
+2026-10-13T15:06:15.6181594Z PASS trial3 actual nail rescue accepted
+2026-10-13T15:06:15.6181594Z PASS trial3 rescuer soul and reserve match native cap
+2026-10-13T15:06:15.6235754Z PASS trial3 reliable replay grants no additional soul or effect
+2026-10-13T15:06:15.6265185Z PASS trial3 both clients see one native rescue break
+2026-10-13T15:06:15.6275201Z PASS trial3 personal geo shade and soul limitation remain intact
+2026-10-13T15:06:15.6285232Z PASS trial3 both checked
+2026-10-13T15:06:18.3341833Z PASS trial3 feedback fully retired
+2026-10-13T15:06:18.4044948Z FINAL PASS rescue soul and native feedback

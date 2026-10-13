@@ -103,6 +103,8 @@ PASS initial player messages wait for queued game setup and cannot survive disco
 PASS server rejection fully releases the client DTLS session
 PASS future chunk fragments cannot contaminate the active chunk
 PASS rapid handshake cancellation, rejection and old timeouts cannot affect a new DTLS session
+PASS room shutdown cancels receiving before waiting for the final outgoing update
+PASS active UDP receive failure remains an error and cannot fabricate a received datagram
 PASS disconnect or reconnect inside a completed chunk callback preserves the new receiver
 PASS malformed slice bounds and lengths cannot corrupt a following valid chunk
-RESULT 107 passed, 0 failed
+RESULT 109 passed, 0 failed

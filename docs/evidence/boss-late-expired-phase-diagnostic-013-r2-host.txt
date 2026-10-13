@@ -1,0 +1,32 @@
+2026-10-13T08:50:15.7123293Z PASS menu ready
+2026-10-13T08:50:20.0048112Z PASS unsaved character ready
+2026-10-13T08:50:20.9047265Z PASS boss test handshake
+2026-10-13T08:50:20.9510989Z PASS both connected
+2026-10-13T08:50:22.2878537Z PASS native False Knight room
+2026-10-13T08:50:22.3414359Z PASS boss authority initialized
+2026-10-13T08:50:26.8993735Z PASS arena trigger starts native boss AI
+2026-10-13T08:50:28.3692867Z ACTIVATE terrain=136832 native=False fsm=FalseyControl state=Roll End active=True
+2026-10-13T08:50:31.2055318Z PASS native armor damage exposes head without terminal death
+2026-10-13T08:50:31.2067296Z PASS armor phase remains alive and resets phase health
+2026-10-13T08:50:31.2078111Z PASS exposed head takes partial native damage
+2026-10-13T08:50:31.2163388Z AUTHORITY exposed position=(42.9, 31.6, 0.0) scale=(-1.3, 1.3, 1.3)
+2026-10-13T08:50:31.2182368Z BEFORE HANDOFF position=(42.9, 31.6, 0.0) scale=(-1.3, 1.3, 1.3)
+2026-10-13T08:50:31.2192437Z ARENA BEFORE HANDOFF FK Terrain Block path=False%20Knight%20New%28Clone%29#0/FK%20Terrain%20Block#0 id=-100626 active=False self=False pos=(26.1, 46.6, 0.0) bounds=Center: (26.1, 46.6, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T08:50:31.2216136Z ARENA BEFORE HANDOFF Battle Gate path=Battle%20Gate#0 id=129026 active=True self=True pos=(46.2, 28.1, 0.0) bounds=Center: (46.2, 28.1, 0.0), Extents: (0.3, 2.1, 0.0) enabled=True trigger=False
+2026-10-13T08:50:31.2226734Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137028 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (64.0, 24.3, 0.0), Extents: (1.0, 1.8, 0.0) enabled=True trigger=False
+2026-10-13T08:50:31.2226734Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137046 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (36.7, 25.8, 0.0), Extents: (27.7, 0.2, 0.0) enabled=True trigger=False
+2026-10-13T08:50:31.2240131Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137048 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (39.7, 22.5, 0.0), Extents: (25.4, 0.1, 0.0) enabled=True trigger=False
+2026-10-13T08:50:31.2250223Z ARENA BEFORE HANDOFF FK Terrain Block path=FK%20Terrain%20Block#0 id=137054 active=True self=True pos=(42.9, 31.6, 0.0) bounds=Center: (42.4, 28.0, 0.0), Extents: (1.7, 1.3, 0.0) enabled=True trigger=False
+2026-10-13T08:50:31.2260301Z TERRAIN REFERENCE Terrain Block=FK%20Terrain%20Block#0
+2026-10-13T08:50:34.9149401Z PASS guest observed exposed phase and health
+2026-10-13T08:50:36.2042763Z ACTIVATE terrain=136832 native=False fsm=FalseyControl state=Stun Fail active=False
+2026-10-13T08:50:37.4183773Z HANDOFF REQUEST state=Idle elapsed exposure may expire during native fade
+2026-10-13T08:50:38.3086355Z PASS old authority leaves after exposed phase observation
+2026-10-13T08:50:51.7118146Z PASS new authority continues native phase and combat
+2026-10-13T08:50:52.6153649Z PASS old authority rejoins ongoing boss fight
+2026-10-13T08:50:52.6954285Z PASS returning client receives continued armor health and phase count
+2026-10-13T08:50:52.7409272Z PART BEFORE MAKEHOST path=FK%20Terrain%20Block#0 owner=9052461825595963441 host=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0/False client=False%20Knight%20New%28Clone%29#0/FK%20Terrain%20Block#0/False
+2026-10-13T08:50:52.7419332Z PART BEFORE PREPARE path=FK%20Terrain%20Block#0 owner=9052461825595963441 host=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0/False client=False%20Knight%20New%28Clone%29#0/FK%20Terrain%20Block#0/False
+2026-10-13T08:50:52.7429497Z PART AFTER PREPARE path=FK%20Terrain%20Block#0 owner=9052461825595963441 host=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0/False client=False%20Knight%20New%28Clone%29#0/FK%20Terrain%20Block#0/False
+2026-10-13T08:50:52.7469397Z PART AFTER MAKEHOST path=FK%20Terrain%20Block#0 owner=9052461825595963441 host=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0/False client=False%20Knight%20New%28Clone%29#0/FK%20Terrain%20Block#0/False
+2026-10-13T08:50:52.8086242Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence

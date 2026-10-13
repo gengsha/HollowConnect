@@ -4,6 +4,8 @@
 
 **这是早期版本，仍需逐 Boss 和跨机器实战验收。** 0.1.13 修复 Boss 死亡时持续动作清理异常导致房间登记失效、队友消失及独立战斗的公共故障链，整理入场与重连生命周期，并修复脱离 Boss 层级的子物体在接管时引用失效、残留碰撞的问题。原因和验证边界见 [房间同步修复](docs/ROOM-LIFECYCLE-FIX-0.1.13.md)和[验证记录](docs/VERIFICATION.md)。此前的[救援反馈](docs/RESCUE-FEEDBACK-0.1.12.md)、[死亡与入场规则](docs/DEATH-AND-ENTRY-0.1.11.md)、[格林弹幕修复](docs/GRIMM-MOTION-FIX-0.1.10.md)、[Boss 战斗修复](docs/BOSS-FIXES-0.1.8.md)与[审计发现](docs/AUDIT-REMEDIATION-0.1.7.md)保留。
 
+**当前源码构建尚未发布安装包。** 房间清理、重连引用、静态实体身份、暂停运动和副本动画复制的公共修复已通过同一生产构建的 12 组静音双客户端检查；[运行记录](docs/evidence/runtime-room-0.1.13.json)核对三项 DLL 哈希、双方终态与全部日志。一次历史镜头冻结的唯一原因仍未确认，[阻塞记录](docs/evidence/runtime-blockers-0.1.13.json)未关闭前禁止打包安装。
+
 它包含修改后的 HKMP 3.0 引擎和 HollowConnect 配套模块。所有玩家使用同一完整包；它的协议与原版 HKMP 2.x / 原版 HKMP 3.0 不兼容。HkmpPouch 和丝之歌的模组不是依赖。
 
 **房主和所有队友必须一起升级至 0.1.13，使用包内 HKMP 3.0.0-hc10，并重新开房与进入挑战。** FRP 继续使用原来的 UDP 端口设置。
@@ -55,8 +57,10 @@ FRP 示例见 [frpc.example.toml](docs/frpc.example.toml)。房主运行 `frpc -
 
 ## 源码与验证
 
-源码包含完整 HKMP 修改源、核心协作模型、模块、回归程序和打包脚本。运行 `powershell -ExecutionPolicy Bypass -File .\scripts\Build.ps1 -GamePath "游戏目录"`，需要 .NET SDK 9 或更新版本。脚本从本机游戏取得引用，下载并校验官方 Modding API v77，构建后运行测试，再生成安装包及对应源码包。没有把用户的原版游戏程序集放入源码包。
+源码包含完整 HKMP 修改源、核心协作模型、模块、回归程序和打包脚本。运行 `powershell -ExecutionPolicy Bypass -File .\scripts\Build.ps1 -GamePath "游戏目录"`，需要 .NET SDK 9 或更新版本。脚本从本机游戏取得引用，下载并校验官方 Modding API v77，构建后运行测试。发行打包还要求 12 组运行验收的 DLL 哈希与当前构建一致；没有对应验收时保留构建结果并拒绝发行打包。没有把用户的原版游戏程序集放入源码包。
 
 首版自动化测试包含共享能力幂等、乱序进度合并、救援距离 / 场景 / 时效校验、双方倒地顺序、迟加入、断线解除重试屏障、地图投影、消息集合序列化、血量乱序与死亡快照，以及五客户端并发真实加密握手。完整实机验收步骤在 [验证记录](docs/VERIFICATION.md)，架构说明在 [设计说明](docs/DESIGN.md)。
+
+后续修复使用本地 Git 和[发布门槛](docs/QUALITY-GATES.md)。`tests/Smoke/Run-Room-Suite.ps1` 运行 12 组隔离专项，`Summarize-Room-Suite.ps1` 核对终态、实际 DLL 与所有运行日志；`scripts/Verify-Release.ps1` 核对发行包和证据。测试插件只用于隔离副本，不随安装包安装。
 
 HKMP 修改部分延续 LGPL-2.1，完整对应源码随附。HollowConnect 自有模块采用 MIT；依赖来源与许可见 [THIRD-PARTY.md](THIRD-PARTY.md)。
