@@ -304,11 +304,13 @@ public sealed class PantheonProbe : MonoBehaviour {
         Mark("HAZARD COLLISION originalPoint="+atOriginalPoint+" pos="+hero.transform.position+" health="+PlayerData.instance.health+" ready="+runtime.Playable);
         yield return Until(()=>camera.mode==CameraController.CameraMode.FROZEN,"native hazard freezes camera",3);
         CameraTrace("FROZEN native-hazard");
-        yield return Until(()=>!hero.cState.hazardDeath&&!hero.cState.hazardRespawning&&hero.acceptingInput&&camera.mode!=CameraController.CameraMode.FROZEN,"native hazard restores input and camera",15);
+        // Exercise the same bounded recovery gate as normal room acceptance,
+        // while the real hazard animation is still holding the camera frozen.
+        yield return RequireRecoveredCamera("native-hazard");
         if(PlayerData.instance.health!=health)throw new Exception("Invulnerable hazard lost health");
         CameraTrace("RECOVERED native-hazard");
         yield return Both("camera-hazard-checked");
-        Mark("FINAL PASS actual native spike collision, transient frozen camera and original recovery; originalPoint="+atOriginalPoint);
+        Mark("FINAL PASS actual native spike collision, shared room camera gate and original recovery; originalPoint="+atOriginalPoint);
         yield return Finish();
     }
     private void DelayInitialSnapshot() {
@@ -332,6 +334,15 @@ public sealed class PantheonProbe : MonoBehaviour {
                 " pos="+(go==null?"null":go.transform.position.ToString())+" render="+(go==null?"null":string.Join(",",go.GetComponentsInChildren<Renderer>(true).Select(r=>r.name+"/"+r.enabled+"/off="+r.forceRenderingOff)))+
                 " state="+string.Join(",",e.Object.Host.GetComponents<PlayMakerFSM>().Select(f=>f.FsmName+"="+f.ActiveStateName)));
         }
+    }
+    private IEnumerator RequireRecoveredCamera(string key) {
+        if(GameCameras.instance.cameraController.mode!=CameraController.CameraMode.FROZEN)yield break;
+        CameraTrace("FROZEN "+key);
+        var hero=HeroController.instance;
+        if(!hero.cState.hazardDeath&&!hero.cState.hazardRespawning)throw new Exception("Frozen camera without native hazard recovery "+key);
+        yield return Until(()=>!hero.cState.hazardDeath&&!hero.cState.hazardRespawning&&hero.acceptingInput&&
+            GameCameras.instance.cameraController.mode!=CameraController.CameraMode.FROZEN,"native hazard camera recovery "+key,15);
+        CameraTrace("RECOVERED "+key);
     }
     private IEnumerator RoomChecks(string key) {
         yield return Until(()=>manager.IsSceneHostDetermined,"room authority "+key);
@@ -359,14 +370,7 @@ public sealed class PantheonProbe : MonoBehaviour {
         var players=Field<Dictionary<ushort,Hkmp.Game.Client.ClientPlayerData>>(engine.ClientManager,"_playerData");
         if(!players.Values.Any(p=>p.IsInLocalScene&&p.PlayerObject!=null&&p.PlayerObject.activeInHierarchy&&p.PlayerObject.GetComponentsInChildren<Renderer>(true).Any(r=>r.enabled&&!r.forceRenderingOff&&r.gameObject.activeInHierarchy)))
             throw new Exception("Remote knight invisible "+key);
-        if(GameCameras.instance.cameraController.mode==CameraController.CameraMode.FROZEN) {
-            CameraTrace("FROZEN "+key);
-            var hero=HeroController.instance;
-            if(!hero.cState.hazardDeath&&!hero.cState.hazardRespawning)throw new Exception("Frozen camera without native hazard recovery "+key);
-            yield return Until(()=>!hero.cState.hazardDeath&&!hero.cState.hazardRespawning&&hero.acceptingInput&&
-                GameCameras.instance.cameraController.mode!=CameraController.CameraMode.FROZEN,"native hazard camera recovery "+key,15);
-            CameraTrace("RECOVERED "+key);
-        }
+        yield return RequireRecoveredCamera(key);
         Mark("PASS visible bosses/knight and unfrozen camera "+key);
         if(!manager.IsSceneHost) {
             var snapshot=snapshots.Last(s=>s.Visit==Hkmp.CoopContext.LocalVisit&&s.SceneName==Hkmp.CoopContext.LocalScene);

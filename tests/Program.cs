@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Hkmp.Game.Client.Entity;
@@ -516,7 +516,7 @@ internal static class Program {
         Test("future chunk fragments cannot contaminate the active chunk", ChunkReceiverProbe.FutureSlice);
         Test("rapid handshake cancellation, rejection and old timeouts cannot affect a new DTLS session", ClientSessionProbe.CancelReconnect);
         Test("room shutdown cancels receiving before waiting for the final outgoing update", ClientSessionProbe.ShutdownReceive);
-        Test("active UDP reset remains an error and cannot fabricate a received datagram", ClientSessionProbe.ReceiveFailureNeverBecomesData);
+        Test("active UDP receive failure remains an error and cannot fabricate a received datagram", ClientSessionProbe.ReceiveFailureNeverBecomesData);
         Test("disconnect or reconnect inside a completed chunk callback preserves the new receiver", ChunkReceiverProbe.ResetFromCallback);
         Test("malformed slice bounds and lengths cannot corrupt a following valid chunk", ChunkReceiverProbe.MalformedSlices);
         Console.WriteLine("RESULT " + passed + " passed, " + failed + " failed");

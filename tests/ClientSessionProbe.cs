@@ -160,16 +160,21 @@ internal static class ClientSessionProbe {
 
     private sealed class SocketErrorLog : Hkmp.Logging.ILogger {
         internal int Errors; internal volatile bool Active = true;
-        public void Error(string message) { if (Active && message.Contains("UDP Socket exception")) Interlocked.Increment(ref Errors); }
+        internal string LastError;
+        public void Error(string message) {
+            if (!Active || !message.Contains("UDP Socket exception")) return;
+            LastError = message;
+            if (message.Contains("Socket ErrorCode: TimedOut")) Interlocked.Increment(ref Errors);
+        }
         public void Info(string s) { } public void Warn(string s) { }
         public void Debug(string s) { } public void Fine(string s) { }
     }
 
     public static void ReceiveFailureNeverBecomesData() {
-        // Windows reports ICMP port-unreachable as a reset on a connected UDP
-        // socket. Exercise the actual receive loop, then reopen that endpoint
-        // and require the first real datagram without a fabricated empty entry.
-        if (Environment.OSVersion.Platform != PlatformID.Win32NT) return;
+        // Use a real socket receive timeout to exercise the active-error path.
+        // Unlike an ICMP port-unreachable, this stimulus does not depend on
+        // Windows choosing to deliver an ICMP to ReceiveFrom rather than Send.
+        // Both reach the same SocketException branch in the production loop.
         var logger = new SocketErrorLog(); Hkmp.Logging.Logger.AddLogger(logger);
         using (var receiver = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
         using (var remote = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
@@ -177,9 +182,7 @@ internal static class ClientSessionProbe {
             remote.Bind(new IPEndPoint(IPAddress.Loopback, 0));
             var endpoint = (IPEndPoint)remote.LocalEndPoint;
             receiver.Connect(endpoint);
-            // .NET Framework and Unity Mono use different defaults for this
-            // Windows option. Explicitly enable the ICMP reset under test.
-            receiver.IOControl(unchecked((IOControlCode)0x9800000C), BitConverter.GetBytes(1), null);
+            receiver.ReceiveTimeout = 300;
             var local = (IPEndPoint)receiver.LocalEndPoint;
             var queue = new ClientDatagramTransport(receiver);
             var peer = new DtlsClient(); Exception workerError = null;
@@ -190,15 +193,21 @@ internal static class ClientSessionProbe {
             });
             worker.Start();
             try {
-                remote.Close(); receiver.Send(new byte[] { 1 });
-                if (!SpinWait.SpinUntil(() => Volatile.Read(ref logger.Errors) > 0, 3000))
-                    throw new Exception("Active socket error was not reported");
-                using (var reopened = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)) {
-                    reopened.Bind(endpoint); reopened.SendTo(new byte[] { 7, 8, 9 }, local);
-                    if (!queue.ReceivedDataCollection.TryTake(out var data, 3000) || data.Length != 3 || data.Buffer[0] != 7)
-                        throw new Exception("Receive failure fabricated data or lost the next valid datagram");
-                    if (queue.ReceivedDataCollection.Count != 0) throw new Exception("Unexpected extra received entry");
-                }
+                // First prove this worker can receive a real datagram, then
+                // leave it idle until its actual ReceiveFrom throws TimedOut.
+                remote.SendTo(new byte[] { 4, 5, 6 }, local);
+                if (!queue.ReceivedDataCollection.TryTake(out var warmup, 3000) ||
+                    warmup.Length != 3 || warmup.Buffer[0] != 4)
+                    throw new Exception("Receive loop did not accept the warm-up datagram: " + workerError);
+                if (!SpinWait.SpinUntil(() => Volatile.Read(ref logger.Errors) > 0 || workerError != null, 3000) ||
+                    Volatile.Read(ref logger.Errors) == 0)
+                    throw new Exception("Active receive timeout was not reported; worker: " + workerError + "; last error: " + logger.LastError);
+                if (queue.ReceivedDataCollection.Count != 0) throw new Exception("Receive failure fabricated a datagram");
+                remote.SendTo(new byte[] { 7, 8, 9 }, local);
+                if (!queue.ReceivedDataCollection.TryTake(out var data, 3000) || data.Length != 3 ||
+                    data.Buffer[0] != 7 || data.Buffer[1] != 8 || data.Buffer[2] != 9)
+                    throw new Exception("Receive failure fabricated data or lost the next valid datagram");
+                if (queue.ReceivedDataCollection.Count != 0) throw new Exception("Unexpected extra received entry");
             } finally {
                 cancellation.Cancel(); receiver.Close();
                 if (!worker.Join(3000)) throw new Exception("Receive loop did not cancel");

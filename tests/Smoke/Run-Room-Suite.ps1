@@ -2,8 +2,8 @@ param([switch]$ReuseNativeHost,[string]$StartAt,[string[]]$Only)
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $taskCases=@(
-    @{Name='final-native-host-013';Mode='pantheon';Existing=[bool]$ReuseNativeHost;Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host'}},
-    @{Name='final-native-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest';HOLLOWCONNECT_CAMERA_TRACE='1'}},
+    @{Name='final-native-host-013';Mode='pantheon';Existing=[bool]$ReuseNativeHost;Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host';HOLLOWCONNECT_CAMERA_RING='1'}},
+    @{Name='final-native-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest';HOLLOWCONNECT_CAMERA_RING='1'}},
     @{Name='final-lifecycle-host-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host';HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS='1'}},
     @{Name='final-lifecycle-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_LIFECYCLE_CHECK='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest';HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS='1'}},
     @{Name='final-boss-013';Mode='boss';Env=@{}},
