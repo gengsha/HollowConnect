@@ -141,6 +141,7 @@ public sealed class GodhomeProbe : MonoBehaviour {
         yield return Until(() => In("Town"), "unsaved character ready"); Freeze();
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); }
         else yield return Until(() => Has("server.started"), "server ready");
+        typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(engine.ClientManager,true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "godhome" + role });
         yield return Until(() => runtime.Connected, "handshake");
         Flag(role + ".connected"); yield return Until(() => Has(host ? "guest.connected" : "host.connected"), "both connected");

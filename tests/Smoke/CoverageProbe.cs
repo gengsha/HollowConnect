@@ -111,6 +111,7 @@ public sealed class CoverageProbe : MonoBehaviour {
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved Town");Freeze();
         if(host){engine.ServerManager.Start(29650,false);Flag("server.started");}else yield return Until(()=>Has("server.started"),"server");
+        typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(engine.ClientManager,true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(engine.ClientManager,new object[]{"127.0.0.1",29650,"coverage"+role});
         yield return Until(()=>runtime.Connected,"connect");Flag(role+".connected");yield return Until(()=>Has((host?"guest":"host")+".connected"),"both connected");
         var scenes=(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SCENES")??"GG_Hornet_1,GG_Nailmasters,GG_Mantis_Lords,GG_Uumuu,GG_Ghost_Markoth,GG_Collector,GG_Hollow_Knight,GG_Painter,GG_Nosk,GG_Ghost_No_Eyes,GG_Soul_Tyrant,GG_White_Defender,GG_Grimm").Split(',');

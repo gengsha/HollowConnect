@@ -22,6 +22,7 @@ public sealed class GrimmMotionProbe : MonoBehaviour {
     private Hkmp.Game.GameManager engine;
     private EntityManager manager;
     private int launches, preserved, moving, peerMatches;
+    private int profileMenuRequests;
     private float nextTrace;
     private float nextDiagnostic;
     private readonly List<Flight> flights = new();
@@ -59,7 +60,7 @@ public sealed class GrimmMotionProbe : MonoBehaviour {
         SceneName = s, EntryGateName = s.StartsWith("GG_") ? "door_dreamEnter" : "left1",
         Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true
     });
-    private void Freeze(float x = 85, float y = 8) {
+    private void Freeze(float x = 80, float y = 8) {
         var h = HeroController.instance; h.takeNoDamage = true;
         h.GetComponent<Rigidbody2D>().gravityScale = 0; h.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         h.transform.position = new Vector3(x, y, h.transform.position.z);
@@ -150,6 +151,11 @@ public sealed class GrimmMotionProbe : MonoBehaviour {
         role = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"); root = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT"); host = role == "host";
         scene = Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRIMM_SCENE") ?? "GG_Grimm";
         Hkmp.Logging.Logger.AddLogger(new Log(this));
+        On.UIManager.GoToProfileMenu += (orig,ui) => {
+            profileMenuRequests++;
+            Mark("FIXTURE PROFILE MENU scene="+GameManager.instance?.sceneName+" stack="+Environment.StackTrace);
+            return orig(ui);
+        };
         On.FireGrimmBall.OnEnter += Launch;
         var stack = new Stack<IEnumerator>(); stack.Push(Run()); var deadline = DateTime.UtcNow.AddMinutes(6);
         while (stack.Count > 0) {
@@ -170,8 +176,16 @@ public sealed class GrimmMotionProbe : MonoBehaviour {
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => In("Town"), "unsaved character ready"); Freeze(20, 10);
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); } else yield return Until(() => Has("server.started"), "server started");
+        // This probe has already selected its in-memory character. Opening a
+        // second native profile menu here races the gameplay scene transition.
+        typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic)
+            .SetValue(engine.ClientManager,Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRIMM_MENU_BASELINE")!="1");
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "motion" + role });
         yield return Until(() => runtime.Connected, "connected"); Flag(role + ".connected"); yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRIMM_MENU_BASELINE")=="1") {
+            yield return Until(()=>profileMenuRequests>0,"baseline selects profile menu after unsaved character was already loaded",10);
+            throw new Exception("Invalid in-memory fixture opened a second profile menu");
+        }
         // Use the native statue setup; no boss FSM state is forced.
         BossSequenceController.Reset(); BossSceneController.SetupEvent = self => { self.BossLevel = 0; };
         if (host != (Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRIMM_AUTHORITY") != "guest")) {
@@ -179,10 +193,11 @@ public sealed class GrimmMotionProbe : MonoBehaviour {
             yield return new WaitForSecondsRealtime(delay);
         }
         Enter(scene); yield return Until(() => In(scene), "arena entered"); Freeze();
+        Require(profileMenuRequests==0,"selected in-memory character never reopens profile menu");
         yield return Until(() => manager.IsSceneHostDetermined && Entities.Values.Any(e => e.Type == EntityType.Grimm || e.Type == EntityType.NightmareKingGrimm), "authority ready");
         Mark("AUTHORITY=" + manager.IsSceneHost); Flag(role + ".arena"); yield return Until(() => Has((host ? "guest" : "host") + ".arena"), "both in arena");
         var boss = Entities.Values.Single(e => e.Type == EntityType.Grimm || e.Type == EntityType.NightmareKingGrimm);
-        Mark("FIXTURE stationary invulnerable target at arena center (85, 8); no boss FSM state or transform forced");
+        Mark("FIXTURE stationary invulnerable target (80, 8), in arena and farther than native Balloon Check minimum 6 from (85.77, 13.5); no boss FSM state or transform forced");
         var until = Time.realtimeSinceStartup + 38;
         while (Time.realtimeSinceStartup < until) { Observe(); yield return null; }
         if (manager.IsSceneHost) boss.Object.Host.GetComponent<HealthManager>().ApplyExtraDamage(scene == "GG_Grimm" ? 201 : 601);

@@ -109,6 +109,7 @@ public sealed class BossProbe : MonoBehaviour {
         Freeze();
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); }
         else yield return Until(() => Has("server.started"), "server ready");
+        typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(engine.ClientManager,true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "boss" + role });
         yield return Until(() => runtime.Connected, "boss test handshake");
         if (Has(role + ".failed")) yield break;
