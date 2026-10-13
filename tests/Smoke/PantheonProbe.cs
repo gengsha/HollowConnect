@@ -233,7 +233,7 @@ public sealed class PantheonProbe : MonoBehaviour {
                 yield return WaitForNeedleThrow(control,"after reconnect "+attempt);
                 foreach(var variable in new[]{"Needle","Needle Tink"})
                     if(control.FsmVariables.FindFsmGameObject(variable).Value==null)throw new Exception("Native throw missing "+variable+" after reconnect "+attempt);
-                yield return Until(()=>control.ActiveStateName=="Throw Recover","native Throw Recover after reconnect "+attempt,20);
+                yield return WaitForNeedleRecovery(control,"after reconnect "+attempt);
                 Flag("throw-recovered."+key);
             }else yield return Until(()=>Has("throw-recovered."+key),"authority throw and recovery after reconnect "+attempt,130);
             yield return new WaitForSecondsRealtime(2);
@@ -260,6 +260,49 @@ public sealed class PantheonProbe : MonoBehaviour {
             yield return null;
         }
         throw new Exception("Timeout: native needle throw "+label+" state="+last);
+    }
+    private IEnumerator WaitForNeedleRecovery(PlayMakerFSM control,string label) {
+        var end=Time.realtimeSinceStartup+20;var next=0f;var last="";
+        while(Time.realtimeSinceStartup<end) {
+            var state=control.ActiveStateName;
+            if(state!=last||Time.realtimeSinceStartup>=next) {
+                last=state;next=Time.realtimeSinceStartup+1;
+                var needle=control.FsmVariables.FindFsmGameObject("Needle").Value;
+                Mark("NATIVE NEEDLE RECOVERY "+label+" state="+state+" source="+EntityReferences.Capture(needle)+
+                    " self="+(needle!=null&&needle.activeSelf)+" active="+(needle!=null&&needle.activeInHierarchy)+
+                    " pos="+(needle!=null?needle.transform.position.ToString():"null")+
+                    " fsms="+(needle!=null?string.Join(",",needle.GetComponents<PlayMakerFSM>().Select(f=>f.FsmName+":"+f.ActiveStateName+"/enabled="+f.enabled)):"null"));
+            }
+            if(state=="Throw Recover"){Mark("PASS native Throw Recover "+label);yield break;}
+            yield return null;
+        }
+        ColliderReferences(control.gameObject,"recovery-timeout");DumpRoom("recovery-timeout");
+        throw new Exception("Timeout: native Throw Recover "+label+" state="+last);
+    }
+    private void StaticIdentityChecks() {
+        var parent=new GameObject("HollowConnect identity test parent");
+        var source=new GameObject("HollowConnect identity test source");GameObject copy=null;
+        try {
+            source.transform.SetParent(parent.transform);
+            var original=EntityIdentity.Static(source,EntityType.DynamicHazard);
+            source.transform.SetParent(null);
+            if(EntityIdentity.Static(source,EntityType.DynamicHazard)!=original)throw new Exception("Native identity changed after detach");
+            copy=Object.Instantiate(source);
+            if(EntityIdentity.Static(copy,EntityType.DynamicHazard)==original)throw new Exception("Cloned metadata inherited another native object's identity");
+            Mark("PASS native identity survives detach and cloned metadata has a separate identity");
+        } finally {Object.Destroy(copy);Object.Destroy(source);Object.Destroy(parent);}
+    }
+    private IEnumerator WaitForNativeDash(PlayMakerFSM control) {
+        var end=Time.realtimeSinceStartup+100;var last="";
+        while(Time.realtimeSinceStartup<end) {
+            var hero=HeroController.instance;var body=hero.GetComponent<Rigidbody2D>();
+            hero.RegainControl();body.gravityScale=0;body.velocity=Vector2.zero;hero.transform.position=new Vector3(22.5f,28.4f,0);
+            var bossBody=control.GetComponent<Rigidbody2D>();
+            if(control.ActiveStateName!=last){last=control.ActiveStateName;Mark("NATIVE DASH wait state="+last+" velocity="+bossBody.velocity+" pos="+control.transform.position);}
+            if(last=="A Dash"&&bossBody.velocity.magnitude>10){Mark("PASS native moving dash before registration pause");yield break;}
+            yield return null;
+        }
+        throw new Exception("Timeout: native moving dash before registration pause");
     }
     private IEnumerator DetachedReferenceCheck() {
         if(manager.IsSceneHost) {
@@ -387,6 +430,13 @@ public sealed class PantheonProbe : MonoBehaviour {
         if(!peer.IsInLocalScene||peer.PlayerObject!=avatar||!avatar.activeInHierarchy||players[peer.Id]!=peer)throw new Exception("Stale presence removes current teammate "+key);
         Mark("PASS stale room/peer leave and duplicate connect preserve avatar "+key);
         var boss=live.OrderBy(e=>e.Id).First();
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS")=="1") {
+            var identities=string.Join("\n",Entities.Values.Where(e=>(e.Id>>63)==0).OrderBy(e=>e.Id).Select(e=>e.Id+":"+e.Type));
+            Flag(role+".identities."+key,identities);yield return Both("identities-ready."+key);
+            var otherIdentities=File.ReadAllText(Path.Combine(root,(host?"guest":"host")+".identities."+key));
+            if(identities!=otherIdentities)throw new Exception("Static entity identities diverged "+key+" local="+identities+" other="+otherIdentities);
+            Mark("PASS all static entity identities converge "+key);
+        }
         Flag(role+".boss."+key,boss.Id.ToString());
         yield return Both("checked."+key);
         var otherId=ulong.Parse(File.ReadAllText(Path.Combine(root,(host?"guest":"host")+".boss."+key)));
@@ -440,6 +490,7 @@ public sealed class PantheonProbe : MonoBehaviour {
         CoopMod.Settings.ShareProgress=false;PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved character");SafeHero();
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STATIC_IDENTITY_CHECK")=="1")StaticIdentityChecks();
         if(host){engine.ServerManager.Start(29650,false);Flag("server.started");}else yield return Until(()=>Has("server.started"),"server ready");
         ConnectLocal("pantheon"+role);
         yield return Until(()=>runtime.Connected,"handshake");yield return Both("connected");
@@ -488,13 +539,36 @@ public sealed class PantheonProbe : MonoBehaviour {
             // Native scene switch and same-session rejoin must not retain Moss
             // entities, duplicate scene hooks, or a previous visit's callbacks.
             if(Entities.Values.Any(e=>e.SourceScene==sequence.GetSceneAt(3)))throw new Exception("Prior room entities survived transition");
+            var pauseMotionCheck=Environment.GetEnvironmentVariable("HOLLOWCONNECT_PAUSE_MOTION_CHECK")=="1";
+            var previousAuthority=manager.IsSceneHost;var dashPosition=Vector3.zero;
+            if(pauseMotionCheck) {
+                if(previousAuthority) {
+                    var control=Entities.Values.Single(e=>e.Type==EntityType.Hornet).Object.Host.GetComponents<PlayMakerFSM>().Single(f=>f.FsmName=="Control");
+                    yield return WaitForNativeDash(control);dashPosition=control.transform.position;
+                    Flag("dash-pause-ready");
+                }else yield return Until(()=>Has("dash-pause-ready"),"authority native dash sample",110);
+                yield return Both("dash-pause");
+            }
             if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1")ColliderReferences(Entities.Values.Single(e=>e.Type==EntityType.Hornet).Object.Host,"initial-before-disconnect");
             engine.ClientManager.Disconnect();
             if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1")ColliderReferences(Object.FindObjectsOfType<PlayMakerFSM>(true).First(f=>f.name=="Hornet Boss 1").gameObject,"initial-after-disconnect");
             yield return Both("lifecycle-disconnected");
+            if(pauseMotionCheck&&!previousAuthority)yield return Until(()=>Has("dash-owner-rejoined"),"previous authority reconnects first");
             ConnectLocal("liferetry"+role);yield return Until(()=>runtime.Connected,"reconnect after destroyed-loop cleanup");
             yield return Until(()=>manager.IsSceneHostDetermined,"rejoined room authority");
+            if(pauseMotionCheck&&previousAuthority) {
+                if(!manager.IsSceneHost)throw new Exception("Dash pause check did not retain the previous native authority");
+                Flag("dash-owner-rejoined");
+                var native=Entities.Values.Single(e=>e.Type==EntityType.Hornet).Object.Host;
+                var control=native.GetComponents<PlayMakerFSM>().Single(f=>f.FsmName=="Control");
+                Mark("NATIVE DASH resumed state="+control.ActiveStateName+" velocity="+native.GetComponent<Rigidbody2D>().velocity+" pos="+native.transform.position+" before="+dashPosition);
+                yield return Until(()=>(native.transform.position-dashPosition).magnitude>1&&control.ActiveStateName!="A Dash","native dash moves and completes after registration pause",8);
+                Flag("dash-pause-recovered");
+            }else if(pauseMotionCheck)yield return Until(()=>Has("dash-pause-recovered"),"authority native dash recovery",15);
             yield return Both("lifecycle-reconnected");yield return RoomChecks("lifecycle-retry");
+            if(pauseMotionCheck&&Environment.GetEnvironmentVariable("HOLLOWCONNECT_PAUSE_MOTION_ONLY")=="1") {
+                Mark("FINAL PASS native moving dash survives same-scene registration pause");yield return Finish();yield break;
+            }
             if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_TRACE")=="1")ColliderReferences(Entities.Values.Single(e=>e.Type==EntityType.Hornet).Object.Host,"retry-first");
             if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS")=="1")yield return ColliderReconnectChecks();
             Mark("FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio");yield return Finish();yield break;

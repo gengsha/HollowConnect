@@ -111,6 +111,8 @@ internal class Entity {
     /// </summary>
     private bool _originalIsActive;
     private readonly Dictionary<PlayMakerFSM, bool> _suspendedRestartFlags = new();
+    private readonly List<(Rigidbody2D Body, UnityEngine.Vector2 Velocity, float Angular, float Gravity,
+        (PlayMakerFSM Fsm, string State)[] States)> _pausedNativeMotion = new();
 
     /// <summary>
     /// Whether the entity is controlled, i.e. in control by updates from the server.
@@ -320,6 +322,18 @@ internal class Entity {
             foreach (var fsm in _fsms.Host.Where(f => f != null && f.Fsm.Started && !string.IsNullOrEmpty(f.ActiveStateName))) {
                 _suspendedRestartFlags[fsm] = fsm.Fsm.RestartOnEnable;
                 fsm.Fsm.RestartOnEnable = false;
+            }
+            if (_suspendedRestartFlags.Count != 0) {
+                // Unity clears rigidbody velocity when a running hierarchy is
+                // disabled. Capture children before pausing the parent: their
+                // own later registration would otherwise only see zeroes.
+                foreach (var body in Object.Host.GetComponentsInChildren<Rigidbody2D>(true)) {
+                    if (!body.gameObject.activeInHierarchy) continue;
+                    var states = body.GetComponents<PlayMakerFSM>().Where(f=>f.Fsm.Started&&!string.IsNullOrEmpty(f.ActiveStateName))
+                        .Select(f=>(Fsm:f,State:f.ActiveStateName)).ToArray();
+                    if (states.Length == 0) states = _suspendedRestartFlags.Keys.Select(f=>(Fsm:f,State:f.ActiveStateName)).ToArray();
+                    _pausedNativeMotion.Add((body, body.velocity, body.angularVelocity, body.gravityScale, states));
+                }
             }
             Object.Host.SetActive(false);
         }
@@ -1013,7 +1027,7 @@ internal class Entity {
     /// <summary>
     /// Initializes the entity when the client user is the scene host.
     /// </summary>
-    public void InitializeHost() {
+    public void InitializeHost(bool deferMotionRestore = false) {
         if (destroyed || Object.Host == null) return;
         WaitingForEntrance.Remove(this);
         foreach (var fsm in _fsms.Host) if (fsm != null) EntityInitializer.InitializeFsm(fsm);
@@ -1039,9 +1053,24 @@ internal class Entity {
             component.InitializeHost();
         }
         ReplayEntranceEvents();
+        if (!deferMotionRestore) CompleteHostInitialization();
         
         // Deregister the hook for updating the active value of the host object
         EntityHooks.ForgetActivation(Object.Host);
+    }
+
+    internal void CompleteHostInitialization() {
+        foreach (var motion in _pausedNativeMotion) {
+            var body = motion.Body;
+            if (body == null || !body.gameObject.activeInHierarchy) continue;
+            // A replayed native entrance event may have advanced the FSM and
+            // deliberately stopped/launched it. That new state's physics wins.
+            if (motion.States.Any(s=>s.Fsm==null||s.Fsm.ActiveStateName!=s.State)) continue;
+            body.velocity = motion.Velocity;
+            body.angularVelocity = motion.Angular;
+            body.gravityScale = motion.Gravity;
+        }
+        _pausedNativeMotion.Clear();
     }
 
     /// <summary>
@@ -1049,6 +1078,7 @@ internal class Entity {
     /// host has been determined.
     /// </summary>
     public void InitializeClient() {
+        _pausedNativeMotion.Clear();
         WaitingForEntrance.Remove(this);
         _isSceneHostDetermined = true;
         entranceEvents.Clear();
@@ -1062,6 +1092,9 @@ internal class Entity {
     /// Makes the entity a host entity if the client user became the scene host.
     /// </summary>
     public void MakeHost() {
+        // A takeover restores the current authority's component snapshots,
+        // never the native values from this peer's earlier registration.
+        _pausedNativeMotion.Clear();
         Logger.Debug($"Making entity ({Id}, {Type}) a host entity");
 
         // Unity can destroy either side after a terminal death while its
@@ -1596,6 +1629,7 @@ internal class Entity {
         WaitingForEntrance.Remove(this);
         entranceEvents.Clear();
         _pendingReferences.Clear();
+        _pausedNativeMotion.Clear();
         RestoreRestartFlags();
         MonoBehaviourUtil.Instance.OnUpdateEvent -= OnUpdate;
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Client));

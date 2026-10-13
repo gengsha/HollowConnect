@@ -116,7 +116,7 @@ internal class EntityProcessor {
         if (_entities.Values.Any(e => e.Object.Host == gameObject || e.Object.Client == gameObject)) return;
         var id = SpawnedId.HasValue
             ? (parentHostObject == null ? SpawnedId.Value : EntityIdentity.Hash(SpawnedId.Value + "/" + EntityIdentity.Path(gameObject.transform, GameObject.transform) + ":" + foundEntry.Type) | 0x8000000000000000UL)
-            : EntityIdentity.Hash(EntityIdentity.Key(gameObject, foundEntry.Type));
+            : EntityIdentity.Static(gameObject, foundEntry.Type);
         if (_entities.ContainsKey(id)) {
             Logger.Error($"Entity identity collision or incompatible spawn: {id}, {foundEntry.Type}, {gameObject.name}");
             return;

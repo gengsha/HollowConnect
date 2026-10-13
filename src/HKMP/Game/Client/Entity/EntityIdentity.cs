@@ -16,6 +16,23 @@ internal static class EntityIdentity {
         }
     }
     internal static ulong Dynamic() => Hash(Guid.NewGuid().ToString("N")) | 0x8000000000000000UL;
+    internal static ulong Static(GameObject go, EntityType type) {
+        // Reconnecting does not reload the native scene. FSMs may have moved
+        // an existing child to scene root while its replica stayed parented.
+        // Its first registration identity belongs to this native lifetime,
+        // not to its mutable current hierarchy or a connection's lookup table.
+        var anchor = go.GetComponent<StaticEntityIdentity>();
+        if (anchor == null) anchor = go.AddComponent<StaticEntityIdentity>();
+        if (anchor.SourceInstance != go.GetInstanceID() || anchor.SceneHandle != go.scene.handle || anchor.Type != type) {
+            // Unity Instantiate may copy a metadata component. A different
+            // native object/scene must never inherit the source object's ID.
+            anchor.SourceInstance = go.GetInstanceID();
+            anchor.SceneHandle = go.scene.handle;
+            anchor.Type = type;
+            anchor.Key = Key(go, type);
+        }
+        return Hash(anchor.Key);
+    }
     internal static string Path(Transform t, Transform root = null) {
         var parts = new List<string>();
         while (t != null && t != root) {
@@ -38,4 +55,13 @@ internal static class EntityIdentity {
     internal static string Key(GameObject go, EntityType type) =>
         go.scene.name + "/" + Path(go.transform) + ":" + type + ":" +
         string.Join("|", go.GetComponents<PlayMakerFSM>().Select(f => f.FsmName).OrderBy(n => n, StringComparer.Ordinal));
+}
+
+// Metadata only: no Update, global object table or saved player data. Unity
+// removes it with the native GameObject, but it survives a network disconnect.
+internal sealed class StaticEntityIdentity : MonoBehaviour {
+    [NonSerialized] internal int SourceInstance;
+    [NonSerialized] internal int SceneHandle;
+    [NonSerialized] internal EntityType Type;
+    [NonSerialized] internal string Key;
 }

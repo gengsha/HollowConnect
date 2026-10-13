@@ -127,7 +127,12 @@ internal class EntityManager {
         IsSceneHostDetermined = true;
 
         foreach (var entity in _entities.Values.ToArray()) {
-            try { entity.InitializeHost(); } catch (Exception e) { Logger.Error($"Initialize host {entity.Id}: {e}"); }
+            try { entity.InitializeHost(true); } catch (Exception e) { Logger.Error($"Initialize host {entity.Id}: {e}"); }
+        }
+        // Restore a paused hierarchy only after all independently registered
+        // children have reached their final activation state.
+        foreach (var entity in _entities.Values.ToArray()) {
+            try { entity.CompleteHostInitialization(); } catch (Exception e) { Logger.Error($"Restore paused motion {entity.Id}: {e}"); }
         }
         
         if (applyPending) CheckReceivedUpdates();
