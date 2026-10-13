@@ -1,4 +1,7 @@
-HollowConnect 0.1.13
+HollowConnect 0.1.13 试玩包 / HKMP 3.0.0-hc10
+
+按用户要求先试玩查 bug；历史入场镜头异常仍未查明，不表示全部 Boss 已验收。
+试玩说明和日志收集方法见 docs\PLAYTEST-0.1.13.md。
 
 1. 先关闭《空洞骑士》，把 ZIP 完整解压到任意目录。
 2. 双击“一键安装.exe”。

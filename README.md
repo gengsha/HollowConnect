@@ -4,7 +4,7 @@
 
 **这是早期版本，仍需逐 Boss 和跨机器实战验收。** 0.1.13 修复 Boss 死亡时持续动作清理异常导致房间登记失效、队友消失及独立战斗的公共故障链，整理入场与重连生命周期，并修复脱离 Boss 层级的子物体在接管时引用失效、残留碰撞的问题。原因和验证边界见 [房间同步修复](docs/ROOM-LIFECYCLE-FIX-0.1.13.md)和[验证记录](docs/VERIFICATION.md)。此前的[救援反馈](docs/RESCUE-FEEDBACK-0.1.12.md)、[死亡与入场规则](docs/DEATH-AND-ENTRY-0.1.11.md)、[格林弹幕修复](docs/GRIMM-MOTION-FIX-0.1.10.md)、[Boss 战斗修复](docs/BOSS-FIXES-0.1.8.md)与[审计发现](docs/AUDIT-REMEDIATION-0.1.7.md)保留。
 
-**当前源码构建尚未发布安装包。** 房间清理、重连引用、静态实体身份、暂停运动和副本动画复制的公共修复已通过同一生产构建的 12 组静音双客户端检查；[运行记录](docs/evidence/runtime-room-0.1.13.json)核对三项 DLL 哈希、双方终态与全部日志。一次历史镜头冻结的唯一原因仍未确认，[阻塞记录](docs/evidence/runtime-blockers-0.1.13.json)未关闭前禁止打包安装。
+**本次提供 0.1.13 试玩包。** 房间清理、重连引用、静态实体身份、暂停运动和副本动画复制的公共修复已通过同一生产构建的 12 组静音双客户端检查；[运行记录](docs/evidence/runtime-room-0.1.13.json)核对三项 DLL 哈希、双方终态与全部日志。一次历史镜头冻结的唯一原因仍未确认，[阻塞记录](docs/evidence/runtime-blockers-0.1.13.json)继续保留。用户要求先试玩查 bug，故单独提供标为 `playtest` 的包；[试玩说明](docs/PLAYTEST-0.1.13.md)列出已知问题及复测方法，正式发布门槛不变。
 
 它包含修改后的 HKMP 3.0 引擎和 HollowConnect 配套模块。所有玩家使用同一完整包；它的协议与原版 HKMP 2.x / 原版 HKMP 3.0 不兼容。HkmpPouch 和丝之歌的模组不是依赖。
 
@@ -12,7 +12,7 @@
 
 ## 安装与开房
 
-1. 解压 `HollowConnect-0.1.13-windows.zip`，关闭游戏。
+1. 解压 `HollowConnect-0.1.13-playtest-windows.zip`，关闭游戏。
 2. 双击解压目录里的 **一键安装.exe**。它会查找各盘的 Steam 游戏库；找到后点击 **安装 / 更新**。有多个副本时从列表选择，未找到时点击 **选择游戏…** 找到自己的 `hollow_knight.exe`，也可粘贴游戏目录。
 3. 启动游戏，在模组菜单的 **HollowConnect** 页面选择房主规则。共享永久进度默认关闭；屏外方位、暗影救援、入场免伤默认开启。房主规则在开房时固定，修改后重新开房生效。
 4. 从 HKMP 的 Multiplayer 菜单选择 Host，选择要使用的存档和端口，例如 `26950`。队友选择 Connect，填写主机地址、同一个端口，并选择自己的存档。

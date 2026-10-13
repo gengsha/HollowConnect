@@ -1,10 +1,21 @@
-﻿$ErrorActionPreference='Stop'
+﻿param([switch]$Playtest)
+$ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
-$package=Join-Path $root 'dist\HollowConnect-0.1.13'
+$taskPackageName='HollowConnect-0.1.13'+$(if($Playtest){'-playtest'}else{''})
+$package=Join-Path $root ('dist\'+$taskPackageName)
 $taskBlockers=Get-Content -LiteralPath (Join-Path $root 'docs/evidence/runtime-blockers-0.1.13.json') -Raw | ConvertFrom-Json
-if($taskBlockers.version -ne '0.1.13' -or @($taskBlockers.findings | Where-Object {$_.resolved -ne $true}).Count){throw 'Unresolved runtime blocker; release cannot be verified.'}
+if($taskBlockers.version -ne '0.1.13'){throw 'Wrong blocker ledger version.'}
+$taskUnresolved=@($taskBlockers.findings | Where-Object {$_.resolved -ne $true})
+if($taskUnresolved.Count -and !$Playtest){throw 'Unresolved runtime blocker; release cannot be verified.'}
 $manifest=Get-Content -LiteralPath (Join-Path $package 'manifest.json') -Raw | ConvertFrom-Json
 if ($manifest.version -ne '0.1.13') { throw 'Wrong version.' }
+if($manifest.releaseChannel -ne $(if($Playtest){'playtest'}else{'release'})){throw 'Wrong release channel.'}
+if($Playtest){
+    $taskAuthorization=Get-Content -LiteralPath (Join-Path $root 'docs/evidence/playtest-authorization-0.1.13.json') -Raw | ConvertFrom-Json
+    if($taskAuthorization.version -ne '0.1.13' -or $taskAuthorization.action -ne 'package-for-user-playtest' -or @($taskUnresolved | Where-Object {$_.id -notin $taskAuthorization.acceptedUnresolvedFindings}).Count){throw 'Playtest request does not cover current unresolved findings.'}
+    if($manifest.playtestAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $package 'docs/evidence/playtest-authorization-0.1.13.json') -Algorithm SHA256).Hash){throw 'Playtest authorization hash differs.'}
+    if(@(Compare-Object -ReferenceObject $taskUnresolved -DifferenceObject @($manifest.knownIssues) -Property id,resolved).Count){throw 'Playtest known issues differ from unresolved ledger.'}
+}
 if (@($manifest.files).Count -ne 7) { throw 'Incomplete payload manifest.' }
 foreach ($entry in $manifest.files) {
     $payload=Join-Path $package "payload\HKMP\$($entry.name)"
@@ -15,7 +26,7 @@ foreach ($entry in $manifest.files) {
     }
 }
 $runtime=Get-Content -LiteralPath (Join-Path $package 'docs\evidence\runtime-room-0.1.13.json') -Raw | ConvertFrom-Json
-if ($runtime.releaseReady -ne $true -or $runtime.version -ne '0.1.13' -or @($runtime.runs).Count -ne 12) { throw 'Incomplete or blocked runtime evidence.' }
+if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne '0.1.13' -or @($runtime.runs).Count -ne 12) { throw 'Incomplete or blocked runtime evidence.' }
 foreach ($run in $runtime.runs) {
     if (!$run.bothPassed -or @($run.binaries).Count -ne 3) { throw 'Incomplete runtime result.' }
     $runDir=Join-Path $root ('.test-results\'+$run.name)
@@ -41,7 +52,7 @@ function Hash-Stream($stream) {
 }
 $counts=@{}
 foreach ($kind in 'windows','source') {
-    $archive=[IO.Compression.ZipFile]::OpenRead((Join-Path $root "dist\HollowConnect-0.1.13-$kind.zip"))
+    $archive=[IO.Compression.ZipFile]::OpenRead((Join-Path $root ('dist\'+$taskPackageName+'-'+$kind+'.zip')))
     try {
         $files=@($archive.Entries | Where-Object { $_.Name.Length -gt 0 })
         $counts[$kind]=$files.Count
@@ -78,8 +89,8 @@ $ledger=Get-Content -LiteralPath (Join-Path $package 'docs\AUDIT-REMEDIATION-0.1
 $ids=@([regex]::Matches($ledger,'(?m)^\| (S[1-5]-\d{2}) \|') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
 if ($ids.Count -ne 49) { throw "Unexpected audit ledger count: $($ids.Count)" }
 foreach ($kind in 'windows','source') {
-    $name="HollowConnect-0.1.13-$kind.zip"
+    $name=$taskPackageName+'-'+$kind+'.zip'
     $hash=(Get-FileHash -LiteralPath (Join-Path $root "dist\$name") -Algorithm SHA256).Hash.ToLowerInvariant()
     if (!(Get-Content -LiteralPath (Join-Path $root 'dist\SHA256SUMS.txt') | Where-Object { $_ -eq "$hash  $name" })) { throw "Bad published checksum: $name" }
 }
-Write-Output "PASS release 0.1.13: 7 payload files; 12 actual runtime binary records and completion markers; API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; published checksums; no test plugin or private saves."
+Write-Output "PASS $($manifest.releaseChannel) 0.1.13: 7 payload files; 12 actual runtime binary records and completion markers; API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; published checksums; no test plugin or private saves."

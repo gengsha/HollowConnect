@@ -1,0 +1,3 @@
+PASS scripts/Package.ps1 retains normal unresolved-blocker rejection
+PASS scripts/Verify-Release.ps1 retains normal unresolved-blocker rejection
+PASS authorized playtest packaging still rejects a runtime failure marker before building or packaging
