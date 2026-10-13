@@ -82,7 +82,7 @@ internal class DtlsClient {
             // Only locals are used while Disconnect can clear the published fields.
             var transport = new DtlsClientProtocol().Connect(tls, datagram);
             lock (_gate) {
-                if (_closed) {
+                if (_closed || token.IsCancellationRequested) {
                     try { transport.Close(); } catch (IOException) { } catch (ObjectDisposedException) { } catch (SocketException) { }
                     throw new ObjectDisposedException(nameof(DtlsClient));
                 }
@@ -91,11 +91,19 @@ internal class DtlsClient {
             }
             Logger.Debug($"Successfully connected DTLS client to endpoint: {address}:{port}");
         } catch (Exception e) when (e is IOException || e is SocketException || e is ObjectDisposedException || e is OperationCanceledException) {
-            var cancelled = _closed;
+            var cancelled = _closed || token.IsCancellationRequested;
             Disconnect();
             if (cancelled) throw new ObjectDisposedException(nameof(DtlsClient), "DTLS attempt was cancelled");
             throw;
         }
+    }
+
+    /// <summary>
+    /// Retire receive callbacks before waiting for the update manager's final
+    /// send. Keep the send transport alive until that packet has been flushed.
+    /// </summary>
+    public void StopReceiving() {
+        lock (_gate) { _receiveTaskTokenSource?.Cancel(); }
     }
 
     /// <summary>
@@ -154,12 +162,16 @@ internal class DtlsClient {
                 break;
             } catch (SocketException e) {
                 Logger.Error($"UDP Socket exception, ErrorCode: {e.ErrorCode}, Socket ErrorCode: {e.SocketErrorCode}, Exception:\n{e}");
+                // A failed ReceiveFrom did not receive a datagram. Never feed a
+                // fabricated empty record to DTLS; keep active errors visible.
+                continue;
             }
 
             if (cancellationToken.IsCancellationRequested) {
                 Logger.Debug("Cancellation requested");
                 break;
             }
+            if (numReceived <= 0) continue;
 
             try {
                 datagram.ReceivedDataCollection.Add(new UdpDatagramTransport.ReceivedData {

@@ -193,6 +193,10 @@ internal class NetClient : INetClient {
             ConnectionStatus = ClientConnectionStatus.NotConnected;
             _session++;
             _packetManager.InvalidateClientSession();
+            // StopUpdates may block on an in-flight send and flush a final
+            // packet to a server that has already shut down. Retire receiving
+            // first so that expected shutdown resets cannot escape that window.
+            _dtlsClient.StopReceiving();
             UpdateManager.StopUpdates();
             if (_timeoutHandler != null) UpdateManager.TimeoutEvent -= _timeoutHandler;
             _timeoutHandler = null;

@@ -129,4 +129,82 @@ internal static class ClientSessionProbe {
             } finally { client.Disconnect(); server.Stop(); DrainMainThread(); }
         }
     }
+
+    public static void ShutdownReceive() {
+        DrainMainThread();
+        var server = new DtlsServer(); var client = new NetClient(new PacketManager());
+        var dtls = Field<DtlsClient>(client, "_dtlsClient");
+        Thread shutdown = null; Exception error = null;
+        server.Start(0);
+        try {
+            dtls.Connect("127.0.0.1", ((IPEndPoint)Field<Socket>(server, "socket").LocalEndPoint).Port);
+            client.UpdateManager.DtlsTransport = dtls.DtlsTransport;
+            client.UpdateManager.StartUpdates();
+            var source = Field<CancellationTokenSource>(dtls, "_receiveTaskTokenSource");
+            var token = source.Token;
+            // Hold a real update-send barrier. Closing the room must retire its
+            // receive callbacks even while the final outgoing update is blocked.
+            var sendGate = typeof(ClientUpdateManager).BaseType.GetField("_sendGate", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(client.UpdateManager);
+            lock (sendGate) {
+                shutdown = new Thread(() => { try { client.Disconnect(); } catch (Exception e) { error = e; } });
+                shutdown.Start();
+                if (!SpinWait.SpinUntil(() => token.IsCancellationRequested, 1500))
+                    throw new Exception("Retired room is still receiving while its final send waits");
+            }
+            if (!shutdown.Join(3000)) throw new Exception("Room shutdown did not finish");
+            if (error != null) throw error;
+        } finally {
+            shutdown?.Join(3000); client.Disconnect(); server.Stop(); DrainMainThread();
+        }
+    }
+
+    private sealed class SocketErrorLog : Hkmp.Logging.ILogger {
+        internal int Errors; internal volatile bool Active = true;
+        public void Error(string message) { if (Active && message.Contains("UDP Socket exception")) Interlocked.Increment(ref Errors); }
+        public void Info(string s) { } public void Warn(string s) { }
+        public void Debug(string s) { } public void Fine(string s) { }
+    }
+
+    public static void ReceiveFailureNeverBecomesData() {
+        // Windows reports ICMP port-unreachable as a reset on a connected UDP
+        // socket. Exercise the actual receive loop, then reopen that endpoint
+        // and require the first real datagram without a fabricated empty entry.
+        if (Environment.OSVersion.Platform != PlatformID.Win32NT) return;
+        var logger = new SocketErrorLog(); Hkmp.Logging.Logger.AddLogger(logger);
+        using (var receiver = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+        using (var remote = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+        using (var cancellation = new CancellationTokenSource()) {
+            remote.Bind(new IPEndPoint(IPAddress.Loopback, 0));
+            var endpoint = (IPEndPoint)remote.LocalEndPoint;
+            receiver.Connect(endpoint);
+            // .NET Framework and Unity Mono use different defaults for this
+            // Windows option. Explicitly enable the ICMP reset under test.
+            receiver.IOControl(unchecked((IOControlCode)0x9800000C), BitConverter.GetBytes(1), null);
+            var local = (IPEndPoint)receiver.LocalEndPoint;
+            var queue = new ClientDatagramTransport(receiver);
+            var peer = new DtlsClient(); Exception workerError = null;
+            var worker = new Thread(() => {
+                try { typeof(DtlsClient).GetMethod("SocketReceiveLoop", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(peer, new object[] { receiver, queue, cancellation.Token }); }
+                catch (Exception e) { workerError = e; }
+            });
+            worker.Start();
+            try {
+                remote.Close(); receiver.Send(new byte[] { 1 });
+                if (!SpinWait.SpinUntil(() => Volatile.Read(ref logger.Errors) > 0, 3000))
+                    throw new Exception("Active socket error was not reported");
+                using (var reopened = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)) {
+                    reopened.Bind(endpoint); reopened.SendTo(new byte[] { 7, 8, 9 }, local);
+                    if (!queue.ReceivedDataCollection.TryTake(out var data, 3000) || data.Length != 3 || data.Buffer[0] != 7)
+                        throw new Exception("Receive failure fabricated data or lost the next valid datagram");
+                    if (queue.ReceivedDataCollection.Count != 0) throw new Exception("Unexpected extra received entry");
+                }
+            } finally {
+                cancellation.Cancel(); receiver.Close();
+                if (!worker.Join(3000)) throw new Exception("Receive loop did not cancel");
+                queue.Dispose(); logger.Active = false;
+            }
+            if (workerError != null) throw workerError;
+        }
+    }
 }
