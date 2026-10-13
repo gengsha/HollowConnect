@@ -1,0 +1,1 @@
+<Project><PropertyGroup><References>$(MSBuildThisFileDirectory)..\..\vendor\references</References><OutputDirectory>$(MSBuildThisFileDirectory)..\..\artifacts\HKMP</OutputDirectory></PropertyGroup></Project>

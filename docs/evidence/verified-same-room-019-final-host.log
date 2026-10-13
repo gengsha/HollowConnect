@@ -1,0 +1,74 @@
+2026-10-12T14:28:11.6340928Z PASS menu
+2026-10-12T14:28:16.5125378Z PASS unsaved character
+2026-10-12T14:28:16.5200517Z ENGINE Starting NetServer on port 29650
+2026-10-12T14:28:16.5484861Z ENGINE LoadOrGenerateECDHKeyPair: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\key.pem
+2026-10-12T14:28:16.5499404Z ENGINE KeyPair file exists, loading...
+2026-10-12T14:28:16.6248471Z ENGINE LoadOrGenerateCertificate: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\cert.cer
+2026-10-12T14:28:16.6263525Z ENGINE Certificate file exists, loading...
+2026-10-12T14:28:16.6757346Z ENGINE Connecting client to server: 127.0.0.1:29650 as pantheonhost
+2026-10-12T14:28:16.8691894Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:28:16.8744153Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:28:16.9707907Z ENGINE Received packet from unknown client with address: 127.0.0.1:53252, creating new client
+2026-10-12T14:28:17.0064311Z ENGINE Received connection request from IP: 127.0.0.1:53252, username: pantheonhost
+2026-10-12T14:28:17.0099160Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:28:17.0300194Z ENGINE Received packet from unknown client with address: 127.0.0.1:53253, creating new client
+2026-10-12T14:28:17.0313979Z ENGINE Received connection request from IP: 127.0.0.1:53253, username: pantheonguest
+2026-10-12T14:28:17.0332333Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:28:17.0497054Z ENGINE Received server info from server
+2026-10-12T14:28:17.8152413Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:28:17.9191984Z ENGINE Scene changed from  to Town
+2026-10-12T14:28:17.9281929Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: Town
+2026-10-12T14:28:17.9409778Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:28:17.9424865Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: Town
+2026-10-12T14:28:17.9498871Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:28:17.9732893Z PASS handshake
+2026-10-12T14:28:17.9753222Z PASS both connected
+2026-10-12T14:28:17.9766391Z PASS connect in already loaded room initializes authority
+2026-10-12T14:28:18.0112807Z ENGINE Player 1 entered scene
+2026-10-12T14:28:18.0166872Z PASS connect in already loaded room creates teammate
+2026-10-12T14:28:18.0196371Z PASS both same-room-initialized
+2026-10-12T14:28:18.0211598Z ENGINE Sending PlayerDisconnect packet
+2026-10-12T14:28:18.0223027Z ENGINE Disconnecting from server
+2026-10-12T14:28:18.0228092Z ENGINE Received PlayerDisconnect data from (0, pantheonhost)
+2026-10-12T14:28:18.0253255Z ENGINE Client 0 disconnected
+2026-10-12T14:28:18.0286235Z ENGINE Handling player leave scene (dc: True) for ID 0, left scene: Town
+2026-10-12T14:28:18.0296313Z ENGINE Sending leave scene packet to 1
+2026-10-12T14:28:18.0358840Z ENGINE Sending that entity '8173247680223640663' is already in scene to '1'
+2026-10-12T14:28:18.0368897Z ENGINE Sending that entity '5433208650596947515' is already in scene to '1'
+2026-10-12T14:28:18.0381767Z ENGINE Sending that entity '9039180234019435213' is already in scene to '1'
+2026-10-12T14:28:18.0396864Z ENGINE Sending that entity '7815807409613637839' is already in scene to '1'
+2026-10-12T14:28:18.0406882Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T14:28:18.0417711Z ENGINE Sending that entity '1925361265462759723' is already in scene to '1'
+2026-10-12T14:28:18.0428837Z ENGINE Sending that entity '688262427560814067' is already in scene to '1'
+2026-10-12T14:28:18.0442052Z ENGINE Sending that entity '1640449854697899003' is already in scene to '1'
+2026-10-12T14:28:18.0457122Z ENGINE   1 has become scene host
+2026-10-12T14:28:18.0467131Z PASS disconnect without scene change
+2026-10-12T14:28:18.0480856Z ENGINE Received PlayerDisconnect data from (1, pantheonguest)
+2026-10-12T14:28:18.0505968Z ENGINE WARN UDP receive failed: ConnectionReset
+2026-10-12T14:28:18.0525636Z ENGINE WARN UDP receive failed: ConnectionReset
+2026-10-12T14:28:18.0530694Z ENGINE Client 1 disconnected
+2026-10-12T14:28:18.0548898Z ENGINE Handling player leave scene (dc: True) for ID 1, left scene: Town
+2026-10-12T14:28:18.0548898Z PASS both same-room-disconnected
+2026-10-12T14:28:18.0565034Z PASS server acknowledged both disconnects
+2026-10-12T14:28:18.0575223Z PASS empty disconnected room clears cached entity state
+2026-10-12T14:28:18.0605534Z PASS both same-room-empty
+2026-10-12T14:28:18.0615666Z ENGINE Connecting client to server: 127.0.0.1:29650 as sameroomretryhost
+2026-10-12T14:28:18.0681999Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:28:18.0697074Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:28:18.0940909Z ENGINE Received packet from unknown client with address: 127.0.0.1:53255, creating new client
+2026-10-12T14:28:18.0952254Z ENGINE Received connection request from IP: 127.0.0.1:53255, username: sameroomretryguest
+2026-10-12T14:28:18.0963730Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:28:18.0973733Z ENGINE Received packet from unknown client with address: 127.0.0.1:53254, creating new client
+2026-10-12T14:28:18.0983766Z ENGINE Received connection request from IP: 127.0.0.1:53254, username: sameroomretryhost
+2026-10-12T14:28:18.0996557Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:28:18.1197740Z ENGINE Received server info from server
+2026-10-12T14:28:18.2300421Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:28:18.2813511Z ENGINE Received EnterScene data from (2, sameroomretryguest), new scene: Town
+2026-10-12T14:28:18.3049533Z ENGINE Scene changed from  to Town
+2026-10-12T14:28:18.3166768Z ENGINE Received EnterScene data from (3, sameroomretryhost), new scene: Town
+2026-10-12T14:28:18.3231740Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:28:18.3241809Z ENGINE Updating already in scene player with ID: 2
+2026-10-12T14:28:18.3246885Z ENGINE Player 2 entered scene
+2026-10-12T14:28:18.3282165Z PASS same-room reconnect initializes authority
+2026-10-12T14:28:18.3297238Z PASS same-room reconnect creates teammate
+2026-10-12T14:28:18.3308120Z FINAL PASS connect without loading a new room; muted audio

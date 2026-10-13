@@ -1,0 +1,130 @@
+{
+  "version": "0.1.10",
+  "muted": true,
+  "scope": "Same-machine native launch/motion/replica probes. No player saves loaded or written; no FRP validation.",
+  "runs": [
+    {
+      "name": "grimm-motion-010-host",
+      "scene": "GG_Grimm",
+      "authority": "host",
+      "entryDelaySeconds": 3,
+      "handoffAfterWave": false,
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "95788207CFB6EA306693CB1AF47156672C900A8F3F01BF8192C94E2D81FF61BC"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "47E8B577648A145542330B9FE2496FD320B5D6C777D6EEB507A69EF672305BAD"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "FFCEA0AE3A5F73DF15A12E7D0384B8710D4531493DAF3BFACCB56C0E4E997AC2"
+        }
+      ]
+    },
+    {
+      "name": "grimm-motion-010-guest",
+      "scene": "GG_Grimm",
+      "authority": "guest",
+      "entryDelaySeconds": 3,
+      "handoffAfterWave": false,
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "95788207CFB6EA306693CB1AF47156672C900A8F3F01BF8192C94E2D81FF61BC"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "47E8B577648A145542330B9FE2496FD320B5D6C777D6EEB507A69EF672305BAD"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "FFCEA0AE3A5F73DF15A12E7D0384B8710D4531493DAF3BFACCB56C0E4E997AC2"
+        }
+      ]
+    },
+    {
+      "name": "grimm-motion-010-nightmare-host",
+      "scene": "GG_Grimm_Nightmare",
+      "authority": "host",
+      "entryDelaySeconds": 3,
+      "handoffAfterWave": false,
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "95788207CFB6EA306693CB1AF47156672C900A8F3F01BF8192C94E2D81FF61BC"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "47E8B577648A145542330B9FE2496FD320B5D6C777D6EEB507A69EF672305BAD"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "FFCEA0AE3A5F73DF15A12E7D0384B8710D4531493DAF3BFACCB56C0E4E997AC2"
+        }
+      ]
+    },
+    {
+      "name": "grimm-motion-010-nightmare-guest-late-r2",
+      "scene": "GG_Grimm_Nightmare",
+      "authority": "guest",
+      "entryDelaySeconds": 15,
+      "handoffAfterWave": false,
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "95788207CFB6EA306693CB1AF47156672C900A8F3F01BF8192C94E2D81FF61BC"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "47E8B577648A145542330B9FE2496FD320B5D6C777D6EEB507A69EF672305BAD"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "FFCEA0AE3A5F73DF15A12E7D0384B8710D4531493DAF3BFACCB56C0E4E997AC2"
+        }
+      ]
+    },
+    {
+      "name": "grimm-motion-010-host-handoff",
+      "scene": "GG_Grimm",
+      "authority": "host",
+      "entryDelaySeconds": 3,
+      "handoffAfterWave": true,
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "95788207CFB6EA306693CB1AF47156672C900A8F3F01BF8192C94E2D81FF61BC"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "47E8B577648A145542330B9FE2496FD320B5D6C777D6EEB507A69EF672305BAD"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "FFCEA0AE3A5F73DF15A12E7D0384B8710D4531493DAF3BFACCB56C0E4E997AC2"
+        }
+      ]
+    }
+  ],
+  "unsuccessfulExploratoryRuns": [
+    {
+      "name": "grimm-motion-010-nightmare-guest-late",
+      "scene": "GG_Grimm_Nightmare",
+      "authority": "guest",
+      "entryDelaySeconds": 15,
+      "bothPassed": false,
+      "causeConfirmed": false,
+      "hostFailure": "replica follows moving native projectiles",
+      "guestFailure": "multiple native balloon launches retain horizontal motion",
+      "observation": "Insufficient valid launch and moving-replica samples; no native FireGrimmBall samples captured after both entered. A repeat with additional diagnostics passed. The initial cause remains unconfirmed."
+    }
+  ]
+}

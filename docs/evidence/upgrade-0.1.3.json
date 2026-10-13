@@ -1,0 +1,12 @@
+{
+  "newGameAndReconnectPassed": true,
+  "regressionChecksPassed": 57,
+  "saveFilesUnchanged": true,
+  "version": "0.1.3",
+  "testPluginAbsent": true,
+  "installedPayloadHashesMatch": true,
+  "fullCombatProbePassed": true,
+  "installerChecksPassed": 12,
+  "saveFilesChecked": 64,
+  "originalUninstallBackupRetained": true
+}

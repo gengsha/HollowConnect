@@ -1,0 +1,14 @@
+{
+  "version": "0.1.9",
+  "checkedAtUtc": "2026-10-12T15:19:14.2001394Z",
+  "saveFilesBefore": 64,
+  "saveFilesAfter": 64,
+  "payloadMatchesManifest": true,
+  "normalGameProcessRunning": false,
+  "testPluginAbsent": true,
+  "originalBackupPointer": "E:\\SteamLibrary\\steamapps\\common\\Hollow Knight\\.HollowConnectBackups\\20261011-162338-614",
+  "installerUsed": true,
+  "saveHashComparison": "Compared with the older 0.1.8 baseline only; it predates later user play and is not evidence of installation mutation.",
+  "saveHashesUsedAsInstallBeforeSnapshot": false,
+  "currentSaveFilesPresent": 64
+}

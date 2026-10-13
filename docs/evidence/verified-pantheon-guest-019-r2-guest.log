@@ -1,0 +1,450 @@
+2026-10-12T14:36:47.8274086Z PASS menu
+2026-10-12T14:36:52.7548473Z PASS unsaved character
+2026-10-12T14:36:52.8175467Z PASS server ready
+2026-10-12T14:36:52.8189747Z ENGINE Connecting client to server: 127.0.0.1:29650 as pantheonguest
+2026-10-12T14:36:52.9485996Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:36:52.9590351Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:36:53.1358132Z ENGINE Received server info from server
+2026-10-12T14:36:53.9155788Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:36:54.0584542Z ENGINE Scene changed from  to Town
+2026-10-12T14:36:54.1063262Z PASS handshake
+2026-10-12T14:36:54.1090314Z PASS both connected
+2026-10-12T14:36:54.1157341Z SEQUENCE 0/GG_Vengefly,1/GG_Gruz_Mother,2/GG_False_Knight,3/GG_Mega_Moss_Charger,4/GG_Hornet_1,5/GG_Spa,6/GG_Ghost_Gorb,7/GG_Dung_Defender,8/GG_Mage_Knight,9/GG_Brooding_Mawlek,10/GG_Engine,11/GG_Nailmasters
+2026-10-12T14:36:54.1360782Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:36:54.1375903Z ENGINE Updating already in scene player with ID: 0
+2026-10-12T14:36:54.1386146Z ENGINE Player 0 entered scene
+2026-10-12T14:36:54.6351590Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:54.6363567Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 1 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:54.6376221Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 2 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:54.6395764Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 3 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:54.6400813Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 4 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:54.6405977Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 5 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:54.6420039Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 6 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:54.6433165Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Giant Buzzer Col, expected 'chaser', actual [Big Buzzer]
+2026-10-12T14:36:54.6541437Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'chaser', actual [corpse,End Roar]
+2026-10-12T14:36:54.6564574Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'Big Buzzer', actual [corpse,End Roar]
+2026-10-12T14:36:54.7662444Z ENGINE Scene changed from Town to GG_Vengefly
+2026-10-12T14:36:54.9137461Z PASS first boss entry
+2026-10-12T14:36:54.9401779Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:36:55.0703783Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Summon(Clone), expected 'chaser', actual []
+2026-10-12T14:36:55.0901081Z ENGINE WARN Entity FSM mismatch: /Buzzer Summon, expected 'chaser', actual []
+2026-10-12T14:36:59.3702253Z ENGINE Player 0 entered scene
+2026-10-12T14:36:59.4209191Z PASS late snapshot captured
+2026-10-12T14:36:59.4233602Z PASS both startroom.0
+2026-10-12T14:36:59.4245940Z PASS native sequence room 0.0
+2026-10-12T14:36:59.8163808Z PASS both room.0.0
+2026-10-12T14:36:59.8226183Z PASS room authority 0.0
+2026-10-12T14:37:02.8262796Z PASS early room-level updates drained 0.0
+2026-10-12T14:37:02.8283049Z ROOM 0.0 scene=GG_Vengefly visit=2 authority=True hero=(50.2, 16.4, 0.0) camera=(49.9, 15.9, -38.1) mode=LOCKED
+2026-10-12T14:37:02.8293200Z ENTITY 2683996848053998615 VengeflyKing key=GG_Vengefly/Giant%20Buzzer%20Col#0:VengeflyKing:Big Buzzer host=True replica=False pos=(55.5, 17.3, 0.0) render=Giant Buzzer Col/True/off=False,Corpse Giant Buzzer Col(Clone)/True/off=False state=Big Buzzer=Idle
+2026-10-12T14:37:02.8303257Z ENTITY 9038138461003165773 CameraLockArea key=GG_Vengefly/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=True replica=False pos=(46.8, 17.9, 0.0) render= state=
+2026-10-12T14:37:02.8315593Z ENTITY 12836822245065663887 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#0:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8337915Z ENTITY 13373600263130059075 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#1:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8347940Z ENTITY 14845617824506759447 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#2:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8359095Z ENTITY 16456744119686220087 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#3:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8372164Z ENTITY 12634200700131587141 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#4:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8372164Z ENTITY 15944359876442244143 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#5:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8386852Z ENTITY 16777719468644617037 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#6:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8396917Z ENTITY 11023173239837013433 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#7:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8402176Z ENTITY 11097681341233680281 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#8:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8413562Z ENTITY 16911066929236374521 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#9:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8413562Z ENTITY 15935836573479464451 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#10:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8427862Z ENTITY 14635311766064933277 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#11:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8427862Z ENTITY 11504889947492498493 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#12:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8438228Z ENTITY 14081795553047068017 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#13:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8453312Z ENTITY 12275661613442700395 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#14:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8463314Z ENTITY 17591134987898292411 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#15:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8463314Z ENTITY 10034343596874208997 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#16:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8473510Z ENTITY 17006396438600302101 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#17:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8516739Z ENTITY 18319232902158935263 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#18:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8526758Z ENTITY 13428174136672128213 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#19:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8526758Z ENTITY 12779345538492665143 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#20:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8538237Z ENTITY 14471118664353458815 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#21:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8538237Z ENTITY 11451545855752752563 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#22:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8548616Z ENTITY 13001824876566231607 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#23:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8548616Z ENTITY 12724502472010171909 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#24:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8562213Z ENTITY 13066277805300581399 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#25:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8585808Z ENTITY 15292313926312818531 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#26:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8600895Z ENTITY 13027296298847844927 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#27:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8600895Z ENTITY 16482192466606375955 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#28:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8611016Z ENTITY 17601926456810698095 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#29:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8611016Z ENTITY 11177760273804692999 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#30:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8621603Z ENTITY 13555159082285677683 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#31:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8641695Z ENTITY 15638527460504382221 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#32:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8646738Z ENTITY 12820695228347350837 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#33:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8646738Z ENTITY 12568050770572606535 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#34:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8656931Z ENTITY 17026956917924864657 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#35:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8669584Z ENTITY 14630326966782161883 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#36:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8680987Z ENTITY 17372340037658857739 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#37:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8695531Z ENTITY 16027257507627566565 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#38:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8713756Z ENTITY 13269480873463713723 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#39:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8723899Z ENTITY 16148106778331664271 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#40:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8723899Z ENTITY 17671534998662701471 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#41:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8742340Z ENTITY 12738140114719123437 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#42:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8747537Z ENTITY 9664922973393565419 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#43:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8747537Z ENTITY 17269265933129903317 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#44:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8757668Z ENTITY 10089103891785835731 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#45:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8767720Z ENTITY 16342232539230363757 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#46:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8767720Z ENTITY 13205151037898322657 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#47:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8780588Z ENTITY 13454576778771429485 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#48:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8790915Z ENTITY 9943666274715522021 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#49:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8790915Z ENTITY 14194320214936798271 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#50:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8803448Z ENTITY 15922073639192273093 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#51:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8813636Z ENTITY 12146226780841785365 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#52:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8813636Z ENTITY 13362640558262926035 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#53:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8825753Z ENTITY 17425962113371712779 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#54:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8845942Z ENTITY 12288528370710153419 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#55:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8856156Z ENTITY 16504311017120339727 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#56:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8867060Z ENTITY 10248822302685894961 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#57:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8877561Z ENTITY 18224824251172840269 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#58:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8887627Z ENTITY 9686546384795600755 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#59:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:37:02.8928945Z PASS camera authority state 0.0
+2026-10-12T14:37:02.9014648Z PASS camera lock state converges 0.0
+2026-10-12T14:37:02.9035314Z PASS visible bosses/knight and unfrozen camera 0.0
+2026-10-12T14:37:02.9050429Z ENGINE Player 0 left scene
+2026-10-12T14:37:02.9071344Z ENGINE Received PlayerConnect data for ID: 0
+2026-10-12T14:37:02.9101456Z PASS stale room/peer leave and duplicate connect preserve avatar 0.0
+2026-10-12T14:37:06.0286871Z PASS both checked.0.0
+2026-10-12T14:37:06.0324740Z PASS damage published 0.0
+2026-10-12T14:37:06.0334828Z PASS same boss HP 0.0
+2026-10-12T14:37:06.0743917Z PASS both hpchecked.0.0
+2026-10-12T14:37:06.0764034Z PASS both anchor.0
+2026-10-12T14:37:06.1043518Z PASS late client holds transition
+2026-10-12T14:37:14.1302747Z ENGINE WARN Entity FSM mismatch: GG_Gruz_Mother/Giant Fly, expected 'Bouncer Control', actual [Big Fly Control,bouncer_control]
+2026-10-12T14:37:14.1472122Z ENGINE WARN Entity FSM mismatch: GG_Gruz_Mother/Corpse Big Fly 1(Clone), expected 'Bouncer Control', actual [corpse]
+2026-10-12T14:37:14.1715249Z ENGINE Scene changed from GG_Vengefly to GG_Gruz_Mother
+2026-10-12T14:37:14.3081138Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:37:14.7982724Z PASS authority native next boss GG_Vengefly
+2026-10-12T14:37:22.8017043Z PASS native sequence room 0.1
+2026-10-12T14:37:30.6700159Z PASS both room.0.1
+2026-10-12T14:37:30.6715396Z PASS room authority 0.1
+2026-10-12T14:37:30.6955874Z ENGINE Player 0 entered scene
+2026-10-12T14:37:33.6731696Z PASS early room-level updates drained 0.1
+2026-10-12T14:37:33.6744432Z ROOM 0.1 scene=GG_Gruz_Mother visit=3 authority=True hero=(99.1, 19.9, 0.0) camera=(94.2, 20.0, -38.1) mode=LOCKED
+2026-10-12T14:37:33.6749672Z ENTITY 6506528302334920627 CameraLockArea key=GG_Gruz_Mother/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=True replica=False pos=(94.2, 20.6, 0.0) render= state=
+2026-10-12T14:37:33.6763863Z ENTITY 3103033005459923505 GruzMother key=GG_Gruz_Mother/_Enemies#0/Giant%20Fly#0:GruzMother:Big Fly Control|bouncer_control host=True replica=False pos=(92.6, 19.7, 0.0) render=Giant Fly/True/off=False,Corpse Big Fly 1(Clone)/True/off=False state=Big Fly Control=Charge,bouncer_control=Stopped
+2026-10-12T14:37:33.6784520Z PASS camera authority state 0.1
+2026-10-12T14:37:33.6847031Z PASS camera lock state converges 0.1
+2026-10-12T14:37:33.6858145Z PASS visible bosses/knight and unfrozen camera 0.1
+2026-10-12T14:37:33.6868509Z ENGINE Player 0 left scene
+2026-10-12T14:37:33.6880609Z ENGINE Received PlayerConnect data for ID: 0
+2026-10-12T14:37:33.6892853Z PASS stale room/peer leave and duplicate connect preserve avatar 0.1
+2026-10-12T14:37:36.7326321Z PASS both checked.0.1
+2026-10-12T14:37:36.7341413Z PASS damage published 0.1
+2026-10-12T14:37:36.7351583Z PASS same boss HP 0.1
+2026-10-12T14:37:36.7643676Z PASS both hpchecked.0.1
+2026-10-12T14:37:36.7656609Z PASS late client holds transition
+2026-10-12T14:37:41.2736271Z ENGINE WARN Entity FSM mismatch: /Corpse Big Fly Burster, expected 'Bouncer Control', actual [burster]
+2026-10-12T14:37:44.6993315Z ENGINE WARN Entity FSM mismatch: GG_False_Knight/Death Head, expected 'Health Check', actual []
+2026-10-12T14:37:44.6993315Z ENGINE WARN Entity FSM mismatch: GG_False_Knight/Staff Head, expected 'Health Check', actual [Mace Control]
+2026-10-12T14:37:44.7679157Z ENGINE Scene changed from GG_Gruz_Mother to GG_False_Knight
+2026-10-12T14:37:44.9210877Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:37:45.3820260Z PASS authority native next boss GG_Gruz_Mother
+2026-10-12T14:37:53.3831174Z PASS native sequence room 0.2
+2026-10-12T14:38:01.5530933Z PASS both room.0.2
+2026-10-12T14:38:01.5541792Z PASS room authority 0.2
+2026-10-12T14:38:01.5603677Z ENGINE Player 0 entered scene
+2026-10-12T14:38:04.5565055Z PASS early room-level updates drained 0.2
+2026-10-12T14:38:04.5575129Z ROOM 0.2 scene=GG_False_Knight visit=4 authority=True hero=(14.8, 31.9, 0.0) camera=(21.5, 31.4, -38.1) mode=LOCKED
+2026-10-12T14:38:04.5617488Z ENTITY 3675315349804982313 BattleGate key=GG_False_Knight/Battle%20Gate%202#0:BattleGate:BG Control host=True replica=False pos=(18.5, 3.8, 0.0) render=Battle Gate 2/True/off=False,Dust/True/off=False,Close Effect/False/off=False,Raise Dust/True/off=False state=BG Control=Double Close
+2026-10-12T14:38:04.5628916Z ENTITY 18071748739765071 BattleGate key=GG_False_Knight/Battle%20Gate%203#0:BattleGate:BG Control host=True replica=False pos=(51.6, 3.9, 0.0) render=Battle Gate 3/True/off=False,Dust/True/off=False,Close Effect/True/off=False,Raise Dust/True/off=False state=BG Control=Close 2
+2026-10-12T14:38:04.5628916Z ENTITY 9116905824005710281 CameraLockArea key=GG_False_Knight/Battle%20Scene#0/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(31.6, 32.5, 0.0) render= state=
+2026-10-12T14:38:04.5640763Z ENTITY 6271568382922080675 FalseKnightBarrels key=GG_False_Knight/Battle%20Scene#0/FK%20Barrel%20Summon#0:FalseKnightBarrels:summon host=True replica=False pos=(29.1, 41.0, 0.0) render= state=summon=Idle
+2026-10-12T14:38:04.5650796Z ENTITY 4189473236617846725 FalseKnight key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0:FalseKnight:Check Health|FalseyControl host=True replica=False pos=(25.5, 31.6, 0.0) render=False Knight New/True/off=False,Roll Dust/True/off=False,Hitter/True/off=False,Jump Trail/True/off=False,Head/True/off=False,Slam Effect/True/off=False,Jump Slam Effect/True/off=False,Death Head/True/off=False,Staff/True/off=False,Staff Head/True/off=False,Slam Rocks/True/off=False,Rage Rocks/True/off=False,Armour Hit/True/off=False,Armour Smash/True/off=False,Dust Land Large/True/off=False,Dust Hit Plume/True/off=False state=FalseyControl=S Land,Check Health=Check
+2026-10-12T14:38:04.5660819Z ENTITY 8447741072119193881 FalseKnightHead key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0/Head#0:FalseKnightHead:Health Check host=True replica=False pos=(22.5, 226.6, 0.0) render=Head/True/off=False state=Health Check=Check 1
+2026-10-12T14:38:04.5694506Z PASS camera authority state 0.2
+2026-10-12T14:38:04.5719866Z PASS camera lock state converges 0.2
+2026-10-12T14:38:04.5719866Z PASS visible bosses/knight and unfrozen camera 0.2
+2026-10-12T14:38:04.5729924Z ENGINE Player 0 left scene
+2026-10-12T14:38:04.5741248Z ENGINE Received PlayerConnect data for ID: 0
+2026-10-12T14:38:04.5753101Z PASS stale room/peer leave and duplicate connect preserve avatar 0.2
+2026-10-12T14:38:07.6519278Z PASS both checked.0.2
+2026-10-12T14:38:07.6554840Z PASS damage published 0.2
+2026-10-12T14:38:07.6567534Z PASS same boss HP 0.2
+2026-10-12T14:38:07.6974189Z PASS both hpchecked.0.2
+2026-10-12T14:38:07.6984634Z PASS late client holds transition
+2026-10-12T14:38:07.6994709Z DEFEAT FK state=Jump Antic hp=253 head=40 hero=(14.8, 31.9, 0.0) anim=Jump Antic
+2026-10-12T14:38:09.7070191Z DEFEAT FK state=Idle hp=253 head=40 hero=(14.8, 31.9, 0.0) anim=Idle
+2026-10-12T14:38:11.7215248Z DEFEAT FK state=Pause Long hp=260 head=40 hero=(14.8, 31.9, 0.0) anim=Stun Roll End
+2026-10-12T14:38:13.7314192Z DEFEAT FK state=Open Uuup hp=260 head=40 hero=(14.8, 31.9, 0.0) anim=Stun Open
+2026-10-12T14:38:15.7405706Z DEFEAT FK state=Rise 2 hp=260 head=40 hero=(14.8, 31.9, 0.0) anim=Jump
+2026-10-12T14:38:17.7513074Z DEFEAT FK state=Rage hp=260 head=40 hero=(14.8, 31.9, 0.0) anim=Blank
+2026-10-12T14:38:19.7675061Z DEFEAT FK state=Anim End hp=260 head=40 hero=(14.8, 31.9, 0.0) anim=Blank
+2026-10-12T14:38:21.7807128Z DEFEAT FK state=Rage End hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Idle
+2026-10-12T14:38:23.7927667Z DEFEAT FK state=Pause Short hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Stun Roll End
+2026-10-12T14:38:25.8016856Z DEFEAT FK state=Idle Pause hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Idle
+2026-10-12T14:38:27.8084207Z DEFEAT FK state=State 2 hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Land
+2026-10-12T14:38:29.8191535Z DEFEAT FK state=Particle Pause hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Blank
+2026-10-12T14:38:31.8270097Z DEFEAT FK state=Rage hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Blank
+2026-10-12T14:38:33.8393547Z DEFEAT FK state=Stun Land hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Stun Roll
+2026-10-12T14:38:35.8476737Z DEFEAT FK state=Opened 2 hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Stun Opened
+2026-10-12T14:38:37.8605091Z DEFEAT FK state=Steam hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Death Spaz
+2026-10-12T14:38:39.8765549Z DEFEAT FK state=Ready hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Death Spaz
+2026-10-12T14:38:41.8851071Z DEFEAT FK state=Death Head Land hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Body
+2026-10-12T14:38:43.8990616Z DEFEAT FK state=Cough hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Body
+2026-10-12T14:38:45.9037269Z DEFEAT FK state=Cough hp=260 head=40 hero=(17.8, 33.4, 0.0) anim=Body
+2026-10-12T14:38:47.2301703Z ENGINE WARN Entity FSM mismatch: GG_Mega_Moss_Charger/Corpse Mega Moss Charger(Clone), expected 'Mossy Control', actual [Corpse]
+2026-10-12T14:38:47.2634780Z ENGINE Scene changed from GG_False_Knight to GG_Mega_Moss_Charger
+2026-10-12T14:38:47.4552914Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:38:47.9255165Z PASS authority native next boss GG_False_Knight
+2026-10-12T14:38:55.9298157Z PASS native sequence room 0.3
+2026-10-12T14:39:00.0129275Z PASS both room.0.3
+2026-10-12T14:39:00.0139292Z PASS room authority 0.3
+2026-10-12T14:39:00.0425198Z ENGINE Player 0 entered scene
+2026-10-12T14:39:03.0153424Z PASS early room-level updates drained 0.3
+2026-10-12T14:39:03.0153424Z ROOM 0.3 scene=GG_Mega_Moss_Charger visit=5 authority=True hero=(40.6, 9.1, 0.0) camera=(41.6, 11.0, -38.1) mode=LOCKED
+2026-10-12T14:39:03.0163601Z ENTITY 4129537347362395435 CameraLockArea key=GG_Mega_Moss_Charger/CameraLockArea%20%282%29#0:CameraLockArea: host=True replica=False pos=(47.4, 15.1, 0.0) render= state=
+2026-10-12T14:39:03.0163601Z ENTITY 4638147650663368899 MassiveMossCharger key=GG_Mega_Moss_Charger/Mega%20Moss%20Charger#0:MassiveMossCharger:Mossy Control host=True replica=False pos=(56.6, 9.8, 0.0) render=Mega Moss Charger/False/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Grass Shake/True/off=False,Grass Roar/True/off=False,Slam Effect R/True/off=False,Corpse Mega Moss Charger(Clone)/True/off=False,Grass Explode/True/off=False,Moss Charger Nibbler/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (1)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (2)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (3)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False state=Mossy Control=Hidden
+2026-10-12T14:39:03.0178096Z PASS camera authority state 0.3
+2026-10-12T14:39:03.0192396Z PASS camera lock state converges 0.3
+2026-10-12T14:39:03.0202936Z PASS visible bosses/knight and unfrozen camera 0.3
+2026-10-12T14:39:03.0202936Z ENGINE Player 0 left scene
+2026-10-12T14:39:03.0218682Z ENGINE Received PlayerConnect data for ID: 0
+2026-10-12T14:39:03.0218682Z PASS stale room/peer leave and duplicate connect preserve avatar 0.3
+2026-10-12T14:39:06.0818160Z PASS both checked.0.3
+2026-10-12T14:39:06.0838284Z PASS damage published 0.3
+2026-10-12T14:39:06.0838284Z PASS same boss HP 0.3
+2026-10-12T14:39:06.1202386Z PASS both hpchecked.0.3
+2026-10-12T14:39:06.1212422Z PASS late client holds transition
+2026-10-12T14:39:16.0707047Z ENGINE Scene changed from GG_Mega_Moss_Charger to GG_Hornet_1
+2026-10-12T14:39:16.2944722Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:16.7603034Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-12T14:39:24.7655553Z PASS native sequence room 0.4
+2026-10-12T14:39:34.7422592Z PASS both room.0.4
+2026-10-12T14:39:34.7427643Z PASS room authority 0.4
+2026-10-12T14:39:34.7622500Z ENGINE Player 0 entered scene
+2026-10-12T14:39:37.7455059Z PASS early room-level updates drained 0.4
+2026-10-12T14:39:37.7455059Z ROOM 0.4 scene=GG_Hornet_1 visit=6 authority=True hero=(19.5, 32.9, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-12T14:39:37.7465081Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(15.3, 28.6, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,A Dash Effect/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Throw Effect/True/off=False,G Dash Effect/True/off=False,Flash Effect/True/off=False state=Control=Jump Antic,Stun Control=Idle
+2026-10-12T14:39:37.7475108Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(30.3, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=
+2026-10-12T14:39:37.7475108Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-12T14:39:37.7490209Z PASS camera authority state 0.4
+2026-10-12T14:39:37.7526129Z PASS camera lock state converges 0.4
+2026-10-12T14:39:37.7526129Z PASS visible bosses/knight and unfrozen camera 0.4
+2026-10-12T14:39:37.7541247Z ENGINE Player 0 left scene
+2026-10-12T14:39:37.7541247Z ENGINE Received PlayerConnect data for ID: 0
+2026-10-12T14:39:37.7554899Z PASS stale room/peer leave and duplicate connect preserve avatar 0.4
+2026-10-12T14:39:40.7963674Z PASS both checked.0.4
+2026-10-12T14:39:40.7997744Z PASS damage published 0.4
+2026-10-12T14:39:40.8007933Z PASS same boss HP 0.4
+2026-10-12T14:39:40.8304359Z PASS both hpchecked.0.4
+2026-10-12T14:39:41.6773916Z ENGINE Scene changed from GG_Hornet_1 to Town
+2026-10-12T14:39:41.8239585Z PASS leave attempt
+2026-10-12T14:39:41.9051369Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:41.9244676Z PASS both left.0
+2026-10-12T14:39:41.9254722Z ENGINE Sending PlayerDisconnect packet
+2026-10-12T14:39:41.9281701Z ENGINE Disconnecting from server
+2026-10-12T14:39:41.9788727Z PASS disconnect between attempts
+2026-10-12T14:39:42.0024575Z PASS both disconnected
+2026-10-12T14:39:42.0039671Z ENGINE Connecting client to server: 127.0.0.1:29650 as retryguest
+2026-10-12T14:39:42.0122054Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:39:42.0134177Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:39:42.0706575Z ENGINE Received server info from server
+2026-10-12T14:39:42.2616807Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:39:42.3204642Z ENGINE Scene changed from  to Town
+2026-10-12T14:39:42.3395684Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:42.3419035Z PASS reconnect between attempts
+2026-10-12T14:39:42.3600232Z ENGINE Player 2 entered scene
+2026-10-12T14:39:42.3629992Z PASS both reconnected
+2026-10-12T14:39:42.9404188Z ENGINE Scene changed from Town to GG_Vengefly
+2026-10-12T14:39:43.0702536Z PASS first boss entry
+2026-10-12T14:39:43.0830314Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:47.1192186Z ENGINE Player 2 entered scene
+2026-10-12T14:39:47.1758651Z PASS late snapshot captured
+2026-10-12T14:39:47.1783079Z PASS both startroom.1
+2026-10-12T14:39:47.1793115Z PASS native sequence room 1.0
+2026-10-12T14:39:47.1821078Z PASS both room.1.0
+2026-10-12T14:39:47.1844844Z PASS room authority 1.0
+2026-10-12T14:39:50.1933912Z PASS early room-level updates drained 1.0
+2026-10-12T14:39:50.1938975Z ROOM 1.0 scene=GG_Vengefly visit=9 authority=True hero=(50.2, 16.4, 0.0) camera=(49.7, 15.8, -38.1) mode=LOCKED
+2026-10-12T14:39:50.1950322Z ENTITY 2683996848053998615 VengeflyKing key=GG_Vengefly/Giant%20Buzzer%20Col#0:VengeflyKing:Big Buzzer host=True replica=False pos=(55.5, 17.3, 0.0) render=Giant Buzzer Col/True/off=False,Corpse Giant Buzzer Col(Clone)/True/off=False state=Big Buzzer=Intro Roar Left
+2026-10-12T14:39:50.1960378Z ENTITY 9038138461003165773 CameraLockArea key=GG_Vengefly/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=True replica=False pos=(46.8, 17.9, 0.0) render= state=
+2026-10-12T14:39:50.1970746Z ENTITY 15139395741990023723 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#0:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.1970746Z ENTITY 10153850209585544951 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#1:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.1985497Z ENTITY 13502316710975428149 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#2:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.1997249Z ENTITY 11502806750921411993 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#3:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2002303Z ENTITY 10563492903526393913 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#4:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2002303Z ENTITY 15928950020807598379 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#5:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2015824Z ENTITY 15458220616909240025 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#6:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2025852Z ENTITY 14166134627067555111 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#7:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2025852Z ENTITY 18255558836519245603 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#8:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2035874Z ENTITY 12772859331157040451 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#9:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2040932Z ENTITY 13211034874096575719 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#10:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2061221Z ENTITY 12834084383081766763 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#11:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2061221Z ENTITY 11134905641242384561 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#12:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2071387Z ENTITY 11637555217634625831 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#13:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2081410Z ENTITY 17662366744651025951 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#14:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2081410Z ENTITY 10133832101620896385 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#15:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2091437Z ENTITY 12850631871280001875 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#16:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2106925Z ENTITY 16292493946188462523 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#17:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2117182Z ENTITY 16093510566042604273 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#18:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2131298Z ENTITY 10260495654721680771 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#19:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2136341Z ENTITY 18015875323034585313 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#20:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2151530Z ENTITY 11096849697508886513 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#21:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2161765Z ENTITY 9873868830894356657 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#22:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2184122Z ENTITY 14981520179507354425 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#23:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2194224Z ENTITY 12542277341215872033 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#24:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2194224Z ENTITY 12549434073966298775 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#25:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2204225Z ENTITY 10718625529094558645 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#26:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2215938Z ENTITY 17902664282819887097 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#27:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2220980Z ENTITY 14796092997503792387 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#28:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2220980Z ENTITY 13773203484600444529 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#29:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2220980Z ENTITY 10478484845723379081 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#30:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2250936Z ENTITY 13855907399574351867 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#31:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2271787Z ENTITY 13905883017094709937 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#32:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2271787Z ENTITY 15967592869259408817 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#33:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2306073Z ENTITY 12975837530137965745 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#34:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2306073Z ENTITY 14770923700453087365 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#35:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2320172Z ENTITY 18367193796440624763 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#36:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2325876Z ENTITY 16598835330836340313 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#37:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2325876Z ENTITY 10716061996015178043 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#38:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2335994Z ENTITY 16474371312767030471 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#39:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2335994Z ENTITY 17565086436932825659 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#40:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2351167Z ENTITY 14887951963720540255 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#41:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2356970Z ENTITY 9570231995689458351 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#42:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2373406Z ENTITY 17139023611647374825 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#43:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2383418Z ENTITY 14836881397250375761 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#44:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2383418Z ENTITY 15211137398774009017 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#45:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2393446Z ENTITY 17445588200438617309 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#46:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2408515Z ENTITY 9876130305720656153 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#47:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2408515Z ENTITY 13920761614655584165 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#48:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2421973Z ENTITY 16778450229890065801 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#49:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2432062Z ENTITY 11102195025338893339 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#50:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2447233Z ENTITY 16399437300738724305 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#51:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2447233Z ENTITY 17952413462642366493 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#52:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2457240Z ENTITY 13573682819962801229 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#53:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2462286Z ENTITY 15705866737531955253 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#54:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2475399Z ENTITY 13478492570470407707 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#55:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2485540Z ENTITY 17240829056500022085 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#56:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2490582Z ENTITY 17530540312208622075 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#57:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2505790Z ENTITY 13713467656600212693 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#58:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2531024Z ENTITY 9942145252624107437 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#59:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)/True/off=False state=
+2026-10-12T14:39:50.2553064Z PASS camera authority state 1.0
+2026-10-12T14:39:50.2565746Z PASS camera lock state converges 1.0
+2026-10-12T14:39:50.2565746Z PASS visible bosses/knight and unfrozen camera 1.0
+2026-10-12T14:39:50.2578753Z ENGINE Player 2 left scene
+2026-10-12T14:39:50.2589403Z ENGINE Received PlayerConnect data for ID: 2
+2026-10-12T14:39:50.2595151Z PASS stale room/peer leave and duplicate connect preserve avatar 1.0
+2026-10-12T14:39:53.7342215Z PASS both checked.1.0
+2026-10-12T14:39:53.7352265Z PASS damage published 1.0
+2026-10-12T14:39:53.7377079Z PASS same boss HP 1.0
+2026-10-12T14:39:53.7703449Z PASS both hpchecked.1.0
+2026-10-12T14:39:53.7727837Z PASS both anchor.1
+2026-10-12T14:39:53.7784008Z PASS late client holds transition
+2026-10-12T14:40:01.7822072Z ENGINE Scene changed from GG_Vengefly to GG_Gruz_Mother
+2026-10-12T14:40:01.9716851Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:40:02.4370783Z PASS authority native next boss GG_Vengefly
+2026-10-12T14:40:10.4392025Z PASS native sequence room 1.1
+2026-10-12T14:40:18.2693235Z PASS both room.1.1
+2026-10-12T14:40:18.2693235Z PASS room authority 1.1
+2026-10-12T14:40:18.2841057Z ENGINE Player 2 entered scene
+2026-10-12T14:40:21.2708208Z PASS early room-level updates drained 1.1
+2026-10-12T14:40:21.2720808Z ROOM 1.1 scene=GG_Gruz_Mother visit=10 authority=True hero=(93.1, 19.9, 0.0) camera=(94.2, 20.1, -38.1) mode=LOCKED
+2026-10-12T14:40:21.2725863Z ENTITY 6506528302334920627 CameraLockArea key=GG_Gruz_Mother/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=True replica=False pos=(94.2, 20.6, 0.0) render= state=
+2026-10-12T14:40:21.2739410Z ENTITY 3103033005459923505 GruzMother key=GG_Gruz_Mother/_Enemies#0/Giant%20Fly#0:GruzMother:Big Fly Control|bouncer_control host=True replica=False pos=(95.5, 23.7, 0.0) render=Giant Fly/True/off=False,Corpse Big Fly 1(Clone)/True/off=False state=Big Fly Control=Slam Up,bouncer_control=Stopped
+2026-10-12T14:40:21.2833049Z PASS camera authority state 1.1
+2026-10-12T14:40:21.2860149Z PASS camera lock state converges 1.1
+2026-10-12T14:40:21.2860149Z PASS visible bosses/knight and unfrozen camera 1.1
+2026-10-12T14:40:21.2870250Z ENGINE Player 2 left scene
+2026-10-12T14:40:21.2882254Z ENGINE Received PlayerConnect data for ID: 2
+2026-10-12T14:40:21.2904685Z PASS stale room/peer leave and duplicate connect preserve avatar 1.1
+2026-10-12T14:40:24.3225945Z PASS both checked.1.1
+2026-10-12T14:40:24.3237482Z PASS damage published 1.1
+2026-10-12T14:40:24.3251014Z PASS same boss HP 1.1
+2026-10-12T14:40:24.3559155Z PASS both hpchecked.1.1
+2026-10-12T14:40:24.3569333Z PASS late client holds transition
+2026-10-12T14:40:32.0364868Z ENGINE Scene changed from GG_Gruz_Mother to GG_False_Knight
+2026-10-12T14:40:32.2040656Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:40:32.3937675Z PASS authority native next boss GG_Gruz_Mother
+2026-10-12T14:40:40.3976462Z PASS native sequence room 1.2
+2026-10-12T14:40:48.2117785Z PASS both room.1.2
+2026-10-12T14:40:48.2127805Z PASS room authority 1.2
+2026-10-12T14:40:48.2322357Z ENGINE Player 2 entered scene
+2026-10-12T14:40:51.2137938Z PASS early room-level updates drained 1.2
+2026-10-12T14:40:51.2152890Z ROOM 1.2 scene=GG_False_Knight visit=11 authority=True hero=(24.1, 30.6, 0.0) camera=(25.1, 31.4, -38.1) mode=LOCKED
+2026-10-12T14:40:51.2152890Z ENTITY 3675315349804982313 BattleGate key=GG_False_Knight/Battle%20Gate%202#0:BattleGate:BG Control host=True replica=False pos=(18.5, 3.8, 0.0) render=Battle Gate 2/True/off=False,Dust/True/off=False,Close Effect/False/off=False,Raise Dust/True/off=False state=BG Control=Double Close
+2026-10-12T14:40:51.2167800Z ENTITY 18071748739765071 BattleGate key=GG_False_Knight/Battle%20Gate%203#0:BattleGate:BG Control host=True replica=False pos=(51.6, 3.9, 0.0) render=Battle Gate 3/True/off=False,Dust/True/off=False,Close Effect/True/off=False,Raise Dust/True/off=False state=BG Control=Close 2
+2026-10-12T14:40:51.2167800Z ENTITY 9116905824005710281 CameraLockArea key=GG_False_Knight/Battle%20Scene#0/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(31.6, 32.5, 0.0) render= state=
+2026-10-12T14:40:51.2180151Z ENTITY 6271568382922080675 FalseKnightBarrels key=GG_False_Knight/Battle%20Scene#0/FK%20Barrel%20Summon#0:FalseKnightBarrels:summon host=True replica=False pos=(29.1, 41.0, 0.0) render= state=summon=Idle
+2026-10-12T14:40:51.2180151Z ENTITY 4189473236617846725 FalseKnight key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0:FalseKnight:Check Health|FalseyControl host=True replica=False pos=(33.8, 39.5, 0.0) render=False Knight New/True/off=False,Roll Dust/True/off=False,Hitter/True/off=False,Jump Trail/True/off=False,Head/True/off=False,Slam Effect/True/off=False,Jump Slam Effect/True/off=False,Death Head/True/off=False,Staff/True/off=False,Staff Head/True/off=False,Slam Rocks/True/off=False,Rage Rocks/True/off=False,Armour Hit/True/off=False,Armour Smash/True/off=False,Dust Land Large/True/off=False,Dust Hit Plume/True/off=False state=FalseyControl=JA Fall,Check Health=Check
+2026-10-12T14:40:51.2196816Z ENTITY 8447741072119193881 FalseKnightHead key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0/Head#0:FalseKnightHead:Health Check host=True replica=False pos=(30.8, 234.5, 0.0) render=Head/True/off=False state=Health Check=Check 1
+2026-10-12T14:40:51.2305378Z PASS camera authority state 1.2
+2026-10-12T14:40:51.2319989Z PASS camera lock state converges 1.2
+2026-10-12T14:40:51.2332956Z PASS visible bosses/knight and unfrozen camera 1.2
+2026-10-12T14:40:51.2344714Z ENGINE Player 2 left scene
+2026-10-12T14:40:51.2354732Z ENGINE Received PlayerConnect data for ID: 2
+2026-10-12T14:40:51.2360284Z PASS stale room/peer leave and duplicate connect preserve avatar 1.2
+2026-10-12T14:40:54.2637470Z PASS both checked.1.2
+2026-10-12T14:40:54.2647519Z PASS damage published 1.2
+2026-10-12T14:40:54.2661804Z PASS same boss HP 1.2
+2026-10-12T14:40:54.2976480Z PASS both hpchecked.1.2
+2026-10-12T14:40:54.2987220Z PASS late client holds transition
+2026-10-12T14:40:54.2997983Z DEFEAT FK state=Fall hp=253 head=40 hero=(21.1, 32.1, 0.0) anim=Jump
+2026-10-12T14:40:56.3121859Z DEFEAT FK state=Stun Land hp=260 head=40 hero=(21.1, 32.1, 0.0) anim=Stun Roll
+2026-10-12T14:40:58.3266477Z DEFEAT FK state=Opened hp=260 head=40 hero=(21.1, 32.1, 0.0) anim=Stun Opened
+2026-10-12T14:41:00.3413285Z DEFEAT FK state=Fall 2 hp=260 head=40 hero=(21.1, 32.1, 0.0) anim=Jump
+2026-10-12T14:41:02.3495971Z DEFEAT FK state=Particle Pause hp=260 head=40 hero=(19.0, 33.1, 0.0) anim=Blank
+2026-10-12T14:41:04.3588690Z DEFEAT FK state=Rage hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Blank
+2026-10-12T14:41:06.3759044Z DEFEAT FK state=Idle hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Idle
+2026-10-12T14:41:08.3873499Z DEFEAT FK state=Pause Short hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Stun Roll End
+2026-10-12T14:41:10.4017603Z DEFEAT FK state=Rage Jump Antic hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Jump Antic
+2026-10-12T14:41:12.4093966Z DEFEAT FK state=R Attack Antic hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Attack Antic
+2026-10-12T14:41:14.4189550Z DEFEAT FK state=Particle Pause hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Blank
+2026-10-12T14:41:16.4294946Z DEFEAT FK state=Rage End hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Idle
+2026-10-12T14:41:18.4448698Z DEFEAT FK state=Stun Land hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Stun Roll
+2026-10-12T14:41:20.4522463Z DEFEAT FK state=Opened 2 hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Stun Opened
+2026-10-12T14:41:22.4603968Z DEFEAT FK state=Steam hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Death Spaz
+2026-10-12T14:41:24.4707312Z DEFEAT FK state=Ready hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Death Spaz
+2026-10-12T14:41:26.4842484Z DEFEAT FK state=Death Head Land hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Body
+2026-10-12T14:41:28.4935168Z DEFEAT FK state=Cough hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Body
+2026-10-12T14:41:30.5104633Z DEFEAT FK state=Cough hp=260 head=40 hero=(18.1, 33.6, 0.0) anim=Body
+2026-10-12T14:41:31.6065519Z ENGINE Scene changed from GG_False_Knight to GG_Mega_Moss_Charger
+2026-10-12T14:41:31.7559635Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:41:32.2359995Z PASS authority native next boss GG_False_Knight
+2026-10-12T14:41:40.2406612Z PASS native sequence room 1.3
+2026-10-12T14:41:44.0594756Z PASS both room.1.3
+2026-10-12T14:41:44.0604779Z PASS room authority 1.3
+2026-10-12T14:41:44.0868961Z ENGINE Player 2 entered scene
+2026-10-12T14:41:47.0656259Z PASS early room-level updates drained 1.3
+2026-10-12T14:41:47.0656259Z ROOM 1.3 scene=GG_Mega_Moss_Charger visit=12 authority=True hero=(40.9, 8.9, 0.0) camera=(41.9, 11.0, -38.1) mode=LOCKED
+2026-10-12T14:41:47.0670313Z ENTITY 4129537347362395435 CameraLockArea key=GG_Mega_Moss_Charger/CameraLockArea%20%282%29#0:CameraLockArea: host=True replica=False pos=(47.4, 15.1, 0.0) render= state=
+2026-10-12T14:41:47.0681246Z ENTITY 4638147650663368899 MassiveMossCharger key=GG_Mega_Moss_Charger/Mega%20Moss%20Charger#0:MassiveMossCharger:Mossy Control host=True replica=False pos=(56.6, 9.8, 0.0) render=Mega Moss Charger/False/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Grass Shake/True/off=False,Grass Roar/True/off=False,Slam Effect R/True/off=False,Corpse Mega Moss Charger(Clone)/True/off=False,Grass Explode/True/off=False,Moss Charger Nibbler/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (1)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (2)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (3)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False state=Mossy Control=Hidden
+2026-10-12T14:41:47.0695890Z PASS camera authority state 1.3
+2026-10-12T14:41:47.0706144Z PASS camera lock state converges 1.3
+2026-10-12T14:41:47.0720620Z PASS visible bosses/knight and unfrozen camera 1.3
+2026-10-12T14:41:47.0745712Z ENGINE Player 2 left scene
+2026-10-12T14:41:47.0759449Z ENGINE Received PlayerConnect data for ID: 2
+2026-10-12T14:41:47.0769505Z PASS stale room/peer leave and duplicate connect preserve avatar 1.3
+2026-10-12T14:41:50.1140525Z PASS both checked.1.3
+2026-10-12T14:41:50.1155602Z PASS damage published 1.3
+2026-10-12T14:41:50.1179087Z PASS same boss HP 1.3
+2026-10-12T14:41:50.1494214Z PASS both hpchecked.1.3
+2026-10-12T14:41:50.1504295Z PASS late client holds transition
+2026-10-12T14:41:59.8020593Z ENGINE Scene changed from GG_Mega_Moss_Charger to GG_Hornet_1
+2026-10-12T14:41:59.9542312Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:42:00.2095172Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-12T14:42:08.2164375Z PASS native sequence room 1.4
+2026-10-12T14:42:17.9989753Z PASS both room.1.4
+2026-10-12T14:42:17.9989753Z PASS room authority 1.4
+2026-10-12T14:42:18.0195392Z ENGINE Player 2 entered scene
+2026-10-12T14:42:21.0039499Z PASS early room-level updates drained 1.4
+2026-10-12T14:42:21.0049824Z ROOM 1.4 scene=GG_Hornet_1 visit=13 authority=True hero=(22.8, 34.6, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-12T14:42:21.0063016Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(28.3, 32.2, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,A Dash Effect/True/off=False,G Dash Effect/True/off=False,Throw Effect/True/off=False,Flash Effect/True/off=False state=Control=Sphere Recover A,Stun Control=Idle
+2026-10-12T14:42:21.0076193Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(16.5, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=
+2026-10-12T14:42:21.0086410Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-12T14:42:21.0194615Z PASS camera authority state 1.4
+2026-10-12T14:42:21.0204638Z PASS camera lock state converges 1.4
+2026-10-12T14:42:21.0218135Z PASS visible bosses/knight and unfrozen camera 1.4
+2026-10-12T14:42:21.0228227Z ENGINE Player 2 left scene
+2026-10-12T14:42:21.0242364Z ENGINE Received PlayerConnect data for ID: 2
+2026-10-12T14:42:21.0242364Z PASS stale room/peer leave and duplicate connect preserve avatar 1.4
+2026-10-12T14:42:24.0544986Z PASS both checked.1.4
+2026-10-12T14:42:24.0565378Z PASS damage published 1.4
+2026-10-12T14:42:24.0570444Z PASS same boss HP 1.4
+2026-10-12T14:42:24.0890985Z PASS both hpchecked.1.4
+2026-10-12T14:42:24.9366801Z ENGINE Scene changed from GG_Hornet_1 to Town
+2026-10-12T14:42:25.0769181Z PASS leave attempt
+2026-10-12T14:42:25.1178605Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:42:25.1382007Z PASS both left.1
+2026-10-12T14:42:25.1405313Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio
+2026-10-12T14:42:25.1531923Z ENGINE Player 2 entered scene

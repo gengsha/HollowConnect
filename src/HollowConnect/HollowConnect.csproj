@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine.AudioModule"><HintPath>../../vendor/references/UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
+    <InternalsVisibleTo Include="HollowConnect.Smoke" />
+    <ProjectReference Include="../HKMP/HKMP.csproj" />
+    <ProjectReference Include="../HollowConnect.Core/HollowConnect.Core.csproj" />
+    <Reference Include="Assembly-CSharp"><HintPath>../../vendor/references/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="MMHOOK_Assembly-CSharp"><HintPath>../../vendor/references/MMHOOK_Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="PlayMaker"><HintPath>../../vendor/references/PlayMaker.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>../../vendor/references/Newtonsoft.Json.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>../../vendor/references/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>../../vendor/references/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.Physics2DModule"><HintPath>../../vendor/references/UnityEngine.Physics2DModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule"><HintPath>../../vendor/references/UnityEngine.ParticleSystemModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.IMGUIModule"><HintPath>../../vendor/references/UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>../../vendor/references/UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.TextRenderingModule"><HintPath>../../vendor/references/UnityEngine.TextRenderingModule.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

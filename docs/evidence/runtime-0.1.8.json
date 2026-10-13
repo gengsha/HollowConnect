@@ -1,0 +1,81 @@
+{
+  "version": "0.1.8",
+  "engineVersion": "3.0.0-hc5",
+  "checkedAtUtc": "2026-10-12T13:03:46.5768922Z",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "8682B791138CB25EF1840F86C36292DCEDD5CA2E6456E256E5D20AB7EA1D478F"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "A75DDFC3ECCB053842774920A087F6AB755B9BE0E2B024F21FBC3DEEB99397A8"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "FFCEA0AE3A5F73DF15A12E7D0384B8710D4531493DAF3BFACCB56C0E4E997AC2"
+    }
+  ],
+  "runs": [
+    {
+      "name": "verified-full-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": false
+    },
+    {
+      "name": "verified-authority-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": false
+    },
+    {
+      "name": "verified-boss-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": false
+    },
+    {
+      "name": "verified-join-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": false
+    },
+    {
+      "name": "verified-godhome-guest-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": false
+    },
+    {
+      "name": "verified-godhome-host-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": false
+    },
+    {
+      "name": "verified-coverage-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": true
+    },
+    {
+      "name": "verified-coverage-reverse-018",
+      "hostPassed": true,
+      "guestPassed": true,
+      "binaryHashesMatch": true,
+      "observationalCoverageOnly": true
+    }
+  ],
+  "allRunsPassed": true,
+  "sameMachineUdp": true,
+  "twoMachineFrpValidation": false,
+  "exhaustiveBossValidation": false
+}

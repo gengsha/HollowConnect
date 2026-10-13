@@ -1,0 +1,63 @@
+2026-10-13T07:18:04.8650641Z native personal death probe; muted; all save overloads intercepted
+2026-10-13T07:18:04.8953908Z PASS menu ready
+2026-10-13T07:18:09.0132615Z PASS fresh unsaved personal checkpoint entered
+2026-10-13T07:18:09.0153326Z PASS actual personal bench marker exists
+2026-10-13T07:18:09.2436662Z PASS server started
+2026-10-13T07:18:11.0566242Z ENGINE Room prepared: Crossroads_47, visit=1, epoch=0, entities=1
+2026-10-13T07:18:11.0860307Z PASS real UDP connected
+2026-10-13T07:18:11.1027525Z ENGINE Room snapshot committed: Crossroads_47, visit=1, epoch=0, authority=True, peers=0
+2026-10-13T07:18:11.1037854Z PASS both connected
+2026-10-13T07:18:15.0608541Z ENGINE Room prepared: Crossroads_01, visit=2, epoch=0, entities=11
+2026-10-13T07:18:15.1642486Z PASS combat room entered
+2026-10-13T07:18:15.1652583Z PASS entry protection initially active
+2026-10-13T07:18:15.1652583Z PASS incoming hit cannot damage arriving player
+2026-10-13T07:18:15.2230364Z ENGINE Room snapshot committed: Crossroads_01, visit=2, epoch=0, authority=False, peers=1
+2026-10-13T07:18:16.0639617Z PASS native input camera and snapshot ready within reaction protection
+2026-10-13T07:18:16.0723671Z PASS protected terrain hit preserves native hazard recovery without health loss
+2026-10-13T07:18:18.2138235Z PASS native hazard recovery finishes during entry protection
+2026-10-13T07:18:18.5750437Z PASS protection expires after ready and reaction interval
+2026-10-13T07:18:18.5891740Z PASS normal damage resumes after protection
+2026-10-13T07:18:18.5902594Z PASS both ready in combat
+2026-10-13T07:18:18.5917255Z PASS scene authority and peer known
+2026-10-13T07:18:18.5953233Z PASS roster before reliable Down still gives exactly one cue
+2026-10-13T07:18:18.5963255Z PASS stale Down after rescue cannot repeat cue or overwrite life
+2026-10-13T07:18:19.8972347Z PASS one-shot native particles clean up
+2026-10-13T07:18:20.3096840Z PASS guest rescue down from native lethal hit
+2026-10-13T07:18:20.3107016Z PASS temporary down has no death animation
+2026-10-13T07:18:20.3107016Z PASS temporary down preserves geo and original shade state
+2026-10-13T07:18:20.3117084Z PASS local temporary down plays one native hit sound
+2026-10-13T07:18:20.3117084Z PASS rescue down animation cannot duplicate remote hit sound
+2026-10-13T07:18:20.3772009Z PASS rescue revives at one health
+2026-10-13T07:18:20.3784404Z PASS rescue has no formal death penalty
+2026-10-13T07:18:20.3934084Z PASS host checked rescue
+2026-10-13T07:18:20.3960177Z PASS guest down before give up
+2026-10-13T07:18:20.4187813Z NATIVE DEATH Map Zone gate=
+2026-10-13T07:18:20.4246565Z NATIVE DEATH Start gate=
+2026-10-13T07:18:21.3726439Z NATIVE DEATH Ash Particle gate=
+2026-10-13T07:18:22.6262865Z NATIVE DEATH Shade? gate=
+2026-10-13T07:18:24.5652941Z ENGINE Room prepared: Crossroads_47, visit=3, epoch=0, entities=1
+2026-10-13T07:18:25.0052935Z ENGINE Room snapshot committed: Crossroads_47, visit=3, epoch=0, authority=True, peers=0
+2026-10-13T07:18:25.0389091Z PASS native give-up returns to guest's own bench
+2026-10-13T07:18:25.0389091Z PASS formal give-up plays native Death animation
+2026-10-13T07:18:25.0399433Z PASS formal story death creates native geo-bearing shade state
+2026-10-13T07:18:25.0399433Z PASS personal bench and respawn type remain unchanged
+2026-10-13T07:18:25.0410522Z PASS individual death does not reset party
+2026-10-13T07:18:25.0451950Z PASS survivor remained in combat
+2026-10-13T07:18:25.8931993Z ENGINE Room prepared: Crossroads_01, visit=4, epoch=0, entities=11
+2026-10-13T07:18:25.9919454Z PASS guest rejoins native shade room
+2026-10-13T07:18:26.0324607Z ENGINE Room snapshot committed: Crossroads_01, visit=4, epoch=0, authority=False, peers=1
+2026-10-13T07:18:26.3092908Z PASS native personal shade spawned in death room
+2026-10-13T07:18:26.7273149Z PASS teammate checked while personal native shade is alive
+2026-10-13T07:18:26.7371615Z PASS native shade restores only owner's geo and soul
+2026-10-13T07:18:26.7510911Z PASS both ready for full failure
+2026-10-13T07:18:26.8145020Z NATIVE DEATH Start gate=
+2026-10-13T07:18:27.7687844Z NATIVE DEATH Ash Particle gate=
+2026-10-13T07:18:29.0196015Z NATIVE DEATH Shade? gate=
+2026-10-13T07:18:30.9629852Z ENGINE Room prepared: Crossroads_47, visit=5, epoch=1, entities=1
+2026-10-13T07:18:31.4914208Z ENGINE Room snapshot committed: Crossroads_47, visit=5, epoch=1, authority=True, peers=0
+2026-10-13T07:18:31.5416197Z PASS full team failure returns each to own bench
+2026-10-13T07:18:31.5430711Z PASS wipe never writes another player's checkpoint
+2026-10-13T07:18:31.5430711Z PASS wipe performs one native death penalty per player
+2026-10-13T07:18:31.5440900Z PASS native death animation and playable respawn complete
+2026-10-13T07:18:31.5630722Z PASS both disconnected normally
+2026-10-13T07:18:31.5642909Z FINAL PASS native personal death Crossroads_01

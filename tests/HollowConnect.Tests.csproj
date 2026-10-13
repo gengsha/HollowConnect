@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net472</TargetFramework><OutputType>Exe</OutputType><AssemblyName>HollowConnect.Tests</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Smoke/**/*.cs" />
+    <ProjectReference Include="../src/HollowConnect/HollowConnect.csproj" />
+    <Reference Include="Assembly-CSharp"><HintPath>../vendor/references/Assembly-CSharp.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>../vendor/references/UnityEngine.CoreModule.dll</HintPath></Reference>
+    <Reference Include="UnityEngine"><HintPath>../vendor/references/UnityEngine.dll</HintPath></Reference>
+    <Reference Include="Assembly-CSharp-firstpass"><HintPath>../vendor/references/Assembly-CSharp-firstpass.dll</HintPath></Reference>
+    <Reference Include="PlayMaker"><HintPath>../vendor/references/PlayMaker.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>

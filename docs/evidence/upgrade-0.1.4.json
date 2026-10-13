@@ -1,0 +1,13 @@
+{
+  "version": "0.1.4",
+  "regressionChecksPassed": 67,
+  "installerChecksPassed": 12,
+  "authorityAfterDestroyedEnemyPassed": true,
+  "hostTimeoutReopenSamePortPassed": true,
+  "fullCombatProbePassed": true,
+  "saveFilesChecked": 64,
+  "saveFilesUnchanged": true,
+  "installedPayloadHashesMatch": true,
+  "testPluginAbsent": true,
+  "originalUninstallBackupRetained": true
+}

@@ -1,0 +1,3 @@
+Windows portable installer fixtures, 2026-10-12
+RESULT 13 passed, 0 failed
+Checks: modern and legacy Steam libraries; multiple copies; manual executable selection; isolated system PowerShell modules; special-character paths/unrelated working directory; upgrade preserves original backup/skins/config; checksum rejection; failed update rollback; initial failure rollback; real locked-file partial rollback diagnostics; uninstall restores original baseline; standalone EXE detection.

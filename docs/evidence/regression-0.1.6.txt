@@ -1,0 +1,77 @@
+PASS new game's early hero event waits for matching scene preparation
+PASS ordinary transitions publish after preparation and distinguish reentry
+PASS old scene requests cannot publish into a different scene
+PASS disconnect discards pending and prepared scene entry
+PASS Mantis Claw is idempotent
+PASS abilities never regress
+PASS spells take maximum, not sum
+PASS invalid progress is rejected
+PASS maps, currency, health and equipment are private
+PASS all progression keys exist in this game build
+PASS progress union survives duplicates and random ordering
+PASS late heartbeat cannot revive downed guest
+PASS guest down then host down creates one wipe
+PASS host down then guest down creates one wipe
+PASS new attempt rejects stale down and presence
+PASS retry barrier waits for everyone
+PASS disconnect releases a pending retry barrier
+PASS late join participates in retry barrier
+PASS retry checkpoint is stable when the original anchor disconnects
+PASS loading player prevents false team wipe
+PASS rescue validates distance and death episode
+PASS rescue validates scene, life and freshness
+PASS rescue cannot happen twice
+PASS old down event cannot undo successful rescue
+PASS reliable death anchor overrides last heartbeat and cannot drift
+PASS second death event cannot move an existing shade
+PASS shade hit cannot revive another death episode
+PASS self hits and reset-round hits never revive
+PASS death anchor rejects nonfinite positions and invalid scene
+PASS give up uses personal bench without resetting the surviving teammate
+PASS alive players and missing checkpoints cannot give up
+PASS duplicate give up and new down events cannot interrupt returning
+PASS rescue and give up accept only the first successful action
+PASS old death and round cannot request or finish a bench return
+PASS bench destination stays frozen during return
+PASS bench arrival requires the authorized scene and finite position
+PASS late old-room heartbeat cannot overwrite a completed bench return
+PASS later bench heartbeat arriving before acknowledgement does not block arrival
+PASS returning teammate prevents a false full-team failure
+PASS give up cannot bypass full-team failure
+PASS out-of-order position is ignored
+PASS invalid and unavailable map coordinates never display
+PASS map center and edges use actual room geometry
+PASS custom map origin offset is respected
+PASS invalid map dimensions do not produce stale positions
+PASS offscreen diagonal arrow stays within viewport
+PASS message roundtrip preserves Chinese names and life version
+PASS events require reliable non-dropping delivery
+PASS warp roundtrip preserves pantheon runtime context
+PASS malformed pantheon context is rejected before use
+PASS native boss completion is reliable and retained in room snapshots
+PASS HKMP addon collection decodes all messages using the live receiver factory
+PASS malformed protocol message is rejected
+PASS entity position preserves room visit and attempt
+PASS entity spawn preserves scene scope
+PASS authority transfer carries health and terminal death snapshot
+PASS server health cache rejects stale values
+PASS terminal death is an immutable tombstone
+PASS server health snapshot converges under random reordering
+PASS five simultaneous real DTLS clients remain isolated and listener restarts
+PASS stopping after a peer closes DTLS permits reopening the same server port
+PASS failed bind can be stopped safely and retried on the same port
+PASS maximum-size fragmented datagram survives reverse order and duplicates
+PASS lost fragment does not consume a later heartbeat
+PASS five simultaneous fragmented peers with equal message IDs remain isolated
+PASS fragment expiry and bounded pending messages allow later heartbeats
+PASS malformed or truncated datagrams cannot corrupt the following packet
+PASS five real DTLS peers keep heartbeats after interleaved reordered and lost fragments
+PASS stopped chunk worker and queued old chunks cannot leak into a new session
+PASS acknowledged chunk flags are reset on reconnect and completion cannot spin
+PASS queued callbacks from a retired client session never execute
+PASS server rejection fully releases the client DTLS session
+PASS future chunk fragments cannot contaminate the active chunk
+PASS rapid handshake cancellation, rejection and old timeouts cannot affect a new DTLS session
+PASS disconnect or reconnect inside a completed chunk callback preserves the new receiver
+PASS malformed slice bounds and lengths cannot corrupt a following valid chunk
+RESULT 76 passed, 0 failed

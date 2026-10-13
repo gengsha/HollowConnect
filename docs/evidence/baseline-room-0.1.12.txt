@@ -1,0 +1,33 @@
+Controlled failure injection on original 0.1.12 HKMP.dll; SHA256 F80DA3601DF693BA318B61512C2721CA8B18653370CFE3DAB4A80CA6F648666B.
+Executed native AudioPlayInState on the Moss replica, then destroyed AudioSource before native completion / room unload.
+This is a controlled ordering probe, not a full natural-play reproduction.
+
+2026-10-13T06:11:24.0685036Z UNITY EXCEPTION NullReferenceException
+UnityEngine.AudioSource.Stop () (at <aebd322417b84b41ad280fa7ff609f00>:0)
+Hkmp.Game.Client.Entity.Action.EntityFsmActions+<>c__DisplayClass148_0.<ApplyNetworkDataFromAction>b__0 () (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.Action.EntityFsmActions+ActionInState.ExitState () (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.Action.EntityFsmActions.ForgetActions (UnityEngine.GameObject owner) (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.Entity.Destroy () (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.EntityManager.ClearEntities (System.Boolean sceneChanged) (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.EntityManager.OnSceneChanged (UnityEngine.SceneManagement.Scene oldScene, UnityEngine.SceneManagement.Scene newScene) (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+UnityEngine.SceneManagement.SceneManager.Internal_ActiveSceneChanged (UnityEngine.SceneManagement.Scene previousActiveScene, UnityEngine.SceneManagement.Scene newActiveScene) (at <047294ce45cf4b9a9441e48d2b8435e4>:0)
+UnityEngine.SceneManagement.SceneManager:UnloadScene(String)
+<>c__DisplayClass174_0:<BeginSceneTransitionRoutine>b__2()
+<BeginRoutine>d__35:MoveNext()
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+
+2026-10-13T06:11:24.0794531Z UNITY EXCEPTION NullReferenceException
+UnityEngine.AudioSource.Stop () (at <aebd322417b84b41ad280fa7ff609f00>:0)
+Hkmp.Game.Client.Entity.Action.EntityFsmActions+<>c__DisplayClass148_0.<ApplyNetworkDataFromAction>b__0 () (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.Action.EntityFsmActions+ActionInState.ExitState () (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.Action.EntityFsmActions.ForgetActions (UnityEngine.GameObject owner) (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.Entity.Destroy () (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+Hkmp.Game.Client.Entity.EntityManager.OnSceneUnloaded (UnityEngine.SceneManagement.Scene scene) (at <3e5f9aadb537417190f4901fc5f37d65>:0)
+UnityEngine.SceneManagement.SceneManager.Internal_SceneUnloaded (UnityEngine.SceneManagement.Scene scene) (at <047294ce45cf4b9a9441e48d2b8435e4>:0)
+UnityEngine.SceneManagement.SceneManager:UnloadScene(String)
+<>c__DisplayClass174_0:<BeginSceneTransitionRoutine>b__2()
+<BeginRoutine>d__35:MoveNext()
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+
+Host result: Timeout: room authority lifecycle-hornet.
+Guest result: Remote knight invisible lifecycle-hornet.

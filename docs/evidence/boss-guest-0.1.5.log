@@ -1,0 +1,16 @@
+2026-10-11T14:38:56.7210680Z PASS menu ready
+2026-10-11T14:39:00.9830177Z PASS unsaved character ready
+2026-10-11T14:39:00.9843291Z PASS server ready
+2026-10-11T14:39:01.7501630Z PASS boss test handshake
+2026-10-11T14:39:01.7610382Z PASS both connected
+2026-10-11T14:39:05.2674314Z PASS native False Knight room
+2026-10-11T14:39:05.3579532Z PASS boss authority initialized
+2026-10-11T14:39:05.3593845Z PASS both in arena
+2026-10-11T14:39:14.2835925Z PASS guest receives exposed boss phase and head health
+2026-10-11T14:39:15.3339571Z PASS authority transfers during exposed phase
+2026-10-11T14:39:15.3339571Z PASS handoff preserves live exposed phase and both health values
+2026-10-11T14:39:21.6307540Z PASS native head defeat advances phase after transfer
+2026-10-11T14:39:23.9309035Z PASS boss AI moves after phase handoff
+2026-10-11T14:39:23.9309035Z PASS continued armor damage remains live after transfer
+2026-10-11T14:39:25.0677940Z PASS returning client sees continued boss
+2026-10-11T14:39:25.0690429Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence

@@ -1,0 +1,329 @@
+2026-10-11T16:31:36.4949375Z PASS menu ready
+2026-10-11T16:31:40.8656065Z PASS unsaved character ready
+2026-10-11T16:31:40.8666264Z PASS server ready
+2026-10-11T16:31:41.9974705Z PASS handshake
+2026-10-11T16:31:41.9997483Z PASS both connected
+2026-10-11T16:31:43.2904013Z PASS host warp destination
+2026-10-11T16:31:43.4857503Z PASS warp target presence
+2026-10-11T16:31:45.2916583Z PASS F8 cross-room arrival
+2026-10-11T16:31:47.2928786Z WARP FADE before=1 after=2 control=False camera=FOLLOWING
+2026-10-11T16:31:47.3062842Z FADE FSM Geo Text/Fader=Upped
+2026-10-11T16:31:47.3074787Z FADE FSM Low Health Light/Fader=Down
+2026-10-11T16:31:47.3101768Z FADE FSM tk2dCamera/CameraFade=Normal
+2026-10-11T16:31:47.3114675Z FADE FSM Add Text/Fader=Down
+2026-10-11T16:31:47.3218657Z FADE FSM Subtract Text/Fader=Down
+2026-10-11T16:31:47.3238690Z FADE FSM HeroLight/color_fader=Init
+2026-10-11T16:31:47.3248869Z FADE FSM SD Charge Wall/color_fader=Init
+2026-10-11T16:31:47.3248869Z FADE FSM SD Charge/color_fader=Init
+2026-10-11T16:31:47.3334361Z PASS F8 restores fade, input and camera
+2026-10-11T16:31:48.3001292Z PASS host leaves
+2026-10-11T16:31:51.6932080Z PASS both warp directions
+2026-10-11T16:31:51.6964171Z BUILTIN SEQUENCES Boss Sequence Test/1,Boss Sequence Tier 1/12,Boss Sequence Tier 2/12,Boss Sequence Tier 3/12,Boss Sequence Tier 4/12,Boss Sequence Tier 5/53
+2026-10-11T16:31:51.7004752Z SEQUENCE SCENES 0/GG_Hive_Knight,1/GG_Ghost_Hu,2/GG_Collector,3/GG_God_Tamer,4/GG_Grimm,5/GG_Spa,6/GG_Ghost_Galien,7/GG_Grey_Prince_Zote,8/GG_Uumuu,9/GG_Hornet_2,10/GG_Engine,11/GG_Sly
+2026-10-11T16:31:51.7053776Z THIRD PANTHEON Boss Sequence Tier 3 starting at Grimm index=4
+2026-10-11T16:31:55.1087700Z PASS Grimm arena entered
+2026-10-11T16:31:55.1374158Z PASS Grimm authority ready
+2026-10-11T16:31:55.1384943Z AUTHORITY=False
+2026-10-11T16:31:55.1412596Z ENTITY 0 Grimm pos=(92.0, 8.3, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:31:55.1412596Z FSM Control=
+2026-10-11T16:31:55.1425381Z STATE Init SendEventByName,CallStaticMethod,GetOwner,FindChild,FindChild,FindChild,SetGameObject,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,SetParent,SetPosition,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild
+2026-10-11T16:31:55.1437299Z INIT CALL className=FakeBat
+2026-10-11T16:31:55.1437299Z INIT CALL methodName=NotifyAllBossAwake
+2026-10-11T16:31:55.1449513Z INIT CALL parameters=HutongGames.PlayMaker.FsmVar[]
+2026-10-11T16:31:55.1449513Z INIT CALL storeResult=None
+2026-10-11T16:31:55.1449513Z INIT CALL everyFrame=False
+2026-10-11T16:31:55.1462311Z STATE Slash Antic FaceObject,AudioPlayerOneShotSingle,Tk2dPlayAnimation,Wait,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1462311Z STATE Slash 1 GetScale,AudioPlayerOneShotSingle,FloatOperator,SetVelocity2d,Tk2dPlayAnimationWithEvents,SetPolygonCollider,ActivateGameObject,PlayParticleEmitter
+2026-10-11T16:31:55.1462311Z STATE Slash 2 Tk2dPlayAnimationWithEvents,SetPolygonCollider,SetPolygonCollider
+2026-10-11T16:31:55.1476362Z STATE Slash 3 Tk2dPlayAnimationWithEvents,SetPolygonCollider,SetPolygonCollider
+2026-10-11T16:31:55.1486541Z STATE Slash Recover DecelerateV2,Tk2dPlayAnimationWithEvents,SetPolygonCollider,StopParticleEmitter
+2026-10-11T16:31:55.1486541Z STATE Slash End SetVelocity2d
+2026-10-11T16:31:55.1497537Z STATE Stun Reset SetPolygonCollider,StopParticleEmitter,ActivateGameObject,SetFsmBool,SetPolygonCollider,SetPolygonCollider,SetPolygonCollider,ActivateGameObject,SetBoolValue,ActivateGameObject,SetRotation,SendEventByName,StopParticleEmitter,StopParticleEmitter,StopParticleEmitter,SetDamageHeroAmount
+2026-10-11T16:31:55.1497537Z STATE FB Antic FaceObject,Tk2dPlayAnimation,Wait,AudioPlayerOneShotSingle,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1607291Z STATE FB Cast Wait,Tk2dPlayAnimation,BoolTest,ActivateGameObject,ActivateGameObject,AudioPlayerOneShotSingle
+2026-10-11T16:31:55.1607291Z STATE FB Cast End Wait,Tk2dPlayAnimation,ActivateGameObject
+2026-10-11T16:31:55.1607291Z STATE Firebat 1 GetScale,FloatOperator,SpawnObjectFromGlobalPool,SpawnObjectFromGlobalPool,SetVelocity2d,SetFsmFloat,Wait,AudioPlayerOneShotSingle
+2026-10-11T16:31:55.1621041Z STATE Firebat 2 GetScale,FloatOperator,SpawnObjectFromGlobalPool,SpawnObjectFromGlobalPool,SetVelocity2d,SetFsmFloat,Wait,AudioPlayerOneShotSingle
+2026-10-11T16:31:55.1621041Z STATE Firebat 3 ActivateGameObject,SetBoolValue,GetScale,FloatOperator,FloatMultiply,SpawnObjectFromGlobalPool,SpawnObjectFromGlobalPool,SetVelocity2d,SetFsmFloat,Wait,AudioPlayerOneShotSingle
+2026-10-11T16:31:55.1621041Z STATE Tele Out Tk2dPlayAnimationWithEvents,SetRotation,SetVelocity2d,SendEventByName,AudioPlayerOneShotSingle
+2026-10-11T16:31:55.1635794Z STATE Out Pause SetMeshRenderer,SendEventByName,Wait,SendEventByName,SetDamageHeroAmount,TransitionToAudioSnapshot,ActivateGameObject
+2026-10-11T16:31:55.1635794Z STATE Move Choice SetBoolValue,SendRandomEventV3
+2026-10-11T16:31:55.1647720Z STATE FB Hero Pos GetPosition,FloatCompare
+2026-10-11T16:31:55.1647720Z STATE FB Tele R RandomFloat,SetPosition
+2026-10-11T16:31:55.1647720Z STATE FB Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-11T16:31:55.1663774Z STATE FB Tele L RandomFloat,SetPosition
+2026-10-11T16:31:55.1663774Z STATE FB Behind Tk2dPlayAnimationWithEvents,ActivateGameObject,ActivateGameObject
+2026-10-11T16:31:55.1663774Z STATE FB Re Tele SetMeshRenderer,SendEventByName,SetBoolValue,ActivateGameObject
+2026-10-11T16:31:55.1674263Z STATE Slash Pos GetPosition,GetPosition,RandomFloat,RandomlyFlipFloat,FloatOperator,FloatInRange,FloatInRange,ActivateGameObject
+2026-10-11T16:31:55.1674263Z STATE Slash Retry NextFrameEvent
+2026-10-11T16:31:55.1688724Z STATE Slash Tele In FaceObject,ActivateGameObject,AudioPlayerOneShotSingle,SetPosition,ActivateGameObject,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-11T16:31:55.1688724Z STATE AD Pos GetPosition,GetPosition,RandomFloat,RandomlyFlipFloat,FloatOperator,FloatInRange
+2026-10-11T16:31:55.1698787Z STATE AD Retry NextFrameEvent
+2026-10-11T16:31:55.1698787Z STATE AD Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,SetPosition,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-11T16:31:55.1698787Z STATE AD Antic GetAngleToTarget2D,AudioPlayerOneShotSingle,FloatClamp,Tk2dPlayAnimationWithEvents,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1711160Z STATE AD Fire Tk2dPlayAnimation,AudioPlayerOneShotSingle,ActivateGameObject,SetVelocityAsAngle,GetPosition,FloatCompare,FaceAngle
+2026-10-11T16:31:55.1711160Z STATE GD Antic Tk2dPlayAnimation,AudioPlayerOneShotSingle,SendEventByName,SetVelocity2d,Wait,FaceObject,SetRotation,ActivateGameObject
+2026-10-11T16:31:55.1711160Z STATE AD Edge SetFloatValue,SetVelocityAsAngle,GetPosition,FloatCompare,FaceAngle
+2026-10-11T16:31:55.1725139Z STATE G Dash GetScale,AudioPlayerOneShotSingle,ActivateGameObject,FloatOperator,SetVelocity2d,Tk2dPlayAnimationWithEvents,SetPolygonCollider,Wait,PlayParticleEmitter
+2026-10-11T16:31:55.1725139Z STATE G Dash Recover Tk2dPlayAnimationWithEvents,DecelerateXY,SetPolygonCollider,Wait,StopParticleEmitter
+2026-10-11T16:31:55.1738224Z STATE Spike Pos GetPosition,GetPosition,RandomFloat,RandomlyFlipFloat,FloatOperator,FloatInRange,FloatInRange
+2026-10-11T16:31:55.1738224Z STATE Spike Retry NextFrameEvent
+2026-10-11T16:31:55.1738224Z STATE Spike Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,SetPosition,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-11T16:31:55.1750646Z STATE Spike Antic Tk2dPlayAnimation,Wait,AudioPlayerOneShotSingle,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1750646Z STATE Spike Attack SendEventByName,SendEventToRegister,Wait
+2026-10-11T16:31:55.1760802Z STATE Balloon Check GetDistance,FloatCompare
+2026-10-11T16:31:55.1760802Z STATE Balloon Retry NextFrameEvent
+2026-10-11T16:31:55.1760802Z STATE Balloon Pos SetPosition,SetIntValue,SetIntValue,SendEventByName
+2026-10-11T16:31:55.1774939Z STATE Balloon Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-11T16:31:55.1774939Z STATE Balloon Antic Tk2dPlayAnimationWithEvents,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1774939Z STATE Inflate AudioPlayerOneShotSingle,SendEventByName,SetTag,SetInvincible,SendEventByName,RandomFloat,Tk2dPlayAnimation,FaceObject,ActivateGameObject,SendEventByName,SetFsmBool,ActivateGameObject,PlayParticleEmitter,AudioPlaySimple
+2026-10-11T16:31:55.1788801Z STATE Deflate ActivateGameObject,SetInvincible,SendEventByName,SetTag,SetFsmBool,Tk2dPlayAnimation,AudioPlayerOneShotSingle,AudioStop
+2026-10-11T16:31:55.1788801Z STATE Fire Repeat IntAdd,IntAdd,IntCompare,IntCompare
+2026-10-11T16:31:55.1788801Z STATE Fire Low R SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-11T16:31:55.1803132Z STATE Fire Mid R SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-11T16:31:55.1803132Z STATE Fire High R SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-11T16:31:55.1815688Z STATE Alt SetIntValue,SetFloatValue,SpawnObjectFromGlobalPool,SetDamageHeroAmount,FireGrimmBall,SetVelocity2d,SpawnObjectFromGlobalPool,SetDamageHeroAmount,FireGrimmBall,SetVelocity2d,SpawnObjectFromGlobalPool,SetDamageHeroAmount,SetFloatValue,FireGrimmBall,SetVelocity2d,SpawnObjectFromGlobalPool,SetDamageHeroAmount,FireGrimmBall,SetVelocity2d
+2026-10-11T16:31:55.1815688Z STATE Fire Pause Wait
+2026-10-11T16:31:55.1829444Z STATE End Pause Wait,StopParticleEmitter
+2026-10-11T16:31:55.1834484Z STATE Fire Low L SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-11T16:31:55.1834484Z STATE Fire Mid L SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-11T16:31:55.1846540Z STATE Fire High L SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-11T16:31:55.1851577Z STATE Down FlingObjectsFromGlobalPool,FlingObjectsFromGlobalPool,FlingObjectsFromGlobalPool
+2026-10-11T16:31:55.1851577Z STATE Set Balloon HP GetHP,IntOperator,IntOperator,IntOperator,IntOperator
+2026-10-11T16:31:55.1861647Z STATE Balloon? GetHP,IntTestToBool,IntTestToBool,IntTestToBool,BoolTestMulti,BoolTestMulti,BoolTestMulti
+2026-10-11T16:31:55.1861647Z STATE Set Balloon 1 SetBoolValue
+2026-10-11T16:31:55.1872161Z STATE Set Balloon 2 SetBoolValue
+2026-10-11T16:31:55.1872161Z STATE Set Balloon 3 SetBoolValue
+2026-10-11T16:31:55.1883395Z STATE Bow GGCheckIfBossScene,ApplyMusicCue,GGCheckIfBossScene,TransitionToAudioSnapshot,Wait,Tk2dPlayAnimation
+2026-10-11T16:31:55.1883395Z STATE Bow Return Tk2dPlayAnimationWithEvents
+2026-10-11T16:31:55.1883395Z STATE Roar Antic Tk2dPlayAnimationWithEvents
+2026-10-11T16:31:55.1897375Z STATE Roar Tk2dPlayAnimation,AudioPlayerOneShotSingle,Wait,SendEventByName,CreateObject
+2026-10-11T16:31:55.1897375Z STATE Roar End SendEventByName,SendEventByName,Tk2dPlayAnimationWithEvents
+2026-10-11T16:31:55.1911380Z STATE Tele Out 2 Tk2dPlayAnimationWithEvents,SetRotation,SetVelocity2d,AudioPlayerOneShotSingle,ActivateGameObject
+2026-10-11T16:31:55.1911380Z STATE Out Pause 2 SetMeshRenderer,SendEventByName,Wait,SendEventByName
+2026-10-11T16:31:55.1911380Z STATE Evade Antic FaceObject,Tk2dPlayAnimationWithEvents,SetBoolValue,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1924971Z STATE Evade GetScale,AudioPlayerOneShotSingle,FloatOperator,SetVelocity2d,Tk2dPlayAnimationWithEvents,ActivateGameObject,Wait,PlayParticleEmitter,AudioPlayInState
+2026-10-11T16:31:55.1924971Z STATE Evade End Tk2dPlayAnimationWithEvents,SetVelocity2d,StopParticleEmitter
+2026-10-11T16:31:55.1924971Z STATE After Evade GetXDistance,FloatCompare
+2026-10-11T16:31:55.1937840Z STATE Auto Evade? RayCast2d,ActivateGameObject,BoolTest,SendRandomEvent
+2026-10-11T16:31:55.1937840Z STATE To Firebats SetIntValue,SetIntValue
+2026-10-11T16:31:55.1950682Z STATE Stun SpawnObjectFromGlobalPool,SetVelocity2d,Tk2dPlayAnimationWithEvents
+2026-10-11T16:31:55.1950682Z STATE Explode Tk2dPlayAnimationWithEvents,ActivateAllChildren,CallStaticMethod,SendEventByName,SendEventByName,AudioPlayerOneShotSingle,AudioPlaySimple,TransitionToAudioSnapshot,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1960730Z STATE Exploded SetMeshRenderer,Wait
+2026-10-11T16:31:55.1960730Z STATE Call Bats CallStaticMethod,SendEventByName,SetFsmBool,Wait,FadeAudio,AudioPlaySimple
+2026-10-11T16:31:55.1960730Z STATE Reformed SetFsmBool,SendEventByName,SendEventByName,SendEventByName,Wait,ActivateGameObject,TransitionToAudioSnapshot,AudioPlayerOneShotSingle,AudioStop,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1974421Z STATE Reforming ActivateGameObject,Tk2dPlayAnimationWithEvents,AudioPlayerOneShotSingle,AudioPlayerOneShotSingle
+2026-10-11T16:31:55.1974421Z STATE Adjust HP GetHP,IntClamp,GetHP,IntOperator,SetHP
+2026-10-11T16:31:55.1985966Z STATE Death Start AudioStop,SendEventByName,StopParticleEmitter,ActivateGameObject,ActivateGameObject,SetFsmBool,SendEventByName,AudioPlayerOneShotSingle,AudioPlayerOneShotSingle,SendMessage,SpawnRandomObjectsV2,SpawnRandomObjectsV2,ActivateGameObject,Tk2dPlayAnimation,FaceObject,SetVelocity2d,SetRotation,Wait,TransitionToAudioSnapshot,SetPolygonCollider,SetPolygonCollider,SetPolygonCollider,SetPolygonCollider,ActivateGameObject,ActivateGameObject,SetRotation,SendEventByName,StopParticleEmitter,StopParticleEmitter,StopParticleEmitter,SetDamageHeroAmount,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.1985966Z STATE Steam ObjectJitter,AudioPlayerOneShotSingle,AudioPlayerOneShotSingle,PlayParticleEmitter,PlayParticleEmitter,SendEventByName,SetFsmBool,FloatAdd,FloatAdd,FloatClamp,SetParticleEmissionRate,SetParticleEmissionSpeed,Wait
+2026-10-11T16:31:55.1996760Z STATE Death Explode StopParticleEmitter,SendEventByName,StopParticleEmitter,SendEventByName,SetFsmBool,SetMeshRenderer,ActivateGameObject,PlayParticleEmitter,Wait,AudioPlayerOneShotSingle,GGCheckIfBossScene
+2026-10-11T16:31:55.1996760Z STATE Send NPC Event SendEventByName
+2026-10-11T16:31:55.1996760Z STATE Uppercut Antic SetVelocity2d,Tk2dPlayAnimation,Wait,ActivateGameObject,AudioStop,AudioPlayerOneShot
+2026-10-11T16:31:55.2008909Z STATE Uppercut Up Tk2dPlayAnimation,PlayParticleEmitter,AudioPlayerOneShotSingle,GetScale,FloatOperator,SetVelocity2d,GetPosition,FloatCompare,Wait
+2026-10-11T16:31:55.2008909Z STATE UP Explode SetPosition,StopParticleEmitter,AudioPlayerOneShotSingle,Tk2dPlayAnimationWithEvents,SetVelocity2d,SetMeshRenderer,SendEventByName,PlayParticleEmitter,Wait,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,ActivateGameObject
+2026-10-11T16:31:55.2008909Z STATE Uppercut? BoolTest
+2026-10-11T16:31:55.2023180Z STATE Explode Pause SetMeshRenderer,Wait
+2026-10-11T16:31:55.2023180Z STATE HP Scale GetPlayerDataInt,IntAdd,IntSwitch
+2026-10-11T16:31:55.2023180Z STATE Set 1 SetHP
+2026-10-11T16:31:55.2037316Z STATE Set 2 SetHP
+2026-10-11T16:31:55.2037316Z STATE Set 3 SetHP
+2026-10-11T16:31:55.2037316Z STATE Set 4 SetHP
+2026-10-11T16:31:55.2051461Z STATE Set 5 SetHP
+2026-10-11T16:31:55.2051461Z STATE Send Death Event SendHealthManagerDeathEvent
+2026-10-11T16:31:55.2061522Z STATE GG Bow GetParent,FindChild,ActivateGameObject,SetMeshRenderer,AnimatorPlayStateWait,AudioPlayerOneShotSingle
+2026-10-11T16:31:55.2061522Z STATE GG Bow Wait Wait
+2026-10-11T16:31:55.2073548Z STATE GG Bow Return AnimatorPlayStateWait
+2026-10-11T16:31:55.2073548Z STATE GG Cancel Bow ActivateGameObject,SetMeshRenderer
+2026-10-11T16:31:55.2085224Z STATE GG Bow Hide SetFsmGameObject,ActivateGameObject,SetMeshRenderer
+2026-10-11T16:31:55.2085224Z STATE Music TransitionToAudioSnapshot,GGCheckIfBossScene,TransitionToAudioSnapshot
+2026-10-11T16:31:55.2096295Z FSM constrain_x=
+2026-10-11T16:31:55.2096295Z STATE Idle GetPosition,FloatCompare,FloatCompare
+2026-10-11T16:31:55.2096295Z STATE Constrain L SetPosition,GotoPreviousState
+2026-10-11T16:31:55.2111179Z STATE Constrain R SetPosition,GotoPreviousState
+2026-10-11T16:31:55.2111179Z STATE Inert 
+2026-10-11T16:31:55.2124139Z STATE Constrain L Only GetPosition,FloatCompare
+2026-10-11T16:31:55.2124139Z STATE Constrain R Only GetPosition,FloatCompare
+2026-10-11T16:31:55.2136953Z FSM Stun=
+2026-10-11T16:31:55.2136953Z STATE Init GetOwner
+2026-10-11T16:31:55.2150100Z STATE Idle 
+2026-10-11T16:31:55.2150100Z STATE In Combo IntAdd,IntAdd,IntCompare,Wait
+2026-10-11T16:31:55.2150100Z STATE Reset Counter SetIntValue
+2026-10-11T16:31:55.2161546Z STATE Continue Combo IntCompare
+2026-10-11T16:31:55.2161546Z STATE Stun IntCompare,IntAdd,SendEventByName,SetIntValue,SetIntValue
+2026-10-11T16:31:55.2175151Z STATE Max Check GetTag,IntCompare
+2026-10-11T16:31:55.2175151Z STATE Stop 
+2026-10-11T16:31:55.2175151Z STATE Unstun Increment IntAdd
+2026-10-11T16:31:55.2188084Z STATE Reset 
+2026-10-11T16:31:55.2198166Z STATE Heavy Blow PlayerDataBoolTest,IntOperator,IntOperator
+2026-10-11T16:31:55.2198166Z FSM Constrain Y=
+2026-10-11T16:31:55.2198166Z STATE Check GetPosition,FloatCompare
+2026-10-11T16:31:55.2211389Z STATE Constrain SetFloatValue,SetPosition
+2026-10-11T16:31:55.2261074Z FIREBAT ASSET Firebat Pillar(Clone) fsms=damages_hero,Control
+2026-10-11T16:31:55.2271216Z FIREBAT ASSET Firebat Pillar(Clone) fsms=damages_hero,Control
+2026-10-11T16:31:55.2271216Z FIREBAT ASSET Firebat Pillar(Clone) fsms=damages_hero,Control
+2026-10-11T16:31:55.2284965Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-11T16:31:55.2284965Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-11T16:31:55.2297195Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-11T16:31:55.2297195Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-11T16:31:55.2297195Z FIREBAT ASSET Firebat Spawn fsms=
+2026-10-11T16:31:55.2453860Z FIREBAT ASSET Grimm Firebat fsms=Control
+2026-10-11T16:31:55.2453860Z FIREBAT ASSET Firebat Pillar fsms=damages_hero,Control
+2026-10-11T16:31:55.2469013Z FIREBAT ASSET Firebat Spawn fsms=
+2026-10-11T16:31:55.2479064Z FIREBAT SPAWN Firebat 1 enabled=True prefab=Grimm Firebat fsms=Control
+2026-10-11T16:31:55.2489420Z FIREBAT SPAWN Firebat 1 enabled=True prefab=Firebat Pillar fsms=damages_hero,Control
+2026-10-11T16:31:55.2489420Z FIREBAT SPAWN Firebat 2 enabled=True prefab=Grimm Firebat fsms=Control
+2026-10-11T16:31:55.2504006Z FIREBAT SPAWN Firebat 2 enabled=True prefab=Firebat Pillar fsms=damages_hero,Control
+2026-10-11T16:31:55.2504006Z FIREBAT SPAWN Firebat 3 enabled=True prefab=Grimm Firebat fsms=Control
+2026-10-11T16:31:55.2504006Z FIREBAT SPAWN Firebat 3 enabled=True prefab=Firebat Pillar fsms=damages_hero,Control
+2026-10-11T16:31:55.2538507Z PASS missing registry target is ignored
+2026-10-11T16:31:55.2562848Z PASS Unity destroyed registry target is ignored
+2026-10-11T16:31:55.2577714Z PASS missing spawn result is not confused with a destroyed registered entity
+2026-10-11T16:31:55.2592546Z PASS missing SetScale target produces no packet
+2026-10-11T16:31:55.2597588Z PASS faulting observer preserves native execution and following observers
+2026-10-11T16:31:55.2611743Z PASS native action errors retain their original propagation
+2026-10-11T16:31:55.2639345Z PASS destroyed replica collider snapshot can still update dormant host
+2026-10-11T16:31:55.2649644Z PASS both Grimm rooms
+2026-10-11T16:32:30.2715792Z BALLOON CHECK from=Grimm Boss to=Knight
+2026-10-11T16:32:30.2759725Z ENTITY 2 GrimmBat pos=(78.4, 7.0, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:30.2769860Z FSM Control=
+2026-10-11T16:32:30.2769860Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-11T16:32:30.2784812Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-11T16:32:30.2794848Z STATE Recycle RecycleSelf
+2026-10-11T16:32:30.2794848Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-11T16:32:30.2807307Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-11T16:32:30.2817592Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-11T16:32:30.2817592Z STATE Impact End Wait,ActivateGameObject
+2026-10-11T16:32:30.2832689Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:30.2832689Z ENTITY 4 GrimmBat pos=(78.4, 7.0, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:30.2842720Z FSM Control=
+2026-10-11T16:32:30.2842720Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-11T16:32:30.2852730Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-11T16:32:30.2862774Z STATE Recycle RecycleSelf
+2026-10-11T16:32:30.2862774Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-11T16:32:30.2874601Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-11T16:32:30.2884632Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-11T16:32:30.2884632Z STATE Impact End Wait,ActivateGameObject
+2026-10-11T16:32:30.2884632Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:30.2897142Z ENTITY 6 GrimmBat pos=(78.4, 7.0, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:30.2897142Z FSM Control=
+2026-10-11T16:32:30.2908738Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-11T16:32:30.2913776Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-11T16:32:30.2913776Z STATE Recycle RecycleSelf
+2026-10-11T16:32:30.2923930Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-11T16:32:30.2934940Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-11T16:32:30.2934940Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-11T16:32:30.2946580Z STATE Impact End Wait,ActivateGameObject
+2026-10-11T16:32:30.2946580Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:30.2961673Z ENTITY 8 GrimmBat pos=(79.5, 7.0, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:30.2975352Z FSM Control=
+2026-10-11T16:32:30.2975352Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-11T16:32:30.2985465Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-11T16:32:30.2996379Z STATE Recycle RecycleSelf
+2026-10-11T16:32:30.3008882Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-11T16:32:30.3008882Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-11T16:32:30.3020039Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-11T16:32:30.3020039Z STATE Impact End Wait,ActivateGameObject
+2026-10-11T16:32:30.3030631Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:31.3063631Z ENTITY 9 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.3068707Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:31.3246678Z ENTITY 10 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.3271364Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.3583576Z ENTITY 11 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.3593597Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.3593597Z ENTITY 12 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.3606772Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.4073331Z ENTITY 13 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.4085402Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.4095440Z ENTITY 14 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.4095440Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.4106270Z ENTITY 15 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.4118268Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.4423543Z ENTITY 16 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.4433789Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.4433789Z ENTITY 17 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.4447713Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.9002312Z ENTITY 18 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.9002312Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:31.9311075Z ENTITY 19 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.9325447Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.9325447Z ENTITY 20 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.9337483Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.9647354Z ENTITY 21 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.9662420Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:31.9672532Z ENTITY 22 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:31.9683538Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:32.0062566Z ENTITY 23 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.0087725Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:32.0098285Z ENTITY 24 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.0098285Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:32.0098285Z ENTITY 25 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.0112409Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:32.0413388Z ENTITY 26 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.0413388Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:32.5077957Z ENTITY 27 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.5092507Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:32.5273475Z ENTITY 28 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.5273475Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:32.5421103Z ENTITY 29 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.5421103Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:32.5591171Z ENTITY 30 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.5601453Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:32.5768174Z ENTITY 31 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.5782940Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:32.5917970Z ENTITY 32 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.5928844Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:32.6242806Z ENTITY 33 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.6242806Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:32.6253803Z ENTITY 34 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.6253803Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:32.6398609Z ENTITY 35 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:32.6408637Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:33.1051490Z ENTITY 36 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.1061514Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:33.1217296Z ENTITY 37 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.1232174Z PROJECTILE client rb= scripts=
+2026-10-11T16:32:33.1496296Z ENTITY 38 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.1496296Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:33.1510542Z ENTITY 39 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.1520618Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:33.1886221Z ENTITY 40 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.1896368Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:33.1909578Z ENTITY 41 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.1909578Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:33.2199164Z ENTITY 42 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.2199164Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:33.2210921Z ENTITY 43 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-11T16:32:33.2210921Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-11T16:32:52.2748692Z GRIMM END state= hp=599
+2026-10-11T16:33:03.4736932Z PASS native Grimm death advances sequence
+2026-10-11T16:33:03.4773055Z PASS both advanced to native pantheon rest room
+2026-10-11T16:33:04.5762270Z PASS guest enters next native sequence boss
+2026-10-11T16:33:08.2919051Z PASS stranded host catches up to next boss
+2026-10-11T16:33:08.3022479Z PASS both at next boss
+2026-10-11T16:33:08.9996202Z PASS guest returns to rest room for reverse test
+2026-10-11T16:33:09.0009681Z PASS warp target presence
+2026-10-11T16:33:10.2271399Z PASS F8 cross-room arrival
+2026-10-11T16:33:12.2282326Z WARP FADE before=2 after=3 control=False camera=FOLLOWING
+2026-10-11T16:33:12.2338060Z FADE FSM Rush/fader=
+2026-10-11T16:33:12.2352884Z FADE FSM Geo Text/Fader=Upped
+2026-10-11T16:33:12.2362946Z FADE FSM Low Health Light/Fader=Down
+2026-10-11T16:33:12.2374497Z FADE FSM tk2dCamera/CameraFade=Normal
+2026-10-11T16:33:12.2385362Z FADE FSM Add Text/Fader=Down
+2026-10-11T16:33:12.2385362Z FADE FSM Subtract Text/Fader=Down
+2026-10-11T16:33:12.2395399Z FADE FSM HeroLight/color_fader=Init
+2026-10-11T16:33:12.2407534Z FADE FSM SD Charge Wall/color_fader=Init
+2026-10-11T16:33:12.2407534Z FADE FSM SD Charge/color_fader=Init
+2026-10-11T16:33:12.2463092Z PASS F8 restores fade, input and camera
+2026-10-11T16:33:12.2477989Z ARSENAL fireballs=2310 bats=215 pillars=48 pillarEntities=3 spikes=18 positions=3085
+2026-10-11T16:33:12.2489801Z MATCHED POSITIONS GrimmSpikes=566
+2026-10-11T16:33:12.2499889Z MATCHED POSITIONS GrimmBat=214
+2026-10-11T16:33:12.2499889Z MATCHED POSITIONS GrimmFirebatPillar=47
+2026-10-11T16:33:12.2514984Z MATCHED POSITIONS GrimmFireball=2258
+2026-10-11T16:33:12.2520039Z PASS replica observes fireballs, firebats, pillar spawn records, damaging spikes and synchronized positions
+2026-10-11T16:33:12.2541946Z PASS each dynamic Grimm projectile type has matching authority positions
+2026-10-11T16:33:13.6954732Z PASS ordinary target ready
+2026-10-11T16:33:13.8954419Z PASS ordinary target presence
+2026-10-11T16:33:15.6422369Z PASS in-flight warp arrives after disconnect
+2026-10-11T16:33:17.6461206Z PASS disconnect preserves accepted arrival fade and releases pantheon context
+2026-10-11T16:33:17.6486725Z PASS native projectile audio survives godhome warps and authority changes
+2026-10-11T16:33:17.6496817Z FINAL PASS

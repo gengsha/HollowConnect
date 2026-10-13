@@ -1,0 +1,19 @@
+2026-10-13T07:22:00.0672328Z PASS menu ready
+2026-10-13T07:22:04.4222708Z PASS unsaved character ready
+2026-10-13T07:22:04.4233157Z PASS server ready
+2026-10-13T07:22:05.3382166Z PASS boss test handshake
+2026-10-13T07:22:05.3403266Z PASS both connected
+2026-10-13T07:22:08.6719210Z PASS native False Knight room
+2026-10-13T07:22:08.7426477Z PASS boss authority initialized
+2026-10-13T07:22:08.7451508Z PASS both in arena
+2026-10-13T07:22:17.7331631Z PASS guest receives exposed boss phase and head health
+2026-10-13T07:22:18.6797391Z PASS authority transfers during exposed phase
+2026-10-13T07:22:18.6807487Z PASS handoff preserves live exposed phase and both health values
+2026-10-13T07:22:24.9831665Z PASS native head defeat advances phase after transfer
+2026-10-13T07:22:24.9900808Z PHASE TICK state=Rage pos=(29.2, 34.9, 0.0) body=Dynamic/(0.0, 0.0)/gravity=0.3 simulated=True constraints=FreezeRotation timescale=1 fixed=0.02 physics=FixedUpdate hero=(19.8, 36.5, 0.0) fixed-ticks=44 handlefixed=True proxies=True/False Knight New:FalseyControl:True anim=True/Blank/0/playing=False actions=Wait
+2026-10-13T07:22:25.9898883Z PHASE TICK state=Rage End pos=(29.2, 34.9, 0.0) body=Dynamic/(0.0, 0.0)/gravity=0.3 simulated=True constraints=FreezeRotation timescale=1 fixed=0.02 physics=FixedUpdate hero=(19.8, 36.5, 0.0) fixed-ticks=44 handlefixed=True proxies=True/False Knight New:FalseyControl:True anim=True/Idle/2/playing=True actions=Wait
+2026-10-13T07:22:26.9921678Z PHASE TICK state=Idle pos=(29.2, 34.9, 0.0) body=Dynamic/(0.0, 0.0)/gravity=0.39 simulated=True constraints=FreezeRotation timescale=1 fixed=0.02 physics=FixedUpdate hero=(19.8, 36.5, 0.0) fixed-ticks=44 handlefixed=True proxies=True/False Knight New:FalseyControl:True anim=True/Idle/4/playing=True actions=CheckTargetDirection,BoolTestMulti,BoolTestMulti,WaitRandom
+2026-10-13T07:22:27.4081020Z PASS boss AI moves after phase handoff
+2026-10-13T07:22:27.4119403Z PASS continued armor damage remains live after transfer
+2026-10-13T07:22:28.3513160Z PASS returning client sees continued boss
+2026-10-13T07:22:28.4690080Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence

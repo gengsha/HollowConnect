@@ -1,0 +1,40 @@
+2026-10-11T16:37:01.0362023Z PASS menu ready
+2026-10-11T16:37:19.5866843Z PASS host waiting in Tutorial
+2026-10-11T16:37:20.4124560Z PASS initial connected from menu
+2026-10-11T16:37:25.0553511Z SCENE Menu_Title -> Opening_Sequence active=Opening_Sequence scope=/0/0
+2026-10-11T16:37:25.1457633Z PASS initial opening sequence
+2026-10-11T16:37:35.7978273Z HERO POSITION EVENT active=Tutorial_01 scope=Opening_Sequence/1/0
+2026-10-11T16:37:35.7992535Z SCENE  -> Tutorial_01 active=Tutorial_01 scope=Opening_Sequence/1/0
+2026-10-11T16:37:36.6251534Z PASS initial new game in Tutorial
+2026-10-11T16:37:36.6261952Z initial positioned active=Tutorial_01 scope=Tutorial_01/2/0
+2026-10-11T16:37:36.6276425Z PASS both players in Tutorial
+2026-10-11T16:37:36.9332656Z PASS initial peer has active visible knight renderer
+2026-10-11T16:37:36.9491940Z PASS initial scene authority initialized
+2026-10-11T16:37:36.9538555Z PASS both directions visible
+2026-10-11T16:37:39.1786466Z SCENE  -> Quit_To_Menu active=Quit_To_Menu scope=Tutorial_01/2/0
+2026-10-11T16:37:40.8336825Z SCENE  -> Menu_Title active=Menu_Title scope=Tutorial_01/2/0
+2026-10-11T16:37:41.1592751Z PASS guest returned to title
+2026-10-11T16:37:41.6393071Z PASS reconnect connected from menu
+2026-10-11T16:37:46.2605783Z SCENE Menu_Title -> Opening_Sequence active=Opening_Sequence scope=Tutorial_01/2/0
+2026-10-11T16:37:46.2916386Z PASS reconnect opening sequence
+2026-10-11T16:37:56.5706487Z SCENE  -> Tutorial_01 active=Tutorial_01 scope=Opening_Sequence/3/0
+2026-10-11T16:37:56.6117007Z HERO POSITION EVENT active=Tutorial_01 scope=Opening_Sequence/3/0
+2026-10-11T16:37:57.3083386Z PASS reconnect new game in Tutorial
+2026-10-11T16:37:57.3088567Z reconnect positioned active=Tutorial_01 scope=Tutorial_01/4/0
+2026-10-11T16:37:57.3109239Z PASS reconnected peer has active visible knight renderer
+2026-10-11T16:37:57.6131230Z PASS reconnected scene authority initialized
+2026-10-11T16:37:57.6195680Z PASS both reconnected directions visible
+2026-10-11T16:38:03.6344874Z SCENE  -> Quit_To_Menu active=Quit_To_Menu scope=Tutorial_01/4/0
+2026-10-11T16:38:04.8288874Z SCENE  -> Menu_Title active=Menu_Title scope=Tutorial_01/4/0
+2026-10-11T16:38:05.0973414Z PASS old room closes and guest returns to title
+2026-10-11T16:38:05.5322522Z PASS rehost connected from menu
+2026-10-11T16:38:10.1570339Z SCENE Menu_Title -> Opening_Sequence active=Opening_Sequence scope=Tutorial_01/4/0
+2026-10-11T16:38:10.1921085Z PASS rehost opening sequence
+2026-10-11T16:38:20.4737656Z SCENE  -> Tutorial_01 active=Tutorial_01 scope=Opening_Sequence/5/0
+2026-10-11T16:38:20.5089507Z HERO POSITION EVENT active=Tutorial_01 scope=Opening_Sequence/5/0
+2026-10-11T16:38:21.2016330Z PASS rehost new game in Tutorial
+2026-10-11T16:38:21.2027263Z rehost positioned active=Tutorial_01 scope=Tutorial_01/6/0
+2026-10-11T16:38:21.2039069Z PASS both joined reopened room
+2026-10-11T16:38:21.4886100Z PASS reopened room has visible teammate
+2026-10-11T16:38:21.4934196Z PASS reopened room has fresh session and scene authority
+2026-10-11T16:38:21.4973920Z FINAL PASS

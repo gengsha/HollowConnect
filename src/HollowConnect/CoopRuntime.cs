@@ -1,0 +1,587 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Hkmp;
+using Hkmp.Api.Client;
+using Hkmp.Api.Client.Networking;
+using HollowConnect.Core;
+using Modding;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
+
+namespace HollowConnect;
+
+public sealed class Peer {
+    public Message State;
+    public double Seen;
+    public uint DownSerial, LifeVersion, DownFeedbackSerial, RescueFeedbackSerial;
+    public Life Life;
+}
+
+public sealed class CoopRuntime : MonoBehaviour {
+    private IClientApi api;
+    private IClientAddonNetworkSender<Channel> sender;
+    internal readonly Dictionary<ushort, Peer> Peers = new Dictionary<ushort, Peer>();
+    private ProgressLedger granted = new ProgressLedger();
+    private readonly Dictionary<string, int> offered = new Dictionary<string, int>();
+    private readonly Dictionary<string, FieldInfo> fields = new Dictionary<string, FieldInfo>();
+    private MapService map;
+    private ShadeService shades;
+    private PersonalDeath personalDeath;
+    private readonly EntryProtectionWindow entryProtection = new EntryProtectionWindow();
+    private int protectionSceneHandle = int.MinValue;
+    private string protectionSession = "";
+    private bool protectEntry;
+    private bool takingDamage, nativeHitPlayed;
+    internal Func<KeyCode, bool> KeyPressed = Input.GetKeyDown;
+    internal string Session = "";
+    internal ushort LocalId, Selected;
+    internal uint ReleasedRound;
+    internal bool Shared, RescueEnabled, WarpEnabled, Down, Resetting, Returning;
+    private uint sequence, downSerial, warpSerial, handledWarp;
+    private float nextPresence, nextProgress;
+    private bool readySent, changingScene;
+    private bool giveUpRequested;
+    private Coroutine benchReturn;
+    private Coroutine checkpointReload, teammateWarp;
+    private string retryScene;
+    private Vector2? warpEntry;
+    private string warpScene;
+    private HeroController lockedHero;
+    private float gravity;
+    private bool noDamage, heroBoxInactive, simulated;
+    internal Vector3 DeathPosition { get; private set; }
+    internal uint DeathSerial => downSerial;
+    private string deathScene;
+    private CameraController deathCamera;
+    private CameraController.CameraMode cameraMode;
+    private Vector3 cameraPosition;
+    private string status = "";
+    private float statusUntil;
+    private Font font;
+    internal static double Now => (DateTime.UtcNow - new DateTime(2020, 1, 1)).TotalSeconds;
+    internal bool Connected => api != null && api.NetClient.IsConnected && Session.Length > 0;
+    internal bool Playable => HeroController.instance != null && GameManager.instance != null &&
+        !GameManager.instance.IsInSceneTransition && HeroController.instance.isHeroInPosition;
+
+    public void Initialize(IClientApi clientApi, CoopClientAddon addon) {
+        api = clientApi;
+        sender = api.NetClient.GetNetworkSender<Channel>(addon);
+        var receiver = api.NetClient.GetNetworkReceiver<Channel>(addon, Wire.CreateCollection);
+        receiver.RegisterPacketHandler<Message>(Channel.Presence, Receive);
+        receiver.RegisterPacketHandler<Message>(Channel.Event, Receive);
+        api.ClientManager.ConnectEvent += OnConnect;
+        api.ClientManager.DisconnectEvent += OnDisconnect;
+        foreach (var key in ProgressCatalog.Limits.Keys) {
+            var field = typeof(PlayerData).GetField(key, BindingFlags.Instance | BindingFlags.Public);
+            if (field != null && (field.FieldType == typeof(bool) || field.FieldType == typeof(int))) fields[key] = field;
+        }
+        map = new MapService(this);
+        shades = new ShadeService(this);
+        BossTravel.Register();
+        CoopContext.CaptureBossContext = BossTravel.CaptureContext;
+        CoopContext.ApplyBossContext = BossTravel.ApplyContext;
+        CoopContext.BossTransitionReady = () => Playable && !Down && !Resetting && !Returning && !changingScene;
+        CoopContext.LocalRescueDown = () => Connected && RescueEnabled && Down;
+        map.Register();
+        On.HeroController.Die += OnDie;
+        On.HeroController.TakeDamage += TakeDamage;
+        On.HeroAudioController.PlaySound += TrackHitSound;
+        ModHooks.AfterTakeDamageHook += AfterTakeDamage;
+        On.CameraController.LateUpdate += CameraUpdate;
+        On.GameManager.FindEntryPoint += FindWarpEntry;
+        On.HeroController.EnterSceneDreamGate += CompleteWarpEntry;
+        ModHooks.SetPlayerBoolHook += OnSetBool;
+        ModHooks.SetPlayerIntHook += OnSetInt;
+        font = Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial" }, 18);
+    }
+
+    private void OnConnect() {
+        Session = ""; Peers.Clear(); offered.Clear(); granted = new ProgressLedger(); sequence = 0; handledWarp = 0; ReleasedRound = 0;
+        entryProtection.Clear(); protectionSceneHandle = int.MinValue; protectionSession = "";
+        Send(new Message { Kind = Kind.Hello });
+    }
+    private void OnDisconnect() {
+        CancelBenchReturn();
+        CancelTransitions();
+        shades.Clear(); Unlock(); Down = Resetting = changingScene = false; Session = ""; Peers.Clear(); offered.Clear();
+        CoopContext.Resetting = false; readySent = false; retryScene = null; map.Clear();
+        // The original hero owns an accepted formal death; disconnect only
+        // abandons our wait and must not cancel its animation/save/return.
+        personalDeath = null; entryProtection.Clear(); protectionSession = "";
+    }
+    private void Send(Message message) {
+        if (!api.NetClient.IsConnected) return;
+        message.Session = Session; message.Round = CoopContext.Epoch;
+        sender.SendCollectionData(message.IsReliable ? Channel.Event : Channel.Presence, message);
+    }
+
+    private void Receive(Message m) {
+        if (m.Kind == Kind.Welcome) {
+            if (Session.Length != 0 && Session != m.Session) return;
+            Session = m.Session; LocalId = m.Id; CoopContext.Epoch = m.Round;
+            Shared = (m.Value & 1) != 0; RescueEnabled = (m.Value & 2) != 0; WarpEnabled = (m.Value & 4) != 0;
+            protectEntry = (m.Value & 8) != 0;
+            Notice("协作连接已建立" + (Shared ? " · 共享进度开启" : ""));
+            nextPresence = nextProgress = 0;
+            return;
+        }
+        if (m.Session != Session || Session.Length == 0) return;
+        if (m.Kind == Kind.Wipe) {
+            // Welcome may carry the current round to a late joiner who has
+            // never released it. Completed rounds, however, cannot reopen.
+            if (m.Round <= ReleasedRound || m.Round <= CoopContext.Epoch && Resetting || m.Round < CoopContext.Epoch) return;
+            CoopContext.Epoch = m.Round; CoopContext.Resetting = true;
+            CancelBenchReturn();
+            CancelTransitions();
+            shades.Clear();
+            Resetting = true; Down = false; readySent = false; Peers.Clear();
+            checkpointReload = StartCoroutine(ReloadCheckpoint(Session, m.Round)); return;
+        }
+        if (m.Round != CoopContext.Epoch) return;
+        switch (m.Kind) {
+            case Kind.Roster:
+                if (m.Id == LocalId) break;
+                if (!Peers.TryGetValue(m.Id, out var p)) Peers[m.Id] = p = new Peer();
+                if (p.State != null && m.Serial < p.State.Serial) break;
+                if (m.Aux < p.LifeVersion) break;
+                if (m.Aux >= p.LifeVersion) { p.LifeVersion = m.Aux; p.Life = (Life)m.Value; }
+                m.Value = (int)p.Life; p.State = m; p.Seen = Now;
+                if (m.Value == (int)Life.Down && uint.TryParse(m.Key, out var incomingDown) && incomingDown >= p.DownSerial) p.DownSerial = incomingDown;
+                break;
+            case Kind.Left:
+                shades.Remove(m.Id); Peers.Remove(m.Id); map.Remove(m.Id); break;
+            case Kind.Down:
+                if (m.Id == LocalId) break;
+                if (!Peers.TryGetValue(m.Id, out var downPeer)) Peers[m.Id] = downPeer = new Peer();
+                // An unreliable roster can arrive before the reliable event.
+                // Keep state ordering separate from one-shot presentation.
+                if (m.Aux < downPeer.LifeVersion || m.Serial < downPeer.DownSerial ||
+                    m.Aux == downPeer.LifeVersion && downPeer.Life != Life.Down) break;
+                downPeer.DownSerial = m.Serial; downPeer.LifeVersion = m.Aux; downPeer.Life = Life.Down;
+                if (downPeer.State == null) downPeer.State = new Message { Id = m.Id, Name = m.Name };
+                downPeer.State.Value = (int)Life.Down; downPeer.State.Scene = m.Scene;
+                downPeer.State.X = m.X; downPeer.State.Y = m.Y; downPeer.Seen = Now;
+                if (m.Serial > downPeer.DownFeedbackSerial) {
+                    downPeer.DownFeedbackSerial = m.Serial;
+                    PlayDownFeedback(m, true);
+                }
+                break;
+            case Kind.Revived:
+                if (Resetting || m.Serial == 0 || m.Target == m.Id) break;
+                if (m.Id == LocalId && Down && m.Serial == downSerial && !Resetting) {
+                    giveUpRequested = false;
+                    shades.Remove(m.Id); Down = false; Unlock();
+                    personalDeath = null;
+                    PlayerData.instance.SetInt("healthBlue", 0); Heal(1); Notice("队友击破了你的暗影，原地一血复活");
+                    PlayRescueFeedback(m);
+                }
+                // Roster is unreliable and can already report Alive before the
+                // reliable acceptance arrives. Reward/presentation has its own
+                // serial; an old acceptance must not affect a later death.
+                if (Peers.TryGetValue(m.Id, out var revived) && m.Serial >= revived.DownSerial &&
+                    m.Serial > revived.RescueFeedbackSerial && m.Aux >= revived.LifeVersion &&
+                    (m.Aux > revived.LifeVersion || revived.Life == Life.Alive || revived.Life == Life.Loading)) {
+                    revived.RescueFeedbackSerial = m.Serial;
+                    shades.Remove(m.Id);
+                    revived.LifeVersion = m.Aux; revived.Life = Life.Alive;
+                    if (revived.State != null) revived.State.Value = (int)Life.Alive;
+                    if (m.Target == LocalId && Connected && Playable && !Down && !Returning && !changingScene)
+                        HeroController.instance.AddMPCharge(RescueFeedback.SoulReward);
+                    PlayRescueFeedback(m);
+                }
+                break;
+            case Kind.Returning:
+                if (m.Id == LocalId && Down && m.Serial == downSerial && !Resetting && !Returning) {
+                    giveUpRequested = false; Returning = true; Down = false; shades.Remove(LocalId);
+                    benchReturn = StartCoroutine(ReturnToBench(m));
+                }
+                if (Peers.TryGetValue(m.Id, out var leaving) && m.Aux > leaving.LifeVersion) {
+                    shades.Remove(m.Id); leaving.LifeVersion = m.Aux; leaving.Life = Life.Returning;
+                    if (leaving.State != null) { leaving.State.Value = (int)Life.Returning; leaving.State.HasMap = leaving.State.IsReady = false; }
+                }
+                break;
+            case Kind.Returned:
+                if (m.Id == LocalId && Returning && m.Serial == downSerial && !Resetting) {
+                    Returning = false; giveUpRequested = false; Unlock(); personalDeath = null; Notice("已回到自己的复活点，队友继续当前战斗");
+                }
+                if (Peers.TryGetValue(m.Id, out var returned) && m.Aux > returned.LifeVersion) {
+                    returned.LifeVersion = m.Aux; returned.Life = Life.Alive;
+                    if (returned.State != null) {
+                        returned.State.Value = (int)Life.Alive; returned.State.Scene = m.Scene;
+                        returned.State.X = m.X; returned.State.Y = m.Y; returned.State.HasMap = returned.State.IsReady = false;
+                    }
+                }
+                break;
+            case Kind.GiveUpDenied:
+                if (m.Id == LocalId && m.Serial == downSerial) {
+                    giveUpRequested = false;
+                    if (Down) Notice("当前无法放弃：尚无可用长椅，或全队重试已开始");
+                }
+                break;
+            case Kind.Release:
+                if (!Resetting) break;
+                ReleasedRound = m.Round;
+                Resetting = false; CoopContext.Resetting = false; readySent = false; Unlock(); personalDeath = null;
+                Notice("全队加载完成，重新出发"); break;
+            case Kind.ProgressGrant:
+                if (Shared && granted.Merge(m.Key, m.Value)) ApplyProgress(m.Key, m.Value);
+                break;
+            case Kind.Warp:
+                if (m.Serial <= handledWarp || Down || Resetting || Returning || changingScene) break;
+                handledWarp = m.Serial; teammateWarp = StartCoroutine(WarpTo(m)); break;
+        }
+    }
+
+    private void PlayRescueFeedback(Message m) {
+        if (!Playable || m.Scene != CoopContext.LocalScene) return;
+        RescueFeedback.Play(new Vector3(m.X, m.Y, 0));
+    }
+
+    private void Update() {
+        if (!Connected) return;
+        RefreshEntryProtection();
+        if (lockedHero != null && (Down || Resetting || Returning)) {
+            lockedHero.RelinquishControl(); lockedHero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            lockedHero.takeNoDamage = true; HeroBox.inactive = true;
+            if (Down) lockedHero.transform.position = DeathPosition;
+        }
+        shades.Synchronize();
+        if (Time.unscaledTime >= nextPresence) { nextPresence = Time.unscaledTime + .1f; SendPresence(); }
+        if (Resetting && !readySent && !changingScene && Playable && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == retryScene) {
+            Lock(); readySent = true; Send(new Message { Kind = Kind.Ready, Scene = retryScene });
+        }
+        if (!Playable || Resetting || changingScene || Returning) return;
+        if (Down && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
+            giveUpRequested = true;
+            Send(new Message { Kind = Kind.GiveUpRequest, Serial = downSerial,
+                Scene = personalDeath?.Destination ?? "", Key = personalDeath?.Marker ?? "", Value = personalDeath?.RespawnType ?? 0 });
+            Notice("正在放弃救援，按原版死亡规则返回自己的复活点…");
+        }
+        if (Shared && Time.unscaledTime >= nextProgress) { nextProgress = Time.unscaledTime + .5f; CheckProgress(); }
+        if (KeyPressed(CoopMod.Settings.SelectTeammateKey)) {
+            var ids = Peers.Where(p => p.Value.State != null).Select(p => p.Key).OrderBy(i => i).ToArray();
+            if (ids.Length > 0) {
+                var index = Array.IndexOf(ids, Selected);
+                Selected = ids[(index + 1) % ids.Length];
+                Notice("已选队友：" + Peers[Selected].State.Name);
+            }
+        }
+        if (!Down && WarpEnabled && KeyPressed(CoopMod.Settings.TeleportKey)) {
+            if (!Peers.ContainsKey(Selected)) Selected = Peers.Keys.OrderBy(i => i).FirstOrDefault();
+            if (Peers.ContainsKey(Selected)) Send(new Message { Kind = Kind.WarpRequest, Target = Selected, Serial = ++warpSerial });
+            else Notice("没有可传送的队友");
+        }
+    }
+
+    private void SendPresence() {
+        var hero = HeroController.instance;
+        if (hero == null) return;
+        var pos = hero.transform.position;
+        var location = Vector3.zero;
+        var hasMap = Playable && !changingScene && !Returning && map.TryLocation(out location);
+        var pd = PlayerData.instance;
+        var message = new Message { Kind = Kind.Presence, Serial = ++sequence, Scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
+            X = pos.x, Y = pos.y, HasMap = hasMap, MapX = hasMap ? location.x : 0, MapY = hasMap ? location.y : 0,
+            IsReady = Playable && !changingScene && !Returning, Key = pd.GetString("respawnScene") ?? "",
+            Name = pd.GetString("respawnMarkerName") ?? "", Value = pd.GetInt("respawnType") };
+        BossTravel.Capture(message); Send(message);
+    }
+
+    private IEnumerator OnDie(On.HeroController.orig_Die orig, HeroController self) {
+        if (!Connected || !RescueEnabled || PlayerData.instance.permadeathMode != 0) { yield return orig(self); yield break; }
+        if (Down || Resetting || Returning) yield break;
+        personalDeath = new PersonalDeath(self, () => orig(self));
+        DeathPosition = self.transform.position; deathScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        deathCamera = GameCameras.instance?.cameraController;
+        if (deathCamera != null) {
+            cameraMode = deathCamera.mode; cameraPosition = deathCamera.transform.position;
+            deathCamera.FreezeInPlace();
+        }
+        Down = true; downSerial++; Lock(); Heal(1);
+        shades.Synchronize();
+        var message = new Message { Kind = Kind.Down, Serial = downSerial, Scene = deathScene, X = DeathPosition.x, Y = DeathPosition.y,
+            Key = personalDeath.Destination, Name = personalDeath.Marker, Value = personalDeath.RespawnType };
+        PlayDownFeedback(message, !takingDamage || !nativeHitPlayed); Send(message);
+        Notice("你已化为暗影；等待队友击破救援，或按 " + CoopMod.Settings.GiveUpKey + " 放弃并回自己的复活点");
+    }
+
+    private void PlayDownFeedback(Message m, bool sound) {
+        DownFeedback.Play(new Vector3(m.X, m.Y, 0), m.Scene == CoopContext.LocalScene, sound);
+    }
+
+    internal bool EntryProtected => RefreshEntryProtection();
+    private bool RefreshEntryProtection() {
+        if (!Connected || !protectEntry) { entryProtection.Clear(); return false; }
+        var scene = UnitySceneManager.GetActiveScene();
+        if (protectionSceneHandle != scene.handle || protectionSession != Session) {
+            protectionSceneHandle = scene.handle; protectionSession = Session; entryProtection.Begin();
+        }
+        var hero = HeroController.instance;
+        var camera = GameCameras.instance?.cameraController;
+        var ready = Playable && !changingScene && !Down && !Resetting && !Returning && hero.acceptingInput &&
+            !hero.cState.dead && !hero.cState.transitioning && hero.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION &&
+            Time.timeScale > 0 && camera != null && camera.mode != CameraController.CameraMode.FROZEN &&
+            api.ClientManager is Hkmp.Game.Client.ClientManager manager && manager.SceneSnapshotReady;
+        return entryProtection.Update(ready, Time.unscaledTime);
+    }
+    private void TakeDamage(On.HeroController.orig_TakeDamage orig, HeroController self, GameObject source,
+        GlobalEnums.CollisionSide side, int damage, int hazard) {
+        if (Connected && (Down || Resetting || Returning)) return;
+        if (EntryProtected && hazard == 1) return;
+        takingDamage = true; nativeHitPlayed = false;
+        try { orig(self, source, side, damage, hazard); }
+        finally { takingDamage = false; }
+    }
+    private void TrackHitSound(On.HeroAudioController.orig_PlaySound orig, HeroAudioController self, GlobalEnums.HeroSounds sound) {
+        if (takingDamage && (int)sound == 8) nativeHitPlayed = true;
+        orig(self, sound);
+    }
+    private int AfterTakeDamage(int hazard, int damage) => EntryProtected ? 0 : damage;
+
+    private void Lock() {
+        var hero = HeroController.instance;
+        if (hero == null || lockedHero == hero) return;
+        lockedHero = hero; var body = hero.GetComponent<Rigidbody2D>();
+        gravity = body.gravityScale; simulated = body.simulated; noDamage = hero.takeNoDamage; heroBoxInactive = HeroBox.inactive;
+        hero.RelinquishControl(); hero.takeNoDamage = true; body.velocity = Vector2.zero; body.gravityScale = 0; HeroBox.inactive = true;
+        body.simulated = false;
+    }
+    private void Unlock() {
+        if (lockedHero != null) {
+            lockedHero.takeNoDamage = noDamage;
+            HeroBox.inactive = heroBoxInactive;
+            lockedHero.RegainControl(); lockedHero.StartAnimationControl();
+            var body = lockedHero.GetComponent<Rigidbody2D>();
+            body.simulated = simulated; body.gravityScale = gravity; body.velocity = Vector2.zero;
+        }
+        lockedHero = null;
+        if (deathCamera != null && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == deathScene)
+            deathCamera.SetMode(cameraMode);
+        deathCamera = null;
+    }
+    private void Heal(int amount) {
+        if (PlayerData.instance == null) return;
+        PlayerData.instance.SetInt("health", Math.Min(PlayerData.instance.CurrentMaxHealth, amount));
+        PlayMakerFSM.BroadcastEvent("HERO HEALED");
+    }
+
+    private void CameraUpdate(On.CameraController.orig_LateUpdate orig, CameraController self) {
+        if (Down && self == deathCamera) self.SetMode(CameraController.CameraMode.FROZEN);
+        orig(self);
+        if (Down && self == deathCamera) self.transform.position = cameraPosition;
+    }
+    private void LateUpdate() {
+        if (Down && lockedHero != null) lockedHero.transform.position = DeathPosition;
+    }
+    internal GameObject PlayerObject(ushort id) => api.ClientManager.GetPlayer(id)?.PlayerObject;
+    internal bool RequestShadeHit(ushort target, uint serial) {
+        if (!Connected || !Playable || Down || Resetting || Returning || changingScene || !RescueEnabled ||
+            !Peers.TryGetValue(target, out var peer) || peer.Life != Life.Down || peer.DownSerial != serial ||
+            peer.State == null || peer.State.Scene != CoopContext.LocalScene || Now - peer.Seen >= 2) return false;
+        SendPresence();
+        Send(new Message { Kind = Kind.ShadeHit, Target = target, Serial = serial, Scene = CoopContext.LocalScene });
+        return true;
+    }
+
+    private bool OnSetBool(string key, bool value) => Shared && Connected && granted.Get(key) == 1 || value;
+    private int OnSetInt(string key, int value) => Shared && Connected && ProgressCatalog.Limits.TryGetValue(key, out var limit)
+        ? Math.Min(limit, Math.Max(value, granted.Get(key))) : value;
+    private void CheckProgress() {
+        foreach (var pair in fields) {
+            var obj = pair.Value.GetValue(PlayerData.instance);
+            var value = obj is bool flag ? (flag ? 1 : 0) : (int)obj;
+            // Reapply grants received before the local save/hero finished loading.
+            if (value < granted.Get(pair.Key)) { ApplyProgress(pair.Key, granted.Get(pair.Key)); value = granted.Get(pair.Key); }
+            if (value <= 0 || offered.TryGetValue(pair.Key, out var old) && value <= old) continue;
+            offered[pair.Key] = value;
+            Send(new Message { Kind = Kind.ProgressOffer, Key = pair.Key, Value = value });
+        }
+    }
+    private void ApplyProgress(string key, int value) {
+        if (!Playable || !fields.TryGetValue(key, out var field)) return;
+        var pd = PlayerData.instance;
+        var current = field.GetValue(pd);
+        if (field.FieldType == typeof(bool)) {
+            if ((bool)current) return;
+            pd.SetBool(key, value > 0);
+            if (key == "hasDash") pd.SetBool("canDash", true);
+            if (key == "hasWalljump") pd.SetBool("canWallJump", true);
+            if (key == "hasSuperDash") pd.SetBool("canSuperDash", true);
+            if (key.StartsWith("gotCharm_", StringComparison.Ordinal)) {
+                var count = Enumerable.Range(1, 40).Count(i => pd.GetBool("gotCharm_" + i));
+                pd.SetInt("charmsOwned", Math.Max(pd.GetInt("charmsOwned"), count));
+            }
+        } else if ((int)current < value) {
+            pd.SetInt(key, value);
+            if (key == "nailSmithUpgrades") pd.SetInt("nailDamage", 5 + 4 * value);
+        }
+        Notice("共享进度：" + key);
+    }
+
+    private IEnumerator ReloadCheckpoint(string session, uint round) {
+        changingScene = true; Unlock();
+        var death = personalDeath;
+        if (death != null) {
+            retryScene = death.Destination;
+            death.Start();
+        } else {
+            // A late joiner did not die. Use their own checkpoint without
+            // charging geo or synthesizing another player's death.
+            while (Connected && Session == session && !Playable) yield return null;
+            if (!Connected || Session != session) yield break;
+            retryScene = PlayerData.instance.GetString("respawnScene");
+            GameManager.instance.ReadyForRespawn(false);
+        }
+        var deadline = Time.realtimeSinceStartup + 30; var warned = false;
+        yield return null;
+        while (Connected && Session == session && Resetting && CoopContext.Epoch == round &&
+            (death != null ? !death.Arrived : UnitySceneManager.GetActiveScene().name != retryScene || !Playable)) {
+            if (!warned && Time.realtimeSinceStartup >= deadline) { warned = true; Notice("重试加载尚未完成，请检查游戏日志"); }
+            yield return null;
+        }
+        checkpointReload = null;
+        if (!Connected || Session != session || !Resetting || CoopContext.Epoch != round) yield break;
+        changingScene = false;
+        retryScene = UnitySceneManager.GetActiveScene().name;
+        Lock();
+    }
+
+    private void CancelTransitions() {
+        if (checkpointReload != null) StopCoroutine(checkpointReload);
+        if (teammateWarp != null) StopCoroutine(teammateWarp);
+        checkpointReload = teammateWarp = null; changingScene = false;
+        // BeginSceneTransition is native work which cannot be cancelled by
+        // stopping our coroutine. Its accepted arrival must still fade in
+        // after disconnect; only post-arrival teammate relocation is cancelled.
+        if (GameManager.instance == null || !GameManager.instance.IsInSceneTransition) { warpEntry = null; warpScene = null; }
+    }
+
+    private void CancelBenchReturn() {
+        if (benchReturn != null) StopCoroutine(benchReturn);
+        benchReturn = null; Returning = false; giveUpRequested = false;
+    }
+    private IEnumerator ReturnToBench(Message m) {
+        var death = personalDeath;
+        if (death == null || death.Destination != m.Scene) {
+            // An invalid acknowledgement must not strand the client locked in
+            // Returning or redirect them to another player's checkpoint.
+            api.ClientManager.Disconnect(); death?.Start();
+            Notice("个人死亡上下文不匹配，已断开联机并保留本机死亡流程");
+            benchReturn = null; yield break;
+        }
+        changingScene = true; Unlock();
+        // Formal death belongs only to this client. The surviving room's
+        // authority/cache and party round remain intact.
+        death.Start();
+        var deadline = Time.realtimeSinceStartup + 30; var warned = false;
+        yield return null;
+        while (Connected && Returning && !death.Arrived) {
+            if (!warned && Time.realtimeSinceStartup >= deadline) { warned = true; Notice("回椅加载尚未完成，请检查游戏日志"); }
+            yield return null;
+        }
+        if (Connected && Returning && !Resetting) {
+            changingScene = false; Lock();
+            var pos = HeroController.instance.transform.position;
+            Send(new Message { Kind = Kind.BenchReady, Serial = downSerial, Aux = sequence,
+                Scene = UnitySceneManager.GetActiveScene().name, X = pos.x, Y = pos.y });
+        }
+        benchReturn = null;
+    }
+
+    private Vector2? FindWarpEntry(On.GameManager.orig_FindEntryPoint orig, GameManager self, string name, UnityEngine.SceneManagement.Scene scene) =>
+        warpEntry.HasValue && name == "dreamGate" && scene.name == warpScene ? warpEntry : orig(self, name, scene);
+
+    private void CompleteWarpEntry(On.HeroController.orig_EnterSceneDreamGate orig, HeroController self) {
+        var ownArrival = warpEntry.HasValue && GameManager.instance.sceneName == warpScene && GameManager.instance.entryGateName == "dreamGate";
+        orig(self);
+        // Native dream-gate travel relies on the Dream Nail FSM to fade in
+        // and release control. F8 does not run that FSM. Complete our own
+        // scoped arrival while retaining native entry/hero-in-position events.
+        if (!ownArrival) return;
+        self.RegainControl(); self.StartAnimationControl();
+        GameCameras.instance.cameraController.PositionToHero(false);
+        GameManager.instance.FadeSceneIn();
+        warpEntry = null; warpScene = null;
+    }
+
+    private IEnumerator WarpTo(Message m) {
+        if (!Playable || !Party.Finite(m.X) || !Party.Finite(m.Y)) yield break;
+        var session = Session;
+        changingScene = true;
+        var rollback = BossTravel.SaveState();
+        var prepared = false;
+        try { prepared = BossTravel.Prepare(m); }
+        catch (Exception e) { UnityEngine.Debug.LogError("HollowConnect boss travel prepare: " + e); }
+        if (!prepared) {
+            rollback(); Notice("无法恢复队友的神居上下文，请检查日志");
+            changingScene = false; teammateWarp = null; yield break;
+        }
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene) {
+            warpEntry = new Vector2(m.X, m.Y);
+            warpScene = m.Scene;
+            try { GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo { SceneName = m.Scene,
+                EntryGateName = "dreamGate", EntryDelay = 0, Visualization = GameManager.SceneLoadVisualizations.Dream,
+                WaitForSceneTransitionCameraFade = true }); }
+            catch (Exception e) {
+                rollback(); warpEntry = null; warpScene = null; changingScene = false; teammateWarp = null;
+                Notice("传送加载被拒绝，已恢复原上下文"); UnityEngine.Debug.LogError(e); yield break;
+            }
+            var deadline = Time.realtimeSinceStartup + 30;
+            var warned = false;
+            yield return null;
+            while (Connected && Session == session && m.Round == CoopContext.Epoch &&
+                (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene || !Playable)) {
+                if (!warned && Time.realtimeSinceStartup >= deadline) { warned = true; Notice("传送加载尚未完成，请检查游戏日志"); }
+                yield return null;
+            }
+        }
+        if (Connected && Session == session && m.Round == CoopContext.Epoch && Playable &&
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == m.Scene && !Down && !Resetting && !Returning) {
+            var target = Peers.TryGetValue(m.Target, out var peer) && peer.State != null && peer.State.Scene == m.Scene && Now - peer.Seen < 1.5
+                ? new Vector2(peer.State.X, peer.State.Y) : new Vector2(m.X, m.Y);
+            var found = false;
+            foreach (var offset in new[] { new Vector2(1.5f, 0), new Vector2(-1.5f, 0), Vector2.zero, new Vector2(0, 2), new Vector2(3, 1), new Vector2(-3, 1) }) {
+                var pos = target + offset;
+                if (Physics2D.OverlapBox(pos, new Vector2(.8f, 1.8f), 0, 1 << 8) != null) continue;
+                var hero = HeroController.instance;
+                hero.transform.position = new Vector3(pos.x, pos.y, hero.transform.position.z);
+                hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                hero.SetHazardRespawn(hero.transform.position, false); hero.ResetAirMoves();
+                GameCameras.instance.cameraController.PositionToHero(false); found = true; break;
+            }
+            Notice(found ? "已到达队友身边" : "队友附近没有安全落点");
+        }
+        changingScene = false; teammateWarp = null;
+    }
+
+    internal void Notice(string message) { status = message; statusUntil = Time.unscaledTime + 5; }
+    private void OnGUI() {
+        if (!Connected) return;
+        var style = new GUIStyle(GUI.skin.label) { font = font, fontSize = 16, alignment = TextAnchor.MiddleCenter };
+        style.normal.textColor = Color.white;
+        if (Time.unscaledTime < statusUntil) GUI.Label(new Rect(0, 70, Screen.width, 36), status, style);
+        if (Down || Resetting || Returning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 70),
+            Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点 · 队友继续战斗" :
+            "暗影形态 · 等待队友击破暗影，一血复活\n按 " + CoopMod.Settings.GiveUpKey + " 放弃救援，按原版死亡规则返回", style);
+        map.DrawOverlay(style);
+    }
+
+    private void OnDestroy() {
+        BossTravel.Unregister();
+        CoopContext.CaptureBossContext = null; CoopContext.ApplyBossContext = null; CoopContext.BossTransitionReady = null;
+        CoopContext.LocalRescueDown = null;
+        CancelBenchReturn();
+        CancelTransitions();
+        shades?.Clear(); Unlock(); map?.Dispose();
+        On.HeroController.Die -= OnDie; On.CameraController.LateUpdate -= CameraUpdate; On.GameManager.FindEntryPoint -= FindWarpEntry;
+        On.HeroController.TakeDamage -= TakeDamage; ModHooks.AfterTakeDamageHook -= AfterTakeDamage;
+        On.HeroAudioController.PlaySound -= TrackHitSound;
+        On.HeroController.EnterSceneDreamGate -= CompleteWarpEntry;
+        ModHooks.SetPlayerBoolHook -= OnSetBool; ModHooks.SetPlayerIntHook -= OnSetInt;
+        if (api != null) { api.ClientManager.ConnectEvent -= OnConnect; api.ClientManager.DisconnectEvent -= OnDisconnect; }
+    }
+}

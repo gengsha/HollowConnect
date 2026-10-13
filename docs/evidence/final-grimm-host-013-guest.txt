@@ -1,0 +1,16 @@
+2026-10-13T07:14:27.3941901Z PASS menu ready
+2026-10-13T07:14:31.6065785Z PASS unsaved character ready
+2026-10-13T07:14:31.6075920Z PASS server started
+2026-10-13T07:14:32.4453650Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7
+2026-10-13T07:14:32.4746422Z PASS connected
+2026-10-13T07:14:32.4761490Z PASS both connected
+2026-10-13T07:14:32.5113486Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=False, peers=1
+2026-10-13T07:14:36.6710159Z ENGINE Room prepared: GG_Grimm, visit=2, epoch=0, entities=2
+2026-10-13T07:14:36.7908065Z PASS arena entered
+2026-10-13T07:14:36.8354943Z ENGINE Room snapshot committed: GG_Grimm, visit=2, epoch=0, authority=False, peers=1
+2026-10-13T07:14:36.8376484Z PASS authority ready
+2026-10-13T07:14:36.8472699Z PASS both in arena
+2026-10-13T07:15:46.8522149Z PASS replica follows moving native projectiles
+2026-10-13T07:15:46.8580165Z PASS both motion probes finished
+2026-10-13T07:15:46.8864665Z PASS both clients disconnected normally
+2026-10-13T07:15:47.1873656Z FINAL PASS Grimm native motion GG_Grimm

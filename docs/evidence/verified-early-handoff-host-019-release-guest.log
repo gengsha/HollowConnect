@@ -1,0 +1,75 @@
+2026-10-12T14:32:26.9533786Z PASS menu
+2026-10-12T14:32:31.6737848Z PASS unsaved character
+2026-10-12T14:32:31.7343636Z PASS server ready
+2026-10-12T14:32:31.7364054Z ENGINE Connecting client to server: 127.0.0.1:29650 as pantheonguest
+2026-10-12T14:32:31.8611446Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:32:31.8727877Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:32:32.0611377Z ENGINE Received server info from server
+2026-10-12T14:32:32.7309552Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:32:32.8601981Z ENGINE Scene changed from  to Town
+2026-10-12T14:32:32.9012725Z PASS handshake
+2026-10-12T14:32:32.9037090Z PASS both connected
+2026-10-12T14:32:32.9193027Z SEQUENCE 0/GG_Vengefly,1/GG_Gruz_Mother,2/GG_False_Knight,3/GG_Mega_Moss_Charger,4/GG_Hornet_1,5/GG_Spa,6/GG_Ghost_Gorb,7/GG_Dung_Defender,8/GG_Mage_Knight,9/GG_Brooding_Mawlek,10/GG_Engine,11/GG_Nailmasters
+2026-10-12T14:32:32.9244051Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:32:32.9259688Z ENGINE Updating already in scene player with ID: 0
+2026-10-12T14:32:32.9279732Z ENGINE Player 0 entered scene
+2026-10-12T14:32:33.9811840Z ENGINE Received scene host transfer for scene: Town
+2026-10-12T14:32:34.0073125Z ENGINE Player 0 left scene
+2026-10-12T14:32:37.2952134Z PASS first entrant starts fighting
+2026-10-12T14:32:38.1771952Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:32:38.1787021Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 1 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:32:38.1798584Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 2 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:32:38.1812959Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 3 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:32:38.1825975Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 4 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:32:38.1836338Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 5 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:32:38.1851701Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 6 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:32:38.1859643Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Giant Buzzer Col, expected 'chaser', actual [Big Buzzer]
+2026-10-12T14:32:38.1931653Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'chaser', actual [corpse,End Roar]
+2026-10-12T14:32:38.1945795Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'Big Buzzer', actual [corpse,End Roar]
+2026-10-12T14:32:38.2760627Z ENGINE Scene changed from Town to GG_Vengefly
+2026-10-12T14:32:38.4034505Z PASS first boss entry
+2026-10-12T14:32:38.4820929Z DELAY SNAPSHOT GG_Vengefly visit=2
+2026-10-12T14:32:38.5809680Z ENGINE WARN Spawn deferred: 14421214141164870773, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.5819701Z ENGINE WARN Spawn deferred: 14486505407909968859, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.5941615Z ENGINE WARN Spawn deferred: 17828447125460008161, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.5950784Z ENGINE WARN Spawn deferred: 12086904527040706427, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6126865Z ENGINE WARN Spawn deferred: 9531400184303032139, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6126865Z ENGINE WARN Spawn deferred: 15741390971658234235, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6299083Z ENGINE WARN Spawn deferred: 9948769501206842193, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6299083Z ENGINE WARN Spawn deferred: 12551051099503709793, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6453005Z ENGINE WARN Spawn deferred: 12068377293000402495, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6635429Z ENGINE WARN Spawn deferred: 13129420386323323723, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6648040Z ENGINE WARN Spawn deferred: 14258237443526569661, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6799510Z ENGINE WARN Spawn deferred: 11331570248857872097, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6809926Z ENGINE WARN Spawn deferred: 13335903211997831737, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.6962032Z ENGINE WARN Spawn deferred: 17937372059526012893, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7148877Z ENGINE WARN Spawn deferred: 16366306129249400361, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7163955Z ENGINE WARN Spawn deferred: 13832930242866311131, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7312796Z ENGINE WARN Spawn deferred: 10584536922304771037, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7474207Z ENGINE WARN Spawn deferred: 11602453346233781937, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7672827Z ENGINE WARN Spawn deferred: 13924640990740962661, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7672827Z ENGINE WARN Spawn deferred: 10617620203554811449, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7810778Z ENGINE WARN Spawn deferred: 16947052272733777589, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7824156Z ENGINE WARN Spawn deferred: 11121824255000451567, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.7993023Z ENGINE WARN Spawn deferred: 11322110497774301691, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.8003130Z ENGINE WARN Spawn deferred: 12141377532465843909, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.8158089Z ENGINE WARN Spawn deferred: 15032009112400208847, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.8163153Z ENGINE WARN Spawn deferred: 10628625055107047581, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.8175245Z ENGINE WARN Spawn deferred: 17639130992959219015, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.8347432Z ENGINE WARN Spawn deferred: 13073164603248375941, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.8347432Z ENGINE WARN Spawn deferred: 15908540588774869945, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:38.8357512Z ENGINE WARN Spawn deferred: 14359265771409733699, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:32:39.5330803Z PASS both startroom.0
+2026-10-12T14:32:39.6499452Z ENGINE Player 0 left scene
+2026-10-12T14:32:39.6504520Z ENGINE Received scene host transfer for scene: GG_Vengefly
+2026-10-12T14:32:39.6548054Z ENGINE WARN Entity FSM mismatch: /Buzzer Summon, expected 'chaser', actual []
+2026-10-12T14:32:39.6559072Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Summon(Clone), expected 'chaser', actual []
+2026-10-12T14:32:40.5784809Z PASS early transfer determines remaining player's authority
+2026-10-12T14:32:41.4866078Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:32:41.4866078Z ENGINE Updating already in scene player with ID: 0
+2026-10-12T14:32:41.4878784Z ENGINE Player 0 entered scene
+2026-10-12T14:32:44.5834787Z PASS old initial snapshot cannot undo early authority handoff
+2026-10-12T14:32:44.7015514Z PASS transferred boss AI continues moving
+2026-10-12T14:32:44.7031862Z PASS transferred boss continues taking damage
+2026-10-12T14:32:44.7041936Z PASS both handoff
+2026-10-12T14:32:44.7051936Z FINAL PASS early handoff before base snapshot; muted audio

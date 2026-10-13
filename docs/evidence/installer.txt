@@ -1,0 +1,2 @@
+PASS installation and uninstall restore original assembly and existing mod exactly
+PASS injected install failure restores original files, removes new API files, restores existing HKMP

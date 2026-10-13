@@ -1,0 +1,8 @@
+2026-10-12T16:13:19.9265999Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:13:19.9276002Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:13:19.9290720Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:13:19.9295757Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:13:19.9305769Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:13:19.9317542Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:13:20.0079275Z FAIL System.Exception: native fire force and coroutine survive network registration
+2026-10-12T16:13:20.5289119Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)

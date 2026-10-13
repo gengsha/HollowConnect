@@ -1,0 +1,600 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Hkmp.Util;
+using HutongGames.PlayMaker.Actions;
+using Modding;
+using UnityEngine;
+using Logger = Hkmp.Logging.Logger;
+using Object = UnityEngine.Object;
+
+namespace Hkmp.Game.Client.Entity; 
+
+/// <summary>
+/// Static class that has implementations for spawning entities that are usually spawned by other entities in-game.
+/// </summary>
+internal static class EntitySpawner {
+    /// <summary>
+    /// Prefab for the Vengefly that can be summoned from a jar in The Collector boss fight.
+    /// </summary>
+    private static GameObject _collectorVengeflyPrefab;
+    /// <summary>
+    /// Prefab for the Aspid Hunter that can be summoned from a jar in The Collector boss fight.
+    /// </summary>
+    private static GameObject _collectorAspidPrefab;
+    /// <summary>
+    /// Prefab for the Baldur that can be summoned from a jar in The Collector boss fight.
+    /// </summary>
+    private static GameObject _collectorBaldurPrefab;
+
+    /// <summary>
+    /// Spawn the game object for an entity with the given type that is spawned from the other given type.
+    /// </summary>
+    /// <param name="spawningType">The type of the entity that spawns the new entity.</param>
+    /// <param name="spawnedType">The type of the spawned entity.</param>
+    /// <param name="clientObject">The client game object from the spawning entity.</param>
+    /// <param name="clientFsms">The list of client FSMs from the spawning entity.</param>
+    /// <returns>The game object for the spawned entity.</returns>
+    public static GameObject SpawnEntityGameObject(
+        EntityType spawningType, 
+        EntityType spawnedType,
+        GameObject clientObject,
+        List<PlayMakerFSM> clientFsms
+    ) {
+        foreach (var fsm in clientFsms.Where(f => f != null)) {
+            try {
+                var spawned = SpawnFromFsm(spawningType, spawnedType, clientObject, fsm);
+                if (spawned != null) return spawned;
+            } catch (Exception e) {
+                Logger.Debug($"Spawn source FSM {fsm.FsmName} does not supply {spawnedType}: {e.Message}");
+            }
+        }
+        Logger.Warn($"No matching spawn action/prefab: {spawningType}/{spawnedType}; FSMs={string.Join(",", clientFsms.Where(f => f != null).Select(f => f.FsmName))}");
+        return null;
+    }
+    private static GameObject SpawnFromFsm(EntityType spawningType, EntityType spawnedType, GameObject clientObject, PlayMakerFSM fsm) {
+        Logger.Debug($"Trying to spawn entity game object for: {spawningType}, {spawnedType}");
+        
+        if (spawningType == EntityType.ElderBaldur && spawnedType == EntityType.Baldur) {
+            return SpawnBaldurGameObject(fsm);
+        } 
+        
+        if (spawningType == EntityType.VengeflyKing) {
+            if (spawnedType == EntityType.VengeflySummon) {
+                return SpawnVengeflySummonObject(fsm);
+            }
+
+            if (spawnedType == EntityType.Vengefly) {
+                return SpawnVengeflyFromKing(fsm);
+            }
+        }
+
+        if (spawningType == EntityType.VengeflySummon && spawnedType == EntityType.Vengefly) {
+            return SpawnVengeflyObjectFromSummon(clientObject);
+        }
+
+        if (spawningType == EntityType.Sporg && spawnedType == EntityType.SporgSpore) {
+            return SpawnSporgSpore(fsm);
+        }
+
+        if (spawningType == EntityType.OomaCorpse && spawnedType == EntityType.OomaCore) {
+            return SpawnOomaCoreObject(fsm);
+        }
+
+        if (spawnedType == EntityType.SoulOrb) {
+            if (spawningType == EntityType.SoulTwister) {
+                return SpawnSoulTwisterOrbObject(fsm);
+            }
+            if (spawningType == EntityType.SoulWarrior) {
+                return SpawnSoulWarriorOrbObject(fsm);
+            }
+            if (spawningType is EntityType.SoulMaster or EntityType.SoulTyrant) {
+                return SpawnSoulMasterOrbObject(fsm);
+            }
+            if (spawningType == EntityType.SoulMasterOrbSpinner) {
+                return SpawnOrbSpinnerOrbObject(fsm);
+            }
+
+            if (spawningType is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2) {
+                return SpawnSoulMaster2OrbObject(fsm);
+            }
+        }
+
+        if (spawningType == EntityType.TheCollector && spawnedType == EntityType.CollectorJar) {
+            return SpawnCollectorJarObject(fsm);
+        }
+
+        if (spawningType == EntityType.CollectorJar) {
+            return SpawnCollectorJarContents(clientObject, spawnedType);
+        }
+
+        if (spawningType is EntityType.DungDefender or EntityType.WhiteDefender) {
+            return SpawnDungBallObject(fsm, spawnedType);
+        }
+
+        if (spawningType == EntityType.Nosk && spawnedType == EntityType.NoskBlob) {
+            return SpawnNoskBlobObject(fsm);
+        }
+
+        if (spawningType == EntityType.BrokenVessel && spawnedType == EntityType.InfectedBalloon) {
+            return SpawnBrokenVesselBalloonObject(fsm);
+        }
+
+        if (spawningType == EntityType.LostKin && spawnedType == EntityType.InfectedBalloon) {
+            return SpawnBrokenVesselBalloonObject(fsm);
+        }
+
+        if (spawningType == EntityType.MantisPetra && spawnedType == EntityType.MantisPetraScythe) {
+            return SpawnMantisPetraScytheObject(fsm);
+        }
+
+        if (spawningType == EntityType.Galien && spawnedType == EntityType.GalienMiniScythe) {
+            // The reason we do not use a hardcoded index from the FSMs is because the Shield Attack FSM is indexed
+            // differently depending on whether Markoth is in Godhome or not
+            return SpawnGalienMiniScytheObject(fsm);
+        }
+        
+        if (spawningType == EntityType.Markoth && spawnedType == EntityType.MarkothShield) {
+            // The reason we do not use a hardcoded index from the FSMs is because the Shield Attack FSM is indexed
+            // differently depending on whether Markoth is in Godhome or not
+            return SpawnMarkothShieldObject(fsm);
+        }
+
+        if (spawningType == EntityType.Kingsmould && spawnedType == EntityType.KingsmouldBlade) {
+            return SpawnKingsmouldBladeObject(fsm);
+        }
+
+        if (spawningType == EntityType.HornetSentinelSpikes && spawnedType == EntityType.HornetSentinelSpike) {
+            return SpawnHornetSentinelSpikeObject(fsm);
+        }
+
+        if (spawningType == EntityType.GrimmkinSpawner) {
+            return SpawnGrimmkinObject(fsm);
+        }
+
+        if (spawningType is EntityType.Grimm or EntityType.NightmareKingGrimm) {
+            if (spawnedType == EntityType.GrimmFirebatPillar) {
+                var action = fsm.GetState("Firebat 1").Actions.OfType<SpawnObjectFromGlobalPool>()
+                    .First(a => a.gameObject.Value != null && a.gameObject.Value.name.Contains("Firebat Pillar"));
+                return SpawnFromGlobalPool(action, action.gameObject.Value);
+            }
+            if (spawnedType == EntityType.GrimmFireball) {
+                return SpawnGrimmFireballObject(fsm);
+            }
+            
+            if (spawnedType is EntityType.GrimmBat or EntityType.NightmareKingGrimmBat) {
+                return SpawnGrimmFirebatObject(fsm);
+            }
+        }
+
+        if (spawningType is EntityType.Radiance or EntityType.AbsoluteRadiance) {
+            if (spawnedType == EntityType.RadianceOrb) {
+                return SpawnRadianceOrb(fsm);
+            }
+            
+            if (spawnedType == EntityType.RadianceNail) {
+                return SpawnRadianceNail(fsm);
+            }
+
+            if (spawnedType == EntityType.RadianceNailComb) {
+                return SpawnRadianceNailComb(fsm);
+            }
+        }
+
+        if (spawningType == EntityType.RadianceNailComb && spawnedType == EntityType.RadianceNail) {
+            return SpawnRadianceNailFromComb(fsm);
+        }
+
+        if (spawningType == EntityType.WingedNosk) {
+            if (spawnedType == EntityType.InfectedBalloon) {
+                return SpawnInfectedBalloonWingedNoskObject(fsm);
+            }
+            
+            if (spawnedType == EntityType.NoskBlob) {
+                return SpawnWingedNoskBlobObject(fsm);
+            }
+        }
+
+        if (spawningType == EntityType.WingedNoskGlobDropper && spawnedType == EntityType.NoskBlob) {
+            return SpawnWingedNoskGlobDropper(fsm);
+        }
+        
+        Logger.Warn($"No implementation for spawning entity game object: {spawningType}, {spawnedType}");
+
+        return null;
+    }
+
+    private static GameObject SpawnFromCreateObject(CreateObject action) {
+        var gameObject = action.gameObject.Value;
+
+        var position = Vector3.zero;
+        var euler = Vector3.zero;
+        if (action.spawnPoint.Value != null) {
+            position = action.spawnPoint.Value.transform.position;
+
+            if (!action.position.IsNone) {
+                position += action.position.Value;
+            }
+
+            if (!action.rotation.IsNone) {
+                euler = action.rotation.Value;
+            } else {
+                euler = action.spawnPoint.Value.transform.eulerAngles;
+            }
+        } else {
+            if (!action.position.IsNone) {
+                position = action.position.Value;
+            }
+
+            if (!action.rotation.IsNone) {
+                euler = action.rotation.Value;
+            }
+        }
+
+        var createdObject = Object.Instantiate(gameObject, position, Quaternion.Euler(euler));
+
+        return createdObject;
+    }
+
+    private static GameObject SpawnFromGlobalPool(SpawnObjectFromGlobalPool action, GameObject gameObject) {
+        var position = Vector3.zero;
+        var euler = Vector3.up;
+        if (action.spawnPoint.Value != null) {
+            position = action.spawnPoint.Value.transform.position;
+            if (!action.position.IsNone) {
+                position += action.position.Value;
+            }
+
+            if (action.rotation.IsNone) {
+                euler = action.spawnPoint.Value.transform.eulerAngles;
+            } else {
+                euler = action.rotation.Value;
+            }
+        } else {
+            if (!action.position.IsNone) {
+                position = action.position.Value;
+            }
+
+            if (!action.rotation.IsNone) {
+                euler = action.rotation.Value;
+            }
+        }
+
+        var spawnedObject = gameObject.Spawn(position, Quaternion.Euler(euler));
+
+        return spawnedObject;
+    }
+    
+    private static GameObject SpawnFromFlingGlobalPool(FlingObjectsFromGlobalPool action, GameObject gameObject) {
+        var position = Vector3.zero;
+        var zero = Vector3.zero;
+        if (action.spawnPoint.Value != null) {
+            position = action.spawnPoint.Value.transform.position;
+            if (!action.position.IsNone) {
+                position += action.position.Value;
+            }
+        } else {
+            if (!action.position.IsNone) {
+                position = action.position.Value;
+            }
+        }
+
+        var spawnedObject = gameObject.Spawn(position, Quaternion.Euler(zero));
+        return spawnedObject;
+    }
+    
+    private static GameObject SpawnFromFlingGlobalPoolTime(
+        FlingObjectsFromGlobalPoolTime action, 
+        GameObject gameObject
+    ) {
+        var position = Vector3.zero;
+        var zero = Vector3.zero;
+        if (action.spawnPoint.Value != null) {
+            position = action.spawnPoint.Value.transform.position;
+            if (!action.position.IsNone) {
+                position += action.position.Value;
+            }
+        } else {
+            if (!action.position.IsNone) {
+                position = action.position.Value;
+            }
+        }
+
+        var spawnedObject = gameObject.Spawn(position, Quaternion.Euler(zero));
+        return spawnedObject;
+    }
+
+    private static GameObject SpawnBaldurGameObject(PlayMakerFSM fsm) {
+        var setGameObjectAction = fsm.GetFirstAction<SetGameObject>("Roller");
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Fire");
+
+        var gameObject = setGameObjectAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+
+    private static GameObject SpawnVengeflySummonObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<CreateObject>("Summon");
+
+        return SpawnFromCreateObject(action);
+    }
+
+    private static GameObject SpawnVengeflyObjectFromSummon(GameObject spawningObject) {
+        var enemySpawner = spawningObject.GetComponent<EnemySpawner>();
+        if (enemySpawner == null) {
+            Logger.Error("Could not create Vengefly object from summon because EnemySpawner component is null");
+            return null;
+        }
+
+        // We check if the object has been created already in the Awake() of the EnemySpawner
+        // If not, we have to instantiate a new object and return that instead
+        var spawnedEnemy = ReflectionHelper.GetField<EnemySpawner, GameObject>(enemySpawner, "spawnedEnemy");
+        if (spawnedEnemy == null) {
+            spawnedEnemy = Object.Instantiate(enemySpawner.enemyPrefab);
+        }
+
+        spawnedEnemy.SetActive(true);
+        
+        return spawnedEnemy;
+    }
+
+    private static GameObject SpawnVengeflyFromKing(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<PreSpawnGameObjects>("Set GG");
+        if (action == null) {
+            return null;
+        }
+        
+        if (action.prefab.Value == null) {
+            return null;
+        }
+        
+        // Check if the store array exists and needs to be resized
+        if (!action.storeArray.IsNone) {
+            var length = action.spawnAmount.Value * action.spawnAmountMultiplier.Value;
+            if (action.storeArray.Values.Length != length) {
+                action.storeArray.Resize(length);
+            }
+        }
+
+        var go = Object.Instantiate(action.prefab.Value);
+
+        // Find a space in the store array to store this object in case we are host transferred
+        // That way, the pre-spawning of objects is already done
+        if (!action.storeArray.IsNone) {
+            var arr = action.storeArray.Values;
+            for (var i = 0; i < arr.Length; i++) {
+                if (arr[i] == null) {
+                    arr[i] = go;
+                    break;
+                }
+            }
+        }
+
+        return go;
+    }
+
+    private static GameObject SpawnOomaCoreObject(PlayMakerFSM fsm) {
+        var action = fsm.GetAction<CreateObject>("Explode", 3);
+
+        return SpawnFromCreateObject(action);
+    }
+
+    private static GameObject SpawnSporgSpore(PlayMakerFSM fsm) {
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Fire");
+        var gameObject = spawnAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+    
+    private static GameObject SpawnSoulTwisterOrbObject(PlayMakerFSM fsm) {
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Fire");
+        var gameObject = spawnAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+    
+    private static GameObject SpawnSoulWarriorOrbObject(PlayMakerFSM fsm) {
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Shoot");
+        var gameObject = spawnAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+    
+    private static GameObject SpawnSoulMasterOrbObject(PlayMakerFSM fsm) {
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Shot");
+        var gameObject = spawnAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+    
+    private static GameObject SpawnOrbSpinnerOrbObject(PlayMakerFSM fsm) {
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Spawn");
+        var gameObject = spawnAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+    
+    private static GameObject SpawnSoulMaster2OrbObject(PlayMakerFSM fsm) {
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Spawn Fireball");
+        var gameObject = spawnAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+    
+    private static GameObject SpawnCollectorJarObject(PlayMakerFSM fsm) {
+        var setContents = fsm.GetFirstAction<SetSpawnJarContents>("Buzzer");
+        _collectorVengeflyPrefab = setContents.enemyPrefab.Value;
+        setContents = fsm.GetFirstAction<SetSpawnJarContents>("Spitter");
+        _collectorAspidPrefab = setContents.enemyPrefab.Value;
+        setContents = fsm.GetFirstAction<SetSpawnJarContents>("Roller");
+        _collectorBaldurPrefab = setContents.enemyPrefab.Value;
+        
+        var spawnAction = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Spawn");
+        var gameObject = spawnAction.gameObject.Value;
+
+        return SpawnFromGlobalPool(spawnAction, gameObject);
+    }
+
+    private static GameObject SpawnCollectorJarContents(GameObject spawningObject, EntityType spawnedType) {
+        var spawnJarControl = spawningObject.GetComponent<SpawnJarControl>();
+        if (spawnJarControl == null) {
+            Logger.Error("Could not find SpawnJarControl behaviour on spawning object");
+            return null;
+        }
+
+        GameObject gameObject;
+        var position = spawnJarControl.transform.position;
+        
+        switch (spawnedType) {
+            case EntityType.Vengefly:
+                gameObject = _collectorVengeflyPrefab.Spawn(position);
+                break;
+            case EntityType.AspidHunter:
+                gameObject = _collectorAspidPrefab.Spawn(position);
+                break;
+            case EntityType.Baldur:
+                gameObject = _collectorBaldurPrefab.Spawn(position);
+                break;
+            default:
+                Logger.Error($"Could not spawn object from collector jar: {spawnedType}");
+                return null;
+        }
+
+
+        gameObject.tag = "Boss";
+
+        return gameObject;
+    }
+
+    private static GameObject SpawnDungBallObject(PlayMakerFSM fsm, EntityType spawnedType) {
+        SpawnObjectFromGlobalPool action;
+        GameObject gameObject;
+        
+        if (spawnedType == EntityType.LargeDungBall) {
+            action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Throw 1");
+            gameObject = action.gameObject.Value;
+        } else if (spawnedType == EntityType.SmallDungBall) {
+            action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Erupt Out");
+            gameObject = action.gameObject.Value;
+        } else {
+            throw new InvalidOperationException($"Could not spawn spawned type from Dung Defender: {spawnedType}");
+        }
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnNoskBlobObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<FlingObjectsFromGlobalPoolTime>("Roof Drop");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromFlingGlobalPoolTime(action, gameObject);
+    }
+    
+    private static GameObject SpawnBrokenVesselBalloonObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Spawn");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnMantisPetraScytheObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Shoot");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnGalienMiniScytheObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<CreateObject>("Summon");
+
+        return SpawnFromCreateObject(action);
+    }
+    
+    private static GameObject SpawnMarkothShieldObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<CreateObject>("Init");
+
+        return SpawnFromCreateObject(action);
+    }
+    
+    private static GameObject SpawnKingsmouldBladeObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<CreateObject>("Throw");
+
+        return SpawnFromCreateObject(action);
+    }
+    
+    private static GameObject SpawnHornetSentinelSpikeObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Spawn 1");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnGrimmkinObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<CreateObject>("Level 3");
+
+        return SpawnFromCreateObject(action);
+    }
+    
+    private static GameObject SpawnGrimmFireballObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Fire Low R");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnGrimmFirebatObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Firebat 1");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+
+    private static GameObject SpawnRadianceOrb(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Spawn Fireball");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnRadianceNail(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("CW Spawn");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnRadianceNailComb(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Comb Top");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnRadianceNailFromComb(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("RG1");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+
+    private static GameObject SpawnInfectedBalloonWingedNoskObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<SpawnObjectFromGlobalPool>("Summon");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnWingedNoskBlobObject(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<FlingObjectsFromGlobalPool>("Spit 1");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromFlingGlobalPool(action, gameObject);
+    }
+    
+    private static GameObject SpawnWingedNoskGlobDropper(PlayMakerFSM fsm) {
+        var action = fsm.GetFirstAction<FlingObjectsFromGlobalPool>("Drop");
+        var gameObject = action.gameObject.Value;
+
+        return SpawnFromFlingGlobalPool(action, gameObject);
+    }
+}

@@ -1,0 +1,558 @@
+{
+  "version": "0.1.13",
+  "checkedAtUtc": "2026-10-13T08:00:09.4534363Z",
+  "muted": true,
+  "scope": "Supplemental diagnostic builds, excluded from the twelve final-binary acceptance runs. No boss transform or FSM state forced. Same-authority controls use the same native armor/head extra damage and do not hand off authority.",
+  "findings": [
+    "Run 5 failed at native Rise 2; fixed updates and correct SetVelocity2d target continued while FK Terrain Block and the battle gate trapped the boss.",
+    "Runs 6-9 recorded authority and replica positions/scales; run 9 identified an active detached replica FK Terrain Block after takeover and recovery, while native Terrain Block remained inactive under the native boss.",
+    "Three same-authority controls completed native head recovery and movement. They are controls, not proof of every native edge case.",
+    "Run 10 on pre-hierarchy HKMP SHA256 C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4 failed the new native-reference/unique-active-collider assertion.",
+    "Run 11 on an intermediate hierarchy-fix build passed the new collider ownership/removal assertions and phase movement. Final acceptance requires the separate final-binary suite.",
+    "Earlier Run-state movement failure remains preserved separately; its incomplete hierarchy trace cannot establish a unique cause."
+  ],
+  "runs": [
+    {
+      "name": "boss-motion-diagnostic-013-1",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-1-host.txt",
+          "sha256": "391ECA67493EB1DA1C21605EA31A4257E1E037EA6A7592B14784C91A5991214A"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-1-guest.txt",
+          "sha256": "820B402EAA3203247F73D5C930513B4AF1D2BE487A92E3BD8DCF48790F0DC5E8"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-2",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-2-host.txt",
+          "sha256": "520C60C4FEE11AB4E674835F5B53B4CCE823AC1D1FA632E31A21FF4332B9C74C"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-2-guest.txt",
+          "sha256": "F594CF9480EC60D09DA5C4EC375631AAA4B13CB98E769856590D6514BF612649"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-3",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-3-host.txt",
+          "sha256": "7913341E4A104099B6D746730EB2C1F4E53F428B77641EA1BDF73847C90C50F5"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-3-guest.txt",
+          "sha256": "81DC10F80ED0ED6FBBFF4595BB65A4FE568C5FD8BEF83B4C654A5DA4EA10F472"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-4",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-4-host.txt",
+          "sha256": "4C11BB22FAC090D1A110EB44FE6C86C8412621CFB2509D83A7BB0C6F7F23B064"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-4-guest.txt",
+          "sha256": "B8BCC99C7E658B21256D6D78C6984DAFD1DE105F7BA9678FA5491FB34DF320FF"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-5",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": false,
+          "failed": true,
+          "passed": false,
+          "failures": [
+            "2026-10-13T07:26:32.6838815Z FAIL new authority continues native phase and combat"
+          ],
+          "evidence": "boss-motion-diagnostic-013-5-host.txt",
+          "sha256": "2C3B8B9B8F75C6BB853EB2F521388BF1905CDAAB6A05CD6C528F1D8BEA47764A"
+        },
+        {
+          "role": "guest",
+          "done": false,
+          "failed": true,
+          "passed": false,
+          "failures": [
+            "2026-10-13T07:26:07.6945740Z FAIL native head defeat advances phase after transfer",
+            "2026-10-13T07:26:23.7068557Z FAIL boss AI moves after phase handoff"
+          ],
+          "evidence": "boss-motion-diagnostic-013-5-guest.txt",
+          "sha256": "057F4B635249D069F63AD9C86D4C2211AC8F8DEC7DAB05B6B5E86FC8C2FBC082"
+        }
+      ],
+      "bothPassed": false
+    },
+    {
+      "name": "boss-motion-diagnostic-013-6",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-6-host.txt",
+          "sha256": "CBCB5CBD17B8ECD30BA561384CF925DC0C7A3B393FDC264C3EBBADE6620C9D03"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-6-guest.txt",
+          "sha256": "40C03431BAC978E6434909285B4E427144DAEB6A378F2365EB33B8B4EC3BAD37"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-7",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-7-host.txt",
+          "sha256": "E559F23D7D8F749E3692B3E2042B4D8E34767182DC4A0B57573E980AA1D04CCB"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-7-guest.txt",
+          "sha256": "5A38484518A7DCEA386E316D78D8F41C0009FFA9B5EC9A59B6065D3D8BE0A41C"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-8",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-8-host.txt",
+          "sha256": "5E57C3EA98696C9B2DA0CF2862AF42A48089D765EE18E9AEA0FE75CF55E96BA7"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-8-guest.txt",
+          "sha256": "A15387218BB8D366A66503BE1847913464D9F4C55A760E5806EDE42CF616141B"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-9",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-9-host.txt",
+          "sha256": "D2E281957CDC697A23DA4BC5745CA25F533A5B68A3828D3D418A4F1FCFC2EC5E"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-9-guest.txt",
+          "sha256": "653560FC2676BEDEC37FE51ADE6453091B1A12C87F1203488CF4558C46C275A6"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-motion-diagnostic-013-10",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": false,
+          "failed": true,
+          "passed": false,
+          "failures": [
+            "2026-10-13T07:45:00.6927604Z FAIL new authority continues native phase and combat"
+          ],
+          "evidence": "boss-motion-diagnostic-013-10-host.txt",
+          "sha256": "AF96EC7205ED960159F97B00A3421F666073EF560AD368E72263F1231F777378"
+        },
+        {
+          "role": "guest",
+          "done": false,
+          "failed": true,
+          "passed": false,
+          "failures": [
+            "2026-10-13T07:44:15.7024632Z FAIL detached native terrain reference owns the only active collider after handoff"
+          ],
+          "evidence": "boss-motion-diagnostic-013-10-guest.txt",
+          "sha256": "72C1AF2617B95E256288E3E31151D6D5336272A11A84EE59440BB5D430BA2AED"
+        }
+      ],
+      "bothPassed": false
+    },
+    {
+      "name": "boss-motion-diagnostic-013-11",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "40EEC46539AA20E32338DA6C61F465AFEFCB7FC692BFF6C2EDEED79902220D7D"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5D57A73E5658D94C2FE1639575FB4A09E4907271A95AD1D41A7539F17FEDC49B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-11-host.txt",
+          "sha256": "54FEE423FABAF9668E607A40EE660D8E2E77AC4F7623C1361E51F36A7B40E145"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-motion-diagnostic-013-11-guest.txt",
+          "sha256": "5FA89A060105DC9C01AAB6DF2F917407941A620E2F183A7DFDEC2AB284EB057C"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-control-diagnostic-013-1",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-control-diagnostic-013-1-host.txt",
+          "sha256": "AE39170AC0F0DAE0C5A557A8BD573AD88E896AED9DE65A1A9767ED3BFE872593"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-control-diagnostic-013-1-guest.txt",
+          "sha256": "686964020F5023B9434E9C71EBCB0E685DE51834C7822E0A1DF241BD3DACA925"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-control-diagnostic-013-2",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-control-diagnostic-013-2-host.txt",
+          "sha256": "4A865FC30994F62A1BD1C507B32845FA7419C5840007FD9561429DEFECFB8B02"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-control-diagnostic-013-2-guest.txt",
+          "sha256": "D7A4BCD60E9FD6A3B68FD0556C3AB53CBA58DA24906EFF7F6662A4F2AFF4DDB5"
+        }
+      ],
+      "bothPassed": true
+    },
+    {
+      "name": "boss-control-diagnostic-013-3",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-control-diagnostic-013-3-host.txt",
+          "sha256": "E6173C1F6ECED175DF0A910844507008D0B8115656746182C3517443D91EF662"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "passed": true,
+          "failures": [],
+          "evidence": "boss-control-diagnostic-013-3-guest.txt",
+          "sha256": "380BCA857C2B7FD3663C0FB1B07121F7C1F539F1AE05CA3CB7BEC86AAC869A26"
+        }
+      ],
+      "bothPassed": true
+    }
+  ],
+  "twoMachineFrpValidation": false
+}

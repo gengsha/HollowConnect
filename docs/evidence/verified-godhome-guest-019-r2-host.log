@@ -1,0 +1,516 @@
+2026-10-12T14:52:14.8147377Z PASS menu ready
+2026-10-12T14:52:14.8547964Z DIAGNOSTIC scene= playable=False host=False ready=False pending= latest= unscaled=11.36479 realtime=11.63171 tickNext=0 controller=null netReady=False
+2026-10-12T14:52:20.1225381Z DIAGNOSTIC scene= playable=False host=False ready=False pending= latest= unscaled=16.36496 realtime=16.89933 tickNext=0 controller=null netReady=False
+2026-10-12T14:52:20.3937065Z PASS unsaved character ready
+2026-10-12T14:52:22.0824520Z PASS handshake
+2026-10-12T14:52:22.1567170Z PASS both connected
+2026-10-12T14:52:23.0757338Z ENGINE WARN Entity FSM mismatch: Crossroads_01/Angry Buzzer, expected 'chaser', actual [Control]
+2026-10-12T14:52:23.1951464Z ENGINE WARN Entity FSM mismatch: Crossroads_01/Corpse Crawler(Clone), expected 'Crawler', actual []
+2026-10-12T14:52:23.3800036Z PASS warp destination ready
+2026-10-12T14:52:25.1236922Z DIAGNOSTIC scene=Crossroads_01 playable=True host=True ready=True pending= latest= unscaled=21.89647 realtime=21.90037 tickNext=22.18923 controller=null netReady=True
+2026-10-12T14:52:27.3408325Z PASS guest warp tested
+2026-10-12T14:52:28.2980661Z PASS host leaves for reverse warp
+2026-10-12T14:52:28.3198835Z PASS reverse warp target ready
+2026-10-12T14:52:28.3227012Z PASS warp target presence
+2026-10-12T14:52:29.6516306Z PASS F8 cross-room arrival
+2026-10-12T14:52:30.1245750Z DIAGNOSTIC scene=Crossroads_01 playable=True host=False ready=True pending= latest= unscaled=26.89855 realtime=26.90116 tickNext=0 controller=null netReady=True
+2026-10-12T14:52:31.6573095Z WARP FADE before=3 after=4 control=False camera=FOLLOWING
+2026-10-12T14:52:31.6655137Z FADE FSM Geo Text/Fader=Upped
+2026-10-12T14:52:31.6665277Z FADE FSM Low Health Light/Fader=Down
+2026-10-12T14:52:31.6665277Z FADE FSM tk2dCamera/CameraFade=Normal
+2026-10-12T14:52:31.6675391Z FADE FSM Add Text/Fader=Down
+2026-10-12T14:52:31.6675391Z FADE FSM Subtract Text/Fader=Down
+2026-10-12T14:52:31.6695018Z FADE FSM HeroLight/color_fader=Init
+2026-10-12T14:52:31.6700071Z FADE FSM SD Charge Wall/color_fader=Init
+2026-10-12T14:52:31.6700071Z FADE FSM SD Charge/color_fader=Init
+2026-10-12T14:52:31.6775938Z PASS F8 restores fade, input and camera
+2026-10-12T14:52:31.6881573Z PASS both warp directions
+2026-10-12T14:52:31.6920395Z BUILTIN SEQUENCES Boss Sequence Test/1,Boss Sequence Tier 1/12,Boss Sequence Tier 2/12,Boss Sequence Tier 3/12,Boss Sequence Tier 4/12,Boss Sequence Tier 5/53
+2026-10-12T14:52:31.6958923Z SEQUENCE SCENES 0/GG_Hive_Knight,1/GG_Ghost_Hu,2/GG_Collector,3/GG_God_Tamer,4/GG_Grimm,5/GG_Spa,6/GG_Ghost_Galien,7/GG_Grey_Prince_Zote,8/GG_Uumuu,9/GG_Hornet_2,10/GG_Engine,11/GG_Sly
+2026-10-12T14:52:31.6979318Z THIRD PANTHEON Boss Sequence Tier 3 starting at Grimm index=4
+2026-10-12T14:52:35.2561395Z DIAGNOSTIC scene=GG_Grimm playable=False host=False ready=False pending= latest= unscaled=31.68857 realtime=32.03331 tickNext=0 controller=GG_Grimm/True netReady=False
+2026-10-12T14:52:35.3026634Z PASS Grimm arena entered
+2026-10-12T14:52:35.3371683Z PASS Grimm authority ready
+2026-10-12T14:52:35.3381899Z AUTHORITY=False
+2026-10-12T14:52:35.3428133Z ENTITY 930639587720373499 Grimm pos=(92.0, 8.3, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:52:35.3438253Z FSM Control=
+2026-10-12T14:52:35.3462943Z STATE Init SendEventByName,CallStaticMethod,GetOwner,FindChild,FindChild,FindChild,SetGameObject,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,SetParent,SetPosition,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild,FindChild
+2026-10-12T14:52:35.3485849Z INIT CALL className=FakeBat
+2026-10-12T14:52:35.3496660Z INIT CALL methodName=NotifyAllBossAwake
+2026-10-12T14:52:35.3512078Z INIT CALL parameters=HutongGames.PlayMaker.FsmVar[]
+2026-10-12T14:52:35.3523388Z INIT CALL storeResult=None
+2026-10-12T14:52:35.3533418Z INIT CALL everyFrame=False
+2026-10-12T14:52:35.3533418Z STATE Slash Antic FaceObject,AudioPlayerOneShotSingle,Tk2dPlayAnimation,Wait,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.3547888Z STATE Slash 1 GetScale,AudioPlayerOneShotSingle,FloatOperator,SetVelocity2d,Tk2dPlayAnimationWithEvents,SetPolygonCollider,ActivateGameObject,PlayParticleEmitter
+2026-10-12T14:52:35.3557984Z STATE Slash 2 Tk2dPlayAnimationWithEvents,SetPolygonCollider,SetPolygonCollider
+2026-10-12T14:52:35.3557984Z STATE Slash 3 Tk2dPlayAnimationWithEvents,SetPolygonCollider,SetPolygonCollider
+2026-10-12T14:52:35.3568006Z STATE Slash Recover DecelerateV2,Tk2dPlayAnimationWithEvents,SetPolygonCollider,StopParticleEmitter
+2026-10-12T14:52:35.3568006Z STATE Slash End SetVelocity2d
+2026-10-12T14:52:35.3580609Z STATE Stun Reset SetPolygonCollider,StopParticleEmitter,ActivateGameObject,SetFsmBool,SetPolygonCollider,SetPolygonCollider,SetPolygonCollider,ActivateGameObject,SetBoolValue,ActivateGameObject,SetRotation,SendEventByName,StopParticleEmitter,StopParticleEmitter,StopParticleEmitter,SetDamageHeroAmount
+2026-10-12T14:52:35.3580609Z STATE FB Antic FaceObject,Tk2dPlayAnimation,Wait,AudioPlayerOneShotSingle,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.3591805Z STATE FB Cast Wait,Tk2dPlayAnimation,BoolTest,ActivateGameObject,ActivateGameObject,AudioPlayerOneShotSingle
+2026-10-12T14:52:35.3601902Z STATE FB Cast End Wait,Tk2dPlayAnimation,ActivateGameObject
+2026-10-12T14:52:35.3611917Z STATE Firebat 1 GetScale,FloatOperator,SpawnObjectFromGlobalPool,SpawnObjectFromGlobalPool,SetVelocity2d,SetFsmFloat,Wait,AudioPlayerOneShotSingle
+2026-10-12T14:52:35.3611917Z STATE Firebat 2 GetScale,FloatOperator,SpawnObjectFromGlobalPool,SpawnObjectFromGlobalPool,SetVelocity2d,SetFsmFloat,Wait,AudioPlayerOneShotSingle
+2026-10-12T14:52:35.3631484Z STATE Firebat 3 ActivateGameObject,SetBoolValue,GetScale,FloatOperator,FloatMultiply,SpawnObjectFromGlobalPool,SpawnObjectFromGlobalPool,SetVelocity2d,SetFsmFloat,Wait,AudioPlayerOneShotSingle
+2026-10-12T14:52:35.3631484Z STATE Tele Out Tk2dPlayAnimationWithEvents,SetRotation,SetVelocity2d,SendEventByName,AudioPlayerOneShotSingle
+2026-10-12T14:52:35.3645989Z STATE Out Pause SetMeshRenderer,SendEventByName,Wait,SendEventByName,SetDamageHeroAmount,TransitionToAudioSnapshot,ActivateGameObject
+2026-10-12T14:52:35.3645989Z STATE Move Choice SetBoolValue,SendRandomEventV3
+2026-10-12T14:52:35.3656918Z STATE FB Hero Pos GetPosition,FloatCompare
+2026-10-12T14:52:35.3667144Z STATE FB Tele R RandomFloat,SetPosition
+2026-10-12T14:52:35.3667144Z STATE FB Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-12T14:52:35.3672368Z STATE FB Tele L RandomFloat,SetPosition
+2026-10-12T14:52:35.3672368Z STATE FB Behind Tk2dPlayAnimationWithEvents,ActivateGameObject,ActivateGameObject
+2026-10-12T14:52:35.3686659Z STATE FB Re Tele SetMeshRenderer,SendEventByName,SetBoolValue,ActivateGameObject
+2026-10-12T14:52:35.3686659Z STATE Slash Pos GetPosition,GetPosition,RandomFloat,RandomlyFlipFloat,FloatOperator,FloatInRange,FloatInRange,ActivateGameObject
+2026-10-12T14:52:35.3699523Z STATE Slash Retry NextFrameEvent
+2026-10-12T14:52:35.3709524Z STATE Slash Tele In FaceObject,ActivateGameObject,AudioPlayerOneShotSingle,SetPosition,ActivateGameObject,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-12T14:52:35.3721289Z STATE AD Pos GetPosition,GetPosition,RandomFloat,RandomlyFlipFloat,FloatOperator,FloatInRange
+2026-10-12T14:52:35.3731357Z STATE AD Retry NextFrameEvent
+2026-10-12T14:52:35.3731357Z STATE AD Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,SetPosition,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-12T14:52:35.3742549Z STATE AD Antic GetAngleToTarget2D,AudioPlayerOneShotSingle,FloatClamp,Tk2dPlayAnimationWithEvents,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.3742549Z STATE AD Fire Tk2dPlayAnimation,AudioPlayerOneShotSingle,ActivateGameObject,SetVelocityAsAngle,GetPosition,FloatCompare,FaceAngle
+2026-10-12T14:52:35.3754491Z STATE GD Antic Tk2dPlayAnimation,AudioPlayerOneShotSingle,SendEventByName,SetVelocity2d,Wait,FaceObject,SetRotation,ActivateGameObject
+2026-10-12T14:52:35.3774941Z STATE AD Edge SetFloatValue,SetVelocityAsAngle,GetPosition,FloatCompare,FaceAngle
+2026-10-12T14:52:35.3774941Z STATE G Dash GetScale,AudioPlayerOneShotSingle,ActivateGameObject,FloatOperator,SetVelocity2d,Tk2dPlayAnimationWithEvents,SetPolygonCollider,Wait,PlayParticleEmitter
+2026-10-12T14:52:35.3799874Z STATE G Dash Recover Tk2dPlayAnimationWithEvents,DecelerateXY,SetPolygonCollider,Wait,StopParticleEmitter
+2026-10-12T14:52:35.3799874Z STATE Spike Pos GetPosition,GetPosition,RandomFloat,RandomlyFlipFloat,FloatOperator,FloatInRange,FloatInRange
+2026-10-12T14:52:35.3809955Z STATE Spike Retry NextFrameEvent
+2026-10-12T14:52:35.3809955Z STATE Spike Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,SetPosition,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-12T14:52:35.3820598Z STATE Spike Antic Tk2dPlayAnimation,Wait,AudioPlayerOneShotSingle,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.3830187Z STATE Spike Attack SendEventByName,SendEventToRegister,Wait
+2026-10-12T14:52:35.3830187Z STATE Balloon Check GetDistance,FloatCompare
+2026-10-12T14:52:35.3843265Z STATE Balloon Retry NextFrameEvent
+2026-10-12T14:52:35.3843265Z STATE Balloon Pos SetPosition,SetIntValue,SetIntValue,SendEventByName
+2026-10-12T14:52:35.3843265Z STATE Balloon Tele In FaceObject,AudioPlayerOneShotSingle,ActivateGameObject,Tk2dPlayAnimationWithEvents,SetMeshRenderer,SendEventByName,SendEventByName
+2026-10-12T14:52:35.3860059Z STATE Balloon Antic Tk2dPlayAnimationWithEvents,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.3870069Z STATE Inflate AudioPlayerOneShotSingle,SendEventByName,SetTag,SetInvincible,SendEventByName,RandomFloat,Tk2dPlayAnimation,FaceObject,ActivateGameObject,SendEventByName,SetFsmBool,ActivateGameObject,PlayParticleEmitter,AudioPlaySimple
+2026-10-12T14:52:35.3870069Z STATE Deflate ActivateGameObject,SetInvincible,SendEventByName,SetTag,SetFsmBool,Tk2dPlayAnimation,AudioPlayerOneShotSingle,AudioStop
+2026-10-12T14:52:35.3881818Z STATE Fire Repeat IntAdd,IntAdd,IntCompare,IntCompare
+2026-10-12T14:52:35.3881818Z STATE Fire Low R SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-12T14:52:35.3893399Z STATE Fire Mid R SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-12T14:52:35.3903426Z STATE Fire High R SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-12T14:52:35.3927289Z STATE Alt SetIntValue,SetFloatValue,SpawnObjectFromGlobalPool,SetDamageHeroAmount,FireGrimmBall,SetVelocity2d,SpawnObjectFromGlobalPool,SetDamageHeroAmount,FireGrimmBall,SetVelocity2d,SpawnObjectFromGlobalPool,SetDamageHeroAmount,SetFloatValue,FireGrimmBall,SetVelocity2d,SpawnObjectFromGlobalPool,SetDamageHeroAmount,FireGrimmBall,SetVelocity2d
+2026-10-12T14:52:35.3927289Z STATE Fire Pause Wait
+2026-10-12T14:52:35.3937365Z STATE End Pause Wait,StopParticleEmitter
+2026-10-12T14:52:35.3950891Z STATE Fire Low L SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-12T14:52:35.3955944Z STATE Fire Mid L SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-12T14:52:35.3955944Z STATE Fire High L SpawnObjectFromGlobalPool,SetDamageHeroAmount,RandomFloatEither,FireGrimmBall,SetVelocity2d
+2026-10-12T14:52:35.3966062Z STATE Down FlingObjectsFromGlobalPool,FlingObjectsFromGlobalPool,FlingObjectsFromGlobalPool
+2026-10-12T14:52:35.3966062Z STATE Set Balloon HP GetHP,IntOperator,IntOperator,IntOperator,IntOperator
+2026-10-12T14:52:35.3966062Z STATE Balloon? GetHP,IntTestToBool,IntTestToBool,IntTestToBool,BoolTestMulti,BoolTestMulti,BoolTestMulti
+2026-10-12T14:52:35.3978535Z STATE Set Balloon 1 SetBoolValue
+2026-10-12T14:52:35.3978535Z STATE Set Balloon 2 SetBoolValue
+2026-10-12T14:52:35.3991746Z STATE Set Balloon 3 SetBoolValue
+2026-10-12T14:52:35.3991746Z STATE Bow GGCheckIfBossScene,ApplyMusicCue,GGCheckIfBossScene,TransitionToAudioSnapshot,Wait,Tk2dPlayAnimation
+2026-10-12T14:52:35.4009281Z STATE Bow Return Tk2dPlayAnimationWithEvents
+2026-10-12T14:52:35.4009281Z STATE Roar Antic Tk2dPlayAnimationWithEvents
+2026-10-12T14:52:35.4019467Z STATE Roar Tk2dPlayAnimation,AudioPlayerOneShotSingle,Wait,SendEventByName,CreateObject
+2026-10-12T14:52:35.4019467Z STATE Roar End SendEventByName,SendEventByName,Tk2dPlayAnimationWithEvents
+2026-10-12T14:52:35.4030738Z STATE Tele Out 2 Tk2dPlayAnimationWithEvents,SetRotation,SetVelocity2d,AudioPlayerOneShotSingle,ActivateGameObject
+2026-10-12T14:52:35.4030738Z STATE Out Pause 2 SetMeshRenderer,SendEventByName,Wait,SendEventByName
+2026-10-12T14:52:35.4045831Z STATE Evade Antic FaceObject,Tk2dPlayAnimationWithEvents,SetBoolValue,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.4055835Z STATE Evade GetScale,AudioPlayerOneShotSingle,FloatOperator,SetVelocity2d,Tk2dPlayAnimationWithEvents,ActivateGameObject,Wait,PlayParticleEmitter,AudioPlayInState
+2026-10-12T14:52:35.4066639Z STATE Evade End Tk2dPlayAnimationWithEvents,SetVelocity2d,StopParticleEmitter
+2026-10-12T14:52:35.4066639Z STATE After Evade GetXDistance,FloatCompare
+2026-10-12T14:52:35.4090065Z STATE Auto Evade? RayCast2d,ActivateGameObject,BoolTest,SendRandomEvent
+2026-10-12T14:52:35.4100075Z STATE To Firebats SetIntValue,SetIntValue
+2026-10-12T14:52:35.4100075Z STATE Stun SpawnObjectFromGlobalPool,SetVelocity2d,Tk2dPlayAnimationWithEvents
+2026-10-12T14:52:35.4110097Z STATE Explode Tk2dPlayAnimationWithEvents,ActivateAllChildren,CallStaticMethod,SendEventByName,SendEventByName,AudioPlayerOneShotSingle,AudioPlaySimple,TransitionToAudioSnapshot,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.4115178Z STATE Exploded SetMeshRenderer,Wait
+2026-10-12T14:52:35.4115178Z STATE Call Bats CallStaticMethod,SendEventByName,SetFsmBool,Wait,FadeAudio,AudioPlaySimple
+2026-10-12T14:52:35.4125213Z STATE Reformed SetFsmBool,SendEventByName,SendEventByName,SendEventByName,Wait,ActivateGameObject,TransitionToAudioSnapshot,AudioPlayerOneShotSingle,AudioStop,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.4135618Z STATE Reforming ActivateGameObject,Tk2dPlayAnimationWithEvents,AudioPlayerOneShotSingle,AudioPlayerOneShotSingle
+2026-10-12T14:52:35.4135618Z STATE Adjust HP GetHP,IntClamp,GetHP,IntOperator,SetHP
+2026-10-12T14:52:35.4145770Z STATE Death Start AudioStop,SendEventByName,StopParticleEmitter,ActivateGameObject,ActivateGameObject,SetFsmBool,SendEventByName,AudioPlayerOneShotSingle,AudioPlayerOneShotSingle,SendMessage,SpawnRandomObjectsV2,SpawnRandomObjectsV2,ActivateGameObject,Tk2dPlayAnimation,FaceObject,SetVelocity2d,SetRotation,Wait,TransitionToAudioSnapshot,SetPolygonCollider,SetPolygonCollider,SetPolygonCollider,SetPolygonCollider,ActivateGameObject,ActivateGameObject,SetRotation,SendEventByName,StopParticleEmitter,StopParticleEmitter,StopParticleEmitter,SetDamageHeroAmount,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.4145770Z STATE Steam ObjectJitter,AudioPlayerOneShotSingle,AudioPlayerOneShotSingle,PlayParticleEmitter,PlayParticleEmitter,SendEventByName,SetFsmBool,FloatAdd,FloatAdd,FloatClamp,SetParticleEmissionRate,SetParticleEmissionSpeed,Wait
+2026-10-12T14:52:35.4160826Z STATE Death Explode StopParticleEmitter,SendEventByName,StopParticleEmitter,SendEventByName,SetFsmBool,SetMeshRenderer,ActivateGameObject,PlayParticleEmitter,Wait,AudioPlayerOneShotSingle,GGCheckIfBossScene
+2026-10-12T14:52:35.4165881Z STATE Send NPC Event SendEventByName
+2026-10-12T14:52:35.4165881Z STATE Uppercut Antic SetVelocity2d,Tk2dPlayAnimation,Wait,ActivateGameObject,AudioStop,AudioPlayerOneShot
+2026-10-12T14:52:35.4175968Z STATE Uppercut Up Tk2dPlayAnimation,PlayParticleEmitter,AudioPlayerOneShotSingle,GetScale,FloatOperator,SetVelocity2d,GetPosition,FloatCompare,Wait
+2026-10-12T14:52:35.4175968Z STATE UP Explode SetPosition,StopParticleEmitter,AudioPlayerOneShotSingle,Tk2dPlayAnimationWithEvents,SetVelocity2d,SetMeshRenderer,SendEventByName,PlayParticleEmitter,Wait,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,SpawnObjectFromGlobalPool,SetVelocity2d,ActivateGameObject
+2026-10-12T14:52:35.4191682Z STATE Uppercut? BoolTest
+2026-10-12T14:52:35.4191682Z STATE Explode Pause SetMeshRenderer,Wait
+2026-10-12T14:52:35.4202684Z STATE HP Scale GetPlayerDataInt,IntAdd,IntSwitch
+2026-10-12T14:52:35.4213324Z STATE Set 1 SetHP
+2026-10-12T14:52:35.4230262Z STATE Set 2 SetHP
+2026-10-12T14:52:35.4230262Z STATE Set 3 SetHP
+2026-10-12T14:52:35.4244875Z STATE Set 4 SetHP
+2026-10-12T14:52:35.4254882Z STATE Set 5 SetHP
+2026-10-12T14:52:35.4259945Z STATE Send Death Event SendHealthManagerDeathEvent
+2026-10-12T14:52:35.4264983Z STATE GG Bow GetParent,FindChild,ActivateGameObject,SetMeshRenderer,AnimatorPlayStateWait,AudioPlayerOneShotSingle
+2026-10-12T14:52:35.4275453Z STATE GG Bow Wait Wait
+2026-10-12T14:52:35.4285485Z STATE GG Bow Return AnimatorPlayStateWait
+2026-10-12T14:52:35.4285485Z STATE GG Cancel Bow ActivateGameObject,SetMeshRenderer
+2026-10-12T14:52:35.4300576Z STATE GG Bow Hide SetFsmGameObject,ActivateGameObject,SetMeshRenderer
+2026-10-12T14:52:35.4300576Z STATE Music TransitionToAudioSnapshot,GGCheckIfBossScene,TransitionToAudioSnapshot
+2026-10-12T14:52:35.4310585Z FSM constrain_x=
+2026-10-12T14:52:35.4321544Z STATE Idle GetPosition,FloatCompare,FloatCompare
+2026-10-12T14:52:35.4321544Z STATE Constrain L SetPosition,GotoPreviousState
+2026-10-12T14:52:35.4332133Z STATE Constrain R SetPosition,GotoPreviousState
+2026-10-12T14:52:35.4342435Z STATE Inert 
+2026-10-12T14:52:35.4352446Z STATE Constrain L Only GetPosition,FloatCompare
+2026-10-12T14:52:35.4362903Z STATE Constrain R Only GetPosition,FloatCompare
+2026-10-12T14:52:35.4372943Z FSM Stun=
+2026-10-12T14:52:35.4372943Z STATE Init GetOwner
+2026-10-12T14:52:35.4385210Z STATE Idle 
+2026-10-12T14:52:35.4399610Z STATE In Combo IntAdd,IntAdd,IntCompare,Wait
+2026-10-12T14:52:35.4409705Z STATE Reset Counter SetIntValue
+2026-10-12T14:52:35.4416319Z STATE Continue Combo IntCompare
+2026-10-12T14:52:35.4416319Z STATE Stun IntCompare,IntAdd,SendEventByName,SetIntValue,SetIntValue
+2026-10-12T14:52:35.4426446Z STATE Max Check GetTag,IntCompare
+2026-10-12T14:52:35.4439752Z STATE Stop 
+2026-10-12T14:52:35.4439752Z STATE Unstun Increment IntAdd
+2026-10-12T14:52:35.4449808Z STATE Reset 
+2026-10-12T14:52:35.4468267Z STATE Heavy Blow PlayerDataBoolTest,IntOperator,IntOperator
+2026-10-12T14:52:35.4478457Z FSM Constrain Y=
+2026-10-12T14:52:35.4490190Z STATE Check GetPosition,FloatCompare
+2026-10-12T14:52:35.4495235Z STATE Constrain SetFloatValue,SetPosition
+2026-10-12T14:52:35.4531938Z FIREBAT ASSET Firebat Pillar(Clone) fsms=damages_hero,Control
+2026-10-12T14:52:35.4531938Z FIREBAT ASSET Firebat Pillar(Clone) fsms=damages_hero,Control
+2026-10-12T14:52:35.4531938Z FIREBAT ASSET Firebat Pillar(Clone) fsms=damages_hero,Control
+2026-10-12T14:52:35.4547009Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-12T14:52:35.4547009Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-12T14:52:35.4559881Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-12T14:52:35.4559881Z FIREBAT ASSET Grimm Firebat(Clone) fsms=Control
+2026-10-12T14:52:35.4569953Z FIREBAT ASSET Firebat Spawn fsms=
+2026-10-12T14:52:35.4744387Z FIREBAT ASSET Grimm Firebat fsms=Control
+2026-10-12T14:52:35.4755028Z FIREBAT ASSET Firebat Pillar fsms=damages_hero,Control
+2026-10-12T14:52:35.4765057Z FIREBAT ASSET Firebat Spawn fsms=
+2026-10-12T14:52:35.4827298Z FIREBAT SPAWN Firebat 1 enabled=True prefab=Grimm Firebat fsms=Control
+2026-10-12T14:52:35.4827298Z FIREBAT SPAWN Firebat 1 enabled=True prefab=Firebat Pillar fsms=damages_hero,Control
+2026-10-12T14:52:35.4827298Z FIREBAT SPAWN Firebat 2 enabled=True prefab=Grimm Firebat fsms=Control
+2026-10-12T14:52:35.4842389Z FIREBAT SPAWN Firebat 2 enabled=True prefab=Firebat Pillar fsms=damages_hero,Control
+2026-10-12T14:52:35.4842389Z FIREBAT SPAWN Firebat 3 enabled=True prefab=Grimm Firebat fsms=Control
+2026-10-12T14:52:35.4857652Z FIREBAT SPAWN Firebat 3 enabled=True prefab=Firebat Pillar fsms=damages_hero,Control
+2026-10-12T14:52:35.4893103Z ENGINE WARN Entity FSM mismatch: GG_Grimm/Grimm Boss, expected 'Control', actual [test-only renamed variant,constrain_x,Stun,Constrain Y]
+2026-10-12T14:52:35.4893103Z PASS health-bearing boss variant survives a renamed FSM
+2026-10-12T14:52:35.4925045Z ENGINE WARN Entity FSM mismatch: GG_Grimm/Grimm Boss, expected 'missing1', actual [test-only renamed variant,constrain_x,Stun,Constrain Y]
+2026-10-12T14:52:35.4938648Z ENGINE WARN Entity FSM mismatch: GG_Grimm/Grimm Boss, expected 'missing2', actual [test-only renamed variant,constrain_x,Stun,Constrain Y]
+2026-10-12T14:52:35.4961329Z PASS ambiguous boss name fallback is rejected
+2026-10-12T14:52:35.4985395Z ENGINE WARN Entity FSM mismatch: GG_Grimm/Mantis Lord S, expected 'Mantis', actual [Mantis Lord]
+2026-10-12T14:52:35.4995482Z PASS detached registered child can be reconstructed as a dynamic root
+2026-10-12T14:52:35.4995482Z PASS scene object references resolve duplicate inactive siblings and escaped names
+2026-10-12T14:52:35.5010571Z PASS missing registry target is ignored
+2026-10-12T14:52:35.5300394Z PASS Unity destroyed registry target is ignored
+2026-10-12T14:52:35.5320585Z PASS missing spawn result is not confused with a destroyed registered entity
+2026-10-12T14:52:35.5343045Z PASS missing SetScale target produces no packet
+2026-10-12T14:52:35.5410516Z ENGINE ERROR FSM network observer failed (GetOwner): System.InvalidOperationException: TEST ONLY observer fault
+  at HollowConnect.Smoke.GodhomeProbe+<>c__DisplayClass40_0.<ObserverFaults>b__0 (HutongGames.PlayMaker.FsmStateAction a) [0x00009] in <83edf8d24b9446348ef66900409abbe1>:0 
+  at Hkmp.Game.Client.Entity.Action.FsmActionHooks+FsmActionHook.InvokeEvent (HutongGames.PlayMaker.FsmStateAction fsmStateAction) [0x0007c] in <1ef7010bd3ff4e039c5aff7d58477835>:0 
+2026-10-12T14:52:35.5410516Z PASS faulting observer preserves native execution and following observers
+2026-10-12T14:52:35.5429756Z PASS native action errors retain their original propagation
+2026-10-12T14:52:35.5476741Z PASS destroyed replica collider snapshot can still update dormant host
+2026-10-12T14:52:35.5510960Z PASS both Grimm rooms
+2026-10-12T14:52:40.2594027Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=37.03284 realtime=37.03667 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:52:45.2625202Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=42.03613 realtime=42.03928 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:52:50.2635174Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=47.03753 realtime=47.04063 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:52:55.2648399Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=52.03843 realtime=52.04186 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:00.2648625Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=57.03952 realtime=57.04256 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:05.2663161Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=62.03996 realtime=62.04361 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:10.2720131Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=67.04472 realtime=67.04836 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:10.5542170Z BALLOON CHECK from=Grimm Boss to=Knight
+2026-10-12T14:53:10.5552201Z ENTITY 9914747863234042065 GrimmBat pos=(80.3, 6.9, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:10.5565755Z FSM Control=
+2026-10-12T14:53:10.5570811Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-12T14:53:10.5580942Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-12T14:53:10.5580942Z STATE Recycle RecycleSelf
+2026-10-12T14:53:10.5607762Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-12T14:53:10.5612807Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-12T14:53:10.5625777Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-12T14:53:10.5636690Z STATE Impact End Wait,ActivateGameObject
+2026-10-12T14:53:10.5636690Z PROJECTILE client rb=Grimm Firebat(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:11.9396513Z ENTITY 9372689186304567049 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:11.9410836Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:11.9426089Z ENTITY 17449481886712227517 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:11.9431268Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:11.9436401Z ENTITY 15835388951808372275 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:11.9436401Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:11.9891462Z ENTITY 16580487768831371661 GrimmFireball pos=(86.0, 12.7, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:11.9905207Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:12.0097658Z ENTITY 16109035887604897075 GrimmFireball pos=(85.5, 12.4, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.0097658Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.0112856Z ENTITY 12528681528581256189 GrimmFireball pos=(86.0, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.0124028Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.0134047Z ENTITY 9908055366275490393 GrimmFireball pos=(85.5, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.0139116Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.0151994Z ENTITY 15556308375162909891 GrimmFireball pos=(86.0, 14.2, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.0151994Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.0162017Z ENTITY 11769715920169762303 GrimmFireball pos=(85.5, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.0162017Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.5324827Z ENTITY 13131694468601027551 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.5335296Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:12.5520726Z ENTITY 9825204925352743245 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.5520726Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:12.5520726Z ENTITY 15277666095866735715 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.5535028Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:12.6243279Z ENTITY 14873404463878503297 GrimmFireball pos=(86.1, 12.3, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.6253551Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.6263629Z ENTITY 16877672452595831843 GrimmFireball pos=(85.4, 12.6, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.6278481Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.6278481Z ENTITY 12250982631980560445 GrimmFireball pos=(86.1, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.6288587Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.6309281Z ENTITY 10068155172182726587 GrimmFireball pos=(85.4, 13.0, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.6309281Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.6324414Z ENTITY 12107674444760402353 GrimmFireball pos=(86.1, 14.0, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.6334903Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:12.6348937Z ENTITY 16766849171151053379 GrimmFireball pos=(85.4, 14.3, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:12.6348937Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:13.1534074Z ENTITY 13767694183649193829 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.1546774Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.1546774Z ENTITY 14371570205937867253 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.1561707Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.1561707Z ENTITY 10920807474643388651 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.1573812Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.2401269Z ENTITY 17627574958948714725 GrimmFireball pos=(86.2, 12.1, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.2423472Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.2433491Z ENTITY 13166143956744930039 GrimmFireball pos=(85.3, 12.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.2433491Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.2443608Z ENTITY 14239885612267062761 GrimmFireball pos=(86.2, 12.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.2453690Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.2453690Z ENTITY 13159236149300418361 GrimmFireball pos=(85.3, 12.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.2463712Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.2468755Z ENTITY 11219777479193488137 GrimmFireball pos=(86.2, 14.1, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.2468755Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.2483935Z ENTITY 14831577482491265295 GrimmFireball pos=(85.3, 14.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.2483935Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.7496123Z ENTITY 14492627734083574603 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7496123Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.7513403Z ENTITY 16765401255605784947 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7525643Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.7525643Z ENTITY 18436934372156997877 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7536097Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:13.7666506Z ENTITY 10058377561010113295 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7676567Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:13.7693332Z ENTITY 16270247890022607003 GrimmFireball pos=(85.7, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7703351Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:13.7713380Z ENTITY 17914750116573286229 GrimmFireball pos=(84.4, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7713380Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:13.7723793Z ENTITY 16053629289455338263 GrimmFireball pos=(85.7, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7723793Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:13.7733873Z ENTITY 11029458580096387677 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7733873Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:13.7847871Z ENTITY 15864649248143252907 GrimmFireball pos=(85.7, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:13.7862806Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3444027Z ENTITY 11723103375912475353 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3464157Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3464157Z ENTITY 9412306930968800049 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3479381Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3479381Z ENTITY 12731406489827047873 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3489706Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3694406Z ENTITY 12067019410546662531 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3709838Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3709838Z ENTITY 16632869968558556401 GrimmFireball pos=(85.6, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3709838Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3725068Z ENTITY 12843306210218361639 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3725068Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3735121Z ENTITY 15652604860462875027 GrimmFireball pos=(85.6, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3735121Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3820189Z ENTITY 11302200968378553229 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3820189Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.3835044Z ENTITY 10149013366300367399 GrimmFireball pos=(85.6, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.3835044Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.9451041Z ENTITY 16107054076278687473 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.9463921Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.9463921Z ENTITY 12411063621275823459 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.9474408Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:14.9487270Z ENTITY 16519929979691158127 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:14.9497369Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:15.0176323Z ENTITY 12260471210729624397 GrimmFireball pos=(86.0, 12.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.0189093Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.0199176Z ENTITY 12368620011542606811 GrimmFireball pos=(85.5, 12.8, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.0199176Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.0209601Z ENTITY 16110428519299810351 GrimmFireball pos=(86.0, 13.2, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.0209601Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.0219700Z ENTITY 14727824342618207981 GrimmFireball pos=(85.5, 13.2, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.0234813Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.0248770Z ENTITY 13046464046200046461 GrimmFireball pos=(86.0, 13.8, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.0258922Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.0272336Z ENTITY 16104213189796793577 GrimmFireball pos=(85.5, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.0282523Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.2729151Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=72.0472 realtime=72.05007 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:15.5379875Z ENTITY 10071444411087546251 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.5389911Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.5553150Z ENTITY 15474558542229693685 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.5565446Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.5570821Z ENTITY 9698799508466080169 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.5570821Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.6151915Z ENTITY 14455322066158904211 GrimmFireball pos=(86.0, 12.8, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.6162998Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.6162998Z ENTITY 16104008411024015807 GrimmFireball pos=(85.5, 12.6, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.6173052Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.6183504Z ENTITY 14081230422366721293 GrimmFireball pos=(86.0, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.6183504Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.6194507Z ENTITY 10000503928282276011 GrimmFireball pos=(85.5, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.6194507Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.6203736Z ENTITY 9694952447673122263 GrimmFireball pos=(86.0, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.6208782Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:15.6219031Z ENTITY 12214645866924959701 GrimmFireball pos=(85.5, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:15.6219031Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.1549148Z ENTITY 16034127768929545383 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.1561977Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.1561977Z ENTITY 16573879829253459675 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.1572234Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.1572234Z ENTITY 15232803082518953711 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.1592527Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.2250754Z ENTITY 14500210832622090905 GrimmFireball pos=(86.1, 12.4, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.2250754Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.2275187Z ENTITY 11929044321996286051 GrimmFireball pos=(85.4, 12.3, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.2289362Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.2289362Z ENTITY 17259852889430701755 GrimmFireball pos=(84.7, 12.7, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.2304436Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.2309575Z ENTITY 16117502026057812807 GrimmFireball pos=(85.3, 12.7, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.2309575Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.2324752Z ENTITY 15927503560543144905 GrimmFireball pos=(86.1, 14.3, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.2324752Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.2339470Z ENTITY 10576735249192965967 GrimmFireball pos=(85.4, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.2339470Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.7559133Z ENTITY 18169720773200898235 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.7585702Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.7585702Z ENTITY 18091614251834397903 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.7596066Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.7596066Z ENTITY 15700285453487352633 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.7611164Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:16.8504302Z ENTITY 17346207870471761169 GrimmFireball pos=(86.2, 12.4, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.8517219Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:16.8517219Z ENTITY 13072509355628633279 GrimmFireball pos=(85.3, 12.4, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.8532169Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:16.8532169Z ENTITY 14319985733859120881 GrimmFireball pos=(86.2, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.8542279Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:16.8542279Z ENTITY 18183631547867479057 GrimmFireball pos=(85.3, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.8552887Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:16.8552887Z ENTITY 16700740487618893261 GrimmFireball pos=(86.2, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.8562905Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:16.8577837Z ENTITY 14566732033888660991 GrimmFireball pos=(85.3, 14.2, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:16.8587830Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:17.3584858Z ENTITY 15988326603623037183 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.3600179Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.3610200Z ENTITY 15791924351333242919 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.3615272Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.3625394Z ENTITY 10305538203901413017 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.3635323Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.3733642Z ENTITY 12648326930978071677 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.3747174Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:17.4112971Z ENTITY 12676438729862614477 GrimmFireball pos=(85.6, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.4127722Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.4127722Z ENTITY 15003659051286233005 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.4151013Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.4151013Z ENTITY 12757251614819542347 GrimmFireball pos=(85.6, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.4163703Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.4174686Z ENTITY 13822276859618202253 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.4184712Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.4184712Z ENTITY 16167285176127808039 GrimmFireball pos=(85.6, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.4199519Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.9514997Z ENTITY 18324949543968695493 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.9525003Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.9539471Z ENTITY 15160030792884003685 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.9539471Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:17.9731311Z ENTITY 14897609297089314159 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:17.9741342Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:18.0088683Z ENTITY 15686367359928423327 GrimmFireball pos=(85.9, 13.2, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.0100283Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.0110276Z ENTITY 16110618483862441241 GrimmFireball pos=(85.6, 13.2, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.0115323Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.0125327Z ENTITY 17518014547546627961 GrimmFireball pos=(85.9, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.0144172Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.0154611Z ENTITY 11676655358587174547 GrimmFireball pos=(85.6, 13.4, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.0166419Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.0166419Z ENTITY 13257107726549667263 GrimmFireball pos=(85.9, 13.6, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.0181502Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.0191614Z ENTITY 10403846983134577823 GrimmFireball pos=(85.6, 13.8, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.0201652Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.5512560Z ENTITY 10735111471429046303 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.5517610Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:18.5648658Z ENTITY 13820167853777583143 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.5662874Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.5677010Z ENTITY 10741724537444269335 GrimmFireball pos=(85.8, 13.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.5687360Z PROJECTILE client rb=Flameball Grimmballoon Straight(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon Straight(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.6291561Z ENTITY 17805791216719215379 GrimmFireball pos=(86.1, 12.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.6291561Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:18.6306190Z ENTITY 10385160633618024405 GrimmFireball pos=(85.4, 12.5, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.6316364Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:18.6316364Z ENTITY 15648019346152011147 GrimmFireball pos=(84.7, 12.7, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.6328868Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:18.6328868Z ENTITY 9770075753525368555 GrimmFireball pos=(85.3, 12.7, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.6339943Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:18.6458692Z ENTITY 17937216330934957765 GrimmFireball pos=(86.1, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.6470458Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:18.6480512Z ENTITY 9464325783674693487 GrimmFireball pos=(85.4, 13.9, 0.0) active=False rb=Dynamic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:18.6480512Z PROJECTILE client rb=Flameball Grimmballoon(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=Flameball Grimmballoon(Clone)(Clone) (GrimmballControl)
+2026-10-12T14:53:20.2772767Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=77.05062 realtime=77.05379 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:25.2803748Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=82.05162 realtime=82.05595 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:30.2876193Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=True pending= latest= unscaled=87.05907 realtime=87.06516 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:30.9724712Z ENTITY 18056606938404583439 GrimmBat pos=(93.0, 6.9, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:30.9734750Z FSM Control=
+2026-10-12T14:53:30.9734750Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-12T14:53:30.9749820Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-12T14:53:30.9749820Z STATE Recycle RecycleSelf
+2026-10-12T14:53:30.9762190Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-12T14:53:30.9772249Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-12T14:53:30.9777549Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-12T14:53:30.9787656Z STATE Impact End Wait,ActivateGameObject
+2026-10-12T14:53:30.9797681Z PROJECTILE client rb=Grimm Firebat(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:31.5809569Z ENTITY 12655422870524961707 GrimmBat pos=(93.0, 6.9, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:31.5809569Z FSM Control=
+2026-10-12T14:53:31.5819721Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-12T14:53:31.5819721Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-12T14:53:31.5834828Z STATE Recycle RecycleSelf
+2026-10-12T14:53:31.5834828Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-12T14:53:31.5845008Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-12T14:53:31.5845008Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-12T14:53:31.5857780Z STATE Impact End Wait,ActivateGameObject
+2026-10-12T14:53:31.5867882Z PROJECTILE client rb=Grimm Firebat(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:31.8945281Z ENTITY 15729093344127205701 GrimmBat pos=(93.3, 6.8, 0.0) active=False rb=Kinematic/gravity=0/v=(0.0, 0.0)
+2026-10-12T14:53:31.8955363Z FSM Control=
+2026-10-12T14:53:31.8955363Z STATE Init AudioPlaySimple,PlayParticleEmitter,PlayParticleEmitter,SetDamageHeroAmount,SetMeshRenderer,NextFrameEvent,ActivateGameObject,ActivateGameObject,GetPosition,FloatAdd,FloatClamp,Translate,RandomFloat
+2026-10-12T14:53:31.8967444Z STATE Fire SetDamageHeroAmount,ActivateGameObject,SetIsKinematic2d,Collision2dEventLayer,ChaseObjectV2,SetVelocity2d,FaceDirection
+2026-10-12T14:53:31.8967444Z STATE Recycle RecycleSelf
+2026-10-12T14:53:31.8977488Z STATE Impact AudioStop,AudioPlaySimple,SetMeshRenderer,SetDamageHeroAmount,ActivateGameObject,PlayParticleEmitter,Wait,SendEventByName,SetVelocity2d,StopParticleEmitter,StopParticleEmitter,Tk2dPlayAnimationWithEvents
+2026-10-12T14:53:31.8982554Z STATE Dissipate AudioStop,iTweenScaleTo,SetDamageHeroAmount,DecelerateV2
+2026-10-12T14:53:31.8987612Z STATE Stop Particles StopParticleEmitter,Wait,SetMeshRenderer,StopParticleEmitter
+2026-10-12T14:53:31.9003162Z STATE Impact End Wait,ActivateGameObject
+2026-10-12T14:53:31.9003162Z PROJECTILE client rb=Grimm Firebat(Clone)(Clone) (UnityEngine.Rigidbody2D) scripts=
+2026-10-12T14:53:32.5704228Z GRIMM END state= hp=599
+2026-10-12T14:53:35.2902254Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=False pending= latest={"Kind":0,"Id":0,"Target":0,"Round":0,"Serial":0,"Aux":0,"Session":"","Scene":"GG_Grimm","Name":"","Key":"","BossSequence":"Boss Sequence Tier 3","BossDoor":"bossDoorStateTier3","BossIndex":4,"BossBindings":0,"BossLevel":0,"BossPlan":"[{\"Name\":\"Hive Knight Boss Scene\",\"Scene\":\"GG_Hive_Knight\",\"Load\":true},{\"Name\":\"Elder Hu Boss Scene\",\"Scene\":\"GG_Ghost_Hu\",\"Load\":true},{\"Name\":\"Collector Boss Scene\",\"Scene\":\"GG_Collector\",\"Load\":true},{\"Name\":\"God Tamer Boss Scene\",\"Scene\":\"GG_God_Tamer\",\"Load\":true},{\"Name\":\"Grimm Boss Scene\",\"Scene\":\"GG_Grimm\",\"Load\":true},{\"Name\":\"Spa Boss Scene\",\"Scene\":\"GG_Spa\",\"Load\":true},{\"Name\":\"Galien Boss Scene\",\"Scene\":\"GG_Ghost_Galien\",\"Load\":true},{\"Name\":\"Grey Prince Zote Boss Scene\",\"Scene\":\"GG_Grey_Prince_Zote\",\"Load\":false},{\"Name\":\"Uumuu Boss Scene\",\"Scene\":\"GG_Uumuu\",\"Load\":true},{\"Name\":\"Hornet 2 Boss Scene\",\"Scene\":\"GG_Hornet_2\",\"Load\":true},{\"Name\":\"Engine Boss Scene\",\"Scene\":\"GG_Engine\",\"Load\":true},{\"Name\":\"Nailsage Sly Boss Scene\",\"Scene\":\"GG_Sly\",\"Load\":true}]","BossStatueKey":"","BossReturnGate":"","X":0.0,"Y":0.0,"MapX":0.0,"MapY":0.0,"Value":0,"HasMap":false,"IsReady":false,"IsReliable":true,"DropReliableDataIfNewerExists":false} unscaled=92.06567 realtime=92.06725 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:36.8543352Z ENGINE Boss room completion relayed: GG_Grimm
+2026-10-12T14:53:40.2922348Z DIAGNOSTIC scene=GG_Grimm playable=True host=False ready=False pending={"Kind":0,"Id":0,"Target":0,"Round":0,"Serial":0,"Aux":0,"Session":"","Scene":"GG_Grimm","Name":"","Key":"","BossSequence":"Boss Sequence Tier 3","BossDoor":"bossDoorStateTier3","BossIndex":4,"BossBindings":0,"BossLevel":0,"BossPlan":"[{\"Name\":\"Hive Knight Boss Scene\",\"Scene\":\"GG_Hive_Knight\",\"Load\":true},{\"Name\":\"Elder Hu Boss Scene\",\"Scene\":\"GG_Ghost_Hu\",\"Load\":true},{\"Name\":\"Collector Boss Scene\",\"Scene\":\"GG_Collector\",\"Load\":true},{\"Name\":\"God Tamer Boss Scene\",\"Scene\":\"GG_God_Tamer\",\"Load\":true},{\"Name\":\"Grimm Boss Scene\",\"Scene\":\"GG_Grimm\",\"Load\":true},{\"Name\":\"Spa Boss Scene\",\"Scene\":\"GG_Spa\",\"Load\":true},{\"Name\":\"Galien Boss Scene\",\"Scene\":\"GG_Ghost_Galien\",\"Load\":true},{\"Name\":\"Grey Prince Zote Boss Scene\",\"Scene\":\"GG_Grey_Prince_Zote\",\"Load\":false},{\"Name\":\"Uumuu Boss Scene\",\"Scene\":\"GG_Uumuu\",\"Load\":true},{\"Name\":\"Hornet 2 Boss Scene\",\"Scene\":\"GG_Hornet_2\",\"Load\":true},{\"Name\":\"Engine Boss Scene\",\"Scene\":\"GG_Engine\",\"Load\":true},{\"Name\":\"Nailsage Sly Boss Scene\",\"Scene\":\"GG_Sly\",\"Load\":true}]","BossStatueKey":"","BossReturnGate":"","X":0.0,"Y":0.0,"MapX":0.0,"MapY":0.0,"Value":0,"HasMap":false,"IsReady":false,"IsReliable":true,"DropReliableDataIfNewerExists":false} latest={"Kind":0,"Id":0,"Target":0,"Round":0,"Serial":0,"Aux":0,"Session":"","Scene":"GG_Grimm","Name":"","Key":"","BossSequence":"Boss Sequence Tier 3","BossDoor":"bossDoorStateTier3","BossIndex":4,"BossBindings":0,"BossLevel":0,"BossPlan":"[{\"Name\":\"Hive Knight Boss Scene\",\"Scene\":\"GG_Hive_Knight\",\"Load\":true},{\"Name\":\"Elder Hu Boss Scene\",\"Scene\":\"GG_Ghost_Hu\",\"Load\":true},{\"Name\":\"Collector Boss Scene\",\"Scene\":\"GG_Collector\",\"Load\":true},{\"Name\":\"God Tamer Boss Scene\",\"Scene\":\"GG_God_Tamer\",\"Load\":true},{\"Name\":\"Grimm Boss Scene\",\"Scene\":\"GG_Grimm\",\"Load\":true},{\"Name\":\"Spa Boss Scene\",\"Scene\":\"GG_Spa\",\"Load\":true},{\"Name\":\"Galien Boss Scene\",\"Scene\":\"GG_Ghost_Galien\",\"Load\":true},{\"Name\":\"Grey Prince Zote Boss Scene\",\"Scene\":\"GG_Grey_Prince_Zote\",\"Load\":false},{\"Name\":\"Uumuu Boss Scene\",\"Scene\":\"GG_Uumuu\",\"Load\":true},{\"Name\":\"Hornet 2 Boss Scene\",\"Scene\":\"GG_Hornet_2\",\"Load\":true},{\"Name\":\"Engine Boss Scene\",\"Scene\":\"GG_Engine\",\"Load\":true},{\"Name\":\"Nailsage Sly Boss Scene\",\"Scene\":\"GG_Sly\",\"Load\":true}]","BossStatueKey":"","BossReturnGate":"","X":0.0,"Y":0.0,"MapX":0.0,"MapY":0.0,"Value":0,"HasMap":false,"IsReady":false,"IsReliable":true,"DropReliableDataIfNewerExists":false} unscaled=97.06837 realtime=97.06905 tickNext=0 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:43.1895436Z PASS authority completed while replica remains downed
+2026-10-12T14:53:43.1895436Z PASS downed replica remains in boss room until it can transition
+2026-10-12T14:53:45.2940440Z DIAGNOSTIC scene=GG_Grimm playable=True host=True ready=True pending= latest= unscaled=102.0682 realtime=102.071 tickNext=102.4483 controller=GG_Grimm/True netReady=True
+2026-10-12T14:53:49.4332924Z PASS native Grimm death advances sequence
+2026-10-12T14:53:49.4342948Z PASS both advanced to native pantheon rest room
+2026-10-12T14:53:50.2960700Z DIAGNOSTIC scene=GG_Spa playable=True host=False ready=True pending= latest= unscaled=107.0692 realtime=107.0741 tickNext=0 controller=GG_Spa/True netReady=True
+2026-10-12T14:53:50.5036819Z PASS guest next boss ready
+2026-10-12T14:53:50.6596511Z PASS warp target presence
+2026-10-12T14:53:52.1789466Z PASS F8 cross-room arrival
+2026-10-12T14:53:54.1829822Z WARP FADE before=4 after=5 control=False camera=FOLLOWING
+2026-10-12T14:53:54.1899340Z FADE FSM White Flash/fade and destroy=
+2026-10-12T14:53:54.1899340Z FADE FSM Rush/fader=
+2026-10-12T14:53:54.1929257Z FADE FSM Geo Text/Fader=Upped
+2026-10-12T14:53:54.1939335Z FADE FSM Low Health Light/Fader=Down
+2026-10-12T14:53:54.1954413Z FADE FSM tk2dCamera/CameraFade=Normal
+2026-10-12T14:53:54.1969238Z FADE FSM Add Text/Fader=Down
+2026-10-12T14:53:54.1979517Z FADE FSM Subtract Text/Fader=Down
+2026-10-12T14:53:54.1997342Z FADE FSM HeroLight/color_fader=Init
+2026-10-12T14:53:54.1997342Z FADE FSM SD Charge Wall/color_fader=Init
+2026-10-12T14:53:54.2012487Z FADE FSM SD Charge/color_fader=Init
+2026-10-12T14:53:54.2098295Z PASS F8 restores fade, input and camera
+2026-10-12T14:53:54.2098295Z PASS F8 repairs stale native sequence counter
+2026-10-12T14:53:54.2136371Z PASS both at next boss
+2026-10-12T14:53:55.2992397Z DIAGNOSTIC scene=GG_Ghost_Galien playable=True host=False ready=True pending= latest= unscaled=112.0737 realtime=112.0765 tickNext=0 controller=GG_Ghost_Galien/True netReady=True
+2026-10-12T14:53:57.4245923Z PASS same-room F8 repairs sequence counter and bindings
+2026-10-12T14:53:58.1829510Z PASS guest away for reverse godhome warp
+2026-10-12T14:54:00.3028156Z DIAGNOSTIC scene=GG_Ghost_Galien playable=True host=True ready=True pending= latest={"Kind":0,"Id":0,"Target":0,"Round":0,"Serial":0,"Aux":0,"Session":"","Scene":"GG_Ghost_Galien","Name":"","Key":"","BossSequence":"Boss Sequence Tier 3","BossDoor":"bossDoorStateTier3","BossIndex":6,"BossBindings":0,"BossLevel":0,"BossPlan":"[{\"Name\":\"Hive Knight Boss Scene\",\"Scene\":\"GG_Hive_Knight\",\"Load\":true},{\"Name\":\"Elder Hu Boss Scene\",\"Scene\":\"GG_Ghost_Hu\",\"Load\":true},{\"Name\":\"Collector Boss Scene\",\"Scene\":\"GG_Collector\",\"Load\":true},{\"Name\":\"God Tamer Boss Scene\",\"Scene\":\"GG_God_Tamer\",\"Load\":true},{\"Name\":\"Grimm Boss Scene\",\"Scene\":\"GG_Grimm\",\"Load\":true},{\"Name\":\"Spa Boss Scene\",\"Scene\":\"GG_Spa\",\"Load\":true},{\"Name\":\"Galien Boss Scene\",\"Scene\":\"GG_Ghost_Galien\",\"Load\":true},{\"Name\":\"Grey Prince Zote Boss Scene\",\"Scene\":\"GG_Grey_Prince_Zote\",\"Load\":false},{\"Name\":\"Uumuu Boss Scene\",\"Scene\":\"GG_Uumuu\",\"Load\":true},{\"Name\":\"Hornet 2 Boss Scene\",\"Scene\":\"GG_Hornet_2\",\"Load\":true},{\"Name\":\"Engine Boss Scene\",\"Scene\":\"GG_Engine\",\"Load\":true},{\"Name\":\"Nailsage Sly Boss Scene\",\"Scene\":\"GG_Sly\",\"Load\":true}]","BossStatueKey":"","BossReturnGate":"","X":0.0,"Y":0.0,"MapX":0.0,"MapY":0.0,"Value":0,"HasMap":false,"IsReady":false,"IsReliable":true,"DropReliableDataIfNewerExists":false} unscaled=117.0763 realtime=117.0801 tickNext=117.9785 controller=GG_Ghost_Galien/True netReady=True
+2026-10-12T14:54:01.4551932Z PASS guest reverse return verified
+2026-10-12T14:54:01.4562027Z ARSENAL fireballs=12677 bats=270 pillars=65 pillarEntities=2 spikes=11 positions=13415
+2026-10-12T14:54:01.4590355Z MATCHED POSITIONS GrimmSpikes=555
+2026-10-12T14:54:01.4601433Z MATCHED POSITIONS GrimmBat=261
+2026-10-12T14:54:01.4601433Z MATCHED POSITIONS GrimmFirebatPillar=55
+2026-10-12T14:54:01.4611469Z MATCHED POSITIONS GrimmFireball=12544
+2026-10-12T14:54:01.4611469Z PASS replica observes fireballs, firebats, pillar spawn records, damaging spikes and synchronized positions
+2026-10-12T14:54:01.4642985Z PASS each dynamic Grimm projectile type has matching authority positions
+2026-10-12T14:54:02.9652100Z PASS ordinary warp target after pantheon
+2026-10-12T14:54:05.3046043Z DIAGNOSTIC scene=Town playable=True host=True ready=True pending= latest= unscaled=122.0789 realtime=122.0825 tickNext=122.7673 controller=null netReady=True
+2026-10-12T14:54:07.0802036Z PASS accepted native warp completed despite disconnect
+2026-10-12T14:54:07.0812069Z PASS native projectile audio survives godhome warps and authority changes
+2026-10-12T14:54:07.0817138Z FINAL PASS

@@ -1,0 +1,38 @@
+2026-10-12T14:36:19.0761878Z PASS menu
+2026-10-12T14:36:23.7463832Z PASS unsaved character
+2026-10-12T14:36:23.9242106Z PASS server ready
+2026-10-12T14:36:23.9252918Z ENGINE Connecting client to server: 127.0.0.1:29650 as pantheonguest
+2026-10-12T14:36:24.0454732Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:36:24.0558363Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:36:24.2452218Z ENGINE Received server info from server
+2026-10-12T14:36:24.8975151Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:36:25.0163122Z ENGINE Scene changed from  to Town
+2026-10-12T14:36:25.0513435Z PASS handshake
+2026-10-12T14:36:25.0545523Z PASS both connected
+2026-10-12T14:36:25.0614549Z SEQUENCE 0/GG_Vengefly,1/GG_Gruz_Mother,2/GG_False_Knight,3/GG_Mega_Moss_Charger,4/GG_Hornet_1,5/GG_Spa,6/GG_Ghost_Gorb,7/GG_Dung_Defender,8/GG_Mage_Knight,9/GG_Brooding_Mawlek,10/GG_Engine,11/GG_Nailmasters
+2026-10-12T14:36:25.0804959Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:36:25.0815114Z ENGINE Updating already in scene player with ID: 0
+2026-10-12T14:36:25.0830714Z ENGINE Player 0 entered scene
+2026-10-12T14:36:25.4745044Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:25.4758393Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 1 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:25.4758393Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 2 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:25.4775212Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 3 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:25.4775212Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 4 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:25.4785218Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 5 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:25.4785218Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 6 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:25.4805475Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Giant Buzzer Col, expected 'chaser', actual [Big Buzzer]
+2026-10-12T14:36:25.4888917Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'chaser', actual [corpse,End Roar]
+2026-10-12T14:36:25.4904000Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'Big Buzzer', actual [corpse,End Roar]
+2026-10-12T14:36:25.5668224Z ENGINE Scene changed from Town to GG_Vengefly
+2026-10-12T14:36:25.6927038Z PASS first boss entry
+2026-10-12T14:36:25.7066543Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:36:25.8012168Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Summon(Clone), expected 'chaser', actual []
+2026-10-12T14:36:25.8137589Z ENGINE WARN Entity FSM mismatch: /Buzzer Summon, expected 'chaser', actual []
+2026-10-12T14:36:30.0815754Z ENGINE Player 0 entered scene
+2026-10-12T14:36:30.1340554Z PASS late snapshot captured
+2026-10-12T14:36:30.1353168Z ENGINE Sending PlayerDisconnect packet
+2026-10-12T14:36:30.1363601Z ENGINE Disconnecting from server
+2026-10-12T14:36:30.1868197Z PASS authority disconnects before delayed base snapshot
+2026-10-12T14:36:30.1989588Z PASS both startroom.0
+2026-10-12T14:36:34.4443689Z PASS both handoff
+2026-10-12T14:36:34.4456714Z FINAL PASS early handoff before base snapshot; muted audio

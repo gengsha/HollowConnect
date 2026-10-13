@@ -1,0 +1,5 @@
+[INFO]:[API] - Starting mod loading
+[INFO]:[Hkmp.HkmpMod] Initializing HKMP v3.0.0-hc1
+[INFO]:[CoopMod] - HollowConnect initialized; compatible engine: HKMP 3.0.0-hc1
+[INFO]:[HollowConnect.CoopServerAddon] HollowConnect server addon ready
+[INFO]:[CoopMod] - HollowConnect client addon ready

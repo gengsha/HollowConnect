@@ -1,0 +1,54 @@
+2026-10-12T14:49:22.1855155Z probe started; save writes intercepted
+2026-10-12T14:49:22.2012411Z PASS mod and menu ready
+2026-10-12T14:49:27.2916099Z PASS fresh unsaved game entered
+2026-10-12T14:49:27.2994828Z SHADE ASSET scene= sprite=True scale=(1.0, 1.0, 1.0) clips=Cast,Idle,Death,Depart,Fly,Slash Effect,Slash,Startle,TurnToFly,Slash Antic,,Slash CD,Cast Antic,Death Start,Death Glow,Cast Charge,Cast Ring,Fireball,Fireball End,Appear,Retreat Start,Quake Antic,Retreat End,TurnToIdle,Quake Start,Quake,Quake Land,Scream Antic,Scream,Scream End,Scream Blast
+2026-10-12T14:49:27.3009932Z SHADE ASSET scene= sprite=False scale=(1.0, 1.0, 1.0) clips=none
+2026-10-12T14:49:29.9482937Z PASS real UDP addon handshake
+2026-10-12T14:49:29.9493420Z session=64ebbda69d8444749331eb032005e868 id=0
+2026-10-12T14:49:30.1536255Z PASS both clients connected
+2026-10-12T14:49:31.4184397Z PASS actual enemy scene entered
+2026-10-12T14:49:33.3292261Z PASS both clients in enemy room
+2026-10-12T14:49:35.3353270Z entities=11 authority=True
+2026-10-12T14:49:35.3379905Z health authority id=7983397790094270417 hp=37
+2026-10-12T14:49:35.4771227Z PASS guest health and progress verified
+2026-10-12T14:49:35.4815288Z combat target Zombie Runner 1 active=True timeScale=1 colliders=True:False:Center: (16.8, 10.4, 0.0), Extents: (0.6, 0.8, 0.0)
+2026-10-12T14:49:35.5356551Z PASS guest position and invincibility verified
+2026-10-12T14:49:36.1195821Z PASS remote player's real nail damages authority
+2026-10-12T14:49:36.7310124Z PASS guest nail damage health converged
+2026-10-12T14:49:36.7327710Z PASS live teammate map coordinate
+2026-10-12T14:49:36.7518371Z PASS teammate map icon exists without equipped compass
+2026-10-12T14:49:36.7566732Z PASS map projection equals actual game compass
+2026-10-12T14:49:36.7639356Z ENTITY 1535048353417914323 FuriousVengefly Angry Buzzer active=False
+2026-10-12T14:49:36.7654429Z ENTITY 7934123459737601023 ViolentHusk Bursting Zombie active=False
+2026-10-12T14:49:36.7654429Z ENTITY 7983397790094270417 WanderingHusk Zombie Runner 1 active=True
+2026-10-12T14:49:36.7664897Z ENTITY 3099832459107831631 CameraLockArea CameraLockArea A active=True
+2026-10-12T14:49:36.7664897Z ENTITY 1415112542835813007 CameraLockArea CameraLockArea B active=True
+2026-10-12T14:49:36.7677701Z ENTITY 1061530121738370049 CameraLockArea CameraLockArea C (1) active=True
+2026-10-12T14:49:36.7687805Z ENTITY 2576612284115440737 CameraLockArea CameraLockArea C active=False
+2026-10-12T14:49:36.7697863Z ENTITY 1575378652187015123 Tiktik Climber 1 active=True
+2026-10-12T14:49:36.7707844Z ENTITY 8586561726117188887 Tiktik Climber active=True
+2026-10-12T14:49:36.7712909Z ENTITY 821874872511794191 Crawlid Crawler 1 active=True
+2026-10-12T14:49:36.7712909Z ENTITY 2653497486118068203 WanderingHusk Zombie Runner active=True
+2026-10-12T14:49:36.8332122Z PASS replica of killed enemy removed before transfer
+2026-10-12T14:49:36.8342387Z LIVE AI Zombie Swipe states=Initialise,Ready,Anticipate,Left or Right?,Face Left,Face Right,Lunge,Cooldown,Idle,Reset,R?,R? 2,Reverse,Reverse Back,Coward
+2026-10-12T14:49:36.8413985Z TRANSFER TEMPLATE Initialise FindChild enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,childName=Charge Dust,storeResult=Charge Dust;GetComponent enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,storeComponent=Zombie Runner (LineOfSightDetector),everyFrame=False;FindAlertRange enabled=True continuous=False fields=target=HutongGames.PlayMaker.FsmOwnerDefault,storeResult=Attack Range (AlertRange),childName=Attack Range;GetOwner enabled=True continuous=False fields=storeGameObject=Zombie Runner
+2026-10-12T14:49:36.8419095Z TRANSFER TEMPLATE Ready GetCanSeeHero enabled=True continuous=True fields=lineOfSightDetector=Zombie Runner (LineOfSightDetector),storeResult=False,everyFrame=True;CheckAlertRange enabled=True continuous=True fields=alertRange=Attack Range (AlertRange),storeResult=False,everyFrame=True;BoolAllTrue enabled=True continuous=True fields=boolVariables=HutongGames.PlayMaker.FsmBool[],sendEvent=HutongGames.PlayMaker.FsmEvent,storeResult=False,everyFrame=True
+2026-10-12T14:49:36.8429153Z TRANSFER TEMPLATE Anticipate RandomFloat enabled=True continuous=False fields=min=0.9,max=1.1,storeResult=0;SetAudioPitch enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,pitch=0,everyFrame=False;AudioPlayRandom enabled=True continuous=False fields=gameObject=Zombie Runner,audioClips=UnityEngine.AudioClip[],weights=HutongGames.PlayMaker.FsmFloat[],pitchMin=0.85,pitchMax=1.15;SetVelocity2d enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,vector=(0.0, 0.0),x=0,y=0,everyFrame=False;Tk2dPlayAnimation enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,animLibName=,clipName=Attack Anticipate;Tk2dWatchAnimationEvents enabled=True continuous=True fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,animationTriggerEvent=,animationCompleteEvent=HutongGames.PlayMaker.FsmEvent
+2026-10-12T14:49:36.8446291Z TRANSFER TEMPLATE Left or Right? StopWalker enabled=True continuous=False fields=target=HutongGames.PlayMaker.FsmOwnerDefault,everyFrame=False;SetFloatValue enabled=True continuous=False fields=floatVariable=0,floatValue=6,everyFrame=False;GetPosition enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,vector=(0.0, 0.0, 0.0),x=0,y=0,z=0,space=World,everyFrame=False;GetPosition enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,vector=(0.0, 0.0, 0.0),x=0,y=0,z=0,space=World,everyFrame=False;FloatCompare enabled=True continuous=False fields=float1=0,float2=0,tolerance=0,equal=HutongGames.PlayMaker.FsmEvent,lessThan=HutongGames.PlayMaker.FsmEvent,greaterThan=HutongGames.PlayMaker.FsmEvent,everyFrame=False
+2026-10-12T14:49:36.8456759Z TRANSFER TEMPLATE Face Left FloatMultiply enabled=True continuous=False fields=floatVariable=0,multiplyBy=-1,everyFrame=False;SetScale enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,vector=(0.0, 0.0, 0.0),x=1,y=0,z=0,everyFrame=False,lateUpdate=False;SetWalkerFacing enabled=True continuous=False fields=walkRight=False,randomStartDir=False,target=HutongGames.PlayMaker.FsmOwnerDefault,everyFrame=False
+2026-10-12T14:49:36.8467384Z TRANSFER TEMPLATE Face Right SetScale enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,vector=(0.0, 0.0, 0.0),x=-1,y=0,z=0,everyFrame=False,lateUpdate=False;SetWalkerFacing enabled=True continuous=False fields=walkRight=True,randomStartDir=False,target=HutongGames.PlayMaker.FsmOwnerDefault,everyFrame=False
+2026-10-12T14:49:36.8477732Z TRANSFER TEMPLATE Lunge PlayParticleEmitter enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,emit=0;Tk2dPlayAnimation enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,animLibName=,clipName=Attack Lunge;Tk2dWatchAnimationEvents enabled=True continuous=True fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,animationTriggerEvent=,animationCompleteEvent=HutongGames.PlayMaker.FsmEvent;SetVelocity2d enabled=True continuous=True fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,vector=(0.0, 0.0),x=0,y=0,everyFrame=True
+2026-10-12T14:49:36.8477732Z TRANSFER TEMPLATE Cooldown StopParticleEmitter enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault;Tk2dPlayAnimation enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,animLibName=,clipName=Attack Cooldown;Tk2dWatchAnimationEvents enabled=True continuous=True fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,animationTriggerEvent=,animationCompleteEvent=HutongGames.PlayMaker.FsmEvent;SetVelocity2d enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,vector=(0.0, 0.0),x=0,y=0,everyFrame=False
+2026-10-12T14:49:36.8491613Z TRANSFER TEMPLATE Idle Tk2dPlayAnimation enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,animLibName=,clipName=Idle;Wait enabled=True continuous=True fields=time=0.25,finishEvent=HutongGames.PlayMaker.FsmEvent,realTime=False
+2026-10-12T14:49:36.8507852Z TRANSFER TEMPLATE Reset StartWalker enabled=True continuous=False fields=walkRight=False,target=HutongGames.PlayMaker.FsmOwnerDefault,everyFrame=False
+2026-10-12T14:49:36.8517872Z TRANSFER TEMPLATE R? BoolTest enabled=True continuous=False fields=boolVariable=False,isTrue=HutongGames.PlayMaker.FsmEvent,isFalse=HutongGames.PlayMaker.FsmEvent,everyFrame=False
+2026-10-12T14:49:36.8528349Z TRANSFER TEMPLATE R? 2 BoolTest enabled=True continuous=False fields=boolVariable=False,isTrue=HutongGames.PlayMaker.FsmEvent,isFalse=HutongGames.PlayMaker.FsmEvent,everyFrame=False
+2026-10-12T14:49:36.8538373Z TRANSFER TEMPLATE Reverse BoolTest enabled=True continuous=False fields=boolVariable=False,isTrue=,isFalse=HutongGames.PlayMaker.FsmEvent,everyFrame=False;FlipScale enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,flipHorizontally=True,flipVertically=False,everyFrame=False,lateUpdate=False
+2026-10-12T14:49:36.8545547Z TRANSFER TEMPLATE Reverse Back BoolTest enabled=True continuous=False fields=boolVariable=False,isTrue=,isFalse=HutongGames.PlayMaker.FsmEvent,everyFrame=False;FlipScale enabled=True continuous=False fields=gameObject=HutongGames.PlayMaker.FsmOwnerDefault,flipHorizontally=True,flipVertically=False,everyFrame=False,lateUpdate=False
+2026-10-12T14:49:36.8550603Z TRANSFER TEMPLATE Coward BoolTest enabled=True continuous=False fields=boolVariable=False,isTrue=,isFalse=HutongGames.PlayMaker.FsmEvent,everyFrame=False;SendRandomEvent enabled=True continuous=False fields=events=HutongGames.PlayMaker.FsmEvent[],weights=HutongGames.PlayMaker.FsmFloat[],delay=0;BoolFlip enabled=True continuous=False fields=boolVariable=False
+2026-10-12T14:49:37.3264011Z PASS living enemy AI moves before transfer
+2026-10-12T14:49:38.2748516Z PASS authority leaves after aggro and enemy death
+2026-10-12T14:49:39.1787650Z PASS survivor continues AI and combat after transfer
+2026-10-12T14:49:39.9335516Z PASS original authority returns to ongoing room
+2026-10-12T14:49:39.9733385Z PASS returning authority receives continued damage
+2026-10-12T14:49:39.9733385Z FINAL PASS authority transfer after aggro and destroyed enemy

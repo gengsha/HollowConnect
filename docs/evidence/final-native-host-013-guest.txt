@@ -1,0 +1,259 @@
+2026-10-13T06:53:29.6718511Z PASS menu
+2026-10-13T06:53:34.0044946Z PASS unsaved character
+2026-10-13T06:53:34.0054989Z PASS server ready
+2026-10-13T06:53:34.9251865Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7
+2026-10-13T06:53:34.9544510Z PASS handshake
+2026-10-13T06:53:34.9572410Z PASS both connected
+2026-10-13T06:53:34.9823492Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=False, peers=1
+2026-10-13T06:53:57.3842959Z PASS first entrant starts fighting
+2026-10-13T06:53:58.3173120Z ENGINE Room prepared: GG_Atrium, visit=2, epoch=0, entities=17
+2026-10-13T06:53:58.4270856Z PASS native atrium
+2026-10-13T06:53:58.4534738Z ENGINE Room snapshot committed: GG_Atrium, visit=2, epoch=0, authority=True, peers=0
+2026-10-13T06:53:59.4469676Z PASS native pantheon selection UI
+2026-10-13T06:54:00.4495236Z NATIVE UI begin subscribers=1 door=GG_Challenge_Door (1) fsm-active=True hierarchy=True
+2026-10-13T06:54:02.4529226Z NATIVE DOOR state=Door Anim timescale=1 hero=(98.3, 35.4, 0.0)
+2026-10-13T06:54:05.7325254Z ENGINE Room prepared: GG_Boss_Door_Entrance, visit=3, epoch=0, entities=0
+2026-10-13T06:54:05.8096144Z PASS native door entrance cinematic
+2026-10-13T06:54:05.8129548Z CINEMATIC state=Wait
+2026-10-13T06:54:06.3181184Z CINEMATIC state=Atmos
+2026-10-13T06:54:10.3447004Z CINEMATIC state=Init
+2026-10-13T06:54:13.3672697Z CINEMATIC state=Greet 0
+2026-10-13T06:54:13.3717038Z NATIVE dialogue input NEXT PANTHEON_ENTER_0/Page End
+2026-10-13T06:54:13.8760406Z NATIVE dialogue input NEXT PANTHEON_ENTER_0/Page End
+2026-10-13T06:54:14.3799627Z NATIVE dialogue input NEXT PANTHEON_ENTER_0/Conversation End
+2026-10-13T06:54:14.8828186Z CINEMATIC state=Out Pause
+2026-10-13T06:54:15.3871629Z CINEMATIC state=Reset Appearance
+2026-10-13T06:54:15.8923995Z CINEMATIC state=Talk Finish
+2026-10-13T06:54:16.2148549Z ENGINE Room prepared: GG_Vengefly, visit=4, epoch=0, entities=2
+2026-10-13T06:54:16.3957911Z PASS native door loads first boss
+2026-10-13T06:54:16.3963315Z PASS first boss entry
+2026-10-13T06:54:16.3973373Z PASS both startroom.0
+2026-10-13T06:54:16.3985606Z PASS native sequence room 0.0
+2026-10-13T06:54:16.4015822Z PASS both room.0.0
+2026-10-13T06:54:19.5242950Z ENGINE Room snapshot committed: GG_Vengefly, visit=4, epoch=0, authority=False, peers=1
+2026-10-13T06:54:19.5257847Z PASS room authority 0.0
+2026-10-13T06:54:22.5297454Z PASS early room-level updates drained 0.0
+2026-10-13T06:54:22.5312149Z ROOM 0.0 scene=GG_Vengefly visit=4 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T06:54:22.5550031Z PASS camera authority state 0.0
+2026-10-13T06:54:22.5560195Z PASS camera lock state converges 0.0
+2026-10-13T06:54:22.5575271Z PASS visible bosses/knight and unfrozen camera 0.0
+2026-10-13T06:54:22.5615834Z PASS duplicate initial snapshot does not reset boss 0.0
+2026-10-13T06:54:22.5649505Z PASS stale room/peer leave and duplicate connect preserve avatar 0.0
+2026-10-13T06:54:22.5673805Z PASS both checked.0.0
+2026-10-13T06:54:22.5725056Z PASS damage published 0.0
+2026-10-13T06:54:22.5992190Z PASS same boss HP 0.0
+2026-10-13T06:54:22.6002285Z PASS both hpchecked.0.0
+2026-10-13T06:54:38.6485126Z PASS teammate fights next boss 0.0
+2026-10-13T06:54:46.2932070Z ENGINE Room prepared: GG_Gruz_Mother, visit=5, epoch=0, entities=2
+2026-10-13T06:54:46.3789336Z PASS native sequence room 0.1
+2026-10-13T06:54:46.3801558Z PASS both room.0.1
+2026-10-13T06:54:49.4045693Z ENGINE Room snapshot committed: GG_Gruz_Mother, visit=5, epoch=0, authority=False, peers=1
+2026-10-13T06:54:49.4055767Z PASS room authority 0.1
+2026-10-13T06:54:52.4082680Z PASS early room-level updates drained 0.1
+2026-10-13T06:54:52.4093614Z ROOM 0.1 scene=GG_Gruz_Mother visit=5 authority=False hero=(93.1, 15.4, 0.0) camera=(94.2, 20.0, -38.1) mode=LOCKED
+2026-10-13T06:54:52.4113668Z PASS camera authority state 0.1
+2026-10-13T06:54:52.4113668Z PASS camera lock state converges 0.1
+2026-10-13T06:54:52.4128662Z PASS visible bosses/knight and unfrozen camera 0.1
+2026-10-13T06:54:52.4149027Z PASS duplicate initial snapshot does not reset boss 0.1
+2026-10-13T06:54:52.4173010Z PASS stale room/peer leave and duplicate connect preserve avatar 0.1
+2026-10-13T06:54:52.4183238Z PASS both checked.0.1
+2026-10-13T06:54:52.4236433Z PASS damage published 0.1
+2026-10-13T06:54:52.4556733Z PASS same boss HP 0.1
+2026-10-13T06:54:52.4649361Z PASS both hpchecked.0.1
+2026-10-13T06:55:09.0225498Z PASS teammate fights next boss 0.1
+2026-10-13T06:55:16.8396403Z ENGINE Room prepared: GG_False_Knight, visit=6, epoch=0, entities=6
+2026-10-13T06:55:16.9446353Z PASS native sequence room 0.2
+2026-10-13T06:55:16.9462275Z PASS both room.0.2
+2026-10-13T06:55:19.9729120Z ENGINE Room snapshot committed: GG_False_Knight, visit=6, epoch=0, authority=False, peers=1
+2026-10-13T06:55:19.9729120Z PASS room authority 0.2
+2026-10-13T06:55:22.9764472Z PASS early room-level updates drained 0.2
+2026-10-13T06:55:22.9774527Z ROOM 0.2 scene=GG_False_Knight visit=6 authority=False hero=(23.8, 27.4, 0.0) camera=(32.5, 31.4, -38.1) mode=LOCKED
+2026-10-13T06:55:22.9809949Z PASS camera authority state 0.2
+2026-10-13T06:55:22.9809949Z PASS camera lock state converges 0.2
+2026-10-13T06:55:22.9820512Z PASS visible bosses/knight and unfrozen camera 0.2
+2026-10-13T06:55:22.9840382Z PASS duplicate initial snapshot does not reset boss 0.2
+2026-10-13T06:55:22.9855506Z PASS stale room/peer leave and duplicate connect preserve avatar 0.2
+2026-10-13T06:55:22.9871496Z PASS both checked.0.2
+2026-10-13T06:55:22.9911737Z PASS damage published 0.2
+2026-10-13T06:55:23.0217237Z PASS same boss HP 0.2
+2026-10-13T06:55:23.0237311Z PASS both hpchecked.0.2
+2026-10-13T06:56:11.7084965Z PASS teammate fights next boss 0.2
+2026-10-13T06:56:15.3993742Z ENGINE Room prepared: GG_Mega_Moss_Charger, visit=7, epoch=0, entities=2
+2026-10-13T06:56:15.4923457Z PASS native sequence room 0.3
+2026-10-13T06:56:15.4933601Z PASS both room.0.3
+2026-10-13T06:56:18.5205517Z ENGINE Room snapshot committed: GG_Mega_Moss_Charger, visit=7, epoch=0, authority=False, peers=1
+2026-10-13T06:56:18.5205517Z PASS room authority 0.3
+2026-10-13T06:56:21.5233526Z PASS early room-level updates drained 0.3
+2026-10-13T06:56:21.5243841Z ROOM 0.3 scene=GG_Mega_Moss_Charger visit=7 authority=False hero=(40.6, 7.4, 0.0) camera=(41.7, 11.1, -38.1) mode=LOCKED
+2026-10-13T06:56:21.5254964Z PASS camera authority state 0.3
+2026-10-13T06:56:21.5271194Z PASS camera lock state converges 0.3
+2026-10-13T06:56:21.5271194Z PASS visible bosses/knight and unfrozen camera 0.3
+2026-10-13T06:56:21.5291615Z PASS duplicate initial snapshot does not reset boss 0.3
+2026-10-13T06:56:21.5314563Z PASS stale room/peer leave and duplicate connect preserve avatar 0.3
+2026-10-13T06:56:21.5328432Z PASS both checked.0.3
+2026-10-13T06:56:21.5370602Z PASS damage published 0.3
+2026-10-13T06:56:21.5835333Z PASS same boss HP 0.3
+2026-10-13T06:56:21.5845354Z PASS both hpchecked.0.3
+2026-10-13T06:56:39.6319349Z PASS teammate fights next boss 0.3
+2026-10-13T06:56:49.3395932Z ENGINE Room prepared: GG_Hornet_1, visit=8, epoch=0, entities=3
+2026-10-13T06:56:49.4343428Z PASS native sequence room 0.4
+2026-10-13T06:56:49.4353430Z PASS both room.0.4
+2026-10-13T06:56:52.4784446Z ENGINE Room snapshot committed: GG_Hornet_1, visit=8, epoch=0, authority=False, peers=1
+2026-10-13T06:56:52.4798909Z PASS room authority 0.4
+2026-10-13T06:56:55.4819262Z PASS early room-level updates drained 0.4
+2026-10-13T06:56:55.4819262Z ROOM 0.4 scene=GG_Hornet_1 visit=8 authority=False hero=(25.8, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T06:56:55.4840393Z PASS camera authority state 0.4
+2026-10-13T06:56:55.4855373Z PASS camera lock state converges 0.4
+2026-10-13T06:56:55.4860633Z PASS visible bosses/knight and unfrozen camera 0.4
+2026-10-13T06:56:55.4870800Z PASS duplicate initial snapshot does not reset boss 0.4
+2026-10-13T06:56:55.4904884Z PASS stale room/peer leave and duplicate connect preserve avatar 0.4
+2026-10-13T06:56:55.4914963Z PASS both checked.0.4
+2026-10-13T06:56:55.4956474Z PASS damage published 0.4
+2026-10-13T06:56:55.5353590Z PASS same boss HP 0.4
+2026-10-13T06:56:55.5447742Z PASS both hpchecked.0.4
+2026-10-13T06:56:55.5514992Z PASS authority nail baseline 0.4.host
+2026-10-13T06:56:56.0128376Z PASS both nail-stop.0.4.host
+2026-10-13T06:56:57.0162535Z PASS authority accepted real nail 0.4.host
+2026-10-13T06:56:57.0172665Z PASS real nail HP converges 0.4.host
+2026-10-13T06:56:57.0172665Z PASS both nail-checked.0.4.host
+2026-10-13T06:56:57.0247102Z PASS authority nail baseline 0.4.guest
+2026-10-13T06:56:57.4805927Z PASS both nail-stop.0.4.guest
+2026-10-13T06:56:58.4871512Z PASS authority accepted real nail 0.4.guest
+2026-10-13T06:56:58.4881678Z PASS real nail HP converges 0.4.guest
+2026-10-13T06:56:58.4893042Z PASS both nail-checked.0.4.guest
+2026-10-13T06:57:02.6096445Z ENGINE Room prepared: GG_Spa, visit=9, epoch=0, entities=2
+2026-10-13T06:57:02.9481722Z PASS Hornet completion reaches spa
+2026-10-13T06:57:03.0159536Z PASS both spa.0
+2026-10-13T06:57:05.9691955Z ENGINE Room snapshot committed: GG_Spa, visit=9, epoch=0, authority=False, peers=1
+2026-10-13T06:57:05.9702073Z PASS spa has teammate and room authority
+2026-10-13T06:57:05.9702073Z PASS both spa-ready.0
+2026-10-13T06:57:07.0539932Z ENGINE Room prepared: Town, visit=10, epoch=0, entities=7
+2026-10-13T06:57:07.1710409Z PASS leave attempt
+2026-10-13T06:57:07.1850315Z PASS both left.0
+2026-10-13T06:57:07.2018312Z PASS disconnect between attempts
+2026-10-13T06:57:07.2038338Z PASS both disconnected
+2026-10-13T06:57:07.3705911Z ENGINE Room prepared: Town, visit=11, epoch=0, entities=7
+2026-10-13T06:57:07.3915643Z ENGINE Room snapshot committed: Town, visit=11, epoch=0, authority=False, peers=1
+2026-10-13T06:57:07.3925651Z PASS reconnect between attempts
+2026-10-13T06:57:07.3935669Z PASS both reconnected
+2026-10-13T06:57:19.5821693Z PASS first entrant starts fighting
+2026-10-13T06:57:20.4593793Z ENGINE Room prepared: GG_Atrium, visit=12, epoch=0, entities=17
+2026-10-13T06:57:20.5561672Z PASS native atrium
+2026-10-13T06:57:20.5696322Z ENGINE Room snapshot committed: GG_Atrium, visit=12, epoch=0, authority=True, peers=0
+2026-10-13T06:57:21.5708406Z PASS native pantheon selection UI
+2026-10-13T06:57:22.5721952Z NATIVE UI begin subscribers=1 door=GG_Challenge_Door (1) fsm-active=True hierarchy=True
+2026-10-13T06:57:24.5732161Z NATIVE DOOR state=Door Anim timescale=1 hero=(98.3, 35.4, 0.0)
+2026-10-13T06:57:27.8489751Z ENGINE Room prepared: GG_Boss_Door_Entrance, visit=13, epoch=0, entities=0
+2026-10-13T06:57:27.9297078Z PASS native door entrance cinematic
+2026-10-13T06:57:27.9327246Z CINEMATIC state=Wait
+2026-10-13T06:57:28.1024214Z ENGINE Room prepared: GG_Vengefly, visit=14, epoch=0, entities=2
+2026-10-13T06:57:28.4352509Z PASS native door loads first boss
+2026-10-13T06:57:28.4357540Z PASS first boss entry
+2026-10-13T06:57:28.4357540Z PASS both startroom.1
+2026-10-13T06:57:28.4372677Z PASS native sequence room 1.0
+2026-10-13T06:57:28.4399286Z PASS both room.1.0
+2026-10-13T06:57:31.3805235Z ENGINE Room snapshot committed: GG_Vengefly, visit=14, epoch=0, authority=False, peers=1
+2026-10-13T06:57:31.3819919Z PASS room authority 1.0
+2026-10-13T06:57:34.3824461Z PASS early room-level updates drained 1.0
+2026-10-13T06:57:34.3824461Z ROOM 1.0 scene=GG_Vengefly visit=14 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-13T06:57:34.4138666Z PASS camera authority state 1.0
+2026-10-13T06:57:34.4138666Z PASS camera lock state converges 1.0
+2026-10-13T06:57:34.4153756Z PASS visible bosses/knight and unfrozen camera 1.0
+2026-10-13T06:57:34.4173946Z PASS duplicate initial snapshot does not reset boss 1.0
+2026-10-13T06:57:34.4196682Z PASS stale room/peer leave and duplicate connect preserve avatar 1.0
+2026-10-13T06:57:34.4206729Z PASS both checked.1.0
+2026-10-13T06:57:34.4262152Z PASS damage published 1.0
+2026-10-13T06:57:34.4556590Z PASS same boss HP 1.0
+2026-10-13T06:57:34.4571667Z PASS both hpchecked.1.0
+2026-10-13T06:57:50.4911843Z PASS teammate fights next boss 1.0
+2026-10-13T06:57:58.0914881Z ENGINE Room prepared: GG_Gruz_Mother, visit=15, epoch=0, entities=2
+2026-10-13T06:57:58.1828559Z PASS native sequence room 1.1
+2026-10-13T06:57:58.1838683Z PASS both room.1.1
+2026-10-13T06:58:01.2150414Z ENGINE Room snapshot committed: GG_Gruz_Mother, visit=15, epoch=0, authority=False, peers=1
+2026-10-13T06:58:01.2150414Z PASS room authority 1.1
+2026-10-13T06:58:04.2170040Z PASS early room-level updates drained 1.1
+2026-10-13T06:58:04.2180213Z ROOM 1.1 scene=GG_Gruz_Mother visit=15 authority=False hero=(90.1, 15.4, 0.0) camera=(94.3, 19.9, -38.1) mode=LOCKED
+2026-10-13T06:58:04.2192156Z PASS camera authority state 1.1
+2026-10-13T06:58:04.2202189Z PASS camera lock state converges 1.1
+2026-10-13T06:58:04.2212280Z PASS visible bosses/knight and unfrozen camera 1.1
+2026-10-13T06:58:04.2235578Z PASS duplicate initial snapshot does not reset boss 1.1
+2026-10-13T06:58:04.2261054Z PASS stale room/peer leave and duplicate connect preserve avatar 1.1
+2026-10-13T06:58:04.2271090Z PASS both checked.1.1
+2026-10-13T06:58:04.2316774Z PASS damage published 1.1
+2026-10-13T06:58:04.2590401Z PASS same boss HP 1.1
+2026-10-13T06:58:04.2683508Z PASS both hpchecked.1.1
+2026-10-13T06:58:20.2970681Z PASS teammate fights next boss 1.1
+2026-10-13T06:58:28.0553774Z ENGINE Room prepared: GG_False_Knight, visit=16, epoch=0, entities=6
+2026-10-13T06:58:28.1495613Z PASS native sequence room 1.2
+2026-10-13T06:58:28.1507421Z PASS both room.1.2
+2026-10-13T06:58:32.3103511Z ENGINE Room snapshot committed: GG_False_Knight, visit=16, epoch=0, authority=False, peers=1
+2026-10-13T06:58:32.3103511Z PASS room authority 1.2
+2026-10-13T06:58:35.3129919Z PASS early room-level updates drained 1.2
+2026-10-13T06:58:35.3140161Z ROOM 1.2 scene=GG_False_Knight visit=16 authority=False hero=(23.8, 27.4, 0.0) camera=(32.5, 31.4, -38.1) mode=LOCKED
+2026-10-13T06:58:35.3174004Z PASS camera authority state 1.2
+2026-10-13T06:58:35.3184335Z PASS camera lock state converges 1.2
+2026-10-13T06:58:35.3184335Z PASS visible bosses/knight and unfrozen camera 1.2
+2026-10-13T06:58:35.3205036Z PASS duplicate initial snapshot does not reset boss 1.2
+2026-10-13T06:58:35.3225548Z PASS stale room/peer leave and duplicate connect preserve avatar 1.2
+2026-10-13T06:58:35.3225548Z PASS both checked.1.2
+2026-10-13T06:58:35.3361230Z PASS damage published 1.2
+2026-10-13T06:58:35.3561439Z PASS same boss HP 1.2
+2026-10-13T06:58:35.3571478Z PASS both hpchecked.1.2
+2026-10-13T06:59:20.0323324Z PASS teammate fights next boss 1.2
+2026-10-13T06:59:23.6610429Z ENGINE Room prepared: GG_Mega_Moss_Charger, visit=17, epoch=0, entities=2
+2026-10-13T06:59:23.7505469Z PASS native sequence room 1.3
+2026-10-13T06:59:23.7518965Z PASS both room.1.3
+2026-10-13T06:59:26.7848388Z ENGINE Room snapshot committed: GG_Mega_Moss_Charger, visit=17, epoch=0, authority=False, peers=1
+2026-10-13T06:59:26.7862827Z PASS room authority 1.3
+2026-10-13T06:59:29.7857274Z PASS early room-level updates drained 1.3
+2026-10-13T06:59:29.7870389Z ROOM 1.3 scene=GG_Mega_Moss_Charger visit=17 authority=False hero=(47.2, 7.4, 0.0) camera=(46.2, 11.0, -38.1) mode=LOCKED
+2026-10-13T06:59:29.7891377Z PASS camera authority state 1.3
+2026-10-13T06:59:29.7891377Z PASS camera lock state converges 1.3
+2026-10-13T06:59:29.7903546Z PASS visible bosses/knight and unfrozen camera 1.3
+2026-10-13T06:59:29.7923694Z PASS duplicate initial snapshot does not reset boss 1.3
+2026-10-13T06:59:29.7935655Z PASS stale room/peer leave and duplicate connect preserve avatar 1.3
+2026-10-13T06:59:29.7958746Z PASS both checked.1.3
+2026-10-13T06:59:29.8036556Z PASS damage published 1.3
+2026-10-13T06:59:29.8240738Z PASS same boss HP 1.3
+2026-10-13T06:59:29.8255114Z PASS both hpchecked.1.3
+2026-10-13T06:59:47.8836721Z PASS teammate fights next boss 1.3
+2026-10-13T06:59:57.5208640Z ENGINE Room prepared: GG_Hornet_1, visit=18, epoch=0, entities=3
+2026-10-13T06:59:57.6236713Z PASS native sequence room 1.4
+2026-10-13T06:59:57.6248450Z PASS both room.1.4
+2026-10-13T07:00:00.6548383Z ENGINE Room snapshot committed: GG_Hornet_1, visit=18, epoch=0, authority=False, peers=1
+2026-10-13T07:00:00.6558467Z PASS room authority 1.4
+2026-10-13T07:00:03.6554903Z PASS early room-level updates drained 1.4
+2026-10-13T07:00:03.6570052Z ROOM 1.4 scene=GG_Hornet_1 visit=18 authority=False hero=(25.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-13T07:00:03.6593858Z PASS camera authority state 1.4
+2026-10-13T07:00:03.6603988Z PASS camera lock state converges 1.4
+2026-10-13T07:00:03.6614400Z PASS visible bosses/knight and unfrozen camera 1.4
+2026-10-13T07:00:03.6624438Z PASS duplicate initial snapshot does not reset boss 1.4
+2026-10-13T07:00:03.6647132Z PASS stale room/peer leave and duplicate connect preserve avatar 1.4
+2026-10-13T07:00:03.6657668Z PASS both checked.1.4
+2026-10-13T07:00:03.6697051Z PASS damage published 1.4
+2026-10-13T07:00:03.7043218Z PASS same boss HP 1.4
+2026-10-13T07:00:03.7055557Z PASS both hpchecked.1.4
+2026-10-13T07:00:03.7100899Z PASS authority nail baseline 1.4.host
+2026-10-13T07:00:04.1639213Z PASS both nail-stop.1.4.host
+2026-10-13T07:00:05.1694987Z PASS authority accepted real nail 1.4.host
+2026-10-13T07:00:05.1700070Z PASS real nail HP converges 1.4.host
+2026-10-13T07:00:05.1710162Z PASS both nail-checked.1.4.host
+2026-10-13T07:00:05.1752442Z PASS authority nail baseline 1.4.guest
+2026-10-13T07:00:05.6285611Z PASS both nail-stop.1.4.guest
+2026-10-13T07:00:06.6345305Z PASS authority accepted real nail 1.4.guest
+2026-10-13T07:00:06.6345305Z PASS real nail HP converges 1.4.guest
+2026-10-13T07:00:06.6356836Z PASS both nail-checked.1.4.guest
+2026-10-13T07:00:10.7092658Z ENGINE Room prepared: GG_Spa, visit=19, epoch=0, entities=2
+2026-10-13T07:00:11.0535951Z PASS Hornet completion reaches spa
+2026-10-13T07:00:11.1502262Z PASS both spa.1
+2026-10-13T07:00:14.0790416Z ENGINE Room snapshot committed: GG_Spa, visit=19, epoch=0, authority=False, peers=1
+2026-10-13T07:00:14.0790416Z PASS spa has teammate and room authority
+2026-10-13T07:00:14.0803704Z PASS both spa-ready.1
+2026-10-13T07:00:15.1789771Z ENGINE Room prepared: Town, visit=20, epoch=0, entities=7
+2026-10-13T07:00:15.2986134Z PASS leave attempt
+2026-10-13T07:00:15.3000011Z PASS both left.1
+2026-10-13T07:00:15.3000011Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio
+2026-10-13T07:00:15.3020104Z PASS both probe-checked
+2026-10-13T07:00:15.3069648Z PASS final client disconnect
+2026-10-13T07:00:15.3110182Z PASS both probe-disconnected
+2026-10-13T07:00:15.3277529Z PASS final server stopped

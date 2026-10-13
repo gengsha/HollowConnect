@@ -1,0 +1,53 @@
+2026-10-13T07:48:45.1816135Z PASS menu ready
+2026-10-13T07:48:49.4647978Z PASS unsaved character ready
+2026-10-13T07:48:49.5001427Z PASS server ready
+2026-10-13T07:48:50.4417420Z PASS boss test handshake
+2026-10-13T07:48:50.4432290Z PASS both connected
+2026-10-13T07:48:53.7525131Z PASS native False Knight room
+2026-10-13T07:48:53.8116600Z PASS boss authority initialized
+2026-10-13T07:48:53.8129399Z PASS both in arena
+2026-10-13T07:49:02.7731626Z PASS guest receives exposed boss phase and head health
+2026-10-13T07:49:02.7731626Z REPLICA exposed position=(43.7, 31.6, 0.0) scale=(-1.3, 1.3, 1.3)
+2026-10-13T07:49:02.7748880Z BEFORE HANDOFF position=(43.7, 31.6, 0.0) scale=(-1.3, 1.3, 1.3)
+2026-10-13T07:49:02.7770868Z ARENA BEFORE HANDOFF FK Terrain Block path=FK%20Terrain%20Block#0 id=-100612 active=True self=True pos=(43.7, 31.6, 0.0) bounds=Center: (43.2, 28.0, 0.0), Extents: (1.7, 1.3, 0.0) enabled=True trigger=False
+2026-10-13T07:49:02.7791690Z ARENA BEFORE HANDOFF Battle Gate path=Battle%20Gate#0 id=129026 active=False self=False pos=(46.2, 28.1, 0.0) bounds=Center: (46.2, 28.1, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:02.7802591Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137028 active=False self=False pos=(35.5, 25.5, 0.0) bounds=Center: (35.5, 25.5, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:02.7802591Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137046 active=False self=False pos=(35.5, 25.5, 0.0) bounds=Center: (35.5, 25.5, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:02.7812630Z ARENA BEFORE HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137048 active=False self=False pos=(35.5, 25.5, 0.0) bounds=Center: (35.5, 25.5, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:02.7822722Z ARENA BEFORE HANDOFF FK Terrain Block path=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0 id=137054 active=False self=False pos=(26.1, 46.6, 0.0) bounds=Center: (26.1, 46.6, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:02.7833260Z TERRAIN REFERENCE Terrain Block=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0
+2026-10-13T07:49:03.6865029Z PASS authority transfers during exposed phase
+2026-10-13T07:49:03.6875160Z TAKEOVER position=(44.1, 31.7, 0.0) scale=(-1.3, 1.3, 1.3) old-authority=43.70623,31.6497
+2026-10-13T07:49:03.6875160Z AFTER HANDOFF position=(44.1, 31.7, 0.0) scale=(-1.3, 1.3, 1.3)
+2026-10-13T07:49:03.6888169Z ARENA AFTER HANDOFF FK Terrain Block path=FK%20Terrain%20Block#0 id=-100612 active=False self=False pos=(43.7, 31.6, 0.0) bounds=Center: (43.7, 31.6, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:03.6899366Z ARENA AFTER HANDOFF Battle Gate path=Battle%20Gate#0 id=129026 active=True self=True pos=(46.2, 28.1, 0.0) bounds=Center: (46.2, 28.1, 0.0), Extents: (0.3, 2.1, 0.0) enabled=True trigger=False
+2026-10-13T07:49:03.6914302Z ARENA AFTER HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137028 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (64.0, 24.3, 0.0), Extents: (1.0, 1.8, 0.0) enabled=True trigger=False
+2026-10-13T07:49:03.6914302Z ARENA AFTER HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137046 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (36.7, 25.8, 0.0), Extents: (27.7, 0.2, 0.0) enabled=True trigger=False
+2026-10-13T07:49:03.6929005Z ARENA AFTER HANDOFF Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137048 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (39.7, 22.5, 0.0), Extents: (25.4, 0.1, 0.0) enabled=True trigger=False
+2026-10-13T07:49:03.6929005Z ARENA AFTER HANDOFF FK Terrain Block path=FK%20Terrain%20Block#0 id=137054 active=True self=True pos=(43.7, 31.6, 0.0) bounds=Center: (43.2, 28.0, 0.0), Extents: (1.7, 1.3, 0.0) enabled=True trigger=False
+2026-10-13T07:49:03.6929005Z TERRAIN REFERENCE Terrain Block=FK%20Terrain%20Block#0
+2026-10-13T07:49:03.6947235Z PASS detached native terrain reference owns the only active collider after handoff
+2026-10-13T07:49:03.6959318Z PASS handoff preserves live exposed phase and both health values
+2026-10-13T07:49:10.0454916Z PASS native head defeat advances phase after transfer
+2026-10-13T07:49:10.0464979Z AFTER HEAD PHASE position=(29.3, 31.6, 0.0) scale=(1.3, 1.3, 1.3)
+2026-10-13T07:49:10.0475015Z ARENA AFTER HEAD PHASE FK Terrain Block path=FK%20Terrain%20Block#0 id=-100612 active=False self=False pos=(43.7, 31.6, 0.0) bounds=Center: (43.7, 31.6, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:10.0485060Z ARENA AFTER HEAD PHASE Battle Gate path=Battle%20Gate#0 id=129026 active=True self=True pos=(46.2, 28.1, 0.0) bounds=Center: (46.2, 28.1, 0.0), Extents: (0.3, 2.1, 0.0) enabled=True trigger=False
+2026-10-13T07:49:10.0500069Z ARENA AFTER HEAD PHASE Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137028 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (64.0, 24.3, 0.0), Extents: (1.0, 1.8, 0.0) enabled=True trigger=False
+2026-10-13T07:49:10.0500069Z ARENA AFTER HEAD PHASE Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137046 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (36.7, 25.8, 0.0), Extents: (27.7, 0.2, 0.0) enabled=True trigger=False
+2026-10-13T07:49:10.0510179Z ARENA AFTER HEAD PHASE Break Floor path=Battle%20Scene#0/FK%20Floor#0/Break%20Floor#0 id=137048 active=True self=True pos=(35.5, 25.5, 0.0) bounds=Center: (39.7, 22.5, 0.0), Extents: (25.4, 0.1, 0.0) enabled=True trigger=False
+2026-10-13T07:49:10.0510179Z ARENA AFTER HEAD PHASE FK Terrain Block path=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0 id=137054 active=False self=False pos=(29.3, 31.6, 0.0) bounds=Center: (29.3, 31.6, 0.0), Extents: (0.0, 0.0, 0.0) enabled=True trigger=False
+2026-10-13T07:49:10.0520731Z TERRAIN REFERENCE Terrain Block=Battle%20Scene#0/False%20Knight%20New#0/FK%20Terrain%20Block#0
+2026-10-13T07:49:10.0531073Z PASS native head recovery removes detached terrain without replica collider residue
+2026-10-13T07:49:10.0546213Z PHASE TICK state=Rage pos=(29.3, 31.6, 0.0) body=Dynamic/(0.0, 0.0)/gravity=0.3 simulated=True constraints=FreezeRotation timescale=1 fixed=0.02 physics=FixedUpdate hero=(22.7, 35.0, 0.0) fixed-ticks=47 handlefixed=True proxies=True/False Knight New:FalseyControl:True anim=True/Blank/0/playing=False actions=Wait
+2026-10-13T07:49:10.0556443Z PHYSICS CONTACT Break Floor/False Knight New normal=(0.0, 1.0) point=(27.2, 26.1) separation=-0.00500679
+2026-10-13T07:49:10.0566495Z PHYSICS CONTACT Break Floor/False Knight New normal=(0.0, 1.0) point=(31.6, 26.1) separation=-0.00500679
+2026-10-13T07:49:11.0569979Z PHASE TICK state=Rage End pos=(29.3, 31.6, 0.0) body=Dynamic/(0.0, 0.0)/gravity=0.3 simulated=True constraints=FreezeRotation timescale=1 fixed=0.02 physics=FixedUpdate hero=(22.7, 35.0, 0.0) fixed-ticks=47 handlefixed=True proxies=True/False Knight New:FalseyControl:True anim=True/Idle/2/playing=True actions=Wait
+2026-10-13T07:49:11.0582883Z PHYSICS CONTACT Break Floor/False Knight New normal=(0.0, 1.0) point=(27.0, 26.1) separation=-0.00500679
+2026-10-13T07:49:11.0582883Z PHYSICS CONTACT Break Floor/False Knight New normal=(0.0, 1.0) point=(31.4, 26.1) separation=-0.00500679
+2026-10-13T07:49:12.0600482Z PHASE TICK state=Idle pos=(29.3, 31.6, 0.0) body=Dynamic/(0.0, 0.0)/gravity=0.39 simulated=True constraints=FreezeRotation timescale=1 fixed=0.02 physics=FixedUpdate hero=(22.7, 35.0, 0.0) fixed-ticks=47 handlefixed=True proxies=True/False Knight New:FalseyControl:True anim=True/Idle/4/playing=True actions=CheckTargetDirection,BoolTestMulti,BoolTestMulti,WaitRandom
+2026-10-13T07:49:12.0614780Z PHYSICS CONTACT Break Floor/False Knight New normal=(0.0, 1.0) point=(27.0, 26.1) separation=-0.00500679
+2026-10-13T07:49:12.0614780Z PHYSICS CONTACT Break Floor/False Knight New normal=(0.0, 1.0) point=(31.4, 26.1) separation=-0.00500679
+2026-10-13T07:49:12.3873229Z PASS boss AI moves after phase handoff
+2026-10-13T07:49:12.3906839Z PASS continued armor damage remains live after transfer
+2026-10-13T07:49:13.3451585Z PASS returning client sees continued boss
+2026-10-13T07:49:13.4446414Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence

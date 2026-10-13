@@ -1,0 +1,12 @@
+# The FRP server must permit this UDP port. Replace address, token and port.
+serverAddr = "YOUR_FRPS_SERVER"
+serverPort = 7000
+auth.method = "token"
+auth.token = "REPLACE_WITH_YOUR_TOKEN"
+
+[[proxies]]
+name = "hollowconnect"
+type = "udp"
+localIP = "127.0.0.1"
+localPort = 26950
+remotePort = 26950

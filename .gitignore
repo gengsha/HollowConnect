@@ -1,0 +1,9 @@
+vendor/
+.tools/
+.analysis/
+**/bin/
+**/obj/
+artifacts/
+dist/
+*.user
+.test-results/

@@ -1,0 +1,53 @@
+2026-10-12T14:28:11.2512099Z PASS menu
+2026-10-12T14:28:16.0302505Z PASS unsaved character
+2026-10-12T14:28:16.6730142Z PASS server ready
+2026-10-12T14:28:16.6750069Z ENGINE Connecting client to server: 127.0.0.1:29650 as pantheonguest
+2026-10-12T14:28:16.8679207Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:28:16.8787074Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:28:17.0808764Z ENGINE Received server info from server
+2026-10-12T14:28:17.8152413Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:28:17.9311300Z ENGINE Scene changed from  to Town
+2026-10-12T14:28:17.9707652Z PASS handshake
+2026-10-12T14:28:17.9753222Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:28:17.9766391Z ENGINE Updating already in scene player with ID: 0
+2026-10-12T14:28:17.9789033Z ENGINE Player 0 entered scene
+2026-10-12T14:28:17.9858322Z PASS both connected
+2026-10-12T14:28:17.9858322Z PASS connect in already loaded room initializes authority
+2026-10-12T14:28:17.9878647Z PASS connect in already loaded room creates teammate
+2026-10-12T14:28:18.0228092Z PASS both same-room-initialized
+2026-10-12T14:28:18.0241157Z ENGINE Sending PlayerDisconnect packet
+2026-10-12T14:28:18.0241157Z ENGINE Disconnecting from server
+2026-10-12T14:28:18.0511044Z PASS disconnect without scene change
+2026-10-12T14:28:18.0530694Z PASS both same-room-disconnected
+2026-10-12T14:28:18.0600331Z PASS both same-room-empty
+2026-10-12T14:28:18.0605534Z ENGINE Connecting client to server: 127.0.0.1:29650 as sameroomretryguest
+2026-10-12T14:28:18.0681999Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:28:18.0697074Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:28:18.1175054Z ENGINE Received server info from server
+2026-10-12T14:28:18.2217642Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:28:18.2755470Z ENGINE Scene changed from  to Town
+2026-10-12T14:28:18.3004028Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:28:18.3308120Z PASS same-room reconnect initializes authority
+2026-10-12T14:28:18.3352574Z ENGINE Player 3 entered scene
+2026-10-12T14:28:18.3384206Z PASS same-room reconnect creates teammate
+2026-10-12T14:28:18.3399141Z FINAL PASS connect without loading a new room; muted audio
+2026-10-12T14:28:19.0339506Z ENGINE ERROR UDP Socket exception, ErrorCode: 10054, Socket ErrorCode: ConnectionReset, Exception:
+System.Net.Sockets.SocketException (0x80004005): Connection reset by peer
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Int32 offset, System.Int32 size, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x0003e] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x00000] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at Hkmp.Networking.Client.DtlsClient.SocketReceiveLoop (System.Net.Sockets.Socket socket, Hkmp.Networking.Client.ClientDatagramTransport datagram, System.Threading.CancellationToken cancellationToken) [0x0001e] in <0a0d8348bf354dc2b8769774f7eee37f>:0 
+2026-10-12T14:28:19.0494670Z ENGINE ERROR UDP Socket exception, ErrorCode: 10054, Socket ErrorCode: ConnectionReset, Exception:
+System.Net.Sockets.SocketException (0x80004005): Connection reset by peer
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Int32 offset, System.Int32 size, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x0003e] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x00000] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at Hkmp.Networking.Client.DtlsClient.SocketReceiveLoop (System.Net.Sockets.Socket socket, Hkmp.Networking.Client.ClientDatagramTransport datagram, System.Threading.CancellationToken cancellationToken) [0x0001e] in <0a0d8348bf354dc2b8769774f7eee37f>:0 
+2026-10-12T14:28:19.0669357Z ENGINE ERROR UDP Socket exception, ErrorCode: 10054, Socket ErrorCode: ConnectionReset, Exception:
+System.Net.Sockets.SocketException (0x80004005): Connection reset by peer
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Int32 offset, System.Int32 size, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x0003e] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x00000] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at Hkmp.Networking.Client.DtlsClient.SocketReceiveLoop (System.Net.Sockets.Socket socket, Hkmp.Networking.Client.ClientDatagramTransport datagram, System.Threading.CancellationToken cancellationToken) [0x0001e] in <0a0d8348bf354dc2b8769774f7eee37f>:0 
+2026-10-12T14:28:19.0825991Z ENGINE ERROR UDP Socket exception, ErrorCode: 10054, Socket ErrorCode: ConnectionReset, Exception:
+System.Net.Sockets.SocketException (0x80004005): Connection reset by peer
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Int32 offset, System.Int32 size, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x0003e] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at System.Net.Sockets.Socket.ReceiveFrom (System.Byte[] buffer, System.Net.Sockets.SocketFlags socketFlags, System.Net.EndPoint& remoteEP) [0x00000] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at Hkmp.Networking.Client.DtlsClient.SocketReceiveLoop (System.Net.Sockets.Socket socket, Hkmp.Networking.Client.ClientDatagramTransport datagram, System.Threading.CancellationToken cancellationToken) [0x0001e] in <0a0d8348bf354dc2b8769774f7eee37f>:0 

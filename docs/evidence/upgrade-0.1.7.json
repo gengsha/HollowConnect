@@ -1,0 +1,23 @@
+﻿{
+    "version":  "0.1.7",
+    "checkedAtUtc":  "2026-10-12T05:13:37.4389790Z",
+    "regressionChecksPassed":  88,
+    "installerChecksPassed":  13,
+    "installerRevision":  3,
+    "packagedInstallerUsed":  true,
+    "installedPayloadFilesChecked":  7,
+    "installedPayloadHashesMatch":  true,
+    "nativeApiAndPlayMakerHashesUnchanged":  true,
+    "saveFilesChecked":  64,
+    "saveFilesUnchanged":  true,
+    "testPluginAbsent":  true,
+    "originalUninstallBackupRetained":  true,
+    "godhomeGuestAuthorityPassed":  true,
+    "godhomeServerAuthorityPassed":  true,
+    "fullCombatProbePassed":  true,
+    "newGameReconnectAndSamePortRehostPassed":  true,
+    "nativeFalseKnightPhaseHandoffPassed":  true,
+    "authorityAfterDestroyedEnemyPassed":  true,
+    "exhaustiveBossValidation":  false,
+    "twoMachineFrpValidation":  false
+}

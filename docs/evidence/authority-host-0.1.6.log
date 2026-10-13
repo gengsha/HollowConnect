@@ -1,0 +1,39 @@
+2026-10-11T16:38:34.3211497Z probe started; save writes intercepted
+2026-10-11T16:38:34.3276274Z PASS mod and menu ready
+2026-10-11T16:38:39.2035743Z PASS fresh unsaved game entered
+2026-10-11T16:38:39.2165665Z SHADE ASSET scene= sprite=True scale=(1.0, 1.0, 1.0) clips=Cast,Idle,Death,Depart,Fly,Slash Effect,Slash,Startle,TurnToFly,Slash Antic,,Slash CD,Cast Antic,Death Start,Death Glow,Cast Charge,Cast Ring,Fireball,Fireball End,Appear,Retreat Start,Quake Antic,Retreat End,TurnToIdle,Quake Start,Quake,Quake Land,Scream Antic,Scream,Scream End,Scream Blast
+2026-10-11T16:38:39.2178502Z SHADE ASSET scene= sprite=False scale=(1.0, 1.0, 1.0) clips=none
+2026-10-11T16:38:41.5001794Z PASS real UDP addon handshake
+2026-10-11T16:38:41.5002396Z session=72aefa139d154d9b86ba5c13d3b5ba21 id=0
+2026-10-11T16:38:41.5254663Z PASS both clients connected
+2026-10-11T16:38:42.9963953Z PASS actual enemy scene entered
+2026-10-11T16:38:44.9787681Z PASS both clients in enemy room
+2026-10-11T16:38:46.9803531Z entities=11 authority=True
+2026-10-11T16:38:46.9823307Z health authority id=2 hp=37
+2026-10-11T16:38:47.0444077Z PASS guest health and progress verified
+2026-10-11T16:38:47.0476321Z combat target Zombie Runner 1 active=True timeScale=1 colliders=True:False:Center: (16.8, 10.4, 0.0), Extents: (0.6, 0.8, 0.0)
+2026-10-11T16:38:47.0868700Z PASS guest position and invincibility verified
+2026-10-11T16:38:47.6531329Z PASS remote player's real nail damages authority
+2026-10-11T16:38:48.2639134Z PASS guest nail damage health converged
+2026-10-11T16:38:48.2664913Z PASS live teammate map coordinate
+2026-10-11T16:38:48.2739638Z PASS teammate map icon exists without equipped compass
+2026-10-11T16:38:48.2773750Z PASS map projection equals actual game compass
+2026-10-11T16:38:48.2816533Z ENTITY 0 FuriousVengefly Angry Buzzer active=False
+2026-10-11T16:38:48.2829161Z ENTITY 1 ViolentHusk Bursting Zombie active=False
+2026-10-11T16:38:48.2829161Z ENTITY 2 WanderingHusk Zombie Runner 1 active=True
+2026-10-11T16:38:48.2840149Z ENTITY 3 CameraLockArea CameraLockArea A active=True
+2026-10-11T16:38:48.2840149Z ENTITY 4 CameraLockArea CameraLockArea B active=True
+2026-10-11T16:38:48.2853134Z ENTITY 5 CameraLockArea CameraLockArea C (1) active=True
+2026-10-11T16:38:48.2864756Z ENTITY 6 CameraLockArea CameraLockArea C active=False
+2026-10-11T16:38:48.2864756Z ENTITY 7 Tiktik Climber 1 active=True
+2026-10-11T16:38:48.2874771Z ENTITY 8 Tiktik Climber active=True
+2026-10-11T16:38:48.2874771Z ENTITY 9 Crawlid Crawler 1 active=True
+2026-10-11T16:38:48.2889661Z ENTITY 10 WanderingHusk Zombie Runner active=True
+2026-10-11T16:38:48.3283921Z PASS replica of killed enemy removed before transfer
+2026-10-11T16:38:48.3294448Z LIVE AI Zombie Swipe states=Initialise,Ready,Anticipate,Left or Right?,Face Left,Face Right,Lunge,Cooldown,Idle,Reset,R?,R? 2,Reverse,Reverse Back,Coward
+2026-10-11T16:38:48.8402485Z PASS living enemy AI moves before transfer
+2026-10-11T16:38:49.9282726Z PASS authority leaves after aggro and enemy death
+2026-10-11T16:38:50.1486317Z PASS survivor continues AI and combat after transfer
+2026-10-11T16:38:51.0185376Z PASS original authority returns to ongoing room
+2026-10-11T16:38:51.0550065Z PASS returning authority receives continued damage
+2026-10-11T16:38:51.0560084Z FINAL PASS authority transfer after aggro and destroyed enemy

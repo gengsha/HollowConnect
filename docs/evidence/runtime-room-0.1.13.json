@@ -1,0 +1,517 @@
+{
+  "version": "0.1.13",
+  "engineVersion": "3.0.0-hc9",
+  "checkedAtUtc": "2026-10-13T07:21:38.3732975Z",
+  "muted": true,
+  "scope": "Two isolated game copies, new in-memory characters, all SaveGame overloads intercepted; actual same-machine UDP/DTLS. Production DLL hashes checked per run. Batch mode test-only rendering waits use simulation frames.",
+  "baseline": {
+    "failureInjection": true,
+    "naturalFullPlayReproduction": false,
+    "chain": "AudioSource.Stop -> ActionInState.ExitState -> ForgetActions -> Entity.Destroy -> ClearEntities / OnSceneUnloaded -> later room/presence callbacks skipped",
+    "engineSha256": "F80DA3601DF693BA318B61512C2721CA8B18653370CFE3DAB4A80CA6F648666B"
+  },
+  "runs": [
+    {
+      "name": "final-native-host-013",
+      "scope": "Native first-Pantheon UI and entrance; host first; two attempts with reconnect; first five bosses, delayed snapshots/transitions, both real Hornet nails, native Hornet defeat to spa.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:00:15.3000011Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio",
+          "assertionCount": 196,
+          "evidence": "final-native-host-013-host.txt",
+          "sha256": "A22B976D0E87E2D197210AB96D566986FC34D21530DC2C86E30DBC851A2EE3E0"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:00:15.3000011Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio",
+          "assertionCount": 198,
+          "evidence": "final-native-host-013-guest.txt",
+          "sha256": "6A95F40010AAFC01AA29E3740F5E02D9D90103CADB465E13E2E28AFE7D4400B3"
+        }
+      ]
+    },
+    {
+      "name": "final-native-guest-013",
+      "scope": "Same native entrance and repeated first-five-boss checks with guest first; both real Hornet nails; native defeat to spa.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:07:11.8166956Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio",
+          "assertionCount": 198,
+          "evidence": "final-native-guest-013-host.txt",
+          "sha256": "B3D74FCAE66FE439F2B6EABCCE9B866E9018B2543D968BFC4675CAB82F376490"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:07:11.8177788Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio",
+          "assertionCount": 196,
+          "evidence": "final-native-guest-013-guest.txt",
+          "sha256": "E28DF3496D254CF29F3000899F5BD55CD76BB9F81C1B6D1BF4B47DCCB4ED8DF1"
+        }
+      ]
+    },
+    {
+      "name": "final-lifecycle-host-013",
+      "scope": "Host first; execute native AudioPlayInState, destroy its source before exit, native Moss death to Hornet, no old-room entities, same-room disconnect/reconnect.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:07:59.5280057Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio",
+          "assertionCount": 52,
+          "evidence": "final-lifecycle-host-013-host.txt",
+          "sha256": "8920298191B73F17B2E9D30F841A97B50D8A72749D014576BA962FBE93390E72"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:07:59.5316323Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio",
+          "assertionCount": 52,
+          "evidence": "final-lifecycle-host-013-guest.txt",
+          "sha256": "0691E0B51683942156ACB9C007A9CCFFE3DC25E00F8B7E4C3BC375F936899953"
+        }
+      ]
+    },
+    {
+      "name": "final-lifecycle-guest-013",
+      "scope": "Same destroyed native audio/cleanup/transition/reconnect probe with guest first.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:08:46.4798021Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio",
+          "assertionCount": 52,
+          "evidence": "final-lifecycle-guest-013-host.txt",
+          "sha256": "BAD0907AE4BF9A8A70B6F45B719ABCB14B839A4B5D39EF53D51585B57AD7C92A"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:08:46.4776855Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio",
+          "assertionCount": 52,
+          "evidence": "final-lifecycle-guest-013-guest.txt",
+          "sha256": "BDA9475D06A08FB854D6E025A7925FB091102D5C088FB429CC0988B37D46A248"
+        }
+      ]
+    },
+    {
+      "name": "final-boss-013",
+      "scope": "Native False Knight armor/head phase transition and authority handoff in ordinary Crossroads room.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:14:16.3103398Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence",
+          "assertionCount": 17,
+          "evidence": "final-boss-013-host.txt",
+          "sha256": "067B28B7DB9F043DD82F3AD758A7A696F2A26BC41343F2E887DE5E741C4F73E1"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:14:16.3078903Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence",
+          "assertionCount": 16,
+          "evidence": "final-boss-013-guest.txt",
+          "sha256": "5BA4BE54B553DBAF61FB0C19A0681CB2F2F3E1891154A86E750B256E1C7E1662"
+        }
+      ]
+    },
+    {
+      "name": "final-grimm-host-013",
+      "scope": "Host first; native Grimm launch force, ongoing horizontal fireballs/firebats and replica motion; no midflight takeover.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:15:47.1948501Z FINAL PASS Grimm native motion GG_Grimm",
+          "assertionCount": 156,
+          "evidence": "final-grimm-host-013-host.txt",
+          "sha256": "DA32E41F9CD35E4D16BB8A52E62A09675F12BB2061E6F9DED9556C7D61AFCB29"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:15:47.1873656Z FINAL PASS Grimm native motion GG_Grimm",
+          "assertionCount": 12,
+          "evidence": "final-grimm-host-013-guest.txt",
+          "sha256": "91F8543F4DFE3977B9AABE18907AF8F200E11C75A0EDBAFA3F33AAF2D0D94B9B"
+        }
+      ]
+    },
+    {
+      "name": "final-grimm-guest-013",
+      "scope": "Same native Grimm motion probe with guest first.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:17:17.9302527Z FINAL PASS Grimm native motion GG_Grimm",
+          "assertionCount": 11,
+          "evidence": "final-grimm-guest-013-host.txt",
+          "sha256": "C3869963F4366ADAB5B2D31E86D534BB64D52CF064DECA5AC219DE5BC902AA7B"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:17:17.9254063Z FINAL PASS Grimm native motion GG_Grimm",
+          "assertionCount": 157,
+          "evidence": "final-grimm-guest-013-guest.txt",
+          "sha256": "89385DECA48AFF295BAF0A55BACBCBF63FBDD3A271104D53352D7577FFC04B51"
+        }
+      ]
+    },
+    {
+      "name": "final-rescue-013",
+      "scope": "Actual nail rescue in both roles; 33 soul attribution, one-mask revive, original Shade feedback, stale/duplicate confirmation rejection.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:17:54.1959437Z FINAL PASS rescue soul and native feedback",
+          "assertionCount": 63,
+          "evidence": "final-rescue-013-host.txt",
+          "sha256": "77663C75286D6FC97F9FB90F55AFE0523DDBF569445A66AF41431F91D6B1F8A4"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:17:54.1912984Z FINAL PASS rescue soul and native feedback",
+          "assertionCount": 64,
+          "evidence": "final-rescue-013-guest.txt",
+          "sha256": "0044D76436662BF95F4857D9495FA0CA734BCB12995AEE8CF57D9E15A73B97AA"
+        }
+      ]
+    },
+    {
+      "name": "final-death-story-013",
+      "scope": "Ordinary native personal deaths and separate benches; original Shade and currency/soul branches; downed feedback and entry protection.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:18:31.5792837Z FINAL PASS native personal death Crossroads_01",
+          "assertionCount": 39,
+          "evidence": "final-death-story-013-host.txt",
+          "sha256": "8B010FA33310A806C84922E94004A10CA4635398ACC0A3F74ECBCEF83D49310A"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:18:31.5642909Z FINAL PASS native personal death Crossroads_01",
+          "assertionCount": 45,
+          "evidence": "final-death-story-013-guest.txt",
+          "sha256": "E441D168F4EA081E8DF15CF3CADAAEBD61A2368402C45AC27D2186B21892CA67"
+        }
+      ]
+    },
+    {
+      "name": "final-full-013",
+      "scope": "Full co-op probe: real remote nail, authority transfer, shared ability, map, personal F6, nail rescue, both wipe orders, F7/F8, disconnect cleanup.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:19:26.0490756Z FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, F6 personal bench return for guest and scene authority without combat reset, native shade nail rescue, both wipe orders and F7/F8 warp",
+          "assertionCount": 63,
+          "evidence": "final-full-013-host.txt",
+          "sha256": "36AA35759607C68CF4E7ACB7BDF54CE489F9B92E063275BC7B3647FC8B2A7760"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:19:25.8624736Z FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, F6 personal bench return for guest and scene authority without combat reset, native shade nail rescue, both wipe orders and F7/F8 warp",
+          "assertionCount": 56,
+          "evidence": "final-full-013-guest.txt",
+          "sha256": "2D967EE9B0BFD917DCD25B0F68BF0857964BD824095FF7B26FE757A29CC3ED9F"
+        }
+      ]
+    },
+    {
+      "name": "final-join-013",
+      "scope": "New in-memory characters, menu return/reconnect, host timeout and reopening the same port; avatars and authority initialize.",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C5643BEDB65288361276F6F80732B118BDE18B3B4093F8DB42BD983C5C9676D4"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "563BF7EB8F7C18EE87601062FF57447E08E897A9EB0A44C75E9C176FAD087807"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:21:01.2579775Z FINAL PASS",
+          "assertionCount": 19,
+          "evidence": "final-join-013-host.txt",
+          "sha256": "56CCE4E70B9027571DDD6C9075E161D3996E6A3A057A8978C5ED16A1A5CC4FFF"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "failed": false,
+          "finalPass": "2026-10-13T07:21:01.2543854Z FINAL PASS",
+          "assertionCount": 23,
+          "evidence": "final-join-013-guest.txt",
+          "sha256": "1A9A6BDBD21F8C2115D884A5CE17172DB7AFA24995DBC3F51B10A8E101D46E47"
+        }
+      ]
+    }
+  ],
+  "unsuccessfulExploratoryRuns": [
+    {
+      "productionVersion": "0.1.12",
+      "bothPassed": false,
+      "cause": "Controlled native audio-source destruction made replica action exit and room cleanup throw. Hornet then had stale room registration; host timed out waiting for authority and guest could not see the remote knight.",
+      "name": "baseline-lifecycle-012"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Probe reconnect username contained a hyphen and was rejected by native username validation; fixture now uses alphanumeric names.",
+      "name": "lifecycle-013-guest"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Reconnect room visibly restored; snapshot wrapper was installed after already-loaded room entry and missed the new snapshot. Wrapper now installs via ConnectEvent before publishing entry.",
+      "name": "lifecycle-013-guest-r2"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Fresh character test door was locked/inactive or selected the wrong UI instance. Fixture now enables only the real door hierarchy, starts its FSM and reads its own spawnedUI.",
+      "name": "native-pantheon-013-host / -r2 / -r3"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Native entrance reached first-entry dialogue. Automated fixture did not provide the page-control NEXT input; added native dialogue input events.",
+      "name": "native-pantheon-013-host-r4 / -cine / -host-final / -dialog"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Hidden nonbatch test did not progress startup; no conclusion about production graphics behavior. Final tests use batch mode.",
+      "name": "native-pantheon-013-rendered"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Second entrant traversed real entrance dialogue for longer than the original 20-second synthetic-entry wait; native entrance fixture now allows 75 seconds.",
+      "name": "native-pantheon-013-host-r5"
+    },
+    {
+      "bothPassed": false,
+      "cause": "First Hornet real nails and native completion passed. One probe left spa for Town before the other delayed snapshot was committed; added a both-ready barrier before probes leave spa.",
+      "name": "native-pantheon-013-spa-barrier"
+    },
+    {
+      "bothPassed": false,
+      "cause": "All two-attempt battle assertions reached FINAL PASS. The launcher then forcibly stopped the still-connected server before the guest and caused a guest UDP ConnectionReset ERROR / failed marker after done. This run is excluded; probe now disconnects both peers, waits for server acknowledgement and stops server before done.",
+      "name": "native-pantheon-013-ungraceful-host"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Suite interrupted to correct teardown after discovering the preceding run acquired a failed marker after done. Incomplete guest-first run is excluded.",
+      "name": "native-pantheon-013-ungraceful-guest"
+    },
+    {
+      "causeConfirmed": false,
+      "bothPassed": false,
+      "cause": "Native False Knight armor/head and authority transfer passed, but after the next phase it stayed in Run at x=43.1 with zero measured velocity. A repeat with extra diagnostics passed at x=28.9; initial cause is not yet established and is not counted as a passed run.",
+      "name": "boss-013-motion-failure"
+    },
+    {
+      "bothPassed": false,
+      "cause": "Exploratory run interrupted when launching the next isolated probe; no complete success claimed.",
+      "name": "lifecycle-013-host"
+    }
+  ],
+  "limits": [
+    "No two-machine FRP validation.",
+    "Native entry uses the real door UI/cinematic but selects its menu programmatically and exposes the locked fresh-character door.",
+    "No boss FSM state forced; early-room completion uses extra damage and intentional Down flags to delay one transition.",
+    "Hornet has real nail checks from both roles; these do not verify all attacks of all bosses.",
+    "First five first-Pantheon bosses and spa, not complete first-to-fourth Pantheon runs.",
+    "No complete ordinary-story reward, all dream variants or midflight projectile takeover validation.",
+    "Native preload/UI and disconnect warnings may exist; passing probe assertions do not mean zero log warnings."
+  ]
+}

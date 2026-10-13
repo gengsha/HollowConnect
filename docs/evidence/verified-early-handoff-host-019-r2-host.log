@@ -1,0 +1,352 @@
+2026-10-12T14:35:48.9189420Z PASS menu
+2026-10-12T14:35:53.6192144Z PASS unsaved character
+2026-10-12T14:35:53.6250052Z ENGINE Starting NetServer on port 29650
+2026-10-12T14:35:53.6432831Z ENGINE LoadOrGenerateECDHKeyPair: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\key.pem
+2026-10-12T14:35:53.6446410Z ENGINE KeyPair file exists, loading...
+2026-10-12T14:35:53.6877843Z ENGINE LoadOrGenerateCertificate: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\cert.cer
+2026-10-12T14:35:53.6892844Z ENGINE Certificate file exists, loading...
+2026-10-12T14:35:53.7111857Z ENGINE Connecting client to server: 127.0.0.1:29650 as pantheonhost
+2026-10-12T14:35:53.8361877Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:35:53.8390224Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:35:53.9005998Z ENGINE Received packet from unknown client with address: 127.0.0.1:59242, creating new client
+2026-10-12T14:35:53.9221575Z ENGINE Received connection request from IP: 127.0.0.1:59242, username: pantheonhost
+2026-10-12T14:35:53.9248764Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:35:53.9554632Z ENGINE Received server info from server
+2026-10-12T14:35:54.0083629Z ENGINE Received packet from unknown client with address: 127.0.0.1:59243, creating new client
+2026-10-12T14:35:54.0101655Z ENGINE Received connection request from IP: 127.0.0.1:59243, username: pantheonguest
+2026-10-12T14:35:54.0111808Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:35:54.6846649Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:35:54.7777443Z ENGINE Scene changed from  to Town
+2026-10-12T14:35:54.7856480Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: Town
+2026-10-12T14:35:54.7978923Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:35:54.8058881Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:35:54.8236261Z PASS handshake
+2026-10-12T14:35:54.8647389Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: Town
+2026-10-12T14:35:54.8712346Z ENGINE Sending that entity '8173247680223640663' is already in scene to '1'
+2026-10-12T14:35:54.8712346Z ENGINE Player 1 entered scene
+2026-10-12T14:35:54.8727425Z ENGINE Sending that entity '5433208650596947515' is already in scene to '1'
+2026-10-12T14:35:54.8737847Z ENGINE Sending that entity '9039180234019435213' is already in scene to '1'
+2026-10-12T14:35:54.8737847Z ENGINE Sending that entity '7815807409613637839' is already in scene to '1'
+2026-10-12T14:35:54.8737847Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T14:35:54.8762121Z ENGINE Sending that entity '1925361265462759723' is already in scene to '1'
+2026-10-12T14:35:54.8762121Z ENGINE Sending that entity '688262427560814067' is already in scene to '1'
+2026-10-12T14:35:54.8772160Z ENGINE Sending that entity '1640449854697899003' is already in scene to '1'
+2026-10-12T14:35:54.8812026Z PASS both connected
+2026-10-12T14:35:54.8859009Z SEQUENCE 0/GG_Vengefly,1/GG_Gruz_Mother,2/GG_False_Knight,3/GG_Mega_Moss_Charger,4/GG_Hornet_1,5/GG_Spa,6/GG_Ghost_Gorb,7/GG_Dung_Defender,8/GG_Mage_Knight,9/GG_Brooding_Mawlek,10/GG_Engine,11/GG_Nailmasters
+2026-10-12T14:35:55.7338293Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:35:55.7348325Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 1 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:35:55.7348325Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 2 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:35:55.7359944Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 3 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:35:55.7369974Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 4 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:35:55.7369974Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 5 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:35:55.7384262Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 6 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:35:55.7389318Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Giant Buzzer Col, expected 'chaser', actual [Big Buzzer]
+2026-10-12T14:35:55.7484867Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'chaser', actual [corpse,End Roar]
+2026-10-12T14:35:55.7493248Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'Big Buzzer', actual [corpse,End Roar]
+2026-10-12T14:35:55.8213025Z ENGINE Scene changed from Town to GG_Vengefly
+2026-10-12T14:35:55.8286758Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: Town
+2026-10-12T14:35:55.8301847Z ENGINE Sending leave scene packet to 1
+2026-10-12T14:35:55.8316603Z ENGINE Sending that entity '8173247680223640663' is already in scene to '1'
+2026-10-12T14:35:55.8326721Z ENGINE Sending that entity '5433208650596947515' is already in scene to '1'
+2026-10-12T14:35:55.9214074Z ENGINE Sending that entity '9039180234019435213' is already in scene to '1'
+2026-10-12T14:35:55.9224095Z ENGINE Sending that entity '7815807409613637839' is already in scene to '1'
+2026-10-12T14:35:55.9229139Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T14:35:55.9229139Z ENGINE Sending that entity '1925361265462759723' is already in scene to '1'
+2026-10-12T14:35:55.9229139Z ENGINE Sending that entity '688262427560814067' is already in scene to '1'
+2026-10-12T14:35:55.9244055Z ENGINE Sending that entity '1640449854697899003' is already in scene to '1'
+2026-10-12T14:35:55.9259133Z ENGINE   1 has become scene host
+2026-10-12T14:35:55.9440419Z PASS first boss entry
+2026-10-12T14:35:55.9551295Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: GG_Vengefly
+2026-10-12T14:35:55.9735545Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:35:56.0500780Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Summon(Clone), expected 'chaser', actual []
+2026-10-12T14:35:56.0629160Z ENGINE WARN Entity FSM mismatch: /Buzzer Summon, expected 'chaser', actual []
+2026-10-12T14:35:56.0765314Z ENGINE Received EntitySpawn from 0, with entity 18422058230135844227, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.0765314Z ENGINE Received EntitySpawn from 0, with entity 11179698483280166259, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.0920501Z ENGINE Received EntitySpawn from 0, with entity 12555192442688321909, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.0934376Z ENGINE Received EntitySpawn from 0, with entity 12529223507925041255, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.0944461Z ENGINE Received EntitySpawn from 0, with entity 16707770642367122509, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1092046Z ENGINE Received EntitySpawn from 0, with entity 9989703297809845813, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1102311Z ENGINE Received EntitySpawn from 0, with entity 16751320788060185343, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1107399Z ENGINE Received EntitySpawn from 0, with entity 12817929055091603241, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1265896Z ENGINE Received EntitySpawn from 0, with entity 13910141441397488743, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1265896Z ENGINE Received EntitySpawn from 0, with entity 18430806219827896657, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1275953Z ENGINE Received EntitySpawn from 0, with entity 15830454045238336157, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1275953Z ENGINE Received EntitySpawn from 0, with entity 15000707508251419715, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1434339Z ENGINE Received EntitySpawn from 0, with entity 13420357901600307819, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1444399Z ENGINE Received EntitySpawn from 0, with entity 13221924764484660971, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1605017Z ENGINE Received EntitySpawn from 0, with entity 16370090877816291311, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1615391Z ENGINE Received EntitySpawn from 0, with entity 15134552819590350089, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1615391Z ENGINE Received EntitySpawn from 0, with entity 11288431788093669441, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1770093Z ENGINE Received EntitySpawn from 0, with entity 17538014753295805171, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1780321Z ENGINE Received EntitySpawn from 0, with entity 15317371972789018257, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1792697Z ENGINE Received EntitySpawn from 0, with entity 18163216595265268781, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1802906Z ENGINE Received EntitySpawn from 0, with entity 9622863637333564363, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1941187Z ENGINE Received EntitySpawn from 0, with entity 15838646320594757885, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1952836Z ENGINE Received EntitySpawn from 0, with entity 12994826632879204979, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1952836Z ENGINE Received EntitySpawn from 0, with entity 14014289622668043931, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.1968018Z ENGINE Received EntitySpawn from 0, with entity 17378975742691840529, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.2110048Z ENGINE Received EntitySpawn from 0, with entity 16996786801566365985, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.2120155Z ENGINE Received EntitySpawn from 0, with entity 11514100010433382453, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.2135073Z ENGINE Received EntitySpawn from 0, with entity 13173939374909489971, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.2135073Z ENGINE Received EntitySpawn from 0, with entity 9760762344662633487, VengeflyKing, VengeflySummon
+2026-10-12T14:35:56.2300202Z ENGINE Received EntitySpawn from 0, with entity 13257411455226326949, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.3293476Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: Town
+2026-10-12T14:36:00.3641933Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: GG_Vengefly
+2026-10-12T14:36:00.3646988Z ENGINE Sending that entity '11514100010433382453' has spawned in the scene to '1'
+2026-10-12T14:36:00.3646988Z ENGINE Sending that entity '11514100010433382453' is already in scene to '1'
+2026-10-12T14:36:00.3661206Z ENGINE Sending that entity '13221924764484660971' has spawned in the scene to '1'
+2026-10-12T14:36:00.3661206Z ENGINE Sending that entity '13221924764484660971' is already in scene to '1'
+2026-10-12T14:36:00.3672387Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T14:36:00.3682782Z ENGINE Sending that entity '17378975742691840529' has spawned in the scene to '1'
+2026-10-12T14:36:00.3682782Z ENGINE Sending that entity '17378975742691840529' is already in scene to '1'
+2026-10-12T14:36:00.3702039Z ENGINE Sending that entity '18422058230135844227' has spawned in the scene to '1'
+2026-10-12T14:36:00.3714088Z ENGINE Sending that entity '18422058230135844227' is already in scene to '1'
+2026-10-12T14:36:00.3714088Z ENGINE Sending that entity '9989703297809845813' has spawned in the scene to '1'
+2026-10-12T14:36:00.3728570Z ENGINE Sending that entity '9989703297809845813' is already in scene to '1'
+2026-10-12T14:36:00.3728570Z ENGINE Sending that entity '12529223507925041255' has spawned in the scene to '1'
+2026-10-12T14:36:00.3742224Z ENGINE Sending that entity '12529223507925041255' is already in scene to '1'
+2026-10-12T14:36:00.3756390Z ENGINE Sending that entity '13257411455226326949' has spawned in the scene to '1'
+2026-10-12T14:36:00.3771506Z ENGINE Sending that entity '13257411455226326949' is already in scene to '1'
+2026-10-12T14:36:00.3785024Z ENGINE Sending that entity '16370090877816291311' has spawned in the scene to '1'
+2026-10-12T14:36:00.3785024Z ENGINE Sending that entity '16370090877816291311' is already in scene to '1'
+2026-10-12T14:36:00.3785024Z ENGINE Player 1 entered scene
+2026-10-12T14:36:00.3804026Z ENGINE Sending that entity '15000707508251419715' has spawned in the scene to '1'
+2026-10-12T14:36:00.3817384Z ENGINE Sending that entity '15000707508251419715' is already in scene to '1'
+2026-10-12T14:36:00.3827401Z ENGINE Sending that entity '13910141441397488743' has spawned in the scene to '1'
+2026-10-12T14:36:00.3838450Z ENGINE Sending that entity '13910141441397488743' is already in scene to '1'
+2026-10-12T14:36:00.3838450Z ENGINE Sending that entity '15134552819590350089' has spawned in the scene to '1'
+2026-10-12T14:36:00.3852632Z ENGINE Sending that entity '15134552819590350089' is already in scene to '1'
+2026-10-12T14:36:00.3869535Z ENGINE Sending that entity '9622863637333564363' has spawned in the scene to '1'
+2026-10-12T14:36:00.3879536Z ENGINE Sending that entity '9622863637333564363' is already in scene to '1'
+2026-10-12T14:36:00.3889706Z ENGINE Sending that entity '11288431788093669441' has spawned in the scene to '1'
+2026-10-12T14:36:00.3898308Z ENGINE Sending that entity '11288431788093669441' is already in scene to '1'
+2026-10-12T14:36:00.3903461Z ENGINE Sending that entity '18430806219827896657' has spawned in the scene to '1'
+2026-10-12T14:36:00.3903461Z ENGINE Sending that entity '18430806219827896657' is already in scene to '1'
+2026-10-12T14:36:00.3916718Z ENGINE Sending that entity '13173939374909489971' has spawned in the scene to '1'
+2026-10-12T14:36:00.3927052Z ENGINE Sending that entity '13173939374909489971' is already in scene to '1'
+2026-10-12T14:36:00.3927052Z ENGINE Sending that entity '12817929055091603241' has spawned in the scene to '1'
+2026-10-12T14:36:00.3941012Z ENGINE Sending that entity '12817929055091603241' is already in scene to '1'
+2026-10-12T14:36:00.3954408Z ENGINE Sending that entity '15317371972789018257' has spawned in the scene to '1'
+2026-10-12T14:36:00.3954408Z ENGINE Sending that entity '15317371972789018257' is already in scene to '1'
+2026-10-12T14:36:00.3967500Z ENGINE Sending that entity '18163216595265268781' has spawned in the scene to '1'
+2026-10-12T14:36:00.3967500Z ENGINE Sending that entity '18163216595265268781' is already in scene to '1'
+2026-10-12T14:36:00.3982008Z ENGINE Sending that entity '15838646320594757885' has spawned in the scene to '1'
+2026-10-12T14:36:00.3993250Z ENGINE Sending that entity '15838646320594757885' is already in scene to '1'
+2026-10-12T14:36:00.3993250Z ENGINE Sending that entity '13420357901600307819' has spawned in the scene to '1'
+2026-10-12T14:36:00.4003442Z ENGINE Sending that entity '13420357901600307819' is already in scene to '1'
+2026-10-12T14:36:00.4015800Z ENGINE Sending that entity '16996786801566365985' has spawned in the scene to '1'
+2026-10-12T14:36:00.4025991Z ENGINE Sending that entity '16996786801566365985' is already in scene to '1'
+2026-10-12T14:36:00.4046421Z ENGINE Sending that entity '2683996848053998615' is already in scene to '1'
+2026-10-12T14:36:00.4066124Z ENGINE Sending that entity '12555192442688321909' has spawned in the scene to '1'
+2026-10-12T14:36:00.4076555Z ENGINE Sending that entity '12555192442688321909' is already in scene to '1'
+2026-10-12T14:36:00.4086589Z ENGINE Sending that entity '15830454045238336157' has spawned in the scene to '1'
+2026-10-12T14:36:00.4086589Z ENGINE Sending that entity '15830454045238336157' is already in scene to '1'
+2026-10-12T14:36:00.4086589Z ENGINE Sending that entity '14014289622668043931' has spawned in the scene to '1'
+2026-10-12T14:36:00.4101683Z ENGINE Sending that entity '14014289622668043931' is already in scene to '1'
+2026-10-12T14:36:00.4112893Z ENGINE Sending that entity '11179698483280166259' has spawned in the scene to '1'
+2026-10-12T14:36:00.4122964Z ENGINE Sending that entity '11179698483280166259' is already in scene to '1'
+2026-10-12T14:36:00.4122964Z ENGINE Sending that entity '9760762344662633487' has spawned in the scene to '1'
+2026-10-12T14:36:00.4137907Z ENGINE Sending that entity '9760762344662633487' is already in scene to '1'
+2026-10-12T14:36:00.4148860Z ENGINE Sending that entity '12994826632879204979' has spawned in the scene to '1'
+2026-10-12T14:36:00.4163992Z ENGINE Sending that entity '12994826632879204979' is already in scene to '1'
+2026-10-12T14:36:00.4163992Z ENGINE Sending that entity '16751320788060185343' has spawned in the scene to '1'
+2026-10-12T14:36:00.4188660Z ENGINE Sending that entity '16751320788060185343' is already in scene to '1'
+2026-10-12T14:36:00.4203784Z ENGINE Sending that entity '17538014753295805171' has spawned in the scene to '1'
+2026-10-12T14:36:00.4225328Z ENGINE Sending that entity '17538014753295805171' is already in scene to '1'
+2026-10-12T14:36:00.4225328Z ENGINE Sending that entity '9038138461003165773' is already in scene to '1'
+2026-10-12T14:36:00.4240569Z ENGINE Sending that entity '16707770642367122509' has spawned in the scene to '1'
+2026-10-12T14:36:00.4240569Z ENGINE Sending that entity '16707770642367122509' is already in scene to '1'
+2026-10-12T14:36:00.4419847Z PASS late snapshot captured
+2026-10-12T14:36:00.5144518Z ENGINE Received EntitySpawn from 0, with entity 14536440346598020483, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.5316854Z ENGINE Received EntitySpawn from 0, with entity 12464092662705999913, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.5330233Z ENGINE Received EntitySpawn from 0, with entity 9655929495652131981, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.5499998Z ENGINE Received EntitySpawn from 0, with entity 13210012277189600835, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.5521958Z ENGINE Received EntitySpawn from 0, with entity 12844312214342282689, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.5662131Z ENGINE Received EntitySpawn from 0, with entity 14862420550149667163, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.5676800Z ENGINE Received EntitySpawn from 0, with entity 13231492951015242163, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.5829044Z ENGINE Received EntitySpawn from 0, with entity 14450044640203985215, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6000651Z ENGINE Received EntitySpawn from 0, with entity 13877003064131734631, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6016075Z ENGINE Received EntitySpawn from 0, with entity 11828744962983177189, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6178293Z ENGINE Received EntitySpawn from 0, with entity 11485385878640459987, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6336226Z ENGINE Received EntitySpawn from 0, with entity 12513994912794956185, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6357131Z ENGINE Received EntitySpawn from 0, with entity 13558660065727523607, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6510096Z ENGINE Received EntitySpawn from 0, with entity 13769790203658815943, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6693425Z ENGINE Received EntitySpawn from 0, with entity 9294177097768512361, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6848461Z ENGINE Received EntitySpawn from 0, with entity 15896595873716469321, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.6866742Z ENGINE Received EntitySpawn from 0, with entity 13952849989657277871, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7020940Z ENGINE Received EntitySpawn from 0, with entity 18257454067800465125, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7185742Z ENGINE Received EntitySpawn from 0, with entity 9330209767017883313, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7206217Z ENGINE Received EntitySpawn from 0, with entity 12858783607001011485, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7357495Z ENGINE Received EntitySpawn from 0, with entity 18170483661101458331, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7530749Z ENGINE Received EntitySpawn from 0, with entity 9835643921852675499, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7702706Z ENGINE Received EntitySpawn from 0, with entity 10505942981774187593, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7713574Z ENGINE Received EntitySpawn from 0, with entity 12062932597127848577, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.7870005Z ENGINE Received EntitySpawn from 0, with entity 10316275522850790129, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.8042428Z ENGINE Received EntitySpawn from 0, with entity 11796098320225538563, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.8052594Z ENGINE Received EntitySpawn from 0, with entity 9370047516789743573, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.8218739Z ENGINE Received EntitySpawn from 0, with entity 13495169016661880777, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.8232225Z ENGINE Received EntitySpawn from 0, with entity 15048897789600442095, VengeflyKing, VengeflySummon
+2026-10-12T14:36:00.8232225Z ENGINE Received EntitySpawn from 0, with entity 18327929772751981131, VengeflyKing, VengeflySummon
+2026-10-12T14:36:01.3267222Z ENGINE Scene changed from GG_Vengefly to Town
+2026-10-12T14:36:01.3414615Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: GG_Vengefly
+2026-10-12T14:36:01.3414615Z ENGINE Sending leave scene packet to 1
+2026-10-12T14:36:01.3427124Z ENGINE Sending that entity '13877003064131734631' has spawned in the scene to '1'
+2026-10-12T14:36:01.4391672Z ENGINE Sending that entity '13877003064131734631' is already in scene to '1'
+2026-10-12T14:36:01.4401814Z ENGINE Sending that entity '11179698483280166259' has spawned in the scene to '1'
+2026-10-12T14:36:01.4401814Z ENGINE Sending that entity '11179698483280166259' is already in scene to '1'
+2026-10-12T14:36:01.4417010Z ENGINE Sending that entity '9989703297809845813' has spawned in the scene to '1'
+2026-10-12T14:36:01.4417010Z ENGINE Sending that entity '9989703297809845813' is already in scene to '1'
+2026-10-12T14:36:01.4430327Z ENGINE Sending that entity '15317371972789018257' has spawned in the scene to '1'
+2026-10-12T14:36:01.4430327Z ENGINE Sending that entity '15317371972789018257' is already in scene to '1'
+2026-10-12T14:36:01.4443673Z ENGINE Sending that entity '12844312214342282689' has spawned in the scene to '1'
+2026-10-12T14:36:01.4443673Z ENGINE Sending that entity '12844312214342282689' is already in scene to '1'
+2026-10-12T14:36:01.4458032Z ENGINE Sending that entity '12464092662705999913' has spawned in the scene to '1'
+2026-10-12T14:36:01.4463070Z ENGINE Sending that entity '12464092662705999913' is already in scene to '1'
+2026-10-12T14:36:01.4473072Z ENGINE Sending that entity '13221924764484660971' has spawned in the scene to '1'
+2026-10-12T14:36:01.4473072Z ENGINE Sending that entity '13221924764484660971' is already in scene to '1'
+2026-10-12T14:36:01.4483345Z ENGINE Sending that entity '12858783607001011485' has spawned in the scene to '1'
+2026-10-12T14:36:01.4498250Z ENGINE Sending that entity '12858783607001011485' is already in scene to '1'
+2026-10-12T14:36:01.4503382Z ENGINE Sending that entity '13910141441397488743' has spawned in the scene to '1'
+2026-10-12T14:36:01.4513578Z ENGINE Sending that entity '13910141441397488743' is already in scene to '1'
+2026-10-12T14:36:01.4513578Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T14:36:01.4523677Z ENGINE Sending that entity '14014289622668043931' has spawned in the scene to '1'
+2026-10-12T14:36:01.4523677Z PASS authority leaves before delayed base snapshot
+2026-10-12T14:36:01.4538751Z ENGINE Sending that entity '14014289622668043931' is already in scene to '1'
+2026-10-12T14:36:01.4538751Z PASS both startroom.0
+2026-10-12T14:36:01.4551241Z ENGINE Sending that entity '14450044640203985215' has spawned in the scene to '1'
+2026-10-12T14:36:01.4575260Z ENGINE Sending that entity '14450044640203985215' is already in scene to '1'
+2026-10-12T14:36:01.4585288Z ENGINE Sending that entity '16370090877816291311' has spawned in the scene to '1'
+2026-10-12T14:36:01.4585288Z ENGINE Sending that entity '16370090877816291311' is already in scene to '1'
+2026-10-12T14:36:01.4600363Z ENGINE Sending that entity '9760762344662633487' has spawned in the scene to '1'
+2026-10-12T14:36:01.4600363Z ENGINE Sending that entity '9760762344662633487' is already in scene to '1'
+2026-10-12T14:36:01.4610372Z ENGINE Sending that entity '12817929055091603241' has spawned in the scene to '1'
+2026-10-12T14:36:01.4624356Z ENGINE Sending that entity '12817929055091603241' is already in scene to '1'
+2026-10-12T14:36:01.4652539Z ENGINE Sending that entity '12062932597127848577' has spawned in the scene to '1'
+2026-10-12T14:36:01.4652539Z ENGINE Sending that entity '12062932597127848577' is already in scene to '1'
+2026-10-12T14:36:01.4665632Z ENGINE Sending that entity '13420357901600307819' has spawned in the scene to '1'
+2026-10-12T14:36:01.4665632Z ENGINE Sending that entity '13420357901600307819' is already in scene to '1'
+2026-10-12T14:36:01.4676139Z ENGINE Sending that entity '13231492951015242163' has spawned in the scene to '1'
+2026-10-12T14:36:01.4684528Z ENGINE Sending that entity '13231492951015242163' is already in scene to '1'
+2026-10-12T14:36:01.4699771Z ENGINE Sending that entity '12529223507925041255' has spawned in the scene to '1'
+2026-10-12T14:36:01.4709939Z ENGINE Sending that entity '12529223507925041255' is already in scene to '1'
+2026-10-12T14:36:01.4720108Z ENGINE Sending that entity '11514100010433382453' has spawned in the scene to '1'
+2026-10-12T14:36:01.4735189Z ENGINE Sending that entity '11514100010433382453' is already in scene to '1'
+2026-10-12T14:36:01.4735189Z ENGINE Sending that entity '14536440346598020483' has spawned in the scene to '1'
+2026-10-12T14:36:01.4749697Z ENGINE Sending that entity '14536440346598020483' is already in scene to '1'
+2026-10-12T14:36:01.4749697Z ENGINE Sending that entity '16751320788060185343' has spawned in the scene to '1'
+2026-10-12T14:36:01.4764330Z ENGINE Sending that entity '16751320788060185343' is already in scene to '1'
+2026-10-12T14:36:01.4777346Z ENGINE Sending that entity '10316275522850790129' has spawned in the scene to '1'
+2026-10-12T14:36:01.4777346Z ENGINE Sending that entity '10316275522850790129' is already in scene to '1'
+2026-10-12T14:36:01.4792429Z ENGINE Sending that entity '13769790203658815943' has spawned in the scene to '1'
+2026-10-12T14:36:01.4807483Z ENGINE Sending that entity '13769790203658815943' is already in scene to '1'
+2026-10-12T14:36:01.4807483Z ENGINE Sending that entity '17538014753295805171' has spawned in the scene to '1'
+2026-10-12T14:36:01.4821602Z ENGINE Sending that entity '17538014753295805171' is already in scene to '1'
+2026-10-12T14:36:01.4821602Z ENGINE Sending that entity '18422058230135844227' has spawned in the scene to '1'
+2026-10-12T14:36:01.4834530Z ENGINE Sending that entity '18422058230135844227' is already in scene to '1'
+2026-10-12T14:36:01.4834530Z ENGINE Sending that entity '15838646320594757885' has spawned in the scene to '1'
+2026-10-12T14:36:01.4849189Z ENGINE Sending that entity '15838646320594757885' is already in scene to '1'
+2026-10-12T14:36:01.4862521Z ENGINE Sending that entity '9622863637333564363' has spawned in the scene to '1'
+2026-10-12T14:36:01.4877286Z ENGINE Sending that entity '9622863637333564363' is already in scene to '1'
+2026-10-12T14:36:01.4877286Z ENGINE Sending that entity '11485385878640459987' has spawned in the scene to '1'
+2026-10-12T14:36:01.4892379Z ENGINE Sending that entity '11485385878640459987' is already in scene to '1'
+2026-10-12T14:36:01.4902406Z ENGINE Sending that entity '14862420550149667163' has spawned in the scene to '1'
+2026-10-12T14:36:01.4907450Z ENGINE Sending that entity '14862420550149667163' is already in scene to '1'
+2026-10-12T14:36:01.4917962Z ENGINE Sending that entity '13173939374909489971' has spawned in the scene to '1'
+2026-10-12T14:36:01.4917962Z ENGINE Sending that entity '13173939374909489971' is already in scene to '1'
+2026-10-12T14:36:01.4931027Z ENGINE Sending that entity '15000707508251419715' has spawned in the scene to '1'
+2026-10-12T14:36:01.4942324Z ENGINE Sending that entity '15000707508251419715' is already in scene to '1'
+2026-10-12T14:36:01.4942324Z ENGINE Sending that entity '18430806219827896657' has spawned in the scene to '1'
+2026-10-12T14:36:01.4956003Z ENGINE Sending that entity '18430806219827896657' is already in scene to '1'
+2026-10-12T14:36:01.4956003Z ENGINE Sending that entity '13558660065727523607' has spawned in the scene to '1'
+2026-10-12T14:36:01.4966927Z ENGINE Sending that entity '13558660065727523607' is already in scene to '1'
+2026-10-12T14:36:01.4979666Z ENGINE Sending that entity '9655929495652131981' has spawned in the scene to '1'
+2026-10-12T14:36:01.4989716Z ENGINE Sending that entity '9655929495652131981' is already in scene to '1'
+2026-10-12T14:36:01.4989716Z ENGINE Sending that entity '9294177097768512361' has spawned in the scene to '1'
+2026-10-12T14:36:01.5004854Z ENGINE Sending that entity '9294177097768512361' is already in scene to '1'
+2026-10-12T14:36:01.5017657Z ENGINE Sending that entity '15896595873716469321' has spawned in the scene to '1'
+2026-10-12T14:36:01.5030799Z ENGINE Sending that entity '15896595873716469321' is already in scene to '1'
+2026-10-12T14:36:01.5040859Z ENGINE Sending that entity '16996786801566365985' has spawned in the scene to '1'
+2026-10-12T14:36:01.5040859Z ENGINE Sending that entity '16996786801566365985' is already in scene to '1'
+2026-10-12T14:36:01.5053187Z ENGINE Sending that entity '17378975742691840529' has spawned in the scene to '1'
+2026-10-12T14:36:01.5053187Z ENGINE Sending that entity '17378975742691840529' is already in scene to '1'
+2026-10-12T14:36:01.5067173Z ENGINE Sending that entity '10505942981774187593' has spawned in the scene to '1'
+2026-10-12T14:36:01.5067173Z ENGINE Sending that entity '10505942981774187593' is already in scene to '1'
+2026-10-12T14:36:01.5080441Z ENGINE Sending that entity '12513994912794956185' has spawned in the scene to '1'
+2026-10-12T14:36:01.5085498Z ENGINE Sending that entity '12513994912794956185' is already in scene to '1'
+2026-10-12T14:36:01.5102224Z ENGINE Sending that entity '11828744962983177189' has spawned in the scene to '1'
+2026-10-12T14:36:01.5113282Z ENGINE Sending that entity '11828744962983177189' is already in scene to '1'
+2026-10-12T14:36:01.5113282Z ENGINE Sending that entity '9038138461003165773' is already in scene to '1'
+2026-10-12T14:36:01.5113282Z ENGINE Sending that entity '18327929772751981131' has spawned in the scene to '1'
+2026-10-12T14:36:01.5128592Z ENGINE Sending that entity '18327929772751981131' is already in scene to '1'
+2026-10-12T14:36:01.5128592Z ENGINE Sending that entity '13495169016661880777' has spawned in the scene to '1'
+2026-10-12T14:36:01.5143406Z ENGINE Sending that entity '13495169016661880777' is already in scene to '1'
+2026-10-12T14:36:01.5143406Z ENGINE Sending that entity '2683996848053998615' is already in scene to '1'
+2026-10-12T14:36:01.5157133Z ENGINE Sending that entity '9330209767017883313' has spawned in the scene to '1'
+2026-10-12T14:36:01.5170256Z ENGINE Sending that entity '9330209767017883313' is already in scene to '1'
+2026-10-12T14:36:01.5170256Z ENGINE Sending that entity '18257454067800465125' has spawned in the scene to '1'
+2026-10-12T14:36:01.5185339Z ENGINE Sending that entity '18257454067800465125' is already in scene to '1'
+2026-10-12T14:36:01.5185339Z ENGINE Sending that entity '11796098320225538563' has spawned in the scene to '1'
+2026-10-12T14:36:01.5214196Z ENGINE Sending that entity '11796098320225538563' is already in scene to '1'
+2026-10-12T14:36:01.5224374Z ENGINE Sending that entity '18170483661101458331' has spawned in the scene to '1'
+2026-10-12T14:36:01.5238829Z ENGINE Sending that entity '18170483661101458331' is already in scene to '1'
+2026-10-12T14:36:01.5238829Z ENGINE Sending that entity '15830454045238336157' has spawned in the scene to '1'
+2026-10-12T14:36:01.5248850Z ENGINE Sending that entity '15830454045238336157' is already in scene to '1'
+2026-10-12T14:36:01.5248850Z ENGINE Sending that entity '15134552819590350089' has spawned in the scene to '1'
+2026-10-12T14:36:01.5259907Z ENGINE Sending that entity '15134552819590350089' is already in scene to '1'
+2026-10-12T14:36:01.5270180Z ENGINE Sending that entity '13952849989657277871' has spawned in the scene to '1'
+2026-10-12T14:36:01.5270180Z ENGINE Sending that entity '13952849989657277871' is already in scene to '1'
+2026-10-12T14:36:01.5285776Z ENGINE Sending that entity '13210012277189600835' has spawned in the scene to '1'
+2026-10-12T14:36:01.5296013Z ENGINE Sending that entity '13210012277189600835' is already in scene to '1'
+2026-10-12T14:36:01.5301128Z ENGINE Sending that entity '9835643921852675499' has spawned in the scene to '1'
+2026-10-12T14:36:01.5312398Z ENGINE Sending that entity '9835643921852675499' is already in scene to '1'
+2026-10-12T14:36:01.5317587Z ENGINE Sending that entity '18163216595265268781' has spawned in the scene to '1'
+2026-10-12T14:36:01.5324263Z ENGINE Sending that entity '18163216595265268781' is already in scene to '1'
+2026-10-12T14:36:01.5339020Z ENGINE Sending that entity '11288431788093669441' has spawned in the scene to '1'
+2026-10-12T14:36:01.5351376Z ENGINE Sending that entity '11288431788093669441' is already in scene to '1'
+2026-10-12T14:36:01.5361533Z ENGINE Sending that entity '12555192442688321909' has spawned in the scene to '1'
+2026-10-12T14:36:01.5371587Z ENGINE Sending that entity '12555192442688321909' is already in scene to '1'
+2026-10-12T14:36:01.5371587Z ENGINE Sending that entity '9370047516789743573' has spawned in the scene to '1'
+2026-10-12T14:36:01.5381614Z ENGINE Sending that entity '9370047516789743573' is already in scene to '1'
+2026-10-12T14:36:01.5393355Z ENGINE Sending that entity '13257411455226326949' has spawned in the scene to '1'
+2026-10-12T14:36:01.5403374Z ENGINE Sending that entity '13257411455226326949' is already in scene to '1'
+2026-10-12T14:36:01.5416713Z ENGINE Sending that entity '12994826632879204979' has spawned in the scene to '1'
+2026-10-12T14:36:01.5416713Z ENGINE Sending that entity '12994826632879204979' is already in scene to '1'
+2026-10-12T14:36:01.5427054Z ENGINE Sending that entity '16707770642367122509' has spawned in the scene to '1'
+2026-10-12T14:36:01.5427054Z ENGINE Sending that entity '16707770642367122509' is already in scene to '1'
+2026-10-12T14:36:01.5439079Z ENGINE Sending that entity '15048897789600442095' has spawned in the scene to '1'
+2026-10-12T14:36:01.5439079Z ENGINE Sending that entity '15048897789600442095' is already in scene to '1'
+2026-10-12T14:36:01.5458986Z ENGINE   1 has become scene host
+2026-10-12T14:36:01.5458986Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: Town
+2026-10-12T14:36:01.5589972Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:36:01.9696218Z ENGINE Received EntitySpawn from 1, with entity 17050439838668390897, VengeflyKing, VengeflySummon
+2026-10-12T14:36:01.9850070Z ENGINE Received EntitySpawn from 1, with entity 14505645290860598171, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0024334Z ENGINE Received EntitySpawn from 1, with entity 16149816801330445053, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0191998Z ENGINE Received EntitySpawn from 1, with entity 14944077583750975197, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0207060Z ENGINE Received EntitySpawn from 1, with entity 16752550831623181175, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0360724Z ENGINE Received EntitySpawn from 1, with entity 12603074021163107119, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0530030Z ENGINE Received EntitySpawn from 1, with entity 17231927105000885353, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0704032Z ENGINE Received EntitySpawn from 1, with entity 14394351077879991877, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0715407Z ENGINE Received EntitySpawn from 1, with entity 10693122897433938489, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.0939561Z ENGINE Received EntitySpawn from 1, with entity 13623328264770705605, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1116542Z ENGINE Received EntitySpawn from 1, with entity 10508206709404289313, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1279231Z ENGINE Received EntitySpawn from 1, with entity 15776361906363699131, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1456172Z ENGINE Received EntitySpawn from 1, with entity 15266949252460011719, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1456172Z ENGINE Received EntitySpawn from 1, with entity 17033126265882141493, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1625129Z ENGINE Received EntitySpawn from 1, with entity 9224953466871440089, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1788827Z ENGINE Received EntitySpawn from 1, with entity 11285806514282782095, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1804052Z ENGINE Received EntitySpawn from 1, with entity 14249546789092812779, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.1964411Z ENGINE Received EntitySpawn from 1, with entity 17544175564522382433, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.2135748Z ENGINE Received EntitySpawn from 1, with entity 12233711572906349925, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.2300077Z ENGINE Received EntitySpawn from 1, with entity 11334710359894880245, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.2315645Z ENGINE Received EntitySpawn from 1, with entity 13220821757008456561, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.2467772Z ENGINE Received EntitySpawn from 1, with entity 18159302063232828329, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.2647961Z ENGINE Received EntitySpawn from 1, with entity 11594189869971032467, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.2815204Z ENGINE Received EntitySpawn from 1, with entity 16190909512360960411, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.2984749Z ENGINE Received EntitySpawn from 1, with entity 17413458281359011601, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.3000104Z ENGINE Received EntitySpawn from 1, with entity 11857669745557582429, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.3155581Z ENGINE Received EntitySpawn from 1, with entity 14605836645595643457, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.3337893Z ENGINE Received EntitySpawn from 1, with entity 12229092527744977109, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.3501662Z ENGINE Received EntitySpawn from 1, with entity 16545891543024992369, VengeflyKing, VengeflySummon
+2026-10-12T14:36:02.3667416Z ENGINE Received EntitySpawn from 1, with entity 13610797785080493361, VengeflyKing, VengeflySummon
+2026-10-12T14:36:06.3681424Z PASS both handoff
+2026-10-12T14:36:06.3691448Z FINAL PASS early handoff before base snapshot; muted audio

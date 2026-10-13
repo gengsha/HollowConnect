@@ -1,0 +1,56 @@
+2026-10-11T10:22:55.9826446Z probe started; save writes intercepted
+2026-10-11T10:22:55.9891695Z PASS mod and menu ready
+2026-10-11T10:23:00.0697391Z PASS fresh unsaved game entered
+2026-10-11T10:23:00.0739844Z SHADE ASSET scene= sprite=True scale=(1.0, 1.0, 1.0) clips=Cast,Idle,Death,Depart,Fly,Slash Effect,Slash,Startle,TurnToFly,Slash Antic,,Slash CD,Cast Antic,Death Start,Death Glow,Cast Charge,Cast Ring,Fireball,Fireball End,Appear,Retreat Start,Quake Antic,Retreat End,TurnToIdle,Quake Start,Quake,Quake Land,Scream Antic,Scream,Scream End,Scream Blast
+2026-10-11T10:23:00.0754910Z SHADE ASSET scene= sprite=False scale=(1.0, 1.0, 1.0) clips=none
+2026-10-11T10:23:01.7422911Z PASS real UDP addon handshake
+2026-10-11T10:23:01.7422911Z session=e776fabdb65546f2af88828c57eefe66 id=0
+2026-10-11T10:23:01.8002273Z PASS both clients connected
+2026-10-11T10:23:02.9088385Z PASS actual enemy scene entered
+2026-10-11T10:23:04.9086127Z PASS both clients in enemy room
+2026-10-11T10:23:06.9093768Z entities=11 authority=True
+2026-10-11T10:23:06.9122459Z health authority id=2 hp=37
+2026-10-11T10:23:06.9410744Z PASS guest health and progress verified
+2026-10-11T10:23:06.9542936Z combat target Zombie Runner 1 active=True timeScale=1 colliders=True:False:Center: (16.8, 10.4, 0.0), Extents: (0.6, 0.8, 0.0)
+2026-10-11T10:23:06.9901777Z PASS guest position and invincibility verified
+2026-10-11T10:23:07.5314219Z PASS remote player's real nail damages authority
+2026-10-11T10:23:08.1527516Z PASS guest nail damage health converged
+2026-10-11T10:23:08.1537611Z PASS live teammate map coordinate
+2026-10-11T10:23:08.1597186Z PASS teammate map icon exists without equipped compass
+2026-10-11T10:23:08.1615631Z PASS map projection equals actual game compass
+2026-10-11T10:23:09.0484883Z PASS old authority leaves enemy room
+2026-10-11T10:23:09.0717419Z PASS guest kept health after authority transfer
+2026-10-11T10:23:09.8749149Z PASS old authority rejoins as replica
+2026-10-11T10:23:09.9121689Z PASS rejoined replica receives current half-health snapshot
+2026-10-11T10:23:09.9273759Z PASS new authority killed enemy
+2026-10-11T10:23:09.9544717Z PASS terminal death appears on replica
+2026-10-11T10:23:10.8100915Z PASS replica leaves after death
+2026-10-11T10:23:11.4219140Z PASS replica late reentry after death
+2026-10-11T10:23:11.4219140Z PASS late death snapshot does not resurrect enemy
+2026-10-11T10:23:11.4700743Z PASS guest down arrived over network
+2026-10-11T10:23:11.4711040Z PASS native teammate shade created
+2026-10-11T10:23:11.4777897Z PASS native shade Idle animation replaces remote hero
+2026-10-11T10:23:12.0496548Z PASS death anchor and camera verified
+2026-10-11T10:23:13.0518373Z PASS mere proximity never revives shade
+2026-10-11T10:23:13.7577352Z PASS missed nail swing never revives shade
+2026-10-11T10:23:13.7954277Z SHADE HIT source=Slash parent=Attacks local=True type=Nail dmg=5
+2026-10-11T10:23:13.8101539Z SHADE ATTACK hero=(15.7, 11.0, 0.0) target=(17.0, 11.0, 0.0) body=True collisionIgnored=True slashes=Slash:True:Center: (17.3, 10.9, 0.0), Extents: (1.6, 1.3, 0.0);AltSlash:False:Center: (15.6, 10.6, 0.0), Extents: (0.0, 0.0, 0.0);DownSlash:False:Center: (15.5, 9.4, 0.0), Extents: (0.0, 0.0, 0.0);UpSlash:False:Center: (15.7, 11.7, 0.0), Extents: (0.0, 0.0, 0.0);WallSlash:False:Center: (15.6, 10.6, 0.0), Extents: (0.0, 0.0, 0.0)
+2026-10-11T10:23:13.8157229Z SHADE HIT source=Slash parent=Attacks local=True type=Nail dmg=5
+2026-10-11T10:23:13.8259360Z PASS real local nail breaks shade over network
+2026-10-11T10:23:13.8259360Z PASS remote shade cleared and knight visible after revive
+2026-10-11T10:23:13.8400894Z PASS guest down for team wipe
+2026-10-11T10:23:13.8585438Z PASS single new attempt number
+2026-10-11T10:23:14.5397411Z PASS team checkpoint barrier released
+2026-10-11T10:23:15.5431086Z PASS host departed checkpoint for warp test
+2026-10-11T10:23:15.5431086Z PASS live target in another room
+2026-10-11T10:23:15.8487837Z PASS F7 selects teammate
+2026-10-11T10:23:16.7627941Z PASS F8 authorized cross-room teleport arrives beside teammate
+2026-10-11T10:23:16.7627941Z PASS original dream gate preserved
+2026-10-11T10:23:16.7674903Z PASS both ready for reverse death order
+2026-10-11T10:23:16.8030740Z PASS reverse order increments attempt once
+2026-10-11T10:23:17.4184973Z PASS reverse order retry releases both clients
+2026-10-11T10:23:17.4296631Z PASS both ready for shade disconnect cleanup
+2026-10-11T10:23:17.4324510Z PASS host shade before disconnect
+2026-10-11T10:23:17.4525117Z PASS guest observed host shade before disconnect
+2026-10-11T10:23:17.4676917Z PASS disconnect restores local camera and hero from shade
+2026-10-11T10:23:17.4709169Z FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, native shade nail rescue with frozen camera and one health, both wipe orders and F7/F8 warp

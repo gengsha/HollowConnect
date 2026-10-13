@@ -1,0 +1,15 @@
+PASS modern Steam libraries find a custom game folder with Chinese, spaces and brackets
+PASS legacy Steam library format remains supported
+PASS multiple game copies are returned without duplicate entries
+PASS manual executable selection works and invalid game folders are rejected
+PASS installer uses system Windows PowerShell modules despite an incompatible parent module path
+PASS EXE installs from an unrelated working directory with apostrophes and ampersands in both paths
+PASS updates preserve the original uninstall backup and player skins/server configuration
+PASS checksum failure rejects the package before modifying game files
+PASS failed update restores the current mod and keeps the original backup pointer
+PASS failed initial install restores original files and removes newly introduced API files
+PASS a real file lock during API rollback still restores HKMP and other API files, and reports incomplete recovery
+PASS EXE uninstall after updates restores the first installation baseline
+PASS standalone EXE automatic discovery runs through Windows PowerShell without developer tools
+RESULT 13 passed, 0 failed
+Evidence: E:\projects\hollowConnect\.test-results\installer-portable-20261013-125320-174

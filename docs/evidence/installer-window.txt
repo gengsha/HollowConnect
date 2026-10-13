@@ -1,0 +1,2 @@
+PASS packaged GUI opens, automatically detects the installed game and exposes install/update and restore actions
+GUI labels: 安装 HollowConnect 协作联机模组 | 自动识别各盘的 Steam 游戏库。也可选择 hollow_knight.exe，或粘贴游戏目录。 | 选择游戏… | 重新查找 | 安装 / 更新 | 卸载并恢复 | 安装前请关闭游戏。自动备份；卸载保留当前存档。 | 已找到游戏，点击“安装 / 更新”即可。

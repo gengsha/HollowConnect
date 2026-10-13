@@ -1,0 +1,470 @@
+2026-10-12T16:17:32.9466814Z PASS menu ready
+2026-10-12T16:17:37.0609600Z PASS unsaved character ready
+2026-10-12T16:17:37.0644067Z ENGINE Starting NetServer on port 29650
+2026-10-12T16:17:37.0776352Z ENGINE LoadOrGenerateECDHKeyPair: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\key.pem
+2026-10-12T16:17:37.0776352Z ENGINE KeyPair file exists, loading...
+2026-10-12T16:17:37.1105041Z ENGINE LoadOrGenerateCertificate: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\cert.cer
+2026-10-12T16:17:37.1105041Z ENGINE Certificate file exists, loading...
+2026-10-12T16:17:37.1349127Z ENGINE Connecting client to server: 127.0.0.1:29650 as motionhost
+2026-10-12T16:17:37.2359104Z ENGINE Server certificate fingerprint(s):
+2026-10-12T16:17:37.2376942Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T16:17:37.2923067Z ENGINE Received packet from unknown client with address: 127.0.0.1:50105, creating new client
+2026-10-12T16:17:37.3075089Z ENGINE Received connection request from IP: 127.0.0.1:50105, username: motionhost
+2026-10-12T16:17:37.3089007Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.10
+2026-10-12T16:17:37.3399433Z ENGINE Received server info from server
+2026-10-12T16:17:37.3498755Z ENGINE Received packet from unknown client with address: 127.0.0.1:50106, creating new client
+2026-10-12T16:17:37.3512387Z ENGINE Received connection request from IP: 127.0.0.1:50106, username: motionguest
+2026-10-12T16:17:37.3512387Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.10
+2026-10-12T16:17:37.8007697Z ENGINE Retrieved addon HollowConnect v0.1.10 ID: 0
+2026-10-12T16:17:37.8678417Z ENGINE Scene changed from  to Town
+2026-10-12T16:17:37.8838497Z ENGINE Received EnterScene data from (0, motionhost), new scene: Town
+2026-10-12T16:17:37.8838497Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T16:17:37.8972960Z ENGINE Received AlreadyInScene packet
+2026-10-12T16:17:37.9112944Z ENGINE Received EnterScene data from (1, motionguest), new scene: Town
+2026-10-12T16:17:37.9273421Z PASS connected
+2026-10-12T16:17:37.9323172Z ENGINE Player 1 entered scene
+2026-10-12T16:17:37.9488824Z PASS both connected
+2026-10-12T16:17:39.1331599Z ENGINE Scene changed from Town to GG_Grimm
+2026-10-12T16:17:39.2085935Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: Town
+2026-10-12T16:17:39.2100084Z ENGINE Sending leave scene packet to 1
+2026-10-12T16:17:39.2132777Z ENGINE Sending that entity '8173247680223640663' is already in scene to '1'
+2026-10-12T16:17:39.2142792Z ENGINE Sending that entity '5433208650596947515' is already in scene to '1'
+2026-10-12T16:17:39.2152819Z ENGINE Sending that entity '9039180234019435213' is already in scene to '1'
+2026-10-12T16:17:39.2152819Z ENGINE Sending that entity '7815807409613637839' is already in scene to '1'
+2026-10-12T16:17:39.2162845Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T16:17:39.2162845Z ENGINE Sending that entity '1925361265462759723' is already in scene to '1'
+2026-10-12T16:17:39.2162845Z ENGINE Sending that entity '688262427560814067' is already in scene to '1'
+2026-10-12T16:17:39.2177917Z ENGINE Sending that entity '1640449854697899003' is already in scene to '1'
+2026-10-12T16:17:39.2188048Z ENGINE   1 has become scene host
+2026-10-12T16:17:39.2428011Z PASS arena entered
+2026-10-12T16:17:39.2594277Z ENGINE Received EnterScene data from (0, motionhost), new scene: GG_Grimm
+2026-10-12T16:17:39.2757253Z ENGINE Received AlreadyInScene packet
+2026-10-12T16:17:39.2786622Z PASS authority ready
+2026-10-12T16:17:39.2800235Z AUTHORITY=True
+2026-10-12T16:17:42.1610505Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: Town
+2026-10-12T16:17:42.1943546Z ENGINE Received EnterScene data from (1, motionguest), new scene: GG_Grimm
+2026-10-12T16:17:42.1958372Z ENGINE Sending that entity '5547100318153585413' is already in scene to '1'
+2026-10-12T16:17:42.1958372Z ENGINE Sending that entity '930639587720373499' is already in scene to '1'
+2026-10-12T16:17:42.1973481Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T16:17:42.2114446Z ENGINE Player 1 entered scene
+2026-10-12T16:17:42.2358550Z PASS both in arena
+2026-10-12T16:17:47.9053833Z ENGINE Received EntitySpawn from 0, with entity 11215048990300643059, Grimm, DynamicHazard
+2026-10-12T16:17:47.9067944Z ENGINE Received EntitySpawn from 0, with entity 11421346176875277651, Grimm, DynamicHazard
+2026-10-12T16:17:47.9067944Z ENGINE Received EntitySpawn from 0, with entity 14540433647674615371, Grimm, DynamicHazard
+2026-10-12T16:17:47.9078026Z ENGINE Received EntitySpawn from 0, with entity 16128265956811582959, Grimm, DynamicHazard
+2026-10-12T16:17:47.9078026Z ENGINE Received EntitySpawn from 0, with entity 17141231274352452261, Grimm, DynamicHazard
+2026-10-12T16:17:50.0353061Z ENGINE Received EntitySpawn from 0, with entity 11834218318135566925, Grimm, GrimmBat
+2026-10-12T16:17:50.0523648Z ENGINE Received EntitySpawn from 0, with entity 15145769607108917839, Grimm, GrimmFirebatPillar
+2026-10-12T16:17:50.6477808Z ENGINE Received EntitySpawn from 0, with entity 11665813070903679477, Grimm, GrimmBat
+2026-10-12T16:17:50.6487927Z ENGINE Received EntitySpawn from 0, with entity 9578062244523350909, Grimm, GrimmFirebatPillar
+2026-10-12T16:17:51.1597189Z ENGINE Received EntitySpawn from 0, with entity 12584854729652460631, Grimm, GrimmBat
+2026-10-12T16:17:51.1597189Z ENGINE Received EntitySpawn from 0, with entity 13891642929031914283, Grimm, GrimmFirebatPillar
+2026-10-12T16:17:55.1140945Z ENGINE Received EntitySpawn from 0, with entity 12552913003837565311, Grimm, DynamicHazard
+2026-10-12T16:17:55.1151000Z ENGINE Received EntitySpawn from 0, with entity 10039227975493010155, Grimm, DynamicHazard
+2026-10-12T16:17:55.1151000Z ENGINE Received EntitySpawn from 0, with entity 13779313369117008041, Grimm, DynamicHazard
+2026-10-12T16:17:55.1166015Z ENGINE Received EntitySpawn from 0, with entity 14411987445209519963, Grimm, DynamicHazard
+2026-10-12T16:17:55.1166015Z ENGINE Received EntitySpawn from 0, with entity 12432782002072554807, Grimm, DynamicHazard
+2026-10-12T16:17:57.2476170Z ENGINE Received EntitySpawn from 0, with entity 10021734382524558885, Grimm, GrimmBat
+2026-10-12T16:17:57.2476170Z ENGINE Received EntitySpawn from 0, with entity 14196662824262689189, Grimm, GrimmFirebatPillar
+2026-10-12T16:17:57.8477034Z ENGINE Received EntitySpawn from 0, with entity 17894906519153340359, Grimm, GrimmBat
+2026-10-12T16:17:57.8477034Z ENGINE Received EntitySpawn from 0, with entity 14364297603402744923, Grimm, GrimmFirebatPillar
+2026-10-12T16:17:58.1534771Z ENGINE Received EntitySpawn from 0, with entity 17262816229429131643, Grimm, GrimmBat
+2026-10-12T16:17:58.1544864Z ENGINE Received EntitySpawn from 0, with entity 11769577915688448829, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:01.1076123Z ENGINE Received EntitySpawn from 0, with entity 13592021249462530153, Grimm, GrimmBat
+2026-10-12T16:18:01.1076123Z ENGINE Received EntitySpawn from 0, with entity 14390738715723573333, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:01.7201871Z ENGINE Received EntitySpawn from 0, with entity 9988172793134115191, Grimm, GrimmBat
+2026-10-12T16:18:01.7201871Z ENGINE Received EntitySpawn from 0, with entity 11922513110479193637, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:01.9257850Z ENGINE Received EntitySpawn from 0, with entity 17992947213591203341, Grimm, GrimmBat
+2026-10-12T16:18:01.9268031Z ENGINE Received EntitySpawn from 0, with entity 11049709705615275235, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:08.2388804Z ENGINE Received EntitySpawn from 0, with entity 16980750690821603199, Grimm, GrimmBat
+2026-10-12T16:18:08.2402487Z ENGINE Received EntitySpawn from 0, with entity 10844638143212196379, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:08.8415024Z ENGINE Received EntitySpawn from 0, with entity 11665464491863387853, Grimm, GrimmBat
+2026-10-12T16:18:08.8420075Z ENGINE Received EntitySpawn from 0, with entity 15240423159443969631, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:09.1477806Z ENGINE Received EntitySpawn from 0, with entity 17798843847818362995, Grimm, GrimmBat
+2026-10-12T16:18:09.1482862Z ENGINE Received EntitySpawn from 0, with entity 14565868664120941449, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:13.3106778Z ENGINE Received EntitySpawn from 0, with entity 16897970034483143649, Grimm, DynamicHazard
+2026-10-12T16:18:13.3106778Z ENGINE Received EntitySpawn from 0, with entity 11789369561454014973, Grimm, DynamicHazard
+2026-10-12T16:18:13.3118071Z ENGINE Received EntitySpawn from 0, with entity 17988620937805839955, Grimm, DynamicHazard
+2026-10-12T16:18:13.3118071Z ENGINE Received EntitySpawn from 0, with entity 11869036327350515999, Grimm, DynamicHazard
+2026-10-12T16:18:13.3128936Z ENGINE Received EntitySpawn from 0, with entity 13014770532095972157, Grimm, DynamicHazard
+2026-10-12T16:18:16.6576065Z ENGINE Received EntitySpawn from 0, with entity 12505245483965370185, Grimm, DynamicHazard
+2026-10-12T16:18:16.6589175Z ENGINE Received EntitySpawn from 0, with entity 16254272002199463011, Grimm, DynamicHazard
+2026-10-12T16:18:16.6589175Z ENGINE Received EntitySpawn from 0, with entity 16031161544050611807, Grimm, DynamicHazard
+2026-10-12T16:18:16.6589175Z ENGINE Received EntitySpawn from 0, with entity 12580098068095028257, Grimm, DynamicHazard
+2026-10-12T16:18:16.6747400Z ENGINE Received EntitySpawn from 0, with entity 17844612339266918079, Grimm, DynamicHazard
+2026-10-12T16:18:19.2025732Z ENGINE Received EntitySpawn from 0, with entity 17036680877004616561, Grimm, GrimmBat
+2026-10-12T16:18:19.2025732Z ENGINE Received EntitySpawn from 0, with entity 13553598231234780929, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:19.8157430Z ENGINE Received EntitySpawn from 0, with entity 15461849768870989015, Grimm, GrimmBat
+2026-10-12T16:18:19.8157430Z ENGINE Received EntitySpawn from 0, with entity 15227014960217682979, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:20.1047491Z ENGINE Received EntitySpawn from 0, with entity 16077054198783662289, Grimm, GrimmBat
+2026-10-12T16:18:20.1223815Z ENGINE Received EntitySpawn from 0, with entity 9863105553926064617, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:22.8913274Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:22.8923345Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:22.8943499Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:22.8953528Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:22.8953528Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:22.8965006Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:22.9151481Z ENGINE Received EntitySpawn from 0, with entity 10055605109231508233, Grimm, GrimmFireball
+2026-10-12T16:18:22.9151481Z ENGINE Received EntitySpawn from 0, with entity 17130439622025422155, Grimm, GrimmFireball
+2026-10-12T16:18:22.9165833Z ENGINE Received EntitySpawn from 0, with entity 15881075493263194315, Grimm, GrimmFireball
+2026-10-12T16:18:22.9663113Z ENGINE Received EntitySpawn from 0, with entity 9612817565309804749, Grimm, GrimmFireball
+2026-10-12T16:18:22.9663113Z ENGINE Received EntitySpawn from 0, with entity 18334173786310824241, Grimm, GrimmFireball
+2026-10-12T16:18:22.9673659Z ENGINE Received EntitySpawn from 0, with entity 14148665090198275873, Grimm, GrimmFireball
+2026-10-12T16:18:22.9673659Z ENGINE Received EntitySpawn from 0, with entity 14495950502256388619, Grimm, GrimmFireball
+2026-10-12T16:18:22.9734464Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:22.9748802Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:22.9748802Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:22.9748802Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:22.9788525Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:22.9801464Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:22.9826267Z ENGINE Received EntitySpawn from 0, with entity 14045561428183217245, Grimm, GrimmFireball
+2026-10-12T16:18:22.9836586Z ENGINE Received EntitySpawn from 0, with entity 17141397484030408199, Grimm, GrimmFireball
+2026-10-12T16:18:23.2919585Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.2956428Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.2967835Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.2967835Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.2967835Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.2977968Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.4889770Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:23.4899802Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:23.4909886Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:23.4909886Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:23.4920048Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:23.4930121Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:23.5114146Z ENGINE Received EntitySpawn from 0, with entity 17921619005046978981, Grimm, GrimmFireball
+2026-10-12T16:18:23.5114146Z ENGINE Received EntitySpawn from 0, with entity 10833464870138601899, Grimm, GrimmFireball
+2026-10-12T16:18:23.5125572Z ENGINE Received EntitySpawn from 0, with entity 13483407234497110829, Grimm, GrimmFireball
+2026-10-12T16:18:23.5707887Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:23.5707887Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:23.5717998Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:23.5717998Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:23.5728052Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:23.5761413Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:23.5786429Z ENGINE Received EntitySpawn from 0, with entity 13993408092987491901, Grimm, GrimmFireball
+2026-10-12T16:18:23.5799698Z ENGINE Received EntitySpawn from 0, with entity 13142319321621463211, Grimm, GrimmFireball
+2026-10-12T16:18:23.5799698Z ENGINE Received EntitySpawn from 0, with entity 14378400476843623233, Grimm, GrimmFireball
+2026-10-12T16:18:23.5809757Z ENGINE Received EntitySpawn from 0, with entity 18271358157807190765, Grimm, GrimmFireball
+2026-10-12T16:18:23.5809757Z ENGINE Received EntitySpawn from 0, with entity 12864657202981459975, Grimm, GrimmFireball
+2026-10-12T16:18:23.5821195Z ENGINE Received EntitySpawn from 0, with entity 16086394416974497153, Grimm, GrimmFireball
+2026-10-12T16:18:23.8890841Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.8901186Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.8962045Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.8962045Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.8973736Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:23.8973736Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:24.0909872Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.0923899Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.0974236Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.0979845Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.0990105Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.1000300Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.1096665Z ENGINE Received EntitySpawn from 0, with entity 16980010161274042839, Grimm, GrimmFireball
+2026-10-12T16:18:24.1106691Z ENGINE Received EntitySpawn from 0, with entity 17492235293004288223, Grimm, GrimmFireball
+2026-10-12T16:18:24.1106691Z ENGINE Received EntitySpawn from 0, with entity 10470674647798176137, Grimm, GrimmFireball
+2026-10-12T16:18:24.1781681Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:24.1781681Z ENGINE Received EntitySpawn from 0, with entity 16752151267953934227, Grimm, GrimmFireball
+2026-10-12T16:18:24.1791744Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:24.1791744Z ENGINE Received EntitySpawn from 0, with entity 18222744427482979503, Grimm, GrimmFireball
+2026-10-12T16:18:24.1791744Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:24.1806394Z ENGINE Received EntitySpawn from 0, with entity 13997573147157662619, Grimm, GrimmFireball
+2026-10-12T16:18:24.1806394Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:24.1816467Z ENGINE Received EntitySpawn from 0, with entity 17109119486730321149, Grimm, GrimmFireball
+2026-10-12T16:18:24.1816467Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:24.1826522Z ENGINE Received EntitySpawn from 0, with entity 14545211434549080707, Grimm, GrimmFireball
+2026-10-12T16:18:24.1826522Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:24.1837994Z ENGINE Received EntitySpawn from 0, with entity 13822268977598853503, Grimm, GrimmFireball
+2026-10-12T16:18:24.4928685Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:24.4928685Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:24.4996020Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:24.4996020Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:24.5006053Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:24.5006053Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:24.9733020Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.9743142Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.9755752Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.9766753Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.9776774Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.9787216Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:24.9977070Z ENGINE Received EntitySpawn from 0, with entity 16815462223901788757, Grimm, GrimmFireball
+2026-10-12T16:18:24.9977070Z ENGINE Received EntitySpawn from 0, with entity 15502323286255315941, Grimm, GrimmFireball
+2026-10-12T16:18:24.9989001Z ENGINE Received EntitySpawn from 0, with entity 16099042106840979727, Grimm, GrimmFireball
+2026-10-12T16:18:24.9989001Z ENGINE Received EntitySpawn from 0, with entity 9978394228705291975, Grimm, GrimmFireball
+2026-10-12T16:18:24.9989001Z ENGINE Received EntitySpawn from 0, with entity 13546035596792166991, Grimm, GrimmFireball
+2026-10-12T16:18:25.0004001Z ENGINE Received EntitySpawn from 0, with entity 14604077860537329573, Grimm, GrimmFireball
+2026-10-12T16:18:25.0009046Z ENGINE Received EntitySpawn from 0, with entity 13592969670577136361, Grimm, GrimmFireball
+2026-10-12T16:18:25.0009046Z ENGINE Received EntitySpawn from 0, with entity 16632845900275662487, Grimm, GrimmFireball
+2026-10-12T16:18:25.0020655Z ENGINE Received EntitySpawn from 0, with entity 15689564828714471581, Grimm, GrimmFireball
+2026-10-12T16:18:25.0556294Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.0556294Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.0556294Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.0604623Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.0609662Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.0609662Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.3756358Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.3770912Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.3775958Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.3775958Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.3775958Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.3826993Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.5757452Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:25.5767485Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:25.5767485Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:25.5782562Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:25.5782562Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:25.5792589Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:25.5850150Z ENGINE Received EntitySpawn from 0, with entity 17787164589256347385, Grimm, GrimmFireball
+2026-10-12T16:18:25.5865156Z ENGINE Received EntitySpawn from 0, with entity 14928508584350016699, Grimm, GrimmFireball
+2026-10-12T16:18:25.5875252Z ENGINE Received EntitySpawn from 0, with entity 18317220274750899057, Grimm, GrimmFireball
+2026-10-12T16:18:25.6199959Z ENGINE Received EntitySpawn from 0, with entity 17058406887840519813, Grimm, GrimmFireball
+2026-10-12T16:18:25.6210734Z ENGINE Received EntitySpawn from 0, with entity 12809638985849911221, Grimm, GrimmFireball
+2026-10-12T16:18:25.6210734Z ENGINE Received EntitySpawn from 0, with entity 13045206879999939763, Grimm, GrimmFireball
+2026-10-12T16:18:25.6224047Z ENGINE Received EntitySpawn from 0, with entity 14162063736710028849, Grimm, GrimmFireball
+2026-10-12T16:18:25.6224047Z ENGINE Received EntitySpawn from 0, with entity 13651115812614953933, Grimm, GrimmFireball
+2026-10-12T16:18:25.6234094Z ENGINE Received EntitySpawn from 0, with entity 16863525061322475179, Grimm, GrimmFireball
+2026-10-12T16:18:25.6562517Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.6577619Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.6577619Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.6577619Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.6589275Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.6632885Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:25.9758480Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.9816734Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.9816734Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.9828101Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.9828101Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:25.9828101Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:26.1762009Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:26.1777111Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:26.1787347Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:26.1797371Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:26.1807371Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:26.1807371Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:26.1862131Z ENGINE Received EntitySpawn from 0, with entity 17688143843942468517, Grimm, GrimmFireball
+2026-10-12T16:18:26.1862131Z ENGINE Received EntitySpawn from 0, with entity 15788762117416695185, Grimm, GrimmFireball
+2026-10-12T16:18:26.1875273Z ENGINE Received EntitySpawn from 0, with entity 16667474273133269029, Grimm, GrimmFireball
+2026-10-12T16:18:26.2196086Z ENGINE Received EntitySpawn from 0, with entity 9720837533906606289, Grimm, GrimmFireball
+2026-10-12T16:18:26.2209661Z ENGINE Received EntitySpawn from 0, with entity 14710485064842717807, Grimm, GrimmFireball
+2026-10-12T16:18:26.2209661Z ENGINE Received EntitySpawn from 0, with entity 16158786188250967863, Grimm, GrimmFireball
+2026-10-12T16:18:26.2222781Z ENGINE Received EntitySpawn from 0, with entity 13001970495694276791, Grimm, GrimmFireball
+2026-10-12T16:18:26.2222781Z ENGINE Received EntitySpawn from 0, with entity 12038387465473616737, Grimm, GrimmFireball
+2026-10-12T16:18:26.2222781Z ENGINE Received EntitySpawn from 0, with entity 13540206577062968281, Grimm, GrimmFireball
+2026-10-12T16:18:26.2662591Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:26.2677685Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:26.2677685Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:26.2688276Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:26.2688276Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:26.2688276Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:26.5773915Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:26.5784030Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:26.5808318Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:26.5822680Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:26.5822680Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:26.5832853Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:27.0567770Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.0577897Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.0588053Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.0588053Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.0601931Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.0611973Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.0731125Z ENGINE Received EntitySpawn from 0, with entity 14569688523057124119, Grimm, GrimmFireball
+2026-10-12T16:18:27.0731125Z ENGINE Received EntitySpawn from 0, with entity 12687463872502654277, Grimm, GrimmFireball
+2026-10-12T16:18:27.0746198Z ENGINE Received EntitySpawn from 0, with entity 10015288696193433243, Grimm, GrimmFireball
+2026-10-12T16:18:27.1383737Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.1393755Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.1393755Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.1407609Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.1407609Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.1417666Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.1417666Z ENGINE Received EntitySpawn from 0, with entity 17750951291285994665, Grimm, GrimmFireball
+2026-10-12T16:18:27.1417666Z ENGINE Received EntitySpawn from 0, with entity 15285109463603750503, Grimm, GrimmFireball
+2026-10-12T16:18:27.1432399Z ENGINE Received EntitySpawn from 0, with entity 14493547246639378833, Grimm, GrimmFireball
+2026-10-12T16:18:27.1432399Z ENGINE Received EntitySpawn from 0, with entity 17304633238278281323, Grimm, GrimmFireball
+2026-10-12T16:18:27.1432399Z ENGINE Received EntitySpawn from 0, with entity 11751043880734489373, Grimm, GrimmFireball
+2026-10-12T16:18:27.1444032Z ENGINE Received EntitySpawn from 0, with entity 13140620411308398211, Grimm, GrimmFireball
+2026-10-12T16:18:27.4574248Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:27.4574248Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:27.4611604Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:27.4611604Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:27.4626053Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:27.4626053Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:27.6575586Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.6585900Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.6595934Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.6605958Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.6605958Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.6616061Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:27.6708967Z ENGINE Received EntitySpawn from 0, with entity 9345952876840087517, Grimm, GrimmFireball
+2026-10-12T16:18:27.6708967Z ENGINE Received EntitySpawn from 0, with entity 9650386007163253043, Grimm, GrimmFireball
+2026-10-12T16:18:27.6719027Z ENGINE Received EntitySpawn from 0, with entity 14415490272654989089, Grimm, GrimmFireball
+2026-10-12T16:18:27.7408186Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.7408186Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.7420109Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.7420109Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.7430147Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.7430147Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:27.7566296Z ENGINE Received EntitySpawn from 0, with entity 14824447529161155377, Grimm, GrimmFireball
+2026-10-12T16:18:27.7566296Z ENGINE Received EntitySpawn from 0, with entity 10365953626176478243, Grimm, GrimmFireball
+2026-10-12T16:18:27.7576394Z ENGINE Received EntitySpawn from 0, with entity 17818499948079632023, Grimm, GrimmFireball
+2026-10-12T16:18:27.7576394Z ENGINE Received EntitySpawn from 0, with entity 11308168676360908987, Grimm, GrimmFireball
+2026-10-12T16:18:27.7588628Z ENGINE Received EntitySpawn from 0, with entity 15281094734428054889, Grimm, GrimmFireball
+2026-10-12T16:18:27.7593704Z ENGINE Received EntitySpawn from 0, with entity 9944142131879801357, Grimm, GrimmFireball
+2026-10-12T16:18:28.0591872Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.0604503Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.0614521Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.0614521Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.0625495Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.0625495Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.2586219Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:28.2597863Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:28.2607918Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:28.2617973Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:28.2629959Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:28.2639995Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:28.2685256Z ENGINE Received EntitySpawn from 0, with entity 15917668899953419151, Grimm, GrimmFireball
+2026-10-12T16:18:28.2685256Z ENGINE Received EntitySpawn from 0, with entity 13314275293270515965, Grimm, GrimmFireball
+2026-10-12T16:18:28.2858008Z ENGINE Received EntitySpawn from 0, with entity 15094270640353021967, Grimm, GrimmFireball
+2026-10-12T16:18:28.3399050Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:28.3434215Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:28.3444389Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:28.3444389Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:28.3444389Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:28.3456536Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:28.3704058Z ENGINE Received EntitySpawn from 0, with entity 10730828576157581867, Grimm, GrimmFireball
+2026-10-12T16:18:28.3704058Z ENGINE Received EntitySpawn from 0, with entity 9837619224681838917, Grimm, GrimmFireball
+2026-10-12T16:18:28.3718161Z ENGINE Received EntitySpawn from 0, with entity 13456161761346761033, Grimm, GrimmFireball
+2026-10-12T16:18:28.3718161Z ENGINE Received EntitySpawn from 0, with entity 11872508927842354275, Grimm, GrimmFireball
+2026-10-12T16:18:28.3731220Z ENGINE Received EntitySpawn from 0, with entity 17507296464465273859, Grimm, GrimmFireball
+2026-10-12T16:18:28.3731220Z ENGINE Received EntitySpawn from 0, with entity 18431142916299747867, Grimm, GrimmFireball
+2026-10-12T16:18:28.6596888Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.6608374Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.6639182Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.6649342Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.6649342Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:28.6649342Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:29.1408148Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.1418178Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.1428200Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.1438229Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.1448241Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.1448241Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.1565698Z ENGINE Received EntitySpawn from 0, with entity 17116780443241466097, Grimm, GrimmFireball
+2026-10-12T16:18:29.1575714Z ENGINE Received EntitySpawn from 0, with entity 11372005092541901485, Grimm, GrimmFireball
+2026-10-12T16:18:29.1581301Z ENGINE Received EntitySpawn from 0, with entity 16956649075658789553, Grimm, GrimmFireball
+2026-10-12T16:18:29.1912372Z ENGINE Received EntitySpawn from 0, with entity 14914178603124488093, Grimm, GrimmFireball
+2026-10-12T16:18:29.1912372Z ENGINE Received EntitySpawn from 0, with entity 16602067231313881609, Grimm, GrimmFireball
+2026-10-12T16:18:29.1926509Z ENGINE Received EntitySpawn from 0, with entity 17428784182892190143, Grimm, GrimmFireball
+2026-10-12T16:18:29.1926509Z ENGINE Received EntitySpawn from 0, with entity 10961230176458396397, Grimm, GrimmFireball
+2026-10-12T16:18:29.1936537Z ENGINE Received EntitySpawn from 0, with entity 15407617113030078635, Grimm, GrimmFireball
+2026-10-12T16:18:29.1936537Z ENGINE Received EntitySpawn from 0, with entity 12357799021330804575, Grimm, GrimmFireball
+2026-10-12T16:18:29.2215631Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.2225704Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.2225704Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.2277363Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.2282403Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.2282403Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.5460112Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:29.5460112Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:29.5460112Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:29.5475209Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:29.5475209Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:29.5486131Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:29.7402600Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.7412615Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.7422663Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.7432759Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.7442780Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.7452809Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:29.7541251Z ENGINE Received EntitySpawn from 0, with entity 11239855830068155267, Grimm, GrimmFireball
+2026-10-12T16:18:29.7541251Z ENGINE Received EntitySpawn from 0, with entity 15563196494142148329, Grimm, GrimmFireball
+2026-10-12T16:18:29.7554694Z ENGINE Received EntitySpawn from 0, with entity 16250081473483590027, Grimm, GrimmFireball
+2026-10-12T16:18:29.7882609Z ENGINE Received EntitySpawn from 0, with entity 11013460144788551295, Grimm, GrimmFireball
+2026-10-12T16:18:29.7892668Z ENGINE Received EntitySpawn from 0, with entity 14599291481044934493, Grimm, GrimmFireball
+2026-10-12T16:18:29.7892668Z ENGINE Received EntitySpawn from 0, with entity 15545740403892827677, Grimm, GrimmFireball
+2026-10-12T16:18:29.7902684Z ENGINE Received EntitySpawn from 0, with entity 14996470647269823311, Grimm, GrimmFireball
+2026-10-12T16:18:29.7902684Z ENGINE Received EntitySpawn from 0, with entity 9829159927708242007, Grimm, GrimmFireball
+2026-10-12T16:18:29.7914540Z ENGINE Received EntitySpawn from 0, with entity 10623128532579858331, Grimm, GrimmFireball
+2026-10-12T16:18:29.8226825Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.8226825Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.8236847Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.8236847Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.8299693Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:29.8311249Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:30.1424468Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.1434499Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.1434499Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.1434499Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.1484935Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.1484935Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.3435885Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:30.3448944Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:30.3458990Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:30.3458990Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:30.3474059Z NATIVE LAUNCH force=7 velocity=(0.0, 0.0)
+2026-10-12T16:18:30.3484195Z NATIVE LAUNCH force=-7 velocity=(0.0, 0.0)
+2026-10-12T16:18:30.3517786Z ENGINE Received EntitySpawn from 0, with entity 10702647085305907959, Grimm, GrimmFireball
+2026-10-12T16:18:30.3682214Z ENGINE Received EntitySpawn from 0, with entity 13162350136792978081, Grimm, GrimmFireball
+2026-10-12T16:18:30.3682214Z ENGINE Received EntitySpawn from 0, with entity 11496881964216551247, Grimm, GrimmFireball
+2026-10-12T16:18:30.4023259Z ENGINE Received EntitySpawn from 0, with entity 15197227116582101199, Grimm, GrimmFireball
+2026-10-12T16:18:30.4033329Z ENGINE Received EntitySpawn from 0, with entity 13564854146976683085, Grimm, GrimmFireball
+2026-10-12T16:18:30.4033329Z ENGINE Received EntitySpawn from 0, with entity 15481174400455802187, Grimm, GrimmFireball
+2026-10-12T16:18:30.4033329Z ENGINE Received EntitySpawn from 0, with entity 11541964082580554765, Grimm, GrimmFireball
+2026-10-12T16:18:30.4048294Z ENGINE Received EntitySpawn from 0, with entity 15398438893653720515, Grimm, GrimmFireball
+2026-10-12T16:18:30.4048294Z ENGINE Received EntitySpawn from 0, with entity 14647292024804375599, Grimm, GrimmFireball
+2026-10-12T16:18:30.4258260Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:30.4258260Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:30.4271743Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:30.4276793Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:30.4276793Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:30.4286917Z PASS native fire force and coroutine survive network registration
+2026-10-12T16:18:30.7444287Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.7455944Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.7455944Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.7497305Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.7497305Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:30.7508324Z PASS native balloon projectile accelerates horizontally
+2026-10-12T16:18:38.1190750Z ENGINE Received EntitySpawn from 0, with entity 10747756527927076155, Grimm, DynamicHazard
+2026-10-12T16:18:38.1202486Z ENGINE Received EntitySpawn from 0, with entity 10353916308240829815, Grimm, DynamicHazard
+2026-10-12T16:18:38.1202486Z ENGINE Received EntitySpawn from 0, with entity 15567570697258061023, Grimm, DynamicHazard
+2026-10-12T16:18:38.1216802Z ENGINE Received EntitySpawn from 0, with entity 9849931912414610303, Grimm, DynamicHazard
+2026-10-12T16:18:38.1216802Z ENGINE Received EntitySpawn from 0, with entity 18268923777084082401, Grimm, DynamicHazard
+2026-10-12T16:18:40.6418821Z ENGINE Received EntitySpawn from 0, with entity 16842160220429535225, Grimm, GrimmBat
+2026-10-12T16:18:40.6433231Z ENGINE Received EntitySpawn from 0, with entity 18214946888309510061, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:41.2563475Z ENGINE Received EntitySpawn from 0, with entity 16861985667992662013, Grimm, GrimmBat
+2026-10-12T16:18:41.2563475Z ENGINE Received EntitySpawn from 0, with entity 11443568680452028449, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:41.5638102Z ENGINE Received EntitySpawn from 0, with entity 12640986486624820431, Grimm, GrimmBat
+2026-10-12T16:18:41.5638102Z ENGINE Received EntitySpawn from 0, with entity 13958698997626969297, Grimm, GrimmFirebatPillar
+2026-10-12T16:18:51.6174544Z ENGINE Received EntitySpawn from 0, with entity 13145542958029845575, Grimm, DynamicHazard
+2026-10-12T16:18:51.6179592Z ENGINE Received EntitySpawn from 0, with entity 12876165879158395189, Grimm, DynamicHazard
+2026-10-12T16:18:51.6179592Z ENGINE Received EntitySpawn from 0, with entity 15242941437451338993, Grimm, DynamicHazard
+2026-10-12T16:18:51.6192618Z ENGINE Received EntitySpawn from 0, with entity 15644184390916158643, Grimm, DynamicHazard
+2026-10-12T16:18:51.6192618Z ENGINE Received EntitySpawn from 0, with entity 14238712623811288361, Grimm, DynamicHazard
+2026-10-12T16:18:52.2396186Z PASS multiple native balloon launches retain horizontal motion
+2026-10-12T16:18:52.2406220Z PASS native firebats travel horizontally
+2026-10-12T16:18:52.2406220Z MOTION launches=72 preserved=72 moving=72 bats=18
+2026-10-12T16:18:52.2517292Z PASS both motion probes finished
+2026-10-12T16:18:52.2517292Z ENGINE Sending PlayerDisconnect packet
+2026-10-12T16:18:52.2549833Z ENGINE Disconnecting from server
+2026-10-12T16:18:52.2560095Z ENGINE Received PlayerDisconnect data from (0, motionhost)
+2026-10-12T16:18:52.2646444Z ENGINE Client 0 disconnected
+2026-10-12T16:18:52.2666505Z ENGINE Handling player leave scene (dc: True) for ID 0, left scene: GG_Grimm
+2026-10-12T16:18:52.2666505Z ENGINE Sending leave scene packet to 1
+2026-10-12T16:18:52.2681577Z ENGINE Sending that entity '12876165879158395189' has spawned in the scene to '1'
+2026-10-12T16:18:52.2681577Z ENGINE Sending that entity '12876165879158395189' is already in scene to '1'
+2026-10-12T16:18:52.2691794Z ENGINE Sending that entity '15644184390916158643' has spawned in the scene to '1'
+2026-10-12T16:18:52.2691794Z ENGINE Sending that entity '15644184390916158643' is already in scene to '1'
+2026-10-12T16:18:52.2701807Z ENGINE Sending that entity '5547100318153585413' is already in scene to '1'
+2026-10-12T16:18:52.2701807Z ENGINE Sending that entity '13145542958029845575' has spawned in the scene to '1'
+2026-10-12T16:18:52.2711852Z ENGINE Sending that entity '13145542958029845575' is already in scene to '1'
+2026-10-12T16:18:52.2721887Z ENGINE Sending that entity '15242941437451338993' has spawned in the scene to '1'
+2026-10-12T16:18:52.2721887Z ENGINE Sending that entity '15242941437451338993' is already in scene to '1'
+2026-10-12T16:18:52.2731919Z ENGINE Sending that entity '14238712623811288361' has spawned in the scene to '1'
+2026-10-12T16:18:52.2731919Z ENGINE Sending that entity '14238712623811288361' is already in scene to '1'
+2026-10-12T16:18:52.2742035Z ENGINE Sending that entity '0' is already in scene to '1'
+2026-10-12T16:18:52.2752059Z ENGINE Sending that entity '930639587720373499' is already in scene to '1'
+2026-10-12T16:18:52.2762084Z ENGINE   1 has become scene host
+2026-10-12T16:18:52.2777157Z ENGINE Received PlayerDisconnect data from (1, motionguest)
+2026-10-12T16:18:52.2797488Z ENGINE Client 1 disconnected
+2026-10-12T16:18:52.2807563Z ENGINE Handling player leave scene (dc: True) for ID 1, left scene: GG_Grimm
+2026-10-12T16:18:52.3403727Z PASS both clients disconnected normally
+2026-10-12T16:18:52.3417283Z ENGINE Stopping NetServer
+2026-10-12T16:18:52.6478754Z FINAL PASS Grimm native motion GG_Grimm

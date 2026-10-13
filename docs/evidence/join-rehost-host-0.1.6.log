@@ -1,0 +1,30 @@
+2026-10-11T16:37:01.2831905Z PASS menu ready
+2026-10-11T16:37:02.3491604Z PASS initial connected from menu
+2026-10-11T16:37:07.0017780Z SCENE Menu_Title -> Opening_Sequence active=Opening_Sequence scope=/0/0
+2026-10-11T16:37:07.0519041Z PASS initial opening sequence
+2026-10-11T16:37:18.1624658Z HERO POSITION EVENT active=Tutorial_01 scope=Opening_Sequence/1/0
+2026-10-11T16:37:18.1644699Z SCENE  -> Tutorial_01 active=Tutorial_01 scope=Opening_Sequence/1/0
+2026-10-11T16:37:19.5826747Z PASS initial new game in Tutorial
+2026-10-11T16:37:19.5846790Z initial positioned active=Tutorial_01 scope=Tutorial_01/2/0
+2026-10-11T16:37:36.6276425Z PASS both players in Tutorial
+2026-10-11T16:37:36.6313327Z PASS initial peer has active visible knight renderer
+2026-10-11T16:37:36.6343711Z PASS initial scene authority initialized
+2026-10-11T16:37:36.9538555Z PASS both directions visible
+2026-10-11T16:37:57.3104069Z PASS guest rejoined from menu
+2026-10-11T16:37:57.3114383Z PASS reconnected peer has active visible knight renderer
+2026-10-11T16:37:57.3135115Z PASS reconnected scene authority initialized
+2026-10-11T16:37:57.6210790Z PASS both reconnected directions visible
+2026-10-11T16:37:59.8134375Z SCENE  -> Quit_To_Menu active=Quit_To_Menu scope=Tutorial_01/2/0
+2026-10-11T16:38:01.1814275Z SCENE  -> Menu_Title active=Menu_Title scope=Tutorial_01/2/0
+2026-10-11T16:38:01.4856224Z PASS host timeout returns to title
+2026-10-11T16:38:01.9766981Z PASS rehost connected from menu
+2026-10-11T16:38:06.5988377Z SCENE Menu_Title -> Opening_Sequence active=Opening_Sequence scope=Tutorial_01/2/0
+2026-10-11T16:38:06.6215425Z PASS rehost opening sequence
+2026-10-11T16:38:16.8802655Z SCENE  -> Tutorial_01 active=Tutorial_01 scope=Opening_Sequence/3/0
+2026-10-11T16:38:16.9155550Z HERO POSITION EVENT active=Tutorial_01 scope=Opening_Sequence/3/0
+2026-10-11T16:38:17.5083814Z PASS rehost new game in Tutorial
+2026-10-11T16:38:17.5083814Z rehost positioned active=Tutorial_01 scope=Tutorial_01/4/0
+2026-10-11T16:38:21.2039069Z PASS both joined reopened room
+2026-10-11T16:38:21.2039069Z PASS reopened room has visible teammate
+2026-10-11T16:38:21.2062669Z PASS reopened room has fresh session and scene authority
+2026-10-11T16:38:21.2082717Z FINAL PASS

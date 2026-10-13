@@ -1,0 +1,121 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="LocalBuildProperties_example.props" Condition="!Exists('LocalBuildProperties.props')" />
+    <Import Project="LocalBuildProperties.props" Condition="Exists('LocalBuildProperties.props')" />
+
+    <PropertyGroup>
+        <ProjectGuid>{F34118B2-515D-4C33-88E6-9CFEF2AD5A15}</ProjectGuid>
+        <RootNamespace>Hkmp</RootNamespace>
+        <AssemblyName>HKMP</AssemblyName>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+        <TargetFramework>net472</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>latest</LangVersion>
+        <EnableNETAnalyzers>false</EnableNETAnalyzers>
+        <!--Shortens and anonymizes paths in debug symbols relative to the project directory. Breakpoints will not work, however.-->
+        <PathMap Condition="'$(Configuration)' == 'Release'">$(MSBuildProjectDirectory)=source</PathMap>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="HkmpServer" />
+        <InternalsVisibleTo Include="HollowConnect" />
+        <InternalsVisibleTo Include="HollowConnect.Tests" />
+        <InternalsVisibleTo Include="HollowConnect.Smoke" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Ui\Resources\Images\*.png" />
+        <EmbeddedResource Include="Ui\Resources\Images\*.dat" />
+        <EmbeddedResource Include="Resource\entity-registry.json" />
+        <EmbeddedResource Include="Resource\action-registry.json" />
+        <EmbeddedResource Include="Resource\save-data.json" />
+        <EmbeddedResource Include="Resource\save-data-godseeker.json" />
+        <EmbeddedResource Include="Resource\string-data.json" />
+        <EmbeddedResource Include="Resource\music-data.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\Assembly-CSharp.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="MMHOOK_Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\MMHOOK_Assembly-CSharp.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="MMHOOK_PlayMaker">
+            <HintPath>$(References)\MMHOOK_PlayMaker.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="MonoMod.RuntimeDetour">
+            <HintPath>$(References)\MonoMod.RuntimeDetour.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="MonoMod.Utils">
+            <HintPath>$(References)\MonoMod.Utils.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Mono.Cecil">
+            <HintPath>$(References)\Mono.Cecil.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\Newtonsoft.Json.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="PlayMaker, Version=1.6.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\PlayMaker.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.AudioModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.CoreModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.ImageConversionModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.InputLegacyModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.ParticleSystemModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.Physics2DModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.TextRenderingModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.UI.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>$(References)\UnityEngine.UIModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <PackageReference Include="BouncyCastle.Cryptography" Version="2.5.1" />
+    </ItemGroup>
+
+    <!-- Create an item group for the source and destination files of the copy target. This way we can specify
+       multiple paths that we want the assembly to be copied to. -->
+    <ItemGroup>
+        <SourceFiles Include="$(TargetDir)*.dll;$(TargetDir)*.pdb;$(TargetDir)*.xml" />
+        <Dest Include="$(OutputDirectory)" />
+    </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="@(SourceFiles)" DestinationFolder="%(Dest.FullPath)" />
+    </Target>
+</Project>

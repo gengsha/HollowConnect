@@ -1,0 +1,47 @@
+2026-10-12T04:58:57.7856326Z PASS menu ready
+2026-10-12T04:59:01.8761923Z PASS unsaved character ready
+2026-10-12T04:59:02.5991686Z PASS handshake
+2026-10-12T04:59:02.6925057Z PASS both connected
+2026-10-12T04:59:03.7388849Z PASS warp destination ready
+2026-10-12T04:59:07.4460690Z PASS guest warp tested
+2026-10-12T04:59:08.2301134Z PASS host leaves for reverse warp
+2026-10-12T04:59:08.2468171Z PASS reverse warp target ready
+2026-10-12T04:59:08.2493375Z PASS warp target presence
+2026-10-12T04:59:09.4529103Z PASS F8 cross-room arrival
+2026-10-12T04:59:11.4673100Z PASS F8 restores fade, input and camera
+2026-10-12T04:59:11.4683172Z PASS both warp directions
+2026-10-12T04:59:12.6768191Z PASS Grimm arena entered
+2026-10-12T04:59:12.7002763Z PASS Grimm authority ready
+2026-10-12T04:59:12.7821327Z PASS health-bearing boss variant survives a renamed FSM
+2026-10-12T04:59:12.7844675Z PASS ambiguous boss name fallback is rejected
+2026-10-12T04:59:12.7867365Z PASS detached registered child can be reconstructed as a dynamic root
+2026-10-12T04:59:12.7872401Z PASS scene object references resolve duplicate inactive siblings and escaped names
+2026-10-12T04:59:12.7872401Z PASS missing registry target is ignored
+2026-10-12T04:59:12.8026416Z PASS Unity destroyed registry target is ignored
+2026-10-12T04:59:12.8045726Z PASS missing spawn result is not confused with a destroyed registered entity
+2026-10-12T04:59:12.8045726Z PASS missing SetScale target produces no packet
+2026-10-12T04:59:12.8055751Z PASS faulting observer preserves native execution and following observers
+2026-10-12T04:59:12.8070778Z PASS native action errors retain their original propagation
+2026-10-12T04:59:12.8110342Z PASS destroyed replica collider snapshot can still update dormant host
+2026-10-12T04:59:14.8079213Z PASS both Grimm rooms
+2026-10-12T05:00:11.8445018Z PASS replica blocks completion while downed
+2026-10-12T05:00:16.2099454Z ENGINE Boss room completion sent: GG_Grimm
+2026-10-12T05:00:16.2140568Z ENGINE Boss room completion relayed: GG_Grimm
+2026-10-12T05:00:22.4431007Z PASS native Grimm death advances sequence
+2026-10-12T05:00:28.4227507Z PASS both advanced to native pantheon rest room
+2026-10-12T05:00:28.9482677Z PASS guest next boss ready
+2026-10-12T05:00:29.1391651Z PASS warp target presence
+2026-10-12T05:00:30.4702608Z PASS F8 cross-room arrival
+2026-10-12T05:00:32.4935610Z PASS F8 restores fade, input and camera
+2026-10-12T05:00:32.4946051Z PASS F8 repairs stale native sequence counter
+2026-10-12T05:00:32.4960666Z PASS both at next boss
+2026-10-12T05:00:35.7003604Z PASS same-room F8 repairs sequence counter and bindings
+2026-10-12T05:00:36.3368416Z PASS guest away for reverse godhome warp
+2026-10-12T05:00:39.4935214Z PASS guest reverse return verified
+2026-10-12T05:00:39.4945237Z ARSENAL fireballs=0 bats=0 pillars=0 pillarEntities=0 spikes=0 positions=0
+2026-10-12T05:00:39.4955255Z PASS replica observes fireballs, firebats, pillar spawn records, damaging spikes and synchronized positions
+2026-10-12T05:00:39.4955255Z PASS each dynamic Grimm projectile type has matching authority positions
+2026-10-12T05:00:40.5418819Z PASS ordinary warp target after pantheon
+2026-10-12T05:00:44.3073718Z PASS accepted native warp completed despite disconnect
+2026-10-12T05:00:44.3088964Z PASS native projectile audio survives godhome warps and authority changes
+2026-10-12T05:00:44.3099444Z FINAL PASS

@@ -1,0 +1,16 @@
+{
+  "version": "0.1.12",
+  "checkedAtUtc": "2026-10-13T04:57:46.3361018Z",
+  "packagedInstallerUsed": true,
+  "installedFilesChecked": 7,
+  "installedHashesMatch": true,
+  "runtimeRunsChecked": 4,
+  "runtimeHashesMatchManifest": true,
+  "nativeAssemblyHashesUnchanged": true,
+  "saveFilesChecked": 64,
+  "saveHashesUnchanged": true,
+  "saveBaseline": "Captured immediately before this installation",
+  "testPluginAbsent": true,
+  "originalBackupRetained": true,
+  "twoMachineFrpValidation": false
+}

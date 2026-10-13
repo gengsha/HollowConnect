@@ -1,0 +1,1488 @@
+2026-10-12T14:36:47.8030479Z PASS menu
+2026-10-12T14:36:52.7230792Z PASS unsaved character
+2026-10-12T14:36:52.7302047Z ENGINE Starting NetServer on port 29650
+2026-10-12T14:36:52.7479397Z ENGINE LoadOrGenerateECDHKeyPair: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\key.pem
+2026-10-12T14:36:52.7492423Z ENGINE KeyPair file exists, loading...
+2026-10-12T14:36:52.7925703Z ENGINE LoadOrGenerateCertificate: E:\projects\hollowConnect\.test-results\game-host\hollow_knight_Data\Managed\Mods\HKMP\cert.cer
+2026-10-12T14:36:52.7925703Z ENGINE Certificate file exists, loading...
+2026-10-12T14:36:52.8175467Z ENGINE Connecting client to server: 127.0.0.1:29650 as pantheonhost
+2026-10-12T14:36:52.9485996Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:36:52.9620755Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:36:53.0261790Z ENGINE Received packet from unknown client with address: 127.0.0.1:50251, creating new client
+2026-10-12T14:36:53.0480295Z ENGINE Received connection request from IP: 127.0.0.1:50251, username: pantheonhost
+2026-10-12T14:36:53.0500869Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:36:53.0803271Z ENGINE Received server info from server
+2026-10-12T14:36:53.0900928Z ENGINE Received packet from unknown client with address: 127.0.0.1:50252, creating new client
+2026-10-12T14:36:53.0926490Z ENGINE Received connection request from IP: 127.0.0.1:50252, username: pantheonguest
+2026-10-12T14:36:53.0926490Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:36:53.8827913Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:36:54.0036807Z ENGINE Scene changed from  to Town
+2026-10-12T14:36:54.0231402Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: Town
+2026-10-12T14:36:54.0331612Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:36:54.0459813Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:36:54.0702435Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: Town
+2026-10-12T14:36:54.0747897Z PASS handshake
+2026-10-12T14:36:54.0762550Z ENGINE Sending that entity '8173247680223640663' is already in scene to '1'
+2026-10-12T14:36:54.0794468Z ENGINE Sending that entity '5433208650596947515' is already in scene to '1'
+2026-10-12T14:36:54.0813877Z ENGINE Sending that entity '9039180234019435213' is already in scene to '1'
+2026-10-12T14:36:54.0827762Z ENGINE Sending that entity '7815807409613637839' is already in scene to '1'
+2026-10-12T14:36:54.0837795Z ENGINE Sending that entity '1925361265462759723' is already in scene to '1'
+2026-10-12T14:36:54.0837795Z ENGINE Sending that entity '688262427560814067' is already in scene to '1'
+2026-10-12T14:36:54.0849855Z ENGINE Sending that entity '1640449854697899003' is already in scene to '1'
+2026-10-12T14:36:54.1110920Z ENGINE Player 1 entered scene
+2026-10-12T14:36:54.1167375Z PASS both connected
+2026-10-12T14:36:54.1227816Z SEQUENCE 0/GG_Vengefly,1/GG_Gruz_Mother,2/GG_False_Knight,3/GG_Mega_Moss_Charger,4/GG_Hornet_1,5/GG_Spa,6/GG_Ghost_Gorb,7/GG_Dung_Defender,8/GG_Mage_Knight,9/GG_Brooding_Mawlek,10/GG_Engine,11/GG_Nailmasters
+2026-10-12T14:36:54.8873802Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: Town
+2026-10-12T14:36:54.8883996Z ENGINE Sending leave scene packet to 0
+2026-10-12T14:36:54.9033324Z ENGINE Player 1 left scene
+2026-10-12T14:36:54.9204532Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: GG_Vengefly
+2026-10-12T14:36:55.1090514Z ENGINE Received EntitySpawn from 1, with entity 12836822245065663887, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1106112Z ENGINE Received EntitySpawn from 1, with entity 13373600263130059075, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1245107Z ENGINE Received EntitySpawn from 1, with entity 14845617824506759447, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1256973Z ENGINE Received EntitySpawn from 1, with entity 16456744119686220087, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1256973Z ENGINE Received EntitySpawn from 1, with entity 12634200700131587141, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1418058Z ENGINE Received EntitySpawn from 1, with entity 15944359876442244143, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1429285Z ENGINE Received EntitySpawn from 1, with entity 16777719468644617037, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1587129Z ENGINE Received EntitySpawn from 1, with entity 11023173239837013433, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1597222Z ENGINE Received EntitySpawn from 1, with entity 11097681341233680281, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1602314Z ENGINE Received EntitySpawn from 1, with entity 16911066929236374521, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1751862Z ENGINE Received EntitySpawn from 1, with entity 15935836573479464451, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1926702Z ENGINE Received EntitySpawn from 1, with entity 14635311766064933277, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.1936704Z ENGINE Received EntitySpawn from 1, with entity 11504889947492498493, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2101836Z ENGINE Received EntitySpawn from 1, with entity 14081795553047068017, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2111979Z ENGINE Received EntitySpawn from 1, with entity 12275661613442700395, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2268241Z ENGINE Received EntitySpawn from 1, with entity 17591134987898292411, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2278365Z ENGINE Received EntitySpawn from 1, with entity 10034343596874208997, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2438277Z ENGINE Received EntitySpawn from 1, with entity 17006396438600302101, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2615441Z ENGINE Received EntitySpawn from 1, with entity 18319232902158935263, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2628870Z ENGINE Received EntitySpawn from 1, with entity 13428174136672128213, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2785559Z ENGINE Received EntitySpawn from 1, with entity 12779345538492665143, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2790721Z ENGINE Received EntitySpawn from 1, with entity 14471118664353458815, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2956310Z ENGINE Received EntitySpawn from 1, with entity 11451545855752752563, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.2961358Z ENGINE Received EntitySpawn from 1, with entity 13001824876566231607, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.3120847Z ENGINE Received EntitySpawn from 1, with entity 12724502472010171909, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.3140508Z ENGINE Received EntitySpawn from 1, with entity 13066277805300581399, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.3298180Z ENGINE Received EntitySpawn from 1, with entity 15292313926312818531, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.3463967Z ENGINE Received EntitySpawn from 1, with entity 13027296298847844927, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.3474146Z ENGINE Received EntitySpawn from 1, with entity 16482192466606375955, VengeflyKing, VengeflySummon
+2026-10-12T14:36:55.3633511Z ENGINE Received EntitySpawn from 1, with entity 17601926456810698095, VengeflyKing, VengeflySummon
+2026-10-12T14:36:58.2248611Z PASS first entrant starts fighting
+2026-10-12T14:36:59.0961645Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:59.1043970Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 1 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:59.1055974Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 2 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:59.1072668Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 3 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:59.1072668Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 4 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:59.1085811Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 5 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:59.1100798Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Dust 6 (1), expected 'chaser', actual [Control Dust]
+2026-10-12T14:36:59.1110898Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Giant Buzzer Col, expected 'chaser', actual [Big Buzzer]
+2026-10-12T14:36:59.1204352Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'chaser', actual [corpse,End Roar]
+2026-10-12T14:36:59.1217929Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Corpse Giant Buzzer Col(Clone), expected 'Big Buzzer', actual [corpse,End Roar]
+2026-10-12T14:36:59.2116587Z ENGINE Scene changed from Town to GG_Vengefly
+2026-10-12T14:36:59.3118734Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: Town
+2026-10-12T14:36:59.3347682Z PASS first boss entry
+2026-10-12T14:36:59.3455120Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: GG_Vengefly
+2026-10-12T14:36:59.3472219Z ENGINE Sending that entity '15292313926312818531' has spawned in the scene to '0'
+2026-10-12T14:36:59.3472219Z ENGINE Sending that entity '15292313926312818531' is already in scene to '0'
+2026-10-12T14:36:59.3487107Z ENGINE Sending that entity '11451545855752752563' has spawned in the scene to '0'
+2026-10-12T14:36:59.3505771Z ENGINE Sending that entity '11451545855752752563' is already in scene to '0'
+2026-10-12T14:36:59.3520995Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:36:59.3534176Z ENGINE Sending that entity '15935836573479464451' has spawned in the scene to '0'
+2026-10-12T14:36:59.3544239Z ENGINE Sending that entity '15935836573479464451' is already in scene to '0'
+2026-10-12T14:36:59.3544239Z ENGINE Sending that entity '12779345538492665143' has spawned in the scene to '0'
+2026-10-12T14:36:59.3557974Z ENGINE Sending that entity '12779345538492665143' is already in scene to '0'
+2026-10-12T14:36:59.3557974Z ENGINE Sending that entity '12836822245065663887' has spawned in the scene to '0'
+2026-10-12T14:36:59.3571774Z ENGINE Sending that entity '12836822245065663887' is already in scene to '0'
+2026-10-12T14:36:59.3586863Z ENGINE Sending that entity '11097681341233680281' has spawned in the scene to '0'
+2026-10-12T14:36:59.3595754Z ENGINE Sending that entity '11097681341233680281' is already in scene to '0'
+2026-10-12T14:36:59.3600797Z ENGINE Sending that entity '16456744119686220087' has spawned in the scene to '0'
+2026-10-12T14:36:59.3610802Z ENGINE Sending that entity '16456744119686220087' is already in scene to '0'
+2026-10-12T14:36:59.3622788Z ENGINE Sending that entity '14635311766064933277' has spawned in the scene to '0'
+2026-10-12T14:36:59.3627914Z ENGINE Sending that entity '14635311766064933277' is already in scene to '0'
+2026-10-12T14:36:59.3635171Z ENGINE Sending that entity '16911066929236374521' has spawned in the scene to '0'
+2026-10-12T14:36:59.3635171Z ENGINE Sending that entity '16911066929236374521' is already in scene to '0'
+2026-10-12T14:36:59.3645440Z ENGINE Sending that entity '15944359876442244143' has spawned in the scene to '0'
+2026-10-12T14:36:59.3655664Z ENGINE Sending that entity '15944359876442244143' is already in scene to '0'
+2026-10-12T14:36:59.3665876Z ENGINE Sending that entity '16482192466606375955' has spawned in the scene to '0'
+2026-10-12T14:36:59.3676441Z ENGINE Sending that entity '16482192466606375955' is already in scene to '0'
+2026-10-12T14:36:59.3676441Z ENGINE Sending that entity '11023173239837013433' has spawned in the scene to '0'
+2026-10-12T14:36:59.3702253Z ENGINE Sending that entity '11023173239837013433' is already in scene to '0'
+2026-10-12T14:36:59.3702253Z ENGINE Sending that entity '10034343596874208997' has spawned in the scene to '0'
+2026-10-12T14:36:59.3725432Z ENGINE Sending that entity '10034343596874208997' is already in scene to '0'
+2026-10-12T14:36:59.3735464Z ENGINE Sending that entity '13001824876566231607' has spawned in the scene to '0'
+2026-10-12T14:36:59.3745486Z ENGINE Sending that entity '13001824876566231607' is already in scene to '0'
+2026-10-12T14:36:59.3755508Z ENGINE Sending that entity '12275661613442700395' has spawned in the scene to '0'
+2026-10-12T14:36:59.3765536Z ENGINE Sending that entity '12275661613442700395' is already in scene to '0'
+2026-10-12T14:36:59.3765536Z ENGINE Sending that entity '12724502472010171909' has spawned in the scene to '0'
+2026-10-12T14:36:59.3780461Z ENGINE Sending that entity '12724502472010171909' is already in scene to '0'
+2026-10-12T14:36:59.3785517Z ENGINE Sending that entity '14471118664353458815' has spawned in the scene to '0'
+2026-10-12T14:36:59.3800683Z ENGINE Sending that entity '14471118664353458815' is already in scene to '0'
+2026-10-12T14:36:59.3816288Z ENGINE Sending that entity '9038138461003165773' is already in scene to '0'
+2026-10-12T14:36:59.3830327Z ENGINE Sending that entity '13373600263130059075' has spawned in the scene to '0'
+2026-10-12T14:36:59.3830327Z ENGINE Sending that entity '13373600263130059075' is already in scene to '0'
+2026-10-12T14:36:59.3844885Z ENGINE Sending that entity '17006396438600302101' has spawned in the scene to '0'
+2026-10-12T14:36:59.3859685Z ENGINE Sending that entity '17006396438600302101' is already in scene to '0'
+2026-10-12T14:36:59.3869966Z ENGINE Sending that entity '13428174136672128213' has spawned in the scene to '0'
+2026-10-12T14:36:59.3881443Z ENGINE Sending that entity '13428174136672128213' is already in scene to '0'
+2026-10-12T14:36:59.3891661Z ENGINE Sending that entity '2683996848053998615' is already in scene to '0'
+2026-10-12T14:36:59.3923883Z ENGINE Sending that entity '14081795553047068017' has spawned in the scene to '0'
+2026-10-12T14:36:59.3934985Z ENGINE Sending that entity '14081795553047068017' is already in scene to '0'
+2026-10-12T14:36:59.3934985Z ENGINE Sending that entity '14845617824506759447' has spawned in the scene to '0'
+2026-10-12T14:36:59.3947045Z ENGINE Sending that entity '14845617824506759447' is already in scene to '0'
+2026-10-12T14:36:59.3947045Z ENGINE Sending that entity '17591134987898292411' has spawned in the scene to '0'
+2026-10-12T14:36:59.3959493Z ENGINE Sending that entity '17591134987898292411' is already in scene to '0'
+2026-10-12T14:36:59.3971332Z ENGINE Sending that entity '11504889947492498493' has spawned in the scene to '0'
+2026-10-12T14:36:59.3978092Z ENGINE Sending that entity '11504889947492498493' is already in scene to '0'
+2026-10-12T14:36:59.3978092Z ENGINE Sending that entity '16777719468644617037' has spawned in the scene to '0'
+2026-10-12T14:36:59.3991941Z ENGINE Sending that entity '16777719468644617037' is already in scene to '0'
+2026-10-12T14:36:59.3996984Z ENGINE Sending that entity '12634200700131587141' has spawned in the scene to '0'
+2026-10-12T14:36:59.4002034Z ENGINE Sending that entity '12634200700131587141' is already in scene to '0'
+2026-10-12T14:36:59.4012107Z ENGINE Sending that entity '18319232902158935263' has spawned in the scene to '0'
+2026-10-12T14:36:59.4026494Z ENGINE Sending that entity '18319232902158935263' is already in scene to '0'
+2026-10-12T14:36:59.4038803Z ENGINE Sending that entity '13027296298847844927' has spawned in the scene to '0'
+2026-10-12T14:36:59.4052665Z ENGINE Sending that entity '13027296298847844927' is already in scene to '0'
+2026-10-12T14:36:59.4062725Z ENGINE Sending that entity '17601926456810698095' has spawned in the scene to '0'
+2026-10-12T14:36:59.4077843Z ENGINE Sending that entity '17601926456810698095' is already in scene to '0'
+2026-10-12T14:36:59.4077843Z ENGINE Sending that entity '13066277805300581399' has spawned in the scene to '0'
+2026-10-12T14:36:59.4090474Z ENGINE Sending that entity '13066277805300581399' is already in scene to '0'
+2026-10-12T14:36:59.4153759Z DELAY SNAPSHOT GG_Vengefly visit=2
+2026-10-12T14:36:59.4245940Z PASS both startroom.0
+2026-10-12T14:36:59.4256024Z PASS native sequence room 0.0
+2026-10-12T14:36:59.4271120Z PASS both room.0.0
+2026-10-12T14:36:59.5030690Z ENGINE Received EntitySpawn from 1, with entity 11177760273804692999, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5183584Z ENGINE WARN Spawn deferred: 11177760273804692999, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5203821Z ENGINE Received EntitySpawn from 1, with entity 13555159082285677683, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5208901Z ENGINE Received EntitySpawn from 1, with entity 15638527460504382221, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5330752Z ENGINE WARN Spawn deferred: 13555159082285677683, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5350699Z ENGINE WARN Spawn deferred: 15638527460504382221, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5375452Z ENGINE Received EntitySpawn from 1, with entity 12820695228347350837, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5390640Z ENGINE Received EntitySpawn from 1, with entity 12568050770572606535, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5502023Z ENGINE WARN Spawn deferred: 12820695228347350837, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5516851Z ENGINE WARN Spawn deferred: 12568050770572606535, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5543267Z ENGINE Received EntitySpawn from 1, with entity 17026956917924864657, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5666607Z ENGINE WARN Spawn deferred: 17026956917924864657, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5717504Z ENGINE Received EntitySpawn from 1, with entity 14630326966782161883, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5717504Z ENGINE Received EntitySpawn from 1, with entity 17372340037658857739, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.5845888Z ENGINE WARN Spawn deferred: 14630326966782161883, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5855917Z ENGINE WARN Spawn deferred: 17372340037658857739, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.5891310Z ENGINE Received EntitySpawn from 1, with entity 16027257507627566565, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6018860Z ENGINE WARN Spawn deferred: 16027257507627566565, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6062195Z ENGINE Received EntitySpawn from 1, with entity 13269480873463713723, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6077438Z ENGINE Received EntitySpawn from 1, with entity 16148106778331664271, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6185301Z ENGINE WARN Spawn deferred: 13269480873463713723, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6204501Z ENGINE WARN Spawn deferred: 16148106778331664271, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6227756Z ENGINE Received EntitySpawn from 1, with entity 17671534998662701471, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6363961Z ENGINE WARN Spawn deferred: 17671534998662701471, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6402062Z ENGINE Received EntitySpawn from 1, with entity 12738140114719123437, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6412227Z ENGINE Received EntitySpawn from 1, with entity 9664922973393565419, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6529930Z ENGINE WARN Spawn deferred: 12738140114719123437, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6544455Z ENGINE WARN Spawn deferred: 9664922973393565419, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6573769Z ENGINE Received EntitySpawn from 1, with entity 17269265933129903317, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6583837Z ENGINE Received EntitySpawn from 1, with entity 10089103891785835731, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6703094Z ENGINE WARN Spawn deferred: 17269265933129903317, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6715526Z ENGINE WARN Spawn deferred: 10089103891785835731, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6739672Z ENGINE Received EntitySpawn from 1, with entity 16342232539230363757, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6869756Z ENGINE WARN Spawn deferred: 16342232539230363757, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.6921462Z ENGINE Received EntitySpawn from 1, with entity 13205151037898322657, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.6921462Z ENGINE Received EntitySpawn from 1, with entity 13454576778771429485, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7041072Z ENGINE WARN Spawn deferred: 13205151037898322657, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7054604Z ENGINE WARN Spawn deferred: 13454576778771429485, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7093267Z ENGINE Received EntitySpawn from 1, with entity 9943666274715522021, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7212510Z ENGINE WARN Spawn deferred: 9943666274715522021, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7261765Z ENGINE Received EntitySpawn from 1, with entity 14194320214936798271, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7277077Z ENGINE Received EntitySpawn from 1, with entity 15922073639192273093, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7385759Z ENGINE WARN Spawn deferred: 14194320214936798271, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7401005Z ENGINE WARN Spawn deferred: 15922073639192273093, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7428249Z ENGINE Received EntitySpawn from 1, with entity 12146226780841785365, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7568117Z ENGINE WARN Spawn deferred: 12146226780841785365, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7604177Z ENGINE Received EntitySpawn from 1, with entity 13362640558262926035, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7616655Z ENGINE Received EntitySpawn from 1, with entity 17425962113371712779, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7725521Z ENGINE WARN Spawn deferred: 13362640558262926035, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7735600Z ENGINE WARN Spawn deferred: 17425962113371712779, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7776235Z ENGINE Received EntitySpawn from 1, with entity 12288528370710153419, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7901912Z ENGINE WARN Spawn deferred: 12288528370710153419, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.7943503Z ENGINE Received EntitySpawn from 1, with entity 16504311017120339727, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.7956315Z ENGINE Received EntitySpawn from 1, with entity 10248822302685894961, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.8065137Z ENGINE WARN Spawn deferred: 16504311017120339727, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.8083002Z ENGINE WARN Spawn deferred: 10248822302685894961, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.8116971Z ENGINE Received EntitySpawn from 1, with entity 18224824251172840269, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.8233569Z ENGINE WARN Spawn deferred: 18224824251172840269, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:36:59.8293028Z ENGINE Received EntitySpawn from 1, with entity 9686546384795600755, VengeflyKing, VengeflySummon
+2026-10-12T14:36:59.8419293Z ENGINE WARN Spawn deferred: 9686546384795600755, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:37:02.4188708Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:37:02.4188708Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:37:02.4209044Z ENGINE Player 1 entered scene
+2026-10-12T14:37:02.4262559Z ENGINE WARN Entity FSM mismatch: /Buzzer Summon, expected 'chaser', actual []
+2026-10-12T14:37:02.4277575Z ENGINE WARN Entity FSM mismatch: GG_Vengefly/Buzzer Summon(Clone), expected 'chaser', actual []
+2026-10-12T14:37:02.9537136Z PASS room authority 0.0
+2026-10-12T14:37:05.9566125Z PASS early room-level updates drained 0.0
+2026-10-12T14:37:05.9591318Z ROOM 0.0 scene=GG_Vengefly visit=2 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-12T14:37:05.9601326Z ENTITY 2683996848053998615 VengeflyKing key=GG_Vengefly/Giant%20Buzzer%20Col#0:VengeflyKing:Big Buzzer host=False replica=True pos=(54.3, 14.8, 0.0) render=Giant Buzzer Col(Clone)/True/off=False,Corpse Giant Buzzer Col(Clone)/True/off=False,Corpse Giant Buzzer Col(Clone)/True/off=False state=Big Buzzer=
+2026-10-12T14:37:05.9606380Z ENTITY 9038138461003165773 CameraLockArea key=GG_Vengefly/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=False replica=True pos=(46.8, 17.9, 0.0) render= state=
+2026-10-12T14:37:05.9611440Z ENTITY 15292313926312818531 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#0:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9621599Z ENTITY 11451545855752752563 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#1:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9636171Z ENTITY 15935836573479464451 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#2:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9636171Z ENTITY 12779345538492665143 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#3:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9646243Z ENTITY 12836822245065663887 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#4:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9646243Z ENTITY 11097681341233680281 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#5:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9661321Z ENTITY 16456744119686220087 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#6:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9671449Z ENTITY 14635311766064933277 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#7:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9688973Z ENTITY 16911066929236374521 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#8:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9688973Z ENTITY 15944359876442244143 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#9:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9704214Z ENTITY 16482192466606375955 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#10:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9714399Z ENTITY 11023173239837013433 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#11:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9714399Z ENTITY 10034343596874208997 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#12:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9728767Z ENTITY 13001824876566231607 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#13:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9733822Z ENTITY 12275661613442700395 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#14:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9744004Z ENTITY 12724502472010171909 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#15:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9757679Z ENTITY 14471118664353458815 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#16:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9770627Z ENTITY 13373600263130059075 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#17:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9780708Z ENTITY 17006396438600302101 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#18:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9785832Z ENTITY 13428174136672128213 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#19:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9800618Z ENTITY 14081795553047068017 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#20:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9810910Z ENTITY 14845617824506759447 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#21:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9810910Z ENTITY 17591134987898292411 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#22:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9821213Z ENTITY 11504889947492498493 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#23:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9821213Z ENTITY 16777719468644617037 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#24:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9835403Z ENTITY 12634200700131587141 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#25:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9835403Z ENTITY 18319232902158935263 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#26:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9845500Z ENTITY 13027296298847844927 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#27:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9845500Z ENTITY 17601926456810698095 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#28:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9855574Z ENTITY 13066277805300581399 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#29:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9866449Z ENTITY 11177760273804692999 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#30:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9876553Z ENTITY 13555159082285677683 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#31:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9876553Z ENTITY 15638527460504382221 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#32:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9886591Z ENTITY 12820695228347350837 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#33:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9904145Z ENTITY 12568050770572606535 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#34:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9909294Z ENTITY 17026956917924864657 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#35:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9909294Z ENTITY 14630326966782161883 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#36:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9919504Z ENTITY 17372340037658857739 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#37:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9929963Z ENTITY 16027257507627566565 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#38:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9929963Z ENTITY 13269480873463713723 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#39:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9940242Z ENTITY 16148106778331664271 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#40:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9962291Z ENTITY 17671534998662701471 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#41:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9972303Z ENTITY 12738140114719123437 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#42:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9982486Z ENTITY 9664922973393565419 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#43:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:05.9992818Z ENTITY 17269265933129903317 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#44:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0002609Z ENTITY 10089103891785835731 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#45:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0007651Z ENTITY 16342232539230363757 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#46:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0017720Z ENTITY 13205151037898322657 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#47:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0017720Z ENTITY 13454576778771429485 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#48:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0032295Z ENTITY 9943666274715522021 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#49:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0042419Z ENTITY 14194320214936798271 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#50:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0052764Z ENTITY 15922073639192273093 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#51:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0052764Z ENTITY 12146226780841785365 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#52:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0067914Z ENTITY 13362640558262926035 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#53:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0079481Z ENTITY 17425962113371712779 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#54:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0089688Z ENTITY 12288528370710153419 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#55:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0089688Z ENTITY 16504311017120339727 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#56:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0104776Z ENTITY 10248822302685894961 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#57:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0117525Z ENTITY 18224824251172840269 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#58:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0130213Z ENTITY 9686546384795600755 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#59:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:37:06.0140392Z PASS camera authority state 0.0
+2026-10-12T14:37:06.0152304Z PASS camera lock state converges 0.0
+2026-10-12T14:37:06.0177398Z PASS visible bosses/knight and unfrozen camera 0.0
+2026-10-12T14:37:06.0190367Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:37:06.0198255Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:37:06.0203381Z ENGINE Player 1 entered scene
+2026-10-12T14:37:06.0216765Z PASS duplicate initial snapshot does not reset boss 0.0
+2026-10-12T14:37:06.0226796Z ENGINE Player 1 left scene
+2026-10-12T14:37:06.0236823Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:37:06.0236823Z PASS stale room/peer leave and duplicate connect preserve avatar 0.0
+2026-10-12T14:37:06.0273945Z PASS both checked.0.0
+2026-10-12T14:37:06.0361424Z PASS damage published 0.0
+2026-10-12T14:37:06.0665935Z PASS same boss HP 0.0
+2026-10-12T14:37:06.0693664Z PASS both hpchecked.0.0
+2026-10-12T14:37:06.0713895Z PASS stationary teammate latest position survives delayed snapshot
+2026-10-12T14:37:06.0787582Z PASS both anchor.0
+2026-10-12T14:37:06.1154427Z ENGINE Boss room completion relayed: GG_Vengefly
+2026-10-12T14:37:06.1512640Z ENGINE WARN Entity (2683996848053998615, VengeflyKing) could not update active, because client object is null
+2026-10-12T14:37:14.1782546Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: GG_Vengefly
+2026-10-12T14:37:14.1803693Z ENGINE Sending leave scene packet to 0
+2026-10-12T14:37:14.1817461Z ENGINE Sending that entity '18224824251172840269' has spawned in the scene to '0'
+2026-10-12T14:37:14.1828657Z ENGINE Sending that entity '18224824251172840269' is already in scene to '0'
+2026-10-12T14:37:14.1838664Z ENGINE Sending that entity '15292313926312818531' has spawned in the scene to '0'
+2026-10-12T14:37:14.1850070Z ENGINE Sending that entity '15292313926312818531' is already in scene to '0'
+2026-10-12T14:37:14.1863948Z ENGINE Sending that entity '11177760273804692999' has spawned in the scene to '0'
+2026-10-12T14:37:14.1875100Z ENGINE Sending that entity '11177760273804692999' is already in scene to '0'
+2026-10-12T14:37:14.1889231Z ENGINE Sending that entity '11451545855752752563' has spawned in the scene to '0'
+2026-10-12T14:37:14.1898325Z ENGINE Sending that entity '11451545855752752563' is already in scene to '0'
+2026-10-12T14:37:14.1903373Z ENGINE Sending that entity '14630326966782161883' has spawned in the scene to '0'
+2026-10-12T14:37:14.1913533Z ENGINE Sending that entity '14630326966782161883' is already in scene to '0'
+2026-10-12T14:37:14.1924055Z ENGINE Sending that entity '17026956917924864657' has spawned in the scene to '0'
+2026-10-12T14:37:14.1924055Z ENGINE Sending that entity '17026956917924864657' is already in scene to '0'
+2026-10-12T14:37:14.1934121Z ENGINE Sending that entity '9664922973393565419' has spawned in the scene to '0'
+2026-10-12T14:37:14.1939294Z ENGINE Sending that entity '9664922973393565419' is already in scene to '0'
+2026-10-12T14:37:14.1949462Z ENGINE Sending that entity '10089103891785835731' has spawned in the scene to '0'
+2026-10-12T14:37:14.1949462Z ENGINE Sending that entity '10089103891785835731' is already in scene to '0'
+2026-10-12T14:37:14.1949462Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:37:14.1963312Z ENGINE Sending that entity '16148106778331664271' has spawned in the scene to '0'
+2026-10-12T14:37:14.1974089Z ENGINE Sending that entity '16148106778331664271' is already in scene to '0'
+2026-10-12T14:37:14.1987204Z ENGINE Sending that entity '15935836573479464451' has spawned in the scene to '0'
+2026-10-12T14:37:14.1987204Z ENGINE Sending that entity '15935836573479464451' is already in scene to '0'
+2026-10-12T14:37:14.2002292Z ENGINE Sending that entity '13205151037898322657' has spawned in the scene to '0'
+2026-10-12T14:37:14.2002292Z ENGINE Sending that entity '13205151037898322657' is already in scene to '0'
+2026-10-12T14:37:14.2017330Z ENGINE Sending that entity '16342232539230363757' has spawned in the scene to '0'
+2026-10-12T14:37:14.2017330Z ENGINE Sending that entity '16342232539230363757' is already in scene to '0'
+2026-10-12T14:37:14.2037982Z ENGINE Sending that entity '17372340037658857739' has spawned in the scene to '0'
+2026-10-12T14:37:14.2037982Z ENGINE Sending that entity '17372340037658857739' is already in scene to '0'
+2026-10-12T14:37:14.2047992Z ENGINE Sending that entity '15922073639192273093' has spawned in the scene to '0'
+2026-10-12T14:37:14.2060513Z ENGINE Sending that entity '15922073639192273093' is already in scene to '0'
+2026-10-12T14:37:14.2074071Z ENGINE Sending that entity '12779345538492665143' has spawned in the scene to '0'
+2026-10-12T14:37:14.2088584Z ENGINE Sending that entity '12779345538492665143' is already in scene to '0'
+2026-10-12T14:37:14.2088584Z ENGINE Sending that entity '12836822245065663887' has spawned in the scene to '0'
+2026-10-12T14:37:14.2103605Z ENGINE Sending that entity '12836822245065663887' is already in scene to '0'
+2026-10-12T14:37:14.2103605Z ENGINE Sending that entity '11097681341233680281' has spawned in the scene to '0'
+2026-10-12T14:37:14.2117999Z ENGINE Sending that entity '11097681341233680281' is already in scene to '0'
+2026-10-12T14:37:14.2117999Z ENGINE Sending that entity '13362640558262926035' has spawned in the scene to '0'
+2026-10-12T14:37:14.2128402Z ENGINE Sending that entity '13362640558262926035' is already in scene to '0'
+2026-10-12T14:37:14.2138410Z ENGINE Sending that entity '15638527460504382221' has spawned in the scene to '0'
+2026-10-12T14:37:14.2143453Z ENGINE Sending that entity '15638527460504382221' is already in scene to '0'
+2026-10-12T14:37:14.2143453Z ENGINE Sending that entity '16456744119686220087' has spawned in the scene to '0'
+2026-10-12T14:37:14.2155940Z ENGINE Sending that entity '16456744119686220087' is already in scene to '0'
+2026-10-12T14:37:14.2169392Z ENGINE Sending that entity '17269265933129903317' has spawned in the scene to '0'
+2026-10-12T14:37:14.2169392Z ENGINE Sending that entity '17269265933129903317' is already in scene to '0'
+2026-10-12T14:37:14.2179658Z ENGINE Sending that entity '14635311766064933277' has spawned in the scene to '0'
+2026-10-12T14:37:14.2190003Z ENGINE Sending that entity '14635311766064933277' is already in scene to '0'
+2026-10-12T14:37:14.2190003Z ENGINE Sending that entity '16911066929236374521' has spawned in the scene to '0'
+2026-10-12T14:37:14.2203950Z ENGINE Sending that entity '16911066929236374521' is already in scene to '0'
+2026-10-12T14:37:14.2224333Z ENGINE Sending that entity '15944359876442244143' has spawned in the scene to '0'
+2026-10-12T14:37:14.2235614Z ENGINE Sending that entity '15944359876442244143' is already in scene to '0'
+2026-10-12T14:37:14.2245628Z ENGINE Sending that entity '14194320214936798271' has spawned in the scene to '0'
+2026-10-12T14:37:14.2259511Z ENGINE Sending that entity '14194320214936798271' is already in scene to '0'
+2026-10-12T14:37:14.2259511Z ENGINE Sending that entity '16504311017120339727' has spawned in the scene to '0'
+2026-10-12T14:37:14.2271356Z ENGINE Sending that entity '16504311017120339727' is already in scene to '0'
+2026-10-12T14:37:14.2284150Z ENGINE Sending that entity '12820695228347350837' has spawned in the scene to '0'
+2026-10-12T14:37:14.2289220Z ENGINE Sending that entity '12820695228347350837' is already in scene to '0'
+2026-10-12T14:37:14.2301775Z ENGINE Sending that entity '9686546384795600755' has spawned in the scene to '0'
+2026-10-12T14:37:14.2301775Z ENGINE Sending that entity '9686546384795600755' is already in scene to '0'
+2026-10-12T14:37:14.2312958Z ENGINE Sending that entity '16482192466606375955' has spawned in the scene to '0'
+2026-10-12T14:37:14.2312958Z ENGINE Sending that entity '16482192466606375955' is already in scene to '0'
+2026-10-12T14:37:14.2322987Z ENGINE Sending that entity '11023173239837013433' has spawned in the scene to '0'
+2026-10-12T14:37:14.2334653Z ENGINE Sending that entity '11023173239837013433' is already in scene to '0'
+2026-10-12T14:37:14.2339800Z ENGINE Sending that entity '10248822302685894961' has spawned in the scene to '0'
+2026-10-12T14:37:14.2339800Z ENGINE Sending that entity '10248822302685894961' is already in scene to '0'
+2026-10-12T14:37:14.2355416Z ENGINE Sending that entity '9943666274715522021' has spawned in the scene to '0'
+2026-10-12T14:37:14.2373869Z ENGINE Sending that entity '9943666274715522021' is already in scene to '0'
+2026-10-12T14:37:14.2386075Z ENGINE Sending that entity '10034343596874208997' has spawned in the scene to '0'
+2026-10-12T14:37:14.2391735Z ENGINE Sending that entity '10034343596874208997' is already in scene to '0'
+2026-10-12T14:37:14.2401828Z ENGINE Sending that entity '12288528370710153419' has spawned in the scene to '0'
+2026-10-12T14:37:14.2401828Z ENGINE Sending that entity '12288528370710153419' is already in scene to '0'
+2026-10-12T14:37:14.2421837Z ENGINE Sending that entity '13001824876566231607' has spawned in the scene to '0'
+2026-10-12T14:37:14.2421837Z ENGINE Sending that entity '13001824876566231607' is already in scene to '0'
+2026-10-12T14:37:14.2431853Z ENGINE Sending that entity '17671534998662701471' has spawned in the scene to '0'
+2026-10-12T14:37:14.2431853Z ENGINE Sending that entity '17671534998662701471' is already in scene to '0'
+2026-10-12T14:37:14.2442477Z ENGINE Sending that entity '12275661613442700395' has spawned in the scene to '0'
+2026-10-12T14:37:14.2452986Z ENGINE Sending that entity '12275661613442700395' is already in scene to '0'
+2026-10-12T14:37:14.2452986Z ENGINE Sending that entity '12724502472010171909' has spawned in the scene to '0'
+2026-10-12T14:37:14.2466699Z ENGINE Sending that entity '12724502472010171909' is already in scene to '0'
+2026-10-12T14:37:14.2479769Z ENGINE Sending that entity '14471118664353458815' has spawned in the scene to '0'
+2026-10-12T14:37:14.2490349Z ENGINE Sending that entity '14471118664353458815' is already in scene to '0'
+2026-10-12T14:37:14.2490349Z ENGINE Sending that entity '12738140114719123437' has spawned in the scene to '0'
+2026-10-12T14:37:14.2505420Z ENGINE Sending that entity '12738140114719123437' is already in scene to '0'
+2026-10-12T14:37:14.2518393Z ENGINE Sending that entity '9038138461003165773' is already in scene to '0'
+2026-10-12T14:37:14.2528405Z ENGINE Sending that entity '13373600263130059075' has spawned in the scene to '0'
+2026-10-12T14:37:14.2542860Z ENGINE Sending that entity '13373600263130059075' is already in scene to '0'
+2026-10-12T14:37:14.2542860Z ENGINE Sending that entity '17006396438600302101' has spawned in the scene to '0'
+2026-10-12T14:37:14.2542860Z ENGINE Sending that entity '17006396438600302101' is already in scene to '0'
+2026-10-12T14:37:14.2557164Z ENGINE Sending that entity '13269480873463713723' has spawned in the scene to '0'
+2026-10-12T14:37:14.2569140Z ENGINE Sending that entity '13269480873463713723' is already in scene to '0'
+2026-10-12T14:37:14.2579163Z ENGINE Sending that entity '13428174136672128213' has spawned in the scene to '0'
+2026-10-12T14:37:14.2579163Z ENGINE Sending that entity '13428174136672128213' is already in scene to '0'
+2026-10-12T14:37:14.2593931Z ENGINE Sending that entity '2683996848053998615' is already in scene to '0'
+2026-10-12T14:37:14.2604924Z ENGINE Sending that entity '14081795553047068017' has spawned in the scene to '0'
+2026-10-12T14:37:14.2615428Z ENGINE Sending that entity '14081795553047068017' is already in scene to '0'
+2026-10-12T14:37:14.2625442Z ENGINE Sending that entity '14845617824506759447' has spawned in the scene to '0'
+2026-10-12T14:37:14.2640427Z ENGINE Sending that entity '14845617824506759447' is already in scene to '0'
+2026-10-12T14:37:14.2640427Z ENGINE Sending that entity '17591134987898292411' has spawned in the scene to '0'
+2026-10-12T14:37:14.2654536Z ENGINE Sending that entity '17591134987898292411' is already in scene to '0'
+2026-10-12T14:37:14.2659576Z ENGINE Sending that entity '16027257507627566565' has spawned in the scene to '0'
+2026-10-12T14:37:14.2670603Z ENGINE Sending that entity '16027257507627566565' is already in scene to '0'
+2026-10-12T14:37:14.2670603Z ENGINE Sending that entity '11504889947492498493' has spawned in the scene to '0'
+2026-10-12T14:37:14.2684440Z ENGINE Sending that entity '11504889947492498493' is already in scene to '0'
+2026-10-12T14:37:14.2689500Z ENGINE Sending that entity '16777719468644617037' has spawned in the scene to '0'
+2026-10-12T14:37:14.2689500Z ENGINE Sending that entity '16777719468644617037' is already in scene to '0'
+2026-10-12T14:37:14.2704742Z ENGINE Sending that entity '12634200700131587141' has spawned in the scene to '0'
+2026-10-12T14:37:14.2714751Z ENGINE Sending that entity '12634200700131587141' is already in scene to '0'
+2026-10-12T14:37:14.2722871Z ENGINE Sending that entity '13555159082285677683' has spawned in the scene to '0'
+2026-10-12T14:37:14.2736181Z ENGINE Sending that entity '13555159082285677683' is already in scene to '0'
+2026-10-12T14:37:14.2750122Z ENGINE Sending that entity '18319232902158935263' has spawned in the scene to '0'
+2026-10-12T14:37:14.2750122Z ENGINE Sending that entity '18319232902158935263' is already in scene to '0'
+2026-10-12T14:37:14.2761251Z ENGINE Sending that entity '13027296298847844927' has spawned in the scene to '0'
+2026-10-12T14:37:14.2785944Z ENGINE Sending that entity '13027296298847844927' is already in scene to '0'
+2026-10-12T14:37:14.2785944Z ENGINE Sending that entity '17601926456810698095' has spawned in the scene to '0'
+2026-10-12T14:37:14.2801024Z ENGINE Sending that entity '17601926456810698095' is already in scene to '0'
+2026-10-12T14:37:14.2811097Z ENGINE Sending that entity '13066277805300581399' has spawned in the scene to '0'
+2026-10-12T14:37:14.2816180Z ENGINE Sending that entity '13066277805300581399' is already in scene to '0'
+2026-10-12T14:37:14.2821228Z ENGINE Sending that entity '17425962113371712779' has spawned in the scene to '0'
+2026-10-12T14:37:14.2821228Z ENGINE Sending that entity '17425962113371712779' is already in scene to '0'
+2026-10-12T14:37:14.2821228Z ENGINE Sending that entity '12146226780841785365' has spawned in the scene to '0'
+2026-10-12T14:37:14.2836376Z ENGINE Sending that entity '12146226780841785365' is already in scene to '0'
+2026-10-12T14:37:14.2836376Z ENGINE Sending that entity '13454576778771429485' has spawned in the scene to '0'
+2026-10-12T14:37:14.2853604Z ENGINE Sending that entity '13454576778771429485' is already in scene to '0'
+2026-10-12T14:37:14.2863673Z ENGINE Sending that entity '12568050770572606535' has spawned in the scene to '0'
+2026-10-12T14:37:14.2863673Z ENGINE Sending that entity '12568050770572606535' is already in scene to '0'
+2026-10-12T14:37:14.2875565Z ENGINE   0 has become scene host
+2026-10-12T14:37:14.2932314Z ENGINE Received scene host transfer for scene: GG_Vengefly
+2026-10-12T14:37:14.2953542Z ENGINE WARN Cannot update position for entity (2683996848053998615, VengeflyKing), client or host object is null
+2026-10-12T14:37:14.2975855Z ENGINE WARN Entity (2683996848053998615, VengeflyKing) could not update active, because client object is null
+2026-10-12T14:37:14.3016740Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: GG_Gruz_Mother
+2026-10-12T14:37:14.3201182Z ENGINE Player 1 left scene
+2026-10-12T14:37:22.8017043Z PASS teammate fights next boss 0.0
+2026-10-12T14:37:30.5115860Z ENGINE WARN Entity FSM mismatch: GG_Gruz_Mother/Giant Fly, expected 'Bouncer Control', actual [Big Fly Control,bouncer_control]
+2026-10-12T14:37:30.5257259Z ENGINE WARN Entity FSM mismatch: GG_Gruz_Mother/Corpse Big Fly 1(Clone), expected 'Bouncer Control', actual [corpse]
+2026-10-12T14:37:30.5494641Z ENGINE Scene changed from GG_Vengefly to GG_Gruz_Mother
+2026-10-12T14:37:30.6428589Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: GG_Vengefly
+2026-10-12T14:37:30.6600873Z PASS native sequence room 0.1
+2026-10-12T14:37:30.6705282Z PASS both room.0.1
+2026-10-12T14:37:30.6769340Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: GG_Gruz_Mother
+2026-10-12T14:37:30.6784092Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:37:30.6784092Z ENGINE Sending that entity '3103033005459923505' is already in scene to '0'
+2026-10-12T14:37:30.6798909Z ENGINE Sending that entity '6506528302334920627' is already in scene to '0'
+2026-10-12T14:37:30.6945782Z DELAY SNAPSHOT GG_Gruz_Mother visit=3
+2026-10-12T14:37:33.6944575Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:37:33.6957212Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:37:33.6970962Z ENGINE Player 1 entered scene
+2026-10-12T14:37:33.7014917Z PASS room authority 0.1
+2026-10-12T14:37:36.7064322Z PASS early room-level updates drained 0.1
+2026-10-12T14:37:36.7064322Z ROOM 0.1 scene=GG_Gruz_Mother visit=3 authority=False hero=(90.1, 15.4, 0.0) camera=(94.2, 20.0, -38.1) mode=LOCKED
+2026-10-12T14:37:36.7077783Z ENTITY 6506528302334920627 CameraLockArea key=GG_Gruz_Mother/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=False replica=True pos=(94.2, 20.6, 0.0) render= state=
+2026-10-12T14:37:36.7090747Z ENTITY 3103033005459923505 GruzMother key=GG_Gruz_Mother/_Enemies#0/Giant%20Fly#0:GruzMother:Big Fly Control|bouncer_control host=False replica=True pos=(99.7, 22.3, 0.0) render=Giant Fly(Clone)/True/off=False,Corpse Big Fly 1(Clone)/True/off=False,Corpse Big Fly 1(Clone)/True/off=False state=Big Fly Control=,bouncer_control=
+2026-10-12T14:37:36.7100935Z PASS camera authority state 0.1
+2026-10-12T14:37:36.7111148Z PASS camera lock state converges 0.1
+2026-10-12T14:37:36.7116200Z PASS visible bosses/knight and unfrozen camera 0.1
+2026-10-12T14:37:36.7126242Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:37:36.7136261Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:37:36.7147960Z ENGINE Player 1 entered scene
+2026-10-12T14:37:36.7147960Z PASS duplicate initial snapshot does not reset boss 0.1
+2026-10-12T14:37:36.7158073Z ENGINE Player 1 left scene
+2026-10-12T14:37:36.7168178Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:37:36.7173217Z PASS stale room/peer leave and duplicate connect preserve avatar 0.1
+2026-10-12T14:37:36.7282197Z PASS both checked.0.1
+2026-10-12T14:37:36.7351583Z PASS damage published 0.1
+2026-10-12T14:37:36.7611585Z PASS same boss HP 0.1
+2026-10-12T14:37:36.7623530Z PASS both hpchecked.0.1
+2026-10-12T14:37:36.7722118Z ENGINE Boss room completion relayed: GG_Gruz_Mother
+2026-10-12T14:37:36.7928102Z ENGINE WARN Entity (3103033005459923505, GruzMother) could not update active, because client object is null
+2026-10-12T14:37:41.2831598Z ENGINE WARN Entity FSM mismatch: /Corpse Big Fly Burster, expected 'Bouncer Control', actual [burster]
+2026-10-12T14:37:44.8693755Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: GG_Gruz_Mother
+2026-10-12T14:37:44.8703808Z ENGINE Sending leave scene packet to 0
+2026-10-12T14:37:44.8703808Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:37:44.8716151Z ENGINE Sending that entity '3103033005459923505' is already in scene to '0'
+2026-10-12T14:37:44.8716151Z ENGINE Sending that entity '6506528302334920627' is already in scene to '0'
+2026-10-12T14:37:44.8728373Z ENGINE   0 has become scene host
+2026-10-12T14:37:44.8867703Z ENGINE Player 1 left scene
+2026-10-12T14:37:44.8879310Z ENGINE Received scene host transfer for scene: GG_Gruz_Mother
+2026-10-12T14:37:44.8889345Z ENGINE WARN Cannot update position for entity (3103033005459923505, GruzMother), client or host object is null
+2026-10-12T14:37:44.8889345Z ENGINE WARN Cannot update scale for entity (3103033005459923505, GruzMother), client object is null
+2026-10-12T14:37:44.8900371Z ENGINE WARN Entity (3103033005459923505, GruzMother) could not update active, because client object is null
+2026-10-12T14:37:44.9027034Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: GG_False_Knight
+2026-10-12T14:37:53.3831174Z PASS teammate fights next boss 0.1
+2026-10-12T14:38:01.3255115Z ENGINE WARN Entity FSM mismatch: GG_False_Knight/Death Head, expected 'Health Check', actual []
+2026-10-12T14:38:01.3280716Z ENGINE WARN Entity FSM mismatch: GG_False_Knight/Staff Head, expected 'Health Check', actual [Mace Control]
+2026-10-12T14:38:01.4046124Z ENGINE Scene changed from GG_Gruz_Mother to GG_False_Knight
+2026-10-12T14:38:01.5230205Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: GG_Gruz_Mother
+2026-10-12T14:38:01.5401431Z PASS native sequence room 0.2
+2026-10-12T14:38:01.5426014Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: GG_False_Knight
+2026-10-12T14:38:01.5530933Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:38:01.5541792Z PASS both room.0.2
+2026-10-12T14:38:01.5541792Z ENGINE Sending that entity '6271568382922080675' is already in scene to '0'
+2026-10-12T14:38:01.5563790Z ENGINE Sending that entity '4189473236617846725' is already in scene to '0'
+2026-10-12T14:38:01.5573945Z ENGINE Sending that entity '3675315349804982313' is already in scene to '0'
+2026-10-12T14:38:01.5584103Z ENGINE Sending that entity '18071748739765071' is already in scene to '0'
+2026-10-12T14:38:01.5603677Z ENGINE Sending that entity '9116905824005710281' is already in scene to '0'
+2026-10-12T14:38:01.5628112Z ENGINE Sending that entity '8447741072119193881' is already in scene to '0'
+2026-10-12T14:38:01.5787808Z DELAY SNAPSHOT GG_False_Knight visit=4
+2026-10-12T14:38:04.5808158Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:38:04.5818393Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:38:04.5828421Z ENGINE Player 1 entered scene
+2026-10-12T14:38:04.5938751Z PASS room authority 0.2
+2026-10-12T14:38:06.3882290Z ENGINE Received EntitySpawn from 1, with entity 15816023932771979775, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.3892314Z ENGINE Received EntitySpawn from 1, with entity 18231176982066948889, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.3907393Z ENGINE Received EntitySpawn from 1, with entity 15107007319825761633, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.3917499Z ENGINE Received EntitySpawn from 1, with entity 16741829214075057013, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4108659Z ENGINE Received EntitySpawn from 1, with entity 11098569977192249069, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4143950Z ENGINE Received EntitySpawn from 1, with entity 12127238339138908765, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4153965Z ENGINE Received EntitySpawn from 1, with entity 9787560220854406525, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4247932Z ENGINE Received EntitySpawn from 1, with entity 12064795947775282255, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4418247Z ENGINE Received EntitySpawn from 1, with entity 15566464488353313395, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4428289Z ENGINE Received EntitySpawn from 1, with entity 13668638327285881471, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4579098Z ENGINE Received EntitySpawn from 1, with entity 9490899746235923053, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.4761427Z ENGINE Received EntitySpawn from 1, with entity 13718441963863429825, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.5787030Z ENGINE Received EntitySpawn from 1, with entity 13869541656562355819, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.5969019Z ENGINE Received EntitySpawn from 1, with entity 16782371831455900139, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.5983229Z ENGINE Received EntitySpawn from 1, with entity 12557807437186151649, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.5993901Z ENGINE Received EntitySpawn from 1, with entity 15601176163603401593, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6008987Z ENGINE Received EntitySpawn from 1, with entity 12944243761611416291, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6018996Z ENGINE Received EntitySpawn from 1, with entity 12356468865214009365, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6143217Z ENGINE Received EntitySpawn from 1, with entity 10303362346354819849, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6153360Z ENGINE Received EntitySpawn from 1, with entity 9917031795951326439, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6164893Z ENGINE Received EntitySpawn from 1, with entity 9642073249429103289, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6314771Z ENGINE Received EntitySpawn from 1, with entity 14478797058418462709, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6336755Z ENGINE Received EntitySpawn from 1, with entity 9598419351057313347, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.6838181Z ENGINE Received EntitySpawn from 1, with entity 16256430061560972379, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.7018984Z ENGINE Received EntitySpawn from 1, with entity 17393144579692661191, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.7028998Z ENGINE Received EntitySpawn from 1, with entity 13568713250123676559, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8035029Z ENGINE Received EntitySpawn from 1, with entity 11960154967651721331, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8045558Z ENGINE Received EntitySpawn from 1, with entity 13194470639958889789, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8059201Z ENGINE Received EntitySpawn from 1, with entity 15118530389233791377, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8059201Z ENGINE Received EntitySpawn from 1, with entity 18309205354221008757, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8069275Z ENGINE Received EntitySpawn from 1, with entity 17078672246935194079, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8083477Z ENGINE Received EntitySpawn from 1, with entity 17597618790261173403, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8093540Z ENGINE Received EntitySpawn from 1, with entity 11032149923314436975, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8103559Z ENGINE Received EntitySpawn from 1, with entity 15294971590761911511, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8108619Z ENGINE Received EntitySpawn from 1, with entity 12658777798217916355, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8118623Z ENGINE Received EntitySpawn from 1, with entity 12120377210756061421, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8217086Z ENGINE Received EntitySpawn from 1, with entity 10402225371205163403, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8217086Z ENGINE Received EntitySpawn from 1, with entity 14662915512614346981, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8231074Z ENGINE Received EntitySpawn from 1, with entity 15622419523621783009, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.8245381Z ENGINE Received EntitySpawn from 1, with entity 11846502839867341005, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9066503Z ENGINE Received EntitySpawn from 1, with entity 14753504858061806777, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9076575Z ENGINE Received EntitySpawn from 1, with entity 15617282401522866717, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9076575Z ENGINE Received EntitySpawn from 1, with entity 9909400873428328323, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9101774Z ENGINE Received EntitySpawn from 1, with entity 11274635673663606445, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9101774Z ENGINE Received EntitySpawn from 1, with entity 16233859325482993935, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9113366Z ENGINE Received EntitySpawn from 1, with entity 10603737314183369453, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9126110Z ENGINE Received EntitySpawn from 1, with entity 9257341767411625763, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9137621Z ENGINE Received EntitySpawn from 1, with entity 15629864772364789549, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9152343Z ENGINE Received EntitySpawn from 1, with entity 11306308984774054927, FalseKnight, DynamicHazard
+2026-10-12T14:38:06.9165677Z ENGINE Received EntitySpawn from 1, with entity 13020339735418071689, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0101223Z ENGINE Received EntitySpawn from 1, with entity 15484555002264735495, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0267731Z ENGINE Received EntitySpawn from 1, with entity 14748882969086814277, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0278299Z ENGINE Received EntitySpawn from 1, with entity 14971762666915190789, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0288445Z ENGINE Received EntitySpawn from 1, with entity 10866093792814311783, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0288445Z ENGINE Received EntitySpawn from 1, with entity 11002697040447083521, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0303532Z ENGINE Received EntitySpawn from 1, with entity 11921180877006891239, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0313954Z ENGINE Received EntitySpawn from 1, with entity 9805590245491487293, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0323971Z ENGINE Received EntitySpawn from 1, with entity 12575980696848043637, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0323971Z ENGINE Received EntitySpawn from 1, with entity 9831441165861216769, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0333999Z ENGINE Received EntitySpawn from 1, with entity 17782428888506742583, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0333999Z ENGINE Received EntitySpawn from 1, with entity 14675294782020978043, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.0444593Z ENGINE Received EntitySpawn from 1, with entity 14458238575012232007, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.1137891Z ENGINE Received EntitySpawn from 1, with entity 11009458389943420451, FalseKnight, DynamicHazard
+2026-10-12T14:38:07.6264355Z PASS early room-level updates drained 0.2
+2026-10-12T14:38:07.6275556Z ROOM 0.2 scene=GG_False_Knight visit=4 authority=False hero=(20.5, 27.4, 0.0) camera=(32.4, 31.4, -38.1) mode=LOCKED
+2026-10-12T14:38:07.6285580Z ENTITY 3675315349804982313 BattleGate key=GG_False_Knight/Battle%20Gate%202#0:BattleGate:BG Control host=False replica=True pos=(18.5, 3.8, 0.0) render=Battle Gate 2(Clone)/True/off=False,Dust/True/off=False,Close Effect/False/off=False,Raise Dust/True/off=False state=BG Control=
+2026-10-12T14:38:07.6297445Z ENTITY 18071748739765071 BattleGate key=GG_False_Knight/Battle%20Gate%203#0:BattleGate:BG Control host=False replica=True pos=(51.6, 3.9, 0.0) render=Battle Gate 3(Clone)/True/off=False,Dust/True/off=False,Close Effect/True/off=False,Raise Dust/True/off=False state=BG Control=
+2026-10-12T14:38:07.6302501Z ENTITY 9116905824005710281 CameraLockArea key=GG_False_Knight/Battle%20Scene#0/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(31.6, 32.5, 0.0) render= state=
+2026-10-12T14:38:07.6317045Z ENTITY 6271568382922080675 FalseKnightBarrels key=GG_False_Knight/Battle%20Scene#0/FK%20Barrel%20Summon#0:FalseKnightBarrels:summon host=False replica=True pos=(29.1, 41.0, 0.0) render= state=summon=
+2026-10-12T14:38:07.6325887Z ENTITY 4189473236617846725 FalseKnight key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0:FalseKnight:Check Health|FalseyControl host=False replica=True pos=(25.5, 31.6, 0.0) render=False Knight New(Clone)/True/off=False,Roll Dust/True/off=False,Hitter/True/off=False,Jump Trail/True/off=False,Head/True/off=False,Slam Effect/True/off=False,Jump Slam Effect/True/off=False,Death Head/True/off=False,Staff/True/off=False,Staff Head/True/off=False,Slam Rocks/True/off=False,Rage Rocks/True/off=False,Armour Hit/True/off=False,Armour Smash/True/off=False,Dust Land Large/True/off=False,Dust Hit Plume/True/off=False state=FalseyControl=,Check Health=
+2026-10-12T14:38:07.6325887Z ENTITY 8447741072119193881 FalseKnightHead key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0/Head#0:FalseKnightHead:Health Check host=False replica=True pos=(22.5, 226.6, 0.0) render=Head/True/off=False state=Health Check=
+2026-10-12T14:38:07.6340480Z PASS camera authority state 0.2
+2026-10-12T14:38:07.6340480Z PASS camera lock state converges 0.2
+2026-10-12T14:38:07.6367389Z PASS visible bosses/knight and unfrozen camera 0.2
+2026-10-12T14:38:07.6398637Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:38:07.6403674Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:38:07.6403674Z ENGINE Player 1 entered scene
+2026-10-12T14:38:07.6422654Z PASS duplicate initial snapshot does not reset boss 0.2
+2026-10-12T14:38:07.6422654Z ENGINE Player 1 left scene
+2026-10-12T14:38:07.6438653Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:38:07.6438653Z PASS stale room/peer leave and duplicate connect preserve avatar 0.2
+2026-10-12T14:38:07.6474863Z PASS both checked.0.2
+2026-10-12T14:38:07.6581279Z PASS damage published 0.2
+2026-10-12T14:38:07.6939068Z PASS same boss HP 0.2
+2026-10-12T14:38:07.6954155Z PASS both hpchecked.0.2
+2026-10-12T14:38:18.3792431Z ENGINE Received EntitySpawn from 1, with entity 14488369409141309243, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:18.5840943Z ENGINE Received EntitySpawn from 1, with entity 12818689578918439449, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:18.7889672Z ENGINE Received EntitySpawn from 1, with entity 12201057017246654889, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:18.9942567Z ENGINE Received EntitySpawn from 1, with entity 14025683151066951517, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:19.2022837Z ENGINE Received EntitySpawn from 1, with entity 9886735496444027499, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:19.4230847Z ENGINE Received EntitySpawn from 1, with entity 17636188712565459407, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:19.6163955Z ENGINE Received EntitySpawn from 1, with entity 16768060769073783495, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:19.8219781Z ENGINE Received EntitySpawn from 1, with entity 12153962797531547839, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:29.3812464Z ENGINE Received EntitySpawn from 1, with entity 11685439148574198437, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:29.5853185Z ENGINE Received EntitySpawn from 1, with entity 12022810511913595199, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:29.7908000Z ENGINE Received EntitySpawn from 1, with entity 13143100757743328755, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:29.9794615Z ENGINE Received EntitySpawn from 1, with entity 17806265818070335269, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:30.1846778Z ENGINE Received EntitySpawn from 1, with entity 16808952005597422555, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:30.3889678Z ENGINE Received EntitySpawn from 1, with entity 13648043354215327941, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:30.5939639Z ENGINE Received EntitySpawn from 1, with entity 11660991615100567665, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:30.6955730Z ENGINE Received EntitySpawn from 1, with entity 16364330126949061341, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:38:43.3581538Z ENGINE Boss room completion relayed: GG_False_Knight
+2026-10-12T14:38:47.2671122Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: GG_False_Knight
+2026-10-12T14:38:47.2686414Z ENGINE Sending leave scene packet to 0
+2026-10-12T14:38:47.2722677Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:38:47.2732747Z ENGINE Sending that entity '6271568382922080675' is already in scene to '0'
+2026-10-12T14:38:47.2745406Z ENGINE Sending that entity '4189473236617846725' is already in scene to '0'
+2026-10-12T14:38:47.2755533Z ENGINE Sending that entity '3675315349804982313' is already in scene to '0'
+2026-10-12T14:38:47.2769289Z ENGINE Sending that entity '18071748739765071' is already in scene to '0'
+2026-10-12T14:38:47.2769289Z ENGINE Sending that entity '9116905824005710281' is already in scene to '0'
+2026-10-12T14:38:47.2786513Z ENGINE Sending that entity '8447741072119193881' is already in scene to '0'
+2026-10-12T14:38:47.2801767Z ENGINE   0 has become scene host
+2026-10-12T14:38:47.2848375Z ENGINE Player 1 left scene
+2026-10-12T14:38:47.2868360Z ENGINE Received scene host transfer for scene: GG_False_Knight
+2026-10-12T14:38:47.4453744Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: GG_Mega_Moss_Charger
+2026-10-12T14:38:55.9298157Z PASS teammate fights next boss 0.2
+2026-10-12T14:38:59.7217406Z ENGINE WARN Entity FSM mismatch: GG_Mega_Moss_Charger/Corpse Mega Moss Charger(Clone), expected 'Mossy Control', actual [Corpse]
+2026-10-12T14:38:59.7441708Z ENGINE Scene changed from GG_False_Knight to GG_Mega_Moss_Charger
+2026-10-12T14:38:59.9901596Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: GG_False_Knight
+2026-10-12T14:39:00.0104639Z PASS native sequence room 0.3
+2026-10-12T14:39:00.0129275Z PASS both room.0.3
+2026-10-12T14:39:00.0241463Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: GG_Mega_Moss_Charger
+2026-10-12T14:39:00.0251483Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:39:00.0256545Z ENGINE Sending that entity '4638147650663368899' is already in scene to '0'
+2026-10-12T14:39:00.0266555Z ENGINE Sending that entity '4129537347362395435' is already in scene to '0'
+2026-10-12T14:39:00.0415136Z DELAY SNAPSHOT GG_Mega_Moss_Charger visit=5
+2026-10-12T14:39:03.0432886Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:03.0459769Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:39:03.0471493Z ENGINE Player 1 entered scene
+2026-10-12T14:39:03.0520712Z PASS room authority 0.3
+2026-10-12T14:39:06.0550252Z PASS early room-level updates drained 0.3
+2026-10-12T14:39:06.0555482Z ROOM 0.3 scene=GG_Mega_Moss_Charger visit=5 authority=False hero=(43.9, 7.4, 0.0) camera=(44.9, 11.0, -38.1) mode=LOCKED
+2026-10-12T14:39:06.0555482Z ENTITY 4129537347362395435 CameraLockArea key=GG_Mega_Moss_Charger/CameraLockArea%20%282%29#0:CameraLockArea: host=False replica=True pos=(47.4, 15.1, 0.0) render= state=
+2026-10-12T14:39:06.0567800Z ENTITY 4638147650663368899 MassiveMossCharger key=GG_Mega_Moss_Charger/Mega%20Moss%20Charger#0:MassiveMossCharger:Mossy Control host=False replica=True pos=(56.6, 9.8, 0.0) render=Mega Moss Charger(Clone)/False/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Grass Shake/True/off=False,Grass Roar/True/off=False,Slam Effect R/True/off=False,Corpse Mega Moss Charger(Clone)/True/off=False,Grass Explode/True/off=False,Corpse Mega Moss Charger(Clone)/True/off=False,Grass Explode/True/off=False,Moss Charger Nibbler/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (1)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (2)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (3)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False state=Mossy Control=
+2026-10-12T14:39:06.0577803Z PASS camera authority state 0.3
+2026-10-12T14:39:06.0577803Z PASS camera lock state converges 0.3
+2026-10-12T14:39:06.0592629Z PASS visible bosses/knight and unfrozen camera 0.3
+2026-10-12T14:39:06.0602661Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:06.0614615Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:39:06.0614615Z ENGINE Player 1 entered scene
+2026-10-12T14:39:06.0637963Z PASS duplicate initial snapshot does not reset boss 0.3
+2026-10-12T14:39:06.0651314Z ENGINE Player 1 left scene
+2026-10-12T14:39:06.0662623Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:39:06.0662623Z PASS stale room/peer leave and duplicate connect preserve avatar 0.3
+2026-10-12T14:39:06.0778051Z PASS both checked.0.3
+2026-10-12T14:39:06.0838284Z PASS damage published 0.3
+2026-10-12T14:39:06.1124207Z PASS same boss HP 0.3
+2026-10-12T14:39:06.1140755Z PASS both hpchecked.0.3
+2026-10-12T14:39:06.1378584Z ENGINE Boss room completion relayed: GG_Mega_Moss_Charger
+2026-10-12T14:39:06.1630495Z ENGINE WARN Entity (4638147650663368899, MassiveMossCharger) could not update active, because client object is null
+2026-10-12T14:39:16.0813552Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: GG_Mega_Moss_Charger
+2026-10-12T14:39:16.0838643Z ENGINE Sending leave scene packet to 0
+2026-10-12T14:39:16.0851177Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:39:16.0867042Z ENGINE Sending that entity '4638147650663368899' is already in scene to '0'
+2026-10-12T14:39:16.0880312Z ENGINE Sending that entity '4129537347362395435' is already in scene to '0'
+2026-10-12T14:39:16.0892460Z ENGINE   0 has become scene host
+2026-10-12T14:39:16.1001827Z ENGINE Player 1 left scene
+2026-10-12T14:39:16.1023816Z ENGINE Received scene host transfer for scene: GG_Mega_Moss_Charger
+2026-10-12T14:39:16.1023816Z ENGINE WARN Cannot update position for entity (4638147650663368899, MassiveMossCharger), client or host object is null
+2026-10-12T14:39:16.1039928Z ENGINE WARN Cannot update scale for entity (4638147650663368899, MassiveMossCharger), client object is null
+2026-10-12T14:39:16.1057316Z ENGINE WARN Entity (4638147650663368899, MassiveMossCharger) could not update active, because client object is null
+2026-10-12T14:39:16.2814812Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: GG_Hornet_1
+2026-10-12T14:39:24.7645481Z PASS teammate fights next boss 0.3
+2026-10-12T14:39:34.6026319Z ENGINE Scene changed from GG_Mega_Moss_Charger to GG_Hornet_1
+2026-10-12T14:39:34.7075421Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: GG_Mega_Moss_Charger
+2026-10-12T14:39:34.7314715Z PASS native sequence room 0.4
+2026-10-12T14:39:34.7412557Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: GG_Hornet_1
+2026-10-12T14:39:34.7427643Z PASS both room.0.4
+2026-10-12T14:39:34.7442576Z ENGINE Sending that entity '4568293017055036489' is already in scene to '0'
+2026-10-12T14:39:34.7442576Z ENGINE Sending that entity '7214630437068105499' is already in scene to '0'
+2026-10-12T14:39:34.7442576Z ENGINE Sending that entity '8176710128723724501' is already in scene to '0'
+2026-10-12T14:39:34.7458060Z ENGINE Sending that entity '0' is already in scene to '0'
+2026-10-12T14:39:34.7596594Z DELAY SNAPSHOT GG_Hornet_1 visit=6
+2026-10-12T14:39:37.7606214Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:37.7629744Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:39:37.7639802Z ENGINE Player 1 entered scene
+2026-10-12T14:39:37.7749364Z PASS room authority 0.4
+2026-10-12T14:39:40.7783951Z PASS early room-level updates drained 0.4
+2026-10-12T14:39:40.7801928Z ROOM 0.4 scene=GG_Hornet_1 visit=6 authority=False hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-12T14:39:40.7812312Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=False replica=True pos=(16.7, 28.6, 0.0) render=Hornet Boss 1(Clone)/True/off=False,Sphere Ball/True/off=False,A Dash Effect/True/off=False,Dust HardLand/True/off=False,G Dash Effect/True/off=False,Flash Effect/True/off=False,Throw Effect/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False state=Control=,Stun Control=
+2026-10-12T14:39:40.7817551Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0/Needle#0:DynamicHazard:Control host=False replica=False pos=(30.3, 28.1, 0.0) render=Needle(Clone)/True/off=False,Thread/True/off=False state=Control=
+2026-10-12T14:39:40.7827905Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(25.1, 34.9, 0.0) render= state=
+2026-10-12T14:39:40.7827905Z PASS camera authority state 0.4
+2026-10-12T14:39:40.7842780Z PASS camera lock state converges 0.4
+2026-10-12T14:39:40.7854615Z PASS visible bosses/knight and unfrozen camera 0.4
+2026-10-12T14:39:40.7864781Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:40.7875737Z ENGINE Updating already in scene player with ID: 1
+2026-10-12T14:39:40.7875737Z ENGINE Player 1 entered scene
+2026-10-12T14:39:40.7887543Z PASS duplicate initial snapshot does not reset boss 0.4
+2026-10-12T14:39:40.7902875Z ENGINE Player 1 left scene
+2026-10-12T14:39:40.7908123Z ENGINE Received PlayerConnect data for ID: 1
+2026-10-12T14:39:40.7908123Z PASS stale room/peer leave and duplicate connect preserve avatar 0.4
+2026-10-12T14:39:40.7931070Z PASS both checked.0.4
+2026-10-12T14:39:40.7997744Z PASS damage published 0.4
+2026-10-12T14:39:40.8262249Z PASS same boss HP 0.4
+2026-10-12T14:39:40.8288758Z PASS both hpchecked.0.4
+2026-10-12T14:39:41.6584729Z ENGINE Scene changed from GG_Hornet_1 to Town
+2026-10-12T14:39:41.6641129Z ENGINE Handling player leave scene (dc: False) for ID 0, left scene: GG_Hornet_1
+2026-10-12T14:39:41.6656268Z ENGINE Sending leave scene packet to 1
+2026-10-12T14:39:41.8832375Z ENGINE Handling player leave scene (dc: False) for ID 1, left scene: GG_Hornet_1
+2026-10-12T14:39:41.8842827Z ENGINE Received EnterScene data from (1, pantheonguest), new scene: Town
+2026-10-12T14:39:41.9106872Z PASS leave attempt
+2026-10-12T14:39:41.9119618Z PASS both left.0
+2026-10-12T14:39:41.9144550Z ENGINE Sending PlayerDisconnect packet
+2026-10-12T14:39:41.9172428Z ENGINE Received EnterScene data from (0, pantheonhost), new scene: Town
+2026-10-12T14:39:41.9187514Z ENGINE Sending that entity '9039180234019435213' is already in scene to '0'
+2026-10-12T14:39:41.9202590Z ENGINE Disconnecting from server
+2026-10-12T14:39:41.9216659Z ENGINE Sending that entity '688262427560814067' is already in scene to '0'
+2026-10-12T14:39:41.9221925Z ENGINE Sending that entity '1925361265462759723' is already in scene to '0'
+2026-10-12T14:39:41.9234380Z ENGINE Sending that entity '8173247680223640663' is already in scene to '0'
+2026-10-12T14:39:41.9234380Z ENGINE Sending that entity '5433208650596947515' is already in scene to '0'
+2026-10-12T14:39:41.9244676Z ENGINE Sending that entity '1640449854697899003' is already in scene to '0'
+2026-10-12T14:39:41.9254722Z ENGINE Sending that entity '7815807409613637839' is already in scene to '0'
+2026-10-12T14:39:41.9269894Z ENGINE Received PlayerDisconnect data from (0, pantheonhost)
+2026-10-12T14:39:41.9370326Z ENGINE Client 0 disconnected
+2026-10-12T14:39:41.9391922Z ENGINE Handling player leave scene (dc: True) for ID 0, left scene: Town
+2026-10-12T14:39:41.9403762Z ENGINE Sending leave scene packet to 1
+2026-10-12T14:39:41.9428895Z ENGINE Received PlayerDisconnect data from (1, pantheonguest)
+2026-10-12T14:39:41.9448932Z ENGINE Client 1 disconnected
+2026-10-12T14:39:41.9469232Z ENGINE Handling player leave scene (dc: True) for ID 1, left scene: Town
+2026-10-12T14:39:41.9490052Z ENGINE WARN Received EntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9505143Z ENGINE WARN Received EntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9510358Z ENGINE WARN Received EntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9521716Z ENGINE WARN Received EntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9544983Z ENGINE WARN Received EntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9568074Z ENGINE WARN Received EntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9580454Z ENGINE WARN Received EntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9580454Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9596394Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9605586Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9616889Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9627054Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9642133Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9653405Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9663434Z ENGINE WARN Received ReliableEntityUpdate data, but player with ID 1 is not in mapping
+2026-10-12T14:39:41.9992767Z PASS disconnect between attempts
+2026-10-12T14:39:42.0013640Z PASS both disconnected
+2026-10-12T14:39:42.0029616Z ENGINE Connecting client to server: 127.0.0.1:29650 as retryhost
+2026-10-12T14:39:42.0122054Z ENGINE Server certificate fingerprint(s):
+2026-10-12T14:39:42.0134177Z ENGINE   fingerprint:SHA256 B4:39:D7:1A:6C:CF:5D:C4:F9:6F:7E:11:1A:F7:F1:1A:0E:E4:0D:76:40:DA:D9:8D:31:CA:5D:54:F3:54:6E:BE (CN=TestEE)
+2026-10-12T14:39:42.0416876Z ENGINE Received packet from unknown client with address: 127.0.0.1:53610, creating new client
+2026-10-12T14:39:42.0429435Z ENGINE Received connection request from IP: 127.0.0.1:53610, username: retryhost
+2026-10-12T14:39:42.0429435Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:39:42.0446367Z ENGINE Received packet from unknown client with address: 127.0.0.1:53611, creating new client
+2026-10-12T14:39:42.0474941Z ENGINE Received connection request from IP: 127.0.0.1:53611, username: retryguest
+2026-10-12T14:39:42.0486135Z ENGINE   Client tries to connect with following addons: HollowConnect v0.1.9
+2026-10-12T14:39:42.0645602Z ENGINE Received server info from server
+2026-10-12T14:39:42.2726434Z ENGINE Retrieved addon HollowConnect v0.1.9 ID: 0
+2026-10-12T14:39:42.3324278Z ENGINE Scene changed from  to Town
+2026-10-12T14:39:42.3335430Z ENGINE Received EnterScene data from (3, retryguest), new scene: Town
+2026-10-12T14:39:42.3479578Z ENGINE Received EnterScene data from (2, retryhost), new scene: Town
+2026-10-12T14:39:42.3507526Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:42.3526709Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:39:42.3536726Z ENGINE Player 3 entered scene
+2026-10-12T14:39:42.3562628Z PASS reconnect between attempts
+2026-10-12T14:39:42.3579089Z PASS both reconnected
+2026-10-12T14:39:42.9490797Z ENGINE Handling player leave scene (dc: False) for ID 3, left scene: Town
+2026-10-12T14:39:42.9490797Z ENGINE Sending leave scene packet to 2
+2026-10-12T14:39:42.9505894Z ENGINE Sending that entity '9039180234019435213' is already in scene to '2'
+2026-10-12T14:39:42.9505894Z ENGINE Sending that entity '688262427560814067' is already in scene to '2'
+2026-10-12T14:39:42.9525187Z ENGINE Sending that entity '1925361265462759723' is already in scene to '2'
+2026-10-12T14:39:42.9525187Z ENGINE Sending that entity '8173247680223640663' is already in scene to '2'
+2026-10-12T14:39:42.9535222Z ENGINE Sending that entity '5433208650596947515' is already in scene to '2'
+2026-10-12T14:39:42.9535222Z ENGINE Sending that entity '1640449854697899003' is already in scene to '2'
+2026-10-12T14:39:42.9560539Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:39:42.9560539Z ENGINE Sending that entity '7815807409613637839' is already in scene to '2'
+2026-10-12T14:39:42.9574651Z ENGINE   2 has become scene host
+2026-10-12T14:39:42.9699927Z ENGINE Player 3 left scene
+2026-10-12T14:39:42.9704977Z ENGINE Received scene host transfer for scene: Town
+2026-10-12T14:39:43.0729475Z ENGINE Received EnterScene data from (3, retryguest), new scene: GG_Vengefly
+2026-10-12T14:39:43.1577893Z ENGINE Received EntitySpawn from 3, with entity 15139395741990023723, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.1748535Z ENGINE Received EntitySpawn from 3, with entity 10153850209585544951, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.1763344Z ENGINE Received EntitySpawn from 3, with entity 13502316710975428149, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.1925783Z ENGINE Received EntitySpawn from 3, with entity 11502806750921411993, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.1925783Z ENGINE Received EntitySpawn from 3, with entity 10563492903526393913, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2092892Z ENGINE Received EntitySpawn from 3, with entity 15928950020807598379, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2105047Z ENGINE Received EntitySpawn from 3, with entity 15458220616909240025, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2267085Z ENGINE Received EntitySpawn from 3, with entity 14166134627067555111, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2281814Z ENGINE Received EntitySpawn from 3, with entity 18255558836519245603, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2435308Z ENGINE Received EntitySpawn from 3, with entity 12772859331157040451, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2450394Z ENGINE Received EntitySpawn from 3, with entity 13211034874096575719, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2611246Z ENGINE Received EntitySpawn from 3, with entity 12834084383081766763, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2621342Z ENGINE Received EntitySpawn from 3, with entity 11134905641242384561, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2772517Z ENGINE Received EntitySpawn from 3, with entity 11637555217634625831, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2787607Z ENGINE Received EntitySpawn from 3, with entity 17662366744651025951, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2946248Z ENGINE Received EntitySpawn from 3, with entity 10133832101620896385, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.2960937Z ENGINE Received EntitySpawn from 3, with entity 12850631871280001875, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3121472Z ENGINE Received EntitySpawn from 3, with entity 16292493946188462523, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3134545Z ENGINE Received EntitySpawn from 3, with entity 16093510566042604273, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3290880Z ENGINE Received EntitySpawn from 3, with entity 10260495654721680771, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3306525Z ENGINE Received EntitySpawn from 3, with entity 18015875323034585313, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3466147Z ENGINE Received EntitySpawn from 3, with entity 11096849697508886513, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3466147Z ENGINE Received EntitySpawn from 3, with entity 9873868830894356657, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3634826Z ENGINE Received EntitySpawn from 3, with entity 14981520179507354425, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3634826Z ENGINE Received EntitySpawn from 3, with entity 12542277341215872033, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3649854Z ENGINE Received EntitySpawn from 3, with entity 12549434073966298775, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3804840Z ENGINE Received EntitySpawn from 3, with entity 10718625529094558645, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3814933Z ENGINE Received EntitySpawn from 3, with entity 17902664282819887097, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3966245Z ENGINE Received EntitySpawn from 3, with entity 14796092997503792387, VengeflyKing, VengeflySummon
+2026-10-12T14:39:43.3978308Z ENGINE Received EntitySpawn from 3, with entity 13773203484600444529, VengeflyKing, VengeflySummon
+2026-10-12T14:39:46.3790502Z PASS first entrant starts fighting
+2026-10-12T14:39:46.9659116Z ENGINE Scene changed from Town to GG_Vengefly
+2026-10-12T14:39:47.0826492Z ENGINE Handling player leave scene (dc: False) for ID 2, left scene: Town
+2026-10-12T14:39:47.0979204Z PASS first boss entry
+2026-10-12T14:39:47.1004328Z ENGINE Received EnterScene data from (2, retryhost), new scene: GG_Vengefly
+2026-10-12T14:39:47.1019430Z ENGINE Sending that entity '15458220616909240025' has spawned in the scene to '2'
+2026-10-12T14:39:47.1029508Z ENGINE Sending that entity '15458220616909240025' is already in scene to '2'
+2026-10-12T14:39:47.1042110Z ENGINE Sending that entity '11502806750921411993' has spawned in the scene to '2'
+2026-10-12T14:39:47.1055582Z ENGINE Sending that entity '11502806750921411993' is already in scene to '2'
+2026-10-12T14:39:47.1081555Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:39:47.1081555Z ENGINE Sending that entity '18255558836519245603' has spawned in the scene to '2'
+2026-10-12T14:39:47.1096560Z ENGINE Sending that entity '18255558836519245603' is already in scene to '2'
+2026-10-12T14:39:47.1106720Z ENGINE Sending that entity '14166134627067555111' has spawned in the scene to '2'
+2026-10-12T14:39:47.1116939Z ENGINE Sending that entity '14166134627067555111' is already in scene to '2'
+2026-10-12T14:39:47.1126977Z ENGINE Sending that entity '15928950020807598379' has spawned in the scene to '2'
+2026-10-12T14:39:47.1126977Z ENGINE Sending that entity '15928950020807598379' is already in scene to '2'
+2026-10-12T14:39:47.1141165Z ENGINE Sending that entity '13773203484600444529' has spawned in the scene to '2'
+2026-10-12T14:39:47.1141165Z ENGINE Sending that entity '13773203484600444529' is already in scene to '2'
+2026-10-12T14:39:47.1153736Z ENGINE Sending that entity '11096849697508886513' has spawned in the scene to '2'
+2026-10-12T14:39:47.1167387Z ENGINE Sending that entity '11096849697508886513' is already in scene to '2'
+2026-10-12T14:39:47.1167387Z ENGINE Sending that entity '11134905641242384561' has spawned in the scene to '2'
+2026-10-12T14:39:47.1181748Z ENGINE Sending that entity '11134905641242384561' is already in scene to '2'
+2026-10-12T14:39:47.1192186Z ENGINE Sending that entity '11637555217634625831' has spawned in the scene to '2'
+2026-10-12T14:39:47.1202174Z ENGINE Sending that entity '11637555217634625831' is already in scene to '2'
+2026-10-12T14:39:47.1213033Z ENGINE Sending that entity '13502316710975428149' has spawned in the scene to '2'
+2026-10-12T14:39:47.1223924Z ENGINE Sending that entity '13502316710975428149' is already in scene to '2'
+2026-10-12T14:39:47.1237736Z ENGINE Sending that entity '9873868830894356657' has spawned in the scene to '2'
+2026-10-12T14:39:47.1237736Z ENGINE Sending that entity '9873868830894356657' is already in scene to '2'
+2026-10-12T14:39:47.1253555Z ENGINE Sending that entity '17902664282819887097' has spawned in the scene to '2'
+2026-10-12T14:39:47.1266803Z ENGINE Sending that entity '17902664282819887097' is already in scene to '2'
+2026-10-12T14:39:47.1277999Z ENGINE Sending that entity '17662366744651025951' has spawned in the scene to '2'
+2026-10-12T14:39:47.1306708Z ENGINE Sending that entity '17662366744651025951' is already in scene to '2'
+2026-10-12T14:39:47.1306708Z ENGINE Sending that entity '10260495654721680771' has spawned in the scene to '2'
+2026-10-12T14:39:47.1322190Z ENGINE Sending that entity '10260495654721680771' is already in scene to '2'
+2026-10-12T14:39:47.1333043Z ENGINE Sending that entity '12850631871280001875' has spawned in the scene to '2'
+2026-10-12T14:39:47.1333043Z ENGINE Sending that entity '12850631871280001875' is already in scene to '2'
+2026-10-12T14:39:47.1351700Z ENGINE Sending that entity '16093510566042604273' has spawned in the scene to '2'
+2026-10-12T14:39:47.1364968Z ENGINE Sending that entity '16093510566042604273' is already in scene to '2'
+2026-10-12T14:39:47.1364968Z ENGINE Sending that entity '16292493946188462523' has spawned in the scene to '2'
+2026-10-12T14:39:47.1378993Z ENGINE Sending that entity '16292493946188462523' is already in scene to '2'
+2026-10-12T14:39:47.1378993Z ENGINE Sending that entity '12542277341215872033' has spawned in the scene to '2'
+2026-10-12T14:39:47.1393016Z ENGINE Sending that entity '12542277341215872033' is already in scene to '2'
+2026-10-12T14:39:47.1403109Z ENGINE Sending that entity '18015875323034585313' has spawned in the scene to '2'
+2026-10-12T14:39:47.1418235Z ENGINE Sending that entity '18015875323034585313' is already in scene to '2'
+2026-10-12T14:39:47.1430597Z ENGINE Sending that entity '9038138461003165773' is already in scene to '2'
+2026-10-12T14:39:47.1454158Z ENGINE Sending that entity '2683996848053998615' is already in scene to '2'
+2026-10-12T14:39:47.1464745Z ENGINE Sending that entity '10718625529094558645' has spawned in the scene to '2'
+2026-10-12T14:39:47.1464745Z ENGINE Sending that entity '10718625529094558645' is already in scene to '2'
+2026-10-12T14:39:47.1479159Z ENGINE Sending that entity '12834084383081766763' has spawned in the scene to '2'
+2026-10-12T14:39:47.1479159Z ENGINE Sending that entity '12834084383081766763' is already in scene to '2'
+2026-10-12T14:39:47.1492704Z ENGINE Sending that entity '13211034874096575719' has spawned in the scene to '2'
+2026-10-12T14:39:47.1504956Z ENGINE Sending that entity '13211034874096575719' is already in scene to '2'
+2026-10-12T14:39:47.1504956Z ENGINE Sending that entity '14796092997503792387' has spawned in the scene to '2'
+2026-10-12T14:39:47.1515238Z ENGINE Sending that entity '14796092997503792387' is already in scene to '2'
+2026-10-12T14:39:47.1515238Z ENGINE Sending that entity '10133832101620896385' has spawned in the scene to '2'
+2026-10-12T14:39:47.1529279Z ENGINE Sending that entity '10133832101620896385' is already in scene to '2'
+2026-10-12T14:39:47.1540813Z ENGINE Sending that entity '12549434073966298775' has spawned in the scene to '2'
+2026-10-12T14:39:47.1540813Z ENGINE Sending that entity '12549434073966298775' is already in scene to '2'
+2026-10-12T14:39:47.1555878Z ENGINE Sending that entity '15139395741990023723' has spawned in the scene to '2'
+2026-10-12T14:39:47.1566917Z ENGINE Sending that entity '15139395741990023723' is already in scene to '2'
+2026-10-12T14:39:47.1577633Z ENGINE Sending that entity '14981520179507354425' has spawned in the scene to '2'
+2026-10-12T14:39:47.1585872Z ENGINE Sending that entity '14981520179507354425' is already in scene to '2'
+2026-10-12T14:39:47.1595934Z ENGINE Sending that entity '12772859331157040451' has spawned in the scene to '2'
+2026-10-12T14:39:47.1606084Z ENGINE Sending that entity '12772859331157040451' is already in scene to '2'
+2026-10-12T14:39:47.1611225Z ENGINE Sending that entity '10153850209585544951' has spawned in the scene to '2'
+2026-10-12T14:39:47.1622600Z ENGINE Sending that entity '10153850209585544951' is already in scene to '2'
+2026-10-12T14:39:47.1639155Z ENGINE Sending that entity '10563492903526393913' has spawned in the scene to '2'
+2026-10-12T14:39:47.1650519Z ENGINE Sending that entity '10563492903526393913' is already in scene to '2'
+2026-10-12T14:39:47.1715515Z DELAY SNAPSHOT GG_Vengefly visit=9
+2026-10-12T14:39:47.1783079Z PASS both startroom.1
+2026-10-12T14:39:47.1793115Z PASS native sequence room 1.0
+2026-10-12T14:39:47.1821078Z PASS both room.1.0
+2026-10-12T14:39:47.2745241Z ENGINE Received EntitySpawn from 3, with entity 10478484845723379081, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.2745241Z ENGINE Received EntitySpawn from 3, with entity 13855907399574351867, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.2903202Z ENGINE WARN Spawn deferred: 10478484845723379081, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.2914922Z ENGINE WARN Spawn deferred: 13855907399574351867, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.2914922Z ENGINE Received EntitySpawn from 3, with entity 13905883017094709937, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3075354Z ENGINE WARN Spawn deferred: 13905883017094709937, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.3089604Z ENGINE Received EntitySpawn from 3, with entity 15967592869259408817, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3102868Z ENGINE Received EntitySpawn from 3, with entity 12975837530137965745, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3245718Z ENGINE WARN Spawn deferred: 15967592869259408817, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.3256698Z ENGINE Received EntitySpawn from 3, with entity 14770923700453087365, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3256698Z ENGINE WARN Spawn deferred: 12975837530137965745, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.3425748Z ENGINE Received EntitySpawn from 3, with entity 18367193796440624763, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3438271Z ENGINE WARN Spawn deferred: 14770923700453087365, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.3606878Z ENGINE Received EntitySpawn from 3, with entity 16598835330836340313, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3606878Z ENGINE WARN Spawn deferred: 18367193796440624763, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.3760313Z ENGINE WARN Spawn deferred: 16598835330836340313, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.3775253Z ENGINE Received EntitySpawn from 3, with entity 10716061996015178043, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3944372Z ENGINE Received EntitySpawn from 3, with entity 16474371312767030471, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.3954426Z ENGINE WARN Spawn deferred: 10716061996015178043, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.3954426Z ENGINE Received EntitySpawn from 3, with entity 17565086436932825659, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.4123874Z ENGINE WARN Spawn deferred: 16474371312767030471, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.4137684Z ENGINE WARN Spawn deferred: 17565086436932825659, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.4286859Z ENGINE Received EntitySpawn from 3, with entity 14887951963720540255, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.4454569Z ENGINE Received EntitySpawn from 3, with entity 9570231995689458351, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.4454569Z ENGINE WARN Spawn deferred: 14887951963720540255, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.4621379Z ENGINE Received EntitySpawn from 3, with entity 17139023611647374825, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.4636481Z ENGINE Received EntitySpawn from 3, with entity 14836881397250375761, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.4641622Z ENGINE WARN Spawn deferred: 9570231995689458351, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.4801961Z ENGINE Received EntitySpawn from 3, with entity 15211137398774009017, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.4807088Z ENGINE WARN Spawn deferred: 17139023611647374825, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.4817286Z ENGINE WARN Spawn deferred: 14836881397250375761, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.4967576Z ENGINE Received EntitySpawn from 3, with entity 17445588200438617309, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.4999735Z ENGINE WARN Spawn deferred: 15211137398774009017, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5139095Z ENGINE Received EntitySpawn from 3, with entity 9876130305720656153, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5153285Z ENGINE WARN Spawn deferred: 17445588200438617309, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5163346Z ENGINE Received EntitySpawn from 3, with entity 13920761614655584165, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5308203Z ENGINE Received EntitySpawn from 3, with entity 16778450229890065801, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5323280Z ENGINE WARN Spawn deferred: 9876130305720656153, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5323280Z ENGINE WARN Spawn deferred: 13920761614655584165, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5476390Z ENGINE Received EntitySpawn from 3, with entity 11102195025338893339, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5489996Z ENGINE WARN Spawn deferred: 16778450229890065801, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5641370Z ENGINE Received EntitySpawn from 3, with entity 16399437300738724305, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5655910Z ENGINE WARN Spawn deferred: 11102195025338893339, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5666192Z ENGINE Received EntitySpawn from 3, with entity 17952413462642366493, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5825785Z ENGINE Received EntitySpawn from 3, with entity 13573682819962801229, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5836818Z ENGINE WARN Spawn deferred: 16399437300738724305, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5841860Z ENGINE WARN Spawn deferred: 17952413462642366493, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.5996372Z ENGINE Received EntitySpawn from 3, with entity 15705866737531955253, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.5996372Z ENGINE WARN Spawn deferred: 13573682819962801229, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.6162561Z ENGINE Received EntitySpawn from 3, with entity 13478492570470407707, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.6162561Z ENGINE Received EntitySpawn from 3, with entity 17240829056500022085, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.6177053Z ENGINE WARN Spawn deferred: 15705866737531955253, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.6325575Z ENGINE Received EntitySpawn from 3, with entity 17530540312208622075, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.6340327Z ENGINE WARN Spawn deferred: 13478492570470407707, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.6340327Z ENGINE WARN Spawn deferred: 17240829056500022085, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.6504319Z ENGINE Received EntitySpawn from 3, with entity 13713467656600212693, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.6595727Z ENGINE WARN Spawn deferred: 17530540312208622075, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.6595727Z ENGINE Received EntitySpawn from 3, with entity 9942145252624107437, VengeflyKing, VengeflySummon
+2026-10-12T14:39:47.6669039Z ENGINE WARN Spawn deferred: 13713467656600212693, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:47.6679247Z ENGINE WARN Spawn deferred: 9942145252624107437, source 2683996848053998615, Big Buzzer/Set GG/0, VengeflySummon
+2026-10-12T14:39:50.1734187Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:50.1734187Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:39:50.1744644Z ENGINE Player 3 entered scene
+2026-10-12T14:39:50.6554871Z PASS room authority 1.0
+2026-10-12T14:39:53.6600732Z PASS early room-level updates drained 1.0
+2026-10-12T14:39:53.6605780Z ROOM 1.0 scene=GG_Vengefly visit=9 authority=False hero=(45.2, 13.4, 0.0) camera=(46.2, 15.9, -38.1) mode=LOCKED
+2026-10-12T14:39:53.6611030Z ENTITY 2683996848053998615 VengeflyKing key=GG_Vengefly/Giant%20Buzzer%20Col#0:VengeflyKing:Big Buzzer host=False replica=True pos=(57.0, 16.2, 0.0) render=Giant Buzzer Col(Clone)/True/off=False,Corpse Giant Buzzer Col(Clone)/True/off=False,Corpse Giant Buzzer Col(Clone)/True/off=False state=Big Buzzer=
+2026-10-12T14:39:53.6621102Z ENTITY 9038138461003165773 CameraLockArea key=GG_Vengefly/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=False replica=True pos=(46.8, 17.9, 0.0) render= state=
+2026-10-12T14:39:53.6631925Z ENTITY 15458220616909240025 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#0:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6645730Z ENTITY 11502806750921411993 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#1:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6651507Z ENTITY 18255558836519245603 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#2:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6661601Z ENTITY 14166134627067555111 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#3:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6704765Z ENTITY 15928950020807598379 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#4:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6710152Z ENTITY 13773203484600444529 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#5:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6723405Z ENTITY 11096849697508886513 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#6:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6733476Z ENTITY 11134905641242384561 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#7:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6733476Z ENTITY 11637555217634625831 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#8:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6743551Z ENTITY 13502316710975428149 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#9:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6743551Z ENTITY 9873868830894356657 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#10:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6755251Z ENTITY 17902664282819887097 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#11:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6766817Z ENTITY 17662366744651025951 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#12:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6766817Z ENTITY 10260495654721680771 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#13:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6777012Z ENTITY 12850631871280001875 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#14:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6777012Z ENTITY 16093510566042604273 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#15:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6787038Z ENTITY 16292493946188462523 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#16:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6792108Z ENTITY 12542277341215872033 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#17:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6802164Z ENTITY 18015875323034585313 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#18:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6807266Z ENTITY 10718625529094558645 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#19:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6807266Z ENTITY 12834084383081766763 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#20:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6821721Z ENTITY 13211034874096575719 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#21:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6833252Z ENTITY 14796092997503792387 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#22:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6833252Z ENTITY 10133832101620896385 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#23:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6843402Z ENTITY 12549434073966298775 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#24:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6843402Z ENTITY 15139395741990023723 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#25:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6854175Z ENTITY 14981520179507354425 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#26:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6864594Z ENTITY 12772859331157040451 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#27:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6874692Z ENTITY 10153850209585544951 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#28:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6884706Z ENTITY 10563492903526393913 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#29:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6884706Z ENTITY 10478484845723379081 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#30:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6895471Z ENTITY 13855907399574351867 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#31:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6905494Z ENTITY 13905883017094709937 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#32:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6905494Z ENTITY 15967592869259408817 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#33:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6920020Z ENTITY 12975837530137965745 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#34:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6931461Z ENTITY 14770923700453087365 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#35:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6941493Z ENTITY 18367193796440624763 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#36:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6946544Z ENTITY 16598835330836340313 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#37:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6967017Z ENTITY 10716061996015178043 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#38:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.6983002Z ENTITY 16474371312767030471 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#39:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7003205Z ENTITY 17565086436932825659 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#40:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7008246Z ENTITY 14887951963720540255 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#41:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7008246Z ENTITY 9570231995689458351 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#42:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7022481Z ENTITY 17139023611647374825 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#43:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7022481Z ENTITY 14836881397250375761 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#44:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7047911Z ENTITY 15211137398774009017 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#45:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7071732Z ENTITY 17445588200438617309 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#46:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7086813Z ENTITY 9876130305720656153 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#47:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7101900Z ENTITY 13920761614655584165 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#48:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7107075Z ENTITY 16778450229890065801 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#49:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7118574Z ENTITY 11102195025338893339 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#50:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7118574Z ENTITY 16399437300738724305 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#51:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7128621Z ENTITY 17952413462642366493 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#52:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7128621Z ENTITY 13573682819962801229 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#53:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7138644Z ENTITY 15705866737531955253 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#54:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7151583Z ENTITY 13478492570470407707 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#55:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7166065Z ENTITY 17240829056500022085 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#56:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7166065Z ENTITY 17530540312208622075 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#57:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7181125Z ENTITY 13713467656600212693 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#58:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7193235Z ENTITY 9942145252624107437 VengeflySummon key=GG_Vengefly/Buzzer%20Summon%28Clone%29#59:VengeflySummon: host=False replica=False pos=(55.5, 25.0, 17.0) render=Buzzer Summon(Clone)(Clone)/True/off=False state=
+2026-10-12T14:39:53.7203487Z PASS camera authority state 1.0
+2026-10-12T14:39:53.7218029Z PASS camera lock state converges 1.0
+2026-10-12T14:39:53.7218029Z PASS visible bosses/knight and unfrozen camera 1.0
+2026-10-12T14:39:53.7232968Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:39:53.7243472Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:39:53.7255417Z ENGINE Player 3 entered scene
+2026-10-12T14:39:53.7270486Z PASS duplicate initial snapshot does not reset boss 1.0
+2026-10-12T14:39:53.7270486Z ENGINE Player 3 left scene
+2026-10-12T14:39:53.7280496Z ENGINE Received PlayerConnect data for ID: 3
+2026-10-12T14:39:53.7280496Z PASS stale room/peer leave and duplicate connect preserve avatar 1.0
+2026-10-12T14:39:53.7305043Z PASS both checked.1.0
+2026-10-12T14:39:53.7377079Z PASS damage published 1.0
+2026-10-12T14:39:53.7666997Z PASS same boss HP 1.0
+2026-10-12T14:39:53.7683286Z PASS both hpchecked.1.0
+2026-10-12T14:39:53.7688347Z PASS stationary teammate latest position survives delayed snapshot
+2026-10-12T14:39:53.7768945Z PASS both anchor.1
+2026-10-12T14:39:53.7924147Z ENGINE Boss room completion relayed: GG_Vengefly
+2026-10-12T14:40:01.7865939Z ENGINE Handling player leave scene (dc: False) for ID 3, left scene: GG_Vengefly
+2026-10-12T14:40:01.7865939Z ENGINE Sending leave scene packet to 2
+2026-10-12T14:40:01.7898117Z ENGINE Sending that entity '15705866737531955253' has spawned in the scene to '2'
+2026-10-12T14:40:01.7920542Z ENGINE Sending that entity '15705866737531955253' is already in scene to '2'
+2026-10-12T14:40:01.7931789Z ENGINE Sending that entity '17565086436932825659' has spawned in the scene to '2'
+2026-10-12T14:40:01.7931789Z ENGINE Sending that entity '17565086436932825659' is already in scene to '2'
+2026-10-12T14:40:01.7943945Z ENGINE Sending that entity '15458220616909240025' has spawned in the scene to '2'
+2026-10-12T14:40:01.7956672Z ENGINE Sending that entity '15458220616909240025' is already in scene to '2'
+2026-10-12T14:40:01.7956672Z ENGINE Sending that entity '11502806750921411993' has spawned in the scene to '2'
+2026-10-12T14:40:01.7966788Z ENGINE Sending that entity '11502806750921411993' is already in scene to '2'
+2026-10-12T14:40:01.7977040Z ENGINE Sending that entity '17139023611647374825' has spawned in the scene to '2'
+2026-10-12T14:40:01.7990441Z ENGINE Sending that entity '17139023611647374825' is already in scene to '2'
+2026-10-12T14:40:01.7990441Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:40:01.8005978Z ENGINE Sending that entity '14836881397250375761' has spawned in the scene to '2'
+2026-10-12T14:40:01.8016407Z ENGINE Sending that entity '14836881397250375761' is already in scene to '2'
+2026-10-12T14:40:01.8016407Z ENGINE Sending that entity '18367193796440624763' has spawned in the scene to '2'
+2026-10-12T14:40:01.8042096Z ENGINE Sending that entity '18367193796440624763' is already in scene to '2'
+2026-10-12T14:40:01.8047155Z ENGINE Sending that entity '18255558836519245603' has spawned in the scene to '2'
+2026-10-12T14:40:01.8062904Z ENGINE Sending that entity '18255558836519245603' is already in scene to '2'
+2026-10-12T14:40:01.8073195Z ENGINE Sending that entity '14166134627067555111' has spawned in the scene to '2'
+2026-10-12T14:40:01.8073195Z ENGINE Sending that entity '14166134627067555111' is already in scene to '2'
+2026-10-12T14:40:01.8090938Z ENGINE Sending that entity '15211137398774009017' has spawned in the scene to '2'
+2026-10-12T14:40:01.8090938Z ENGINE Sending that entity '15211137398774009017' is already in scene to '2'
+2026-10-12T14:40:01.8110156Z ENGINE Sending that entity '15928950020807598379' has spawned in the scene to '2'
+2026-10-12T14:40:01.8115280Z ENGINE Sending that entity '15928950020807598379' is already in scene to '2'
+2026-10-12T14:40:01.8127793Z ENGINE Sending that entity '13773203484600444529' has spawned in the scene to '2'
+2026-10-12T14:40:01.8140244Z ENGINE Sending that entity '13773203484600444529' is already in scene to '2'
+2026-10-12T14:40:01.8155109Z ENGINE Sending that entity '9570231995689458351' has spawned in the scene to '2'
+2026-10-12T14:40:01.8155109Z ENGINE Sending that entity '9570231995689458351' is already in scene to '2'
+2026-10-12T14:40:01.8165173Z ENGINE Sending that entity '16399437300738724305' has spawned in the scene to '2'
+2026-10-12T14:40:01.8180470Z ENGINE Sending that entity '16399437300738724305' is already in scene to '2'
+2026-10-12T14:40:01.8180470Z ENGINE Sending that entity '11096849697508886513' has spawned in the scene to '2'
+2026-10-12T14:40:01.8191822Z ENGINE Sending that entity '11096849697508886513' is already in scene to '2'
+2026-10-12T14:40:01.8191822Z ENGINE Sending that entity '13713467656600212693' has spawned in the scene to '2'
+2026-10-12T14:40:01.8205445Z ENGINE Sending that entity '13713467656600212693' is already in scene to '2'
+2026-10-12T14:40:01.8215453Z ENGINE Sending that entity '11134905641242384561' has spawned in the scene to '2'
+2026-10-12T14:40:01.8215453Z ENGINE Sending that entity '11134905641242384561' is already in scene to '2'
+2026-10-12T14:40:01.8229171Z ENGINE Sending that entity '13478492570470407707' has spawned in the scene to '2'
+2026-10-12T14:40:01.8242279Z ENGINE Sending that entity '13478492570470407707' is already in scene to '2'
+2026-10-12T14:40:01.8242279Z ENGINE Sending that entity '11102195025338893339' has spawned in the scene to '2'
+2026-10-12T14:40:01.8257280Z ENGINE Sending that entity '11102195025338893339' is already in scene to '2'
+2026-10-12T14:40:01.8262322Z ENGINE Sending that entity '11637555217634625831' has spawned in the scene to '2'
+2026-10-12T14:40:01.8276948Z ENGINE Sending that entity '11637555217634625831' is already in scene to '2'
+2026-10-12T14:40:01.8287696Z ENGINE Sending that entity '13502316710975428149' has spawned in the scene to '2'
+2026-10-12T14:40:01.8314774Z ENGINE Sending that entity '13502316710975428149' is already in scene to '2'
+2026-10-12T14:40:01.8335040Z ENGINE Sending that entity '13573682819962801229' has spawned in the scene to '2'
+2026-10-12T14:40:01.8335040Z ENGINE Sending that entity '13573682819962801229' is already in scene to '2'
+2026-10-12T14:40:01.8347537Z ENGINE Sending that entity '16778450229890065801' has spawned in the scene to '2'
+2026-10-12T14:40:01.8347537Z ENGINE Sending that entity '16778450229890065801' is already in scene to '2'
+2026-10-12T14:40:01.8347537Z ENGINE Sending that entity '17445588200438617309' has spawned in the scene to '2'
+2026-10-12T14:40:01.8362600Z ENGINE Sending that entity '17445588200438617309' is already in scene to '2'
+2026-10-12T14:40:01.8376458Z ENGINE Sending that entity '9873868830894356657' has spawned in the scene to '2'
+2026-10-12T14:40:01.8376458Z ENGINE Sending that entity '9873868830894356657' is already in scene to '2'
+2026-10-12T14:40:01.8391423Z ENGINE Sending that entity '15967592869259408817' has spawned in the scene to '2'
+2026-10-12T14:40:01.8406454Z ENGINE Sending that entity '15967592869259408817' is already in scene to '2'
+2026-10-12T14:40:01.8411766Z ENGINE Sending that entity '17240829056500022085' has spawned in the scene to '2'
+2026-10-12T14:40:01.8411766Z ENGINE Sending that entity '17240829056500022085' is already in scene to '2'
+2026-10-12T14:40:01.8435247Z ENGINE Sending that entity '10478484845723379081' has spawned in the scene to '2'
+2026-10-12T14:40:01.8435247Z ENGINE Sending that entity '10478484845723379081' is already in scene to '2'
+2026-10-12T14:40:01.8460064Z ENGINE Sending that entity '17902664282819887097' has spawned in the scene to '2'
+2026-10-12T14:40:01.8482077Z ENGINE Sending that entity '17902664282819887097' is already in scene to '2'
+2026-10-12T14:40:01.8492535Z ENGINE Sending that entity '17952413462642366493' has spawned in the scene to '2'
+2026-10-12T14:40:01.8502574Z ENGINE Sending that entity '17952413462642366493' is already in scene to '2'
+2026-10-12T14:40:01.8518121Z ENGINE Sending that entity '17662366744651025951' has spawned in the scene to '2'
+2026-10-12T14:40:01.8518121Z ENGINE Sending that entity '17662366744651025951' is already in scene to '2'
+2026-10-12T14:40:01.8532245Z ENGINE Sending that entity '10260495654721680771' has spawned in the scene to '2'
+2026-10-12T14:40:01.8543134Z ENGINE Sending that entity '10260495654721680771' is already in scene to '2'
+2026-10-12T14:40:01.8560239Z ENGINE Sending that entity '12850631871280001875' has spawned in the scene to '2'
+2026-10-12T14:40:01.8560239Z ENGINE Sending that entity '12850631871280001875' is already in scene to '2'
+2026-10-12T14:40:01.8575073Z ENGINE Sending that entity '16093510566042604273' has spawned in the scene to '2'
+2026-10-12T14:40:01.8588167Z ENGINE Sending that entity '16093510566042604273' is already in scene to '2'
+2026-10-12T14:40:01.8603264Z ENGINE Sending that entity '13920761614655584165' has spawned in the scene to '2'
+2026-10-12T14:40:01.8626834Z ENGINE Sending that entity '13920761614655584165' is already in scene to '2'
+2026-10-12T14:40:01.8626834Z ENGINE Sending that entity '16292493946188462523' has spawned in the scene to '2'
+2026-10-12T14:40:01.8640910Z ENGINE Sending that entity '16292493946188462523' is already in scene to '2'
+2026-10-12T14:40:01.8640910Z ENGINE Sending that entity '14887951963720540255' has spawned in the scene to '2'
+2026-10-12T14:40:01.8640910Z ENGINE Sending that entity '14887951963720540255' is already in scene to '2'
+2026-10-12T14:40:01.8664167Z ENGINE Sending that entity '12542277341215872033' has spawned in the scene to '2'
+2026-10-12T14:40:01.8664167Z ENGINE Sending that entity '12542277341215872033' is already in scene to '2'
+2026-10-12T14:40:01.8679298Z ENGINE Sending that entity '18015875323034585313' has spawned in the scene to '2'
+2026-10-12T14:40:01.8679298Z ENGINE Sending that entity '18015875323034585313' is already in scene to '2'
+2026-10-12T14:40:01.8698724Z ENGINE Sending that entity '9038138461003165773' is already in scene to '2'
+2026-10-12T14:40:01.8703872Z ENGINE Sending that entity '16598835330836340313' has spawned in the scene to '2'
+2026-10-12T14:40:01.8718623Z ENGINE Sending that entity '16598835330836340313' is already in scene to '2'
+2026-10-12T14:40:01.8730371Z ENGINE Sending that entity '12975837530137965745' has spawned in the scene to '2'
+2026-10-12T14:40:01.8730371Z ENGINE Sending that entity '12975837530137965745' is already in scene to '2'
+2026-10-12T14:40:01.8750369Z ENGINE Sending that entity '2683996848053998615' is already in scene to '2'
+2026-10-12T14:40:01.8760446Z ENGINE Sending that entity '10718625529094558645' has spawned in the scene to '2'
+2026-10-12T14:40:01.8772565Z ENGINE Sending that entity '10718625529094558645' is already in scene to '2'
+2026-10-12T14:40:01.8782613Z ENGINE Sending that entity '12834084383081766763' has spawned in the scene to '2'
+2026-10-12T14:40:01.8782613Z ENGINE Sending that entity '12834084383081766763' is already in scene to '2'
+2026-10-12T14:40:01.8802894Z ENGINE Sending that entity '9942145252624107437' has spawned in the scene to '2'
+2026-10-12T14:40:01.8802894Z ENGINE Sending that entity '9942145252624107437' is already in scene to '2'
+2026-10-12T14:40:01.8812964Z ENGINE Sending that entity '13211034874096575719' has spawned in the scene to '2'
+2026-10-12T14:40:01.8823489Z ENGINE Sending that entity '13211034874096575719' is already in scene to '2'
+2026-10-12T14:40:01.8837486Z ENGINE Sending that entity '14796092997503792387' has spawned in the scene to '2'
+2026-10-12T14:40:01.8866587Z ENGINE Sending that entity '14796092997503792387' is already in scene to '2'
+2026-10-12T14:40:01.8866587Z ENGINE Sending that entity '17530540312208622075' has spawned in the scene to '2'
+2026-10-12T14:40:01.8880766Z ENGINE Sending that entity '17530540312208622075' is already in scene to '2'
+2026-10-12T14:40:01.8880766Z ENGINE Sending that entity '9876130305720656153' has spawned in the scene to '2'
+2026-10-12T14:40:01.8901067Z ENGINE Sending that entity '9876130305720656153' is already in scene to '2'
+2026-10-12T14:40:01.8906233Z ENGINE Sending that entity '10133832101620896385' has spawned in the scene to '2'
+2026-10-12T14:40:01.8916378Z ENGINE Sending that entity '10133832101620896385' is already in scene to '2'
+2026-10-12T14:40:01.8916378Z ENGINE Sending that entity '12549434073966298775' has spawned in the scene to '2'
+2026-10-12T14:40:01.8930165Z ENGINE Sending that entity '12549434073966298775' is already in scene to '2'
+2026-10-12T14:40:01.8930165Z ENGINE Sending that entity '14770923700453087365' has spawned in the scene to '2'
+2026-10-12T14:40:01.8944601Z ENGINE Sending that entity '14770923700453087365' is already in scene to '2'
+2026-10-12T14:40:01.8954657Z ENGINE Sending that entity '15139395741990023723' has spawned in the scene to '2'
+2026-10-12T14:40:01.8966408Z ENGINE Sending that entity '15139395741990023723' is already in scene to '2'
+2026-10-12T14:40:01.8976427Z ENGINE Sending that entity '14981520179507354425' has spawned in the scene to '2'
+2026-10-12T14:40:01.8976427Z ENGINE Sending that entity '14981520179507354425' is already in scene to '2'
+2026-10-12T14:40:01.8991529Z ENGINE Sending that entity '13855907399574351867' has spawned in the scene to '2'
+2026-10-12T14:40:01.9005541Z ENGINE Sending that entity '13855907399574351867' is already in scene to '2'
+2026-10-12T14:40:01.9031087Z ENGINE Sending that entity '16474371312767030471' has spawned in the scene to '2'
+2026-10-12T14:40:01.9031087Z ENGINE Sending that entity '16474371312767030471' is already in scene to '2'
+2026-10-12T14:40:01.9042236Z ENGINE Sending that entity '12772859331157040451' has spawned in the scene to '2'
+2026-10-12T14:40:01.9052293Z ENGINE Sending that entity '12772859331157040451' is already in scene to '2'
+2026-10-12T14:40:01.9052293Z ENGINE Sending that entity '10153850209585544951' has spawned in the scene to '2'
+2026-10-12T14:40:01.9066891Z ENGINE Sending that entity '10153850209585544951' is already in scene to '2'
+2026-10-12T14:40:01.9076970Z ENGINE Sending that entity '13905883017094709937' has spawned in the scene to '2'
+2026-10-12T14:40:01.9076970Z ENGINE Sending that entity '13905883017094709937' is already in scene to '2'
+2026-10-12T14:40:01.9086986Z ENGINE Sending that entity '10563492903526393913' has spawned in the scene to '2'
+2026-10-12T14:40:01.9102772Z ENGINE Sending that entity '10563492903526393913' is already in scene to '2'
+2026-10-12T14:40:01.9117243Z ENGINE Sending that entity '10716061996015178043' has spawned in the scene to '2'
+2026-10-12T14:40:01.9128381Z ENGINE Sending that entity '10716061996015178043' is already in scene to '2'
+2026-10-12T14:40:01.9143319Z ENGINE   2 has become scene host
+2026-10-12T14:40:01.9231584Z ENGINE Player 3 left scene
+2026-10-12T14:40:01.9242066Z ENGINE Received scene host transfer for scene: GG_Vengefly
+2026-10-12T14:40:01.9251984Z ENGINE WARN Cannot update position for entity (2683996848053998615, VengeflyKing), client or host object is null
+2026-10-12T14:40:01.9283042Z ENGINE WARN Entity (2683996848053998615, VengeflyKing) could not update active, because client object is null
+2026-10-12T14:40:01.9547077Z ENGINE Received EnterScene data from (3, retryguest), new scene: GG_Gruz_Mother
+2026-10-12T14:40:10.4407115Z PASS teammate fights next boss 1.0
+2026-10-12T14:40:18.1380479Z ENGINE Scene changed from GG_Vengefly to GG_Gruz_Mother
+2026-10-12T14:40:18.2486988Z ENGINE Handling player leave scene (dc: False) for ID 2, left scene: GG_Vengefly
+2026-10-12T14:40:18.2656977Z PASS native sequence room 1.1
+2026-10-12T14:40:18.2656977Z ENGINE Received EnterScene data from (2, retryhost), new scene: GG_Gruz_Mother
+2026-10-12T14:40:18.2672050Z PASS both room.1.1
+2026-10-12T14:40:18.2672050Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:40:18.2682220Z ENGINE Sending that entity '3103033005459923505' is already in scene to '2'
+2026-10-12T14:40:18.2693235Z ENGINE Sending that entity '6506528302334920627' is already in scene to '2'
+2026-10-12T14:40:18.2841057Z DELAY SNAPSHOT GG_Gruz_Mother visit=10
+2026-10-12T14:40:21.2860149Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:40:21.2870250Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:40:21.2882254Z ENGINE Player 3 entered scene
+2026-10-12T14:40:21.2931775Z PASS room authority 1.1
+2026-10-12T14:40:24.2960141Z PASS early room-level updates drained 1.1
+2026-10-12T14:40:24.2975212Z ROOM 1.1 scene=GG_Gruz_Mother visit=10 authority=False hero=(87.1, 15.4, 0.0) camera=(94.2, 20.1, -38.1) mode=LOCKED
+2026-10-12T14:40:24.2990430Z ENTITY 6506528302334920627 CameraLockArea key=GG_Gruz_Mother/_Camera%20Lock%20Zones#0/CameraLockArea#0:CameraLockArea: host=False replica=True pos=(94.2, 20.6, 0.0) render= state=
+2026-10-12T14:40:24.3005518Z ENTITY 3103033005459923505 GruzMother key=GG_Gruz_Mother/_Enemies#0/Giant%20Fly#0:GruzMother:Big Fly Control|bouncer_control host=False replica=True pos=(88.7, 23.7, 0.0) render=Giant Fly(Clone)/True/off=False,Corpse Big Fly 1(Clone)/True/off=False,Corpse Big Fly 1(Clone)/True/off=False state=Big Fly Control=,bouncer_control=
+2026-10-12T14:40:24.3017409Z PASS camera authority state 1.1
+2026-10-12T14:40:24.3030050Z PASS camera lock state converges 1.1
+2026-10-12T14:40:24.3040126Z PASS visible bosses/knight and unfrozen camera 1.1
+2026-10-12T14:40:24.3050192Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:40:24.3064084Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:40:24.3074145Z ENGINE Player 3 entered scene
+2026-10-12T14:40:24.3074145Z PASS duplicate initial snapshot does not reset boss 1.1
+2026-10-12T14:40:24.3084469Z ENGINE Player 3 left scene
+2026-10-12T14:40:24.3099649Z ENGINE Received PlayerConnect data for ID: 3
+2026-10-12T14:40:24.3105008Z PASS stale room/peer leave and duplicate connect preserve avatar 1.1
+2026-10-12T14:40:24.3225945Z PASS both checked.1.1
+2026-10-12T14:40:24.3290031Z PASS damage published 1.1
+2026-10-12T14:40:24.3531422Z PASS same boss HP 1.1
+2026-10-12T14:40:24.3554111Z PASS both hpchecked.1.1
+2026-10-12T14:40:24.3652032Z ENGINE Boss room completion relayed: GG_Gruz_Mother
+2026-10-12T14:40:24.3869494Z ENGINE WARN Entity (3103033005459923505, GruzMother) could not update active, because client object is null
+2026-10-12T14:40:32.1626188Z ENGINE Handling player leave scene (dc: False) for ID 3, left scene: GG_Gruz_Mother
+2026-10-12T14:40:32.1626188Z ENGINE Sending leave scene packet to 2
+2026-10-12T14:40:32.1641275Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:40:32.1641275Z ENGINE Sending that entity '3103033005459923505' is already in scene to '2'
+2026-10-12T14:40:32.1652478Z ENGINE Sending that entity '6506528302334920627' is already in scene to '2'
+2026-10-12T14:40:32.1652478Z ENGINE   2 has become scene host
+2026-10-12T14:40:32.1722969Z ENGINE Player 3 left scene
+2026-10-12T14:40:32.1722969Z ENGINE Received scene host transfer for scene: GG_Gruz_Mother
+2026-10-12T14:40:32.1738170Z ENGINE WARN Cannot update position for entity (3103033005459923505, GruzMother), client or host object is null
+2026-10-12T14:40:32.1758408Z ENGINE WARN Cannot update scale for entity (3103033005459923505, GruzMother), client object is null
+2026-10-12T14:40:32.1768435Z ENGINE WARN Entity (3103033005459923505, GruzMother) could not update active, because client object is null
+2026-10-12T14:40:32.1956288Z ENGINE Received EnterScene data from (3, retryguest), new scene: GG_False_Knight
+2026-10-12T14:40:40.3976462Z PASS teammate fights next boss 1.1
+2026-10-12T14:40:42.4794013Z ENGINE Received EntitySpawn from 3, with entity 10857809926956845269, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.4804110Z ENGINE Received EntitySpawn from 3, with entity 9232440798356807485, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.4816349Z ENGINE Received EntitySpawn from 3, with entity 9514104393490319541, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5675396Z ENGINE Received EntitySpawn from 3, with entity 9270810897638635207, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5680452Z ENGINE Received EntitySpawn from 3, with entity 17446350083413011187, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5829400Z ENGINE Received EntitySpawn from 3, with entity 11207985737369208867, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5829400Z ENGINE Received EntitySpawn from 3, with entity 10359379083875665935, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5842548Z ENGINE Received EntitySpawn from 3, with entity 12293684933125177091, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5847673Z ENGINE Received EntitySpawn from 3, with entity 10016720171406767355, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5852735Z ENGINE Received EntitySpawn from 3, with entity 11655611478392634395, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5857844Z ENGINE Received EntitySpawn from 3, with entity 16943768072091423673, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5871476Z ENGINE Received EntitySpawn from 3, with entity 14613107979519992105, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5871476Z ENGINE Received EntitySpawn from 3, with entity 16609893913584466195, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.5885676Z ENGINE Received EntitySpawn from 3, with entity 12900067841197859137, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6004130Z ENGINE Received EntitySpawn from 3, with entity 12021824658789049401, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6016461Z ENGINE Received EntitySpawn from 3, with entity 14683797792919983819, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6030157Z ENGINE Received EntitySpawn from 3, with entity 11581518317013049379, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6680832Z ENGINE Received EntitySpawn from 3, with entity 15417906893806953859, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6680832Z ENGINE Received EntitySpawn from 3, with entity 15907208120357754769, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6857433Z ENGINE Received EntitySpawn from 3, with entity 12736183971868739031, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6857433Z ENGINE Received EntitySpawn from 3, with entity 15809189326760911529, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6867591Z ENGINE Received EntitySpawn from 3, with entity 14481602940370255245, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6867591Z ENGINE Received EntitySpawn from 3, with entity 12377246204482721239, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6882283Z ENGINE Received EntitySpawn from 3, with entity 15239159519182367419, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6893493Z ENGINE Received EntitySpawn from 3, with entity 12072183999714568929, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.6903495Z ENGINE Received EntitySpawn from 3, with entity 10420311973336947585, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7717182Z ENGINE Received EntitySpawn from 3, with entity 16302397552667456725, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7722258Z ENGINE Received EntitySpawn from 3, with entity 13054787533475257315, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7884726Z ENGINE Received EntitySpawn from 3, with entity 17066316409409598431, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7907011Z ENGINE Received EntitySpawn from 3, with entity 11646816024816504109, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7922073Z ENGINE Received EntitySpawn from 3, with entity 12754289362751200213, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7929063Z ENGINE Received EntitySpawn from 3, with entity 12131220931340311511, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7929063Z ENGINE Received EntitySpawn from 3, with entity 16154067734912077389, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7939342Z ENGINE Received EntitySpawn from 3, with entity 9900157137755512179, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7949737Z ENGINE Received EntitySpawn from 3, with entity 16390468397841970613, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7960058Z ENGINE Received EntitySpawn from 3, with entity 11289291256296719959, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7960058Z ENGINE Received EntitySpawn from 3, with entity 17562097788419433619, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.7970887Z ENGINE Received EntitySpawn from 3, with entity 14526007188065330895, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8907039Z ENGINE Received EntitySpawn from 3, with entity 11677140993986216241, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8907039Z ENGINE Received EntitySpawn from 3, with entity 11625532945524206285, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8920147Z ENGINE Received EntitySpawn from 3, with entity 17994751030444570351, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8920147Z ENGINE Received EntitySpawn from 3, with entity 16078599665471041597, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8932798Z ENGINE Received EntitySpawn from 3, with entity 14768108694915944185, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8961854Z ENGINE Received EntitySpawn from 3, with entity 12133535426135992937, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8976958Z ENGINE Received EntitySpawn from 3, with entity 17117629047390202531, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.8987163Z ENGINE Received EntitySpawn from 3, with entity 16049130720230596093, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9003266Z ENGINE Received EntitySpawn from 3, with entity 18121742109712533239, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9008374Z ENGINE Received EntitySpawn from 3, with entity 11065989835730329391, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9019004Z ENGINE Received EntitySpawn from 3, with entity 18107479221502718173, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9091617Z ENGINE Received EntitySpawn from 3, with entity 14142929810748709701, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9923307Z ENGINE Received EntitySpawn from 3, with entity 16854136300459251737, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9938214Z ENGINE Received EntitySpawn from 3, with entity 14705949491182801107, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9948287Z ENGINE Received EntitySpawn from 3, with entity 12578839440477002489, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9962457Z ENGINE Received EntitySpawn from 3, with entity 16361318837077788209, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9972525Z ENGINE Received EntitySpawn from 3, with entity 13945181422300204047, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9972525Z ENGINE Received EntitySpawn from 3, with entity 9805378005753786103, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9987100Z ENGINE Received EntitySpawn from 3, with entity 16025744505735585601, FalseKnight, DynamicHazard
+2026-10-12T14:40:42.9987100Z ENGINE Received EntitySpawn from 3, with entity 16805277560759979289, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0002208Z ENGINE Received EntitySpawn from 3, with entity 13785789969966145199, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0118455Z ENGINE Received EntitySpawn from 3, with entity 10064496956096925395, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0118455Z ENGINE Received EntitySpawn from 3, with entity 12821366434836799385, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0953919Z ENGINE Received EntitySpawn from 3, with entity 14719163604222534329, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0953919Z ENGINE Received EntitySpawn from 3, with entity 18117309150998547595, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0968859Z ENGINE Received EntitySpawn from 3, with entity 11999614571370258303, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0968859Z ENGINE Received EntitySpawn from 3, with entity 9530703773180093461, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0978945Z ENGINE Received EntitySpawn from 3, with entity 14593133045724062827, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0978945Z ENGINE Received EntitySpawn from 3, with entity 9346700536818625855, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.0988989Z ENGINE Received EntitySpawn from 3, with entity 17418674408675058075, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.1006533Z ENGINE Received EntitySpawn from 3, with entity 10764464184920084057, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.1124264Z ENGINE Received EntitySpawn from 3, with entity 10370078265964324779, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.1144153Z ENGINE Received EntitySpawn from 3, with entity 13807738866232966155, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.1144153Z ENGINE Received EntitySpawn from 3, with entity 13210412692894122469, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.1891973Z ENGINE Received EntitySpawn from 3, with entity 17307497099150040625, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.1907075Z ENGINE Received EntitySpawn from 3, with entity 13037130547529148563, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.1907075Z ENGINE Received EntitySpawn from 3, with entity 11846780632144347027, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.2070177Z ENGINE Received EntitySpawn from 3, with entity 15762177016454069861, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.2085123Z ENGINE Received EntitySpawn from 3, with entity 11940873527602194123, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.2093093Z ENGINE Received EntitySpawn from 3, with entity 18225693536831077133, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.2098146Z ENGINE Received EntitySpawn from 3, with entity 9428923699184211019, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.2103319Z ENGINE Received EntitySpawn from 3, with entity 10528697929008529343, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.2918796Z ENGINE Received EntitySpawn from 3, with entity 12201347236590868299, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.4965023Z ENGINE Received EntitySpawn from 3, with entity 9235021691625225979, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.4975092Z ENGINE Received EntitySpawn from 3, with entity 16285297956842861857, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.5986780Z ENGINE Received EntitySpawn from 3, with entity 9804245658689803575, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6004056Z ENGINE Received EntitySpawn from 3, with entity 14972783310683710351, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6004056Z ENGINE Received EntitySpawn from 3, with entity 12766877495853478333, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6004056Z ENGINE Received EntitySpawn from 3, with entity 10406339155766359857, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6017467Z ENGINE Received EntitySpawn from 3, with entity 16863032777375841575, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6017467Z ENGINE Received EntitySpawn from 3, with entity 16412872819913165705, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6160470Z ENGINE Received EntitySpawn from 3, with entity 10837444163266900543, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6160470Z ENGINE Received EntitySpawn from 3, with entity 14746025336804536627, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6173792Z ENGINE Received EntitySpawn from 3, with entity 12562320097358837895, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6173792Z ENGINE Received EntitySpawn from 3, with entity 15024114895879353901, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6193102Z ENGINE Received EntitySpawn from 3, with entity 14741974134367821119, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6203429Z ENGINE Received EntitySpawn from 3, with entity 16406204584001317273, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.6203429Z ENGINE Received EntitySpawn from 3, with entity 9700405817948982441, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7005318Z ENGINE Received EntitySpawn from 3, with entity 12072071520206614723, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7015403Z ENGINE Received EntitySpawn from 3, with entity 15789257381440348779, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7027739Z ENGINE Received EntitySpawn from 3, with entity 13443272245586187865, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7027739Z ENGINE Received EntitySpawn from 3, with entity 9685765647324682593, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7037867Z ENGINE Received EntitySpawn from 3, with entity 15523280649633197011, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7179637Z ENGINE Received EntitySpawn from 3, with entity 12933975510359841093, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7202773Z ENGINE Received EntitySpawn from 3, with entity 9547153616108566025, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7213928Z ENGINE Received EntitySpawn from 3, with entity 10750937205878985215, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7226732Z ENGINE Received EntitySpawn from 3, with entity 17508986587651429843, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.7236732Z ENGINE Received EntitySpawn from 3, with entity 9277374184190711115, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8033340Z ENGINE Received EntitySpawn from 3, with entity 14515104069290278247, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8044569Z ENGINE Received EntitySpawn from 3, with entity 13788193833398105671, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8044569Z ENGINE Received EntitySpawn from 3, with entity 9614480546704072553, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8054585Z ENGINE Received EntitySpawn from 3, with entity 14853545263933426729, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8059664Z ENGINE Received EntitySpawn from 3, with entity 14989625252617872425, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8072234Z ENGINE Received EntitySpawn from 3, with entity 13465586530599386401, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8087146Z ENGINE Received EntitySpawn from 3, with entity 9504281069683396173, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8210611Z ENGINE Received EntitySpawn from 3, with entity 15906496871995315859, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8215664Z ENGINE Received EntitySpawn from 3, with entity 13830884404586185793, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.8215664Z ENGINE Received EntitySpawn from 3, with entity 15262876406181267145, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.9057796Z ENGINE Received EntitySpawn from 3, with entity 11134412084147979005, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.9067815Z ENGINE Received EntitySpawn from 3, with entity 17265165952938095363, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.9077851Z ENGINE Received EntitySpawn from 3, with entity 16246911655862660859, FalseKnight, DynamicHazard
+2026-10-12T14:40:43.9077851Z ENGINE Received EntitySpawn from 3, with entity 9805674815191944343, FalseKnight, DynamicHazard
+2026-10-12T14:40:48.0901166Z ENGINE Scene changed from GG_Gruz_Mother to GG_False_Knight
+2026-10-12T14:40:48.0928315Z ENGINE Handling player leave scene (dc: False) for ID 2, left scene: GG_Gruz_Mother
+2026-10-12T14:40:48.2102686Z PASS native sequence room 1.2
+2026-10-12T14:40:48.2107739Z PASS both room.1.2
+2026-10-12T14:40:48.2143555Z ENGINE Received EnterScene data from (2, retryhost), new scene: GG_False_Knight
+2026-10-12T14:40:48.2143555Z ENGINE Sending that entity '6271568382922080675' is already in scene to '2'
+2026-10-12T14:40:48.2158229Z ENGINE Sending that entity '8447741072119193881' is already in scene to '2'
+2026-10-12T14:40:48.2158229Z ENGINE Sending that entity '3675315349804982313' is already in scene to '2'
+2026-10-12T14:40:48.2171063Z ENGINE Sending that entity '4189473236617846725' is already in scene to '2'
+2026-10-12T14:40:48.2171063Z ENGINE Sending that entity '9116905824005710281' is already in scene to '2'
+2026-10-12T14:40:48.2184777Z ENGINE Sending that entity '18071748739765071' is already in scene to '2'
+2026-10-12T14:40:48.2200696Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:40:48.2322357Z DELAY SNAPSHOT GG_False_Knight visit=11
+2026-10-12T14:40:51.2332956Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:40:51.2344714Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:40:51.2360284Z ENGINE Player 3 entered scene
+2026-10-12T14:40:51.2418376Z PASS room authority 1.2
+2026-10-12T14:40:54.2442682Z PASS early room-level updates drained 1.2
+2026-10-12T14:40:54.2442682Z ROOM 1.2 scene=GG_False_Knight visit=11 authority=False hero=(23.8, 27.4, 0.0) camera=(32.5, 31.4, -38.1) mode=LOCKED
+2026-10-12T14:40:54.2453132Z ENTITY 3675315349804982313 BattleGate key=GG_False_Knight/Battle%20Gate%202#0:BattleGate:BG Control host=False replica=True pos=(18.5, 3.8, 0.0) render=Battle Gate 2(Clone)/True/off=False,Dust/True/off=False,Close Effect/False/off=False,Raise Dust/True/off=False state=BG Control=
+2026-10-12T14:40:54.2466416Z ENTITY 18071748739765071 BattleGate key=GG_False_Knight/Battle%20Gate%203#0:BattleGate:BG Control host=False replica=True pos=(51.6, 3.9, 0.0) render=Battle Gate 3(Clone)/True/off=False,Dust/True/off=False,Close Effect/True/off=False,Raise Dust/True/off=False state=BG Control=
+2026-10-12T14:40:54.2476502Z ENTITY 9116905824005710281 CameraLockArea key=GG_False_Knight/Battle%20Scene#0/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(31.6, 32.5, 0.0) render= state=
+2026-10-12T14:40:54.2486613Z ENTITY 6271568382922080675 FalseKnightBarrels key=GG_False_Knight/Battle%20Scene#0/FK%20Barrel%20Summon#0:FalseKnightBarrels:summon host=False replica=True pos=(29.1, 41.0, 0.0) render= state=summon=
+2026-10-12T14:40:54.2496646Z ENTITY 4189473236617846725 FalseKnight key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0:FalseKnight:Check Health|FalseyControl host=False replica=True pos=(37.3, 39.6, 0.0) render=False Knight New(Clone)/True/off=False,Roll Dust/True/off=False,Hitter/True/off=False,Jump Trail/True/off=False,Head/True/off=False,Slam Effect/True/off=False,Jump Slam Effect/True/off=False,Death Head/True/off=False,Staff/True/off=False,Staff Head/True/off=False,Slam Rocks/True/off=False,Rage Rocks/True/off=False,Armour Hit/True/off=False,Armour Smash/True/off=False,Dust Land Large/True/off=False,Dust Hit Plume/True/off=False state=FalseyControl=,Check Health=
+2026-10-12T14:40:54.2506655Z ENTITY 8447741072119193881 FalseKnightHead key=GG_False_Knight/Battle%20Scene#0/False%20Knight%20New#0/Head#0:FalseKnightHead:Health Check host=False replica=True pos=(34.3, 234.6, 0.0) render=Head/True/off=False state=Health Check=
+2026-10-12T14:40:54.2506655Z PASS camera authority state 1.2
+2026-10-12T14:40:54.2515261Z PASS camera lock state converges 1.2
+2026-10-12T14:40:54.2528601Z PASS visible bosses/knight and unfrozen camera 1.2
+2026-10-12T14:40:54.2540347Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:40:54.2540347Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:40:54.2554732Z ENGINE Player 3 entered scene
+2026-10-12T14:40:54.2554732Z PASS duplicate initial snapshot does not reset boss 1.2
+2026-10-12T14:40:54.2565452Z ENGINE Player 3 left scene
+2026-10-12T14:40:54.2580560Z ENGINE Received PlayerConnect data for ID: 3
+2026-10-12T14:40:54.2594842Z PASS stale room/peer leave and duplicate connect preserve avatar 1.2
+2026-10-12T14:40:54.2637470Z PASS both checked.1.2
+2026-10-12T14:40:54.2685040Z PASS damage published 1.2
+2026-10-12T14:40:54.2920634Z PASS same boss HP 1.2
+2026-10-12T14:40:54.2943927Z PASS both hpchecked.1.2
+2026-10-12T14:41:02.7725430Z ENGINE Received EntitySpawn from 3, with entity 17865435758207240155, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:02.9623254Z ENGINE Received EntitySpawn from 3, with entity 12436734600615587501, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:03.1667003Z ENGINE Received EntitySpawn from 3, with entity 13709568692517040535, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:03.3706428Z ENGINE Received EntitySpawn from 3, with entity 9223935325396201823, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:03.5757455Z ENGINE Received EntitySpawn from 3, with entity 11585091722357781705, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:03.7821931Z ENGINE Received EntitySpawn from 3, with entity 17628826553343424269, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:03.9876899Z ENGINE Received EntitySpawn from 3, with entity 10081123029230762919, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:04.1941846Z ENGINE Received EntitySpawn from 3, with entity 13649937590393500515, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:13.5395028Z ENGINE Received EntitySpawn from 3, with entity 13234358221257406693, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:13.7444548Z ENGINE Received EntitySpawn from 3, with entity 17433715605689486587, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:13.9666179Z ENGINE Received EntitySpawn from 3, with entity 15258035259669921137, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:14.1724495Z ENGINE Received EntitySpawn from 3, with entity 15648357277249009553, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:14.2761573Z ENGINE Received EntitySpawn from 3, with entity 13055459833093769547, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:14.5807881Z ENGINE Received EntitySpawn from 3, with entity 13132043291360505829, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:14.8034829Z ENGINE Received EntitySpawn from 3, with entity 13918067199206817427, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:15.0071297Z ENGINE Received EntitySpawn from 3, with entity 17716303260315903621, FalseKnightBarrels, DynamicHazard
+2026-10-12T14:41:27.9695830Z ENGINE Boss room completion relayed: GG_False_Knight
+2026-10-12T14:41:31.7203848Z ENGINE Handling player leave scene (dc: False) for ID 3, left scene: GG_False_Knight
+2026-10-12T14:41:31.7217338Z ENGINE Sending leave scene packet to 2
+2026-10-12T14:41:31.7238558Z ENGINE Sending that entity '6271568382922080675' is already in scene to '2'
+2026-10-12T14:41:31.7248597Z ENGINE Sending that entity '8447741072119193881' is already in scene to '2'
+2026-10-12T14:41:31.7262086Z ENGINE Sending that entity '3675315349804982313' is already in scene to '2'
+2026-10-12T14:41:31.7262086Z ENGINE Sending that entity '4189473236617846725' is already in scene to '2'
+2026-10-12T14:41:31.7275054Z ENGINE Sending that entity '9116905824005710281' is already in scene to '2'
+2026-10-12T14:41:31.7286186Z ENGINE Sending that entity '18071748739765071' is already in scene to '2'
+2026-10-12T14:41:31.7298547Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:41:31.7303590Z ENGINE   2 has become scene host
+2026-10-12T14:41:31.7407032Z ENGINE Player 3 left scene
+2026-10-12T14:41:31.7412176Z ENGINE Received scene host transfer for scene: GG_False_Knight
+2026-10-12T14:41:31.7541466Z ENGINE Received EnterScene data from (3, retryguest), new scene: GG_Mega_Moss_Charger
+2026-10-12T14:41:40.2406612Z PASS teammate fights next boss 1.2
+2026-10-12T14:41:43.9004745Z ENGINE Scene changed from GG_False_Knight to GG_Mega_Moss_Charger
+2026-10-12T14:41:43.9052747Z ENGINE Handling player leave scene (dc: False) for ID 2, left scene: GG_False_Knight
+2026-10-12T14:41:44.0505806Z PASS native sequence room 1.3
+2026-10-12T14:41:44.0531828Z PASS both room.1.3
+2026-10-12T14:41:44.0639057Z ENGINE Received EnterScene data from (2, retryhost), new scene: GG_Mega_Moss_Charger
+2026-10-12T14:41:44.0654157Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:41:44.0664326Z ENGINE Sending that entity '4638147650663368899' is already in scene to '2'
+2026-10-12T14:41:44.0674392Z ENGINE Sending that entity '4129537347362395435' is already in scene to '2'
+2026-10-12T14:41:44.0841073Z DELAY SNAPSHOT GG_Mega_Moss_Charger visit=12
+2026-10-12T14:41:47.0858894Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:41:47.0872847Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:41:47.0882893Z ENGINE Player 3 entered scene
+2026-10-12T14:41:47.0947162Z PASS room authority 1.3
+2026-10-12T14:41:50.0960935Z PASS early room-level updates drained 1.3
+2026-10-12T14:41:50.0973669Z ROOM 1.3 scene=GG_Mega_Moss_Charger visit=12 authority=False hero=(43.9, 7.4, 0.0) camera=(44.9, 11.0, -38.1) mode=LOCKED
+2026-10-12T14:41:50.0983694Z ENTITY 4129537347362395435 CameraLockArea key=GG_Mega_Moss_Charger/CameraLockArea%20%282%29#0:CameraLockArea: host=False replica=True pos=(47.4, 15.1, 0.0) render= state=
+2026-10-12T14:41:50.0994452Z ENTITY 4638147650663368899 MassiveMossCharger key=GG_Mega_Moss_Charger/Mega%20Moss%20Charger#0:MassiveMossCharger:Mossy Control host=False replica=True pos=(56.6, 9.8, 0.0) render=Mega Moss Charger(Clone)/False/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Grass Shake/True/off=False,Grass Roar/True/off=False,Slam Effect R/True/off=False,Corpse Mega Moss Charger(Clone)/True/off=False,Grass Explode/True/off=False,Corpse Mega Moss Charger(Clone)/True/off=False,Grass Explode/True/off=False,Moss Charger Nibbler/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (1)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (2)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (3)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False state=Mossy Control=
+2026-10-12T14:41:50.1004473Z PASS camera authority state 1.3
+2026-10-12T14:41:50.1016225Z PASS camera lock state converges 1.3
+2026-10-12T14:41:50.1030206Z PASS visible bosses/knight and unfrozen camera 1.3
+2026-10-12T14:41:50.1044139Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:41:50.1049936Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:41:50.1049936Z ENGINE Player 3 entered scene
+2026-10-12T14:41:50.1060026Z PASS duplicate initial snapshot does not reset boss 1.3
+2026-10-12T14:41:50.1060026Z ENGINE Player 3 left scene
+2026-10-12T14:41:50.1071013Z ENGINE Received PlayerConnect data for ID: 3
+2026-10-12T14:41:50.1071013Z PASS stale room/peer leave and duplicate connect preserve avatar 1.3
+2026-10-12T14:41:50.1103321Z PASS both checked.1.3
+2026-10-12T14:41:50.1230079Z PASS damage published 1.3
+2026-10-12T14:41:50.1428459Z PASS same boss HP 1.3
+2026-10-12T14:41:50.1465857Z PASS both hpchecked.1.3
+2026-10-12T14:41:50.1875360Z ENGINE Boss room completion relayed: GG_Mega_Moss_Charger
+2026-10-12T14:41:59.8043759Z ENGINE Handling player leave scene (dc: False) for ID 3, left scene: GG_Mega_Moss_Charger
+2026-10-12T14:41:59.8043759Z ENGINE Sending leave scene packet to 2
+2026-10-12T14:41:59.8055789Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:41:59.8065853Z ENGINE Sending that entity '4638147650663368899' is already in scene to '2'
+2026-10-12T14:41:59.8082246Z ENGINE Sending that entity '4129537347362395435' is already in scene to '2'
+2026-10-12T14:41:59.8105311Z ENGINE   2 has become scene host
+2026-10-12T14:41:59.8207991Z ENGINE Player 3 left scene
+2026-10-12T14:41:59.8220317Z ENGINE Received scene host transfer for scene: GG_Mega_Moss_Charger
+2026-10-12T14:41:59.8230401Z ENGINE WARN Cannot update position for entity (4638147650663368899, MassiveMossCharger), client or host object is null
+2026-10-12T14:41:59.8230401Z ENGINE WARN Cannot update scale for entity (4638147650663368899, MassiveMossCharger), client object is null
+2026-10-12T14:41:59.8243770Z ENGINE WARN Entity (4638147650663368899, MassiveMossCharger) could not update active, because client object is null
+2026-10-12T14:41:59.9503496Z ENGINE Received EnterScene data from (3, retryguest), new scene: GG_Hornet_1
+2026-10-12T14:42:08.2174436Z PASS teammate fights next boss 1.3
+2026-10-12T14:42:17.8631879Z ENGINE Scene changed from GG_Mega_Moss_Charger to GG_Hornet_1
+2026-10-12T14:42:17.9670116Z ENGINE Handling player leave scene (dc: False) for ID 2, left scene: GG_Mega_Moss_Charger
+2026-10-12T14:42:17.9924976Z PASS native sequence room 1.4
+2026-10-12T14:42:17.9937183Z PASS both room.1.4
+2026-10-12T14:42:18.0010200Z ENGINE Received EnterScene data from (2, retryhost), new scene: GG_Hornet_1
+2026-10-12T14:42:18.0010200Z ENGINE Sending that entity '4568293017055036489' is already in scene to '2'
+2026-10-12T14:42:18.0024073Z ENGINE Sending that entity '8176710128723724501' is already in scene to '2'
+2026-10-12T14:42:18.0036815Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:42:18.0036815Z ENGINE Sending that entity '7214630437068105499' is already in scene to '2'
+2026-10-12T14:42:18.0184849Z DELAY SNAPSHOT GG_Hornet_1 visit=13
+2026-10-12T14:42:21.0194615Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:42:21.0204638Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:42:21.0218135Z ENGINE Player 3 entered scene
+2026-10-12T14:42:21.0289984Z PASS room authority 1.4
+2026-10-12T14:42:24.0321466Z PASS early room-level updates drained 1.4
+2026-10-12T14:42:24.0321466Z ROOM 1.4 scene=GG_Hornet_1 visit=13 authority=False hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-12T14:42:24.0336529Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=False replica=True pos=(15.8, 32.5, 0.0) render=Hornet Boss 1(Clone)/True/off=False,Sphere Ball/True/off=False,A Dash Effect/True/off=False,Dust HardLand/True/off=False,G Dash Effect/True/off=False,Flash Effect/True/off=False,Throw Effect/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False state=Control=,Stun Control=
+2026-10-12T14:42:24.0336529Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0/Needle#0:DynamicHazard:Control host=False replica=False pos=(16.5, 28.1, 0.0) render=Needle(Clone)/True/off=False,Thread/True/off=False state=Control=
+2026-10-12T14:42:24.0346606Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(25.1, 34.9, 0.0) render= state=
+2026-10-12T14:42:24.0356641Z PASS camera authority state 1.4
+2026-10-12T14:42:24.0366664Z PASS camera lock state converges 1.4
+2026-10-12T14:42:24.0366664Z PASS visible bosses/knight and unfrozen camera 1.4
+2026-10-12T14:42:24.0390693Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:42:24.0390693Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:42:24.0405990Z ENGINE Player 3 entered scene
+2026-10-12T14:42:24.0417373Z PASS duplicate initial snapshot does not reset boss 1.4
+2026-10-12T14:42:24.0417373Z ENGINE Player 3 left scene
+2026-10-12T14:42:24.0432466Z ENGINE Received PlayerConnect data for ID: 3
+2026-10-12T14:42:24.0432466Z PASS stale room/peer leave and duplicate connect preserve avatar 1.4
+2026-10-12T14:42:24.0555352Z PASS both checked.1.4
+2026-10-12T14:42:24.0565378Z PASS damage published 1.4
+2026-10-12T14:42:24.0875896Z PASS same boss HP 1.4
+2026-10-12T14:42:24.0890985Z PASS both hpchecked.1.4
+2026-10-12T14:42:24.9420902Z ENGINE Handling player leave scene (dc: False) for ID 3, left scene: GG_Hornet_1
+2026-10-12T14:42:24.9435850Z ENGINE Scene changed from GG_Hornet_1 to Town
+2026-10-12T14:42:24.9435850Z ENGINE Sending leave scene packet to 2
+2026-10-12T14:42:24.9446093Z ENGINE Sending that entity '4568293017055036489' is already in scene to '2'
+2026-10-12T14:42:24.9456169Z ENGINE Sending that entity '8176710128723724501' is already in scene to '2'
+2026-10-12T14:42:24.9471269Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:42:24.9471269Z ENGINE Sending that entity '7214630437068105499' is already in scene to '2'
+2026-10-12T14:42:24.9481483Z ENGINE   2 has become scene host
+2026-10-12T14:42:25.1004337Z ENGINE Received EnterScene data from (3, retryguest), new scene: Town
+2026-10-12T14:42:25.1030513Z ENGINE Handling player leave scene (dc: False) for ID 2, left scene: GG_Hornet_1
+2026-10-12T14:42:25.1061149Z ENGINE Received scene host transfer for scene: GG_Hornet_1
+2026-10-12T14:42:25.1074901Z ENGINE   Current scene (Town) does not match scene for host transfer, ignoring
+2026-10-12T14:42:25.1217714Z PASS leave attempt
+2026-10-12T14:42:25.1242869Z PASS both left.1
+2026-10-12T14:42:25.1247940Z FINAL PASS repeated delayed first pantheon through Hornet; muted audio
+2026-10-12T14:42:25.1348128Z ENGINE Received EnterScene data from (2, retryhost), new scene: Town
+2026-10-12T14:42:25.1358197Z ENGINE Sending that entity '8173247680223640663' is already in scene to '2'
+2026-10-12T14:42:25.1382007Z ENGINE Sending that entity '1925361265462759723' is already in scene to '2'
+2026-10-12T14:42:25.1395301Z ENGINE Sending that entity '0' is already in scene to '2'
+2026-10-12T14:42:25.1405313Z ENGINE Sending that entity '5433208650596947515' is already in scene to '2'
+2026-10-12T14:42:25.1415642Z ENGINE Sending that entity '9039180234019435213' is already in scene to '2'
+2026-10-12T14:42:25.1430807Z ENGINE Sending that entity '688262427560814067' is already in scene to '2'
+2026-10-12T14:42:25.1437750Z ENGINE Sending that entity '7815807409613637839' is already in scene to '2'
+2026-10-12T14:42:25.1437750Z ENGINE Sending that entity '1640449854697899003' is already in scene to '2'
+2026-10-12T14:42:25.1545598Z ENGINE Received AlreadyInScene packet
+2026-10-12T14:42:25.1545598Z ENGINE Updating already in scene player with ID: 3
+2026-10-12T14:42:25.1557005Z ENGINE Player 3 entered scene

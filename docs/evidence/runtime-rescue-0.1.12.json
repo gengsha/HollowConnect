@@ -1,0 +1,170 @@
+{
+  "version": "0.1.12",
+  "engineVersion": "3.0.0-hc8",
+  "checkedAtUtc": "2026-10-13T04:55:42.4489532Z",
+  "nativeAssemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+  "environment": "Two isolated local Unity processes; real loopback UDP/DTLS; fresh in-memory characters; all SaveGame overloads intercepted; AudioListener muted",
+  "runs": [
+    {
+      "roles": [
+        {
+          "done": true,
+          "failed": false,
+          "role": "host",
+          "finalPass": true,
+          "passAssertions": 63
+        },
+        {
+          "done": true,
+          "failed": false,
+          "role": "guest",
+          "finalPass": true,
+          "passAssertions": 64
+        }
+      ],
+      "name": "final-rescue-012",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "F80DA3601DF693BA318B61512C2721CA8B18653370CFE3DAB4A80CA6F648666B"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "E2541B10ABA2DC546BFDAE9747C4EE620244CD57875F41AF85832C7EB2DFAF6F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "bothPassed": true,
+      "scope": "four physical nail rescues alternating host/guest; 33 soul awarded only to rescuer; orb/reserve caps; personal shade and limitation retained; reliable replay; roster-first ordering; stale session/round/death/wipe events; native animation/particles/audio mixer; unscaled cleanup"
+    },
+    {
+      "roles": [
+        {
+          "done": true,
+          "failed": false,
+          "role": "host",
+          "finalPass": true,
+          "passAssertions": 37
+        },
+        {
+          "done": true,
+          "failed": false,
+          "role": "guest",
+          "finalPass": true,
+          "passAssertions": 44
+        }
+      ],
+      "name": "final-death-story-012",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "F80DA3601DF693BA318B61512C2721CA8B18653370CFE3DAB4A80CA6F648666B"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "E2541B10ABA2DC546BFDAE9747C4EE620244CD57875F41AF85832C7EB2DFAF6F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "bothPassed": true,
+      "scope": "native story death and personal checkpoints; rescue one-health/no death penalty; original shade recovery; party wipe; entry protection"
+    },
+    {
+      "roles": [
+        {
+          "done": true,
+          "failed": false,
+          "role": "host",
+          "finalPass": true,
+          "passAssertions": 63
+        },
+        {
+          "done": true,
+          "failed": false,
+          "role": "guest",
+          "finalPass": true,
+          "passAssertions": 56
+        }
+      ],
+      "name": "final-full-012",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "F80DA3601DF693BA318B61512C2721CA8B18653370CFE3DAB4A80CA6F648666B"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "E2541B10ABA2DC546BFDAE9747C4EE620244CD57875F41AF85832C7EB2DFAF6F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "bothPassed": true,
+      "scope": "full co-op fixture: enemy damage/authority, late death, shared progress, map, actual nail rescue, both F6 authority roles, both wipe orders, teammate warp and disconnect"
+    },
+    {
+      "roles": [
+        {
+          "done": true,
+          "failed": false,
+          "role": "host",
+          "finalPass": true,
+          "passAssertions": 39
+        },
+        {
+          "done": true,
+          "failed": false,
+          "role": "guest",
+          "finalPass": true,
+          "passAssertions": 45
+        }
+      ],
+      "name": "final-death-private-012",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "F80DA3601DF693BA318B61512C2721CA8B18653370CFE3DAB4A80CA6F648666B"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "E2541B10ABA2DC546BFDAE9747C4EE620244CD57875F41AF85832C7EB2DFAF6F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B931BFF5F66A4189CB0C8AC4C6C0D46792639619E14EEB2683ECEE4BE32C46EB"
+        }
+      ],
+      "bothPassed": true,
+      "scope": "native personal shade kept alive until other client checks it is invisible and not in synchronized entity registry; original recovery; personal death/checkpoints/wipe"
+    }
+  ],
+  "nativeAssets": {
+    "fsm": "Shade Control",
+    "focusCost": 33,
+    "prefab": "Hollow Shade Death",
+    "clips": [
+      "Death Start",
+      "Death",
+      "Death Glow"
+    ],
+    "audio": [
+      "boss_explode_clean",
+      "hero_void_scream_spell"
+    ]
+  },
+  "limitations": [
+    "No real two-machine FRP validation",
+    "No new complete Pantheon/all-boss-move claim",
+    "Muted tests check audio assets/routing, not subjective loudness",
+    "Native menu SetupHeroRefs exception in batch startup precedes fresh hero creation; assertions do not imply warning-free Unity logs",
+    "No new exhaustive native Steel Soul/fragile charm/special-zone death coverage"
+  ]
+}
