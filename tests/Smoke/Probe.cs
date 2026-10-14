@@ -31,6 +31,7 @@ public sealed class ProbeMod : Mod {
         On.GameManager.LoadFirstScene += (orig, gm) => SimulationFrames(orig(gm));
         var go = new GameObject("HollowConnect smoke probe"); Object.DontDestroyOnLoad(go);
         go.AddComponent<SilentProbe>();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "progress") { go.AddComponent<ProgressProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "rescue") { go.AddComponent<RescueProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "shade-inspect") { go.AddComponent<ShadeInspectProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "death") { go.AddComponent<DeathProbe>(); return; }

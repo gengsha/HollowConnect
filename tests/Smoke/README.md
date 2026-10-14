@@ -2,6 +2,8 @@
 
 此项目不进入运行安装包，不能放在日常游戏的 Mods 目录中。
 
+`progress` 模式用无存档写入的双客户端检查遗忘十字路鹿角站共享：购买者由 `HOLLOWCONNECT_PROGRESS_BUYER=host|guest` 选择，`HOLLOWCONNECT_PROGRESS_PROMPT=1` 让接收者正在原生购买对话内。探针程序化进入原生交互入口，随后通过原生 Yes/No 控制 FSM 的选择事件支付，保留真正的 TakeGeo、授权和开站动画。断言当前房间无需重新加载即可使用、仅购买者扣 50 吉欧、对话结束、控制恢复、重复进度 offer 不改变钱或原生动作。`HOLLOWCONNECT_PROGRESS_BASELINE=1` 在旧实现上确认接收者还能再次付费并明确失败；不能计入验收。之后实际购买科尼法首张地图并跨 Crossroads_08、Crossroads_30 检查双端角色/快照，`HOLLOWCONNECT_MAP_BOTH=1` 覆盖双方购买；地图和吉欧仍为个人数据。`HOLLOWCONNECT_PROGRESS_INSPECT=1` 只导出原生购买 FSM，不是购买验收。成功路径使用已有 ProbeShutdown 完成网络退出后才写终态。
+
 所有测试模式创建 SilentProbe，启动及每帧将 AudioListener.volume 设为 0；只静音隔离测试进程，不修改用户音量配置。
 
 已载入内存角色的游戏内探针连接时设置 `_autoConnect`，保留已选角色；从菜单开始的 JoinProbe 则仍走真正选档/新档路径。格林探针观察 ProfileMenu 请求，正常游戏内检查必须为零；`HOLLOWCONNECT_GRIMM_MENU_BASELINE=1` 保留旧夹具路径并在实际菜单请求后明确失败，用于对照，不触发 Boss 战或计入验收。原生崩溃标记在发布日志扫描中独立失败。

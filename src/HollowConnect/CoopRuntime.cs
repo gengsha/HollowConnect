@@ -6,6 +6,7 @@ using System.Reflection;
 using Hkmp;
 using Hkmp.Api.Client;
 using Hkmp.Api.Client.Networking;
+using Hkmp.Game.Client.Save;
 using HollowConnect.Core;
 using Modding;
 using UnityEngine;
@@ -28,6 +29,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     private ProgressLedger granted = new ProgressLedger();
     private readonly Dictionary<string, int> offered = new Dictionary<string, int>();
     private readonly Dictionary<string, FieldInfo> fields = new Dictionary<string, FieldInfo>();
+    private readonly SaveChanges sceneSaveChanges = new SaveChanges();
     private MapService map;
     private ShadeService shades;
     private PersonalDeath personalDeath;
@@ -418,6 +420,7 @@ public sealed class CoopRuntime : MonoBehaviour {
             pd.SetInt(key, value);
             if (key == "nailSmithUpgrades") pd.SetInt("nailDamage", 5 + 4 * value);
         }
+        sceneSaveChanges.ApplyPlayerDataSaveChange(key);
         Notice("共享进度：" + key);
     }
 
