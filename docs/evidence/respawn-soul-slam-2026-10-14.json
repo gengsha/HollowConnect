@@ -1,0 +1,1007 @@
+{
+  "version": "0.1.13",
+  "engineVersion": "3.0.0-hc10",
+  "releaseReady": false,
+  "buildCommit": "1f5efe0ef26461a467b0512aaf5bc0d95f01f00a",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "45E4D6092568DE113405E8DE418BDF035CED787E962115E3E44ABF3C7FA023B2",
+      "productVersion": "1.0.0+1f5efe0ef26461a467b0512aaf5bc0d95f01f00a"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "0FF80DD93FF04F71A48F2BCFD980EDE817875B5E1A6F6E02FCC28890C63E476A",
+      "productVersion": "1.0.0+1f5efe0ef26461a467b0512aaf5bc0d95f01f00a"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "914840E7A61A6A0C3F1445BCFDA8FEBFDA2D89EC266B40294D5EA0EBD5F8888C",
+      "productVersion": "1.0.0+1f5efe0ef26461a467b0512aaf5bc0d95f01f00a"
+    }
+  ],
+  "recordedAtUtc": "2026-10-14T14:05:42.5354700Z",
+  "runtimeValidation": {
+    "version": "0.1.13",
+    "engineVersion": "3.0.0-hc10",
+    "releaseReady": false,
+    "runs": [
+      {
+        "name": "playtest-return-final-godhome-wake-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "45E4D6092568DE113405E8DE418BDF035CED787E962115E3E44ABF3C7FA023B2"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0FF80DD93FF04F71A48F2BCFD980EDE817875B5E1A6F6E02FCC28890C63E476A"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "914840E7A61A6A0C3F1445BCFDA8FEBFDA2D89EC266B40294D5EA0EBD5F8888C"
+          }
+        ],
+        "scope": "Two isolated clients: native personal death in GG_Hornet_1, own Godhome return to GG_Atrium, native wake event and two complete jumps on each client.",
+        "strictLogsAfterShutdownPassed": true,
+        "logs": [
+          {
+            "role": "host",
+            "log": ".test-results/playtest-return-final-godhome-wake-20261014/host.log",
+            "sha256": "EB74D30CADA384AAA7C9870CA547388E910A8BBCA0387F9335A60D01CADF8054",
+            "finalPass": [
+              "2026-10-14T13:45:41.6576626Z FINAL PASS native personal death GG_Hornet_1"
+            ],
+            "physics": [
+              "2026-10-14T13:45:37.8478027Z PASS special-zone return native wake input prompt",
+              "2026-10-14T13:45:37.8488100Z PASS special-zone return native wake jump event exists",
+              "2026-10-14T13:45:41.1013544Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+              "2026-10-14T13:45:41.1051952Z PASS special-zone return native jump 1 rises",
+              "2026-10-14T13:45:41.1884598Z PASS special-zone return native jump 1 falls again",
+              "2026-10-14T13:45:41.3522292Z PASS special-zone return native jump 2 rises",
+              "2026-10-14T13:45:41.4493679Z PASS special-zone return native jump 2 falls again",
+              "2026-10-14T13:45:41.6091414Z PASS special-zone return lands after repeated jumps"
+            ],
+            "rooms": [
+              "2026-10-14T13:45:25.7107707Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7",
+              "2026-10-14T13:45:25.7508322Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:45:26.6714172Z ENGINE Room prepared: GG_Atrium, visit=2, epoch=0, entities=17",
+              "2026-10-14T13:45:26.8264907Z ENGINE Room snapshot committed: GG_Atrium, visit=2, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:45:27.7120763Z ENGINE Room prepared: GG_Hornet_1, visit=3, epoch=0, entities=3",
+              "2026-10-14T13:45:27.8124034Z PASS combat room entered",
+              "2026-10-14T13:45:27.8401251Z ENGINE Room snapshot committed: GG_Hornet_1, visit=3, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:45:36.6714704Z ENGINE Room prepared: GG_Atrium, visit=4, epoch=1, entities=17",
+              "2026-10-14T13:45:36.8689981Z ENGINE Room snapshot committed: GG_Atrium, visit=4, epoch=1, authority=False, peers=1"
+            ],
+            "bossStates": [],
+            "nativePhase": [],
+            "spawnCounts": [],
+            "costs": [],
+            "frameSamples": null
+          },
+          {
+            "role": "guest",
+            "log": ".test-results/playtest-return-final-godhome-wake-20261014/guest.log",
+            "sha256": "815C13B16444C5DD5736C854B43D72F0D928C0B40A80DB54CC036ECFA3818EDD",
+            "finalPass": [
+              "2026-10-14T13:45:41.6576626Z FINAL PASS native personal death GG_Hornet_1"
+            ],
+            "physics": [
+              "2026-10-14T13:45:37.7224798Z PASS special-zone return native wake input prompt",
+              "2026-10-14T13:45:37.7224798Z PASS special-zone return native wake jump event exists",
+              "2026-10-14T13:45:40.9632858Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+              "2026-10-14T13:45:40.9664392Z PASS special-zone return native jump 1 rises",
+              "2026-10-14T13:45:41.0531479Z PASS special-zone return native jump 1 falls again",
+              "2026-10-14T13:45:41.2150824Z PASS special-zone return native jump 2 rises",
+              "2026-10-14T13:45:41.3140369Z PASS special-zone return native jump 2 falls again",
+              "2026-10-14T13:45:41.4723109Z PASS special-zone return lands after repeated jumps"
+            ],
+            "rooms": [
+              "2026-10-14T13:45:25.7268293Z ENGINE Room prepared: Crossroads_47, visit=1, epoch=0, entities=1",
+              "2026-10-14T13:45:25.7651977Z ENGINE Room snapshot committed: Crossroads_47, visit=1, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:45:29.6986634Z ENGINE Room prepared: GG_Atrium, visit=2, epoch=0, entities=17",
+              "2026-10-14T13:45:29.8379504Z ENGINE Room snapshot committed: GG_Atrium, visit=2, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:45:30.7908508Z ENGINE Room prepared: GG_Hornet_1, visit=3, epoch=0, entities=3",
+              "2026-10-14T13:45:30.9222369Z PASS combat room entered",
+              "2026-10-14T13:45:30.9676654Z ENGINE Room snapshot committed: GG_Hornet_1, visit=3, epoch=0, authority=False, peers=1",
+              "2026-10-14T13:45:36.6222576Z ENGINE Room prepared: GG_Atrium, visit=4, epoch=1, entities=17",
+              "2026-10-14T13:45:36.8490509Z ENGINE Room snapshot committed: GG_Atrium, visit=4, epoch=1, authority=True, peers=0"
+            ],
+            "bossStates": [],
+            "nativePhase": [],
+            "spawnCounts": [],
+            "costs": [],
+            "frameSamples": null
+          }
+        ]
+      },
+      {
+        "name": "playtest-return-verified-story-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "45E4D6092568DE113405E8DE418BDF035CED787E962115E3E44ABF3C7FA023B2"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0FF80DD93FF04F71A48F2BCFD980EDE817875B5E1A6F6E02FCC28890C63E476A"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "914840E7A61A6A0C3F1445BCFDA8FEBFDA2D89EC266B40294D5EA0EBD5F8888C"
+          }
+        ],
+        "scope": "Two isolated clients: personal F6 return and full-team wipe to different personal benches, native death/shade/penalty rules and repeated jump/landing checks.",
+        "strictLogsAfterShutdownPassed": true,
+        "logs": [
+          {
+            "role": "host",
+            "log": ".test-results/playtest-return-verified-story-20261014/host.log",
+            "sha256": "278C30342CA4BA269C5311CC8A01B1A94BB31AC7C1023D383DE62CD96E4D0EB1",
+            "finalPass": [
+              "2026-10-14T13:47:28.0962258Z FINAL PASS native personal death Crossroads_01"
+            ],
+            "physics": [
+              "2026-10-14T13:47:27.5526791Z RETURN PHYSICS full team bench return gravity=0.79 cachedGravity=0 simulated=True",
+              "2026-10-14T13:47:27.5556992Z PASS full team bench return native jump 1 rises",
+              "2026-10-14T13:47:27.6407454Z PASS full team bench return native jump 1 falls again",
+              "2026-10-14T13:47:27.8021946Z PASS full team bench return native jump 2 rises",
+              "2026-10-14T13:47:27.8998050Z PASS full team bench return native jump 2 falls again",
+              "2026-10-14T13:47:28.0595919Z PASS full team bench return lands after repeated jumps"
+            ],
+            "rooms": [
+              "2026-10-14T13:47:03.5056725Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7",
+              "2026-10-14T13:47:03.5381144Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:47:04.4227756Z ENGINE Room prepared: Crossroads_01, visit=2, epoch=0, entities=11",
+              "2026-10-14T13:47:04.5341586Z PASS combat room entered",
+              "2026-10-14T13:47:04.5692987Z ENGINE Room snapshot committed: Crossroads_01, visit=2, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:47:19.4994182Z PASS survivor remains room authority during teammate's formal death",
+              "2026-10-14T13:47:25.6111750Z ENGINE Room prepared: Town, visit=3, epoch=1, entities=7",
+              "2026-10-14T13:47:26.0145582Z ENGINE Room snapshot committed: Town, visit=3, epoch=1, authority=True, peers=0"
+            ],
+            "bossStates": [],
+            "nativePhase": [],
+            "spawnCounts": [],
+            "costs": [],
+            "frameSamples": null
+          },
+          {
+            "role": "guest",
+            "log": ".test-results/playtest-return-verified-story-20261014/guest.log",
+            "sha256": "1C79E1C050B856EA83BAAA579D633AC20D7E6F0C928861266A2188E9143ADFA7",
+            "finalPass": [
+              "2026-10-14T13:47:28.0962258Z FINAL PASS native personal death Crossroads_01"
+            ],
+            "physics": [
+              "2026-10-14T13:47:18.9688263Z RETURN PHYSICS individual bench return gravity=0.79 cachedGravity=0 simulated=True",
+              "2026-10-14T13:47:18.9734169Z PASS individual bench return native jump 1 rises",
+              "2026-10-14T13:47:19.0685480Z PASS individual bench return native jump 1 falls again",
+              "2026-10-14T13:47:19.2292681Z PASS individual bench return native jump 2 rises",
+              "2026-10-14T13:47:19.3300823Z PASS individual bench return native jump 2 falls again",
+              "2026-10-14T13:47:19.4888929Z PASS individual bench return lands after repeated jumps",
+              "2026-10-14T13:47:27.5526791Z RETURN PHYSICS full team bench return gravity=0.79 cachedGravity=0 simulated=True",
+              "2026-10-14T13:47:27.5556992Z PASS full team bench return native jump 1 rises",
+              "2026-10-14T13:47:27.6361193Z PASS full team bench return native jump 1 falls again",
+              "2026-10-14T13:47:27.7963008Z PASS full team bench return native jump 2 rises",
+              "2026-10-14T13:47:27.8957343Z PASS full team bench return native jump 2 falls again",
+              "2026-10-14T13:47:28.0542618Z PASS full team bench return lands after repeated jumps"
+            ],
+            "rooms": [
+              "2026-10-14T13:47:03.4896673Z ENGINE Room prepared: Crossroads_47, visit=1, epoch=0, entities=1",
+              "2026-10-14T13:47:03.5435456Z ENGINE Room snapshot committed: Crossroads_47, visit=1, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:47:07.4803192Z ENGINE Room prepared: Crossroads_01, visit=2, epoch=0, entities=11",
+              "2026-10-14T13:47:07.5773840Z PASS combat room entered",
+              "2026-10-14T13:47:07.6364179Z ENGINE Room snapshot committed: Crossroads_01, visit=2, epoch=0, authority=False, peers=1",
+              "2026-10-14T13:47:16.9955962Z ENGINE Room prepared: Crossroads_47, visit=3, epoch=0, entities=1",
+              "2026-10-14T13:47:17.4284667Z ENGINE Room snapshot committed: Crossroads_47, visit=3, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:47:20.3672310Z ENGINE Room prepared: Crossroads_01, visit=4, epoch=0, entities=11",
+              "2026-10-14T13:47:20.5037382Z ENGINE Room snapshot committed: Crossroads_01, visit=4, epoch=0, authority=False, peers=1",
+              "2026-10-14T13:47:25.4645190Z ENGINE Room prepared: Crossroads_47, visit=5, epoch=1, entities=1",
+              "2026-10-14T13:47:25.9805891Z ENGINE Room snapshot committed: Crossroads_47, visit=5, epoch=1, authority=True, peers=0"
+            ],
+            "bossStates": [],
+            "nativePhase": [],
+            "spawnCounts": [],
+            "costs": [],
+            "frameSamples": null
+          }
+        ]
+      },
+      {
+        "name": "playtest-return-final-dream-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "45E4D6092568DE113405E8DE418BDF035CED787E962115E3E44ABF3C7FA023B2"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0FF80DD93FF04F71A48F2BCFD980EDE817875B5E1A6F6E02FCC28890C63E476A"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "914840E7A61A6A0C3F1445BCFDA8FEBFDA2D89EC266B40294D5EA0EBD5F8888C"
+          }
+        ],
+        "scope": "Two isolated clients: native personal dream death, Dream_01_False_Knight to Crossroads_10, native wake event and two complete jumps on each client.",
+        "strictLogsAfterShutdownPassed": true,
+        "logs": [
+          {
+            "role": "host",
+            "log": ".test-results/playtest-return-final-dream-20261014/host.log",
+            "sha256": "0CC1E25C02A0C255E19DEBD7AB5702AFF5F65E41CFCCCC05F155AF05F4F477DA",
+            "finalPass": [
+              "2026-10-14T13:48:02.6262179Z FINAL PASS native personal death Dream_01_False_Knight"
+            ],
+            "physics": [
+              "2026-10-14T13:47:58.7218910Z PASS special-zone return native wake input prompt",
+              "2026-10-14T13:47:58.7229969Z PASS special-zone return native wake jump event exists",
+              "2026-10-14T13:48:01.9804615Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+              "2026-10-14T13:48:01.9853820Z PASS special-zone return native jump 1 rises",
+              "2026-10-14T13:48:02.0835923Z PASS special-zone return native jump 1 falls again",
+              "2026-10-14T13:48:02.2441145Z PASS special-zone return native jump 2 rises",
+              "2026-10-14T13:48:02.3380041Z PASS special-zone return native jump 2 falls again",
+              "2026-10-14T13:48:02.4963578Z PASS special-zone return lands after repeated jumps"
+            ],
+            "rooms": [
+              "2026-10-14T13:47:46.7731303Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7",
+              "2026-10-14T13:47:46.8075581Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:47:47.7330077Z ENGINE Room prepared: Dream_01_False_Knight, visit=2, epoch=0, entities=26",
+              "2026-10-14T13:47:47.9533492Z PASS combat room entered",
+              "2026-10-14T13:47:47.9938279Z ENGINE Room snapshot committed: Dream_01_False_Knight, visit=2, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:47:57.6295565Z ENGINE Room prepared: Crossroads_10, visit=3, epoch=1, entities=8",
+              "2026-10-14T13:47:57.9465104Z ENGINE Room snapshot committed: Crossroads_10, visit=3, epoch=1, authority=True, peers=0"
+            ],
+            "bossStates": [],
+            "nativePhase": [],
+            "spawnCounts": [],
+            "costs": [],
+            "frameSamples": null
+          },
+          {
+            "role": "guest",
+            "log": ".test-results/playtest-return-final-dream-20261014/guest.log",
+            "sha256": "CFEFE1EFC1B44818F7339BECB059A360F5C680B00FE7DFDA2F1060042FBAE415",
+            "finalPass": [
+              "2026-10-14T13:48:02.6282253Z FINAL PASS native personal death Dream_01_False_Knight"
+            ],
+            "physics": [
+              "2026-10-14T13:47:58.8083595Z PASS special-zone return native wake input prompt",
+              "2026-10-14T13:47:58.8083595Z PASS special-zone return native wake jump event exists",
+              "2026-10-14T13:48:02.0630598Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+              "2026-10-14T13:48:02.0672135Z PASS special-zone return native jump 1 rises",
+              "2026-10-14T13:48:02.1555790Z PASS special-zone return native jump 1 falls again",
+              "2026-10-14T13:48:02.3171311Z PASS special-zone return native jump 2 rises",
+              "2026-10-14T13:48:02.4148517Z PASS special-zone return native jump 2 falls again",
+              "2026-10-14T13:48:02.5741662Z PASS special-zone return lands after repeated jumps"
+            ],
+            "rooms": [
+              "2026-10-14T13:47:46.7552462Z ENGINE Room prepared: Crossroads_47, visit=1, epoch=0, entities=1",
+              "2026-10-14T13:47:46.7918505Z ENGINE Room snapshot committed: Crossroads_47, visit=1, epoch=0, authority=True, peers=0",
+              "2026-10-14T13:47:50.6817399Z ENGINE Room prepared: Dream_01_False_Knight, visit=2, epoch=0, entities=26",
+              "2026-10-14T13:47:50.9037394Z PASS combat room entered",
+              "2026-10-14T13:47:50.9548261Z ENGINE Room snapshot committed: Dream_01_False_Knight, visit=2, epoch=0, authority=False, peers=1",
+              "2026-10-14T13:47:57.6982035Z ENGINE Room prepared: Crossroads_10, visit=3, epoch=1, entities=8",
+              "2026-10-14T13:47:58.0167392Z ENGINE Room snapshot committed: Crossroads_10, visit=3, epoch=1, authority=False, peers=1"
+            ],
+            "bossStates": [],
+            "nativePhase": [],
+            "spawnCounts": [],
+            "costs": [],
+            "frameSamples": null
+          }
+        ]
+      },
+      {
+        "name": "playtest-slam-final-host-authority-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "45E4D6092568DE113405E8DE418BDF035CED787E962115E3E44ABF3C7FA023B2"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0FF80DD93FF04F71A48F2BCFD980EDE817875B5E1A6F6E02FCC28890C63E476A"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "914840E7A61A6A0C3F1445BCFDA8FEBFDA2D89EC266B40294D5EA0EBD5F8888C"
+          }
+        ],
+        "scope": "Two isolated clients: server host has scene authority; GG_Soul_Master then GG_Soul_Tyrant, 75 seconds each, actual first-phase Quake Down and scene-change cache clearing.",
+        "strictLogsAfterShutdownPassed": true,
+        "logs": [
+          {
+            "role": "host",
+            "log": ".test-results/playtest-slam-final-host-authority-20261014/host.log",
+            "sha256": "011D3793F2517E20A52F26C7B1FCC6518A30AFC25BBAA28D25167C635B0E9A77",
+            "finalPass": [
+              "2026-10-14T13:50:58.9137825Z FINAL PASS coverage observations (not all attacks proven)"
+            ],
+            "physics": [],
+            "rooms": [
+              "2026-10-14T13:48:25.6743606Z PASS both room GG_Soul_Master",
+              "2026-10-14T13:48:25.6743606Z ROOM GG_Soul_Master authority=True entities=7",
+              "2026-10-14T13:49:43.6849213Z PASS both room GG_Soul_Tyrant",
+              "2026-10-14T13:49:43.6849213Z ROOM GG_Soul_Tyrant authority=True entities=7"
+            ],
+            "bossStates": [
+              "2026-10-14T13:49:40.8457377Z BOSS STATES SoulMasterPhase2/Init,SoulMaster/Roar,SoulMaster/Idle,SoulMaster/Roar End,SoulMaster/Tele Line,SoulMaster/Shot Antic,SoulMaster/Shot,SoulMaster/Tele Line Q,SoulMaster/Quake Antic,SoulMaster/Quake Down,SoulMaster/Quake Waves,SoulMaster/HS Summon,SoulMaster/HS Orb,SoulMaster/HS Left,SoulMaster/HS Stop,SoulMaster/Hs Ret Right,SoulMaster/HS Dissipate,SoulMaster/Charge Antic,SoulMaster/Charge Left,SoulMaster/Fake Down",
+              "2026-10-14T13:50:58.8823561Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/Roar,SoulTyrant/Idle,SoulTyrant/Tele Line,SoulTyrant/Shot Antic,SoulTyrant/Shot,SoulTyrant/Tele Line Q,SoulTyrant/Quake Antic,SoulTyrant/Quake Down,SoulTyrant/Quake Waves,SoulTyrant/Charge Antic,SoulTyrant/Charge Left,SoulTyrant/Fake Down,SoulTyrant/HS Summon,SoulTyrant/HS Orb,SoulTyrant/HS Left,SoulTyrant/HS Stop,SoulTyrant/Hs Ret Right,SoulTyrant/HS Dissipate,SoulTyrant/Charge Right,SoulTyrant/HS Right,SoulTyrant/HS Ret Left"
+            ],
+            "nativePhase": [],
+            "spawnCounts": [
+              "2026-10-14T13:49:40.8437205Z SPAWN COUNT 11 Mage Orb from=Mage Lord/Shot",
+              "2026-10-14T13:49:40.8437205Z SPAWN COUNT 553 Shockwave Spurt from=/",
+              "2026-10-14T13:49:40.8447236Z SPAWN COUNT 277 Shockwave Spurt L from=/",
+              "2026-10-14T13:49:40.8457377Z SPAWN COUNT 8 Mage Orb Over from=Orb Spinner/Spawn",
+              "2026-10-14T13:50:58.8790904Z SPAWN COUNT 1 Mage Orb from=Mage Lord/Shot",
+              "2026-10-14T13:50:58.8803357Z SPAWN COUNT 11 Mage Orb from=Dream Mage Lord/Shot",
+              "2026-10-14T13:50:58.8808398Z SPAWN COUNT 507 Shockwave Spurt from=/",
+              "2026-10-14T13:50:58.8813451Z SPAWN COUNT 786 Shockwave Spurt L from=/",
+              "2026-10-14T13:50:58.8813451Z SPAWN COUNT 12 Mage Orb Over from=Orb Spinner/Spawn"
+            ],
+            "costs": [
+              {
+                "scene": "GG_Soul_Master",
+                "kind": "process",
+                "count": 1228,
+                "totalMs": 1020.3992,
+                "p95Ms": 1.5152,
+                "maxMs": 90.3016
+              },
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "process",
+                "count": 1452,
+                "totalMs": 1254.2169,
+                "p95Ms": 1.3859,
+                "maxMs": 34.7557
+              }
+            ],
+            "frameSamples": {
+              "twoSecondWindows": 76,
+              "maximumMs": 195.2419,
+              "windowsAbove100Ms": 2,
+              "lastCumulativeCounters": "2026-10-14T13:50:57.9821319Z PERF p95ms=10.9961 maxms=27.2805 registrations=2069 registrationMs=1927.6244 retirements=2036 retirementMs=197.5184 replicaSpawns=0 replicaSpawnMs=0"
+            }
+          },
+          {
+            "role": "guest",
+            "log": ".test-results/playtest-slam-final-host-authority-20261014/guest.log",
+            "sha256": "C569B45F28F79EAC4A6D424568C39A5F194A0FDEFA4A9BE3D6276AC103200102",
+            "finalPass": [
+              "2026-10-14T13:50:58.9137825Z FINAL PASS coverage observations (not all attacks proven)"
+            ],
+            "physics": [],
+            "rooms": [
+              "2026-10-14T13:48:25.6718450Z PASS both room GG_Soul_Master",
+              "2026-10-14T13:48:25.6728679Z ROOM GG_Soul_Master authority=False entities=7",
+              "2026-10-14T13:49:43.6833881Z PASS both room GG_Soul_Tyrant",
+              "2026-10-14T13:49:43.6839140Z ROOM GG_Soul_Tyrant authority=False entities=7"
+            ],
+            "bossStates": [
+              "2026-10-14T13:49:40.6763948Z BOSS STATES ",
+              "2026-10-14T13:50:58.6870488Z BOSS STATES "
+            ],
+            "nativePhase": [],
+            "spawnCounts": [
+              "2026-10-14T13:50:58.6870488Z SPAWN COUNT 1 Mage Orb from=Mage Lord/Shot"
+            ],
+            "costs": [
+              {
+                "scene": "GG_Soul_Master",
+                "kind": "prefab",
+                "count": 849,
+                "totalMs": 658.1725,
+                "p95Ms": 1.3605,
+                "maxMs": 12.1447
+              },
+              {
+                "scene": "GG_Soul_Master",
+                "kind": "process",
+                "count": 1186,
+                "totalMs": 942.986700000001,
+                "p95Ms": 1.4598,
+                "maxMs": 81.4962
+              },
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "prefab",
+                "count": 1301,
+                "totalMs": 1100.5934,
+                "p95Ms": 1.3208,
+                "maxMs": 9.2022
+              },
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "process",
+                "count": 1375,
+                "totalMs": 1156.7267,
+                "p95Ms": 1.3933,
+                "maxMs": 30.0404
+              }
+            ],
+            "frameSamples": {
+              "twoSecondWindows": 76,
+              "maximumMs": 55.7597,
+              "windowsAbove100Ms": 0,
+              "lastCumulativeCounters": "2026-10-14T13:50:57.7491732Z PERF p95ms=3.7578 maxms=30.767 registrations=1 registrationMs=4.31779999999991 retirements=1 retirementMs=0.2489 replicaSpawns=2057 replicaSpawnMs=3541.83739999999"
+            }
+          }
+        ]
+      },
+      {
+        "name": "playtest-slam-final-host-replica-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "45E4D6092568DE113405E8DE418BDF035CED787E962115E3E44ABF3C7FA023B2"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0FF80DD93FF04F71A48F2BCFD980EDE817875B5E1A6F6E02FCC28890C63E476A"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "914840E7A61A6A0C3F1445BCFDA8FEBFDA2D89EC266B40294D5EA0EBD5F8888C"
+          }
+        ],
+        "scope": "Two isolated clients: guest enters first and has scene authority; server host displays replicas in GG_Soul_Tyrant for 60 seconds, actual first-phase Quake Down.",
+        "strictLogsAfterShutdownPassed": true,
+        "logs": [
+          {
+            "role": "host",
+            "log": ".test-results/playtest-slam-final-host-replica-20261014/host.log",
+            "sha256": "85E6476BBF1B391D8E22D4F4B63DADA052B02C1C3F35299A6C2B546AD69EF9B9",
+            "finalPass": [
+              "2026-10-14T13:52:18.1623854Z FINAL PASS coverage observations (not all attacks proven)"
+            ],
+            "physics": [],
+            "rooms": [
+              "2026-10-14T13:51:17.8694131Z PASS both room GG_Soul_Tyrant",
+              "2026-10-14T13:51:17.8704165Z ROOM GG_Soul_Tyrant authority=False entities=7"
+            ],
+            "bossStates": [
+              "2026-10-14T13:52:17.8772182Z BOSS STATES "
+            ],
+            "nativePhase": [],
+            "spawnCounts": [],
+            "costs": [
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "prefab",
+                "count": 205,
+                "totalMs": 207.2059,
+                "p95Ms": 1.8082,
+                "maxMs": 7.8043
+              },
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "process",
+                "count": 546,
+                "totalMs": 403.6037,
+                "p95Ms": 2.0293,
+                "maxMs": 81.8802
+              }
+            ],
+            "frameSamples": {
+              "twoSecondWindows": 30,
+              "maximumMs": 75.5556,
+              "windowsAbove100Ms": 0,
+              "lastCumulativeCounters": "2026-10-14T13:52:15.9337480Z PERF p95ms=3.8656 maxms=12.5894 registrations=0 registrationMs=0.0338 retirements=0 retirementMs=0 replicaSpawns=204 replicaSpawnMs=453.8539"
+            }
+          },
+          {
+            "role": "guest",
+            "log": ".test-results/playtest-slam-final-host-replica-20261014/guest.log",
+            "sha256": "092017D2BEFEB940CA84D492AF7C63F39B943393D67984F201ADE054D7749006",
+            "finalPass": [
+              "2026-10-14T13:52:18.1623854Z FINAL PASS coverage observations (not all attacks proven)"
+            ],
+            "physics": [],
+            "rooms": [
+              "2026-10-14T13:51:17.8694131Z PASS both room GG_Soul_Tyrant",
+              "2026-10-14T13:51:17.8704165Z ROOM GG_Soul_Tyrant authority=True entities=7"
+            ],
+            "bossStates": [
+              "2026-10-14T13:52:18.0516363Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/Roar,SoulTyrant/Idle,SoulTyrant/Tele Line Q,SoulTyrant/Quake Antic,SoulTyrant/Quake Down,SoulTyrant/Quake Waves,SoulTyrant/Tele Line,SoulTyrant/Shot Antic,SoulTyrant/Shot,SoulTyrant/HS Summon,SoulTyrant/HS Orb,SoulTyrant/HS Left,SoulTyrant/HS Stop,SoulTyrant/Hs Ret Right,SoulTyrant/HS Dissipate,SoulTyrant/Charge Antic,SoulTyrant/Charge Left"
+            ],
+            "nativePhase": [],
+            "spawnCounts": [
+              "2026-10-14T13:52:18.0496273Z SPAWN COUNT 95 Shockwave Spurt from=/",
+              "2026-10-14T13:52:18.0496273Z SPAWN COUNT 75 Shockwave Spurt L from=/",
+              "2026-10-14T13:52:18.0506338Z SPAWN COUNT 18 Mage Orb from=Dream Mage Lord/Shot",
+              "2026-10-14T13:52:18.0516363Z SPAWN COUNT 18 Mage Orb Over from=Orb Spinner/Spawn"
+            ],
+            "costs": [
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "process",
+                "count": 582,
+                "totalMs": 398.6973,
+                "p95Ms": 2.1097,
+                "maxMs": 78.8789
+              }
+            ],
+            "frameSamples": {
+              "twoSecondWindows": 30,
+              "maximumMs": 178.0463,
+              "windowsAbove100Ms": 1,
+              "lastCumulativeCounters": "2026-10-14T13:52:16.1173193Z PERF p95ms=10.5055 maxms=15.3504 registrations=204 registrationMs=216.4219 retirements=202 retirementMs=17.8931 replicaSpawns=0 replicaSpawnMs=0"
+            }
+          }
+        ]
+      },
+      {
+        "name": "playtest-slam-final-phase2-live-objects-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "45E4D6092568DE113405E8DE418BDF035CED787E962115E3E44ABF3C7FA023B2"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0FF80DD93FF04F71A48F2BCFD980EDE817875B5E1A6F6E02FCC28890C63E476A"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "914840E7A61A6A0C3F1445BCFDA8FEBFDA2D89EC266B40294D5EA0EBD5F8888C"
+          }
+        ],
+        "scope": "Two isolated clients: native HealthManager damage advances GG_Soul_Tyrant to phase 2; 60 seconds with actual phase-2 Quake Down and native hazard retirement.",
+        "strictLogsAfterShutdownPassed": true,
+        "logs": [
+          {
+            "role": "host",
+            "log": ".test-results/playtest-slam-final-phase2-live-objects-20261014/host.log",
+            "sha256": "725639A63E1B3E47B5AAE599F43937A6A70FEF8A123B7DBB7D828FAC77F56CED",
+            "finalPass": [
+              "2026-10-14T13:57:57.0905773Z FINAL PASS coverage observations (not all attacks proven)"
+            ],
+            "physics": [],
+            "rooms": [
+              "2026-10-14T13:56:53.8383162Z PASS both room GG_Soul_Tyrant",
+              "2026-10-14T13:56:53.8383162Z ROOM GG_Soul_Tyrant authority=True entities=7"
+            ],
+            "bossStates": [
+              "2026-10-14T13:57:57.0414993Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/,SoulTyrantPhase2/Wait,SoulTyrantPhase2/Tele Line Q,SoulTyrantPhase2/Quake Antic,SoulTyrantPhase2/Quake Down,SoulTyrantPhase2/Quake Land,SoulTyrantPhase2/Tele Line,SoulTyrantPhase2/Shot Antic,SoulTyrantPhase2/Orb Summon,SoulTyrantPhase2/Spawn Fireball,SoulTyrantPhase2/Shot CD,SoulTyrantPhase2/Tele Out"
+            ],
+            "nativePhase": [
+              "2026-10-14T13:56:56.8687181Z NATIVE PHASE DAMAGE SoulTyrant hp=900",
+              "2026-10-14T13:56:56.8752506Z PASS native Soul phase 2 activated GG_Soul_Tyrant"
+            ],
+            "spawnCounts": [
+              "2026-10-14T13:57:57.0389523Z SPAWN COUNT 77 Shockwave Spurt from=/",
+              "2026-10-14T13:57:57.0404601Z SPAWN COUNT 57 Shockwave Spurt L from=/",
+              "2026-10-14T13:57:57.0404601Z SPAWN COUNT 14 Mage Orb from=Dream Mage Lord Phase2/Spawn Fireball"
+            ],
+            "costs": [
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "process",
+                "count": 517,
+                "totalMs": 342.8333,
+                "p95Ms": 1.6065,
+                "maxMs": 84.7365
+              }
+            ],
+            "frameSamples": {
+              "twoSecondWindows": 30,
+              "maximumMs": 212.7723,
+              "windowsAbove100Ms": 1,
+              "lastCumulativeCounters": "2026-10-14T13:57:55.0944334Z PERF p95ms=5.4141 maxms=12.4704 registrations=148 registrationMs=156.1759 retirements=148 retirementMs=11.7118 replicaSpawns=0 replicaSpawnMs=0"
+            }
+          },
+          {
+            "role": "guest",
+            "log": ".test-results/playtest-slam-final-phase2-live-objects-20261014/guest.log",
+            "sha256": "8BBAD0DD10D5C8E684A6BBDB06F49FD5836A1B749449BECB189B32538A46FD15",
+            "finalPass": [
+              "2026-10-14T13:57:57.0905773Z FINAL PASS coverage observations (not all attacks proven)"
+            ],
+            "physics": [],
+            "rooms": [
+              "2026-10-14T13:56:53.8372898Z PASS both room GG_Soul_Tyrant",
+              "2026-10-14T13:56:53.8372898Z ROOM GG_Soul_Tyrant authority=False entities=7"
+            ],
+            "bossStates": [
+              "2026-10-14T13:57:53.8439741Z BOSS STATES "
+            ],
+            "nativePhase": [
+              "2026-10-14T13:56:53.8383162Z PASS native Soul phase 2 activated GG_Soul_Tyrant"
+            ],
+            "spawnCounts": [],
+            "costs": [
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "prefab",
+                "count": 148,
+                "totalMs": 135.5084,
+                "p95Ms": 1.6054,
+                "maxMs": 8.3371
+              },
+              {
+                "scene": "GG_Soul_Tyrant",
+                "kind": "process",
+                "count": 489,
+                "totalMs": 333.9519,
+                "p95Ms": 1.1923,
+                "maxMs": 104.7496
+              }
+            ],
+            "frameSamples": {
+              "twoSecondWindows": 30,
+              "maximumMs": 36.2598,
+              "windowsAbove100Ms": 0,
+              "lastCumulativeCounters": "2026-10-14T13:57:51.8847997Z PERF p95ms=3.8849 maxms=6.1828 registrations=0 registrationMs=0.0252 retirements=0 retirementMs=0 replicaSpawns=148 replicaSpawnMs=277.0748"
+            }
+          }
+        ]
+      }
+    ],
+    "regression": {
+      "passed": 143,
+      "failed": 0,
+      "log": ".test-results/playtest-wipe-soul-20261014/verified-regression.log",
+      "sha256": "095FA1D59547A1E0E9B66859AA08665C9DBF920B93F40B8EE70BC7BEC7F913E4"
+    },
+    "strictLogGate": {
+      "passed": 14,
+      "log": ".test-results/playtest-wipe-soul-20261014/verified-log-gate.log",
+      "sha256": "4E64A4DEC6D6B5C447F1D237DAD5A77BAF07AB26C6AF3202416E96D3186BED89"
+    }
+  },
+  "comparisons": {
+    "gravityBaseline": [
+      {
+        "role": "host",
+        "log": ".test-results/wipe-return-gravity-native-baseline-20261014/host.log",
+        "sha256": "0E08F9BE04289B2887502F61C9850296C4B372C3A682F2AF1792C21FFE842A14",
+        "finalPass": [],
+        "physics": [
+          "2026-10-14T13:02:52.0419708Z RETURN PHYSICS special-zone return gravity=0 cachedGravity=0 simulated=True"
+        ],
+        "rooms": [
+          "2026-10-14T13:02:40.9490975Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7",
+          "2026-10-14T13:02:40.9837131Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0",
+          "2026-10-14T13:02:41.9121510Z ENGINE Room prepared: GG_Atrium, visit=2, epoch=0, entities=17",
+          "2026-10-14T13:02:42.0547017Z ENGINE Room snapshot committed: GG_Atrium, visit=2, epoch=0, authority=True, peers=0",
+          "2026-10-14T13:02:42.9498585Z ENGINE Room prepared: GG_Hornet_1, visit=3, epoch=0, entities=3",
+          "2026-10-14T13:02:43.0495361Z PASS combat room entered",
+          "2026-10-14T13:02:43.0744045Z ENGINE Room snapshot committed: GG_Hornet_1, visit=3, epoch=0, authority=True, peers=0",
+          "2026-10-14T13:02:51.8961023Z ENGINE Room prepared: GG_Atrium, visit=4, epoch=1, entities=17",
+          "2026-10-14T13:02:52.0242691Z ENGINE Room snapshot committed: GG_Atrium, visit=4, epoch=1, authority=False, peers=1"
+        ],
+        "bossStates": [],
+        "nativePhase": [],
+        "spawnCounts": [],
+        "costs": [],
+        "frameSamples": null
+      },
+      {
+        "role": "guest",
+        "log": ".test-results/wipe-return-gravity-native-baseline-20261014/guest.log",
+        "sha256": "FCC5162217045BE4B8F6BB1E5FA7859B88987AB6BE38BB3BA5275ECC9102617B",
+        "finalPass": [],
+        "physics": [
+          "2026-10-14T13:02:52.0419708Z RETURN PHYSICS special-zone return gravity=0 cachedGravity=0 simulated=True"
+        ],
+        "rooms": [
+          "2026-10-14T13:02:40.9296536Z ENGINE Room prepared: Crossroads_47, visit=1, epoch=0, entities=1",
+          "2026-10-14T13:02:40.9705327Z ENGINE Room snapshot committed: Crossroads_47, visit=1, epoch=0, authority=True, peers=0",
+          "2026-10-14T13:02:44.9684445Z ENGINE Room prepared: GG_Atrium, visit=2, epoch=0, entities=17",
+          "2026-10-14T13:02:45.1051126Z ENGINE Room snapshot committed: GG_Atrium, visit=2, epoch=0, authority=True, peers=0",
+          "2026-10-14T13:02:46.0051308Z ENGINE Room prepared: GG_Hornet_1, visit=3, epoch=0, entities=3",
+          "2026-10-14T13:02:46.1229409Z PASS combat room entered",
+          "2026-10-14T13:02:46.1890027Z ENGINE Room snapshot committed: GG_Hornet_1, visit=3, epoch=0, authority=False, peers=1",
+          "2026-10-14T13:02:51.8676455Z ENGINE Room prepared: GG_Atrium, visit=4, epoch=1, entities=17",
+          "2026-10-14T13:02:52.0047767Z ENGINE Room snapshot committed: GG_Atrium, visit=4, epoch=1, authority=True, peers=0"
+        ],
+        "bossStates": [],
+        "nativePhase": [],
+        "spawnCounts": [],
+        "costs": [],
+        "frameSamples": null
+      }
+    ],
+    "slamBaseline": [
+      {
+        "role": "host",
+        "log": ".test-results/soul-slam-host-replica-cost-baseline-20261014/host.log",
+        "sha256": "148DAA5C8F36016AB2BE16B9D86DE2B3479AA02C1286539E8F3AC9F7B0C9E456",
+        "finalPass": [
+          "2026-10-14T13:29:31.1228393Z FINAL PASS coverage observations (not all attacks proven)"
+        ],
+        "physics": [],
+        "rooms": [
+          "2026-10-14T13:28:45.9011763Z PASS both room GG_Soul_Tyrant",
+          "2026-10-14T13:28:45.9021815Z ROOM GG_Soul_Tyrant authority=False entities=7"
+        ],
+        "bossStates": [
+          "2026-10-14T13:29:30.9050619Z BOSS STATES "
+        ],
+        "nativePhase": [],
+        "spawnCounts": [],
+        "costs": [
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "prefab",
+            "count": 366,
+            "totalMs": 2808.8155,
+            "p95Ms": 9.8853,
+            "maxMs": 19.3059
+          },
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "process",
+            "count": 707,
+            "totalMs": 583.9722,
+            "p95Ms": 1.8202,
+            "maxMs": 84.6008
+          }
+        ],
+        "frameSamples": {
+          "twoSecondWindows": 23,
+          "maximumMs": 711.6411,
+          "windowsAbove100Ms": 3,
+          "lastCumulativeCounters": "2026-10-14T13:29:30.5675698Z PERF p95ms=3.8209 maxms=12.8379 registrations=0 registrationMs=0.0384 retirements=0 retirementMs=0 replicaSpawns=366 replicaSpawnMs=3252.0091"
+        }
+      },
+      {
+        "role": "guest",
+        "log": ".test-results/soul-slam-host-replica-cost-baseline-20261014/guest.log",
+        "sha256": "2E067D5C9F80D2681E181B55908816622907634EE41EEEA332BFA50AC402AA72",
+        "finalPass": [
+          "2026-10-14T13:29:31.1228393Z FINAL PASS coverage observations (not all attacks proven)"
+        ],
+        "physics": [],
+        "rooms": [
+          "2026-10-14T13:28:45.9021815Z PASS both room GG_Soul_Tyrant",
+          "2026-10-14T13:28:45.9033362Z ROOM GG_Soul_Tyrant authority=True entities=7"
+        ],
+        "bossStates": [
+          "2026-10-14T13:29:31.0771491Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/Roar,SoulTyrant/Idle,SoulTyrant/Tele Line Q,SoulTyrant/Quake Antic,SoulTyrant/Quake Down,SoulTyrant/Quake Waves,SoulTyrant/Tele Line,SoulTyrant/Charge Antic,SoulTyrant/Charge Left,SoulTyrant/Shot Antic,SoulTyrant/Shot,SoulTyrant/HS Summon,SoulTyrant/HS Orb,SoulTyrant/HS Left,SoulTyrant/HS Stop,SoulTyrant/Hs Ret Right,SoulTyrant/HS Dissipate"
+        ],
+        "nativePhase": [],
+        "spawnCounts": [
+          "2026-10-14T13:29:31.0741219Z SPAWN COUNT 192 Shockwave Spurt from=/",
+          "2026-10-14T13:29:31.0751349Z SPAWN COUNT 150 Shockwave Spurt L from=/",
+          "2026-10-14T13:29:31.0751349Z SPAWN COUNT 12 Mage Orb from=Dream Mage Lord/Shot",
+          "2026-10-14T13:29:31.0761387Z SPAWN COUNT 12 Mage Orb Over from=Orb Spinner/Spawn"
+        ],
+        "costs": [
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "process",
+            "count": 736,
+            "totalMs": 488.337,
+            "p95Ms": 1.2125,
+            "maxMs": 79.1748
+          }
+        ],
+        "frameSamples": {
+          "twoSecondWindows": 23,
+          "maximumMs": 178.4482,
+          "windowsAbove100Ms": 1,
+          "lastCumulativeCounters": "2026-10-14T13:29:30.1153910Z PERF p95ms=6.9004 maxms=11.1318 registrations=366 registrationMs=309.5916 retirements=360 retirementMs=31.9922 replicaSpawns=0 replicaSpawnMs=0"
+        }
+      }
+    ],
+    "slamResourceCacheOnly": [
+      {
+        "role": "host",
+        "log": ".test-results/soul-slam-host-replica-prefab-cache-20261014/host.log",
+        "sha256": "4065055A37CE687E818C90789358F0CD97F3679CB2CCECC2AD75C373E713B2FC",
+        "finalPass": [
+          "2026-10-14T13:31:44.0586143Z FINAL PASS coverage observations (not all attacks proven)"
+        ],
+        "physics": [],
+        "rooms": [
+          "2026-10-14T13:30:58.8342450Z PASS both room GG_Soul_Tyrant",
+          "2026-10-14T13:30:58.8342450Z ROOM GG_Soul_Tyrant authority=False entities=7"
+        ],
+        "bossStates": [
+          "2026-10-14T13:31:43.8362325Z BOSS STATES "
+        ],
+        "nativePhase": [],
+        "spawnCounts": [],
+        "costs": [
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "prefab",
+            "count": 200,
+            "totalMs": 541.7339,
+            "p95Ms": 3.7993,
+            "maxMs": 9.2688
+          },
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "process",
+            "count": 541,
+            "totalMs": 404.5222,
+            "p95Ms": 1.771,
+            "maxMs": 95.4426
+          }
+        ],
+        "frameSamples": {
+          "twoSecondWindows": 23,
+          "maximumMs": 105.2548,
+          "windowsAbove100Ms": 1,
+          "lastCumulativeCounters": "2026-10-14T13:31:42.8752460Z PERF p95ms=3.6265 maxms=12.7989 registrations=0 registrationMs=0.0231 retirements=0 retirementMs=0 replicaSpawns=200 replicaSpawnMs=771.6378"
+        }
+      },
+      {
+        "role": "guest",
+        "log": ".test-results/soul-slam-host-replica-prefab-cache-20261014/guest.log",
+        "sha256": "1D1A0082CE2B9160AE7F593EB94439BBB4879CB517C9A150840B9DD2EE590D10",
+        "finalPass": [
+          "2026-10-14T13:31:44.0596166Z FINAL PASS coverage observations (not all attacks proven)"
+        ],
+        "physics": [],
+        "rooms": [
+          "2026-10-14T13:30:58.8352701Z PASS both room GG_Soul_Tyrant",
+          "2026-10-14T13:30:58.8362765Z ROOM GG_Soul_Tyrant authority=True entities=7"
+        ],
+        "bossStates": [
+          "2026-10-14T13:31:44.0053540Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/Roar,SoulTyrant/Idle,SoulTyrant/Tele Line,SoulTyrant/Shot Antic,SoulTyrant/Shot,SoulTyrant/Tele Line Q,SoulTyrant/Quake Antic,SoulTyrant/Quake Down,SoulTyrant/Quake Waves,SoulTyrant/Charge Antic,SoulTyrant/Charge Left,SoulTyrant/HS Summon,SoulTyrant/HS Orb,SoulTyrant/HS Left,SoulTyrant/HS Stop,SoulTyrant/Hs Ret Right,SoulTyrant/HS Dissipate"
+        ],
+        "nativePhase": [],
+        "spawnCounts": [
+          "2026-10-14T13:31:44.0033031Z SPAWN COUNT 8 Mage Orb from=Dream Mage Lord/Shot",
+          "2026-10-14T13:31:44.0038070Z SPAWN COUNT 96 Shockwave Spurt from=/",
+          "2026-10-14T13:31:44.0038070Z SPAWN COUNT 78 Shockwave Spurt L from=/",
+          "2026-10-14T13:31:44.0053540Z SPAWN COUNT 18 Mage Orb Over from=Orb Spinner/Spawn"
+        ],
+        "costs": [
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "process",
+            "count": 565,
+            "totalMs": 345.6357,
+            "p95Ms": 1.757,
+            "maxMs": 80.6329
+          }
+        ],
+        "frameSamples": {
+          "twoSecondWindows": 23,
+          "maximumMs": 173.7956,
+          "windowsAbove100Ms": 1,
+          "lastCumulativeCounters": "2026-10-14T13:31:43.0521149Z PERF p95ms=9.800699 maxms=17.9322 registrations=200 registrationMs=172.5691 retirements=199 retirementMs=16.4182 replicaSpawns=0 replicaSpawnMs=0"
+        }
+      }
+    ],
+    "slamLookupFixed": [
+      {
+        "role": "host",
+        "log": ".test-results/soul-slam-host-replica-lookup-fixed-20261014/host.log",
+        "sha256": "135AC1B981F78B3AFFC8B6E37062E95987D313F8B97EFE9559A45B511C0FA430",
+        "finalPass": [
+          "2026-10-14T13:34:03.2811037Z FINAL PASS coverage observations (not all attacks proven)"
+        ],
+        "physics": [],
+        "rooms": [
+          "2026-10-14T13:33:17.9856364Z PASS both room GG_Soul_Tyrant",
+          "2026-10-14T13:33:17.9866655Z ROOM GG_Soul_Tyrant authority=False entities=7"
+        ],
+        "bossStates": [
+          "2026-10-14T13:34:02.9922294Z BOSS STATES "
+        ],
+        "nativePhase": [],
+        "spawnCounts": [],
+        "costs": [
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "prefab",
+            "count": 354,
+            "totalMs": 302.5031,
+            "p95Ms": 1.4622,
+            "maxMs": 9.0856
+          },
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "process",
+            "count": 695,
+            "totalMs": 506.8104,
+            "p95Ms": 1.5149,
+            "maxMs": 94.8283
+          }
+        ],
+        "frameSamples": {
+          "twoSecondWindows": 23,
+          "maximumMs": 57.1606,
+          "windowsAbove100Ms": 0,
+          "lastCumulativeCounters": "2026-10-14T13:34:02.0282254Z PERF p95ms=4.3785 maxms=11.3514 registrations=0 registrationMs=0.0483 retirements=0 retirementMs=0 replicaSpawns=354 replicaSpawnMs=646.3809"
+        }
+      },
+      {
+        "role": "guest",
+        "log": ".test-results/soul-slam-host-replica-lookup-fixed-20261014/guest.log",
+        "sha256": "9C610F7A45FEF001F4DB12FEC0EE63F4F8F50D69AAFA2C47173FC8CE16E67A30",
+        "finalPass": [
+          "2026-10-14T13:34:03.2811037Z FINAL PASS coverage observations (not all attacks proven)"
+        ],
+        "physics": [],
+        "rooms": [
+          "2026-10-14T13:33:17.9871845Z PASS both room GG_Soul_Tyrant",
+          "2026-10-14T13:33:17.9881935Z ROOM GG_Soul_Tyrant authority=True entities=7"
+        ],
+        "bossStates": [
+          "2026-10-14T13:34:03.1652318Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/Roar,SoulTyrant/Idle,SoulTyrant/Tele Line Q,SoulTyrant/Quake Antic,SoulTyrant/Quake Down,SoulTyrant/Quake Waves,SoulTyrant/Tele Line,SoulTyrant/Fake Down,SoulTyrant/Charge Antic,SoulTyrant/Charge Left,SoulTyrant/HS Summon,SoulTyrant/HS Orb,SoulTyrant/HS Left,SoulTyrant/HS Stop,SoulTyrant/Hs Ret Right,SoulTyrant/HS Dissipate,SoulTyrant/Shot Antic,SoulTyrant/Shot"
+        ],
+        "nativePhase": [],
+        "spawnCounts": [
+          "2026-10-14T13:34:03.1580223Z SPAWN COUNT 186 Shockwave Spurt from=/",
+          "2026-10-14T13:34:03.1594643Z SPAWN COUNT 148 Shockwave Spurt L from=/",
+          "2026-10-14T13:34:03.1594643Z SPAWN COUNT 12 Mage Orb Over from=Orb Spinner/Spawn",
+          "2026-10-14T13:34:03.1604914Z SPAWN COUNT 8 Mage Orb from=Dream Mage Lord/Shot"
+        ],
+        "costs": [
+          {
+            "scene": "GG_Soul_Tyrant",
+            "kind": "process",
+            "count": 724,
+            "totalMs": 507.6111,
+            "p95Ms": 1.3591,
+            "maxMs": 85.4128
+          }
+        ],
+        "frameSamples": {
+          "twoSecondWindows": 23,
+          "maximumMs": 174.8494,
+          "windowsAbove100Ms": 1,
+          "lastCumulativeCounters": "2026-10-14T13:34:02.2225438Z PERF p95ms=11.4848 maxms=19.4226 registrations=354 registrationMs=325.1116 retirements=353 retirementMs=30.944 replicaSpawns=0 replicaSpawnMs=0"
+        }
+      }
+    ]
+  },
+  "retainedNonAcceptanceRuns": [
+    {
+      "classification": "Probe error: reading destroyed phase-1 objects. Two diagnostic reads fixed in adb28ee; production binaries unchanged.",
+      "name": "playtest-slam-final-phase2-20261014"
+    },
+    {
+      "classification": "Probe omitted native Dream Return/Ready wake input; retained as fixture failure.",
+      "name": "playtest-return-final-godhome-20261014"
+    },
+    {
+      "classification": "Probe placement/wake sequencing diagnostic; not production failure evidence.",
+      "name": "death-return-motion-dream-20261014"
+    },
+    {
+      "classification": "Probe omitted native wake input; not production failure evidence.",
+      "name": "death-return-motion-dream-native-position-20261014"
+    },
+    {
+      "classification": "Hidden rendered process never initialized probe; no terminal result, not rendered performance acceptance.",
+      "name": "soul-slam-rendered-performance-baseline-20261014"
+    },
+    {
+      "classification": "Suspended target did not produce observed phase-1 slam; not slam acceptance.",
+      "name": "soul-phase1-slam-cost-baseline-20261014"
+    },
+    {
+      "classification": "Early probe directly set zero gravity, corrupting native gravity cache; not a valid production baseline.",
+      "name": "wipe-return-gravity-baseline-20261014"
+    },
+    {
+      "classification": "Early probe lacked full native jump sequence; not production baseline evidence.",
+      "name": "wipe-return-gravity-baseline-r2-20261014"
+    }
+  ],
+  "limitations": [
+    "Same-machine isolated Unity clients, actual UDP, batch mode; not a rendered FPS or real two-machine FRP guarantee.",
+    "SpawnDescriptor.Create timings include both prefab resolution and Instantiate. Native random attacks were not fixed; comparison is not identical input per frame.",
+    "Godhome and dream checks cover personal native death return; ordinary story check additionally covers full-team wipe.",
+    "Full current-build 12-run release matrix, all bosses/Pantheons, in-flight takeover, progression rewards and three/four-player play remain incomplete.",
+    "Original inactive Hornet needle, repeated False Knight armor/head and transient frozen camera findings remain unresolved."
+  ],
+  "normalGameInstalled": false,
+  "playerSavesModified": false
+}

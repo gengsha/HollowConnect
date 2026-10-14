@@ -38,6 +38,10 @@
 
 批处理探针仅对 Respawn、HazardRespawn 与 LoadFirstScene 的渲染帧等待改为下一模拟帧。生产模块不替换这些原生协程。
 
+复活运动检查在个人 F6、全队回椅和特殊区域返回后，等待原生入场与反应保护完成，再连续两次调用原生 HeroJump / Jump，要求正重力、起跳、负向落速和最终落地。悬空测试靶子使用 AffectedByGravity(false) 保留原生缓存；返回后不再 PrepareHero。梦境返回的 Dream Return/Ready 原本等待玩家按键，探针发送其 ListenForJump.wasPressed 配置的原生事件完成唤醒，未直接改 FSM 状态。超时保存角色物理、输入及附近/骑士 FSM 状态。
+
+`coverage` 的 `HOLLOWCONNECT_COVERAGE_PERFORMANCE=1` 用自然落地的免伤靶子观察灵魂法师系列下砸，每两秒记录实体数量、帧耗时和临时 detour 测得的登记、退休、接收生成、预制体查找与处理耗时。它关闭逐帧位置文件和重复实体详列，保留开场 FSM/预制体及最终生成数量；未观察到原生 Quake Down 必须失败。`HOLLOWCONNECT_COVERAGE_SCENES=GG_Soul_Master,GG_Soul_Tyrant` 选择两个变体，`HOLLOWCONNECT_COVERAGE_AUTHORITY=guest` 让服务器房主显示副本。`HOLLOWCONNECT_COVERAGE_SOUL_PHASE2=1` 用原生 HealthManager 伤害推进二阶段，不设置 Boss FSM。该同机诊断不等于真实双机 FRP 或完整招式验收。
+
 0.1.10 新增 `HOLLOWCONNECT_SMOKE_MODE=grimm-motion`。`HOLLOWCONNECT_GRIMM_SCENE=GG_Grimm/GG_Grimm_Nightmare` 选择房间，`HOLLOWCONNECT_GRIMM_AUTHORITY=host/guest` 交换先入顺序，`HOLLOWCONNECT_GRIMM_ENTRY_DELAY` 指定后来者延迟秒数。直接观察原生 FireGrimmBall 的推力、网络登记后的协程和横向运动，另检查横向火蝠、副本无重力 / 速度和位置样本。要求至少 8 次保留发射参数、3 次正确方向横向运动和 3 个横向飞行火蝠；不能用两端共同错误的位置一致替代它。
 
 `HOLLOWCONNECT_GRIMM_HANDOFF=1` 在气球火球一轮结束后让原权威离房，要求新权威继续发射上述原生攻击，再让原权威重新入房核对移动弹幕。这不证明飞行中弹幕接管。双方正常断开后才停止服务器，任一 `.failed` 均为失败。当前角色免伤但仍会受到原生运动与碰撞，招式未触发 / 样本不足也必须失败；诊断记录 Hero 和 Boss 的站位及原生状态，不能隐藏这种失败。
