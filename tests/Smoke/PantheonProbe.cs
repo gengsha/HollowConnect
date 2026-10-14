@@ -74,7 +74,16 @@ public sealed class PantheonProbe : MonoBehaviour {
     }
     private Dictionary<ulong, Entity> Entities => Field<Dictionary<ulong, Entity>>(manager, "_entities");
     private bool Has(string n) => File.Exists(Path.Combine(root, n));
-    private void Flag(string n, string value="ready") => File.WriteAllText(Path.Combine(root,n),value);
+    private void Flag(string n, string value="ready") {
+        lock(logLock) {
+            var path=Path.Combine(root,n);
+            // Coordination flags are immutable: publish only after closing
+            // their complete contents. Exists must never expose an open writer.
+            if(File.Exists(path))return;
+            var staged=Path.Combine(root,role+"."+Guid.NewGuid().ToString("N")+".flag.tmp");
+            File.WriteAllText(staged,value);File.Move(staged,path);
+        }
+    }
     private void Mark(string value) { lock(logLock) File.AppendAllText(Path.Combine(root,role+".log"),DateTime.UtcNow.ToString("O")+" "+value+"\n"); }
     private IEnumerator Until(Func<bool> ready,string label,float seconds=45) {
         var end=Time.realtimeSinceStartup+seconds;
