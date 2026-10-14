@@ -1,16 +1,16 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$version = '0.1.13'
+$version = '0.1.14'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
-$taskEvidencePath=Join-Path $root 'docs/evidence/runtime-room-0.1.13.json'
+$taskEvidencePath=Join-Path $root "docs/evidence/runtime-room-$version.json"
 $taskEvidence=Get-Content -LiteralPath $taskEvidencePath -Raw | ConvertFrom-Json
-$taskBlockers=Get-Content -LiteralPath (Join-Path $root 'docs/evidence/runtime-blockers-0.1.13.json') -Raw | ConvertFrom-Json
+$taskBlockers=Get-Content -LiteralPath (Join-Path $root "docs/evidence/runtime-blockers-$version.json") -Raw | ConvertFrom-Json
 if($taskBlockers.version -ne $version){throw 'Wrong blocker ledger version.'}
 $taskUnresolved=@($taskBlockers.findings | Where-Object {$_.resolved -ne $true})
 if($taskUnresolved.Count -and !$Playtest){throw 'Unresolved runtime blocker; no release package created.'}
-$taskAuthorizationRelative='docs/evidence/playtest-authorization-0.1.13'+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})+'.json'
+$taskAuthorizationRelative="docs/evidence/playtest-authorization-$version"+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})+'.json'
 $taskAuthorizationPath=Join-Path $root $taskAuthorizationRelative
 if($Playtest){
     $taskAuthorization=Get-Content -LiteralPath $taskAuthorizationPath -Raw | ConvertFrom-Json
@@ -37,7 +37,7 @@ foreach($taskRun in $taskRuntime.runs){
 }
 & dotnet build (Join-Path $root 'src\HollowConnect.Installer\HollowConnect.Installer.csproj') -c Release --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Installer build failed.' }
-$taskPackageName="HollowConnect-$version"+$(if($Playtest){'-playtest'}else{''})+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})
+$taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package = Join-Path $root ('dist\'+$taskPackageName)
 $payload = Join-Path $package 'payload\HKMP'
 New-Item -ItemType Directory -Force -Path $payload,(Join-Path $package 'dependencies') | Out-Null
@@ -55,7 +55,7 @@ $manifest = [ordered]@{
     releaseChannel = if($Playtest){'playtest'}else{'release'}
     releaseReady = if($Playtest){$false}else{$taskEvidence.releaseReady}
     buildLabel = $PlaytestBuild
-    runtimeValidationSource = if($Playtest -and $taskAuthorization.runtimeValidation){$taskAuthorizationRelative}else{'docs/evidence/runtime-room-0.1.13.json'}
+    runtimeValidationSource = if($Playtest -and $taskAuthorization.runtimeValidation){$taskAuthorizationRelative}else{"docs/evidence/runtime-room-$version.json"}
     knownIssues = $taskUnresolved
     playtestScope = if($Playtest){$taskAuthorization.scope}else{$null}
     playtestAuthorizationSha256 = if($Playtest){(Get-FileHash -LiteralPath $taskAuthorizationPath -Algorithm SHA256).Hash}else{$null}

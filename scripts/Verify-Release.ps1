@@ -1,21 +1,22 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
+$version='0.1.14'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
-$taskPackageName='HollowConnect-0.1.13'+$(if($Playtest){'-playtest'}else{''})+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})
+$taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package=Join-Path $root ('dist\'+$taskPackageName)
-$taskBlockers=Get-Content -LiteralPath (Join-Path $root 'docs/evidence/runtime-blockers-0.1.13.json') -Raw | ConvertFrom-Json
-if($taskBlockers.version -ne '0.1.13'){throw 'Wrong blocker ledger version.'}
+$taskBlockers=Get-Content -LiteralPath (Join-Path $root "docs/evidence/runtime-blockers-$version.json") -Raw | ConvertFrom-Json
+if($taskBlockers.version -ne $version){throw 'Wrong blocker ledger version.'}
 $taskUnresolved=@($taskBlockers.findings | Where-Object {$_.resolved -ne $true})
 if($taskUnresolved.Count -and !$Playtest){throw 'Unresolved runtime blocker; release cannot be verified.'}
 $manifest=Get-Content -LiteralPath (Join-Path $package 'manifest.json') -Raw | ConvertFrom-Json
-if ($manifest.version -ne '0.1.13') { throw 'Wrong version.' }
+if ($manifest.version -ne $version) { throw 'Wrong version.' }
 if($manifest.releaseChannel -ne $(if($Playtest){'playtest'}else{'release'})){throw 'Wrong release channel.'}
 if($manifest.buildLabel -ne $PlaytestBuild){throw 'Wrong playtest build label.'}
 if($Playtest){
-    $taskAuthorizationRelative='docs/evidence/playtest-authorization-0.1.13'+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})+'.json'
+    $taskAuthorizationRelative="docs/evidence/playtest-authorization-$version"+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})+'.json'
     $taskAuthorization=Get-Content -LiteralPath (Join-Path $root $taskAuthorizationRelative) -Raw | ConvertFrom-Json
-    if($taskAuthorization.version -ne '0.1.13' -or $taskAuthorization.action -ne 'package-for-user-playtest' -or @($taskUnresolved | Where-Object {$_.id -notin $taskAuthorization.acceptedUnresolvedFindings}).Count){throw 'Playtest request does not cover current unresolved findings.'}
+    if($taskAuthorization.version -ne $version -or $taskAuthorization.action -ne 'package-for-user-playtest' -or @($taskUnresolved | Where-Object {$_.id -notin $taskAuthorization.acceptedUnresolvedFindings}).Count){throw 'Playtest request does not cover current unresolved findings.'}
     if($PlaytestBuild -and $taskAuthorization.buildLabel -ne $PlaytestBuild){throw 'Playtest build label differs from the request record.'}
     if($manifest.releaseReady -ne $false){throw 'A playtest cannot claim release readiness.'}
     if($manifest.playtestAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $package $taskAuthorizationRelative) -Algorithm SHA256).Hash -or $manifest.playtestAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $root $taskAuthorizationRelative) -Algorithm SHA256).Hash){throw 'Playtest authorization hash differs.'}
@@ -30,12 +31,12 @@ foreach ($entry in $manifest.files) {
         throw "Payload differs from native test build: $($entry.name)"
     }
 }
-$taskRuntimeSource=if($Playtest -and $taskAuthorization.runtimeValidation){$taskAuthorizationRelative}else{'docs/evidence/runtime-room-0.1.13.json'}
+$taskRuntimeSource=if($Playtest -and $taskAuthorization.runtimeValidation){$taskAuthorizationRelative}else{"docs/evidence/runtime-room-$version.json"}
 if($manifest.runtimeValidationSource -ne $taskRuntimeSource){throw 'Wrong runtime validation source.'}
 $runtime=Get-Content -LiteralPath (Join-Path $package $taskRuntimeSource) -Raw | ConvertFrom-Json
 if($Playtest -and $runtime.runtimeValidation){$runtime=$runtime.runtimeValidation}
 $taskScopedPlaytest=$Playtest -and $taskAuthorization.runtimeValidation
-if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne '0.1.13' -or $runtime.engineVersion -ne '3.0.0-hc10' -or @($runtime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($runtime.runs).Count -ne 12)) { throw 'Incomplete or blocked runtime evidence.' }
+if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc10' -or @($runtime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($runtime.runs).Count -ne 12)) { throw 'Incomplete or blocked runtime evidence.' }
 foreach ($run in $runtime.runs) {
     if (!$run.bothPassed -or @($run.binaries).Count -ne 3) { throw 'Incomplete runtime result.' }
     $runDir=Join-Path $root ('.test-results\'+$run.name)
@@ -102,4 +103,4 @@ foreach ($kind in 'windows','source') {
     $hash=(Get-FileHash -LiteralPath (Join-Path $root "dist\$name") -Algorithm SHA256).Hash.ToLowerInvariant()
     if (!(Get-Content -LiteralPath (Join-Path $root 'dist\SHA256SUMS.txt') | Where-Object { $_ -eq "$hash  $name" })) { throw "Bad published checksum: $name" }
 }
-Write-Output "PASS $($manifest.releaseChannel) 0.1.13 $PlaytestBuild`: 7 payload files; $(@($runtime.runs).Count) actual runtime binary records and completion markers; API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; published checksums; no test plugin or private saves."
+Write-Output "PASS $($manifest.releaseChannel) $version $PlaytestBuild`: 7 payload files; $(@($runtime.runs).Count) actual runtime binary records and completion markers; API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; published checksums; no test plugin or private saves."
