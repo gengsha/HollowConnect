@@ -1,0 +1,91 @@
+{
+  "version": "0.1.13",
+  "action": "package-for-user-playtest",
+  "buildLabel": "dc0a4f5",
+  "buildCommit": "dc0a4f54ea67ebf40f4a3ec161c55f43921303a3",
+  "userRequest": "打包吧",
+  "recordedAtUtc": "2026-10-14T11:01:05.1929547Z",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "7E108A45D458DC5946DB8BB857E89A65CD574BB468482D84AD9A740353254925",
+      "productVersion": "1.0.0+dc0a4f54ea67ebf40f4a3ec161c55f43921303a3"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "AFCE1CBF777D03C173987D8F4AC47F0175FFC42E5AE12ABAF722B2FD1F95956D",
+      "productVersion": "1.0.0+dc0a4f54ea67ebf40f4a3ec161c55f43921303a3"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "4ABC9BEF0C7669AE2F85246B964AFA53CBAC325453460884AEBAB3CFDB4EE616",
+      "productVersion": "1.0.0+dc0a4f54ea67ebf40f4a3ec161c55f43921303a3"
+    }
+  ],
+  "scope": "Package the current dc0a4f5 candidate for user playtesting after disclosure of remaining runtime bugs and incomplete validation. Use the two completed targeted runs; the full current-build release matrix is incomplete. Preserve original failures and releaseReady=false. Do not install into the normal game.",
+  "runtimeValidation": {
+    "version": "0.1.13",
+    "engineVersion": "3.0.0-hc10",
+    "releaseReady": false,
+    "runs": [
+      {
+        "name": "datagram-frame-final-periodic-host-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7E108A45D458DC5946DB8BB857E89A65CD574BB468482D84AD9A740353254925"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "AFCE1CBF777D03C173987D8F4AC47F0175FFC42E5AE12ABAF722B2FD1F95956D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "4ABC9BEF0C7669AE2F85246B964AFA53CBAC325453460884AEBAB3CFDB4EE616"
+          }
+        ],
+        "scope": "Two isolated clients; eight actual authority exchanges and natural needle recoveries; nine Unity FSM checks per client; injected packet loss, reordering and duplication."
+      },
+      {
+        "name": "datagram-frame-final-seeded-guest-retry-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7E108A45D458DC5946DB8BB857E89A65CD574BB468482D84AD9A740353254925"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "AFCE1CBF777D03C173987D8F4AC47F0175FFC42E5AE12ABAF722B2FD1F95956D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "4ABC9BEF0C7669AE2F85246B964AFA53CBAC325453460884AEBAB3CFDB4EE616"
+          }
+        ],
+        "scope": "Two isolated clients; eight actual authority exchanges and natural needle recoveries; nine Unity FSM checks per client; injected packet loss, reordering and duplication."
+      }
+    ],
+    "regression": {
+      "passed": 143,
+      "failed": 0,
+      "log": ".test-results/datagram-frame-final-unit-20261014.log"
+    },
+    "strictLogGate": {
+      "passed": 14,
+      "log": ".test-results/datagram-frame-final-log-gate-20261014.log"
+    }
+  },
+  "unverifiedRisks": [
+    "Remaining static audit findings: docs/RESCREEN-REVIEW-2026-10-14.md",
+    "Other bosses/dream variants and in-flight projectile takeover",
+    "Complete Pantheons, normal progression rewards and three/four-player rooms",
+    "Real two-machine FRP operation"
+  ]
+}

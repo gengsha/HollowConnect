@@ -2,7 +2,7 @@
 
 更新时间：2026-10-14（北京时间）。本文件是当前状态入口；历史验证以对应证据为准，不需要重读整段聊天或一次加载全部报告。后续每次修复、交付或收到新的试玩结果后更新本文件。
 
-**最新状态：网络专项已修七条公共路径，此前两次接管失败仍未确认根因，尚未发布。** 最新生产 DLL 构建为 `dc0a4f5`：已修同一收到的数据报被拆成多个 Unity 回调、可能跨帧应用父体和子体的问题。确定性对照从 142 passed / 1 failed 变为 143 passed / 0 failed，14 项日志门槛通过。原周期正向、固定种子反向两组专项各八次实际交换和自然回收通过，双端各九项 Unity 夹具通过。见 [同包同帧应用专项](DATAGRAM-FRAME-COMMIT-2026-10-14.md)。旧两次 `Thrown` / inactive 飞针失败、假骑士再次破甲旧样本和历史镜头 FROZEN 均仍未解除。未重打包或部署日常游戏。
+**最新状态：网络专项已修七条公共路径，用户知悉剩余问题后要求打包最新候选试玩，尚未正式发布。** 最新生产 DLL 构建为 `dc0a4f5`：已修同一收到的数据报被拆成多个 Unity 回调、可能跨帧应用父体和子体的问题。确定性对照从 142 passed / 1 failed 变为 143 passed / 0 failed，14 项日志门槛通过。原周期正向、固定种子反向两组专项各八次实际交换和自然回收通过，双端各九项 Unity 夹具通过。见 [同包同帧应用专项](DATAGRAM-FRAME-COMMIT-2026-10-14.md)。旧两次 `Thrown` / inactive 飞针失败、假骑士再次破甲旧样本、历史镜头 FROZEN 和外部静态风险均仍保留。当前完整发布矩阵未完成；本次只打包，不部署日常游戏。
 
 上一轮 `44ae5d1` 修周期入场持续未送达，142 项回归与原周期两种顺序入场通过；九组实机七组通过、两组拒绝：完整周期正向第 3 轮、固定种子反向第 5 轮交接后 `Thrown` / inactive 飞针、20 秒自然回收超时。它们缺少足够追踪，不能用后续通过覆盖。详细结果及该旧构建哈希见 [选择性 ACK 专项](SELECTIVE-ACK-RECOVERY-2026-10-14.md)。
 
@@ -24,8 +24,9 @@
 ## 当前可交付物
 
 - 版本：HollowConnect **0.1.13** / HKMP **3.0.0-hc10**，目标 Windows 游戏 1.5.78.11833 / Unity 2020.2.2f1。
-- 已交付并核验：`dist/HollowConnect-0.1.13-playtest-windows.zip`（10.54 MiB，含一键安装器）和同名前缀的 `-source.zip`。核验报告为 `dist/HollowConnect-0.1.13-playtest-verification.txt`。
-- 用户明确说“先打包，我们试玩查 bug”，允许提供保留已知问题的试玩包；请求见 [试玩记录](evidence/playtest-authorization-0.1.13.json)。**这次只打包，没有自动安装到正常游戏。** 当前等待双方试玩结果。
+- 当前交付：`dist/HollowConnect-0.1.13-playtest-dc0a4f5-windows.zip`（含一键安装器）和同名前缀的 `-source.zip`；核验报告为同名前缀的 `-verification.txt`。旧无构建号的试玩包保留，仍属于 `6ddf5b3`。
+- 打包校验通过：七项载荷、两组实际运行哈希/终态、全部压缩内容与文档链接、API 校验和、无测试插件/私人存档；便携安装器 13 项检查通过，仅操作伪游戏夹具。普通发布仍被阻止，生产 DLL 未重建。
+- 用户听取剩余问题说明后明确说“打包吧”，本次以当前候选和两组已完成专项打包；请求及实际哈希见 [本次试玩记录](evidence/playtest-authorization-0.1.13-dc0a4f5.json)。**只打包，没有自动安装到正常游戏，也没有把完整发布矩阵记为通过。** 历史 [旧试玩记录](evidence/playtest-authorization-0.1.13.json)保留。
 - [试玩说明](PLAYTEST-0.1.13.md)包含安装和复测顺序。发生问题时保留双方 ModLog.txt、房间、先入顺序、招式以及死亡/传送/重连情况。
 
 ## 构建、Git 与验证事实
@@ -53,5 +54,5 @@
 2. 源码入口：`src/HKMP/Game/Client/Entity/`（实体/子物体/动作）、`src/HKMP/Game/Client/ClientManager.cs`（房间/连接）、`src/HollowConnect/`（协作玩法）。测试入口 `tests/Smoke/`；具体范围见其 README。
 3. 实机测试只用 `.test-results/game-host` / `game-guest` 隔离副本、静音、内存角色，拦截全部三个 SaveGame 重载。不要停止正常游戏或修改玩家存档；退出与安装以用户当前要求及实际进程为准，未知路径的游戏进程不要盲目强杀。
 4. 模组异常、HKMP ERROR、Spawn expired、原生崩溃和完成后的失败标记均使验收失败；每轮使用全新 RunName，保存失败基线，不用新增 catch 或放宽断言来制造通过。汇总脚本使用当前 PowerShell 7；不要用 legacy powershell.exe 运行含 ConvertFrom-Json 数组汇总的旧脚本。
-5. 试玩打包：`powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Package.ps1 -Playtest`；核验同参数运行 `scripts/Verify-Release.ps1`。仍要求完整 12 组与当前 DLL 一致，只允许记录中的已知问题；普通发布继续被阻塞。
+5. 本次用户明确要求的候选试玩打包：在 PowerShell 7 运行 `scripts/Package.ps1 -Playtest -PlaytestBuild dc0a4f5`，同参数运行 `scripts/Verify-Release.ps1`；按该请求记录核对当前哈希、已完成两组专项和全部已知问题。普通发布仍要求完整 12 组与当前 DLL 一致，并解除发布阻塞；旧构建证据不能替代新验收。
 6. 每项实质修复独立提交。先用最小证据定位，再做对应验证；复用现有探针与日志校验器，避免为每轮新造硬编码汇总脚本或盲加补偿。只更新相关验证，避免重复无必要的整套测试；生产 DLL 改变时重新核对最终构建。重要长期规则写进项目文档，历史日志按需取证。

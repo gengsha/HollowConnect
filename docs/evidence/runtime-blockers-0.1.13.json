@@ -108,6 +108,23 @@
         "final-lifecycle-guest-013"
       ],
       "finalVerificationScope": "Both entry orders passed actual native moving A Dash restoration, all static identities, six real throw/recover reconnect cycles, native/replica tween cloning and clean strict logs on production build 6ddf5b3. Full twelve-case suite remains independently required."
+    },
+    {
+      "id": "reconnect-inactive-needle-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "sourceRuns": ["selective-ack-final-periodic-lifecycle-host-20261014", "selective-ack-final-lifecycle-guest-20261014"],
+      "observation": "Authority transfer after disconnect left Hornet waiting in Thrown with an inactive needle; natural recovery timed out in two stress runs.",
+      "latestVerificationRuns": ["datagram-frame-final-periodic-host-20261014", "datagram-frame-final-seeded-guest-retry-20261014"],
+      "releaseRequirement": "The latest targeted runs passed, but do not uniquely explain or resolve the earlier failures. Capture reliable updates and activation across takeover before classifying the finding as resolved."
+    },
+    {
+      "id": "false-knight-repeat-head-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "sourceRun": "reliability-closed-seeded-boss-late-20261014",
+      "observation": "After late entry and authority transfer, False Knight did not expose its head after the next armour break within the original 20-second assertion.",
+      "releaseRequirement": "Retain the original failure; successful later runs do not establish its cause. Capture damage and native phase transitions if it recurs."
     }
   ]
 }

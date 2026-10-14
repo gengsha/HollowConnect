@@ -1,7 +1,8 @@
-﻿param([switch]$Playtest)
+﻿param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $version = '0.1.13'
+if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
 $taskEvidencePath=Join-Path $root 'docs/evidence/runtime-room-0.1.13.json'
 $taskEvidence=Get-Content -LiteralPath $taskEvidencePath -Raw | ConvertFrom-Json
@@ -9,17 +10,21 @@ $taskBlockers=Get-Content -LiteralPath (Join-Path $root 'docs/evidence/runtime-b
 if($taskBlockers.version -ne $version){throw 'Wrong blocker ledger version.'}
 $taskUnresolved=@($taskBlockers.findings | Where-Object {$_.resolved -ne $true})
 if($taskUnresolved.Count -and !$Playtest){throw 'Unresolved runtime blocker; no release package created.'}
-$taskAuthorizationPath=Join-Path $root 'docs/evidence/playtest-authorization-0.1.13.json'
+$taskAuthorizationRelative='docs/evidence/playtest-authorization-0.1.13'+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})+'.json'
+$taskAuthorizationPath=Join-Path $root $taskAuthorizationRelative
 if($Playtest){
     $taskAuthorization=Get-Content -LiteralPath $taskAuthorizationPath -Raw | ConvertFrom-Json
     if($taskAuthorization.version -ne $version -or $taskAuthorization.action -ne 'package-for-user-playtest' -or @($taskUnresolved | Where-Object {$_.id -notin $taskAuthorization.acceptedUnresolvedFindings}).Count){throw 'Playtest request does not cover current unresolved findings.'}
+    if($PlaytestBuild -and $taskAuthorization.buildLabel -ne $PlaytestBuild){throw 'Playtest build label differs from the request record.'}
     foreach($taskRequired in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll'){
         $taskHash=(Get-FileHash -LiteralPath (Join-Path $root ('src/HollowConnect/bin/Release/net472/'+$taskRequired)) -Algorithm SHA256).Hash
         if(@($taskAuthorization.binaries | Where-Object {$_.name -eq $taskRequired -and $_.sha256 -eq $taskHash}).Count -ne 1){throw 'Playtest production DLL differs from the authorized tested build.'}
     }
 }
-if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc10' -or @($taskEvidence.runs).Count -ne 12){throw 'Final runtime acceptance is incomplete or blocked; no release package created.'}
-foreach($taskRun in $taskEvidence.runs){
+$taskScopedPlaytest=$Playtest -and $taskAuthorization.runtimeValidation
+$taskRuntime=if($taskScopedPlaytest){$taskAuthorization.runtimeValidation}else{$taskEvidence}
+if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc10' -or @($taskRuntime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($taskRuntime.runs).Count -ne 12)){throw 'Runtime acceptance is incomplete or blocked; no package created.'}
+foreach($taskRun in $taskRuntime.runs){
     if(!$taskRun.bothPassed){throw 'A runtime acceptance case failed; no release package created.'}
     if(@($taskRun.binaries).Count -ne 3){throw 'Runtime DLL evidence is incomplete; no release package created.'}
     foreach($taskRequired in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll'){
@@ -32,7 +37,7 @@ foreach($taskRun in $taskEvidence.runs){
 }
 & dotnet build (Join-Path $root 'src\HollowConnect.Installer\HollowConnect.Installer.csproj') -c Release --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Installer build failed.' }
-$taskPackageName="HollowConnect-$version"+$(if($Playtest){'-playtest'}else{''})
+$taskPackageName="HollowConnect-$version"+$(if($Playtest){'-playtest'}else{''})+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})
 $package = Join-Path $root ('dist\'+$taskPackageName)
 $payload = Join-Path $package 'payload\HKMP'
 New-Item -ItemType Directory -Force -Path $payload,(Join-Path $package 'dependencies') | Out-Null
@@ -48,8 +53,11 @@ Copy-Item -LiteralPath (Join-Path $root 'docs') -Destination $package -Recurse -
 $manifest = [ordered]@{
     version = $version
     releaseChannel = if($Playtest){'playtest'}else{'release'}
-    releaseReady = $taskEvidence.releaseReady
+    releaseReady = if($Playtest){$false}else{$taskEvidence.releaseReady}
+    buildLabel = $PlaytestBuild
+    runtimeValidationSource = if($Playtest -and $taskAuthorization.runtimeValidation){$taskAuthorizationRelative}else{'docs/evidence/runtime-room-0.1.13.json'}
     knownIssues = $taskUnresolved
+    playtestScope = if($Playtest){$taskAuthorization.scope}else{$null}
     playtestAuthorizationSha256 = if($Playtest){(Get-FileHash -LiteralPath $taskAuthorizationPath -Algorithm SHA256).Hash}else{$null}
     installerRevision = 3
     buildInformation = @('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll') | ForEach-Object { @{name=$_;productVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $output $_)).ProductVersion} }
