@@ -6,6 +6,7 @@ using Hkmp.Game.Client.Entity.Component;
 using Hkmp.Game.Server;
 using Hkmp.Networking.Packet;
 using Hkmp.Networking.Packet.Data;
+using Hkmp.Networking.Packet.Update;
 using HollowConnect;
 using HollowConnect.Core;
 
@@ -40,6 +41,25 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        Test("final entity snapshot is consumed before same-datagram disconnect", () => {
+            var manager = new PacketManager(); var connected = true; var applied = false;
+            manager.RegisterServerUpdatePacketHandler(ServerUpdatePacketId.PlayerDisconnect, (ushort _) => connected = false);
+            manager.RegisterServerUpdatePacketHandler<ReliableEntityUpdate>(ServerUpdatePacketId.ReliableEntityUpdate,
+                (sender, update) => { if (connected && update.Id == 17) applied = true; });
+            var outgoing = new ServerUpdatePacket();
+            outgoing.SetSendingPacketData(ServerUpdatePacketId.PlayerDisconnect, new EmptyData());
+            var updates = new PacketDataCollection<ReliableEntityUpdate>();
+            var update = new ReliableEntityUpdate { Id = 17 };
+            var state = new EntityHostFsmData { CurrentState = 3 }; state.Types.Add(EntityHostFsmData.Type.State);
+            update.UpdateTypes.Add(EntityUpdateType.HostFsm); update.HostFsmData[0] = state;
+            updates.DataInstances.Add(update);
+            outgoing.SetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, updates);
+            var bytes = new Packet(); outgoing.CreatePacket(bytes);
+            var incoming = new ServerUpdatePacket();
+            Check(incoming.ReadPacket(PacketManager.ReadDatagram(bytes.ToArray())), "final datagram did not decode");
+            manager.HandleServerUpdatePacket(2, incoming);
+            Check(applied && !connected, "disconnect removed authority before its final entity state");
+        });
         Test("replica cancellation remains final after a destroyed-target exit failure", () => {
             var life=new Hkmp.Game.Client.Entity.Action.ActionLifetime();var stops=0;var exits=0;
             try { life.Finish(()=>stops++,()=>{exits++;throw new InvalidOperationException("target destroyed");}); }

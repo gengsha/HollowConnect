@@ -300,9 +300,18 @@ internal class PacketManager {
     /// <param name="id">The ID of the client that sent the packet.</param>
     /// <param name="packet">The server update packet.</param>
     public void HandleServerUpdatePacket(ushort id, ServerUpdatePacket packet) {
+        var packetData = packet.GetPacketData();
+        // The final datagram can contain both state updates and disconnect.
+        // Wire enum order puts disconnect first; retiring the author there
+        // would reject the remaining updates and transfer a stale snapshot.
+        var hasDisconnect = packetData.TryGetValue(ServerUpdatePacketId.PlayerDisconnect, out var disconnect);
+        if (hasDisconnect) {
+            packetData = new Dictionary<ServerUpdatePacketId, IPacketData>(packetData);
+            packetData.Remove(ServerUpdatePacketId.PlayerDisconnect);
+        }
         // Execute corresponding packet handlers
         UnpackPacketDataDict(
-            packet.GetPacketData(),
+            packetData,
             (packetId, packetData) => ExecuteServerUpdatePacketHandler(id, packetId, packetData)
         );
 
@@ -321,6 +330,7 @@ internal class PacketManager {
                 )
             );
         }
+        if (hasDisconnect) ExecuteServerUpdatePacketHandler(id, ServerUpdatePacketId.PlayerDisconnect, disconnect);
     }
 
     /// <summary>
