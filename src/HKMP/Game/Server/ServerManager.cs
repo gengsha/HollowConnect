@@ -436,7 +436,10 @@ internal abstract class ServerManager : IServerManager {
         Logger.Info($"Received EnterScene data from ({id}, {playerData.Username}), new scene: {newSceneName}");
 
         // Store it in their PlayerData object
-        if (playerEnterScene.Epoch != CoopContext.Epoch || playerEnterScene.Visit <= playerData.SceneVisit) return;
+        if (playerEnterScene.Epoch != CoopContext.Epoch || playerEnterScene.Visit <= playerData.SceneVisit) {
+            Logger.Info($"Ignoring obsolete room entry: player={id}, scene={newSceneName}, visit={playerEnterScene.Visit}, epoch={playerEnterScene.Epoch}, currentVisit={playerData.SceneVisit}, currentEpoch={CoopContext.Epoch}");
+            return;
+        }
         if (!string.IsNullOrEmpty(playerData.CurrentScene)) HandlePlayerLeaveScene(id, false, false, playerData.CurrentScene);
         playerData.SceneVisit = playerEnterScene.Visit;
         playerData.CurrentScene = newSceneName;

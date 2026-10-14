@@ -797,7 +797,7 @@ internal class ClientManager : IClientManager {
     /// <param name="alreadyInScene">The ClientPlayerAlreadyInScene packet data.</param>
     private void OnPlayerAlreadyInScene(ClientPlayerAlreadyInScene alreadyInScene) {
         if (alreadyInScene.SceneName != CoopContext.LocalScene || alreadyInScene.Visit != CoopContext.LocalVisit || alreadyInScene.Epoch != CoopContext.Epoch) {
-            Logger.Debug($"Ignoring obsolete scene snapshot: {alreadyInScene.SceneName}/{alreadyInScene.Visit}/{alreadyInScene.Epoch}, local: {CoopContext.LocalScene}/{CoopContext.LocalVisit}/{CoopContext.Epoch}");
+            Logger.Info($"Ignoring obsolete scene snapshot: {alreadyInScene.SceneName}/{alreadyInScene.Visit}/{alreadyInScene.Epoch}, local: {CoopContext.LocalScene}/{CoopContext.LocalVisit}/{CoopContext.Epoch}");
             return;
         }
         Logger.Info("Received AlreadyInScene packet");
@@ -1279,7 +1279,7 @@ internal class ClientManager : IClientManager {
             animationClipId = (ushort) AnimationManager.GetCurrentAnimationClip();
         }
 
-        Logger.Debug($"Sending EnterScene packet");
+        Logger.Info($"Publishing room entry: {sceneName}, visit={CoopContext.LocalVisit}, epoch={CoopContext.Epoch}");
 
         _netClient.UpdateManager.SetEnterSceneData(
             SceneUtil.GetCurrentSceneName(),
