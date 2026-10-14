@@ -39,6 +39,14 @@ public sealed class DeathProbe : MonoBehaviour {
     private IEnumerator Until(Func<bool> test, string name, float seconds = 50) {
         var deadline = Time.realtimeSinceStartup + seconds;
         while (!test() && Time.realtimeSinceStartup < deadline) yield return null;
+        if (!test() && HeroController.instance != null) {
+            var h = HeroController.instance; var b = h.GetComponent<Rigidbody2D>();
+            Log("TIMEOUT HERO " + name + " pos=" + h.transform.position + " velocity=" + b.velocity + " gravity=" + b.gravityScale +
+                " cachedGravity=" + Field<float>(h, "prevGravityScale") + " simulated=" + b.simulated + " ground=" + h.cState.onGround + " input=" + h.acceptingInput + " state=" + h.hero_state);
+            foreach (var f in Object.FindObjectsOfType<PlayMakerFSM>().Where(f => f.transform.IsChildOf(h.transform) || (f.gameObject.scene.name == GameManager.instance.sceneName &&
+                (f.name.IndexOf("Dream", StringComparison.OrdinalIgnoreCase) >= 0 || Vector2.Distance(f.transform.position, h.transform.position) < 5))))
+                Log("TIMEOUT FSM " + f.name + "/" + f.FsmName + "=" + f.ActiveStateName + " actions=" + string.Join(",", f.Fsm.ActiveState?.Actions.Select(a => a.GetType().Name) ?? Enumerable.Empty<string>()));
+        }
         Require(test(), name);
     }
     private bool In(string name) => HeroController.instance != null && HeroController.instance.isHeroInPosition &&
@@ -53,7 +61,7 @@ public sealed class DeathProbe : MonoBehaviour {
         PlayerData.instance.SetBool("isInvincible", false); h.takeNoDamage = immune; HeroBox.inactive = false;
         h.SetDamageMode(GlobalEnums.DamageMode.FULL_DAMAGE);
         h.GetComponent<Rigidbody2D>().velocity = Vector2.zero; h.AffectedByGravity(false);
-        h.transform.position = new Vector3(host ? 20 : 22, 12, 0);
+        if (scene == "Crossroads_01") h.transform.position = new Vector3(host ? 20 : 22, 12, 0);
     }
     private void Die() {
         PlayerData.instance.SetInt("health", 0);
@@ -289,6 +297,15 @@ public sealed class DeathProbe : MonoBehaviour {
     }
     private IEnumerator ReturnMotion(string label) {
         var hero = HeroController.instance; var body = hero.GetComponent<Rigidbody2D>();
+        if (scene.StartsWith("Dream_")) {
+            var wake = hero.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Dream Return");
+            yield return Until(() => wake.ActiveStateName == "Ready", label + " native wake input prompt", 10);
+            var jump = wake.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single();
+            Require(jump.wasPressed != null, label + " native wake jump event exists");
+            wake.Fsm.Event(jump.wasPressed);
+        }
+        yield return Until(() => !runtime.EntryProtected && hero.acceptingInput && !hero.cState.transitioning,
+            label + " native arrival and reaction protection finished", 10);
         Log("RETURN PHYSICS " + label + " gravity=" + body.gravityScale + " cachedGravity=" + Field<float>(hero, "prevGravityScale") + " simulated=" + body.simulated);
         Require(body.simulated, label + " restores simulation");
         Require(body.gravityScale > 0, label + " restores native gravity");

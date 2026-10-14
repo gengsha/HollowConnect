@@ -221,6 +221,8 @@ public sealed class CoverageProbe : MonoBehaviour {
                 foreach(var f in e.Object.Host.GetComponents<PlayMakerFSM>()) phaseStates.Add(e.Type + "/" + f.ActiveStateName);
             yield return null;}
             if(performance) {
+                if(manager.IsSceneHost && (scene=="GG_Soul_Master" || scene=="GG_Soul_Tyrant") && !phaseStates.Any(s=>s.EndsWith("/Quake Down",StringComparison.Ordinal)))
+                    throw new Exception("Native Soul slam was not observed " + scene);
                 foreach(var pair in spawnCounts)Mark("SPAWN COUNT " + pair.Value + " " + pair.Key);Mark("BOSS STATES " + string.Join(",",phaseStates));spawnCounts.Clear();
                 foreach(var times in new[]{(Name:"prefab",Values:prefabTimes),(Name:"process",Values:processTimes)}) {
                     times.Values.Sort();if(times.Values.Count!=0)Mark("COST " + times.Name + " count=" + times.Values.Count + " totalMs=" + times.Values.Sum() + " p95ms=" + times.Values[(int)((times.Values.Count-1)*.95)] + " maxms=" + times.Values.Last());
