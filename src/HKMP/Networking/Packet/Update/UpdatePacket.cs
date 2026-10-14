@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hkmp.Logging;
 using Hkmp.Networking.Packet.Data;
 
@@ -280,7 +281,8 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
 
     /// <inheritdoc />
     protected override void CacheAllPacketData() {
-        base.CacheAllPacketData();
+        CachedAllPacketData = new Dictionary<TPacketId, IPacketData>();
+        CachedAllAddonData = new Dictionary<byte, AddonPacketData>();
         
         void AddResendData<TKey>(
             Dictionary<TKey, IPacketData> dataDict,
@@ -291,39 +293,45 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
                 var packetId = packetIdDataPair.Key;
                 var packetData = packetIdDataPair.Value;
 
-                // Check whether for this ID there already exists data
-                if (cachedData.TryGetValue(packetId, out var existingPacketData)) {
-                    // If the existing data is a PacketDataCollection, we can simply add all the data instance to it
-                    // If not, we simply discard the resent data, since it is older
-                    if (existingPacketData is RawPacketDataCollection existingPacketDataCollection
-                        && packetData is RawPacketDataCollection packetDataCollection) {
-                        existingPacketDataCollection.DataInstances.AddRange(packetDataCollection.DataInstances);
+                if (packetData is RawPacketDataCollection collection) {
+                    if (!cachedData.TryGetValue(packetId, out var existingPacketData)) {
+                        existingPacketData = collection.EmptyCopy();
+                        cachedData[packetId] = existingPacketData;
                     }
+                    ((RawPacketDataCollection)existingPacketData).DataInstances.AddRange(collection.DataInstances);
                 } else {
-                    // If no data exists for this ID, we can simply set the resent data for that key
+                    // Batches arrive oldest first; the newest scalar replaces it.
                     cachedData[packetId] = packetData;
                 }
             }
         }
         
-        // Iteratively add the resent packet data, but make sure to merge it with existing data
-        foreach (var resentPacketData in ResendPacketData.Values) {
-            AddResendData(resentPacketData, CachedAllPacketData);
+        // Reliable collections contain both snapshots and events. Keep every
+        // event, but apply snapshots in their original sequence order, with the
+        // current packet last. Unsigned distance also handles ushort wrap.
+        // Copy collection containers so caching cannot alter the original wire
+        // payload and cause its next serialization to duplicate resent events.
+        foreach (var pair in ResendPacketData.OrderByDescending(p => unchecked((ushort)(Sequence - p.Key)))) {
+            AddResendData(pair.Value, CachedAllPacketData);
         }
+        AddResendData(NormalPacketData, CachedAllPacketData);
         
-        // Iteratively add the resent addon data, but make sure to merge it with existing data
-        foreach (var resentAddonData in ResendAddonPacketData.Values) {
-            foreach (var addonIdDataPair in resentAddonData) {
+        void AddAddonData(Dictionary<byte, AddonPacketData> addons) {
+            foreach (var addonIdDataPair in addons) {
                 var addonId = addonIdDataPair.Key;
                 var addonPacketData = addonIdDataPair.Value;
 
-                if (CachedAllAddonData.TryGetValue(addonId, out var existingAddonPacketData)) {
-                    AddResendData(addonPacketData.PacketData, existingAddonPacketData.PacketData);
-                } else {
-                    CachedAllAddonData[addonId] = addonPacketData;
+                if (!CachedAllAddonData.TryGetValue(addonId, out var existingAddonPacketData)) {
+                    existingAddonPacketData = addonPacketData.GetEmptyCopy();
+                    CachedAllAddonData[addonId] = existingAddonPacketData;
                 }
+                AddResendData(addonPacketData.PacketData, existingAddonPacketData.PacketData);
             }
         }
+        foreach (var pair in ResendAddonPacketData.OrderByDescending(p => unchecked((ushort)(Sequence - p.Key)))) {
+            AddAddonData(pair.Value);
+        }
+        AddAddonData(AddonPacketData);
         
         IsAllPacketDataCached = true;
     }

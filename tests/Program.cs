@@ -41,6 +41,65 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        foreach (var sequence in new ushort[] { 22, 1 }) Test("reliable resend order preserves snapshots and events across sequence " + sequence, () => {
+            ServerUpdatePacket StatePacket(ushort seq, byte state, bool active) {
+                var result = new ServerUpdatePacket { Sequence = seq };
+                var update = new ReliableEntityUpdate { Id = 17, IsActive = active };
+                update.UpdateTypes.UnionWith(new[] { EntityUpdateType.Active, EntityUpdateType.HostFsm });
+                var fsm = new EntityHostFsmData { CurrentState = state }; fsm.Types.Add(EntityHostFsmData.Type.State);
+                update.HostFsmData[0] = fsm;
+                var events = new EntityNetworkData { Type = EntityComponentType.Fsm }; events.Packet.Write(state);
+                update.UpdateTypes.Add(EntityUpdateType.Data); update.GenericData.Add(events);
+                var batch = new PacketDataCollection<ReliableEntityUpdate>(); batch.DataInstances.Add(update);
+                result.SetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, batch);
+                return result;
+            }
+            var oldest = StatePacket(unchecked((ushort)(sequence - 2)), 1, false);
+            var older = StatePacket(unchecked((ushort)(sequence - 1)), 2, false);
+            var outgoing = StatePacket(sequence, 3, true);
+            // Queue the resends in reverse order, as the concurrent loss queue may do.
+            outgoing.SetLostReliableData(older); outgoing.SetLostReliableData(oldest);
+            var bytes = new Packet(); outgoing.CreatePacket(bytes);
+            var incoming = new ServerUpdatePacket();
+            Check(incoming.ReadPacket(PacketManager.ReadDatagram(bytes.ToArray())), "resend datagram did not decode");
+            var applied = new List<byte>(); var active = false; byte state = 0;
+            var manager = new PacketManager();
+            manager.RegisterServerUpdatePacketHandler<ReliableEntityUpdate>(ServerUpdatePacketId.ReliableEntityUpdate,
+                (sender, update) => { active = update.IsActive; state = update.HostFsmData[0].CurrentState;
+                    applied.Add(update.GenericData[0].Packet.ReadByte()); });
+            manager.HandleServerUpdatePacket(2, incoming);
+            Check(state == 3 && active, "old resend rolled back the newest activation/FSM snapshot");
+            Check(applied.SequenceEqual(new byte[] { 1, 2, 3 }), "reliable action events were lost, duplicated, or reordered");
+            Check(outgoing.GetPacketData()[ServerUpdatePacketId.ReliableEntityUpdate] is RawPacketDataCollection merged && merged.DataInstances.Count == 3);
+            Check(outgoing.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw) &&
+                ((RawPacketDataCollection)raw).DataInstances.Count == 1, "reading merged data mutated the original send collection");
+            bytes = new Packet(); outgoing.CreatePacket(bytes); incoming = new ServerUpdatePacket();
+            Check(incoming.ReadPacket(PacketManager.ReadDatagram(bytes.ToArray())));
+            Check(((RawPacketDataCollection)incoming.GetPacketData()[ServerUpdatePacketId.ReliableEntityUpdate]).DataInstances.Count == 3,
+                "serializing after reading the cache duplicated reliable events");
+        });
+        Test("addon resends preserve chronological collections and newest scalar without mutating sends", () => {
+            const byte addonId = 243;
+            BasePacket<ServerUpdatePacketId>.AddonPacketInfoDict[addonId] = new AddonPacketInfo(id =>
+                id == 0 ? (IPacketData)new PacketDataCollection<Message>() : new ChatMessage(), 2);
+            try {
+                ServerUpdatePacket AddonPacket(ushort sequence, uint serial) {
+                    var packet = new ServerUpdatePacket { Sequence = sequence }; var addon = new AddonPacketData(2);
+                    var events = new PacketDataCollection<Message>(); events.DataInstances.Add(new Message { Kind = Kind.Down, Serial = serial });
+                    addon.PacketData[0] = events; addon.PacketData[1] = new ChatMessage { Message = serial.ToString() };
+                    packet.SetSendingAddonPacketData(addonId, addon); return packet;
+                }
+                var outgoing = AddonPacket(1, 3); outgoing.SetLostReliableData(AddonPacket(0, 2));
+                outgoing.SetLostReliableData(AddonPacket(ushort.MaxValue, 1));
+                var bytes = new Packet(); outgoing.CreatePacket(bytes); var incoming = new ServerUpdatePacket();
+                Check(incoming.ReadPacket(PacketManager.ReadDatagram(bytes.ToArray())));
+                var merged = incoming.GetAddonPacketData()[addonId].PacketData;
+                Check(((RawPacketDataCollection)merged[0]).DataInstances.Cast<Message>().Select(m => m.Serial).SequenceEqual(new uint[] { 1, 2, 3 }));
+                Check(((ChatMessage)merged[1]).Message == "3", "old addon scalar replaced current value");
+                outgoing.GetAddonPacketData();
+                Check(outgoing.TryGetSendingAddonPacketData(addonId, out var original) && ((RawPacketDataCollection)original.PacketData[0]).DataInstances.Count == 1);
+            } finally { BasePacket<ServerUpdatePacketId>.AddonPacketInfoDict.Remove(addonId); }
+        });
         Test("final entity snapshot is consumed before same-datagram disconnect", () => {
             var manager = new PacketManager(); var connected = true; var applied = false;
             manager.RegisterServerUpdatePacketHandler(ServerUpdatePacketId.PlayerDisconnect, (ushort _) => connected = false);
