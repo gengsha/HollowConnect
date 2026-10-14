@@ -16,6 +16,10 @@
 
 重连压力测试还比较双方所有静态实体 ID，防止 Boss ID 一致但脱离层级的飞针 ID 已经分叉。原构建在首次同房重连即失败；单纯检查引用非空无法发现此问题。`HOLLOWCONNECT_STATIC_IDENTITY_CHECK=1` 用真实 Unity 对象检查脱离父级仍保留身份、复制的元数据不继承原对象身份，两组最终生命周期专项均启用。
 
+`HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 使用真实 PlayMaker / iTween 动作和生产 `Entity.MakeHost` 检查未完成的绝对位移动画先到目的地再完成，以及带权威速度快照的 `DecelerateV2` 恢复固定帧减速。夹具物体独立于 Boss。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=1` 只做此项；值为 `deceleration` 时单独检查减速，用于保留旧引擎失败对照。旧引擎双端分别出现提前完成和持续 38 速度，不能用随机六轮重连通过覆盖。
+
+`HOLLOWCONNECT_FSM_CONTINUATION_STRESS=1` 强制每轮重连换到另一端模拟权威，在原有六轮自然 Throw / Thrown 断线后，再追加自然 Needle Decel 和 Return 中各一次断线。每轮仍要求静态身份、引用、血量、镜头与真实 Throw Recover 通过，原超时和严格日志门槛不变。启用此项的两种先入顺序是本次修复的专项范围，不自动替代旧构建的完整 12 组发布证据。
+
 `HOLLOWCONNECT_PAUSE_MOTION_CHECK=1` 等待原生 A Dash 且速度大于 10，断线后让同一原权威先重连，要求继续移动并自然完成冲刺。`HOLLOWCONNECT_PAUSE_MOTION_ONLY=1` 可只做这项定向诊断；最终两组生命周期专项启用前者，并继续六轮投针检查。旧实现的真实基线在相同 FSM 状态恢复成零速度，8 秒内不能完成；没有强设 Boss 状态或速度。
 
 `HOLLOWCONNECT_CAMERA_HAZARD=1` 诊断使用真实虫王房 Cloud Hazard，记录原生危险死亡的冻结来源，调用与普通房间验收相同的恢复判定。只允许 hazardDeath / hazardRespawning 中的冻结在 15 秒内恢复；非危险状态或持续冻结仍失败，不改变生产镜头。`HOLLOWCONNECT_CAMERA_RING=1` 保存最近模式调用来源，在冻结时输出，正式两种原生入口均启用。

@@ -30,8 +30,8 @@ internal static class ActionRegistry {
 
     /// <summary>
     /// Checks whether the given FSM action is an action that executes continuously. This is the case for actions
-    /// that have the "everyFrame" field and the value for this field is true or in several other specific cases
-    /// (such as actions related to collisions).
+    /// that have the "everyFrame" field and the value for this field is true or have unfinished native work
+    /// (such as collision checks, fixed-update deceleration and absolute tweens with completion callbacks).
     /// </summary>
     /// <param name="action">The FSM action to check.</param>
     /// <returns>true if the action executes continuously; otherwise false.</returns>

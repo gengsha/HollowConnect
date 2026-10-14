@@ -223,7 +223,8 @@ public sealed class PantheonProbe : MonoBehaviour {
         }
     }
     private IEnumerator ColliderReconnectChecks() {
-        for(var attempt=0;attempt<6;attempt++) {
+        var continuationStress=Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_STRESS")=="1";
+        for(var attempt=0;attempt<(continuationStress?8:6);attempt++) {
             var key="collider-cycle."+attempt;
             var boss=Entities.Values.Single(e=>e.Type==EntityType.Hornet);
             var native=boss.Object.Host;
@@ -231,13 +232,25 @@ public sealed class PantheonProbe : MonoBehaviour {
                 var control=native.GetComponents<PlayMakerFSM>().Single(f=>f.FsmName=="Control");
                 if(attempt==0)File.WriteAllLines(Path.Combine(root,role+"-hornet-fsm.txt"),control.FsmStates.SelectMany(s=>s.Actions.Select(a=>s.Name+" / "+a.GetType().Name+" / "+string.Join(",",a.GetType().GetFields(BindingFlags.Instance|BindingFlags.Public).Select(field=>field.Name+"="+field.GetValue(a))))));
                 yield return WaitForNeedleThrow(control,"before reconnect "+attempt);
+                if(attempt>=6) {
+                    var needle=control.FsmVariables.FindFsmGameObject("Needle").Value.GetComponents<PlayMakerFSM>().Single(f=>f.FsmName=="Control");
+                    var phase=attempt==6?"Decel":"Return";
+                    yield return Until(()=>needle.ActiveStateName==phase,"native needle "+phase+" before takeover",5);
+                    Mark("CONTINUATION HANDOFF needle="+phase+" boss="+control.ActiveStateName);
+                }
                 ColliderReferences(native,"before "+attempt);Flag("phase."+key);
             }else yield return Until(()=>Has("phase."+key),"authority reaches native needle throw "+attempt,110);
             yield return Both("phase."+key);
+            var nextAuthority=manager.IsSceneHost?(host?"guest":"host"):role;
             engine.ClientManager.Disconnect();ColliderReferences(native,"disconnected "+attempt);
             yield return Both("disconnected."+key);
+            if(continuationStress&&role!=nextAuthority)yield return Until(()=>Has("owner-rejoined."+key),"other peer reconnects as next authority");
             ConnectLocal("collider"+role);
             yield return Until(()=>runtime.Connected&&manager.IsSceneHostDetermined,"needle-phase reconnect "+attempt);
+            if(continuationStress&&role==nextAuthority) {
+                if(!manager.IsSceneHost)throw new Exception("Reconnect did not transfer authority to expected peer "+key);
+                Flag("owner-rejoined."+key);Mark("PASS reconnect transferred native authority "+key);
+            }
             yield return Both("connected."+key);
             ColliderReferences(native,"reconnected "+attempt);
             yield return RoomChecks(key);
@@ -558,6 +571,13 @@ public sealed class PantheonProbe : MonoBehaviour {
         CoopMod.Settings.ShareProgress=false;PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved character");SafeHero();
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_CHECK")=="1") {
+            yield return FsmContinuationChecks.Run(Field<NetClient>(engine.ClientManager,"_netClient"),Mark);
+            yield return Both("fsm-continuation-checked");
+            if(!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY"))) {
+                Mark("FINAL PASS native FSM action continuation through production takeover; muted audio");Flag(role+".done");yield break;
+            }
+        }
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STATIC_IDENTITY_CHECK")=="1")StaticIdentityChecks();
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_TWEEN_CLONE_CHECK")=="1") {
             yield return TweenCloneChecks();yield return Both("tween-clone-checked");

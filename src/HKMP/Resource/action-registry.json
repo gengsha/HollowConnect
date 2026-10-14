@@ -149,6 +149,12 @@
         "type": "NextFrameEvent"
     },
     {
+        "type": "iTweenMoveTo"
+    },
+    {
+        "type": "DecelerateV2"
+    },
+    {
         "type": "SetVector2XY",
         "update_field": "everyFrame"
     },
