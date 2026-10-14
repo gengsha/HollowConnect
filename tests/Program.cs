@@ -44,6 +44,9 @@ internal static class Program {
         foreach (var sequence in new ushort[] { 22, 1 })
             Test("nested reliable retransmissions retain origin across sequence " + sequence, () => ReliabilityProbe.NestedResends(sequence));
         Test("nested addon retransmissions retain origin across sequence wrap", ReliabilityProbe.NestedAddonResends);
+        Test("consumed retransmission origins and delayed originals execute once", () => ReliabilityProbe.RepeatedOrigins(20, 0));
+        Test("consumed origins survive beyond the 64-packet ACK history and sequence wrap", () => ReliabilityProbe.RepeatedOrigins(65530, 100));
+        Test("consumed addon origins and duplicate carriers execute once", ReliabilityProbe.RepeatedAddonOrigins);
         foreach (var sequence in new ushort[] { 22, 1 }) Test("reliable resend order preserves snapshots and events across sequence " + sequence, () => {
             ServerUpdatePacket StatePacket(ushort seq, byte state, bool active) {
                 var result = new ServerUpdatePacket { Sequence = seq };

@@ -347,6 +347,27 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
     }
     
     /// <summary>
+    /// Consume each original payload once, whether it arrived directly or in a
+    /// retransmission. Built-in and addon data share an origin, so test both
+    /// dictionaries before marking that origin as consumed.
+    /// </summary>
+    internal void FilterReceivedData(SequenceWindow consumedOrigins) {
+        var origins = ResendPacketData.Keys.Union(ResendAddonPacketData.Keys)
+            .OrderByDescending(seq => unchecked((ushort)(Sequence - seq))).ToArray();
+        foreach (var sequence in origins) {
+            if (!consumedOrigins.TryAdd(sequence)) {
+                ResendPacketData.Remove(sequence);
+                ResendAddonPacketData.Remove(sequence);
+            }
+        }
+        if (!consumedOrigins.TryAdd(Sequence)) {
+            NormalPacketData.Clear();
+            AddonPacketData.Clear();
+        }
+        IsAllPacketDataCached = false;
+    }
+
+    /// <summary>
     /// Drops resend data that is duplicate, i.e. that we already received in an earlier packet.
     /// </summary>
     /// <param name="receivedSequenceNumbers">A queue containing sequence numbers that were already

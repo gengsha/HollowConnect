@@ -55,11 +55,13 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
     /// The last received sequence number.
     /// </summary>
     private ushort _remoteSequence;
+    private bool _hasRemoteSequence;
 
     /// <summary>
     /// Fixed-size queue containing sequence numbers that have been received.
     /// </summary>
     private readonly ConcurrentFixedSizeQueue<ushort> _receivedQueue;
+    private readonly SequenceWindow _consumedOrigins = new SequenceWindow();
 
     /// <summary>
     /// Object to lock asynchronous accesses.
@@ -155,6 +157,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
             lock (Lock) {
                 _udpCongestionManager = new UdpCongestionManager<TOutgoing, TPacketId>(this);
                 _receivedQueue.Clear(); _localSequence = _remoteSequence = 0;
+                _consumedOrigins.Clear(); _hasRemoteSequence = false;
                 _messageId = 0; _sendFailureLogged = false;
                 CurrentUpdatePacket = new TOutgoing();
                 _isUpdating = true;
@@ -200,16 +203,16 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
             if (!_isUpdating) return;
             _udpCongestionManager.OnReceivePackets<TIncoming, TOtherPacketId>(packet);
 
-            // Get the sequence number from the packet and add it to the receive queue
+            // ACKs describe received datagrams. Payload de-duplication separately
+            // remembers original batches, including those delivered by resends.
+            packet.FilterReceivedData(_consumedOrigins);
             var sequence = packet.Sequence;
             _receivedQueue.Enqueue(sequence);
 
-            // Instruct the packet to drop all resent data that was received already
-            packet.DropDuplicateResendData(_receivedQueue.GetCopy());
-
             // Update the latest remote sequence number if applicable
-            if (IsSequenceGreaterThan(sequence, _remoteSequence)) {
+            if (!_hasRemoteSequence || IsSequenceGreaterThan(sequence, _remoteSequence)) {
                 _remoteSequence = sequence;
+                _hasRemoteSequence = true;
             }
 
             // Reset the heart beat timer, as we have received a packet and the connection is alive
