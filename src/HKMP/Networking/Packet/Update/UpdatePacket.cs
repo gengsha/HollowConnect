@@ -209,22 +209,32 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
     /// </summary>
     /// <param name="lostPacket">The update packet instance that was lost.</param>
     public void SetLostReliableData(UpdatePacket<TPacketId> lostPacket) {
-        // Retrieve the lost packet data
-        var lostPacketData = lostPacket.GetPacketData();
+        // A retransmission can itself be lost. Keep each batch under its original
+        // sequence rather than assigning the merged payload to the carrier. The
+        // same origin may also occur in several timed-out carriers in one send.
+        foreach (var pair in lostPacket.ResendPacketData) {
+            CopyOrigin(pair.Key, pair.Value);
+        }
+        CopyOrigin(lostPacket.Sequence, lostPacket.NormalPacketData);
 
-        // Finally, put the packet data dictionary in the resend dictionary keyed by its sequence number
-        ResendPacketData[lostPacket.Sequence] = CopyReliableDataDict(
-            lostPacketData,
-            t => NormalPacketData.ContainsKey(t)
-        );
+        foreach (var pair in lostPacket.ResendAddonPacketData) {
+            CopyAddonOrigin(pair.Key, pair.Value);
+        }
+        CopyAddonOrigin(lostPacket.Sequence, lostPacket.AddonPacketData);
+        IsAllPacketDataCached = false;
+    }
 
-        // Retrieve the lost addon data
-        var lostAddonData = lostPacket.GetAddonPacketData();
+    private void CopyOrigin(ushort sequence, Dictionary<TPacketId, IPacketData> data) {
+        var reliable = CopyReliableDataDict(data, NormalPacketData.ContainsKey);
+        if (reliable.Count != 0) ResendPacketData[sequence] = reliable;
+    }
+
+    private void CopyAddonOrigin(ushort sequence, Dictionary<byte, AddonPacketData> data) {
         // Create a new dictionary of addon data in which we store all reliable data from the lost packet
         // for all addons in the dictionary
         var toResendAddonData = new Dictionary<byte, AddonPacketData>();
 
-        foreach (var idLostDataPair in lostAddonData) {
+        foreach (var idLostDataPair in data) {
             var addonId = idLostDataPair.Key;
             var addonPacketData = idLostDataPair.Value;
 
@@ -236,11 +246,11 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
                     AddonPacketData.TryGetValue(addonId, out var existingAddonData)
                     && existingAddonData.PacketData.ContainsKey(rawPacketId));
 
-            toResendAddonData[addonId] = newAddonPacketData;
+            if (newAddonPacketData.PacketData.Count != 0) toResendAddonData[addonId] = newAddonPacketData;
         }
 
         // Put the addon data dictionary in the resend dictionary keyed by its sequence number
-        ResendAddonPacketData[lostPacket.Sequence] = toResendAddonData;
+        if (toResendAddonData.Count != 0) ResendAddonPacketData[sequence] = toResendAddonData;
     }
     
     /// <summary>

@@ -41,6 +41,9 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        foreach (var sequence in new ushort[] { 22, 1 })
+            Test("nested reliable retransmissions retain origin across sequence " + sequence, () => ReliabilityProbe.NestedResends(sequence));
+        Test("nested addon retransmissions retain origin across sequence wrap", ReliabilityProbe.NestedAddonResends);
         foreach (var sequence in new ushort[] { 22, 1 }) Test("reliable resend order preserves snapshots and events across sequence " + sequence, () => {
             ServerUpdatePacket StatePacket(ushort seq, byte state, bool active) {
                 var result = new ServerUpdatePacket { Sequence = seq };
