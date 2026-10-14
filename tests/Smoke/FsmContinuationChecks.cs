@@ -73,6 +73,25 @@ internal static class FsmContinuationChecks {
                     throw new Exception("Empty native state retained a previous attack's takeover state");
                 mark("PASS empty native state clears the previous attack snapshot");
                 entity.Destroy(); entity = null; Object.Destroy(source); source = null;
+
+                source = new GameObject("HollowConnect reactivation snapshot fixture"); source.SetActive(false);
+                wait = new Wait(); wait.Reset(); wait.time = 10; wait.finishEvent = FsmEvent.Finished;
+                fsm = Create(source, null, wait); source.SetActive(true);
+                yield return null;
+                source.SetActive(false);
+                const ulong activationId = 0xffffffffffffffe4UL;
+                entity = new Entity(net, activationId, EntityType.DynamicHazard, source);
+                entity.InitializeHost();
+                source.SetActive(true);
+                outgoing = (ServerUpdatePacket)typeof(ClientUpdateManager).BaseType
+                    .GetField("CurrentUpdatePacket", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(net.UpdateManager);
+                if (!outgoing.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out raw) ||
+                    !((PacketDataCollection<ReliableEntityUpdate>)raw).DataInstances.Cast<ReliableEntityUpdate>().Any(u =>
+                        u.Id == activationId && u.UpdateTypes.Contains(EntityUpdateType.Active) && u.IsActive &&
+                        u.HostFsmData.TryGetValue(0, out var d) && d.Types.Contains(EntityHostFsmData.Type.State) && d.CurrentState == 0))
+                    throw new Exception("Native reactivation published a new FSM state with the old inactive snapshot");
+                mark("PASS native reactivation publishes active and its new FSM state together");
+                entity.Destroy(); entity = null; Object.Destroy(source); source = null;
                 if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") == "snapshot") yield break;
             }
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") != "deceleration") {

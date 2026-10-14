@@ -455,7 +455,8 @@ internal class Entity {
         _fsmSnapshots[index].CurrentState = state.Name;
         var data = new EntityHostFsmData { CurrentState = (byte)Array.IndexOf(_fsms.Host[index].FsmStates, state) };
         data.Types.Add(EntityHostFsmData.Type.State);
-        _netClient.UpdateManager.AddEntityHostFsmData(Id, (byte)index, data);
+        _lastIsActive = _hasParent ? Object.Host.activeSelf : Object.Host.activeInHierarchy;
+        _netClient.UpdateManager.AddEntityHostFsmData(Id, (byte)index, data, _lastIsActive);
         nextFsmSample = 0;
     }
 

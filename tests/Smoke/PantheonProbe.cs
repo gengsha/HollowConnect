@@ -180,6 +180,18 @@ public sealed class PantheonProbe : MonoBehaviour {
                 orig(action);
             };
         }
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CONTINUATION_TRACE")=="1") {
+            bool Traced(HutongGames.PlayMaker.Fsm f)=>f.GameObject!=null&&(f.GameObject.name=="Hornet Boss 1"||f.GameObject.name=="Needle");
+            string Status(HutongGames.PlayMaker.Fsm f)=>" owner="+f.GameObject.name+" fsm="+f.Name+" state="+f.ActiveState?.Name+" active="+f.GameObject.activeInHierarchy+" finished="+f.Finished+" restart="+f.RestartOnEnable+" parent="+f.GameObject.transform.parent?.name+" pos="+f.GameObject.transform.position+" local="+f.GameObject.transform.localPosition;
+            On.HutongGames.PlayMaker.Fsm.OnEnable += (orig,f)=>{if(Traced(f))Mark("TRACE ENABLE before"+Status(f));orig(f);if(Traced(f))Mark("TRACE ENABLE after"+Status(f));};
+            On.HutongGames.PlayMaker.Fsm.OnDisable += (orig,f)=>{if(Traced(f))Mark("TRACE DISABLE before"+Status(f));orig(f);if(Traced(f))Mark("TRACE DISABLE after"+Status(f));};
+            On.HutongGames.PlayMaker.Fsm.SetState += (orig,f,state)=>{if(Traced(f))Mark("TRACE SET before target="+state+Status(f));orig(f,state);if(Traced(f))Mark("TRACE SET after"+Status(f));};
+            On.HutongGames.PlayMaker.Fsm.ProcessEvent += (orig,f,evt,data)=>{if(Traced(f)&&evt?.Name=="NEEDLE RETURN")Mark("TRACE RECEIVE before"+Status(f));orig(f,evt,data);if(Traced(f)&&evt?.Name=="NEEDLE RETURN")Mark("TRACE RECEIVE after"+Status(f));};
+            On.HutongGames.PlayMaker.Actions.SendEventByName.OnEnter += (orig,a)=>{
+                if(a.sendEvent.Value=="NEEDLE RETURN")Mark("TRACE NOTIFY target="+a.eventTarget.target+" state="+a.Fsm.ActiveState?.Name+" owner="+a.Owner.name);
+                orig(a);
+            };
+        }
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_TRACE")=="1") {
             On.CameraController.SetMode += (orig,camera,mode)=> {Mark("CAMERA MODE "+mode+" scene="+GameManager.instance?.sceneName+" stack="+Environment.StackTrace);orig(camera,mode);};
             On.CameraController.SceneInit += (orig,camera)=> {orig(camera);if(HeroController.instance!=null)CameraTrace("SceneInit");};

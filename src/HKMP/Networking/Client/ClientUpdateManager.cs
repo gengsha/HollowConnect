@@ -308,11 +308,18 @@ internal class ClientUpdateManager : UdpUpdateManager<ServerUpdatePacket, Server
     /// <param name="entityId">The ID of the entity.</param>
     /// <param name="fsmIndex">The index of the FSM of the entity.</param>
     /// <param name="data">The host FSM data to add.</param>
-    public void AddEntityHostFsmData(ulong entityId, byte fsmIndex, EntityHostFsmData data) {
+    public void AddEntityHostFsmData(ulong entityId, byte fsmIndex, EntityHostFsmData data, bool? isActive = null) {
         lock (Lock) {
             var entityUpdate = FindOrCreateEntityUpdate<ReliableEntityUpdate>(entityId);
 
             entityUpdate.UpdateTypes.Add(EntityUpdateType.HostFsm);
+            // A state entered by native reactivation belongs to that activation,
+            // even if the per-frame active observer has not run yet. Keep the
+            // pair under the same send lock so the timer cannot split them.
+            if (isActive.HasValue) {
+                entityUpdate.UpdateTypes.Add(EntityUpdateType.Active);
+                entityUpdate.IsActive = isActive.Value;
+            }
 
             if (entityUpdate.HostFsmData.TryGetValue(fsmIndex, out var existingData)) {
                 existingData.MergeData(data);
