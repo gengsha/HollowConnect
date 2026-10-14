@@ -473,6 +473,7 @@ internal class EntityManager {
         // Clear the list of entities and the queue of received updates that have not been applied yet
         EntityFsmActions.ClearActions();
         EntityReferences.Clear();
+        SpawnDescriptor.Clear();
         
         MusicComponent.ClearInstance();
         clearing = false;
@@ -484,6 +485,7 @@ internal class EntityManager {
     /// <param name="scene">The scene that is loaded.</param>
     /// <param name="mode">The load scene mode.</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        SpawnDescriptor.Clear();
         if (!_netClient.IsConnected || clearing) return;
         var currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         // If this scene is a boss or boss-defeated scene it starts with the same name, so we skip all other

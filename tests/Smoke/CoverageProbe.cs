@@ -5,9 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Hkmp.Game.Client.Entity;
+using Hkmp.Networking.Packet.Data;
 using HollowConnect;
 using HutongGames.PlayMaker;
 using Modding;
+using MonoMod.RuntimeDetour;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -24,6 +26,46 @@ public sealed class CoverageProbe : MonoBehaviour {
     private int shieldEvaluated,shieldMatched;
     private int visibleNeedleSamples,pureMeleeSamples;
     private float nextTrace;
+    private readonly List<IDisposable> performanceHooks = new();
+    private readonly Dictionary<string, int> spawnCounts = new();
+    private double registrationMs, retirementMs, replicaSpawnMs;
+    private int registrations, retirements, replicaSpawns;
+    private readonly List<double> prefabTimes = new(), processTimes = new();
+    private void ObservePerformance() {
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        double Milliseconds(long start) => (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+        performanceHooks.Add(new Hook(typeof(EntityManager).GetMethod("OnGameObjectSpawned", flags),
+            (Func<Func<EntityManager, EntitySpawnDetails, bool>, EntityManager, EntitySpawnDetails, bool>)((orig, m, d) => {
+                var before = Entities.Count; var start = System.Diagnostics.Stopwatch.GetTimestamp();
+                var result = orig(m, d); registrationMs += Milliseconds(start);
+                if (Entities.Count > before) {
+                    registrations++;
+                    var key = (d.Prefab == null ? d.GameObject?.name : d.Prefab.name) + " from=" + d.Action?.Fsm?.GameObject?.name + "/" + d.Action?.State?.Name;
+                    spawnCounts.TryGetValue(key, out var count); spawnCounts[key] = count + 1;
+                }
+                return result;
+            })));
+        performanceHooks.Add(new Hook(typeof(EntityManager).GetMethod("RetireLifetime", flags),
+            (Action<Action<EntityManager, Entity>, EntityManager, Entity>)((orig, m, e) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(m, e);
+                retirementMs += Milliseconds(start); retirements++;
+            })));
+        performanceHooks.Add(new Hook(typeof(EntityManager).GetMethod("SpawnEntity"),
+            (Action<Action<EntityManager, EntitySpawn>, EntityManager, EntitySpawn>)((orig, m, s) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(m, s);
+                replicaSpawnMs += Milliseconds(start); replicaSpawns++;
+            })));
+        performanceHooks.Add(new Hook(typeof(SpawnDescriptor).GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic),
+            (Func<Func<EntitySpawn, Entity, GameObject>, EntitySpawn, Entity, GameObject>)((orig, s, e) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); var go = orig(s, e);
+                prefabTimes.Add(Milliseconds(start)); return go;
+            })));
+        performanceHooks.Add(new Hook(typeof(EntityProcessor).GetMethod("Process", Type.EmptyTypes),
+            (Func<Func<EntityProcessor, EntityProcessor>, EntityProcessor, EntityProcessor>)((orig, p) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); var result = orig(p);
+                processTimes.Add(Milliseconds(start)); return result;
+            })));
+    }
     private void Trace(int round) {
         if(Time.realtimeSinceStartup<nextTrace)return;nextTrace=Time.realtimeSinceStartup+.1f;
         var path=Path.Combine(root,"positions."+round+".txt");
@@ -62,7 +104,7 @@ public sealed class CoverageProbe : MonoBehaviour {
     private bool Has(string s) => File.Exists(Path.Combine(root,s));
     private IEnumerator Until(Func<bool> f,string label) { var end=Time.realtimeSinceStartup+50; while(!f()&&Time.realtimeSinceStartup<end) yield return null; if(!f()) throw new Exception("Timeout "+label); Mark("PASS "+label); }
     private bool In(string scene)=>runtime.Playable&&GameManager.instance.sceneName==scene;
-    private void Freeze() { var h=HeroController.instance; h.takeNoDamage=true; h.GetComponent<Rigidbody2D>().gravityScale=0; h.GetComponent<Rigidbody2D>().velocity=Vector2.zero; }
+    private void Freeze() { var h=HeroController.instance; h.takeNoDamage=true; h.AffectedByGravity(false); h.GetComponent<Rigidbody2D>().velocity=Vector2.zero; }
     private void Enter(string scene)=>GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo{SceneName=scene,EntryGateName=scene.StartsWith("GG_")?"door_dreamEnter":"left1",Visualization=GameManager.SceneLoadVisualizations.Default,WaitForSceneTransitionCameraFade=true});
     private sealed class Log : Hkmp.Logging.ILogger {
         private readonly CoverageProbe p; internal Log(CoverageProbe p){this.p=p;}
@@ -103,6 +145,8 @@ public sealed class CoverageProbe : MonoBehaviour {
         yield return Until(()=>Object.FindObjectOfType<CoopRuntime>()!=null&&GameManager.instance!=null&&UnityEngine.SceneManagement.SceneManager.GetActiveScene().name=="Menu_Title","menu");
         runtime=Object.FindObjectOfType<CoopRuntime>();engine=Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"),"_gameManager");manager=Field<EntityManager>(engine.ClientManager,"_entityManager");
         Hkmp.Logging.Logger.AddLogger(new Log(this));
+        var performance = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PERFORMANCE") == "1";
+        if (performance) ObservePerformance();
         On.HutongGames.PlayMaker.Actions.DestroyObject.OnEnter += (orig,a)=>{ Mark("NATIVE DESTROY "+Describe(a.gameObject.Value)+" from="+a.Fsm?.GameObject?.name+"/"+a.Fsm?.Name+"/"+a.State?.Name); orig(a); };
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += (orig,f,e,d)=>{ if(f.GameObject!=null&&f.GameObject.name.Contains("Mega Jellyfish"))Mark("UUMUU EVENT "+f.GameObject.name+"/"+f.Name+"/"+e?.Name+" active="+f.Active+" state="+f.ActiveStateName);orig(f,e,d); };
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager,"_modSettings").AuthKey=Hkmp.Util.AuthUtil.GenerateAuthKey();
@@ -129,20 +173,60 @@ public sealed class CoverageProbe : MonoBehaviour {
             }
             var guestAuthority=Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_AUTHORITY")=="guest";
             if(host==guestAuthority)yield return new WaitForSecondsRealtime(2);
-            Enter(scene);yield return Until(()=>In(scene),"enter "+scene);Freeze();yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
+            Enter(scene);yield return Until(()=>In(scene),"enter "+scene);
+            if(performance) {
+                var hero=HeroController.instance;hero.takeNoDamage=true;hero.AffectedByGravity(true);hero.IgnoreInputWithoutReset();
+                yield return Until(()=>hero.cState.onGround,"native performance target lands " + scene);
+            } else Freeze();
+            yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SOUL_PHASE2") == "1") {
+                var phase1 = Entities.Values.Single(e => e.Type is EntityType.SoulMaster or EntityType.SoulTyrant);
+                var phase2 = Entities.Values.Single(e => e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2);
+                if (manager.IsSceneHost) {
+                    yield return new WaitForSecondsRealtime(3);
+                    var health = phase1.Object.Host.GetComponent<HealthManager>();
+                    Mark("NATIVE PHASE DAMAGE " + phase1.Type + " hp=" + health.hp);
+                    health.ApplyExtraDamage(health.hp);
+                }
+                yield return Until(() => (manager.IsSceneHost ? phase2.Object.Host : phase2.Object.Client).activeInHierarchy, "native Soul phase 2 activated " + scene);
+                if (performance && manager.IsSceneHost) Dump(phase2.Object.Host);
+            }
             if(round==0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COMBAT_ASSERTIONS")=="1")yield return CombatAssertions();
             if(scene=="GG_Hollow_Knight" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_NATIVE_CONTACT_ASSERTIONS")=="1")yield return PureVesselContact(round);
             if(host && scene=="GG_Uumuu") foreach(var go in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f=>f.gameObject.scene.name==scene&&EntityReferences.Owner(f.gameObject)==null).Select(f=>f.gameObject).Distinct())Dump(go);
-            if(host) foreach(var e in Entities.Values.ToArray().Where(e=>e.Object.Host!=null&&e.Object.Host.GetComponent<HealthManager>()!=null)) {Mark("REGISTERED "+e.Id+" "+e.Type);Dump(e.Object.Host);}
+            if(performance && manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SOUL_PHASE2") != "1")
+                foreach(var e in Entities.Values.Where(e=>e.Type is EntityType.SoulMaster or EntityType.SoulTyrant)) Dump(e.Object.Host);
+            if(host && !performance) foreach(var e in Entities.Values.ToArray().Where(e=>e.Object.Host!=null&&e.Object.Host.GetComponent<HealthManager>()!=null)) {Mark("REGISTERED "+e.Id+" "+e.Type);Dump(e.Object.Host);}
             var end=Time.realtimeSinceStartup+seconds;var sample=0f;var frames=0;var start=Time.realtimeSinceStartup;
-            while(Time.realtimeSinceStartup<end){frames++;Trace(round);if(Time.realtimeSinceStartup>=sample){sample=Time.realtimeSinceStartup+2;
+            var frameTimes = new List<float>(); var phaseStates = new HashSet<string>();
+            while(Time.realtimeSinceStartup<end){frames++;if(!performance)Trace(round);else frameTimes.Add(Time.unscaledDeltaTime*1000);if(Time.realtimeSinceStartup>=sample){sample=Time.realtimeSinceStartup+2;
                 Mark("SAMPLE "+scene+" entities="+Entities.Count+" active="+Entities.Values.Count(e=>{var o=manager.IsSceneHost?e.Object.Host:e.Object.Client;return o!=null&&o.activeInHierarchy;})+" frames="+frames+" seconds="+(Time.realtimeSinceStartup-start));
+                if (performance) {
+                    frameTimes.Sort(); Mark("PERF p95ms=" + frameTimes[(int)((frameTimes.Count-1)*.95)] + " maxms=" + frameTimes.Last() +
+                        " registrations=" + registrations + " registrationMs=" + registrationMs + " retirements=" + retirements + " retirementMs=" + retirementMs + " replicaSpawns=" + replicaSpawns + " replicaSpawnMs=" + replicaSpawnMs);
+                    frameTimes.Clear();
+                    foreach (var e in Entities.Values.Where(e => e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant)) {
+                        var go = manager.IsSceneHost ? e.Object.Host : e.Object.Client;
+                        Mark("BOSS " + e.Type + " pos=" + go.transform.position + " state=" + string.Join(",", go.GetComponents<PlayMakerFSM>().Select(f => f.FsmName + "=" + f.ActiveStateName)));
+                    }
+                }
+                if(!performance)
                 foreach(var e in Entities.Values.ToArray()){var go=manager.IsSceneHost?e.Object.Host:e.Object.Client;if(go==null||(!go.activeInHierarchy&&go.GetComponent<HealthManager>()==null))continue;
                     Mark("LIVE "+e.Id+" "+e.Type+" "+Describe(go)+" pos="+go.transform.position+" state="+string.Join(",",go.GetComponents<PlayMakerFSM>().Select(f=>f.FsmName+"="+f.ActiveStateName))+" colliders="+string.Join(",",go.GetComponentsInChildren<Collider2D>(true).Select(c=>c.gameObject.name+"/"+c.enabled+"/"+c.isTrigger+"/active="+c.gameObject.activeInHierarchy))+" damage="+string.Join(",",go.GetComponentsInChildren<DamageHero>(true).Select(d=>d.gameObject.name+"/"+d.enabled+"/"+d.damageDealt)));
                 }
-            }yield return null;}
+            }
+            if(performance && manager.IsSceneHost) foreach(var e in Entities.Values.Where(e=>e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant))
+                foreach(var f in e.Object.Host.GetComponents<PlayMakerFSM>()) phaseStates.Add(e.Type + "/" + f.ActiveStateName);
+            yield return null;}
+            if(performance) {
+                foreach(var pair in spawnCounts)Mark("SPAWN COUNT " + pair.Value + " " + pair.Key);Mark("BOSS STATES " + string.Join(",",phaseStates));spawnCounts.Clear();
+                foreach(var times in new[]{(Name:"prefab",Values:prefabTimes),(Name:"process",Values:processTimes)}) {
+                    times.Values.Sort();if(times.Values.Count!=0)Mark("COST " + times.Name + " count=" + times.Values.Count + " totalMs=" + times.Values.Sum() + " p95ms=" + times.Values[(int)((times.Values.Count-1)*.95)] + " maxms=" + times.Values.Last());
+                    times.Values.Clear();
+                }
+            }
             Flag(role+".sample."+round);yield return Until(()=>Has((host?"guest":"host")+".sample."+round),"both sampled "+scene);
             foreach(var item in matched.OrderBy(p=>p.Key))Mark("POSITION MATCHES "+scene+" "+item.Key+"="+item.Value);matched.Clear();
             if(!manager.IsSceneHost && scene.StartsWith("GG_Ghost_Markoth")){
@@ -160,6 +244,8 @@ public sealed class CoverageProbe : MonoBehaviour {
             shieldEvaluated=shieldMatched=0;
             visibleNeedleSamples=pureMeleeSamples=0;
         }
+        foreach(var hook in performanceHooks)hook.Dispose();performanceHooks.Clear();
+        yield return ProbeShutdown.Run(engine,root,role);
         Mark("FINAL PASS coverage observations (not all attacks proven)");Flag(role+".done");
     }
     private IEnumerator PureVesselContact(int round) {

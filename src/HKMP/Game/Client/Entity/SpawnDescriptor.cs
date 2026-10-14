@@ -11,10 +11,16 @@ namespace Hkmp.Game.Client.Entity;
 // Use the actual source action and prefab, rather than a growing boss-specific
 // list of guessed FSM component indices. Nothing executes on the replica here.
 internal static class SpawnDescriptor {
+    private static readonly Dictionary<Type, FieldInfo[]> PrefabFields = new();
+    private static readonly Dictionary<(string, EntityType), GameObject> ResourcePrefabs = new();
+    internal static void Clear() => ResourcePrefabs.Clear();
     internal static IEnumerable<GameObject> Prefabs(FsmStateAction action) {
         if (action == null) yield break;
-        foreach (var field in action.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public)) {
-            if (field.Name != "gameObject" && field.Name.IndexOf("prefab", StringComparison.OrdinalIgnoreCase) < 0) continue;
+        var type = action.GetType();
+        if (!PrefabFields.TryGetValue(type, out var fields))
+            PrefabFields[type] = fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public)
+                .Where(f => f.Name == "gameObject" || f.Name.IndexOf("prefab", StringComparison.OrdinalIgnoreCase) >= 0).ToArray();
+        foreach (var field in fields) {
             var value = field.GetValue(action);
             var go = value as GameObject ?? (value as FsmGameObject)?.Value;
             if (go != null) yield return go;
@@ -42,8 +48,18 @@ internal static class SpawnDescriptor {
             candidates=source.Object.Host.GetComponentsInChildren<SpawnJarControl>(true)
                 .Select(j=>Modding.ReflectionHelper.GetField<SpawnJarControl,GameObject>(j,"enemyToSpawn")).Where(Match).Distinct().ToArray();
         }
-        if (candidates.Length != 1 && data.Prefab.Length != 0)
-            candidates = Resources.FindObjectsOfTypeAll<GameObject>().Where(p => !p.scene.IsValid() && Match(p)).ToArray();
+        if (candidates.Length != 1 && data.Prefab.Length != 0) {
+            var key = (data.Prefab, data.SpawnedType);
+            if (ResourcePrefabs.TryGetValue(key, out var cached) && cached != null && !cached.scene.IsValid() && Match(cached))
+                candidates = new[] { cached };
+            else {
+                candidates = Resources.FindObjectsOfTypeAll<GameObject>().Where(p => !p.scene.IsValid() && Match(p)).ToArray();
+                // Pooled hazards can arrive in large bursts. Reuse only a
+                // unique native asset; misses and ambiguity still retry/fail.
+                if (candidates.Length == 1) ResourcePrefabs[key] = candidates[0];
+                else ResourcePrefabs.Remove(key);
+            }
+        }
         // Ambiguity is an explicit failure; spawning the wrong hazard is worse.
         if (candidates.Length != 1) return null;
         var staging=new GameObject("HollowConnect spawn staging");staging.SetActive(false);
