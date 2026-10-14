@@ -297,7 +297,7 @@ public sealed class DeathProbe : MonoBehaviour {
     }
     private IEnumerator ReturnMotion(string label) {
         var hero = HeroController.instance; var body = hero.GetComponent<Rigidbody2D>();
-        if (scene.StartsWith("Dream_")) {
+        if (scene.StartsWith("Dream_") || scene.StartsWith("GG_")) {
             var wake = hero.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Dream Return");
             yield return Until(() => wake.ActiveStateName == "Ready", label + " native wake input prompt", 10);
             var jump = wake.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single();
