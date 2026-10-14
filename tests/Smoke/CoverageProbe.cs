@@ -209,6 +209,7 @@ public sealed class CoverageProbe : MonoBehaviour {
                     frameTimes.Clear();
                     foreach (var e in Entities.Values.Where(e => e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant)) {
                         var go = manager.IsSceneHost ? e.Object.Host : e.Object.Client;
+                        if(go==null)continue;
                         Mark("BOSS " + e.Type + " pos=" + go.transform.position + " state=" + string.Join(",", go.GetComponents<PlayMakerFSM>().Select(f => f.FsmName + "=" + f.ActiveStateName)));
                     }
                 }
@@ -217,7 +218,7 @@ public sealed class CoverageProbe : MonoBehaviour {
                     Mark("LIVE "+e.Id+" "+e.Type+" "+Describe(go)+" pos="+go.transform.position+" state="+string.Join(",",go.GetComponents<PlayMakerFSM>().Select(f=>f.FsmName+"="+f.ActiveStateName))+" colliders="+string.Join(",",go.GetComponentsInChildren<Collider2D>(true).Select(c=>c.gameObject.name+"/"+c.enabled+"/"+c.isTrigger+"/active="+c.gameObject.activeInHierarchy))+" damage="+string.Join(",",go.GetComponentsInChildren<DamageHero>(true).Select(d=>d.gameObject.name+"/"+d.enabled+"/"+d.damageDealt)));
                 }
             }
-            if(performance && manager.IsSceneHost) foreach(var e in Entities.Values.Where(e=>e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant))
+            if(performance && manager.IsSceneHost) foreach(var e in Entities.Values.Where(e=>e.Object.Host!=null && (e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant)))
                 foreach(var f in e.Object.Host.GetComponents<PlayMakerFSM>()) phaseStates.Add(e.Type + "/" + f.ActiveStateName);
             yield return null;}
             if(performance) {
