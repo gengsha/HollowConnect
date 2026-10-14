@@ -55,7 +55,7 @@ internal sealed class CombatStateComponent : EntityComponent {
         Build();
         if(nodes==null)return;
         foreach(var n in nodes){
-            if(n.Path.Length==0||n.Host?.Transform==null||n.Client?.Transform==null)continue;
+            if(n.Host?.Transform==null||n.Client?.Transform==null)continue;
             var source=n.Client.Transform;var target=n.Host.Transform;
             var parentKey=EntityReferences.Capture(source.parent==null?null:source.parent.gameObject);
             var parent=EntityReferences.Resolve(parentKey,false);
@@ -82,7 +82,10 @@ internal sealed class CombatStateComponent : EntityComponent {
         foreach(var n in nodes){
             var h=n.Host;var t=h.Transform;p.Write(n.Path);p.Write(t!=null);if(t==null)continue;
             p.Write(t.gameObject.activeSelf);p.Write((byte)t.gameObject.layer);
-            if(n.Path.Length!=0){p.Write(EntityReferences.Capture(t.parent==null?null:t.parent.gameObject));WriteVector(p,t.localPosition);WriteVector(p,t.localEulerAngles);WriteVector(p,t.localScale);}
+            // An independently registered child is the root of this component,
+            // and can detach from its registration parent during native play.
+            p.Write(EntityReferences.Capture(t.parent==null?null:t.parent.gameObject));
+            if(n.Path.Length!=0){WriteVector(p,t.localPosition);WriteVector(p,t.localEulerAngles);WriteVector(p,t.localScale);}
             else WriteVector(p,t.eulerAngles);
             p.Write(Count(h.Colliders));for(var k=0;k<Count(h.Colliders);k++){
                 var c=h.Colliders[k];p.Write(c!=null&&c.enabled);p.Write(c!=null&&c.isTrigger);
@@ -115,7 +118,8 @@ internal sealed class CombatStateComponent : EntityComponent {
             if(n==null){var target=EntityReferences.Resolve("e:"+id+"/"+path,true);if(target!=null){n=new Node{Path=path,Client=new Parts(target.transform)};lookup[path]=n;}}
             if(!p.ReadBool()){if(n?.Client?.Transform!=null)n.Client.Transform.gameObject.SetActive(false);continue;}
             var active=p.ReadBool();var layer=p.ReadByte();if(layer>31)throw new FormatException("Invalid combat layer");
-            var parentKey="";var pos=Vector3.zero;var rot=Vector3.zero;var scale=Vector3.one;if(path.Length!=0){parentKey=p.ReadString();if(parentKey.Length>2048)throw new FormatException("Invalid combat parent");pos=ReadVector(p);rot=ReadVector(p);scale=ReadVector(p);}else rot=ReadVector(p);
+            var parentKey=p.ReadString();if(parentKey.Length>2048)throw new FormatException("Invalid combat parent");
+            var pos=Vector3.zero;var rot=Vector3.zero;var scale=Vector3.one;if(path.Length!=0){pos=ReadVector(p);rot=ReadVector(p);scale=ReadVector(p);}else rot=ReadVector(p);
             // Dormant native children must remain under the disabled native
             // root until takeover. Detaching and activating both copies creates
             // duplicate terrain colliders and native attack controllers.
@@ -126,10 +130,14 @@ internal sealed class CombatStateComponent : EntityComponent {
             void ApplyTransform(Parts b){
                 if(b?.Transform==null)return;
                 b.Transform.gameObject.layer=layer;
-                if(path.Length==0){b.Transform.eulerAngles=rot;return;}
+                if(path.Length==0 && ReferenceEquals(b,n?.Host)){b.Transform.eulerAngles=rot;return;}
                 var parent=EntityReferences.Resolve(parentKey,true);
                 if(parentKey.Length!=0&&parent==null)return;
                 if(parent!=null&&(parent.transform==b.Transform||parent.transform.IsChildOf(b.Transform)))return;
+                if(path.Length==0){
+                    b.Transform.SetParent(parent==null?null:parent.transform,true);
+                    b.Transform.eulerAngles=rot;return;
+                }
                 b.Transform.SetParent(parent==null?null:parent.transform,false);
                 b.Transform.localPosition=pos;b.Transform.localEulerAngles=rot;b.Transform.localScale=scale;
                 b.Transform.gameObject.SetActive(active);

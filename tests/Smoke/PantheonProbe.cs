@@ -311,7 +311,16 @@ public sealed class PantheonProbe : MonoBehaviour {
                     " pos="+(needle!=null?needle.transform.position.ToString():"null")+
                     " fsms="+(needle!=null?string.Join(",",needle.GetComponents<PlayMakerFSM>().Select(f=>f.FsmName+":"+f.ActiveStateName+"/enabled="+f.enabled)):"null"));
             }
-            if(state=="Throw Recover"){Mark("PASS native Throw Recover "+label);yield break;}
+            if(state=="Throw Recover"){
+                if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_HIERARCHY_CHECK")=="1") {
+                    var needle=control.FsmVariables.FindFsmGameObject("Needle").Value;
+                    var target=control.transform.position+new Vector3(0,-.5f,0);
+                    if(needle==null||needle.transform.parent!=null||Vector2.Distance(needle.transform.position,target)>1)
+                        throw new Exception("Native needle recovery completed in a stale parent space: "+label+" pos="+needle?.transform.position+" expected="+target);
+                    Mark("PASS native needle returns near launch position "+label);
+                }
+                Mark("PASS native Throw Recover "+label);yield break;
+            }
             yield return null;
         }
         ColliderReferences(control.gameObject,"recovery-timeout");DumpRoom("recovery-timeout");

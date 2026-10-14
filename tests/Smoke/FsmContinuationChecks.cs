@@ -45,6 +45,10 @@ internal static class FsmContinuationChecks {
         Entity entity = null;
         try {
             PlayMakerFSM fsm;
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_HIERARCHY_CHECK") == "1") {
+                yield return Hierarchy(net, mark);
+                if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") == "hierarchy") yield break;
+            }
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_SNAPSHOT_CHECK") == "1") {
                 source = new GameObject("HollowConnect state publication fixture"); source.SetActive(false);
                 var wait = new Wait(); wait.Reset(); wait.time = 10; wait.finishEvent = FsmEvent.Finished;
@@ -181,6 +185,61 @@ internal static class FsmContinuationChecks {
         } finally {
             entity?.Destroy();
             if (source != null) { iTween.Stop(source); Object.Destroy(source); }
+        }
+    }
+
+    private static IEnumerator Hierarchy(NetClient net, Action<string> mark) {
+        var parent = new GameObject("HollowConnect hierarchy fixture parent");
+        parent.transform.position = new Vector3(10, 20, 0);
+        var source = new GameObject("HollowConnect hierarchy fixture"); source.SetActive(false);
+        var replica = new GameObject("HollowConnect hierarchy fixture replica"); replica.SetActive(false);
+        Entity entity = null;
+        try {
+            var tween = new iTweenMoveTo(); tween.Reset();
+            tween.gameObject = new FsmOwnerDefault { OwnerOption = OwnerDefaultOption.UseOwner };
+            tween.space = Space.Self; tween.vectorPosition = new Vector3(6, 0, 0);
+            tween.time = .8f; tween.orientToPath = false; tween.finishEvent = FsmEvent.Finished;
+            var fsm = Create(source, null, tween); Create(replica, null, new Wait { time = 10 });
+            source.SetActive(true); yield return null; yield return null;
+            replica.transform.SetParent(parent.transform, true); replica.transform.position = source.transform.position;
+            const ulong id = 0xffffffffffffffe5UL;
+            entity = new Entity(net, id, EntityType.DynamicHazard, source, replica);
+            EntityReferences.Register(entity);
+            var components = (Dictionary<EntityComponentType, EntityComponent>)typeof(Entity)
+                .GetField("_components", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(entity);
+            var combat = (CombatStateComponent)components[EntityComponentType.CombatState];
+            // Capture the source payload without promoting this paused receiver
+            // to authority; InitializeClient does not demote an existing host.
+            combat.IsControlled = false; combat.InitializeHost();
+            typeof(CombatStateComponent).GetMethod("Tick", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(combat, null);
+            combat.IsControlled = true;
+            var outgoing = (ServerUpdatePacket)typeof(ClientUpdateManager).BaseType
+                .GetField("CurrentUpdatePacket", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(net.UpdateManager);
+            if (!outgoing.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw))
+                throw new Exception("Hierarchy fixture did not publish combat state");
+            var data = ((PacketDataCollection<ReliableEntityUpdate>)raw).DataInstances.Cast<ReliableEntityUpdate>()
+                .Single(u => u.Id == id).GenericData.Last(d => d.Type == EntityComponentType.CombatState);
+            entity.InitializeClient(); entity.UpdateIsActive(true);
+            // This peer's dormant native hierarchy predates the remote detach.
+            source.transform.SetParent(parent.transform, true);
+            entity.UpdateData(new List<EntityNetworkData> { new EntityNetworkData {
+                Type = data.Type, Packet = new Packet(data.Packet.ToArray())
+            } }, true);
+            if (replica.transform.parent != null || source.transform.parent != parent.transform)
+                throw new Exception("Root parent snapshot did not detach only the replica while native simulation was paused");
+            var position = new Hkmp.Math.Vector2(2, 0); entity.UpdatePosition(position);
+            if (Vector2.Distance(replica.transform.position, new Vector2(2, 0)) > .01f)
+                throw new Exception("Detached registered child interpreted world position in its previous parent space");
+            entity.MakeHost();
+            if (source.transform.parent != null || Vector2.Distance(source.transform.position, new Vector2(2, 0)) > .01f)
+                throw new Exception("Takeover kept a stale native root parent or changed world position");
+            var end = Time.realtimeSinceStartup + 3;
+            while (fsm.ActiveStateName != "Done" && Time.realtimeSinceStartup < end) yield return null;
+            if (fsm.ActiveStateName != "Done" || Vector2.Distance(source.transform.position, new Vector2(6, 0)) > .1f)
+                throw new Exception("Local-space tween resumed in a stale parent coordinate system");
+            mark("PASS detached entity root restores parent and world position before native local tween completion");
+        } finally {
+            entity?.Destroy(); iTween.Stop(source); Object.Destroy(source); Object.Destroy(replica); Object.Destroy(parent);
         }
     }
 }

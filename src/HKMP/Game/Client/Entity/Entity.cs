@@ -786,7 +786,9 @@ internal class Entity {
 
         var transform = Object.Host.transform;
 
-        var newPosition = _hasParent ? transform.localPosition : transform.position;
+        // Registration ownership survives native reparenting. Position packets
+        // use world space so that ownership cannot select an obsolete basis.
+        var newPosition = transform.position;
         if (newPosition != _lastPosition) {
             _lastPosition = newPosition;
 
@@ -1314,7 +1316,7 @@ internal class Entity {
         var unityPos = new Vector3(
             position.X, 
             position.Y,
-            _hasParent ? Object.Host.transform.localPosition.z : Object.Host.transform.position.z
+            Object.Host.transform.position.z
         );
 
         var positionInterpolation = Object.Client.GetComponent<PositionInterpolation>();
@@ -1322,7 +1324,7 @@ internal class Entity {
             return;
         }
 
-        if (!_hasParent && Object.Client.transform.parent != null) unityPos = Object.Client.transform.parent.InverseTransformPoint(unityPos);
+        if (Object.Client.transform.parent != null) unityPos = Object.Client.transform.parent.InverseTransformPoint(unityPos);
         positionInterpolation.SetNewPosition(unityPos);
     }
 
