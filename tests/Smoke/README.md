@@ -79,6 +79,8 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 探针拦截三个 SaveGame 重载，不读取现有存档；角色在内存中创建。测试插件在批处理模式下将 Respawn 和 LoadFirstScene 中的渲染帧等待改为下一模拟帧，发行模块没有这一行为。测试结束停止这两个测试进程，移除测试副本中的插件；不要把它复制到日常游戏。验证内容与局限见 docs/VERIFICATION.md。
 ## FSM 快照与接管专项
 
+`HOLLOWCONNECT_NETWORK_FAULTS=1` 在测试插件内、DTLS 加密前按每个独立 transport 注入固定故障：每 13 条消息连续丢两条、每 9 条延后一条至下一条之后、每 17 条重复一条。缓存完整应用消息，绝不跨连接混合分片。不会增加生产重试或调整超时；最终仍要求原有招式、回收位置、镜头、双端终态及严格日志门槛全部通过。结束日志的 `NETWORK FAULTS` 记录实际丢包、乱序、重复和嵌套重发数，没有实际覆盖全部配置故障就失败。这是同机故障注入，不等于真实双机 FRP 验收。
+
 `HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 在联网前运行真实 Unity/PlayMaker 的绝对 tween、固定帧减速和休眠接管夹具；`HOLLOWCONNECT_FSM_SNAPSHOT_CHECK=1` 再检查原生状态在采样窗口内即时发布、空状态清除旧快照，以及原生重激活的 active/state 在同一可靠更新中发布。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=snapshot` 只运行后三项，须同时启用前两个开关。所有夹具都通过生产 Entity 路径，使用独立测试对象，不强制 Boss 状态。
 
 `HOLLOWCONNECT_FSM_CONTINUATION_STRESS=1` 配合投针重连专项，让每轮另一端先重连并成为权威，前六轮之外再覆盖 Needle 自然 `Decel` 和 `Return`，共八轮。可用 `HOLLOWCONNECT_CONTINUATION_TRACE=1` 记录原生状态恢复、激活/停用、通知收发、父物体和坐标；追踪不改变原生执行，也不放宽恢复超时或日志门槛。

@@ -19,6 +19,7 @@ internal static class ProbeShutdown {
             File.WriteAllText(Path.Combine(root,"shutdown-server-stopped"),"stopped");
         }
         yield return Wait(()=>File.Exists(Path.Combine(root,"shutdown-server-stopped")),"server stopped");
+        ProbeNetworkFaults.Verify(root, role);
         IEnumerator Wait(Func<bool> ready,string label) {
             var end=UnityEngine.Time.realtimeSinceStartup+15;
             while(!ready()&&UnityEngine.Time.realtimeSinceStartup<end)yield return null;
