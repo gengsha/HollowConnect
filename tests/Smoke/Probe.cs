@@ -20,6 +20,7 @@ public sealed class ProbeMod : Mod {
         if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"))) return;
         ProbeLogGuard.Install(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT"), Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"));
         ProbeNetworkFaults.Install();
+        ProbePresenceTrace.Install();
         On.GameManager.SaveGame += (orig, gm) => { };
         On.GameManager.SaveGame_Action1 += (orig, gm, callback) => callback?.Invoke(true);
         On.GameManager.SaveGame_int_Action1 += (orig, gm, slot, callback) => callback?.Invoke(true);

@@ -79,7 +79,9 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 探针拦截三个 SaveGame 重载，不读取现有存档；角色在内存中创建。测试插件在批处理模式下将 Respawn 和 LoadFirstScene 中的渲染帧等待改为下一模拟帧，发行模块没有这一行为。测试结束停止这两个测试进程，移除测试副本中的插件；不要把它复制到日常游戏。验证内容与局限见 docs/VERIFICATION.md。
 ## FSM 快照与接管专项
 
-`HOLLOWCONNECT_NETWORK_FAULTS=1` 在测试插件内、DTLS 加密前按每个独立 transport 注入固定故障：每 13 条消息连续丢两条、每 9 条延后一条至下一条之后、每 17 条重复一条。缓存完整应用消息，绝不跨连接混合分片。不会增加生产重试或调整超时；最终仍要求原有招式、回收位置、镜头、双端终态及严格日志门槛全部通过。结束日志的 `NETWORK FAULTS` 记录实际丢包、乱序、重复和嵌套重发数，没有实际覆盖全部配置故障就失败。这是同机故障注入，不等于真实双机 FRP 验收。
+`HOLLOWCONNECT_NETWORK_FAULTS=1` 在测试插件内、DTLS 加密前按每个独立 transport 注入固定种子故障：连续丢两条消息，间隔 10–16 条；将一条延后到后续消息之后，间隔 6–12 条；重复一条，间隔 12–22 条。均值分别为 13、9、17，种子为 `0x6D2B79F5`，不依赖包内容；缓存完整应用消息，绝不跨连接混合分片。不会增加生产重试或调整超时；最终仍要求原有招式、回收位置、镜头、双端终态及严格日志门槛全部通过。结束日志的 `NETWORK FAULTS` 记录实际丢包、乱序、重复和嵌套重发数，没有实际覆盖全部配置故障就失败。这是同机故障注入，不等于真实双机 FRP 验收。
+
+`HOLLOWCONNECT_NETWORK_FAULTS=periodic` 保留最初每 13/9/17 条的周期性故障。每 13 条丢两条可能与现有约 13 包一次的可靠重发同步，造成持续心跳正常而同一入场消息所有重发都被丢弃；对应旧失败不能由固定种子组通过解除。`HOLLOWCONNECT_NETWORK_TRACE=1` 额外记录入场/离场消息的原始来源、接收筛选及游戏上下文，并记录实际 DROP/HOLD，日志为各角色独立的 `.presence.log`，不改变分发。
 
 `HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 在联网前运行真实 Unity/PlayMaker 的绝对 tween、固定帧减速和休眠接管夹具；`HOLLOWCONNECT_FSM_SNAPSHOT_CHECK=1` 再检查原生状态在采样窗口内即时发布、空状态清除旧快照，以及原生重激活的 active/state 在同一可靠更新中发布。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=snapshot` 只运行后三项，须同时启用前两个开关。所有夹具都通过生产 Entity 路径，使用独立测试对象，不强制 Boss 状态。
 
