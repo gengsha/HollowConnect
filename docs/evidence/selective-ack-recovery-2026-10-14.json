@@ -1,0 +1,738 @@
+{
+  "sourceCommit": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+  "fix": {
+    "commit": "44ae5d1",
+    "issue": "Recover missing reliable data when a selective ACK report confirms three distinct newer datagrams",
+    "bossSpecific": false,
+    "wirePayloadChanged": false,
+    "newTimers": false,
+    "timeoutsChanged": false,
+    "faultScheduleChanged": false,
+    "acceptanceWeakened": false
+  },
+  "regression": {
+    "passed": 142,
+    "failed": 0,
+    "log": ".test-results/selective-ack-final-unit-20261014.log",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1",
+        "productVersion": "1.0.0+44ae5d17537f4f257c7d553e11694dc0c57abe98"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12",
+        "productVersion": "1.0.0+44ae5d17537f4f257c7d553e11694dc0c57abe98"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3",
+        "productVersion": "1.0.0+44ae5d17537f4f257c7d553e11694dc0c57abe98"
+      }
+    ],
+    "logGateChecks": 14
+  },
+  "deterministicBaseline": {
+    "passed": 132,
+    "failed": 10,
+    "log": ".test-results/selective-ack-baseline-v2-20261014.log",
+    "senderProductVersion": "1.0.0+92a7822518e425412533b17153ad8baa590e57c9",
+    "senderSha256": "381B9135F1EFD6CD37F77F1F42F20EF79B63DD91A9C20933CB3B246435DCA109",
+    "source90Carriers": [
+      90,
+      103,
+      116,
+      129,
+      142,
+      155,
+      168,
+      181,
+      194,
+      207
+    ],
+    "serverEnters": 0,
+    "clientEnters": 0,
+    "dtlsBoundaryVirtual": true,
+    "clockVirtual": true,
+    "productionSendEncodeFrameDecodeAckAndDispatch": true
+  },
+  "excludedFixtureDiagnostics": [
+    ".test-results/selective-ack-baseline-20261014.log: enter positions not initialized; not a production failure baseline",
+    ".test-results/selective-ack-fixed-build-20261014.log: generic type inference compilation error; not runtime evidence"
+  ],
+  "runtimeBaseline": {
+    "name": "reliability-loss-lifecycle-host-trace-20261014",
+    "source": "c9dd07a",
+    "origin": 90,
+    "carriers": [
+      90,
+      103,
+      116,
+      129
+    ],
+    "resolved": true,
+    "fix": "44ae5d1",
+    "untracedFirstSampleUniquelyAttributed": false
+  },
+  "takeoverContrast": {
+    "name": "selective-ack-old-sender-seeded-trace-guest-20261014",
+    "senderProductVersion": "1.0.0+92a7822518e425412533b17153ad8baa590e57c9",
+    "candidateAcceptance": false,
+    "bothPassed": true,
+    "sameThrowRecoveryFailureReproducedBeforeSenderFix": false,
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "381B9135F1EFD6CD37F77F1F42F20EF79B63DD91A9C20933CB3B246435DCA109"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+      }
+    ],
+    "roles": [
+      {
+        "role": "host",
+        "done": true,
+        "failure": null
+      },
+      {
+        "role": "guest",
+        "done": true,
+        "failure": null
+      }
+    ],
+    "uniqueRootCauseEstablished": false,
+    "introducedBySenderFix": null,
+    "preexistingDefectProven": false
+  },
+  "faultInjection": {
+    "attemptedRuns": 9,
+    "passedRuns": 7,
+    "rejectedRuns": 2,
+    "periodicEntryRunsPassed": 2,
+    "periodicStressRunsAttempted": 2,
+    "fixedSeedRunsAttempted": 5,
+    "fixedSeedRunsPassed": 4,
+    "periodicDropBurst": 2,
+    "periodicDropInterval": 13,
+    "periodicReorderInterval": 9,
+    "periodicDuplicateInterval": 17,
+    "seed": "0x6D2B79F5",
+    "sameMachine": true,
+    "frpVerified": false,
+    "periodicStarvationResolved": true,
+    "allPeriodicStressPassed": false
+  },
+  "runs": [
+    {
+      "name": "selective-ack-final-periodic-lifecycle-host-20261014",
+      "bothPassed": false,
+      "strictLogsPassed": false,
+      "rejection": "Probe has a failure marker (including failures after done).",
+      "environment": {
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "periodic",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": false,
+          "finalPass": false,
+          "faultVerificationCompleted": false,
+          "messages": null,
+          "dropped": null,
+          "reordered": null,
+          "duplicated": null,
+          "nestedResends": null,
+          "takeoverRounds": 1,
+          "naturalRecoveries": 1,
+          "unityChecks": 9,
+          "failure": "System.Exception: Timeout: authority throw and recovery after reconnect 2\r\n  at HollowConnect.Smoke.PantheonProbe+<Until>d__27.MoveNext () [0x00080] in <536740e08e4a4775937b8fa1643b2957>:0 \r\n  at HollowConnect.Smoke.PantheonProbe+<Start>d__35.MoveNext () [0x002f4] in <536740e08e4a4775937b8fa1643b2957>:0 "
+        },
+        {
+          "role": "guest",
+          "done": false,
+          "finalPass": false,
+          "faultVerificationCompleted": false,
+          "messages": null,
+          "dropped": null,
+          "reordered": null,
+          "duplicated": null,
+          "nestedResends": null,
+          "takeoverRounds": 2,
+          "naturalRecoveries": 1,
+          "unityChecks": 9,
+          "failure": "System.Exception: Timeout: native Throw Recover after reconnect 2 state=Thrown\r\n  at HollowConnect.Smoke.PantheonProbe+<WaitForNeedleRecovery>d__41.MoveNext () [0x0059a] in <536740e08e4a4775937b8fa1643b2957>:0 \r\n  at HollowConnect.Smoke.PantheonProbe+<Start>d__35.MoveNext () [0x002f4] in <536740e08e4a4775937b8fa1643b2957>:0 "
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-periodic-trace-lifecycle-guest-20261014",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "rejection": null,
+      "environment": {
+        "HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_CONTINUATION_PACKET_TRACE": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "periodic",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 46115,
+          "dropped": 7064,
+          "reordered": 4324,
+          "duplicated": 2051,
+          "nestedResends": 0,
+          "takeoverRounds": 4,
+          "naturalRecoveries": 4,
+          "unityChecks": 9,
+          "failure": null
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 15391,
+          "dropped": 2356,
+          "reordered": 1444,
+          "duplicated": 686,
+          "nestedResends": 0,
+          "takeoverRounds": 4,
+          "naturalRecoveries": 4,
+          "unityChecks": 9,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-lifecycle-host-20261014",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "rejection": null,
+      "environment": {
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "1",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 46722,
+          "dropped": 7209,
+          "reordered": 4410,
+          "duplicated": 2082,
+          "nestedResends": 0,
+          "takeoverRounds": 4,
+          "naturalRecoveries": 4,
+          "unityChecks": 9,
+          "failure": null
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 15559,
+          "dropped": 2401,
+          "reordered": 1470,
+          "duplicated": 692,
+          "nestedResends": 0,
+          "takeoverRounds": 4,
+          "naturalRecoveries": 4,
+          "unityChecks": 9,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-lifecycle-guest-20261014",
+      "bothPassed": false,
+      "strictLogsPassed": false,
+      "rejection": "Probe has a failure marker (including failures after done).",
+      "environment": {
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "1",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": false,
+          "finalPass": false,
+          "faultVerificationCompleted": false,
+          "messages": null,
+          "dropped": null,
+          "reordered": null,
+          "duplicated": null,
+          "nestedResends": null,
+          "takeoverRounds": 3,
+          "naturalRecoveries": 2,
+          "unityChecks": 9,
+          "failure": "System.Exception: Timeout: native Throw Recover after reconnect 4 state=Thrown\r\n  at HollowConnect.Smoke.PantheonProbe+<WaitForNeedleRecovery>d__41.MoveNext () [0x0059a] in <536740e08e4a4775937b8fa1643b2957>:0 \r\n  at HollowConnect.Smoke.PantheonProbe+<Start>d__35.MoveNext () [0x002f4] in <536740e08e4a4775937b8fa1643b2957>:0 "
+        },
+        {
+          "role": "guest",
+          "done": false,
+          "finalPass": false,
+          "faultVerificationCompleted": false,
+          "messages": null,
+          "dropped": null,
+          "reordered": null,
+          "duplicated": null,
+          "nestedResends": null,
+          "takeoverRounds": 2,
+          "naturalRecoveries": 2,
+          "unityChecks": 9,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-boss-late-20261014",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "rejection": null,
+      "environment": {
+        "HOLLOWCONNECT_SMOKE_DAMAGE_TRACE": "1",
+        "HOLLOWCONNECT_SMOKE_HANDOFF_DELAY": "2.5",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "1",
+        "HOLLOWCONNECT_SMOKE_BOSS_LATE": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 6230,
+          "dropped": 964,
+          "reordered": 595,
+          "duplicated": 272,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 0,
+          "failure": null
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 2084,
+          "dropped": 322,
+          "reordered": 200,
+          "duplicated": 91,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 0,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-grimm-host-20261014",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "rejection": null,
+      "environment": {
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm",
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "host",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 13368,
+          "dropped": 2061,
+          "reordered": 1293,
+          "duplicated": 591,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 0,
+          "failure": null
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 4457,
+          "dropped": 686,
+          "reordered": 431,
+          "duplicated": 197,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 0,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-grimm-guest-20261014",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "rejection": null,
+      "environment": {
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm",
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "guest",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 13384,
+          "dropped": 2062,
+          "reordered": 1295,
+          "duplicated": 593,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 0,
+          "failure": null
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 4454,
+          "dropped": 686,
+          "reordered": 431,
+          "duplicated": 197,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 0,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-periodic-entry-host-20261014",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "rejection": null,
+      "environment": {
+        "HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "periodic",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 12906,
+          "dropped": 1979,
+          "reordered": 1210,
+          "duplicated": 575,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 9,
+          "failure": null
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 4293,
+          "dropped": 660,
+          "reordered": 402,
+          "duplicated": 192,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 9,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "name": "selective-ack-final-periodic-entry-guest-20261014",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "rejection": null,
+      "environment": {
+        "HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_NETWORK_TRACE": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "periodic",
+        "HOLLOWCONNECT_CONTINUATION_PACKET_TRACE": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "07032B3EE9DD2E82E46E3FACB176CEA632A8FD7560006279D7725EDF1CEF0EF1"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6DEB846A19487957F1D234F48498C1FCDE5E2C0E85B551EEFA01F7A9F6503B12"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5EC3F4236D772D30FF04D972B201EB007224E226AF39CCA783CB934F493D23E3"
+        }
+      ],
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 6847,
+          "dropped": 1048,
+          "reordered": 641,
+          "duplicated": 305,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 9,
+          "failure": null
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "finalPass": true,
+          "faultVerificationCompleted": true,
+          "messages": 2259,
+          "dropped": 346,
+          "reordered": 211,
+          "duplicated": 101,
+          "nestedResends": 0,
+          "takeoverRounds": 0,
+          "naturalRecoveries": 0,
+          "unityChecks": 9,
+          "failure": null
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    "Full takeover stress retains Thrown with inactive needle and times out in periodic host round 2 and fixed-seed guest round 4; not an entry starvation; not resolved",
+    "Original second native armor collapse failure lacks post-damage phase trace; later passing probes cannot uniquely attribute it",
+    "Historical camera FROZEN source remains unresolved",
+    "Other GenericData snapshots and initial/live snapshot interleaving",
+    "Real two-machine FRP, complete current-build 12-case release suite and wider Boss/Pantheon/multi-player coverage"
+  ],
+  "isolatedClientsStopped": true,
+  "isolatedSmokePluginsRemovedFromLoadablePayload": true,
+  "isolatedSmokePluginDisposition": "Renamed to HollowConnect.Smoke.44ae5d1.dll.disabled after stopping both isolated clients",
+  "logsScannedAfterShutdown": true,
+  "previousEvidence": "docs/evidence/network-reliability-2026-10-14.json",
+  "releaseReady": false,
+  "packaged": false,
+  "installedToNormalGame": false
+}

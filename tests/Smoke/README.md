@@ -110,3 +110,5 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 格林运动夹具每帧维持原定固定无敌靶子在场内 `(80,8)`，防止零重力靶子被固体碰撞推出场外，令原生 AD Pos 永远无合法落点。靶子还须距气球中心 `(85.77,13.5)` 至少 6 单位；先前 `(85,8)` 导致原生 Balloon Retry，因此该轮失败保留。此条件仅约束测试角色，不修改 Boss 的 FSM 或位置。
 
 `HOLLOWCONNECT_CONTINUATION_PACKET_TRACE=1` 仅在隔离 Pantheon 探针中记录原始发送及合并接收的可靠 active/FSM 状态、序列号、实体 ID 和 visit。追踪通过临时 detour 观察生产包，不修改包内容或测试断言，用于区分未送达与旧重发覆盖。
+
+`Summarize-Selective-Ack-Recovery.ps1` 锁定 `44ae5d1` 构建、142 项回归、14 项日志门槛、九组当前构建运行及一组旧发送器诊断。要求先停止隔离客户端并停用 Smoke，再核对 DLL 和复扫日志；两组独立周期入场必须双方通过全部三次房间检查。完整接管压力失败仍记录为拒绝，不因入场通过、后续重跑通过或旧发送器诊断通过而解除。它输出专项证据，不授予发布通过。
