@@ -1,0 +1,2 @@
+host 2026-10-14T02:41:01.4677059Z FAIL System.Exception: Native state transition was not published before another Unity update/sample
+guest 2026-10-14T02:41:01.4626592Z FAIL System.Exception: Native state transition was not published before another Unity update/sample

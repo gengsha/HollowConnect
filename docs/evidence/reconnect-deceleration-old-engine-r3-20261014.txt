@@ -1,0 +1,4 @@
+host 2026-10-14T01:40:20.0148681Z DECEL TAKEOVER state=Moving speed=38
+host 2026-10-14T01:40:23.0219110Z FAIL System.Exception: Takeover dropped native fixed-update deceleration
+guest 2026-10-14T01:40:20.0052367Z DECEL TAKEOVER state=Moving speed=38
+guest 2026-10-14T01:40:23.0118191Z FAIL System.Exception: Takeover dropped native fixed-update deceleration

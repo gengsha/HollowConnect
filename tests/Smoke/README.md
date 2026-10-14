@@ -85,6 +85,8 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 
 `HOLLOWCONNECT_FSM_HIERARCHY_CHECK=1` 另运行独立登记根脱离父体的快照/接管夹具，要求副本先脱离、休眠源保持停用，接管后父体和世界坐标正确，并实际完成原生 local-space tween。配合八轮实战时，还要求 Needle 在原生 `Throw Recover` 时回到发射位置附近；仅发出通知而飞到错误坐标也拒绝。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=hierarchy` 可单跑这项。
 
+`HOLLOWCONNECT_FSM_ENTRY_CHECK=1` 在真实原生 StateChanged / OnEnter 边界让独立发送线程尝试正常发送锁，拒绝“父体新状态已发布，原生子体激活尚未执行”的部分入口；同时要求完整入口结束后子体激活已发布。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=entry` 可单跑此项。与前三组夹具共八项；旧构建即使随机八轮实机通过，也不能覆盖这项确定性失败。
+
 ## 救援反馈专用探针
 
 `HOLLOWCONNECT_SMOKE_MODE=rescue` 使用两个隔离客户端与真实 UDP 连接，交替由主机/客机用实际骨钉命中救援暗影，验证只有服务器确认的救人者增加 33 灵魂、受救者一血不获奖励、满槽/储备/个人灵魂限制以及旧暗影记录保留。通过生产接收函数注入合成事件，检查名单先于救援、重复确认、旧死亡、错误会话/轮次和全队重试中的拒绝。暂停时检查原版 Death/Death Glow、粒子波、两段音效资源与原生混音通道以及 2.5 秒清理。`shade-inspect` 仅在未保存新角色中反序列化原版素材以查看资源，不执行暗影回收 FSM。

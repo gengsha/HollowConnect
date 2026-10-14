@@ -1,0 +1,562 @@
+{
+  "date": "2026-10-14",
+  "timezone": "Asia/Shanghai",
+  "sourceCommit": "d6992e6e2879749a947e9c47aecd623f06ef1bc5",
+  "version": "0.1.13 / 3.0.0-hc10",
+  "releaseReady": false,
+  "packaged": false,
+  "installedToNormalGame": false,
+  "regression": {
+    "regressionLog": ".test-results/fsm-atomic-entry-regression-20261014.log",
+    "newDeterministicUnityChecksPerRole": 8,
+    "passed": 113,
+    "logGateSelfTests": 14,
+    "failed": 0,
+    "logGateLog": ".test-results/fsm-atomic-entry-log-gate-20261014.log"
+  },
+  "baselines": [
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "B94D1E1D354556F6A0EB2602104C5CE85994F38086AC32D28344458F9D905F5F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8CDC6432A40CEBAB2C91AFA24062AFEE4CA5AD6AB1A9A50112040E57D57C6288"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "27F654E08087FB3FC6D7017E3345C5DC9F0984647983EDC24FB4ED25B4470F84"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "reconnect-continuation-old-engine-r2-20261014.txt",
+      "sha256": "7870039600FF9458B53A042F0EDABB02F70883A93A23929CBC4428EB4B6B39AE",
+      "name": "reconnect-continuation-old-engine-r2-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "B94D1E1D354556F6A0EB2602104C5CE85994F38086AC32D28344458F9D905F5F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "3695026B07E1DB28E3DAB3F935281924F6889574CF892A311A93684A7C78D821"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "27F654E08087FB3FC6D7017E3345C5DC9F0984647983EDC24FB4ED25B4470F84"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "reconnect-deceleration-old-engine-r3-20261014.txt",
+      "sha256": "D05388041CD8B9CAB885AE1055E1A10FA89BCB7858B04988096848AA6A87C623",
+      "name": "reconnect-deceleration-old-engine-r3-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "B94D1E1D354556F6A0EB2602104C5CE85994F38086AC32D28344458F9D905F5F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "3695026B07E1DB28E3DAB3F935281924F6889574CF892A311A93684A7C78D821"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "27F654E08087FB3FC6D7017E3345C5DC9F0984647983EDC24FB4ED25B4470F84"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "reconnect-forced-handoff-old-engine-20261014.txt",
+      "sha256": "EDF1C70FD984F98E147992E001B66871B9BDD0D0FD1282B49E42A9D0422AD642",
+      "name": "reconnect-forced-handoff-old-engine-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C62F7B62509892A945043214FE28ADDD0975340D46E73F6479C5C2FE617F1AED"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DBFD9AE0BC6AEF8B414E42E1BFE4B7603066D815D88F03E25082AECEED1B36BC"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "97165712345707DF2DB80F449E7210443EBE0835F83703C9A511190615071D7B"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "reconnect-dormant-39a0cc5-baseline-20261014.txt",
+      "sha256": "700F1B913F74F2DA7C0FCDCB3A5031D9497B0509B438082DC4ABCEDD63C8F9EB",
+      "name": "reconnect-dormant-39a0cc5-baseline-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C62F7B62509892A945043214FE28ADDD0975340D46E73F6479C5C2FE617F1AED"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DBFD9AE0BC6AEF8B414E42E1BFE4B7603066D815D88F03E25082AECEED1B36BC"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "97165712345707DF2DB80F449E7210443EBE0835F83703C9A511190615071D7B"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-final-lifecycle-host-20261014.txt",
+      "sha256": "BC3380A8DE7F105FD8DF295264A05F21B0A49386BCCFDDAE8E634864CEE0E214",
+      "name": "fsm-final-lifecycle-host-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FEDAB277EE3DF1B8496602A139F61B49B59305B409CEE2718DE9D4CB06959877"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8916823ACDF394E2B7AA69E3592A4B252D8516D9E5DF1381F371D0B6B516BF3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "6A6D194DD94CB97D6DFF4DF067672CB22C4D3AF711168AF2C7F82249B030BF2A"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-accepted-lifecycle-host-20261014.txt",
+      "sha256": "5663923B0CBD6C7DF526A54690E5966237986D64E58FDF8F5621CF83C54ADBEE",
+      "name": "fsm-accepted-lifecycle-host-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FEDAB277EE3DF1B8496602A139F61B49B59305B409CEE2718DE9D4CB06959877"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8916823ACDF394E2B7AA69E3592A4B252D8516D9E5DF1381F371D0B6B516BF3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "6A6D194DD94CB97D6DFF4DF067672CB22C4D3AF711168AF2C7F82249B030BF2A"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "reconnect-notify-trace-6021cf7-20261014.txt",
+      "sha256": "4CF047DDCD7433B4A4DE50EE720F09E1F5C1934831C46D81C565B7B1054A9D8A",
+      "name": "reconnect-notify-trace-6021cf7-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FEDAB277EE3DF1B8496602A139F61B49B59305B409CEE2718DE9D4CB06959877"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8916823ACDF394E2B7AA69E3592A4B252D8516D9E5DF1381F371D0B6B516BF3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "6A6D194DD94CB97D6DFF4DF067672CB22C4D3AF711168AF2C7F82249B030BF2A"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-state-publication-6021cf7-baseline-20261014.txt",
+      "sha256": "1A7F304F4654ED6FBFAF437C7A8287C09BAFAB45984756E8463B099FA36CD3FA",
+      "name": "fsm-state-publication-6021cf7-baseline-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "F87B8F9D1157572F3454892144D376E9A95FC664256B19260D8B4EAA0477C835"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "194A925A62C3CD3670E96EE60716824196D30327AED323815F78996E94C6B8D5"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "88CB6824FEC7EA43F70FFA5D02ADEC378E10BFF5FB9B87A939616A70F3CA8237"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-state-entry-lifecycle-host-20261014.txt",
+      "sha256": "600FB22DBFDA0BF12FC39825007038526E1E12BE771C2ECF3770F6104730B55A",
+      "name": "fsm-state-entry-lifecycle-host-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "0DBB04D742BF174E06065EF8ED76F85484AED457E8BB973921E83FE8D8D19A0E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8B279CA14F33CBEE9AF0EF1BC1B840252EF781B518B7898481D32546FB1A963D"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "20B8679F40C7007E04D5C32D7F519DA1C4D8B5B200C42808DBD965F5C7206B17"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-reactivation-e4ad923-baseline-20261014.txt",
+      "sha256": "25EFFB3B77DDA7A453EBAC69CFE8316A5C626731E431F32C3C05F3C90BE32169",
+      "name": "fsm-reactivation-e4ad923-baseline-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "05ADBC00B595476E5A58FB1A31CE792C860561F5ACFA66F8B8D2A02BA4806779"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "702C61C0F4F1C370F1B3B7C0C5256E5B3BCFDB3CC5DD7F6DF21D6D8768D711B0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E3D57BB83708D993045D9144458F4D1658919C329D33A0C53229DA5BDDF9BCA7"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-root-hierarchy-31e33d9-baseline-r2-20261014.txt",
+      "sha256": "655D98A5D0118AB3C671CF7FA7C400EB5577AF1AC5F732B8C91496797A81EA85",
+      "name": "fsm-root-hierarchy-31e33d9-baseline-r2-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "74BF74831D6C4AA72DBCFB6A86C87AF755313FAFB2E9FB0975FC0A4C016FE188"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "9848762368F69482F275995136222B0CDCD71C7639C3E52E64C5B4438F5B1A1C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E3B610501E9F045AC59148D990A9723EDEF570C1DC6A7225C7E2FD8061B194FA"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-parent-restored-lifecycle-host-20261014.txt",
+      "sha256": "33C2530AF640E74E698A49B76F541BFA7258AD66E19E7A4B405EB2F12212ED48",
+      "name": "fsm-parent-restored-lifecycle-host-20261014",
+      "category": "test coordination failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CD4F5AAFD27AB783FEF3CB0A90864EDAC03C40FB741D50A83053D1877CAF406A"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5FB9A76B784782BE5D845D60F5475314CB8C2C52DBBCB27EDFE83592022EE267"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "21E47ECBF1591CAD1A571060E381B084F3690628737CA6CDF72418767DA8B70A"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-verified-lifecycle-guest-20261014.txt",
+      "sha256": "C302033E95015B447E05999E2BEE8E59F312D81A3322C111E78E7EF8A8D1D7CC",
+      "name": "fsm-verified-lifecycle-guest-20261014",
+      "category": "observed engine/continuation failure"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "B54469CD05ED56502490B11741D3B868779FBACF9190C4947164C490CA16CBEA"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "9179BC26EBB7481E8CB396D8BDCB85B94BE328EE24AACDA57B2609215B71B72E"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "82E2D420994F05F484F6C54CFD4646E819A2F8C71412107EAB9FEF3711465480"
+        }
+      ],
+      "bothPassed": false,
+      "failureEvidence": "fsm-native-entry-38d7480-baseline-20261014.txt",
+      "sha256": "95A7626CA1154CF4D83F80D99BAFBA9B92D04DE9D7DB884D6F72FAB0E08E9576",
+      "name": "fsm-native-entry-38d7480-baseline-20261014",
+      "category": "observed engine/continuation failure"
+    }
+  ],
+  "runs": [
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "541E0A345914B9DCAB49800DC2FE4F586D73F226AF55543517D6768494561A5C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F25FD953672C5A4EE026416D8E12035D40A0E64AC8F06572949615838B5EFE83"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "A4BFE22ACD87D24C56C6106E9C4BDF31C236DD9B8E73622221664026E786525C"
+        }
+      ],
+      "name": "fsm-atomic-entry-lifecycle-host-20261014",
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "evidence": "fsm-atomic-entry-lifecycle-host-20261014-host.txt",
+          "sha256": "26EBE1E4AB73BAAE7C87847B85666A3A2E0EB5F24F07406913CDD79EDBCB0B74",
+          "failed": false,
+          "finalPass": "2026-10-14T03:54:08.0022056Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "evidence": "fsm-atomic-entry-lifecycle-host-20261014-guest.txt",
+          "sha256": "F1DA9F38DCC28012597AA06E5F762D4A707C7EE07D98DB1CE52D7C515C3484D3",
+          "failed": false,
+          "finalPass": "2026-10-14T03:54:08.0012041Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio"
+        }
+      ],
+      "environment": {
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogGate": true
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "541E0A345914B9DCAB49800DC2FE4F586D73F226AF55543517D6768494561A5C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F25FD953672C5A4EE026416D8E12035D40A0E64AC8F06572949615838B5EFE83"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "A4BFE22ACD87D24C56C6106E9C4BDF31C236DD9B8E73622221664026E786525C"
+        }
+      ],
+      "name": "fsm-atomic-entry-lifecycle-guest-20261014",
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "evidence": "fsm-atomic-entry-lifecycle-guest-20261014-host.txt",
+          "sha256": "2D0C3D35F808648E1F5234B6F558A38D47E63CB8DBCBBF0B9439F1E6D70726A1",
+          "failed": false,
+          "finalPass": "2026-10-14T03:59:34.8491090Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "evidence": "fsm-atomic-entry-lifecycle-guest-20261014-guest.txt",
+          "sha256": "570F5155E810DC8C5067E1211E0883D6C4D13AB521E3AF401F60370317F4D875",
+          "failed": false,
+          "finalPass": "2026-10-14T03:59:34.8491090Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio"
+        }
+      ],
+      "environment": {
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_CONTINUATION_TRACE": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogGate": true
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "541E0A345914B9DCAB49800DC2FE4F586D73F226AF55543517D6768494561A5C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F25FD953672C5A4EE026416D8E12035D40A0E64AC8F06572949615838B5EFE83"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "A4BFE22ACD87D24C56C6106E9C4BDF31C236DD9B8E73622221664026E786525C"
+        }
+      ],
+      "name": "fsm-atomic-entry-boss-late-20261014",
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "evidence": "fsm-atomic-entry-boss-late-20261014-host.txt",
+          "sha256": "89F7D07B50A1DD76AB192C10A2C2DF616FD5C66BC1D8CF34333D3225F315F778",
+          "failed": false,
+          "finalPass": "2026-10-14T04:00:23.5362072Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "evidence": "fsm-atomic-entry-boss-late-20261014-guest.txt",
+          "sha256": "0108B390345437A6148E21F63500F06CA79ED7EAB8195502D632FC5422C71CF4",
+          "failed": false,
+          "finalPass": "2026-10-14T04:00:23.5349384Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence"
+        }
+      ],
+      "environment": {
+        "HOLLOWCONNECT_SMOKE_HANDOFF_DELAY": "2.5",
+        "HOLLOWCONNECT_SMOKE_BOSS_LATE": "1"
+      },
+      "bothPassed": true,
+      "strictLogGate": true
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "541E0A345914B9DCAB49800DC2FE4F586D73F226AF55543517D6768494561A5C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F25FD953672C5A4EE026416D8E12035D40A0E64AC8F06572949615838B5EFE83"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "A4BFE22ACD87D24C56C6106E9C4BDF31C236DD9B8E73622221664026E786525C"
+        }
+      ],
+      "name": "fsm-atomic-entry-grimm-host-20261014",
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "evidence": "fsm-atomic-entry-grimm-host-20261014-host.txt",
+          "sha256": "0FDB05676AC7385CADE9FD54238A20C71674E7ABC703DE75CD81096D8EC765B6",
+          "failed": false,
+          "finalPass": "2026-10-14T04:01:55.3255574Z FINAL PASS Grimm native motion GG_Grimm"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "evidence": "fsm-atomic-entry-grimm-host-20261014-guest.txt",
+          "sha256": "A3E2B5390B1E5372F6EE50B7C0AE7102EE9790EE425D6E0132D71D2CDFB97F5F",
+          "failed": false,
+          "finalPass": "2026-10-14T04:01:55.3255574Z FINAL PASS Grimm native motion GG_Grimm"
+        }
+      ],
+      "environment": {
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "host",
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm",
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3"
+      },
+      "bothPassed": true,
+      "strictLogGate": true
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "541E0A345914B9DCAB49800DC2FE4F586D73F226AF55543517D6768494561A5C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F25FD953672C5A4EE026416D8E12035D40A0E64AC8F06572949615838B5EFE83"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "A4BFE22ACD87D24C56C6106E9C4BDF31C236DD9B8E73622221664026E786525C"
+        }
+      ],
+      "name": "fsm-atomic-entry-grimm-guest-20261014",
+      "roles": [
+        {
+          "role": "host",
+          "done": true,
+          "evidence": "fsm-atomic-entry-grimm-guest-20261014-host.txt",
+          "sha256": "3E8AEF39F85BF792D5ACA96A0743932F88ECE400F1AC252683DC049060EE1D2F",
+          "failed": false,
+          "finalPass": "2026-10-14T04:03:26.5441954Z FINAL PASS Grimm native motion GG_Grimm"
+        },
+        {
+          "role": "guest",
+          "done": true,
+          "evidence": "fsm-atomic-entry-grimm-guest-20261014-guest.txt",
+          "sha256": "1B1125C4CC9AB03329B0C5BC70A25338FE4665986D27AB4CFD25083F1D36E52A",
+          "failed": false,
+          "finalPass": "2026-10-14T04:03:26.5441954Z FINAL PASS Grimm native motion GG_Grimm"
+        }
+      ],
+      "environment": {
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "guest",
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm",
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3"
+      },
+      "bothPassed": true,
+      "strictLogGate": true
+    }
+  ],
+  "transportRegression": {
+    "fixedResult": "113 passed, 0 failed",
+    "oldResult": "110 passed, 2 failed",
+    "fixedEvidence": "fsm-atomic-entry-regression-20261014.txt",
+    "oldEvidence": "fsm-resend-order-baseline-20261014.txt"
+  },
+  "staticAudit": {
+    "directory": ".test-results/reconnect-fsm-audit-20261014",
+    "playmakerSha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+    "assemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+  },
+  "limits": [
+    "Same-machine isolated clients and local UDP, no two-machine FRP validation.",
+    "Only five current-build dual-client groups; previous twelve groups belong to a different binary build.",
+    "Absolute tween resumes toward the original destination; exact elapsed animation time is not preserved.",
+    "All bosses, dream variants, full first-to-fourth Pantheons and ordinary-story rewards remain unverified.",
+    "Cross-datagram reordering, nested resend origin tracking and deduplication have not received a dedicated network loss/reordering test.",
+    "Historical transient FROZEN blocker remains unresolved.",
+    "Earlier fixture failures and an old-engine random six-cycle pass remain preserved and do not override failure baselines."
+  ]
+}

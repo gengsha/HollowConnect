@@ -1,0 +1,42 @@
+host 2026-10-14T02:43:51.8625104Z TWEEN TAKEOVER state=Moving pos=(0.6, 0.0, 0.0)
+host 2026-10-14T02:43:52.6549460Z DORMANT TAKEOVER active=False tweens=0
+host 2026-10-14T02:43:53.4662728Z DECEL TAKEOVER state=Moving speed=30.4
+host 2026-10-14T02:44:30.7130968Z PASS reconnect transferred native authority collider-cycle.0
+host 2026-10-14T02:44:41.7011565Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(17.0, 28.1, 0.0) fsms=Control:Out/enabled=True
+host 2026-10-14T02:44:42.7031499Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(30.8, 28.1, 0.0) fsms=Control:Return/enabled=True
+host 2026-10-14T02:44:43.7034203Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(11.7, 45.8, 0.0) fsms=Control:Return/enabled=True
+host 2026-10-14T02:44:44.0566075Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+host 2026-10-14T02:45:37.9648141Z PASS reconnect transferred native authority collider-cycle.2
+host 2026-10-14T02:45:56.5110960Z NATIVE NEEDLE RECOVERY after reconnect 2 state=Thrown source=e:4568293017055036489 self=True active=True pos=(17.3, 28.1, 0.0) fsms=Control:Out/enabled=True
+host 2026-10-14T02:45:57.5126718Z NATIVE NEEDLE RECOVERY after reconnect 2 state=Thrown source=e:4568293017055036489 self=True active=True pos=(30.2, 28.1, 0.0) fsms=Control:Return/enabled=True
+host 2026-10-14T02:45:58.5145804Z NATIVE NEEDLE RECOVERY after reconnect 2 state=Thrown source=e:4568293017055036489 self=True active=True pos=(10.9, 46.4, 0.0) fsms=Control:Return/enabled=True
+host 2026-10-14T02:45:58.8461127Z NATIVE NEEDLE RECOVERY after reconnect 2 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:43:52.0696514Z TWEEN TAKEOVER state=Moving pos=(0.8, 0.0, 0.0)
+guest 2026-10-14T02:43:52.8585673Z DORMANT TAKEOVER active=False tweens=0
+guest 2026-10-14T02:43:53.6724702Z DECEL TAKEOVER state=Moving speed=30.4
+guest 2026-10-14T02:45:05.8377519Z PASS reconnect transferred native authority collider-cycle.1
+guest 2026-10-14T02:45:20.6351239Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(17.3, 28.1, 0.0) fsms=Control:Out/enabled=True
+guest 2026-10-14T02:45:21.6374461Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(29.9, 28.1, 0.0) fsms=Control:Return/enabled=True
+guest 2026-10-14T02:45:22.0367987Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(16.5, 28.1, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:07.7811468Z PASS reconnect transferred native authority collider-cycle.3
+guest 2026-10-14T02:46:14.1140455Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:15.1165422Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:16.1172287Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:17.1188819Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:18.1190278Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:19.1209186Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:20.1228650Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:21.1243308Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:22.1257487Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:23.1259520Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:24.1255789Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:25.1258823Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:26.1274078Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:27.1296724Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:28.1304558Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:29.1303806Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:30.1324526Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:31.1342699Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:32.1352958Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:33.1372031Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:46:34.1285824Z FAIL System.Exception: Timeout: native Throw Recover after reconnect 3 state=Thrown

@@ -1,0 +1,2 @@
+host 2026-10-14T03:06:10.1373342Z FAIL System.Exception: Root parent snapshot did not detach only the replica while native simulation was paused
+guest 2026-10-14T03:06:10.1058926Z FAIL System.Exception: Root parent snapshot did not detach only the replica while native simulation was paused

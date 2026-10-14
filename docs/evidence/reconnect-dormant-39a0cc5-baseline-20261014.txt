@@ -1,0 +1,6 @@
+host 2026-10-14T01:52:10.5740816Z TWEEN TAKEOVER state=Moving pos=(0.2, 0.0, 0.0)
+host 2026-10-14T01:52:11.2417527Z DORMANT TAKEOVER active=False tweens=1
+host 2026-10-14T01:52:11.2438181Z FAIL System.Exception: Inactive takeover created or retained a native tween controller
+guest 2026-10-14T01:52:10.6006542Z TWEEN TAKEOVER state=Moving pos=(0.2, 0.0, 0.0)
+guest 2026-10-14T01:52:11.2638463Z DORMANT TAKEOVER active=False tweens=1
+guest 2026-10-14T01:52:11.2659400Z FAIL System.Exception: Inactive takeover created or retained a native tween controller

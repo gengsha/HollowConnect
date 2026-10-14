@@ -1,0 +1,3 @@
+FAIL reliable resend order preserves snapshots and events across sequence 22: System.Exception: old resend rolled back the newest activation/FSM snapshot
+FAIL reliable resend order preserves snapshots and events across sequence 1: System.Exception: old resend rolled back the newest activation/FSM snapshot
+RESULT 110 passed, 2 failed

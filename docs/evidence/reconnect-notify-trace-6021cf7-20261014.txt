@@ -1,0 +1,30 @@
+host 2026-10-14T02:00:51.5844442Z PASS reconnect transferred native authority collider-cycle.1
+host 2026-10-14T02:00:57.9650555Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=True replica=False pos=(235.1, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=Notify
+host 2026-10-14T02:00:58.0378056Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(237.4, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:00:59.0384518Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(276.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:00.0433945Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(314.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:01.0438848Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(352.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:02.0436951Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(390.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:03.0475396Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(428.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:04.0487620Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(466.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:05.0514477Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(504.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:06.0535226Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(542.2, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:07.0552373Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(580.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:08.0562411Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(618.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:09.0568954Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(656.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:10.0570034Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(694.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:11.0577192Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(732.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:12.0604460Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(770.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:13.0626861Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(808.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:14.0664518Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(846.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:15.0674059Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(884.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:16.0704186Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(922.9, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:17.0744554Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(961.7, 28.1, 0.0) fsms=Control:Notify/enabled=True
+host 2026-10-14T02:01:18.0655745Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=True replica=False pos=(998.2, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=Notify
+host 2026-10-14T02:01:18.0665802Z FAIL System.Exception: Timeout: native Throw Recover after reconnect 1 state=Thrown
+guest 2026-10-14T02:00:29.8501570Z PASS reconnect transferred native authority collider-cycle.0
+guest 2026-10-14T02:00:42.7937868Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(16.5, 28.1, 0.0) fsms=Control:Out/enabled=True
+guest 2026-10-14T02:00:43.7954023Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(30.2, 28.1, 0.0) fsms=Control:Return/enabled=True
+guest 2026-10-14T02:00:44.7987357Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(11.0, 46.3, 0.0) fsms=Control:Return/enabled=True
+guest 2026-10-14T02:00:45.1394024Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(0.0, 56.6, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T02:28:49.2052992Z FAIL System.TimeoutException: Pantheon probe deadline

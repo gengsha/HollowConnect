@@ -1,0 +1,4 @@
+host 2026-10-14T01:35:24.8077781Z TWEEN TAKEOVER state=Done pos=(0.2, 0.0, 0.0)
+host 2026-10-14T01:35:24.8144028Z FAIL System.Exception: Takeover skipped unfinished tween and emitted completion before return
+guest 2026-10-14T01:35:24.7485327Z TWEEN TAKEOVER state=Done pos=(0.2, 0.0, 0.0)
+guest 2026-10-14T01:35:24.7544747Z FAIL System.Exception: Takeover skipped unfinished tween and emitted completion before return

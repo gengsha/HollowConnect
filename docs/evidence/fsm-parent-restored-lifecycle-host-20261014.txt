@@ -1,0 +1,33 @@
+host 2026-10-14T03:08:13.8761264Z TWEEN TAKEOVER state=Moving pos=(0.0, 0.0, 0.0)
+host 2026-10-14T03:08:14.6807737Z DORMANT TAKEOVER active=False tweens=0
+host 2026-10-14T03:08:15.4909459Z DECEL TAKEOVER state=Moving speed=30.4
+host 2026-10-14T03:09:38.3544407Z PASS reconnect transferred native authority collider-cycle.1
+host 2026-10-14T03:09:52.4078118Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(18.0, 28.1, 0.0) fsms=Control:Out/enabled=True
+host 2026-10-14T03:09:53.4081996Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(30.6, 28.1, 0.0) fsms=Control:Return/enabled=True
+host 2026-10-14T03:09:53.7993896Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(17.3, 28.1, 0.0) fsms=Control:/enabled=True
+host 2026-10-14T03:10:40.3546695Z PASS reconnect transferred native authority collider-cycle.3
+host 2026-10-14T03:10:56.5547626Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=True active=True pos=(31.0, 28.1, 0.0) fsms=Control:Out/enabled=True
+host 2026-10-14T03:10:57.5566872Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=True active=True pos=(17.5, 28.1, 0.0) fsms=Control:Return/enabled=True
+host 2026-10-14T03:10:57.9644825Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(31.0, 28.1, 0.0) fsms=Control:/enabled=True
+host 2026-10-14T03:11:35.1627930Z PASS reconnect transferred native authority collider-cycle.5
+host 2026-10-14T03:11:48.9230695Z NATIVE NEEDLE RECOVERY after reconnect 5 state=Thrown source=e:4568293017055036489 self=True active=True pos=(16.5, 28.1, 0.0) fsms=Control:Out/enabled=True
+host 2026-10-14T03:11:49.9235398Z NATIVE NEEDLE RECOVERY after reconnect 5 state=Thrown source=e:4568293017055036489 self=True active=True pos=(30.0, 28.1, 0.0) fsms=Control:Return/enabled=True
+host 2026-10-14T03:11:50.3353656Z NATIVE NEEDLE RECOVERY after reconnect 5 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(16.5, 28.1, 0.0) fsms=Control:/enabled=True
+host 2026-10-14T03:12:02.7842230Z FAIL System.IO.IOException: Sharing violation on path E:\projects\hollowConnect\.test-results\fsm-parent-restored-lifecycle-host-20261014\hp.collider-cycle.6
+guest 2026-10-14T03:08:13.8814389Z TWEEN TAKEOVER state=Moving pos=(0.0, 0.0, 0.0)
+guest 2026-10-14T03:08:14.6865290Z DORMANT TAKEOVER active=False tweens=0
+guest 2026-10-14T03:08:15.5019886Z DECEL TAKEOVER state=Moving speed=30.4
+guest 2026-10-14T03:08:59.7558651Z PASS reconnect transferred native authority collider-cycle.0
+guest 2026-10-14T03:09:23.7609153Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(16.5, 28.1, 0.0) fsms=Control:Out/enabled=True
+guest 2026-10-14T03:09:24.7650512Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Thrown source=e:4568293017055036489 self=True active=True pos=(30.0, 28.1, 0.0) fsms=Control:Return/enabled=True
+guest 2026-10-14T03:09:25.1757954Z NATIVE NEEDLE RECOVERY after reconnect 0 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(16.5, 28.1, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T03:09:59.7355851Z PASS reconnect transferred native authority collider-cycle.2
+guest 2026-10-14T03:10:29.9054607Z NATIVE NEEDLE RECOVERY after reconnect 2 state=Thrown source=e:4568293017055036489 self=True active=True pos=(19.5, 28.1, 0.0) fsms=Control:Out/enabled=True
+guest 2026-10-14T03:10:30.9063417Z NATIVE NEEDLE RECOVERY after reconnect 2 state=Thrown source=e:4568293017055036489 self=True active=True pos=(33.1, 28.1, 0.0) fsms=Control:Return/enabled=True
+guest 2026-10-14T03:10:31.3266326Z NATIVE NEEDLE RECOVERY after reconnect 2 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(19.5, 28.1, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T03:11:01.8495127Z PASS reconnect transferred native authority collider-cycle.4
+guest 2026-10-14T03:11:26.7481291Z NATIVE NEEDLE RECOVERY after reconnect 4 state=Thrown source=e:4568293017055036489 self=True active=True pos=(18.8, 28.1, 0.0) fsms=Control:Out/enabled=True
+guest 2026-10-14T03:11:27.7490934Z NATIVE NEEDLE RECOVERY after reconnect 4 state=Thrown source=e:4568293017055036489 self=True active=True pos=(32.3, 28.1, 0.0) fsms=Control:Return/enabled=True
+guest 2026-10-14T03:11:28.1565231Z NATIVE NEEDLE RECOVERY after reconnect 4 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(18.8, 28.1, 0.0) fsms=Control:/enabled=True
+guest 2026-10-14T03:11:56.5242930Z PASS reconnect transferred native authority collider-cycle.6
+guest 2026-10-14T03:12:47.7956404Z FAIL System.Exception: Timeout: both hpchecked.collider-cycle.6

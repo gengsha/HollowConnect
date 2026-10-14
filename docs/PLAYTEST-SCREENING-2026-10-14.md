@@ -1,5 +1,7 @@
 # 2026-10-14 今日筛查记录
 
+以下是今天最初筛查构建的历史结果。后续公共 FSM/重连修复、保留的失败对照和当前候选验证单独记录在 [FSM 专项](FSM-CONTINUATION-2026-10-14.md)；用户指定的外部重筛报告核查见 [核查报告](RESCREEN-REVIEW-2026-10-14.md)。不要把这里的旧 DLL 哈希用于后续构建。
+
 本次筛查使用本地重新构建的 0.1.13 测试 DLL。由于文档提交后重新构建会改变 ProductVersion 和 SHA-256，本次结果不能直接替代昨天 `6ddf5b3` 构建的 12 组发布证据；试玩包也没有重打。今天构建的三个 DLL 哈希为：
 
 - `HKMP.dll`: `B94D1E1D354556F6A0EB2602104C5CE85994F38086AC32D28344458F9D905F5F`
@@ -33,7 +35,7 @@ Timeout: authority throw and recovery after reconnect 2
 失败日志：
 
 - `.test-results/today-lifecycle-host-20261014/host.log`
-- `.test-results/today-lifecycle-guest-20261014/guest.log`
+- `.test-results/today-lifecycle-host-20261014/guest.log`
 
 这项失败暂时阻止正式发布，也不能用其它通过的 Boss 或重跑结果覆盖。下一步应沿着第三轮重连时 `Hornet Control=Thrown`、`Needle Control=Notify` 的原生 FSM/回收回调继续定位。
 

@@ -1,0 +1,25 @@
+2026-10-14T03:59:47.1834529Z PASS menu ready
+2026-10-14T03:59:51.3069457Z PASS unsaved character ready
+2026-10-14T03:59:51.4272126Z PASS server ready
+2026-10-14T03:59:52.2529438Z PASS boss test handshake
+2026-10-14T03:59:52.2542051Z PASS both connected
+2026-10-14T04:00:02.4929879Z PASS late join waits for already-exposed native boss
+2026-10-14T04:00:05.9242048Z PASS native False Knight room
+2026-10-14T04:00:05.9790174Z PASS boss authority initialized
+2026-10-14T04:00:05.9804644Z PASS both in arena
+2026-10-14T04:00:05.9987723Z PASS guest receives exposed boss phase and head health
+2026-10-14T04:00:06.0047979Z PASS detached child keeps stable identity and both native/replica references
+2026-10-14T04:00:09.3892279Z PASS authority transfers after exposed phase observation
+2026-10-14T04:00:09.3993392Z PASS elapsed exposure has no active terrain or stale replica collider
+2026-10-14T04:00:09.3993392Z PASS timed-out exposure still preserves last authoritative armor and head health
+2026-10-14T04:00:09.4044955Z PASS native boss resumes combat when exposure expires before takeover
+2026-10-14T04:00:13.7562154Z PASS native armor damage exposes a second head after timed-out late transfer
+2026-10-14T04:00:13.7577260Z PASS detached native terrain reference owns the only active collider after handoff
+2026-10-14T04:00:13.7587396Z PASS handoff preserves live exposed phase and both health values
+2026-10-14T04:00:20.1158553Z PASS native head defeat advances phase after transfer
+2026-10-14T04:00:20.1235331Z PASS native head recovery removes detached terrain without replica collider residue
+2026-10-14T04:00:22.5365530Z PASS boss AI moves after phase handoff
+2026-10-14T04:00:22.5405766Z PASS continued armor damage remains live after transfer
+2026-10-14T04:00:23.4320961Z PASS returning client sees continued boss
+2026-10-14T04:00:23.5349384Z PASS disconnect destroys the detached replica even after live entity table retirement
+2026-10-14T04:00:23.5349384Z FINAL PASS native False Knight: arena trigger, armor collapse, exposed head health, phase handoff, next phase AI and returning client convergence

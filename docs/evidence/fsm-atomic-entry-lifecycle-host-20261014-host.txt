@@ -1,0 +1,491 @@
+2026-10-14T03:49:52.0641526Z PASS menu
+2026-10-14T03:49:56.3233334Z PASS unsaved character
+2026-10-14T03:49:56.5844248Z PASS native state entry and child activation cannot be split by the sender
+2026-10-14T03:49:57.4155230Z PASS detached entity root restores parent and world position before native local tween completion
+2026-10-14T03:49:57.4187201Z PASS native state transition publishes inside variable sampling window
+2026-10-14T03:49:57.4249539Z PASS empty native state clears the previous attack snapshot
+2026-10-14T03:49:57.4284680Z PASS native reactivation publishes active and its new FSM state together
+2026-10-14T03:49:57.4354815Z TWEEN TAKEOVER state=Moving pos=(0.0, 0.0, 0.0)
+2026-10-14T03:49:58.2324193Z PASS unfinished absolute tween resumes before native completion
+2026-10-14T03:49:59.0489032Z PASS dormant takeover stays stopped until native activation and then completes
+2026-10-14T03:49:59.0706533Z DECEL TAKEOVER state=Moving speed=30.4
+2026-10-14T03:49:59.4238722Z PASS native fixed-update deceleration resumes and completes
+2026-10-14T03:49:59.4300954Z PASS both fsm-continuation-checked
+2026-10-14T03:49:59.4347851Z PASS native identity survives detach and cloned metadata has a separate identity
+2026-10-14T03:49:59.4425727Z TWEEN CLONE before activation copied=0 native=2
+2026-10-14T03:50:00.0476618Z PASS runtime tween cloning: replica activation clean, native arguments intact, fresh replica tween moves
+2026-10-14T03:50:00.0631396Z PASS both tween-clone-checked
+2026-10-14T03:50:01.0137893Z ENGINE Room prepared: Town, visit=1, epoch=0, entities=7
+2026-10-14T03:50:01.0416074Z ENGINE Room snapshot committed: Town, visit=1, epoch=0, authority=True, peers=0
+2026-10-14T03:50:01.0665485Z PASS handshake
+2026-10-14T03:50:01.1805790Z PASS both connected
+2026-10-14T03:50:02.1042485Z ENGINE Room prepared: GG_Mega_Moss_Charger, visit=2, epoch=0, entities=2
+2026-10-14T03:50:02.2068007Z PASS moss room
+2026-10-14T03:50:02.2391008Z ENGINE Room snapshot committed: GG_Mega_Moss_Charger, visit=2, epoch=0, authority=True, peers=0
+2026-10-14T03:50:02.2411213Z PASS first moss authority
+2026-10-14T03:50:03.2456912Z PASS both moss
+2026-10-14T03:50:03.2480210Z PASS room authority lifecycle-moss
+2026-10-14T03:50:06.2509814Z PASS early room-level updates drained lifecycle-moss
+2026-10-14T03:50:06.2519962Z ROOM lifecycle-moss scene=GG_Mega_Moss_Charger visit=2 authority=True hero=(43.9, 7.4, 0.0) camera=(44.9, 10.9, -38.1) mode=FOLLOWING
+2026-10-14T03:50:06.2530332Z ENTITY 4129537347362395435 CameraLockArea key=GG_Mega_Moss_Charger/CameraLockArea%20%282%29#0:CameraLockArea: host=True replica=False pos=(47.4, 15.1, 0.0) render= state=
+2026-10-14T03:50:06.2540349Z ENTITY 4638147650663368899 MassiveMossCharger key=GG_Mega_Moss_Charger/Mega%20Moss%20Charger#0:MassiveMossCharger:Mossy Control host=True replica=False pos=(56.6, 9.8, 0.0) render=Mega Moss Charger/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Grass Shake/True/off=False,Grass Roar/True/off=False,Slam Effect R/True/off=False,Corpse Mega Moss Charger(Clone)/True/off=False,Grass Explode/True/off=False,Moss Charger Nibbler/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (1)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (2)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False,Moss Charger Nibbler (3)/True/off=False,Range Grass/True/off=False,Grass Burst/True/off=False,Charge Grass/True/off=False,Grass Burst Down/True/off=False,Grass Submerge/True/off=False,Grass Explode 1/True/off=False,Grass Dig/True/off=False state=Mossy Control=Roar
+2026-10-14T03:50:06.2652008Z PASS camera authority state lifecycle-moss
+2026-10-14T03:50:06.2665329Z PASS camera lock state converges lifecycle-moss
+2026-10-14T03:50:06.2685458Z PASS visible bosses/knight and unfrozen camera lifecycle-moss
+2026-10-14T03:50:06.2710683Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-moss
+2026-10-14T03:50:09.2985811Z PASS both identities-ready.lifecycle-moss
+2026-10-14T03:50:09.2985811Z PASS all static entity identities converge lifecycle-moss
+2026-10-14T03:50:09.3022489Z PASS both checked.lifecycle-moss
+2026-10-14T03:50:09.3055034Z PASS damage published lifecycle-moss
+2026-10-14T03:50:09.3065098Z PASS same boss HP lifecycle-moss
+2026-10-14T03:50:09.3401060Z PASS both hpchecked.lifecycle-moss
+2026-10-14T03:50:09.3478916Z PASS replica loop target destroyed
+2026-10-14T03:50:09.3491876Z PASS both destroyed-loop
+2026-10-14T03:50:19.1143252Z ENGINE Room prepared: GG_Hornet_1, visit=3, epoch=0, entities=3
+2026-10-14T03:50:19.2537977Z ENGINE Room snapshot committed: GG_Hornet_1, visit=3, epoch=0, authority=True, peers=0
+2026-10-14T03:50:19.3900146Z PASS authority native next boss GG_Mega_Moss_Charger
+2026-10-14T03:50:19.3924447Z PASS both hornet-entered
+2026-10-14T03:50:19.3924447Z PASS room authority lifecycle-hornet
+2026-10-14T03:50:22.3945480Z PASS early room-level updates drained lifecycle-hornet
+2026-10-14T03:50:22.3969956Z ROOM lifecycle-hornet scene=GG_Hornet_1 visit=3 authority=True hero=(22.5, 28.4, 0.0) camera=(26.4, 33.3, -38.1) mode=FOLLOWING
+2026-10-14T03:50:22.3969956Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(31.1, 28.6, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,A Dash Effect/True/off=False,Dust HardLand/True/off=False,G Dash Effect/True/off=False,Flash Effect/True/off=False,Throw Effect/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False state=Control=Flourish,Stun Control=Idle
+2026-10-14T03:50:22.3984334Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(31.4, 44.6, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=
+2026-10-14T03:50:22.3984334Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:50:22.4009702Z PASS camera authority state lifecycle-hornet
+2026-10-14T03:50:22.4020735Z PASS camera lock state converges lifecycle-hornet
+2026-10-14T03:50:22.4020735Z PASS visible bosses/knight and unfrozen camera lifecycle-hornet
+2026-10-14T03:50:22.4040852Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-hornet
+2026-10-14T03:50:25.3003564Z PASS both identities-ready.lifecycle-hornet
+2026-10-14T03:50:25.3020672Z PASS all static entity identities converge lifecycle-hornet
+2026-10-14T03:50:25.3051656Z PASS both checked.lifecycle-hornet
+2026-10-14T03:50:25.3072254Z PASS damage published lifecycle-hornet
+2026-10-14T03:50:25.3088441Z PASS same boss HP lifecycle-hornet
+2026-10-14T03:50:25.3501589Z PASS both hpchecked.lifecycle-hornet
+2026-10-14T03:50:25.3521737Z NATIVE DASH wait state=GDash Recover1 velocity=(-4.0, 0.0) pos=(16.9, 28.6, 0.0)
+2026-10-14T03:50:25.4500046Z NATIVE DASH wait state=GDash Recover2 velocity=(-0.8, 0.0) pos=(16.7, 28.6, 0.0)
+2026-10-14T03:50:25.5623331Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(16.7, 28.6, 0.0)
+2026-10-14T03:50:25.8136716Z NATIVE DASH wait state=Run velocity=(-8.0, 0.0) pos=(16.7, 28.6, 0.0)
+2026-10-14T03:50:25.9781646Z NATIVE DASH wait state=Jump Antic velocity=(0.0, 0.0) pos=(15.3, 28.6, 0.0)
+2026-10-14T03:50:26.3137059Z NATIVE DASH wait state=In Air velocity=(9.5, 41.0) pos=(15.6, 28.6, 0.0)
+2026-10-14T03:50:27.0370653Z NATIVE DASH wait state=Sphere Antic A velocity=(7.4, -20.0) pos=(22.6, 33.6, 0.0)
+2026-10-14T03:50:27.6244767Z NATIVE DASH wait state=Sphere A velocity=(0.0, 0.0) pos=(23.1, 32.2, 0.0)
+2026-10-14T03:50:28.9009925Z NATIVE DASH wait state=Sphere Recover A velocity=(0.0, 0.0) pos=(23.1, 32.2, 0.0)
+2026-10-14T03:50:29.1523014Z NATIVE DASH wait state=In Air velocity=(0.0, 0.0) pos=(23.1, 32.2, 0.0)
+2026-10-14T03:50:29.4167806Z NATIVE DASH wait state=Land velocity=(0.0, 0.0) pos=(23.1, 28.6, 0.0)
+2026-10-14T03:50:29.6698123Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(23.1, 28.6, 0.0)
+2026-10-14T03:50:30.1985698Z NATIVE DASH wait state=Run velocity=(8.0, 0.0) pos=(23.1, 28.6, 0.0)
+2026-10-14T03:50:30.6579727Z NATIVE DASH wait state=GDash Antic velocity=(0.0, 0.0) pos=(26.8, 28.6, 0.0)
+2026-10-14T03:50:31.2183804Z NATIVE DASH wait state=G Dash velocity=(-25.0, 0.0) pos=(26.8, 28.6, 0.0)
+2026-10-14T03:50:31.8430811Z NATIVE DASH wait state=GDash Recover1 velocity=(-19.3, 0.0) pos=(18.3, 28.6, 0.0)
+2026-10-14T03:50:32.0668912Z NATIVE DASH wait state=GDash Recover2 velocity=(-0.8, 0.0) pos=(17.1, 28.6, 0.0)
+2026-10-14T03:50:32.1790542Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(17.0, 28.6, 0.0)
+2026-10-14T03:50:32.4301240Z NATIVE DASH wait state=Run velocity=(8.0, 0.0) pos=(17.0, 28.6, 0.0)
+2026-10-14T03:50:32.8990559Z NATIVE DASH wait state=GDash Antic velocity=(0.0, 0.0) pos=(20.9, 28.6, 0.0)
+2026-10-14T03:50:33.4544466Z NATIVE DASH wait state=G Dash velocity=(25.0, 0.0) pos=(20.9, 28.6, 0.0)
+2026-10-14T03:50:34.0804511Z NATIVE DASH wait state=GDash Recover1 velocity=(19.3, 0.0) pos=(29.4, 28.6, 0.0)
+2026-10-14T03:50:34.3083717Z NATIVE DASH wait state=GDash Recover2 velocity=(0.8, 0.0) pos=(30.6, 28.6, 0.0)
+2026-10-14T03:50:34.4133282Z NATIVE DASH wait state=Run Antic velocity=(0.0, 0.0) pos=(30.6, 28.6, 0.0)
+2026-10-14T03:50:34.6636871Z NATIVE DASH wait state=Run velocity=(-8.0, 0.0) pos=(30.6, 28.6, 0.0)
+2026-10-14T03:50:35.2882466Z NATIVE DASH wait state=Jump Antic velocity=(0.0, 0.0) pos=(25.7, 28.6, 0.0)
+2026-10-14T03:50:35.6202759Z NATIVE DASH wait state=In Air velocity=(7.1, 41.0) pos=(25.7, 28.6, 0.0)
+2026-10-14T03:50:35.9269852Z NATIVE DASH wait state=ADash Antic velocity=(0.0, 0.0) pos=(27.8, 36.5, 0.0)
+2026-10-14T03:50:36.3778849Z NATIVE DASH wait state=A Dash velocity=(-15.7, -25.6) pos=(27.8, 36.5, 0.0)
+2026-10-14T03:50:36.3788911Z PASS native moving dash before registration pause
+2026-10-14T03:50:36.3843459Z PASS both dash-pause
+2026-10-14T03:50:36.4246720Z PASS both lifecycle-disconnected
+2026-10-14T03:50:36.6511831Z ENGINE Room prepared: GG_Hornet_1, visit=4, epoch=0, entities=3
+2026-10-14T03:50:36.6640297Z ENGINE Room snapshot committed: GG_Hornet_1, visit=4, epoch=0, authority=True, peers=0
+2026-10-14T03:50:36.6652276Z PASS reconnect after destroyed-loop cleanup
+2026-10-14T03:50:36.6665343Z PASS rejoined room authority
+2026-10-14T03:50:36.6687491Z NATIVE DASH resumed state=A Dash velocity=(-15.7, -25.6) pos=(26.2, 34.0, 0.0) before=(27.8, 36.5, 0.0)
+2026-10-14T03:50:36.9112304Z PASS native dash moves and completes after registration pause
+2026-10-14T03:50:39.9250767Z PASS both lifecycle-reconnected
+2026-10-14T03:50:39.9264469Z PASS room authority lifecycle-retry
+2026-10-14T03:50:42.9273166Z PASS early room-level updates drained lifecycle-retry
+2026-10-14T03:50:42.9285632Z ROOM lifecycle-retry scene=GG_Hornet_1 visit=4 authority=True hero=(19.5, 29.9, 0.0) camera=(26.3, 33.4, -38.1) mode=LOCKED
+2026-10-14T03:50:42.9285632Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(34.2, 28.6, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Flash Effect/True/off=False,G Dash Effect/True/off=False,A Dash Effect/True/off=False,Throw Effect/True/off=False state=Control=Thrown,Stun Control=Stop
+2026-10-14T03:50:42.9300701Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:50:42.9312914Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=True replica=False pos=(20.4, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=Decel
+2026-10-14T03:50:42.9332941Z PASS camera authority state lifecycle-retry
+2026-10-14T03:50:42.9342974Z PASS camera lock state converges lifecycle-retry
+2026-10-14T03:50:42.9352991Z PASS visible bosses/knight and unfrozen camera lifecycle-retry
+2026-10-14T03:50:42.9375306Z PASS stale room/peer leave and duplicate connect preserve avatar lifecycle-retry
+2026-10-14T03:50:42.9517754Z PASS both identities-ready.lifecycle-retry
+2026-10-14T03:50:42.9543552Z PASS all static entity identities converge lifecycle-retry
+2026-10-14T03:50:42.9574742Z PASS both checked.lifecycle-retry
+2026-10-14T03:50:42.9619295Z PASS damage published lifecycle-retry
+2026-10-14T03:50:42.9629305Z PASS same boss HP lifecycle-retry
+2026-10-14T03:50:42.9992101Z PASS both hpchecked.lifecycle-retry
+2026-10-14T03:50:43.0087053Z NATIVE NEEDLE before reconnect 0 state=Thrown hero=(22.5, 28.4, 0.0) boss=(34.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:50:43.0087053Z PASS native needle throw before reconnect 0
+2026-10-14T03:50:43.0309412Z PASS both phase.collider-cycle.0
+2026-10-14T03:50:43.0757120Z PASS both disconnected.collider-cycle.0
+2026-10-14T03:50:43.3614133Z PASS other peer reconnects as next authority
+2026-10-14T03:50:43.5708342Z ENGINE Room prepared: GG_Hornet_1, visit=5, epoch=0, entities=3
+2026-10-14T03:50:46.6244067Z ENGINE Room snapshot committed: GG_Hornet_1, visit=5, epoch=0, authority=False, peers=1
+2026-10-14T03:50:46.6244067Z PASS needle-phase reconnect 0
+2026-10-14T03:50:46.6265455Z PASS both connected.collider-cycle.0
+2026-10-14T03:50:46.6386398Z PASS room authority collider-cycle.0
+2026-10-14T03:50:49.6400958Z PASS early room-level updates drained collider-cycle.0
+2026-10-14T03:50:49.6414947Z ROOM collider-cycle.0 scene=GG_Hornet_1 visit=5 authority=False hero=(19.9, 29.7, 0.0) camera=(26.5, 33.3, -38.1) mode=LOCKED
+2026-10-14T03:50:49.6425242Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=False replica=True pos=(18.4, 28.6, 0.0) render=Hornet Boss 1(Clone)/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,A Dash Effect/True/off=False,Throw Effect/True/off=False,Flash Effect/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,G Dash Effect/True/off=False state=Control=Throw Recover,Stun Control=Idle
+2026-10-14T03:50:49.6425242Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:50:49.6435358Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(34.2, 28.1, 0.0) render=Needle(Clone)/True/off=False,Thread/True/off=False state=Control=
+2026-10-14T03:50:49.6569719Z PASS camera authority state collider-cycle.0
+2026-10-14T03:50:49.6579763Z PASS camera lock state converges collider-cycle.0
+2026-10-14T03:50:49.6589785Z PASS visible bosses/knight and unfrozen camera collider-cycle.0
+2026-10-14T03:50:49.6621119Z PASS duplicate initial snapshot does not reset boss collider-cycle.0
+2026-10-14T03:50:49.6645446Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.0
+2026-10-14T03:50:49.6681563Z PASS both identities-ready.collider-cycle.0
+2026-10-14T03:50:49.6692778Z PASS all static entity identities converge collider-cycle.0
+2026-10-14T03:50:49.6790352Z PASS both checked.collider-cycle.0
+2026-10-14T03:50:49.6805460Z PASS damage published collider-cycle.0
+2026-10-14T03:50:49.7091877Z PASS same boss HP collider-cycle.0
+2026-10-14T03:50:49.7101781Z PASS both hpchecked.collider-cycle.0
+2026-10-14T03:51:06.2370055Z PASS authority throw and recovery after reconnect 0
+2026-10-14T03:51:08.2467464Z PASS both settled.collider-cycle.0
+2026-10-14T03:51:17.4398643Z PASS authority reaches native needle throw 1
+2026-10-14T03:51:17.4517937Z PASS both phase.collider-cycle.1
+2026-10-14T03:51:17.4898993Z PASS both disconnected.collider-cycle.1
+2026-10-14T03:51:17.7342562Z ENGINE Room prepared: GG_Hornet_1, visit=6, epoch=0, entities=3
+2026-10-14T03:51:17.7677446Z ENGINE Room snapshot committed: GG_Hornet_1, visit=6, epoch=0, authority=True, peers=0
+2026-10-14T03:51:17.7692040Z PASS needle-phase reconnect 1
+2026-10-14T03:51:17.7712307Z PASS reconnect transferred native authority collider-cycle.1
+2026-10-14T03:51:21.0941533Z PASS both connected.collider-cycle.1
+2026-10-14T03:51:21.1062644Z PASS room authority collider-cycle.1
+2026-10-14T03:51:24.1075890Z PASS early room-level updates drained collider-cycle.1
+2026-10-14T03:51:24.1075890Z ROOM collider-cycle.1 scene=GG_Hornet_1 visit=6 authority=True hero=(22.8, 38.2, 0.0) camera=(26.3, 33.2, -38.1) mode=LOCKED
+2026-10-14T03:51:24.1089788Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(17.0, 28.6, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,A Dash Effect/True/off=False,Throw Effect/True/off=False,Flash Effect/True/off=False,G Dash Effect/True/off=False state=Control=G Dash,Stun Control=Idle
+2026-10-14T03:51:24.1099844Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:51:24.1099844Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(19.3, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=
+2026-10-14T03:51:24.1213224Z PASS camera authority state collider-cycle.1
+2026-10-14T03:51:24.1223401Z PASS camera lock state converges collider-cycle.1
+2026-10-14T03:51:24.1233425Z PASS visible bosses/knight and unfrozen camera collider-cycle.1
+2026-10-14T03:51:24.1244880Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.1
+2026-10-14T03:51:24.1348912Z PASS both identities-ready.collider-cycle.1
+2026-10-14T03:51:24.1363264Z PASS all static entity identities converge collider-cycle.1
+2026-10-14T03:51:24.1397807Z PASS both checked.collider-cycle.1
+2026-10-14T03:51:24.1418941Z PASS damage published collider-cycle.1
+2026-10-14T03:51:24.1428973Z PASS same boss HP collider-cycle.1
+2026-10-14T03:51:24.1738295Z PASS both hpchecked.collider-cycle.1
+2026-10-14T03:51:24.1748914Z NATIVE NEEDLE after reconnect 1 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(15.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:24.3833799Z NATIVE NEEDLE after reconnect 1 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(15.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:24.4943085Z NATIVE NEEDLE after reconnect 1 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(15.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:24.7453722Z NATIVE NEEDLE after reconnect 1 state=Evade hero=(22.5, 28.4, 0.0) boss=(15.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:24.7593630Z NATIVE NEEDLE after reconnect 1 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:25.0113624Z NATIVE NEEDLE after reconnect 1 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:25.5686845Z NATIVE NEEDLE after reconnect 1 state=G Dash hero=(22.5, 28.4, 0.0) boss=(16.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:26.1954169Z NATIVE NEEDLE after reconnect 1 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(25.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:26.4174739Z NATIVE NEEDLE after reconnect 1 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(26.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:26.5322941Z NATIVE NEEDLE after reconnect 1 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:26.7830217Z NATIVE NEEDLE after reconnect 1 state=Run hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:27.7786683Z NATIVE NEEDLE after reconnect 1 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(21.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:28.1186902Z NATIVE NEEDLE after reconnect 1 state=In Air hero=(22.5, 28.4, 0.0) boss=(21.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:28.6702494Z NATIVE NEEDLE after reconnect 1 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(25.6, 37.1, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:29.1213975Z NATIVE NEEDLE after reconnect 1 state=A Dash hero=(22.5, 28.4, 0.0) boss=(25.6, 37.1, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-14T03:51:29.7297676Z NATIVE NEEDLE after reconnect 1 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.3, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:30.2310980Z NATIVE NEEDLE after reconnect 1 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(21.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:30.4834442Z NATIVE NEEDLE after reconnect 1 state=Run hero=(22.5, 28.4, 0.0) boss=(21.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:31.1383229Z NATIVE NEEDLE after reconnect 1 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(16.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:31.9281013Z NATIVE NEEDLE after reconnect 1 state=Thrown hero=(22.5, 28.4, 0.0) boss=(16.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:31.9281013Z PASS native needle throw after reconnect 1
+2026-10-14T03:51:31.9306916Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(16.5, 28.1, 0.0) fsms=Control:Out/enabled=True
+2026-10-14T03:51:32.9308647Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Thrown source=e:4568293017055036489 self=True active=True pos=(30.0, 28.1, 0.0) fsms=Control:Return/enabled=True
+2026-10-14T03:51:33.3373420Z NATIVE NEEDLE RECOVERY after reconnect 1 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(16.5, 28.1, 0.0) fsms=Control:/enabled=True
+2026-10-14T03:51:33.3373420Z PASS native needle returns near launch position after reconnect 1
+2026-10-14T03:51:33.3383431Z PASS native Throw Recover after reconnect 1
+2026-10-14T03:51:35.3581913Z PASS both settled.collider-cycle.1
+2026-10-14T03:51:35.3581913Z NATIVE NEEDLE before reconnect 2 state=A Dash hero=(22.5, 28.4, 0.0) boss=(26.8, 27.6, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-14T03:51:35.3652863Z NATIVE NEEDLE before reconnect 2 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(27.2, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:35.8660894Z NATIVE NEEDLE before reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:36.1186636Z NATIVE NEEDLE before reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:36.5666853Z NATIVE NEEDLE before reconnect 2 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(32.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:37.1234067Z NATIVE NEEDLE before reconnect 2 state=G Dash hero=(22.5, 28.4, 0.0) boss=(32.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:37.7478512Z NATIVE NEEDLE before reconnect 2 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(23.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:37.9710280Z NATIVE NEEDLE before reconnect 2 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(21.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:38.0832439Z NATIVE NEEDLE before reconnect 2 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(21.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:38.3328533Z NATIVE NEEDLE before reconnect 2 state=Evade hero=(22.5, 28.4, 0.0) boss=(21.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:38.5821503Z NATIVE NEEDLE before reconnect 2 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(16.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:38.8324446Z NATIVE NEEDLE before reconnect 2 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(16.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:39.1697748Z NATIVE NEEDLE before reconnect 2 state=In Air hero=(22.5, 28.4, 0.0) boss=(16.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:39.3870341Z NATIVE NEEDLE before reconnect 2 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(19.7, 35.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:39.8399887Z NATIVE NEEDLE before reconnect 2 state=A Dash hero=(22.5, 28.4, 0.0) boss=(19.7, 35.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-14T03:51:40.3820140Z NATIVE NEEDLE before reconnect 2 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(22.7, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:40.8845692Z NATIVE NEEDLE before reconnect 2 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(23.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:41.1364166Z NATIVE NEEDLE before reconnect 2 state=Run hero=(22.5, 28.4, 0.0) boss=(23.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:41.7306231Z NATIVE NEEDLE before reconnect 2 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(28.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:42.0654362Z NATIVE NEEDLE before reconnect 2 state=In Air hero=(22.5, 28.4, 0.0) boss=(28.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:42.9630290Z NATIVE NEEDLE before reconnect 2 state=Land hero=(22.5, 28.4, 0.0) boss=(30.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:43.2111970Z NATIVE NEEDLE before reconnect 2 state=Idle hero=(22.5, 28.4, 0.0) boss=(30.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:43.4924850Z NATIVE NEEDLE before reconnect 2 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(30.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:44.2741317Z NATIVE NEEDLE before reconnect 2 state=Thrown hero=(22.5, 28.4, 0.0) boss=(30.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:51:44.2741317Z PASS native needle throw before reconnect 2
+2026-10-14T03:51:44.2910587Z PASS both phase.collider-cycle.2
+2026-10-14T03:51:44.3198258Z PASS both disconnected.collider-cycle.2
+2026-10-14T03:51:44.5980157Z PASS other peer reconnects as next authority
+2026-10-14T03:51:44.7819514Z ENGINE Room prepared: GG_Hornet_1, visit=7, epoch=0, entities=3
+2026-10-14T03:51:47.8110662Z ENGINE Room snapshot committed: GG_Hornet_1, visit=7, epoch=0, authority=False, peers=1
+2026-10-14T03:51:47.8120691Z PASS needle-phase reconnect 2
+2026-10-14T03:51:47.8227966Z PASS both connected.collider-cycle.2
+2026-10-14T03:51:47.8352279Z PASS room authority collider-cycle.2
+2026-10-14T03:51:50.8376485Z PASS early room-level updates drained collider-cycle.2
+2026-10-14T03:51:50.8386615Z ROOM collider-cycle.2 scene=GG_Hornet_1 visit=7 authority=False hero=(21.3, 29.0, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-14T03:51:50.8386615Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=False replica=True pos=(17.8, 33.4, 0.0) render=Hornet Boss 1(Clone)/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Flash Effect/True/off=False,Throw Effect/True/off=False,G Dash Effect/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,A Dash Effect/True/off=False state=Control=Thrown,Stun Control=Stop
+2026-10-14T03:51:50.8396644Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:51:50.8396644Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(30.8, 28.1, 0.0) render=Needle(Clone)/True/off=False,Thread/True/off=False state=Control=Out
+2026-10-14T03:51:50.8543886Z PASS camera authority state collider-cycle.2
+2026-10-14T03:51:50.8555184Z PASS camera lock state converges collider-cycle.2
+2026-10-14T03:51:50.8565242Z PASS visible bosses/knight and unfrozen camera collider-cycle.2
+2026-10-14T03:51:50.8585326Z PASS duplicate initial snapshot does not reset boss collider-cycle.2
+2026-10-14T03:51:50.8610580Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.2
+2026-10-14T03:51:50.8642374Z PASS both identities-ready.collider-cycle.2
+2026-10-14T03:51:50.8642374Z PASS all static entity identities converge collider-cycle.2
+2026-10-14T03:51:50.8706756Z PASS both checked.collider-cycle.2
+2026-10-14T03:51:50.8728250Z PASS damage published collider-cycle.2
+2026-10-14T03:51:50.9008341Z PASS same boss HP collider-cycle.2
+2026-10-14T03:51:50.9018388Z PASS both hpchecked.collider-cycle.2
+2026-10-14T03:52:02.7339173Z PASS authority throw and recovery after reconnect 2
+2026-10-14T03:52:04.7442653Z PASS both settled.collider-cycle.2
+2026-10-14T03:52:11.1241777Z PASS authority reaches native needle throw 3
+2026-10-14T03:52:11.1255341Z PASS both phase.collider-cycle.3
+2026-10-14T03:52:11.1599267Z PASS both disconnected.collider-cycle.3
+2026-10-14T03:52:11.3544259Z ENGINE Room prepared: GG_Hornet_1, visit=8, epoch=0, entities=3
+2026-10-14T03:52:11.3673835Z ENGINE Room snapshot committed: GG_Hornet_1, visit=8, epoch=0, authority=True, peers=0
+2026-10-14T03:52:11.3684046Z PASS needle-phase reconnect 3
+2026-10-14T03:52:11.3711867Z PASS reconnect transferred native authority collider-cycle.3
+2026-10-14T03:52:14.7129573Z PASS both connected.collider-cycle.3
+2026-10-14T03:52:14.7269390Z PASS room authority collider-cycle.3
+2026-10-14T03:52:17.7314091Z PASS early room-level updates drained collider-cycle.3
+2026-10-14T03:52:17.7326895Z ROOM collider-cycle.3 scene=GG_Hornet_1 visit=8 authority=True hero=(15.3, 35.0, 0.0) camera=(26.3, 33.3, -38.1) mode=LOCKED
+2026-10-14T03:52:17.7326895Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(15.3, 33.2, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Flash Effect/True/off=False,G Dash Effect/True/off=False,Throw Effect/True/off=False,A Dash Effect/True/off=False state=Control=Wall L,Stun Control=Idle
+2026-10-14T03:52:17.7340793Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:52:17.7340793Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(35.7, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=
+2026-10-14T03:52:17.7373209Z PASS camera authority state collider-cycle.3
+2026-10-14T03:52:17.7383429Z PASS camera lock state converges collider-cycle.3
+2026-10-14T03:52:17.7383429Z PASS visible bosses/knight and unfrozen camera collider-cycle.3
+2026-10-14T03:52:17.7408836Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.3
+2026-10-14T03:52:17.7630623Z PASS both identities-ready.collider-cycle.3
+2026-10-14T03:52:17.7630623Z PASS all static entity identities converge collider-cycle.3
+2026-10-14T03:52:17.7682440Z PASS both checked.collider-cycle.3
+2026-10-14T03:52:17.7707723Z PASS damage published collider-cycle.3
+2026-10-14T03:52:17.7718742Z PASS same boss HP collider-cycle.3
+2026-10-14T03:52:17.8053476Z PASS both hpchecked.collider-cycle.3
+2026-10-14T03:52:17.8067559Z NATIVE NEEDLE after reconnect 3 state=Wall L hero=(22.5, 28.4, 0.0) boss=(15.3, 33.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:17.9310415Z NATIVE NEEDLE after reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(15.3, 33.2, 0.0) body=Dynamic gravity=2 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:18.3956809Z NATIVE NEEDLE after reconnect 3 state=Land hero=(22.5, 28.4, 0.0) boss=(20.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:18.6407254Z NATIVE NEEDLE after reconnect 3 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(20.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:18.8918631Z NATIVE NEEDLE after reconnect 3 state=Evade hero=(22.5, 28.4, 0.0) boss=(20.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:19.0962146Z NATIVE NEEDLE after reconnect 3 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:19.3498118Z NATIVE NEEDLE after reconnect 3 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:19.6834524Z NATIVE NEEDLE after reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(15.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:20.4153605Z NATIVE NEEDLE after reconnect 3 state=Sphere Antic A hero=(22.5, 28.4, 0.0) boss=(27.4, 33.6, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:21.0027768Z NATIVE NEEDLE after reconnect 3 state=Sphere A hero=(22.5, 28.4, 0.0) boss=(28.3, 32.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:21.9990809Z NATIVE NEEDLE after reconnect 3 state=Sphere Recover A hero=(22.5, 28.4, 0.0) boss=(28.3, 32.2, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:22.2506051Z NATIVE NEEDLE after reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(28.3, 32.2, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:22.5155473Z NATIVE NEEDLE after reconnect 3 state=Land hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:22.7666366Z NATIVE NEEDLE after reconnect 3 state=Idle hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:22.8697489Z NATIVE NEEDLE after reconnect 3 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:23.2044145Z NATIVE NEEDLE after reconnect 3 state=In Air hero=(22.5, 28.4, 0.0) boss=(28.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:23.4873174Z NATIVE NEEDLE after reconnect 3 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(30.6, 36.3, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:23.9405962Z NATIVE NEEDLE after reconnect 3 state=A Dash hero=(22.5, 28.4, 0.0) boss=(30.6, 36.3, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-14T03:52:24.6348665Z NATIVE NEEDLE after reconnect 3 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(21.8, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:25.1358293Z NATIVE NEEDLE after reconnect 3 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(20.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:25.3860347Z NATIVE NEEDLE after reconnect 3 state=Run hero=(22.5, 28.4, 0.0) boss=(20.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:25.9790156Z NATIVE NEEDLE after reconnect 3 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(15.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:26.5364279Z NATIVE NEEDLE after reconnect 3 state=G Dash hero=(22.5, 28.4, 0.0) boss=(16.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:27.1617163Z NATIVE NEEDLE after reconnect 3 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(25.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:27.3847537Z NATIVE NEEDLE after reconnect 3 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(26.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:27.4996056Z NATIVE NEEDLE after reconnect 3 state=Evade Antic hero=(22.5, 28.4, 0.0) boss=(26.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:27.7503248Z NATIVE NEEDLE after reconnect 3 state=Evade hero=(22.5, 28.4, 0.0) boss=(26.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:27.9996608Z NATIVE NEEDLE after reconnect 3 state=Evade Land hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:28.2511316Z NATIVE NEEDLE after reconnect 3 state=Idle hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:28.5320374Z NATIVE NEEDLE after reconnect 3 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:29.3151371Z NATIVE NEEDLE after reconnect 3 state=Thrown hero=(22.5, 28.4, 0.0) boss=(32.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:29.3165110Z PASS native needle throw after reconnect 3
+2026-10-14T03:52:29.3165110Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=True active=True pos=(32.2, 28.1, 0.0) fsms=Control:Out/enabled=True
+2026-10-14T03:52:30.3180365Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Thrown source=e:4568293017055036489 self=True active=True pos=(18.6, 28.1, 0.0) fsms=Control:Return/enabled=True
+2026-10-14T03:52:30.7414407Z NATIVE NEEDLE RECOVERY after reconnect 3 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(32.2, 28.1, 0.0) fsms=Control:/enabled=True
+2026-10-14T03:52:30.7426014Z PASS native needle returns near launch position after reconnect 3
+2026-10-14T03:52:30.7426014Z PASS native Throw Recover after reconnect 3
+2026-10-14T03:52:32.7610709Z PASS both settled.collider-cycle.3
+2026-10-14T03:52:32.7610709Z NATIVE NEEDLE before reconnect 4 state=In Air hero=(22.5, 28.4, 0.0) boss=(32.3, 37.4, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:33.1470153Z NATIVE NEEDLE before reconnect 4 state=Land hero=(22.5, 28.4, 0.0) boss=(28.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:33.3989045Z NATIVE NEEDLE before reconnect 4 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(28.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:33.6487530Z NATIVE NEEDLE before reconnect 4 state=Run hero=(22.5, 28.4, 0.0) boss=(28.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:34.1650496Z NATIVE NEEDLE before reconnect 4 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(32.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:34.7233175Z NATIVE NEEDLE before reconnect 4 state=G Dash hero=(22.5, 28.4, 0.0) boss=(32.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:35.3487168Z NATIVE NEEDLE before reconnect 4 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(23.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:35.5719086Z NATIVE NEEDLE before reconnect 4 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(22.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:35.6845064Z NATIVE NEEDLE before reconnect 4 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(22.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:35.9362658Z NATIVE NEEDLE before reconnect 4 state=Run hero=(22.5, 28.4, 0.0) boss=(22.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:36.4271558Z NATIVE NEEDLE before reconnect 4 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(18.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:36.9860543Z NATIVE NEEDLE before reconnect 4 state=G Dash hero=(22.5, 28.4, 0.0) boss=(18.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:37.6108350Z NATIVE NEEDLE before reconnect 4 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(27.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:37.8333204Z NATIVE NEEDLE before reconnect 4 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(28.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:37.9614172Z NATIVE NEEDLE before reconnect 4 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(28.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:38.1982029Z NATIVE NEEDLE before reconnect 4 state=Run hero=(22.5, 28.4, 0.0) boss=(28.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:38.7242855Z NATIVE NEEDLE before reconnect 4 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(32.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:39.5034730Z NATIVE NEEDLE before reconnect 4 state=Thrown hero=(22.5, 28.4, 0.0) boss=(32.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:52:39.5047200Z PASS native needle throw before reconnect 4
+2026-10-14T03:52:39.5222386Z PASS both phase.collider-cycle.4
+2026-10-14T03:52:39.5821538Z PASS both disconnected.collider-cycle.4
+2026-10-14T03:52:39.9695705Z PASS other peer reconnects as next authority
+2026-10-14T03:52:40.2413519Z ENGINE Room prepared: GG_Hornet_1, visit=9, epoch=0, entities=3
+2026-10-14T03:52:43.2883692Z ENGINE Room snapshot committed: GG_Hornet_1, visit=9, epoch=0, authority=False, peers=1
+2026-10-14T03:52:43.2883692Z PASS needle-phase reconnect 4
+2026-10-14T03:52:43.2996932Z PASS both connected.collider-cycle.4
+2026-10-14T03:52:43.3130054Z PASS room authority collider-cycle.4
+2026-10-14T03:52:46.3156038Z PASS early room-level updates drained collider-cycle.4
+2026-10-14T03:52:46.3156038Z ROOM collider-cycle.4 scene=GG_Hornet_1 visit=9 authority=False hero=(18.9, 30.2, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-14T03:52:46.3156038Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=False replica=True pos=(21.9, 28.6, 0.0) render=Hornet Boss 1(Clone)/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Flash Effect/True/off=False,G Dash Effect/True/off=False,Throw Effect/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,A Dash Effect/True/off=False state=Control=Thrown,Stun Control=Stop
+2026-10-14T03:52:46.3169611Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:52:46.3179659Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(32.2, 28.1, 0.0) render=Needle(Clone)/True/off=False,Thread/True/off=False state=Control=Out
+2026-10-14T03:52:46.3238956Z PASS camera authority state collider-cycle.4
+2026-10-14T03:52:46.3249083Z PASS camera lock state converges collider-cycle.4
+2026-10-14T03:52:46.3259165Z PASS visible bosses/knight and unfrozen camera collider-cycle.4
+2026-10-14T03:52:46.3290421Z PASS duplicate initial snapshot does not reset boss collider-cycle.4
+2026-10-14T03:52:46.3310715Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.4
+2026-10-14T03:52:46.3430854Z PASS both identities-ready.collider-cycle.4
+2026-10-14T03:52:46.3445330Z PASS all static entity identities converge collider-cycle.4
+2026-10-14T03:52:46.3508488Z PASS both checked.collider-cycle.4
+2026-10-14T03:52:46.3518567Z PASS damage published collider-cycle.4
+2026-10-14T03:52:46.3684618Z PASS same boss HP collider-cycle.4
+2026-10-14T03:52:46.3699682Z PASS both hpchecked.collider-cycle.4
+2026-10-14T03:52:49.5871591Z PASS authority throw and recovery after reconnect 4
+2026-10-14T03:52:51.5907675Z PASS both settled.collider-cycle.4
+2026-10-14T03:53:01.7024004Z PASS authority reaches native needle throw 5
+2026-10-14T03:53:01.7044077Z PASS both phase.collider-cycle.5
+2026-10-14T03:53:01.7373113Z PASS both disconnected.collider-cycle.5
+2026-10-14T03:53:01.9763089Z ENGINE Room prepared: GG_Hornet_1, visit=10, epoch=0, entities=3
+2026-10-14T03:53:02.0124423Z ENGINE Room snapshot committed: GG_Hornet_1, visit=10, epoch=0, authority=True, peers=0
+2026-10-14T03:53:02.0135116Z PASS needle-phase reconnect 5
+2026-10-14T03:53:02.0150593Z PASS reconnect transferred native authority collider-cycle.5
+2026-10-14T03:53:05.3132525Z PASS both connected.collider-cycle.5
+2026-10-14T03:53:05.3268140Z PASS room authority collider-cycle.5
+2026-10-14T03:53:08.3286749Z PASS early room-level updates drained collider-cycle.5
+2026-10-14T03:53:08.3296824Z ROOM collider-cycle.5 scene=GG_Hornet_1 visit=10 authority=True hero=(27.9, 38.0, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-14T03:53:08.3306968Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(34.9, 28.6, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Flash Effect/True/off=False,Throw Effect/True/off=False,A Dash Effect/True/off=False,G Dash Effect/True/off=False state=Control=GDash Recover1,Stun Control=Idle
+2026-10-14T03:53:08.3317036Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:53:08.3330124Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(19.2, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=
+2026-10-14T03:53:08.3442864Z PASS camera authority state collider-cycle.5
+2026-10-14T03:53:08.3452969Z PASS camera lock state converges collider-cycle.5
+2026-10-14T03:53:08.3452969Z PASS visible bosses/knight and unfrozen camera collider-cycle.5
+2026-10-14T03:53:08.3485015Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.5
+2026-10-14T03:53:08.3576382Z PASS both identities-ready.collider-cycle.5
+2026-10-14T03:53:08.3586643Z PASS all static entity identities converge collider-cycle.5
+2026-10-14T03:53:08.3622891Z PASS both checked.collider-cycle.5
+2026-10-14T03:53:08.3650875Z PASS damage published collider-cycle.5
+2026-10-14T03:53:08.3663343Z PASS same boss HP collider-cycle.5
+2026-10-14T03:53:08.3987075Z PASS both hpchecked.collider-cycle.5
+2026-10-14T03:53:08.3997181Z NATIVE NEEDLE after reconnect 5 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(35.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:08.4245434Z NATIVE NEEDLE after reconnect 5 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(35.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:08.5366310Z NATIVE NEEDLE after reconnect 5 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(35.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:08.7886665Z NATIVE NEEDLE after reconnect 5 state=Run hero=(22.5, 28.4, 0.0) boss=(35.1, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:09.1048184Z NATIVE NEEDLE after reconnect 5 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(37.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:09.8864315Z NATIVE NEEDLE after reconnect 5 state=Thrown hero=(22.5, 28.4, 0.0) boss=(36.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:09.8874444Z PASS native needle throw after reconnect 5
+2026-10-14T03:53:09.8874444Z NATIVE NEEDLE RECOVERY after reconnect 5 state=Thrown source=e:4568293017055036489 self=True active=True pos=(35.7, 28.1, 0.0) fsms=Control:Out/enabled=True
+2026-10-14T03:53:10.8897127Z NATIVE NEEDLE RECOVERY after reconnect 5 state=Thrown source=e:4568293017055036489 self=True active=True pos=(23.0, 28.1, 0.0) fsms=Control:Return/enabled=True
+2026-10-14T03:53:11.2975512Z NATIVE NEEDLE RECOVERY after reconnect 5 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(36.5, 28.1, 0.0) fsms=Control:/enabled=True
+2026-10-14T03:53:11.3010667Z PASS native needle returns near launch position after reconnect 5
+2026-10-14T03:53:11.3010667Z PASS native Throw Recover after reconnect 5
+2026-10-14T03:53:13.3209684Z PASS both settled.collider-cycle.5
+2026-10-14T03:53:13.3223480Z NATIVE NEEDLE before reconnect 6 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(23.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:13.3854946Z NATIVE NEEDLE before reconnect 6 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(23.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:13.4966414Z NATIVE NEEDLE before reconnect 6 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(23.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:14.0233575Z NATIVE NEEDLE before reconnect 6 state=Run hero=(22.5, 28.4, 0.0) boss=(23.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:14.4018555Z NATIVE NEEDLE before reconnect 6 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(26.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:14.7377047Z NATIVE NEEDLE before reconnect 6 state=In Air hero=(22.5, 28.4, 0.0) boss=(26.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:15.6199314Z NATIVE NEEDLE before reconnect 6 state=Land hero=(22.5, 28.4, 0.0) boss=(34.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:15.8714118Z NATIVE NEEDLE before reconnect 6 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(34.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:16.1230228Z NATIVE NEEDLE before reconnect 6 state=Run hero=(22.5, 28.4, 0.0) boss=(34.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:16.4997642Z NATIVE NEEDLE before reconnect 6 state=Jump Antic hero=(22.5, 28.4, 0.0) boss=(37.6, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:16.8372418Z NATIVE NEEDLE before reconnect 6 state=In Air hero=(22.5, 28.4, 0.0) boss=(37.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:17.0658115Z NATIVE NEEDLE before reconnect 6 state=ADash Antic hero=(22.5, 28.4, 0.0) boss=(32.3, 35.6, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:17.5167661Z NATIVE NEEDLE before reconnect 6 state=A Dash hero=(22.5, 28.4, 0.0) boss=(32.3, 35.6, 0.0) body=Dynamic gravity=0 colliders=BoxCollider2D:True/trigger=True
+2026-10-14T03:53:18.2197363Z NATIVE NEEDLE before reconnect 6 state=Hard Land hero=(22.5, 28.4, 0.0) boss=(21.9, 27.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:18.7199122Z NATIVE NEEDLE before reconnect 6 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(20.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:18.9705842Z NATIVE NEEDLE before reconnect 6 state=Run hero=(22.5, 28.4, 0.0) boss=(20.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:19.4834531Z NATIVE NEEDLE before reconnect 6 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(16.3, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:20.2653054Z NATIVE NEEDLE before reconnect 6 state=Thrown hero=(22.5, 28.4, 0.0) boss=(16.5, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:20.2663067Z PASS native needle throw before reconnect 6
+2026-10-14T03:53:20.8406646Z PASS native needle Decel before takeover
+2026-10-14T03:53:20.8418830Z CONTINUATION HANDOFF needle=Decel boss=Thrown
+2026-10-14T03:53:20.8677091Z PASS both phase.collider-cycle.6
+2026-10-14T03:53:20.8982987Z PASS both disconnected.collider-cycle.6
+2026-10-14T03:53:21.2241712Z PASS other peer reconnects as next authority
+2026-10-14T03:53:21.4052369Z ENGINE Room prepared: GG_Hornet_1, visit=11, epoch=0, entities=3
+2026-10-14T03:53:24.4503126Z ENGINE Room snapshot committed: GG_Hornet_1, visit=11, epoch=0, authority=False, peers=1
+2026-10-14T03:53:24.4513126Z PASS needle-phase reconnect 6
+2026-10-14T03:53:24.4523556Z PASS both connected.collider-cycle.6
+2026-10-14T03:53:24.4646400Z PASS room authority collider-cycle.6
+2026-10-14T03:53:27.4665648Z PASS early room-level updates drained collider-cycle.6
+2026-10-14T03:53:27.4675672Z ROOM collider-cycle.6 scene=GG_Hornet_1 visit=11 authority=False hero=(29.1, 31.7, 0.0) camera=(26.3, 33.3, -38.1) mode=LOCKED
+2026-10-14T03:53:27.4685702Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=False replica=True pos=(29.1, 34.1, 0.0) render=Hornet Boss 1(Clone)/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Flash Effect/True/off=False,G Dash Effect/True/off=False,Throw Effect/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False state=Control=Thrown,Stun Control=Stop
+2026-10-14T03:53:27.4695725Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=False replica=True pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:53:27.4700779Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(16.5, 28.1, 0.0) render=Needle(Clone)/True/off=False,Thread/True/off=False state=Control=Return
+2026-10-14T03:53:27.4796742Z PASS camera authority state collider-cycle.6
+2026-10-14T03:53:27.4801789Z PASS camera lock state converges collider-cycle.6
+2026-10-14T03:53:27.4811796Z PASS visible bosses/knight and unfrozen camera collider-cycle.6
+2026-10-14T03:53:27.4838437Z PASS duplicate initial snapshot does not reset boss collider-cycle.6
+2026-10-14T03:53:27.4878094Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.6
+2026-10-14T03:53:27.4916546Z PASS both identities-ready.collider-cycle.6
+2026-10-14T03:53:27.4926578Z PASS all static entity identities converge collider-cycle.6
+2026-10-14T03:53:27.5016964Z PASS both checked.collider-cycle.6
+2026-10-14T03:53:27.5066834Z PASS damage published collider-cycle.6
+2026-10-14T03:53:27.5522237Z PASS same boss HP collider-cycle.6
+2026-10-14T03:53:27.5546773Z PASS both hpchecked.collider-cycle.6
+2026-10-14T03:53:36.0634571Z PASS authority throw and recovery after reconnect 6
+2026-10-14T03:53:38.0661091Z PASS both settled.collider-cycle.6
+2026-10-14T03:53:52.1029956Z PASS authority reaches native needle throw 7
+2026-10-14T03:53:52.1051489Z PASS both phase.collider-cycle.7
+2026-10-14T03:53:52.1410316Z PASS both disconnected.collider-cycle.7
+2026-10-14T03:53:52.4074574Z ENGINE Room prepared: GG_Hornet_1, visit=12, epoch=0, entities=3
+2026-10-14T03:53:52.4194928Z ENGINE Room snapshot committed: GG_Hornet_1, visit=12, epoch=0, authority=True, peers=0
+2026-10-14T03:53:52.4208328Z PASS needle-phase reconnect 7
+2026-10-14T03:53:52.4235997Z PASS reconnect transferred native authority collider-cycle.7
+2026-10-14T03:53:55.7083291Z PASS both connected.collider-cycle.7
+2026-10-14T03:53:55.7222673Z PASS room authority collider-cycle.7
+2026-10-14T03:53:58.7250531Z PASS early room-level updates drained collider-cycle.7
+2026-10-14T03:53:58.7250531Z ROOM collider-cycle.7 scene=GG_Hornet_1 visit=12 authority=True hero=(23.1, 38.0, 0.0) camera=(26.4, 33.3, -38.1) mode=LOCKED
+2026-10-14T03:53:58.7263325Z ENTITY 7214630437068105499 Hornet key=GG_Hornet_1/Boss%20Holder#0/Hornet%20Boss%201#0:Hornet:Control|Stun Control host=True replica=False pos=(20.9, 28.6, 0.0) render=Hornet Boss 1/True/off=False,Sphere Ball/True/off=False,Dust HardLand/True/off=False,Corpse Hornet GG(Clone)/True/off=False,Thread/True/off=False,Grass/True/off=False,Grass Escape/True/off=False,Start Pt/True/off=False,Leave Anim/True/off=False,Flash Effect/True/off=False,G Dash Effect/True/off=False,Throw Effect/True/off=False,A Dash Effect/True/off=False state=Control=Run,Stun Control=Idle
+2026-10-14T03:53:58.7275486Z ENTITY 8176710128723724501 CameraLockArea key=GG_Hornet_1/CameraLockArea%20B#0:CameraLockArea: host=True replica=False pos=(25.1, 34.9, 0.0) render= state=
+2026-10-14T03:53:58.7275486Z ENTITY 4568293017055036489 DynamicHazard key=GG_Hornet_1/Needle#0:DynamicHazard:Control host=False replica=False pos=(30.7, 28.1, 0.0) render=Needle/True/off=False,Thread/True/off=False state=Control=
+2026-10-14T03:53:58.7301324Z PASS camera authority state collider-cycle.7
+2026-10-14T03:53:58.7301324Z PASS camera lock state converges collider-cycle.7
+2026-10-14T03:53:58.7311368Z PASS visible bosses/knight and unfrozen camera collider-cycle.7
+2026-10-14T03:53:58.7335053Z PASS stale room/peer leave and duplicate connect preserve avatar collider-cycle.7
+2026-10-14T03:53:58.7439988Z PASS both identities-ready.collider-cycle.7
+2026-10-14T03:53:58.7454421Z PASS all static entity identities converge collider-cycle.7
+2026-10-14T03:53:58.7479299Z PASS both checked.collider-cycle.7
+2026-10-14T03:53:58.7505177Z PASS damage published collider-cycle.7
+2026-10-14T03:53:58.7516565Z PASS same boss HP collider-cycle.7
+2026-10-14T03:53:58.7919071Z PASS both hpchecked.collider-cycle.7
+2026-10-14T03:53:58.7933942Z NATIVE NEEDLE after reconnect 7 state=Run hero=(22.5, 28.4, 0.0) boss=(20.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:59.1741538Z NATIVE NEEDLE after reconnect 7 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(17.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:53:59.7347893Z NATIVE NEEDLE after reconnect 7 state=G Dash hero=(22.5, 28.4, 0.0) boss=(17.2, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:00.3603878Z NATIVE NEEDLE after reconnect 7 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(25.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:00.5816111Z NATIVE NEEDLE after reconnect 7 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(26.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:00.6934806Z NATIVE NEEDLE after reconnect 7 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:00.9456198Z NATIVE NEEDLE after reconnect 7 state=Run hero=(22.5, 28.4, 0.0) boss=(27.0, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:01.5478709Z NATIVE NEEDLE after reconnect 7 state=GDash Antic hero=(22.5, 28.4, 0.0) boss=(31.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:02.1076078Z NATIVE NEEDLE after reconnect 7 state=G Dash hero=(22.5, 28.4, 0.0) boss=(31.4, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:02.7322968Z NATIVE NEEDLE after reconnect 7 state=GDash Recover1 hero=(22.5, 28.4, 0.0) boss=(22.9, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:02.9562471Z NATIVE NEEDLE after reconnect 7 state=GDash Recover2 hero=(22.5, 28.4, 0.0) boss=(21.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:03.0694801Z NATIVE NEEDLE after reconnect 7 state=Run Antic hero=(22.5, 28.4, 0.0) boss=(21.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:03.3250923Z NATIVE NEEDLE after reconnect 7 state=Run hero=(22.5, 28.4, 0.0) boss=(21.7, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:03.8032362Z NATIVE NEEDLE after reconnect 7 state=Throw Antic hero=(22.5, 28.4, 0.0) boss=(17.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:04.5850703Z NATIVE NEEDLE after reconnect 7 state=Thrown hero=(22.5, 28.4, 0.0) boss=(17.8, 28.6, 0.0) body=Dynamic gravity=1.5 colliders=BoxCollider2D:True/trigger=False
+2026-10-14T03:54:04.5908399Z PASS native needle throw after reconnect 7
+2026-10-14T03:54:04.5918588Z NATIVE NEEDLE RECOVERY after reconnect 7 state=Thrown source=e:4568293017055036489 self=True active=True pos=(18.6, 28.1, 0.0) fsms=Control:Out/enabled=True
+2026-10-14T03:54:05.5921693Z NATIVE NEEDLE RECOVERY after reconnect 7 state=Thrown source=e:4568293017055036489 self=True active=True pos=(31.3, 28.1, 0.0) fsms=Control:Return/enabled=True
+2026-10-14T03:54:05.9919813Z NATIVE NEEDLE RECOVERY after reconnect 7 state=Throw Recover source=e:4568293017055036489 self=False active=False pos=(17.8, 28.1, 0.0) fsms=Control:/enabled=True
+2026-10-14T03:54:05.9919813Z PASS native needle returns near launch position after reconnect 7
+2026-10-14T03:54:05.9929847Z PASS native Throw Recover after reconnect 7
+2026-10-14T03:54:08.0012041Z PASS both settled.collider-cycle.7
+2026-10-14T03:54:08.0022056Z FINAL PASS destroyed native loop cleanup, Hornet authority and reconnect; muted audio
+2026-10-14T03:54:08.0095372Z PASS both probe-checked
+2026-10-14T03:54:08.0168222Z PASS final client disconnect
+2026-10-14T03:54:08.0297630Z PASS both probe-disconnected
+2026-10-14T03:54:08.0337825Z PASS server acknowledges final disconnects
+2026-10-14T03:54:08.0483844Z PASS final server stopped
