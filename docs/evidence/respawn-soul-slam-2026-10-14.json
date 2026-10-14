@@ -20,7 +20,7 @@
       "productVersion": "1.0.0+1f5efe0ef26461a467b0512aaf5bc0d95f01f00a"
     }
   ],
-  "recordedAtUtc": "2026-10-14T14:05:42.5354700Z",
+  "recordedAtUtc": "2026-10-14T14:05:42.53547Z",
   "runtimeValidation": {
     "version": "0.1.13",
     "engineVersion": "3.0.0-hc10",
@@ -1003,5 +1003,19 @@
     "Original inactive Hornet needle, repeated False Knight armor/head and transient frozen camera findings remain unresolved."
   ],
   "normalGameInstalled": false,
-  "playerSavesModified": false
+  "playerSavesModified": false,
+  "installerValidation": {
+    "status": "blocked-by-existing-game-processes",
+    "passed": 4,
+    "expected": 13,
+    "completed": false,
+    "scriptExitCode": 1,
+    "reason": "Close Hollow Knight in the selected directory before installing or restoring.",
+    "log": ".test-results/playtest-wipe-soul-20261014/installer-1f5efe0.log",
+    "logSha256": "D4D75AFFB94D03E19AFBC59E52E493FACE62577AA77D6D4F831B6849960621E1",
+    "operationsLog": ".test-results/installer-portable-1f5efe0-20261014/operations.log",
+    "operationsLogSha256": "734319C319D5B99C7E133AC4B992A43D5FD05C92A197F5EDAC0CB804177582B8",
+    "unknownPathProcessesStopped": false,
+    "normalGameModified": false
+  }
 }

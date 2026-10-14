@@ -28,6 +28,7 @@
 - 版本：HollowConnect **0.1.13** / HKMP **3.0.0-hc10**，目标 Windows 游戏 1.5.78.11833 / Unity 2020.2.2f1。
 - 当前交付：`dist/HollowConnect-0.1.13-playtest-1f5efe0-windows.zip`（含一键安装器）和同名前缀的 `-source.zip`；核验报告为同名前缀的 `-verification.txt`。旧 `dc0a4f5` 及无构建号的 `6ddf5b3` 试玩包保留。
 - 打包工具核对七项载荷、六组实际运行哈希/终态、全部压缩内容与文档链接、API 校验和及无测试插件/私人存档；安装器检查只操作伪游戏夹具。详细交付校验结果见同名前缀的核验报告。普通发布仍被阻止，打包仅构建安装器，生产 DLL 未重建。
+- 本轮安装器检查仅前四项通过，首次伪游戏安装被两个路径不可读的现有 hollow_knight 进程拦截，剩余九项未完成。未停止未知进程、绕过检查或更改安装器；保留 `.test-results/installer-portable-1f5efe0-20261014`，具体原因见本轮机器记录的 installerValidation。旧十三项通过不能替代本轮结果。
 - 用户此前明确说“打包吧”，随后提供新试玩反馈并要求继续修复，本次沿用试玩打包范围；未声称用户明确批准新哈希或完整发布。请求及实际哈希见 [本次试玩记录](evidence/playtest-authorization-0.1.13-1f5efe0.json)。**只打包，没有自动安装到正常游戏，也没有把完整发布矩阵记为通过。** [dc0a4f5 试玩记录](evidence/playtest-authorization-0.1.13-dc0a4f5.json)及 [更早试玩记录](evidence/playtest-authorization-0.1.13.json)保留。
 - [试玩说明](PLAYTEST-0.1.13.md)包含安装和复测顺序。发生问题时保留双方 ModLog.txt、房间、先入顺序、招式以及死亡/传送/重连情况。
 
