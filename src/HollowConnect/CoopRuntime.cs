@@ -51,7 +51,6 @@ public sealed class CoopRuntime : MonoBehaviour {
     private Vector2? warpEntry;
     private string warpScene;
     private HeroController lockedHero;
-    private float gravity;
     private bool noDamage, heroBoxInactive, simulated;
     internal Vector3 DeathPosition { get; private set; }
     internal uint DeathSerial => downSerial;
@@ -346,8 +345,8 @@ public sealed class CoopRuntime : MonoBehaviour {
         var hero = HeroController.instance;
         if (hero == null || lockedHero == hero) return;
         lockedHero = hero; var body = hero.GetComponent<Rigidbody2D>();
-        gravity = body.gravityScale; simulated = body.simulated; noDamage = hero.takeNoDamage; heroBoxInactive = HeroBox.inactive;
-        hero.RelinquishControl(); hero.takeNoDamage = true; body.velocity = Vector2.zero; body.gravityScale = 0; HeroBox.inactive = true;
+        simulated = body.simulated; noDamage = hero.takeNoDamage; heroBoxInactive = HeroBox.inactive;
+        hero.RelinquishControl(); hero.takeNoDamage = true; body.velocity = Vector2.zero; hero.AffectedByGravity(false); HeroBox.inactive = true;
         body.simulated = false;
     }
     private void Unlock() {
@@ -356,7 +355,7 @@ public sealed class CoopRuntime : MonoBehaviour {
             HeroBox.inactive = heroBoxInactive;
             lockedHero.RegainControl(); lockedHero.StartAnimationControl();
             var body = lockedHero.GetComponent<Rigidbody2D>();
-            body.simulated = simulated; body.gravityScale = gravity; body.velocity = Vector2.zero;
+            body.simulated = simulated; body.velocity = Vector2.zero;
         }
         lockedHero = null;
         if (deathCamera != null && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == deathScene)

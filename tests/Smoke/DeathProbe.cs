@@ -52,7 +52,7 @@ public sealed class DeathProbe : MonoBehaviour {
         h.cState.invulnerable = false; h.cState.recoiling = false; h.cState.recoilingLeft = h.cState.recoilingRight = false;
         PlayerData.instance.SetBool("isInvincible", false); h.takeNoDamage = immune; HeroBox.inactive = false;
         h.SetDamageMode(GlobalEnums.DamageMode.FULL_DAMAGE);
-        h.GetComponent<Rigidbody2D>().velocity = Vector2.zero; h.GetComponent<Rigidbody2D>().gravityScale = 0;
+        h.GetComponent<Rigidbody2D>().velocity = Vector2.zero; h.AffectedByGravity(false);
         h.transform.position = new Vector3(host ? 20 : 22, 12, 0);
     }
     private void Die() {
@@ -229,6 +229,7 @@ public sealed class DeathProbe : MonoBehaviour {
             Require(pd.GetInt("geo") == 0 && pd.GetInt("geoPool") == 456 && pd.GetString("shadeScene") == scene && pd.GetBool("soulLimited"), "formal story death creates native geo-bearing shade state");
             Require(pd.GetString("respawnScene") == benchScene && pd.GetInt("respawnType") == 1, "personal bench and respawn type remain unchanged");
             Require(Hkmp.CoopContext.Epoch == 0 && !runtime.Resetting, "individual death does not reset party");
+            yield return ReturnMotion("individual bench return");
             Flag("guest.giveup"); yield return Until(() => Has("host.survived"), "survivor remained in combat");
             Enter(scene); yield return Until(() => In(scene), "guest rejoins native shade room"); PrepareHero();
             yield return new WaitForSecondsRealtime(.3f);
@@ -270,6 +271,7 @@ public sealed class DeathProbe : MonoBehaviour {
         Require(pd.GetString("respawnScene") == benchScene && pd.GetString("respawnMarkerName") == "RestBench" && pd.GetInt("respawnType") == 1, "wipe never writes another player's checkpoint");
         Require(pd.GetInt("geo") == 0 && pd.GetInt("geoPool") == (host ? 111 : 222) && pd.GetString("shadeScene") == scene, "wipe performs one native death penalty per player");
         Require(clips.Contains("Death") && !HeroController.instance.cState.dead && !HeroBox.inactive, "native death animation and playable respawn complete");
+        yield return ReturnMotion("full team bench return");
     }
     private IEnumerator SpecialDeath() {
         var pd = PlayerData.instance;
@@ -283,6 +285,21 @@ public sealed class DeathProbe : MonoBehaviour {
         // route; inspect the actual map-zone branch rather than guessing.
         Require(clips.Contains("Death Dream"), "native special-zone death animation observed");
         Require(pd.GetString("respawnScene") == benchScene, "implicit dream return preserves personal bench");
+        yield return ReturnMotion("special-zone return");
+    }
+    private IEnumerator ReturnMotion(string label) {
+        var hero = HeroController.instance; var body = hero.GetComponent<Rigidbody2D>();
+        Log("RETURN PHYSICS " + label + " gravity=" + body.gravityScale + " cachedGravity=" + Field<float>(hero, "prevGravityScale") + " simulated=" + body.simulated);
+        Require(body.simulated, label + " restores simulation");
+        Require(body.gravityScale > 0, label + " restores native gravity");
+        for (var jump = 1; jump <= 2; jump++) {
+            yield return Until(() => hero.cState.onGround && hero.acceptingInput, label + " grounded before jump " + jump, 10);
+            typeof(HeroController).GetMethod("HeroJump", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
+            typeof(HeroController).GetMethod("Jump", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
+            Require(body.velocity.y > 0, label + " native jump " + jump + " rises");
+            yield return Until(() => body.velocity.y < -1, label + " native jump " + jump + " falls again", 4);
+        }
+        yield return Until(() => hero.cState.onGround, label + " lands after repeated jumps", 10);
     }
     private void Update() {
         if (!started || HeroController.instance == null) return;
