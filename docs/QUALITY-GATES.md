@@ -22,7 +22,7 @@
 
 ## 验收与更新
 
-用户明确要求先打包试玩时，可用 `Package.ps1 -Playtest` 和 `Verify-Release.ps1 -Playtest` 制作、核验独立试玩包。其请求及允许的未解决问题保存在 `evidence/playtest-authorization-0.1.13.json`，并绑定本次已验收 DLL 的哈希。试玩包仍要求 12 组完整运行记录、严格日志和一致的生产哈希；manifest 标记 `playtest`、保留已知问题和 `releaseReady=false`。普通发布仍拒绝未解决问题，不把试玩请求改写为问题已解决。此次请求只打包，正常游戏未自动安装。
+用户明确要求先打包试用时，可用 `Package.ps1 -Playtest` 和 `Verify-Release.ps1 -Playtest` 制作、核验包。请求及未解决问题保存在对应版本的 `evidence/playtest-authorization-<version>.json`，绑定实测 DLL 哈希；有 runtimeValidation 的专项请求按其中运行范围验收，否则仍要求完整 12 组。每组仍须通过实际哈希、双端终态和严格日志。manifest 保留验证范围、已知问题和 `releaseReady=false`；普通完整发布仍拒绝未解决问题，要求当前 DLL 的完整 12 组。0.1.14 按用户要求使用普通版本号和文件名，不带修复版或构建号后缀；文件名不改变实际验证范围。正常游戏未自动安装。
 
 本机静音双客户端用于验证可重复的生命周期、状态和传输不变量；真实两台机器、完整 Boss 招式、普通流程关键奖励仍各自验收。固定无敌测试角色必须保持场内位置；格林的场外固定靶子可能令原生 AD Pos 永远重试，不能把这类零样本测试计为通过。
 

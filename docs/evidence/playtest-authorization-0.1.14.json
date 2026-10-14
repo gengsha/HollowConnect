@@ -1,0 +1,178 @@
+{
+  "version": "0.1.14",
+  "action": "package-for-user-playtest",
+  "buildLabel": "",
+  "buildCommit": "803234c2e451ddb5c98f7d0eaa3949d2045cde36",
+  "userRequest": "直接更新一个小版本,别修复版. Update menu/addon version and package filenames to 0.1.14, carrying forward the earlier packaging request and known limits.",
+  "recordedAtUtc": "2026-10-14T14:32:27.3177504Z",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0",
+      "productVersion": "1.0.0+803234c2e451ddb5c98f7d0eaa3949d2045cde36"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16",
+      "productVersion": "1.0.0+803234c2e451ddb5c98f7d0eaa3949d2045cde36"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A",
+      "productVersion": "1.0.0+803234c2e451ddb5c98f7d0eaa3949d2045cde36"
+    }
+  ],
+  "scope": "Deliver HollowConnect 0.1.14 with standard version filenames and the existing respawn gravity and Soul slam lookup fixes. Six targeted current-binary runs, 143 regression and 14 log-gate checks passed. Keep older packages, unresolved findings and releaseReady=false; no normal game installation.",
+  "runtimeValidation": {
+    "version": "0.1.14",
+    "engineVersion": "3.0.0-hc10",
+    "releaseReady": false,
+    "runs": [
+      {
+        "name": "version-014-godhome-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+          }
+        ],
+        "scope": "Two isolated clients: native personal death in GG_Hornet_1, own Godhome return to GG_Atrium, native wake event and two complete jumps on each client."
+      },
+      {
+        "name": "version-014-story-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+          }
+        ],
+        "scope": "Two isolated clients: personal F6 return and full-team wipe to different personal benches, native death/shade/penalty rules and repeated jump/landing checks."
+      },
+      {
+        "name": "version-014-dream-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+          }
+        ],
+        "scope": "Two isolated clients: native personal dream death, Dream_01_False_Knight to Crossroads_10, native wake event and two complete jumps on each client."
+      },
+      {
+        "name": "version-014-slam-authority-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+          }
+        ],
+        "scope": "Two isolated clients: server host has scene authority; GG_Soul_Master then GG_Soul_Tyrant, 75 seconds each, actual first-phase Quake Down and scene-change cache clearing."
+      },
+      {
+        "name": "version-014-slam-replica-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+          }
+        ],
+        "scope": "Two isolated clients: guest enters first and has scene authority; server host displays replicas in GG_Soul_Tyrant for 60 seconds, actual first-phase Quake Down."
+      },
+      {
+        "name": "version-014-slam-phase2-20261014",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+          }
+        ],
+        "scope": "Two isolated clients: native HealthManager damage advances GG_Soul_Tyrant to phase 2; 60 seconds with actual phase-2 Quake Down and native hazard retirement."
+      }
+    ],
+    "regression": {
+      "passed": 143,
+      "failed": 0,
+      "log": ".test-results/version-0.1.14-20261014/regression.log",
+      "sha256": "095FA1D59547A1E0E9B66859AA08665C9DBF920B93F40B8EE70BC7BEC7F913E4"
+    },
+    "strictLogGate": {
+      "passed": 14,
+      "log": ".test-results/version-0.1.14-20261014/log-gate.log",
+      "sha256": "4E64A4DEC6D6B5C447F1D237DAD5A77BAF07AB26C6AF3202416E96D3186BED89"
+    }
+  },
+  "detailedEvidence": "docs/evidence/runtime-room-0.1.14.json",
+  "installerValidation": {
+    "status": "not-repeated-existing-game-processes",
+    "completed": false,
+    "previousAttemptEvidence": "playtest-authorization-0.1.13-1f5efe0.json",
+    "previousAttemptPassed": 4,
+    "expected": 13,
+    "reason": "Existing hollow_knight processes still have unreadable paths; previous fixture installation was rejected. Installer source is unchanged; no unknown process stopped or check bypassed."
+  },
+  "unverifiedRisks": [
+    "Remaining static audit findings: docs/RESCREEN-REVIEW-2026-10-14.md",
+    "Other bosses/dream variants and in-flight projectile takeover",
+    "Complete Pantheons, normal progression rewards and three/four-player rooms",
+    "Real two-machine FRP operation"
+  ]
+}

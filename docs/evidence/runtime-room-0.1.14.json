@@ -1,0 +1,402 @@
+{
+  "version": "0.1.14",
+  "engineVersion": "3.0.0-hc10",
+  "releaseReady": false,
+  "buildCommit": "803234c2e451ddb5c98f7d0eaa3949d2045cde36",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0",
+      "productVersion": "1.0.0+803234c2e451ddb5c98f7d0eaa3949d2045cde36"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16",
+      "productVersion": "1.0.0+803234c2e451ddb5c98f7d0eaa3949d2045cde36"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A",
+      "productVersion": "1.0.0+803234c2e451ddb5c98f7d0eaa3949d2045cde36"
+    }
+  ],
+  "versionInspection": {
+    "version": "0.1.14",
+    "buildCommit": "803234c2e451ddb5c98f7d0eaa3949d2045cde36",
+    "menuConstant": "0.1.14",
+    "clientAddonVersion": "0.1.14",
+    "serverAddonVersion": "0.1.14",
+    "inspection": "Mono.Cecil read of built HollowConnect.dll; checks performed before recording",
+    "packagingScriptsParse": true
+  },
+  "recordedAtUtc": "2026-10-14T14:32:27.2868096Z",
+  "scope": "Version-only update over the tested 1f5efe0 fixes. All six targeted runs repeated on newly built 0.1.14 binaries. Full 12-case release matrix remains incomplete.",
+  "runs": [
+    {
+      "name": "version-014-godhome-20261014",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+        }
+      ],
+      "scope": "Two isolated clients: native personal death in GG_Hornet_1, own Godhome return to GG_Atrium, native wake event and two complete jumps on each client.",
+      "strictLogsAfterShutdownPassed": true,
+      "logs": [
+        {
+          "role": "host",
+          "log": ".test-results/version-014-godhome-20261014/host.log",
+          "sha256": "7D6F6EFEA7B39B7C5A18934105ADA6E41792A4713A6B119F3457FAB7C966DFD1",
+          "finalPass": [
+            "2026-10-14T14:24:41.5282348Z FINAL PASS native personal death GG_Hornet_1"
+          ],
+          "physics": [
+            "2026-10-14T14:24:40.9718715Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+            "2026-10-14T14:24:41.4845164Z PASS special-zone return lands after repeated jumps"
+          ],
+          "bossStates": [],
+          "costs": [],
+          "spawnCounts": []
+        },
+        {
+          "role": "guest",
+          "log": ".test-results/version-014-godhome-20261014/guest.log",
+          "sha256": "CE4DB59D215F352B6E406E74937989C9BE507F904490F16AE2712117997DC2F2",
+          "finalPass": [
+            "2026-10-14T14:24:41.5282348Z FINAL PASS native personal death GG_Hornet_1"
+          ],
+          "physics": [
+            "2026-10-14T14:24:40.9472466Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+            "2026-10-14T14:24:41.4671793Z PASS special-zone return lands after repeated jumps"
+          ],
+          "bossStates": [],
+          "costs": [],
+          "spawnCounts": []
+        }
+      ]
+    },
+    {
+      "name": "version-014-story-20261014",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+        }
+      ],
+      "scope": "Two isolated clients: personal F6 return and full-team wipe to different personal benches, native death/shade/penalty rules and repeated jump/landing checks.",
+      "strictLogsAfterShutdownPassed": true,
+      "logs": [
+        {
+          "role": "host",
+          "log": ".test-results/version-014-story-20261014/host.log",
+          "sha256": "33ED5EBB8DD9B28D45DC69F478BAB2BE0509B3A40A6A94DA26AF4ABD70D99CDF",
+          "finalPass": [
+            "2026-10-14T14:25:25.6171826Z FINAL PASS native personal death Crossroads_01"
+          ],
+          "physics": [
+            "2026-10-14T14:25:25.0716581Z RETURN PHYSICS full team bench return gravity=0.79 cachedGravity=0 simulated=True",
+            "2026-10-14T14:25:25.5757744Z PASS full team bench return lands after repeated jumps"
+          ],
+          "bossStates": [],
+          "costs": [],
+          "spawnCounts": []
+        },
+        {
+          "role": "guest",
+          "log": ".test-results/version-014-story-20261014/guest.log",
+          "sha256": "408E1AE550BF1736F37498D44C2EFED898F6C70ED8DFAC117CA7D1C7A6F10DFF",
+          "finalPass": [
+            "2026-10-14T14:25:25.6171826Z FINAL PASS native personal death Crossroads_01"
+          ],
+          "physics": [
+            "2026-10-14T14:25:16.4473329Z RETURN PHYSICS individual bench return gravity=0.79 cachedGravity=0 simulated=True",
+            "2026-10-14T14:25:16.9659061Z PASS individual bench return lands after repeated jumps",
+            "2026-10-14T14:25:25.0706516Z RETURN PHYSICS full team bench return gravity=0.79 cachedGravity=0 simulated=True",
+            "2026-10-14T14:25:25.5883900Z PASS full team bench return lands after repeated jumps"
+          ],
+          "bossStates": [],
+          "costs": [],
+          "spawnCounts": []
+        }
+      ]
+    },
+    {
+      "name": "version-014-dream-20261014",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+        }
+      ],
+      "scope": "Two isolated clients: native personal dream death, Dream_01_False_Knight to Crossroads_10, native wake event and two complete jumps on each client.",
+      "strictLogsAfterShutdownPassed": true,
+      "logs": [
+        {
+          "role": "host",
+          "log": ".test-results/version-014-dream-20261014/host.log",
+          "sha256": "DD5C1915EF0E85C1F263CF0D085E41FD5C94EC747C8C42DDDF9EAE56CA5B9899",
+          "finalPass": [
+            "2026-10-14T14:25:59.9055275Z FINAL PASS native personal death Dream_01_False_Knight"
+          ],
+          "physics": [
+            "2026-10-14T14:25:59.2566632Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+            "2026-10-14T14:25:59.7658292Z PASS special-zone return lands after repeated jumps"
+          ],
+          "bossStates": [],
+          "costs": [],
+          "spawnCounts": []
+        },
+        {
+          "role": "guest",
+          "log": ".test-results/version-014-dream-20261014/guest.log",
+          "sha256": "DD38BB0ADBDC13407B82710F4D0A367CED19711CF18348AB5C52F2D8624A7B98",
+          "finalPass": [
+            "2026-10-14T14:25:59.9070369Z FINAL PASS native personal death Dream_01_False_Knight"
+          ],
+          "physics": [
+            "2026-10-14T14:25:59.3483636Z RETURN PHYSICS special-zone return gravity=0.79 cachedGravity=0 simulated=True",
+            "2026-10-14T14:25:59.8530128Z PASS special-zone return lands after repeated jumps"
+          ],
+          "bossStates": [],
+          "costs": [],
+          "spawnCounts": []
+        }
+      ]
+    },
+    {
+      "name": "version-014-slam-authority-20261014",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+        }
+      ],
+      "scope": "Two isolated clients: server host has scene authority; GG_Soul_Master then GG_Soul_Tyrant, 75 seconds each, actual first-phase Quake Down and scene-change cache clearing.",
+      "strictLogsAfterShutdownPassed": true,
+      "logs": [
+        {
+          "role": "host",
+          "log": ".test-results/version-014-slam-authority-20261014/host.log",
+          "sha256": "FDA013BA3EEA90D18EA5CFEA3CA0614880322AD5F2BE7DB3241F79AC55D37B6A",
+          "finalPass": [
+            "2026-10-14T14:28:55.6913138Z FINAL PASS coverage observations (not all attacks proven)"
+          ],
+          "physics": [],
+          "bossStates": [
+            "2026-10-14T14:27:37.3528472Z BOSS STATES SoulMasterPhase2/Init,SoulMaster/Roar,SoulMaster/Idle,SoulMaster/Roar End,SoulMaster/Tele Line Q,SoulMaster/Quake Antic,SoulMaster/Quake Down,SoulMaster/Quake Waves,SoulMaster/Tele Line,SoulMaster/Charge Antic,SoulMaster/Charge Left,SoulMaster/Fake Down,SoulMaster/HS Summon,SoulMaster/HS Orb,SoulMaster/HS Left,SoulMaster/HS Stop,SoulMaster/Hs Ret Right,SoulMaster/HS Dissipate,SoulMaster/Shot Antic,SoulMaster/Shot,SoulMaster/Charge Right,SoulMaster/HS Right,SoulMaster/HS Ret Left",
+            "2026-10-14T14:28:55.5953229Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/Roar,SoulTyrant/Idle,SoulTyrant/Tele Line Q,SoulTyrant/Quake Antic,SoulTyrant/Quake Down,SoulTyrant/Quake Waves,SoulTyrant/Tele Line,SoulTyrant/Shot Antic,SoulTyrant/Shot,SoulTyrant/Fake Down,SoulTyrant/HS Summon,SoulTyrant/HS Orb,SoulTyrant/HS Right,SoulTyrant/HS Stop,SoulTyrant/HS Ret Left,SoulTyrant/HS Dissipate,SoulTyrant/Charge Antic,SoulTyrant/Charge Right"
+          ],
+          "costs": [
+            "2026-10-14T14:27:37.3701849Z COST process count=1261 totalMs=1032.5083 p95ms=1.4144 maxms=97.6384",
+            "2026-10-14T14:28:55.5968304Z COST process count=1366 totalMs=1111.8293 p95ms=1.3087 maxms=27.3347"
+          ],
+          "spawnCounts": [
+            "2026-10-14T14:27:37.3504900Z SPAWN COUNT 422 Shockwave Spurt from=/",
+            "2026-10-14T14:27:37.3518406Z SPAWN COUNT 444 Shockwave Spurt L from=/",
+            "2026-10-14T14:27:37.3518406Z SPAWN COUNT 12 Mage Orb Over from=Orb Spinner/Spawn",
+            "2026-10-14T14:27:37.3528472Z SPAWN COUNT 7 Mage Orb from=Mage Lord/Shot",
+            "2026-10-14T14:28:55.5928169Z SPAWN COUNT 444 Shockwave Spurt from=/",
+            "2026-10-14T14:28:55.5943089Z SPAWN COUNT 760 Shockwave Spurt L from=/",
+            "2026-10-14T14:28:55.5943089Z SPAWN COUNT 11 Mage Orb from=Dream Mage Lord/Shot",
+            "2026-10-14T14:28:55.5953229Z SPAWN COUNT 18 Mage Orb Over from=Orb Spinner/Spawn"
+          ]
+        },
+        {
+          "role": "guest",
+          "log": ".test-results/version-014-slam-authority-20261014/guest.log",
+          "sha256": "FA9CF0584EF4AF95C226176B950FFFF85215999C166D7A50860B66021676ECFF",
+          "finalPass": [
+            "2026-10-14T14:28:55.6913138Z FINAL PASS coverage observations (not all attacks proven)"
+          ],
+          "physics": [],
+          "bossStates": [
+            "2026-10-14T14:27:37.1908233Z BOSS STATES ",
+            "2026-10-14T14:28:55.4132439Z BOSS STATES "
+          ],
+          "costs": [
+            "2026-10-14T14:27:37.2106131Z COST prefab count=885 totalMs=658.7262 p95ms=1.1104 maxms=11.0253",
+            "2026-10-14T14:27:37.2116556Z COST process count=1222 totalMs=1000.0038 p95ms=1.284 maxms=110.1484",
+            "2026-10-14T14:28:55.4145962Z COST prefab count=1233 totalMs=1035.7622 p95ms=1.2881 maxms=7.9296",
+            "2026-10-14T14:28:55.4157666Z COST process count=1306 totalMs=1095.4267 p95ms=1.3801 maxms=31.7057"
+          ],
+          "spawnCounts": []
+        }
+      ]
+    },
+    {
+      "name": "version-014-slam-replica-20261014",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+        }
+      ],
+      "scope": "Two isolated clients: guest enters first and has scene authority; server host displays replicas in GG_Soul_Tyrant for 60 seconds, actual first-phase Quake Down.",
+      "strictLogsAfterShutdownPassed": true,
+      "logs": [
+        {
+          "role": "host",
+          "log": ".test-results/version-014-slam-replica-20261014/host.log",
+          "sha256": "0DF9DD7EB51ACC043D943D3FBD2475DBE7C9137FD0D6D9C9FBE882CA40DCDA1A",
+          "finalPass": [
+            "2026-10-14T14:30:19.2103047Z FINAL PASS coverage observations (not all attacks proven)"
+          ],
+          "physics": [],
+          "bossStates": [
+            "2026-10-14T14:30:18.9608007Z BOSS STATES "
+          ],
+          "costs": [
+            "2026-10-14T14:30:18.9668324Z COST prefab count=586 totalMs=534.2871 p95ms=1.464 maxms=12.4367",
+            "2026-10-14T14:30:18.9668324Z COST process count=927 totalMs=714.0446 p95ms=1.5161 maxms=90.6922"
+          ],
+          "spawnCounts": []
+        },
+        {
+          "role": "guest",
+          "log": ".test-results/version-014-slam-replica-20261014/guest.log",
+          "sha256": "1B5FD485EE7072832E3FEB8F0E3963E5CE17C886CA30EF5C537FD30541CD77A6",
+          "finalPass": [
+            "2026-10-14T14:30:19.2123103Z FINAL PASS coverage observations (not all attacks proven)"
+          ],
+          "physics": [],
+          "bossStates": [
+            "2026-10-14T14:30:19.1315653Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/Roar,SoulTyrant/Idle,SoulTyrant/Tele Line,SoulTyrant/Charge Antic,SoulTyrant/Charge Left,SoulTyrant/Shot Antic,SoulTyrant/Shot,SoulTyrant/Tele Line Q,SoulTyrant/Quake Antic,SoulTyrant/Quake Down,SoulTyrant/Quake Waves,SoulTyrant/HS Summon,SoulTyrant/HS Orb,SoulTyrant/HS Left,SoulTyrant/HS Stop,SoulTyrant/Hs Ret Right,SoulTyrant/HS Dissipate,SoulTyrant/Fake Down"
+          ],
+          "costs": [
+            "2026-10-14T14:30:19.1366547Z COST process count=967 totalMs=773.0294 p95ms=1.6551 maxms=95.5654"
+          ],
+          "spawnCounts": [
+            "2026-10-14T14:30:19.1290512Z SPAWN COUNT 11 Mage Orb from=Dream Mage Lord/Shot",
+            "2026-10-14T14:30:19.1290512Z SPAWN COUNT 366 Shockwave Spurt from=/",
+            "2026-10-14T14:30:19.1300770Z SPAWN COUNT 191 Shockwave Spurt L from=/",
+            "2026-10-14T14:30:19.1315653Z SPAWN COUNT 18 Mage Orb Over from=Orb Spinner/Spawn"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "version-014-slam-phase2-20261014",
+      "bothPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "C0A0528FEF6899EC7E065217D10A351150B704C347E0A33756FAEB4C5FCFE8E0"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DFD91E21F9B16706D6F40158670E1EB53BE1542DF0B43037D7E5FE9AC3343C16"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E7AA7E06CE89CBC6117B2E1AF6C94A34A0052BAC7915A393297DBE622D21D73A"
+        }
+      ],
+      "scope": "Two isolated clients: native HealthManager damage advances GG_Soul_Tyrant to phase 2; 60 seconds with actual phase-2 Quake Down and native hazard retirement.",
+      "strictLogsAfterShutdownPassed": true,
+      "logs": [
+        {
+          "role": "host",
+          "log": ".test-results/version-014-slam-phase2-20261014/host.log",
+          "sha256": "4819B832C79E71CAAFBAA9985CFA905EE33B38CFEE18A74F8EB3B8502ADC7AD2",
+          "finalPass": [
+            "2026-10-14T14:31:43.7119840Z FINAL PASS coverage observations (not all attacks proven)"
+          ],
+          "physics": [],
+          "bossStates": [
+            "2026-10-14T14:31:43.6384775Z BOSS STATES SoulTyrantPhase2/Init,SoulTyrantPhase2/Idle,SoulTyrant/,SoulTyrantPhase2/Wait,SoulTyrantPhase2/Tele Line Q,SoulTyrantPhase2/Quake Antic,SoulTyrantPhase2/Quake Down,SoulTyrantPhase2/Quake Land,SoulTyrantPhase2/Tele Line,SoulTyrantPhase2/Shot Antic,SoulTyrantPhase2/Orb Summon,SoulTyrantPhase2/Spawn Fireball,SoulTyrantPhase2/Shot CD,SoulTyrantPhase2/Tele Out"
+          ],
+          "costs": [
+            "2026-10-14T14:31:43.6419581Z COST process count=382 totalMs=253.3537 p95ms=2.2082 maxms=89.9589"
+          ],
+          "spawnCounts": [
+            "2026-10-14T14:31:43.6374759Z SPAWN COUNT 1 Mage Orb from=Dream Mage Lord/Shot",
+            "2026-10-14T14:31:43.6374759Z SPAWN COUNT 15 Mage Orb from=Dream Mage Lord Phase2/Spawn Fireball"
+          ]
+        },
+        {
+          "role": "guest",
+          "log": ".test-results/version-014-slam-phase2-20261014/guest.log",
+          "sha256": "A8CD56439BDC40FB2865A84F02FE485FE26ED6A88FD0E741DF4E2C373D07D573",
+          "finalPass": [
+            "2026-10-14T14:31:43.7119840Z FINAL PASS coverage observations (not all attacks proven)"
+          ],
+          "physics": [],
+          "bossStates": [
+            "2026-10-14T14:31:40.4385712Z BOSS STATES "
+          ],
+          "costs": [
+            "2026-10-14T14:31:40.4428206Z COST prefab count=15 totalMs=29.0749 p95ms=2.1808 maxms=3.3929",
+            "2026-10-14T14:31:40.4438588Z COST process count=356 totalMs=262.6128 p95ms=1.9666 maxms=116.1652"
+          ],
+          "spawnCounts": []
+        }
+      ]
+    }
+  ],
+  "regression": {
+    "passed": 143,
+    "failed": 0,
+    "log": ".test-results/version-0.1.14-20261014/regression.log",
+    "sha256": "095FA1D59547A1E0E9B66859AA08665C9DBF920B93F40B8EE70BC7BEC7F913E4"
+  },
+  "strictLogGate": {
+    "passed": 14,
+    "log": ".test-results/version-0.1.14-20261014/log-gate.log",
+    "sha256": "4E64A4DEC6D6B5C447F1D237DAD5A77BAF07AB26C6AF3202416E96D3186BED89"
+  },
+  "installerValidation": {
+    "status": "not-repeated-existing-game-processes",
+    "completed": false,
+    "previousAttemptEvidence": "playtest-authorization-0.1.13-1f5efe0.json",
+    "previousAttemptPassed": 4,
+    "expected": 13,
+    "reason": "Existing hollow_knight processes still have unreadable paths; previous fixture installation was rejected. Installer source is unchanged; no unknown process stopped or check bypassed."
+  },
+  "normalGameInstalled": false,
+  "playerSavesModified": false
+}
