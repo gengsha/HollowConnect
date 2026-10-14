@@ -47,6 +47,12 @@ internal static class Program {
         Test("consumed retransmission origins and delayed originals execute once", () => ReliabilityProbe.RepeatedOrigins(20, 0));
         Test("consumed origins survive beyond the 64-packet ACK history and sequence wrap", () => ReliabilityProbe.RepeatedOrigins(65530, 100));
         Test("consumed addon origins and duplicate carriers execute once", ReliabilityProbe.RepeatedAddonOrigins);
+        foreach (var sequence in new ushort[] { 22, 1 }) {
+            Test("delayed datagrams keep newer sparse entity snapshots across sequence " + sequence, () => ReliabilityProbe.ReorderedSnapshots(sequence, false));
+            Test("delayed resends keep newer sparse entity snapshots across sequence " + sequence, () => ReliabilityProbe.ReorderedSnapshots(sequence, true));
+        }
+        Test("consumed origins allow fresh payloads after a complete ushort sequence wrap", ReliabilityProbe.CompleteSequenceWrap);
+        Test("client receive and main-thread dispatch preserve reordered fragmented entity updates", ReliabilityProbe.ClientReceivePath);
         foreach (var sequence in new ushort[] { 22, 1 }) Test("reliable resend order preserves snapshots and events across sequence " + sequence, () => {
             ServerUpdatePacket StatePacket(ushort seq, byte state, bool active) {
                 var result = new ServerUpdatePacket { Sequence = seq };

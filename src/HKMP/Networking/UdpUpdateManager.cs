@@ -62,6 +62,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
     /// </summary>
     private readonly ConcurrentFixedSizeQueue<ushort> _receivedQueue;
     private readonly SequenceWindow _consumedOrigins = new SequenceWindow();
+    private readonly EntitySnapshotHistory _entitySnapshots = new EntitySnapshotHistory();
 
     /// <summary>
     /// Object to lock asynchronous accesses.
@@ -158,6 +159,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
                 _udpCongestionManager = new UdpCongestionManager<TOutgoing, TPacketId>(this);
                 _receivedQueue.Clear(); _localSequence = _remoteSequence = 0;
                 _consumedOrigins.Clear(); _hasRemoteSequence = false;
+                _entitySnapshots.Clear();
                 _messageId = 0; _sendFailureLogged = false;
                 CurrentUpdatePacket = new TOutgoing();
                 _isUpdating = true;
@@ -205,7 +207,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
 
             // ACKs describe received datagrams. Payload de-duplication separately
             // remembers original batches, including those delivered by resends.
-            packet.FilterReceivedData(_consumedOrigins);
+            packet.FilterReceivedData(_consumedOrigins, _entitySnapshots);
             var sequence = packet.Sequence;
             _receivedQueue.Enqueue(sequence);
 

@@ -351,19 +351,24 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
     /// retransmission. Built-in and addon data share an origin, so test both
     /// dictionaries before marking that origin as consumed.
     /// </summary>
-    internal void FilterReceivedData(SequenceWindow consumedOrigins) {
+    internal void FilterReceivedData(SequenceWindow consumedOrigins, EntitySnapshotHistory snapshots) {
         var origins = ResendPacketData.Keys.Union(ResendAddonPacketData.Keys)
             .OrderByDescending(seq => unchecked((ushort)(Sequence - seq))).ToArray();
         foreach (var sequence in origins) {
-            if (!consumedOrigins.TryAdd(sequence)) {
+            if (!consumedOrigins.TryAdd(sequence, out var revision)) {
                 ResendPacketData.Remove(sequence);
                 ResendAddonPacketData.Remove(sequence);
+            } else if (ResendPacketData.TryGetValue(sequence, out var data)) {
+                foreach (var item in data.Values) snapshots.Filter(item, revision);
             }
         }
-        if (!consumedOrigins.TryAdd(Sequence)) {
+        if (!consumedOrigins.TryAdd(Sequence, out var currentRevision)) {
             NormalPacketData.Clear();
             AddonPacketData.Clear();
+        } else {
+            foreach (var item in NormalPacketData.Values) snapshots.Filter(item, currentRevision);
         }
+        snapshots.Advance(consumedOrigins.LatestRevision);
         IsAllPacketDataCached = false;
     }
 
