@@ -83,6 +83,8 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 
 `HOLLOWCONNECT_NETWORK_FAULTS=periodic` 保留最初每 13/9/17 条的周期性故障。每 13 条丢两条可能与现有约 13 包一次的可靠重发同步，造成持续心跳正常而同一入场消息所有重发都被丢弃；对应旧失败不能由固定种子组通过解除。`HOLLOWCONNECT_NETWORK_TRACE=1` 额外记录入场/离场消息的原始来源、接收筛选及游戏上下文，并记录实际 DROP/HOLD，日志为各角色独立的 `.presence.log`，不改变分发。
 
+`Summarize-Network-Reliability.ps1` 汇总 2026-10-14 网络专项的五组指定验收及修改前失败；只接受锁定的生产构建和三个 DLL 哈希、双方 done/FINAL PASS、实际故障计数、九项 Unity 夹具与两种顺序各八轮交换/回收。须先停止两个隔离进程并移除隔离 Smoke 插件，脚本再复扫结束后的日志；旧构建、缺项或失败都拒绝生成通过汇总，报告始终保留未解决项和 `releaseReady=false`。
+
 `HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 在联网前运行真实 Unity/PlayMaker 的绝对 tween、固定帧减速和休眠接管夹具；`HOLLOWCONNECT_FSM_SNAPSHOT_CHECK=1` 再检查原生状态在采样窗口内即时发布、空状态清除旧快照，以及原生重激活的 active/state 在同一可靠更新中发布。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=snapshot` 只运行后三项，须同时启用前两个开关。所有夹具都通过生产 Entity 路径，使用独立测试对象，不强制 Boss 状态。
 
 `HOLLOWCONNECT_FSM_CONTINUATION_STRESS=1` 配合投针重连专项，让每轮另一端先重连并成为权威，前六轮之外再覆盖 Needle 自然 `Decel` 和 `Return`，共八轮。可用 `HOLLOWCONNECT_CONTINUATION_TRACE=1` 记录原生状态恢复、激活/停用、通知收发、父物体和坐标；追踪不改变原生执行，也不放宽恢复超时或日志门槛。
