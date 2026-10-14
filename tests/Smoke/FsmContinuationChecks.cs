@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 using Hkmp.Game.Client.Entity;
 using Hkmp.Game.Client.Entity.Component;
 using Hkmp.Networking.Client;
 using Hkmp.Networking.Packet;
 using Hkmp.Networking.Packet.Data;
+using Hkmp.Networking.Packet.Update;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using UnityEngine;
@@ -42,6 +45,36 @@ internal static class FsmContinuationChecks {
         Entity entity = null;
         try {
             PlayMakerFSM fsm;
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_SNAPSHOT_CHECK") == "1") {
+                source = new GameObject("HollowConnect state publication fixture"); source.SetActive(false);
+                var wait = new Wait(); wait.Reset(); wait.time = 10; wait.finishEvent = FsmEvent.Finished;
+                fsm = Create(source, null, wait); source.SetActive(true);
+                yield return null;
+                const ulong stateId = 0xffffffffffffffe3UL;
+                entity = new Entity(net, stateId, EntityType.DynamicHazard, source);
+                entity.InitializeHost();
+                // The next native state starts inside the variable sampling window.
+                typeof(Entity).GetField("nextFsmSample", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(entity, Time.unscaledTime + 1);
+                fsm.SetState("Done");
+                var outgoing = (ServerUpdatePacket)typeof(ClientUpdateManager).BaseType
+                    .GetField("CurrentUpdatePacket", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(net.UpdateManager);
+                if (!outgoing.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw) ||
+                    !((PacketDataCollection<ReliableEntityUpdate>)raw).DataInstances.Cast<ReliableEntityUpdate>().Any(u => u.Id == stateId &&
+                        u.HostFsmData.TryGetValue(0, out var d) && d.Types.Contains(EntityHostFsmData.Type.State) && d.CurrentState == 1))
+                    throw new Exception("Native state transition was not published before another Unity update/sample");
+                mark("PASS native state transition publishes inside variable sampling window");
+                entity.InitializeClient();
+                var empty = new EntityHostFsmData { CurrentState = byte.MaxValue };
+                empty.Types.Add(EntityHostFsmData.Type.State);
+                entity.UpdateHostFsmData(new Dictionary<byte, EntityHostFsmData> { [0] = empty });
+                var snapshots = (List<FsmSnapshot>)typeof(Entity).GetField("_fsmSnapshots", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(entity);
+                if (!string.IsNullOrEmpty(snapshots[0].CurrentState))
+                    throw new Exception("Empty native state retained a previous attack's takeover state");
+                mark("PASS empty native state clears the previous attack snapshot");
+                entity.Destroy(); entity = null; Object.Destroy(source); source = null;
+                if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") == "snapshot") yield break;
+            }
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") != "deceleration") {
                 source = new GameObject("HollowConnect continuation fixture"); source.SetActive(false);
                 var tween = new iTweenMoveTo(); tween.Reset();
@@ -127,7 +160,8 @@ internal static class FsmContinuationChecks {
                 throw new Exception("Takeover dropped native fixed-update deceleration");
             mark("PASS native fixed-update deceleration resumes and completes");
         } finally {
-            entity?.Destroy(); iTween.Stop(source); Object.Destroy(source);
+            entity?.Destroy();
+            if (source != null) { iTween.Stop(source); Object.Destroy(source); }
         }
     }
 }

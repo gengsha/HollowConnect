@@ -442,6 +442,21 @@ internal class Entity {
         snapshot.Vector3s = fsm.FsmVariables.Vector3Variables.Select(v => v.Value).ToArray();
 
         _fsmSnapshots.Add(snapshot);
+        fsm.Fsm.StateChanged += OnHostStateChanged;
+    }
+
+    private void OnHostStateChanged(FsmState state) {
+        if (destroyed || _isControlled || !_isSceneHostDetermined) return;
+        var index = _fsms.Host.FindIndex(f => f != null && ReferenceEquals(f.Fsm, state.Fsm));
+        if (index < 0 || index >= byte.MaxValue) return;
+        // State entry precedes native OnEnter side effects (including activating
+        // another entity). Publish the new continuation state immediately, so
+        // those effects cannot be paired with a previous attack's sampled state.
+        _fsmSnapshots[index].CurrentState = state.Name;
+        var data = new EntityHostFsmData { CurrentState = (byte)Array.IndexOf(_fsms.Host[index].FsmStates, state) };
+        data.Types.Add(EntityHostFsmData.Type.State);
+        _netClient.UpdateManager.AddEntityHostFsmData(Id, (byte)index, data);
+        nextFsmSample = 0;
     }
 
     /// <summary>
@@ -1535,6 +1550,9 @@ internal class Entity {
                 var states = hostFsm.FsmStates;
                 if (data.CurrentState == byte.MaxValue) {
                     // Inactive FSMs have no current state.
+                    snapshot.CurrentState = string.Empty;
+                    if (_fsms.Client[fsmIndex] != null)
+                        EntityFsmActions.RegisterStateChange(_fsms.Client[fsmIndex].Fsm, string.Empty);
                 } else if (states.Length <= data.CurrentState) {
                     Logger.Warn($"Tried to update host FSM state for unknown state index: {data.CurrentState}");
                 } else {
@@ -1653,6 +1671,7 @@ internal class Entity {
         _pausedNativeMotion.Clear();
         RestoreRestartFlags();
         MonoBehaviourUtil.Instance.OnUpdateEvent -= OnUpdate;
+        foreach (var fsm in _fsms.Host) if (fsm != null) fsm.Fsm.StateChanged -= OnHostStateChanged;
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Client));
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Host));
         Cleanup(() => EntityHooks.ForgetActivation(Object.Host));
