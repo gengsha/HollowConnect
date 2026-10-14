@@ -5,8 +5,12 @@ namespace Hkmp.Networking.Packet.Data;
 /// <summary>
 /// Non-generic version of packet data collection.
 /// </summary>
-public abstract class RawPacketDataCollection {
-    internal abstract IPacketData EmptyCopy();
+public class RawPacketDataCollection {
+    internal IPacketData EmptyCopy() {
+        var copy = (RawPacketDataCollection)MemberwiseClone();
+        copy.DataInstances = new List<IPacketData>();
+        return (IPacketData)copy;
+    }
     /// <summary>
     /// Whether this collection should be treated as reliable.
     /// </summary>
@@ -40,7 +44,7 @@ public abstract class RawPacketDataCollection {
     /// <summary>
     /// A list of packet data instances in this collection.
     /// </summary>
-    public List<IPacketData> DataInstances { get; }
+    public List<IPacketData> DataInstances { get; private set; }
 
     /// <summary>
     /// Construct the data collection.
