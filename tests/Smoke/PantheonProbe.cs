@@ -35,7 +35,7 @@ public sealed class PantheonProbe : MonoBehaviour {
         if (!(raw is RawPacketDataCollection batch)) return;
         foreach (var update in batch.DataInstances.OfType<ReliableEntityUpdate>()) {
             if (!update.UpdateTypes.Contains(EntityUpdateType.Active) && !update.UpdateTypes.Contains(EntityUpdateType.HostFsm)) continue;
-            Mark("WIRE " + flow + " seq=" + packet.Sequence + " id=" + update.Id + " visit=" + update.Visit +
+            Mark("WIRE " + flow + " seq=" + packet.Sequence + " ack=" + packet.Ack + " id=" + update.Id + " visit=" + update.Visit +
                 " active=" + (update.UpdateTypes.Contains(EntityUpdateType.Active) ? update.IsActive.ToString() : "-") +
                 " states=" + string.Join(",", update.HostFsmData.Where(p => p.Value.Types.Contains(EntityHostFsmData.Type.State)).Select(p => p.Key + ":" + p.Value.CurrentState)));
         }
@@ -190,6 +190,22 @@ public sealed class PantheonProbe : MonoBehaviour {
             packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(PacketManager).GetMethod("HandleClientUpdatePacket"),
                 (Action<Action<PacketManager,ClientUpdatePacket>,PacketManager,ClientUpdatePacket>)((orig,m,p)=>{
                     TracePacket("client-receive",p,ClientUpdatePacketId.ReliableEntityUpdate,false);orig(m,p);
+                })));
+            packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(Entity).GetMethod("UpdateIsActive"),
+                (Action<Action<Entity,bool>,Entity,bool>)((orig,e,active)=>{
+                    Mark("APPLY active id="+e.Id+" value="+active);orig(e,active);
+                })));
+            packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(Entity).GetMethod("UpdateData"),
+                (Action<Action<Entity,List<EntityNetworkData>,bool>,Entity,List<EntityNetworkData>,bool>)((orig,e,data,snapshot)=>{
+                    var before=e.Object.Client!=null&&e.Object.Client.activeSelf;orig(e,data,snapshot);
+                    var after=e.Object.Client!=null&&e.Object.Client.activeSelf;
+                    if(before!=after)Mark("APPLY component activation id="+e.Id+" before="+before+" after="+after+" types="+string.Join(",",data.Select(d=>d.Type)));
+                })));
+            packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(Entity).GetMethod("MakeHost"),
+                (Action<Action<Entity>,Entity>)((orig,e)=>{
+                    Mark("TAKEOVER id="+e.Id+" replicaActive="+(e.Object.Client!=null&&e.Object.Client.activeSelf)+
+                        " states="+string.Join(",",Field<List<FsmSnapshot>>(e,"_fsmSnapshots").Select(s=>s.CurrentState)));
+                    orig(e);
                 })));
         }
         On.CameraController.DoPositionToHero += (orig,camera,direct)=>TrackCameraPosition(orig(camera,direct));

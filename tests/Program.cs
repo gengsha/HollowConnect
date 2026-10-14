@@ -616,6 +616,7 @@ internal static class Program {
         Test("five real DTLS peers keep heartbeats after interleaved reordered and lost fragments", NetworkTrafficProbe.Run);
         Test("stopped chunk worker and queued old chunks cannot leak into a new session", ChunkLifecycleProbe.Run);
         Test("acknowledged chunk flags are reset on reconnect and completion cannot spin", ChunkLifecycleProbe.AcknowledgedReconnect);
+        Test("one received datagram commits parent, child and addon updates in the same Unity frame", ClientSessionProbe.CompleteDatagram);
         Test("queued callbacks from a retired client session never execute", ClientSessionProbe.OldCallbacks);
         Test("initial player messages wait for queued game setup and cannot survive disconnect", ClientSessionProbe.EarlyUpdates);
         Test("server rejection fully releases the client DTLS session", ClientSessionProbe.RejectedConnection);

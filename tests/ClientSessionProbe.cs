@@ -20,6 +20,53 @@ internal static class ClientSessionProbe {
         var callbacks = queue.ToArray(); queue.Clear();
         foreach (var action in callbacks) action();
     }
+    public static void CompleteDatagram() {
+        DrainMainThread();
+        var manager = new PacketManager(); var parent = false; var child = false; var addonApplied = false;
+        manager.RegisterClientUpdatePacketHandler<ReliableEntityUpdate>(ClientUpdatePacketId.ReliableEntityUpdate,
+            update => { if (update.Id == 17) parent = update.IsActive; else child = update.IsActive; });
+        manager.RegisterClientAddonUpdatePacketHandler(1, 0, _ => addonApplied = true);
+        var packet = new ClientUpdatePacket(); var batch = new PacketDataCollection<ReliableEntityUpdate>();
+        foreach (var id in new ulong[] { 17, 18 }) {
+            var update = new ReliableEntityUpdate { Id = id, IsActive = true };
+            update.UpdateTypes.Add(EntityUpdateType.Active); batch.DataInstances.Add(update);
+        }
+        packet.SetSendingPacketData(ClientUpdatePacketId.ReliableEntityUpdate, batch);
+        var addon = new AddonPacketData(1); addon.PacketData[0] = new EmptyData();
+        packet.SetSendingAddonPacketData(1, addon);
+        using var queued = new ManualResetEventSlim(); using var release = new ManualResetEventSlim();
+        var mainThread = Thread.CurrentThread.ManagedThreadId; var scheduled = 0; Exception error = null;
+        // Pump a Unity frame while the receive thread is paused immediately
+        // after its first enqueue. The parent and child came in one datagram.
+        using var hook = new MonoMod.RuntimeDetour.Hook(typeof(ThreadUtil).GetMethod("RunActionOnMainThread"),
+            (Action<Action<Action>, Action>)((orig, callback) => {
+                orig(callback);
+                if (Thread.CurrentThread.ManagedThreadId != mainThread && Interlocked.Increment(ref scheduled) == 1) {
+                    queued.Set(); if (!release.Wait(3000)) throw new Exception("Datagram enqueue barrier timed out");
+                }
+            }));
+        var worker = new Thread(() => { try { manager.HandleClientUpdatePacket(packet); } catch (Exception e) { error = e; } });
+        var partial = false; worker.Start();
+        try {
+            if (!queued.Wait(2000)) throw new Exception("Datagram was not queued");
+            DrainMainThread(); partial = parent && (!child || !addonApplied);
+        } finally {
+            release.Set(); if (!worker.Join(3000)) throw new Exception("Datagram receive worker did not finish");
+            DrainMainThread();
+        }
+        if (error != null) throw error;
+        if (partial) throw new Exception("One received datagram exposed a parent update before its child/addon in a Unity frame");
+        if (!parent || !child || !addonApplied) throw new Exception("Datagram lost a child or addon update");
+        parent = child = addonApplied = false;
+        manager.DeregisterClientUpdatePacketHandler(ClientUpdatePacketId.ReliableEntityUpdate);
+        manager.RegisterClientUpdatePacketHandler<ReliableEntityUpdate>(ClientUpdatePacketId.ReliableEntityUpdate,
+            update => {
+                if (update.Id == 17) { parent = true; manager.InvalidateClientSession(); }
+                else child = true;
+            });
+        manager.HandleClientUpdatePacket(packet); DrainMainThread();
+        if (!parent || child || addonApplied) throw new Exception("Disconnect inside a datagram applied its remaining retired updates");
+    }
     public static void OldCallbacks() {
         DrainMainThread();
         var manager = new PacketManager(); var client = new NetClient(manager); var calls = 0;

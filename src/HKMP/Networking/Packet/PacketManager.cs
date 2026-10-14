@@ -110,19 +110,22 @@ internal class PacketManager {
     /// </summary>
     /// <param name="packet">The client update packet to handle.</param>
     public void HandleClientUpdatePacket(ClientUpdatePacket packet) {
-        // Execute corresponding packet handlers for normal packet data
-        UnpackPacketDataDict(packet.GetPacketData(), ExecuteClientUpdatePacketHandler);
+        // Keep one received datagram in one Unity callback. Enqueuing each
+        // entity separately can expose a parent's new state in one frame and
+        // leave its child's activation queued until after a disconnect.
+        QueueClientCallback(() => {
+            var generation = Volatile.Read(ref _clientGeneration);
+            UnpackPacketDataDict(packet.GetPacketData(), (packetId, data) => {
+                if (generation == Volatile.Read(ref _clientGeneration)) ExecuteClientUpdatePacketHandler(packetId, data);
+            });
 
-        // Execute corresponding packet handlers for addon packet data of each addon in the packet
-        foreach (var idPacketDataPair in packet.GetAddonPacketData()) {
-            var addonId = idPacketDataPair.Key;
-            var packetDataDict = idPacketDataPair.Value.PacketData;
-
-            UnpackPacketDataDict(
-                packetDataDict,
-                (packetId, packetData) => ExecuteClientAddonUpdatePacketHandler(addonId, packetId, packetData)
-            );
-        }
+            foreach (var idPacketDataPair in packet.GetAddonPacketData()) {
+                var addonId = idPacketDataPair.Key;
+                UnpackPacketDataDict(idPacketDataPair.Value.PacketData, (packetId, data) => {
+                    if (generation == Volatile.Read(ref _clientGeneration)) ExecuteClientAddonUpdatePacketHandler(addonId, packetId, data);
+                });
+            }
+        });
     }
 
     /// <summary>
@@ -131,22 +134,19 @@ internal class PacketManager {
     /// <param name="packetId">The client packet ID for this data.</param>
     /// <param name="packetData">The packet data instance.</param>
     private void ExecuteClientUpdatePacketHandler(ClientUpdatePacketId packetId, IPacketData packetData) {
-        // Invoke the packet handler for this ID on the Unity main thread
-        QueueClientCallback(() => {
-            // ServerInfo queues connection setup on this same thread. Update
-            // packets can arrive before that setup runs; looking up the handler
-            // on the receive thread silently loses the first player messages.
-            // The queued session guard still rejects callbacks after disconnect.
-            if (!_clientUpdatePacketHandlers.TryGetValue(packetId, out var handler)) {
-                Logger.Error($"There is no client update packet handler registered for ID: {packetId}");
-                return;
-            }
-            try {
-                handler.Invoke(packetData);
-            } catch (Exception e) {
-                Logger.Error($"Exception occured while executing client packet handler for packet ID {packetId}:\n{e}");
-            }
-        });
+        // Called from the datagram's Unity callback.
+        // ServerInfo queues connection setup on this same thread. Update
+        // packets can arrive before that setup runs; looking up the handler
+        // on the receive thread silently loses the first player messages.
+        if (!_clientUpdatePacketHandlers.TryGetValue(packetId, out var handler)) {
+            Logger.Error($"There is no client update packet handler registered for ID: {packetId}");
+            return;
+        }
+        try {
+            handler.Invoke(packetData);
+        } catch (Exception e) {
+            Logger.Error($"Exception occured while executing client packet handler for packet ID {packetId}:\n{e}");
+        }
     }
 
     /// <summary>
@@ -534,14 +534,12 @@ internal class PacketManager {
             return;
         }
 
-        // Invoke the packet handler on the Unity main thread
-        QueueClientCallback(() => {
-            try {
-                handler.Invoke(packetData);
-            } catch (Exception e) {
-                Logger.Error($"Exception occurred while executing client addon packet handler {addonPacketIdMessage}:\n{e}");
-            }
-        });
+        // Called from the datagram's Unity callback.
+        try {
+            handler.Invoke(packetData);
+        } catch (Exception e) {
+            Logger.Error($"Exception occurred while executing client addon packet handler {addonPacketIdMessage}:\n{e}");
+        }
     }
 
     /// <summary>
