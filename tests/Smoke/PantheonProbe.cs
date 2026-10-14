@@ -342,6 +342,20 @@ public sealed class PantheonProbe : MonoBehaviour {
         throw new Exception("Timeout: native needle throw "+label+" state="+last);
     }
     private IEnumerator WaitForNeedleRecovery(PlayMakerFSM control,string label) {
+        Vector3? launchTarget = null;
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_HIERARCHY_CHECK")=="1") {
+            var needle = control.FsmVariables.FindFsmGameObject("Needle").Value;
+            var position = control.FsmStates.Single(s=>s.Name=="Throw").Actions.OfType<SetPosition>()
+                .Single(a=>a.Fsm.GetOwnerDefaultTarget(a.gameObject)==needle);
+            if(position.space!=Space.World||position.vector.IsNone)
+                throw new Exception("Native needle launch has no world-space target "+label);
+            var target = position.vector.Value;
+            if(!position.x.IsNone)target.x=position.x.Value;
+            if(!position.y.IsNone)target.y=position.y.Value;
+            if(!position.z.IsNone)target.z=position.z.Value;
+            launchTarget=target;
+            Mark("NATIVE NEEDLE LAUNCH TARGET "+label+" target="+target+" boss="+control.transform.position);
+        }
         var end=Time.realtimeSinceStartup+20;var next=0f;var last="";
         while(Time.realtimeSinceStartup<end) {
             var state=control.ActiveStateName;
@@ -356,9 +370,13 @@ public sealed class PantheonProbe : MonoBehaviour {
             if(state=="Throw Recover"){
                 if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_HIERARCHY_CHECK")=="1") {
                     var needle=control.FsmVariables.FindFsmGameObject("Needle").Value;
-                    var target=control.transform.position+new Vector3(0,-.5f,0);
+                    // Native Throw saves this world-space target before its
+                    // collider shrinks and the boss can settle lower. Return
+                    // aims at that saved launch point, not the boss's later pose.
+                    var target=launchTarget.Value;
                     if(needle==null||needle.transform.parent!=null||Vector2.Distance(needle.transform.position,target)>1)
                         throw new Exception("Native needle recovery completed in a stale parent space: "+label+" pos="+needle?.transform.position+" expected="+target);
+                    Mark("NATIVE NEEDLE RETURN TARGET "+label+" target="+target+" actual="+needle.transform.position+" current-boss="+control.transform.position);
                     Mark("PASS native needle returns near launch position "+label);
                 }
                 Mark("PASS native Throw Recover "+label);yield break;

@@ -103,6 +103,8 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 
 `HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK=1` 在 FSM 夹具入口增加真实 Unity 碰撞体/子物体检查：从生产 CombatStateComponent 捕获两份快照，经实际序列化、序列回绕与接收过滤倒序交付，随后接管，要求原生和副本碰撞体、子物体仍保留新值。与 `HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 一起使用；`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=combat` 只运行此夹具。它不证明其他 GenericData 组件或初始大快照的顺序已受保护。
 
+飞针回收的坐标断言从原生 Throw 的世界坐标 SetPosition 动作读取并保存本轮发射目标；原生 Throw 随后缩小 Boss 碰撞体，Boss 可在飞针返回期间下沉，不能将完成时的 Boss 坐标当成发射点。日志同时记录发射目标、返回实际值及完成时 Boss 坐标；仍要求飞针无父物体且距原始目标不超过 1 单位，未放宽距离或完成超时。
+
 格林运动夹具每帧维持原定固定无敌靶子在场内 `(80,8)`，防止零重力靶子被固体碰撞推出场外，令原生 AD Pos 永远无合法落点。靶子还须距气球中心 `(85.77,13.5)` 至少 6 单位；先前 `(85,8)` 导致原生 Balloon Retry，因此该轮失败保留。此条件仅约束测试角色，不修改 Boss 的 FSM 或位置。
 
 `HOLLOWCONNECT_CONTINUATION_PACKET_TRACE=1` 仅在隔离 Pantheon 探针中记录原始发送及合并接收的可靠 active/FSM 状态、序列号、实体 ID 和 visit。追踪通过临时 detour 观察生产包，不修改包内容或测试断言，用于区分未送达与旧重发覆盖。
