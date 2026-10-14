@@ -129,7 +129,7 @@ public sealed class ProgressProbe : MonoBehaviour {
         Flag(role + ".station-pass"); yield return Until(() => Has((host ? "guest" : "host") + ".station-pass"), "both station assertions passed");
         var actions = bell.FsmStates.First(s => s.Name == "Box Disappear Anim").Actions.Length;
         typeof(CoopRuntime).GetMethod("Send", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime,
-            new object[] { new HollowConnect.Core.Message { Kind = HollowConnect.Core.Kind.ProgressOffer, Key = "openedCrossroads", Value = 1 } });
+            new object[] { new Message { Kind = Kind.ProgressOffer, Key = "openedCrossroads", Value = 1 } });
         yield return new WaitForSecondsRealtime(1);
         if (bell.ActiveStateName != "Opened" || PlayerData.instance.GetInt("geo") != geo - charge ||
             bell.FsmStates.First(s => s.Name == "Box Disappear Anim").Actions.Length != actions) {
