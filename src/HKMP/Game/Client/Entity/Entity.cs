@@ -1249,6 +1249,18 @@ internal class Entity {
             // found beneath its former parent during initialization.
             EntityInitializer.InitializeFsm(fsm);
 
+            // A disabled snapshot can retain the last state of a pooled attack.
+            // SetState executes OnEnter even on an inactive GameObject: a tween
+            // created there has not run Awake/RetrieveArgs, and its next native
+            // OnExit cannot stop it. Honour the original disable semantics and
+            // leave the next activation to the native FSM instead of starting
+            // asynchronous work on a dormant source.
+            if (!Object.Host.activeInHierarchy) {
+                if (_suspendedRestartFlags.TryGetValue(fsm, out var restart)) fsm.Fsm.RestartOnEnable = restart;
+                fsm.Fsm.Stop();
+                continue;
+            }
+
             // Before setting the state, we replace the actions of the to-be state to only include the ones that
             // should be executed again (including actions with "everyFrame" on true or that continuously check
             // collisions for example).

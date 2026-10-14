@@ -16,7 +16,7 @@
 
 重连压力测试还比较双方所有静态实体 ID，防止 Boss ID 一致但脱离层级的飞针 ID 已经分叉。原构建在首次同房重连即失败；单纯检查引用非空无法发现此问题。`HOLLOWCONNECT_STATIC_IDENTITY_CHECK=1` 用真实 Unity 对象检查脱离父级仍保留身份、复制的元数据不继承原对象身份，两组最终生命周期专项均启用。
 
-`HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 使用真实 PlayMaker / iTween 动作和生产 `Entity.MakeHost` 检查未完成的绝对位移动画先到目的地再完成，以及带权威速度快照的 `DecelerateV2` 恢复固定帧减速。夹具物体独立于 Boss。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=1` 只做此项；值为 `deceleration` 时单独检查减速，用于保留旧引擎失败对照。旧引擎双端分别出现提前完成和持续 38 速度，不能用随机六轮重连通过覆盖。
+`HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 使用真实 PlayMaker / iTween 动作和生产 `Entity.MakeHost` 检查未完成的绝对位移动画先到目的地再完成、休眠快照不启动 tween 且后续原生激活正常完成，以及带权威速度快照的 `DecelerateV2` 恢复固定帧减速。夹具物体独立于 Boss。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=1` 只做此项；值为 `deceleration` 时单独检查减速，用于保留旧引擎失败对照。旧引擎双端分别出现提前完成和持续 38 速度；只加恢复表的中间构建会在休眠源创建未 Awake 的 tween。这些失败不能用随机六轮重连通过覆盖。
 
 `HOLLOWCONNECT_FSM_CONTINUATION_STRESS=1` 强制每轮重连换到另一端模拟权威，在原有六轮自然 Throw / Thrown 断线后，再追加自然 Needle Decel 和 Return 中各一次断线。每轮仍要求静态身份、引用、血量、镜头与真实 Throw Recover 通过，原超时和严格日志门槛不变。启用此项的两种先入顺序是本次修复的专项范围，不自动替代旧构建的完整 12 组发布证据。
 

@@ -67,6 +67,31 @@ internal static class FsmContinuationChecks {
                 iTween.Stop(source); Object.Destroy(source);
             }
 
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") != "deceleration") {
+                source = new GameObject("HollowConnect dormant continuation fixture"); source.SetActive(false);
+                var tween = new iTweenMoveTo(); tween.Reset();
+                tween.gameObject = new FsmOwnerDefault { OwnerOption = OwnerDefaultOption.UseOwner };
+                tween.vectorPosition = new Vector3(6, 0, 0); tween.time = .8f; tween.orientToPath = false;
+                tween.finishEvent = FsmEvent.Finished;
+                fsm = Create(source, null, tween); source.SetActive(true);
+                yield return null; yield return null;
+                if (fsm.ActiveStateName != "Moving") throw new Exception("Dormant continuation fixture never started");
+                entity = new Entity(net, 0xffffffffffffffe2UL, EntityType.DynamicHazard, source);
+                entity.InitializeClient(); // Authoritative snapshot remains inactive, with the last Moving state.
+                entity.MakeHost();
+                yield return null;
+                mark("DORMANT TAKEOVER active="+source.activeInHierarchy+" tweens="+source.GetComponents<iTween>().Length);
+                if (source.activeInHierarchy || source.GetComponents<iTween>().Length != 0)
+                    throw new Exception("Inactive takeover created or retained a native tween controller");
+                source.SetActive(true);
+                var dormantEnd = Time.realtimeSinceStartup + 3;
+                while (fsm.ActiveStateName != "Done" && Time.realtimeSinceStartup < dormantEnd) yield return null;
+                if (fsm.ActiveStateName != "Done" || Math.Abs(source.transform.position.x - 6) > .1f)
+                    throw new Exception("Native activation after dormant takeover did not complete normally");
+                mark("PASS dormant takeover stays stopped until native activation and then completes");
+                entity.Destroy(); entity = null; iTween.Stop(source); Object.Destroy(source);
+            }
+
             source = new GameObject("HollowConnect deceleration fixture"); source.SetActive(false);
             var body = source.AddComponent<Rigidbody2D>(); body.gravityScale = 0;
             var speed = new FsmFloat { Name = "Speed", UseVariable = true, Value = 38 };
