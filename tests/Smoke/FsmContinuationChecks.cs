@@ -41,6 +41,10 @@ internal static class FsmContinuationChecks {
     }
 
     internal static IEnumerator Run(NetClient net, Action<string> mark) {
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_COMBAT_SNAPSHOT_CHECK") == "1") {
+            yield return CombatSnapshots(net, mark);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") == "combat") yield break;
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_ENTRY_CHECK") == "1") {
             yield return Entry(net, mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") == "entry") yield break;
@@ -244,6 +248,69 @@ internal static class FsmContinuationChecks {
         } finally {
             childEntity?.Destroy(); parentEntity?.Destroy(); EntityHooks.Unregister();
             Object.Destroy(child); Object.Destroy(parent);
+        }
+    }
+
+    private static IEnumerator CombatSnapshots(NetClient net, Action<string> mark) {
+        var source = new GameObject("HollowConnect combat ordering fixture"); source.SetActive(false);
+        var child = new GameObject("Child"); child.transform.SetParent(source.transform, false);
+        var collider = source.AddComponent<BoxCollider2D>();
+        Entity entity = null;
+        var receiver = new Hkmp.Networking.Server.ServerUpdateManager();
+        try {
+            const ulong id = 0xffffffffffffffe6UL;
+            entity = new Entity(net, id, EntityType.DynamicHazard, source);
+            EntityReferences.Register(entity); entity.InitializeClient();
+            var components = (Dictionary<EntityComponentType, EntityComponent>)typeof(Entity)
+                .GetField("_components", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(entity);
+            var combat = (CombatStateComponent)components[EntityComponentType.CombatState];
+            var tick = typeof(CombatStateComponent).GetMethod("Tick", BindingFlags.Instance | BindingFlags.NonPublic);
+            var current = typeof(ClientUpdateManager).BaseType.GetField("CurrentUpdatePacket", BindingFlags.Instance | BindingFlags.NonPublic);
+            byte[] Capture(bool enabled) {
+                collider.enabled = enabled; child.SetActive(enabled);
+                combat.IsControlled = false;
+                try { combat.InitializeHost(); tick.Invoke(combat, null); }
+                finally { combat.IsControlled = true; }
+                var outgoing = (ServerUpdatePacket)current.GetValue(net.UpdateManager);
+                if (!outgoing.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw))
+                    throw new Exception("Combat ordering fixture did not publish a snapshot");
+                return ((RawPacketDataCollection)raw).DataInstances.Cast<ReliableEntityUpdate>().Single(u => u.Id == id)
+                    .GenericData.Last(d => d.Type == EntityComponentType.CombatState).Packet.ToArray();
+            }
+            var older = Capture(false); var newer = Capture(true);
+            var manager = new PacketManager();
+            manager.RegisterServerUpdatePacketHandler<ReliableEntityUpdate>(ServerUpdatePacketId.ReliableEntityUpdate,
+                (_, update) => entity.UpdateData(update.GenericData, false));
+            ServerUpdatePacket Snapshot(ushort sequence, byte[] bytes) {
+                var packet = new ServerUpdatePacket { Sequence = sequence };
+                var update = new ReliableEntityUpdate { Id = id }; update.UpdateTypes.Add(EntityUpdateType.Data);
+                update.GenericData.Add(new EntityNetworkData { Type = EntityComponentType.CombatState, Packet = new Packet(bytes) });
+                var collection = new PacketDataCollection<ReliableEntityUpdate>(); collection.DataInstances.Add(update);
+                packet.SetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, collection); return packet;
+            }
+            void Deliver(ServerUpdatePacket outgoing) {
+                var wire = new Packet(); outgoing.CreatePacket(wire);
+                var incoming = new ServerUpdatePacket();
+                if (!incoming.ReadPacket(PacketManager.ReadDatagram(wire.ToArray()))) throw new Exception("Combat ordering datagram did not decode");
+                receiver.OnReceivePacket<ServerUpdatePacket, ServerUpdatePacketId>(incoming);
+                manager.HandleServerUpdatePacket(2, incoming);
+            }
+            receiver.StartUpdates();
+            var late = Snapshot(65534, older);
+            Deliver(Snapshot(0, newer)); Deliver(late);
+            var carrier = new ServerUpdatePacket { Sequence = 1 }; carrier.SetLostReliableData(late); Deliver(carrier);
+            var replicaChild = entity.Object.Client.transform.Find("Child").gameObject;
+            if (!collider.enabled || !entity.Object.Client.GetComponent<BoxCollider2D>().enabled || !replicaChild.activeSelf)
+                throw new Exception("Delayed combat snapshot disabled a newer native/replica collider or child");
+            entity.UpdateIsActive(true); entity.MakeHost();
+            if (!collider.enabled || !child.activeSelf)
+                throw new Exception("Takeover restored stale combat collider or child state");
+            mark("PASS delayed combat snapshots preserve native and replica colliders and child activation through takeover");
+            yield return null;
+        } finally {
+            receiver.StopUpdates(); entity?.Destroy();
+            if (entity?.Object.Client != null) Object.Destroy(entity.Object.Client);
+            Object.Destroy(source);
         }
     }
 

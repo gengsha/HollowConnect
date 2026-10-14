@@ -149,6 +149,53 @@ internal static class ReliabilityProbe {
         } finally { receiver.StopUpdates(); BasePacket<ServerUpdatePacketId>.AddonPacketInfoDict.Remove(addonId); }
     }
 
+    internal static void ReorderedCombatSnapshots(ushort sequence, bool viaResend) {
+        var receiver = new ServerUpdateManager(); var manager = new PacketManager();
+        var latest = new Dictionary<ulong, byte>(); var events = new List<byte>();
+        manager.RegisterServerUpdatePacketHandler<ReliableEntityUpdate>(ServerUpdatePacketId.ReliableEntityUpdate,
+            (_, update) => {
+                foreach (var data in update.GenericData) {
+                    var value = data.Packet.ReadByte();
+                    if (data.Type == Hkmp.Game.Client.Entity.Component.EntityComponentType.CombatState) latest[update.Id] = value;
+                    else events.Add(value);
+                }
+            });
+        ServerUpdatePacket Snapshot(ushort seq, byte value) {
+            var packet = Events(seq, value);
+            packet.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw);
+            var collection = (RawPacketDataCollection)raw;
+            var update = (ReliableEntityUpdate)collection.DataInstances[0];
+            update.UpdateTypes.Remove(EntityUpdateType.Active); update.UpdateTypes.Remove(EntityUpdateType.HostFsm);
+            update.HostFsmData.Clear();
+            var combat = new EntityNetworkData { Type = Hkmp.Game.Client.Entity.Component.EntityComponentType.CombatState };
+            combat.Packet.Write(value); update.GenericData.Insert(0, combat);
+            if (value == 1) {
+                var other = new ReliableEntityUpdate { Id = 18 };
+                other.UpdateTypes.Add(EntityUpdateType.Data);
+                var untouched = new EntityNetworkData { Type = combat.Type }; untouched.Packet.Write((byte)11);
+                other.GenericData.Add(untouched); collection.DataInstances.Add(other);
+            }
+            return packet;
+        }
+        void Deliver(ServerUpdatePacket outgoing) {
+            var packet = Wire(outgoing); receiver.OnReceivePacket<ServerUpdatePacket, ServerUpdatePacketId>(packet);
+            manager.HandleServerUpdatePacket(2, packet);
+        }
+        receiver.StartUpdates();
+        try {
+            var first = Snapshot(unchecked((ushort)(sequence - 2)), 1);
+            var second = Snapshot(unchecked((ushort)(sequence - 1)), 2);
+            Deliver(Snapshot(sequence, 3));
+            if (viaResend) {
+                var carrier = new ServerUpdatePacket { Sequence = unchecked((ushort)(sequence + 1)) };
+                carrier.SetLostReliableData(second); carrier.SetLostReliableData(first); Deliver(carrier);
+            } else { Deliver(first); Deliver(second); }
+            Check(latest[17] == 3, "a delayed combat snapshot rolled back newer collider/child state");
+            Check(latest[18] == 11, "rejecting stale combat state discarded another entity's first snapshot");
+            Check(events.OrderBy(v => v).SequenceEqual(new byte[] { 1, 2, 3 }), "rejecting stale combat state discarded reliable actions");
+        } finally { receiver.StopUpdates(); }
+    }
+
     internal static void ReorderedSnapshots(ushort sequence, bool viaResend) {
         var receiver = new ServerUpdateManager(); var manager = new PacketManager();
         var events = new List<byte>(); var active = false; var merged = new EntityHostFsmData();

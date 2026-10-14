@@ -52,6 +52,10 @@ internal static class Program {
             Test("delayed resends keep newer sparse entity snapshots across sequence " + sequence, () => ReliabilityProbe.ReorderedSnapshots(sequence, true));
         }
         Test("consumed origins allow fresh payloads after a complete ushort sequence wrap", ReliabilityProbe.CompleteSequenceWrap);
+        foreach (var sequence in new ushort[] { 20, 1 }) {
+            Test("delayed combat snapshots preserve newer collider state across sequence " + sequence, () => ReliabilityProbe.ReorderedCombatSnapshots(sequence, false));
+            Test("resent combat snapshots preserve newer collider state across sequence " + sequence, () => ReliabilityProbe.ReorderedCombatSnapshots(sequence, true));
+        }
         Test("client receive and main-thread dispatch preserve reordered fragmented entity updates", ReliabilityProbe.ClientReceivePath);
         foreach (var sequence in new ushort[] { 22, 1 }) Test("reliable resend order preserves snapshots and events across sequence " + sequence, () => {
             ServerUpdatePacket StatePacket(ushort seq, byte state, bool active) {

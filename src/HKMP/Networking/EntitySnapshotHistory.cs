@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Hkmp.Game.Client.Entity.Component;
 using Hkmp.Networking.Packet;
 using Hkmp.Networking.Packet.Data;
 
@@ -15,6 +16,7 @@ internal sealed class EntitySnapshotHistory {
         public long Latest;
         public readonly Dictionary<(EntityUpdateType Field, byte Axis), long> Fields = new();
         public readonly Dictionary<(byte Fsm, EntityHostFsmData.Type Field, byte Variable), long> FsmFields = new();
+        public readonly Dictionary<EntityComponentType, long> Components = new();
     }
 
     private readonly Dictionary<(string Scene, uint Visit, uint Epoch, ulong Id), Entry> _entities = new();
@@ -47,7 +49,8 @@ internal sealed class EntitySnapshotHistory {
         if (data is not BaseEntityUpdate update || update.Id == 0) return;
         if (update is ReliableEntityUpdate eventsOnly &&
             !eventsOnly.UpdateTypes.Contains(EntityUpdateType.Active) &&
-            !eventsOnly.UpdateTypes.Contains(EntityUpdateType.HostFsm)) return;
+            !eventsOnly.UpdateTypes.Contains(EntityUpdateType.HostFsm) &&
+            !eventsOnly.GenericData.Any(item => item.Type == EntityComponentType.CombatState)) return;
 
         var key = (update.SceneName, update.Visit, update.Epoch, update.Id);
         if (!_entities.TryGetValue(key, out var entry)) {
@@ -70,6 +73,14 @@ internal sealed class EntitySnapshotHistory {
                 if (scale.IsEmpty) motion.UpdateTypes.Remove(EntityUpdateType.Scale);
             }
         } else if (update is ReliableEntityUpdate reliable) {
+            // CombatState is a complete snapshot of its managed subtree, not
+            // an action. Delayed originals and resends must not undo newer
+            // collider/child state even when this packet has no FSM fields.
+            foreach (var item in reliable.GenericData.ToArray()) {
+                if (item.Type == EntityComponentType.CombatState && !Accept(entry.Components, item.Type, revision))
+                    reliable.GenericData.Remove(item);
+            }
+            if (reliable.GenericData.Count == 0) reliable.UpdateTypes.Remove(EntityUpdateType.Data);
             Field(reliable.UpdateTypes, EntityUpdateType.Active);
             foreach (var pair in reliable.HostFsmData.ToArray()) {
                 var fsm = pair.Value; var index = pair.Key;
