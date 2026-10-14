@@ -41,6 +41,10 @@ internal static class FsmContinuationChecks {
     }
 
     internal static IEnumerator Run(NetClient net, Action<string> mark) {
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_ENTRY_CHECK") == "1") {
+            yield return Entry(net, mark);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY") == "entry") yield break;
+        }
         GameObject source = null;
         Entity entity = null;
         try {
@@ -185,6 +189,61 @@ internal static class FsmContinuationChecks {
         } finally {
             entity?.Destroy();
             if (source != null) { iTween.Stop(source); Object.Destroy(source); }
+        }
+    }
+
+    private static IEnumerator Entry(NetClient net, Action<string> mark) {
+        var parent = new GameObject("HollowConnect state entry fixture"); parent.SetActive(false);
+        var child = new GameObject("HollowConnect state entry child"); child.SetActive(false);
+        Entity parentEntity = null, childEntity = null;
+        EntityHooks.Register();
+        try {
+            var childWait = new Wait(); childWait.Reset(); childWait.time = 10;
+            var childFsm = Create(child, null, childWait); child.SetActive(true); yield return null; child.SetActive(false);
+            var wait = new Wait(); wait.Reset(); wait.time = 10;
+            var fsm = Create(parent, null, wait);
+            var activate = new ActivateGameObject(); activate.Reset();
+            activate.gameObject = new FsmOwnerDefault { OwnerOption = OwnerDefaultOption.SpecifyGameObject, GameObject = child };
+            activate.activate = true;
+            var done = fsm.FsmStates[1]; done.Actions = new FsmStateAction[] { activate }; activate.Init(done); done.SaveActions();
+            parent.SetActive(true); yield return null;
+            const ulong parentId = 0xffffffffffffffe6UL, childId = 0xffffffffffffffe7UL;
+            parentEntity = new Entity(net, parentId, EntityType.DynamicHazard, parent); parentEntity.InitializeHost();
+            childEntity = new Entity(net, childId, EntityType.DynamicHazard, child); childEntity.InitializeHost();
+            EntityReferences.Register(parentEntity); EntityReferences.Register(childEntity);
+            var updateType = typeof(ClientUpdateManager).BaseType;
+            var sendGate = updateType.GetField("Lock", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(net.UpdateManager);
+            var currentPacket = updateType.GetField("CurrentUpdatePacket", BindingFlags.Instance | BindingFlags.NonPublic);
+            bool partial = false, workerFinished = false;
+            fsm.Fsm.StateChanged += state => {
+                if (state.Name != "Done") return;
+                // At the exact native boundary, let an independent sender try
+                // the same lock as the production timer. No network delay or
+                // scheduling assumption determines whether it sees a partial entry.
+                var sender = new System.Threading.Thread(() => {
+                    if (!System.Threading.Monitor.TryEnter(sendGate)) { workerFinished = true; return; }
+                    try {
+                        var packet = (ServerUpdatePacket)currentPacket.GetValue(net.UpdateManager);
+                        if (!packet.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw)) return;
+                        var updates = ((RawPacketDataCollection)raw).DataInstances.Cast<ReliableEntityUpdate>().ToArray();
+                        var p = updates.Single(u => u.Id == parentId); var c = updates.Single(u => u.Id == childId);
+                        partial = p.HostFsmData.TryGetValue(0, out var data) && data.Types.Contains(EntityHostFsmData.Type.State) &&
+                            data.CurrentState == 1 && !c.IsActive;
+                    } finally { System.Threading.Monitor.Exit(sendGate); workerFinished = true; }
+                });
+                sender.Start();
+                if (!sender.Join(2000)) throw new Exception("State entry sender fixture did not finish");
+            };
+            fsm.SetState("Done");
+            if (!workerFinished || partial) throw new Exception("Sender observed the new parent FSM state before its native child activation");
+            var outgoing = (ServerUpdatePacket)currentPacket.GetValue(net.UpdateManager);
+            if (!outgoing.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var finalRaw) ||
+                !((RawPacketDataCollection)finalRaw).DataInstances.Cast<ReliableEntityUpdate>().Any(u => u.Id == childId && u.IsActive))
+                throw new Exception("Completed native state entry did not publish its child activation");
+            mark("PASS native state entry and child activation cannot be split by the sender");
+        } finally {
+            childEntity?.Destroy(); parentEntity?.Destroy(); EntityHooks.Unregister();
+            Object.Destroy(child); Object.Destroy(parent);
         }
     }
 

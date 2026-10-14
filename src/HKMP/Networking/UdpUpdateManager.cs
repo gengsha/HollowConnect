@@ -136,6 +136,16 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
         _heartBeatTimer.Elapsed += OnHeartBeatTimerElapsed;
     }
 
+    // Match the sender/start/stop lock order. A synchronous native transition
+    // may update several entities; the timer must publish all of its effects
+    // together, after OnEnter has finished. Both locks are reentrant for nested
+    // FSM transitions and an explicit disconnect inside a native callback.
+    internal void RunAtomicUpdate(Action update) {
+        lock (_sendGate) {
+            lock (Lock) update();
+        }
+    }
+
     /// <summary>
     /// Start the update manager. This will start the send and heartbeat timers, which will respectively trigger
     /// sending update packets and trigger on connection timing out.

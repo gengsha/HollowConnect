@@ -21,6 +21,7 @@ internal static class EntityHooks {
         On.HealthManager.Die += Die;
         On.HealthManager.ApplyExtraDamage += Extra;
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += ProcessEvent;
+        On.HutongGames.PlayMaker.Fsm.EnterState += EnterState;
         On.HutongGames.PlayMaker.Fsm.BroadcastEvent_FsmEvent_bool += Broadcast;
         On.Recoil.RecoilByDirection += Recoil;
     }
@@ -33,6 +34,7 @@ internal static class EntityHooks {
         On.HealthManager.Die -= Die;
         On.HealthManager.ApplyExtraDamage -= Extra;
         On.HutongGames.PlayMaker.Fsm.ProcessEvent -= ProcessEvent;
+        On.HutongGames.PlayMaker.Fsm.EnterState -= EnterState;
         On.HutongGames.PlayMaker.Fsm.BroadcastEvent_FsmEvent_bool -= Broadcast;
         On.Recoil.RecoilByDirection -= Recoil;
         Animators.Clear(); Recyclers.Clear(); Activators.Clear(); Deaths.Clear(); Extras.Clear();
@@ -76,6 +78,12 @@ internal static class EntityHooks {
     private static void Extra(On.HealthManager.orig_ApplyExtraDamage orig, HealthManager self, int amount) {
         if (Extras.TryGetValue(self.GetInstanceID(), out var handler)) handler(orig, self, amount);
         else orig(self, amount);
+    }
+    private static void EnterState(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, HutongGames.PlayMaker.Fsm self,
+        HutongGames.PlayMaker.FsmState state) {
+        var entity = EntityReferences.Owner(self.GameObject);
+        if (entity == null) orig(self, state);
+        else entity.EnterNativeState(orig, self, state);
     }
     private static void ProcessEvent(On.HutongGames.PlayMaker.Fsm.orig_ProcessEvent orig, HutongGames.PlayMaker.Fsm self,
         HutongGames.PlayMaker.FsmEvent ev, HutongGames.PlayMaker.FsmEventData data) {

@@ -445,6 +445,16 @@ internal class Entity {
         fsm.Fsm.StateChanged += OnHostStateChanged;
     }
 
+    internal void EnterNativeState(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, HutongGames.PlayMaker.Fsm fsm, FsmState state) {
+        if (destroyed || _isControlled || !_isSceneHostDetermined || fsm.GameObject != Object.Host) {
+            orig(fsm, state);
+            return;
+        }
+        // StateChanged runs before OnEnter. Hold the normal send locks across
+        // both so a parent continuation cannot precede its child activation.
+        _netClient.UpdateManager.RunAtomicUpdate(() => orig(fsm, state));
+    }
+
     private void OnHostStateChanged(FsmState state) {
         if (destroyed || _isControlled || !_isSceneHostDetermined) return;
         var index = _fsms.Host.FindIndex(f => f != null && ReferenceEquals(f.Fsm, state.Fsm));
