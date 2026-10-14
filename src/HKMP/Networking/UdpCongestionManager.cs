@@ -54,6 +54,10 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
     /// </summary>
     private const int MaximumExpectedRttDuringConnection = 5000;
 
+    // Three distinct later deliveries distinguish a loss from brief reordering.
+    // Count packets in one selective ACK report, never repeated copies of an ACK.
+    private const int LaterAcknowledgementsBeforeLoss = 3;
+
     /// <summary>
     /// The corresponding update manager from which we receive the packets that we calculate the RTT from.
     /// </summary>
@@ -163,6 +167,35 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
                 CheckCongestion(sequenceToCheck);
             }
         }
+
+        // Retire acknowledged packets before considering gaps. Waiting only for
+        // a fixed RTT deadline can keep every carrier in the same periodic loss
+        // window even while later packets and their ACKs continue to arrive.
+        foreach (var pair in _sentQueue) {
+            if (!pair.Value.Lost && pair.Value.Packet.ContainsReliableData
+                && HasAcknowledgedSuccessors<TIncoming, TOtherPacketId>(pair.Key, packet)) {
+                MarkLost(pair.Value);
+            }
+        }
+    }
+
+    private static bool HasAcknowledgedSuccessors<TIncoming, TOtherPacketId>(ushort sequence, TIncoming packet)
+        where TIncoming : UpdatePacket<TOtherPacketId>
+        where TOtherPacketId : Enum {
+        var distance = (ushort)(packet.Ack - sequence);
+        // ACKs from before this send (including across wrap) are not evidence.
+        if (distance == 0 || distance >= 32768) return false;
+
+        var laterAcknowledgements = 1; // The leading ACK itself.
+        for (var i = 0; i < UdpUpdateManager.AckSize && i < distance - 1; i++) {
+            if (packet.AckField[i] && ++laterAcknowledgements >= LaterAcknowledgementsBeforeLoss) return true;
+        }
+        return false;
+    }
+
+    private void MarkLost(SentPacket<TOutgoing, TPacketId> sentPacket) {
+        sentPacket.Lost = true;
+        if (sentPacket.Packet.ContainsReliableData) _udpUpdateManager.ResendReliableData(sentPacket.Packet);
     }
 
     /// <summary>
@@ -289,16 +322,7 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
             // If the packet was not marked as lost already and the stopwatch has elapsed the maximum expected
             // round trip time, we resend the reliable data
             if (!sentPacket.Lost && sentPacket.Stopwatch.ElapsedMilliseconds > MaximumExpectedRtt) {
-                sentPacket.Lost = true;
-
-                // Check if this packet contained information that needed to be reliable
-                // and if so, resend the data by adding it to the current packet
-                if (sentPacket.Packet.ContainsReliableData) {
-                    // Logger.Debug(
-                    //     $"Packet ack of seq: {seqSentPacketPair.Key} with reliable data exceeded maximum RTT, assuming lost, resending data");
-
-                    _udpUpdateManager.ResendReliableData(sentPacket.Packet);
-                }
+                MarkLost(sentPacket);
             }
         }
 

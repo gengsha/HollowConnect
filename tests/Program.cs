@@ -41,6 +41,16 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        foreach (var sequence in new ushort[] { 0, 65523 }) {
+            foreach (var step in new[] { 12, 13, 90, 91 })
+                Test($"periodic loss delivers both enter directions once: start={sequence} lostStep={step}",
+                    () => SelectiveAckProbe.PeriodicDelivery(sequence, step));
+            var origin = unchecked((ushort)(sequence + 12));
+            Test("selective ACK loss evidence tolerates reordering and duplicate reports: " + origin,
+                () => SelectiveAckProbe.AckEvidence(origin));
+        }
+        Test("periodic loss delivers at congested send rate", () => SelectiveAckProbe.PeriodicDelivery(0, 90, 50));
+        Test("reliable loss retains its timeout fallback without newer ACK evidence", SelectiveAckProbe.TimeoutFallback);
         foreach (var sequence in new ushort[] { 22, 1 })
             Test("nested reliable retransmissions retain origin across sequence " + sequence, () => ReliabilityProbe.NestedResends(sequence));
         Test("nested addon retransmissions retain origin across sequence wrap", ReliabilityProbe.NestedAddonResends);
