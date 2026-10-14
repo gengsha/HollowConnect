@@ -77,6 +77,7 @@ internal class NetServer : INetServer {
     /// Event that is called when a client times out.
     /// </summary>
     public event Action<ushort> ClientTimeoutEvent;
+    public event Action<ushort> ClientTransportClosedEvent;
 
     /// <summary>
     /// Event that is called when the server shuts down.
@@ -134,6 +135,7 @@ internal class NetServer : INetServer {
             _processingThread.Start();
 
             _dtlsServer.DataReceivedEvent += OnDataReceived;
+            _dtlsServer.ClientClosedEvent += OnTransportClosed;
         }
     }
 
@@ -153,6 +155,26 @@ internal class NetServer : INetServer {
         _processingWaitHandle.Set();
     }
 
+    private void OnTransportClosed(DtlsServerClient client) {
+        if (!IsStarted) return;
+        // The DTLS worker publishes this after its last application datagram.
+        // Use the same queue so room retirement cannot overtake the final state.
+        _receivedQueue.Enqueue(new ReceivedData { DtlsServerClient = client, TransportClosed = true });
+        _processingWaitHandle.Set();
+    }
+
+    private void HandleTransportClosed(DtlsServerClient source) {
+        if (!IsStarted || !_clientsByEndPoint.TryGetValue(source.EndPoint, out var client) ||
+            !ReferenceEquals(client.UpdateManager.DtlsTransport, source.DtlsTransport) ||
+            !_clientsById.TryRemove(client.Id, out _)) return;
+        ((ICollection<KeyValuePair<IPEndPoint, NetServerClient>>)_clientsByEndPoint)
+            .Remove(new KeyValuePair<IPEndPoint, NetServerClient>(source.EndPoint, client));
+        client.UpdateManager.DtlsTransport = null;
+        client.Disconnect();
+        ClientTransportClosedEvent?.Invoke(client.Id);
+        Logger.Info($"Client {client.Id} transport closed");
+    }
+
     /// <summary>
     /// Starts processing queued network data.
     /// </summary>
@@ -165,6 +187,7 @@ internal class NetServer : INetServer {
 
             while (!token.IsCancellationRequested && _receivedQueue.TryDequeue(out var receivedData)) {
                 var dtlsServerClient = receivedData.DtlsServerClient;
+                if (receivedData.TransportClosed) { HandleTransportClosed(dtlsServerClient); continue; }
                 if (dtlsServerClient.ReceiveLoopTokenSource.IsCancellationRequested ||
                     !dtlsServerClient.Reassembler.Accept(receivedData.Buffer, receivedData.NumReceived, out var message)) continue;
                 var packet = PacketManager.ReadDatagram(message);
@@ -357,6 +380,7 @@ internal class NetServer : INetServer {
             Logger.Info("Stopping NetServer");
             IsStarted = false;
             _dtlsServer.DataReceivedEvent -= OnDataReceived;
+            _dtlsServer.ClientClosedEvent -= OnTransportClosed;
             _taskTokenSource?.Cancel();
             _processingWaitHandle.Set();
             if (_processingThread != null && _processingThread != Thread.CurrentThread) _processingThread.Join();
@@ -505,6 +529,7 @@ internal class NetServer : INetServer {
 /// Data class for storing received data from a given IP end-point.
 /// </summary>
 internal class ReceivedData {
+    public bool TransportClosed { get; init; }
     /// <summary>
     /// The DTLS server client that sent this data.
     /// </summary>

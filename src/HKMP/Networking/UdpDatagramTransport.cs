@@ -20,6 +20,7 @@ internal abstract class UdpDatagramTransport : DatagramTransport {
     /// DTLS transport.
     /// </summary>
     public BlockingCollection<ReceivedData> ReceivedDataCollection { get; }
+    internal bool IsClosed => _cancellationTokenSource.IsCancellationRequested;
 
     protected UdpDatagramTransport() {
         _cancellationTokenSource = new CancellationTokenSource();

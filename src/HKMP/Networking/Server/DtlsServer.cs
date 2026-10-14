@@ -20,6 +20,7 @@ internal class DtlsServer {
     private Socket socket;
     private CancellationTokenSource stop;
     public event Action<DtlsServerClient, byte[], int> DataReceivedEvent;
+    public event Action<DtlsServerClient> ClientClosedEvent;
 
     public void Start(int port) {
         if (socket != null) throw new InvalidOperationException("DTLS server is already started");
@@ -125,7 +126,7 @@ internal class DtlsServer {
         var token = client.ReceiveLoopTokenSource.Token;
         var dtls = client.DtlsTransport;
         try {
-            while (!token.IsCancellationRequested) {
+            while (!token.IsCancellationRequested && !client.DatagramTransport.IsClosed) {
                 var buffer = new byte[dtls.GetReceiveLimit()];
                 var count = dtls.Receive(buffer, 0, buffer.Length, 50);
                 if (count <= 0) continue;
@@ -139,6 +140,7 @@ internal class DtlsServer {
                 if (clients.TryGetValue(client.EndPoint, out var registered) && registered == client) clients.Remove(client.EndPoint);
             }
             client.DatagramTransport.Close();
+            ClientClosedEvent?.Invoke(client);
             try { dtls.Close(); } catch (IOException) { } catch (SocketException) { } catch (ObjectDisposedException) { }
             client.DatagramTransport.Dispose(); client.ReceiveLoopTokenSource.Dispose();
         }

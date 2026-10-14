@@ -224,6 +224,7 @@ internal abstract class ServerManager : IServerManager {
     public virtual void Initialize() {
         // Register a timeout handler
         _netServer.ClientTimeoutEvent += OnClientTimeout;
+        _netServer.ClientTransportClosedEvent += id => ProcessPlayerDisconnect(id, transportClosed: true);
 
         // Register server shutdown handler
         _netServer.ShutdownEvent += OnServerShutdown;
@@ -1223,9 +1224,10 @@ internal abstract class ServerManager : IServerManager {
     /// </summary>
     /// <param name="id">The ID of the player.</param>
     /// <param name="timeout">Whether this player timed out or disconnected normally.</param>
-    private void ProcessPlayerDisconnect(ushort id, bool timeout = false) {
+    /// <param name="transportClosed">Whether NetServer already retired the closed transport.</param>
+    private void ProcessPlayerDisconnect(ushort id, bool timeout = false, bool transportClosed = false) {
         lock (worldLock) {
-        if (!timeout) {
+        if (!timeout && !transportClosed) {
             // If this isn't a timeout, then we need to propagate this packet to the NetServer
             _netServer.OnClientDisconnect(id);
         }

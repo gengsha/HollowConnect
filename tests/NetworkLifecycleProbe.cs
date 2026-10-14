@@ -7,10 +7,52 @@ using System.Threading;
 using Hkmp.Networking;
 using Hkmp.Networking.Client;
 using Hkmp.Networking.Packet;
+using Hkmp.Networking.Packet.Data;
+using Hkmp.Networking.Packet.Update;
 using Hkmp.Networking.Server;
 
 internal static class NetworkLifecycleProbe {
     private static T Field<T>(object o, string name) => (T)o.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(o);
+    public static void ClosedTransport() {
+        var manager = new PacketManager(); var server = new NetServer(manager); var client = new DtlsClient();
+        var peers = Field<ConcurrentDictionary<ushort, NetServerClient>>(server, "_clientsById");
+        var snapshot = false; var closed = 0;
+        // Reflection keeps this regression runnable against the old server,
+        // where the close event does not exist yet.
+        typeof(NetServer).GetEvent("ClientTransportClosedEvent")?.AddEventHandler(server, (Action<ushort>)(_ => {
+            if (!snapshot) throw new Exception("Transport retirement overtook the final queued snapshot");
+            Interlocked.Increment(ref closed);
+        }));
+        manager.RegisterServerUpdatePacketHandler<ReliableEntityUpdate>(ServerUpdatePacketId.ReliableEntityUpdate,
+            (id, update) => snapshot = peers.ContainsKey(id) && update.Id == 17 && update.IsActive);
+        server.Start(0);
+        uint messageId = 0;
+        void Send(ServerUpdatePacket packet) {
+            var bytes = new Packet(); packet.CreatePacket(bytes);
+            foreach (var frame in DatagramFraming.Fragment(bytes.ToArray(), messageId++))
+                client.DtlsTransport.Send(frame, 0, frame.Length);
+        }
+        try {
+            var dtls = Field<DtlsServer>(server, "_dtlsServer");
+            var port = ((IPEndPoint)Field<Socket>(dtls, "socket").LocalEndPoint).Port;
+            client.Connect("127.0.0.1", port); Send(new ServerUpdatePacket());
+            if (!SpinWait.SpinUntil(() => peers.Count == 1, 2000)) throw new Exception("Close probe did not register its peer");
+            foreach (var peer in peers.Values) peer.IsRegistered = true;
+            var final = new ServerUpdatePacket { Sequence = 1 };
+            var updates = new PacketDataCollection<ReliableEntityUpdate>();
+            var update = new ReliableEntityUpdate { Id = 17, IsActive = true }; update.UpdateTypes.Add(EntityUpdateType.Active);
+            updates.DataInstances.Add(update); final.SetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, updates);
+            Send(final); client.Disconnect(); // Deliberately omit the application's disconnect packet.
+            if (!SpinWait.SpinUntil(() => peers.IsEmpty, 1000))
+                throw new Exception("Closed DTLS peer remains registered until the 5-second heartbeat timeout");
+            if (!snapshot) throw new Exception("Final snapshot was lost before transport retirement");
+            if (!Field<ConcurrentDictionary<IPEndPoint, NetServerClient>>(server, "_clientsByEndPoint").IsEmpty)
+                throw new Exception("Closed transport retained an endpoint mapping");
+            if (typeof(NetServer).GetEvent("ClientTransportClosedEvent") != null &&
+                !SpinWait.SpinUntil(() => Volatile.Read(ref closed) == 1, 1000))
+                throw new Exception("Transport close did not notify the room exactly once");
+        } finally { client.Disconnect(); server.Stop(); }
+    }
     public static void Run() {
         var server = new NetServer(new PacketManager());
         var dtls = Field<DtlsServer>(server, "_dtlsServer");

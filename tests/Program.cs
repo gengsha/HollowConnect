@@ -591,6 +591,7 @@ internal static class Program {
         });
         Test("five simultaneous real DTLS clients remain isolated and listener restarts", TransportProbe.Run);
         Test("stopping after a peer closes DTLS permits reopening the same server port", NetworkLifecycleProbe.Run);
+        Test("DTLS close retires a peer after its final snapshot without waiting for heartbeat timeout", NetworkLifecycleProbe.ClosedTransport);
         Test("failed bind can be stopped safely and retried on the same port", NetworkLifecycleProbe.FailedBind);
         Test("maximum-size fragmented datagram survives reverse order and duplicates", DatagramProbe.Reorder);
         Test("boss action packets larger than 64 KiB survive framing and live update decoding", DatagramProbe.LargeBossBatch);
