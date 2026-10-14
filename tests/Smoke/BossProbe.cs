@@ -20,6 +20,30 @@ public sealed class BossProbe : MonoBehaviour {
     private Hkmp.Game.GameManager engine;
     private CoopRuntime runtime;
     private int nativeVelocityTicks;
+    private Entity tracedBoss, tracedHead;
+    private string lastDamageTrace;
+    private float nextDamageTrace;
+    private readonly List<string> damageTrace = new();
+    private void Update() {
+        if (tracedBoss == null || tracedBoss.Object.Host == null) return;
+        var hm = tracedBoss.Object.Host.GetComponent<HealthManager>();
+        var control = Control(tracedBoss);
+        var head = tracedHead.Object.Host;
+        var headHm = head.GetComponent<HealthManager>();
+        var stun = typeof(HealthManager).GetField("stunControlFSM", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(hm) as PlayMakerFSM;
+        var trace = "state=" + control.ActiveStateName + " hp=" + hm.hp + " dead=" + hm.isDead + " invincible=" + hm.IsInvincible +
+            " special=" + hm.hasSpecialDeath + " reset=" + hm.deathReset + " override=" + hm.damageOverride + " stun=" + stun?.FsmName +
+            " head=" + head.activeSelf + "/" + head.activeInHierarchy + "/" + headHm.hp + "/" + headHm.isDead +
+            " stunned=" + control.FsmVariables.GetFsmInt("Stunned Amount").Value + " rages=" + control.FsmVariables.GetFsmInt("Rages").Value;
+        if (trace != lastDamageTrace || Time.realtimeSinceStartup >= nextDamageTrace) {
+            lastDamageTrace = trace; nextDamageTrace = Time.realtimeSinceStartup + 1;
+            var body = tracedBoss.Object.Host.GetComponent<Rigidbody2D>();
+            var animator = tracedBoss.Object.Host.GetComponent<tk2dSpriteAnimator>();
+            damageTrace.Add(DateTime.UtcNow.ToString("O") + " DAMAGE TRACE " + trace + " pos=" + body.position + " velocity=" + body.velocity + " gravity=" + body.gravityScale +
+                " animator=" + animator.enabled + "/" + animator.CurrentClip?.name + "/" + animator.CurrentFrame + "/" + animator.Playing +
+                " actions=" + string.Join(",",control.Fsm.ActiveState.ActiveActions.Select(a=>a.GetType().Name)));
+        }
+    }
     private bool StayAuthority => Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_BOSS_CONTROL") == "stay";
     private bool LateGuest => Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_BOSS_LATE") == "1";
     private GameObject detachedReplicaTerrain;
@@ -217,9 +241,24 @@ public sealed class BossProbe : MonoBehaviour {
                 yield return Until(()=>Vector2.Distance(boss.Object.Host.transform.position,recoveredPosition)>.3f && !hm.IsInvincible,
                     "native boss resumes combat when exposure expires before takeover",20);
                 if(Has(role+".failed"))yield break;
+                var damageState = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_DAMAGE_STATE");
+                if (!string.IsNullOrEmpty(damageState)) {
+                    yield return Until(() => control.ActiveStateName == damageState && !hm.IsInvincible,
+                        "native combat reaches diagnostic damage state " + damageState, 20);
+                    if (Has(role+".failed")) yield break;
+                }
+                if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_DAMAGE_TRACE") == "1") { tracedBoss = boss; tracedHead = head; Update(); }
+                Mark("SECOND ARMOR DAMAGE before hp="+hm.hp+" state="+control.ActiveStateName+
+                    " transitions="+string.Join(",",control.Fsm.ActiveState.Transitions.Select(t=>t.EventName+":"+t.ToState))+
+                    " globals="+string.Join(",",control.Fsm.GlobalTransitions.Select(t=>t.EventName+":"+t.ToState)));
                 hm.ApplyExtraDamage(hm.hp);
+                Mark("SECOND ARMOR DAMAGE after hp="+hm.hp+" state="+control.ActiveStateName);
                 yield return Until(()=>control.ActiveStateName=="Opened"&&head.Object.Host.activeInHierarchy,
                     "native armor damage exposes a second head after timed-out late transfer",20);
+                if (tracedBoss != null) {
+                    Update(); tracedBoss = null;
+                    File.WriteAllLines(Path.Combine(root, role + ".damage.log"), damageTrace);
+                }
                 if(Has(role+".failed"))yield break;
                 var reopened=head.Object.Host.GetComponent<HealthManager>();expectedHeadHealth=reopened.hp-7;reopened.ApplyExtraDamage(7);
                 Mark("REOPENED native head health="+reopened.hp+" expected="+expectedHeadHealth+" armor="+hm.hp);
