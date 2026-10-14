@@ -262,6 +262,7 @@ public sealed class PantheonProbe : MonoBehaviour {
             engine.ServerManager.Stop();Flag("server.stopped");
         }
         yield return Until(()=>Has("server.stopped"),"final server stopped");
+        ProbeNetworkFaults.Verify(root, role);
         if(!Has(role+".failed"))Flag(role+".done");
     }
     private void ColliderReferences(GameObject boss,string label) {
