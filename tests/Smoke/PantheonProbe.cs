@@ -27,6 +27,20 @@ public sealed class PantheonProbe : MonoBehaviour {
     private Hkmp.Game.GameManager engine;
     private EntityManager manager;
     private int attemptNumber;
+    private readonly List<MonoMod.RuntimeDetour.Hook> packetTraces = new();
+    private void TracePacket<TId>(string flow, UpdatePacket<TId> packet, TId reliableId, bool sending) where TId : Enum {
+        IPacketData raw;
+        if (sending) packet.TryGetSendingPacketData(reliableId, out raw);
+        else packet.GetPacketData().TryGetValue(reliableId, out raw);
+        if (!(raw is RawPacketDataCollection batch)) return;
+        foreach (var update in batch.DataInstances.OfType<ReliableEntityUpdate>()) {
+            if (!update.UpdateTypes.Contains(EntityUpdateType.Active) && !update.UpdateTypes.Contains(EntityUpdateType.HostFsm)) continue;
+            Mark("WIRE " + flow + " seq=" + packet.Sequence + " id=" + update.Id + " visit=" + update.Visit +
+                " active=" + (update.UpdateTypes.Contains(EntityUpdateType.Active) ? update.IsActive.ToString() : "-") +
+                " states=" + string.Join(",", update.HostFsmData.Where(p => p.Value.Types.Contains(EntityHostFsmData.Type.State)).Select(p => p.Key + ":" + p.Value.CurrentState)));
+        }
+    }
+    private void OnDestroy() { foreach (var trace in packetTraces) trace.Dispose(); }
     private int pendingCameraPositions;
     private bool stallHazardRecovery, hazardRecoveryStalled;
     private IEnumerator StallHazardRecovery(IEnumerator routine) {
@@ -160,6 +174,24 @@ public sealed class PantheonProbe : MonoBehaviour {
     }
     private IEnumerator Start() {
         role=Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE");root=Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT");host=role=="host";
+        if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CONTINUATION_PACKET_TRACE")=="1") {
+            packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(UpdatePacket<ServerUpdatePacketId>).GetMethod("CreatePacket"),
+                (Action<Action<UpdatePacket<ServerUpdatePacketId>,Packet>,UpdatePacket<ServerUpdatePacketId>,Packet>)((orig,p,bytes)=>{
+                    TracePacket("client-send",p,ServerUpdatePacketId.ReliableEntityUpdate,true);orig(p,bytes);
+                })));
+            packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(UpdatePacket<ClientUpdatePacketId>).GetMethod("CreatePacket"),
+                (Action<Action<UpdatePacket<ClientUpdatePacketId>,Packet>,UpdatePacket<ClientUpdatePacketId>,Packet>)((orig,p,bytes)=>{
+                    TracePacket("server-send",p,ClientUpdatePacketId.ReliableEntityUpdate,true);orig(p,bytes);
+                })));
+            packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(PacketManager).GetMethod("HandleServerUpdatePacket"),
+                (Action<Action<PacketManager,ushort,ServerUpdatePacket>,PacketManager,ushort,ServerUpdatePacket>)((orig,m,id,p)=>{
+                    TracePacket("server-receive sender="+id,p,ServerUpdatePacketId.ReliableEntityUpdate,false);orig(m,id,p);
+                })));
+            packetTraces.Add(new MonoMod.RuntimeDetour.Hook(typeof(PacketManager).GetMethod("HandleClientUpdatePacket"),
+                (Action<Action<PacketManager,ClientUpdatePacket>,PacketManager,ClientUpdatePacket>)((orig,m,p)=>{
+                    TracePacket("client-receive",p,ClientUpdatePacketId.ReliableEntityUpdate,false);orig(m,p);
+                })));
+        }
         On.CameraController.DoPositionToHero += (orig,camera,direct)=>TrackCameraPosition(orig(camera,direct));
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_GATE_NEGATIVE")=="persistent")
             On.GameManager.PlayerDeadFromHazard += (orig,gm,waitTime)=>StallHazardRecovery(orig(gm,waitTime));

@@ -77,6 +77,14 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 0.1.6 新增 `HOLLOWCONNECT_SMOKE_MODE=godhome`：使用内置三门从格林段开始，观察原生火蝠、火柱、气球火球和地刺，原生伤害及死亡后双方进入休息房；双向普通 / 神居 F8 检查淡入、镜头与输入，故意损坏落后端连战序号后核对恢复，再在已接受跨房加载后立即断线并检查正常抵达。`HOLLOWCONNECT_GODHOME_AUTHORITY=host` 让服务器房主先入房，否则客机先入房，分别覆盖房主作为显示副本和模拟权威。动态弹幕每 0.1 秒观测本地源位置，小于 3 世界单位的副本样本计为匹配；每种弹幕至少三次匹配。角色固定在指定位置并免伤，直接调用 HealthManager 伤害；没有强制 Boss FSM 状态，也没有完成完整三门。`HOLLOWCONNECT_GALIEN_ONLY=1` 单独验证加利安迟加入接管的 GetOwner 本机引用及原生音效异常。故障注入与原生音效诊断只存在于此测试插件。
 
 探针拦截三个 SaveGame 重载，不读取现有存档；角色在内存中创建。测试插件在批处理模式下将 Respawn 和 LoadFirstScene 中的渲染帧等待改为下一模拟帧，发行模块没有这一行为。测试结束停止这两个测试进程，移除测试副本中的插件；不要把它复制到日常游戏。验证内容与局限见 docs/VERIFICATION.md。
+## FSM 快照与接管专项
+
+`HOLLOWCONNECT_FSM_CONTINUATION_CHECK=1` 在联网前运行真实 Unity/PlayMaker 的绝对 tween、固定帧减速和休眠接管夹具；`HOLLOWCONNECT_FSM_SNAPSHOT_CHECK=1` 再检查原生状态在采样窗口内即时发布、空状态清除旧快照，以及原生重激活的 active/state 在同一可靠更新中发布。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=snapshot` 只运行后三项，须同时启用前两个开关。所有夹具都通过生产 Entity 路径，使用独立测试对象，不强制 Boss 状态。
+
+`HOLLOWCONNECT_FSM_CONTINUATION_STRESS=1` 配合投针重连专项，让每轮另一端先重连并成为权威，前六轮之外再覆盖 Needle 自然 `Decel` 和 `Return`，共八轮。可用 `HOLLOWCONNECT_CONTINUATION_TRACE=1` 记录原生状态恢复、激活/停用、通知收发、父物体和坐标；追踪不改变原生执行，也不放宽恢复超时或日志门槛。
+
+`HOLLOWCONNECT_FSM_HIERARCHY_CHECK=1` 另运行独立登记根脱离父体的快照/接管夹具，要求副本先脱离、休眠源保持停用，接管后父体和世界坐标正确，并实际完成原生 local-space tween。配合八轮实战时，还要求 Needle 在原生 `Throw Recover` 时回到发射位置附近；仅发出通知而飞到错误坐标也拒绝。`HOLLOWCONNECT_FSM_CONTINUATION_ONLY=hierarchy` 可单跑这项。
+
 ## 救援反馈专用探针
 
 `HOLLOWCONNECT_SMOKE_MODE=rescue` 使用两个隔离客户端与真实 UDP 连接，交替由主机/客机用实际骨钉命中救援暗影，验证只有服务器确认的救人者增加 33 灵魂、受救者一血不获奖励、满槽/储备/个人灵魂限制以及旧暗影记录保留。通过生产接收函数注入合成事件，检查名单先于救援、重复确认、旧死亡、错误会话/轮次和全队重试中的拒绝。暂停时检查原版 Death/Death Glow、粒子波、两段音效资源与原生混音通道以及 2.5 秒清理。`shade-inspect` 仅在未保存新角色中反序列化原版素材以查看资源，不执行暗影回收 FSM。
@@ -87,3 +95,4 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 
 格林运动夹具每帧维持原定固定无敌靶子在场内 `(80,8)`，防止零重力靶子被固体碰撞推出场外，令原生 AD Pos 永远无合法落点。靶子还须距气球中心 `(85.77,13.5)` 至少 6 单位；先前 `(85,8)` 导致原生 Balloon Retry，因此该轮失败保留。此条件仅约束测试角色，不修改 Boss 的 FSM 或位置。
 
+`HOLLOWCONNECT_CONTINUATION_PACKET_TRACE=1` 仅在隔离 Pantheon 探针中记录原始发送及合并接收的可靠 active/FSM 状态、序列号、实体 ID 和 visit。追踪通过临时 detour 观察生产包，不修改包内容或测试断言，用于区分未送达与旧重发覆盖。
