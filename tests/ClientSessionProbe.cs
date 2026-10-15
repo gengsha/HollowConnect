@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -16,9 +17,28 @@ using Hkmp.Util;
 internal static class ClientSessionProbe {
     private static T Field<T>(object o, string n) => (T)o.GetType().GetField(n, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(o);
     internal static void DrainMainThread() {
-        var queue = (List<Action>)typeof(ThreadUtil).GetField("ActionsToRun", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-        var callbacks = queue.ToArray(); queue.Clear();
-        foreach (var action in callbacks) action();
+        var queue = (Queue<Action>)typeof(ThreadUtil).GetField("ActionsToRun", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        while (queue.Count > 0) ThreadUtil.RunPendingActions();
+    }
+    public static void BacklogBudget() {
+        DrainMainThread();
+        var applied = new List<int>();
+        ThreadUtil.RunActionOnMainThread(() => {
+            applied.Add(1); Thread.Sleep(8); applied.Add(2);
+            ThreadUtil.RunActionOnMainThread(() => applied.Add(5));
+        });
+        ThreadUtil.RunActionOnMainThread(() => applied.Add(3));
+        ThreadUtil.RunActionOnMainThread(() => applied.Add(4));
+        ThreadUtil.RunPendingActions();
+        if (!applied.SequenceEqual(new[] { 1, 2 })) throw new Exception("Backlog ran past its frame budget or split a callback");
+        DrainMainThread();
+        if (!applied.SequenceEqual(new[] { 1, 2, 3, 4, 5 })) throw new Exception("Budgeted callbacks were lost or reordered");
+        var deferred = false;
+        ThreadUtil.RunActionOnMainThread(() => ThreadUtil.RunActionOnMainThread(() => deferred = true));
+        ThreadUtil.RunPendingActions();
+        if (deferred) throw new Exception("A newly posted callback bypassed the next-frame boundary");
+        DrainMainThread();
+        if (!deferred) throw new Exception("Next-frame callback was lost");
     }
     public static void CompleteDatagram() {
         DrainMainThread();

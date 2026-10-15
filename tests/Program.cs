@@ -41,6 +41,7 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        Test("main-thread backlog yields between complete callbacks and preserves FIFO", ClientSessionProbe.BacklogBudget);
         Test("scalar packet encoding preserves BitConverter wire bytes and floating-point bits", PacketEncodingProbe.WireFormat);
         Test("reused scratch snapshots do not change published packets", PacketEncodingProbe.ScratchOwnership);
         Test("compressed combat updates preserve independent full snapshots and reject invalid lengths", PacketEncodingProbe.CompleteCombatPayload);
