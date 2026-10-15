@@ -437,7 +437,7 @@ internal class Entity {
         snapshot.Floats = fsm.FsmVariables.FloatVariables.Select(f => f.Value).ToArray();
         snapshot.Ints = fsm.FsmVariables.IntVariables.Select(i => i.Value).ToArray();
         snapshot.Bools = fsm.FsmVariables.BoolVariables.Select(b => b.Value).ToArray();
-        snapshot.Strings = fsm.FsmVariables.StringVariables.Select(s => s.Value).ToArray();
+        snapshot.Strings = fsm.FsmVariables.StringVariables.Select(s => s.Value ?? string.Empty).ToArray();
         snapshot.Vector2s = fsm.FsmVariables.Vector2Variables.Select(v => v.Value).ToArray();
         snapshot.Vector3s = fsm.FsmVariables.Vector3Variables.Select(v => v.Value).ToArray();
 
@@ -939,7 +939,8 @@ internal class Entity {
             CondAddData(
                 fsm.FsmVariables.StringVariables, 
                 snapshot.Strings,
-                fsmString => fsmString.Value,
+                // The wire format represents an unset string as empty.
+                fsmString => fsmString.Value ?? string.Empty,
                 EntityHostFsmData.Type.Strings,
                 data.Strings
             );

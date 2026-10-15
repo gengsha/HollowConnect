@@ -170,6 +170,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         yield return Until(()=>Object.FindObjectOfType<CoopRuntime>()!=null&&GameManager.instance!=null&&UnityEngine.SceneManagement.SceneManager.GetActiveScene().name=="Menu_Title","menu");
         runtime=Object.FindObjectOfType<CoopRuntime>();engine=Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"),"_gameManager");manager=Field<EntityManager>(engine.ClientManager,"_entityManager");
         Hkmp.Logging.Logger.AddLogger(new Log(this));
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_LAYOUT_TRACE") == "1") ObserveFsmLayouts();
         var performance = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PERFORMANCE") == "1";
         if (performance) ObservePerformance();
         On.HutongGames.PlayMaker.Actions.DestroyObject.OnEnter += (orig,a)=>{ Mark("NATIVE DESTROY "+Describe(a.gameObject.Value)+" from="+a.Fsm?.GameObject?.name+"/"+a.Fsm?.Name+"/"+a.State?.Name); orig(a); };
@@ -206,6 +207,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_NULL_STRING_ASSERTIONS") == "1") yield return FsmContinuationChecks.StringSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1") yield return DreamPlatformAssertions(round);
             if (scene == "Mines_35" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_FLIP_ASSERTIONS") == "1") yield return LocalFlipAssertions(round);
             if (scene == "Ruins2_04" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_ROOT_ANIMATION_ASSERTIONS") == "1") {

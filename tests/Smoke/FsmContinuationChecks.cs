@@ -19,6 +19,74 @@ namespace HollowConnect.Smoke;
 // Real PlayMaker actions through production Entity.MakeHost. These synthetic
 // objects exercise continuation without setting any boss state or physics.
 internal static class FsmContinuationChecks {
+    internal static IEnumerator StringSnapshots(Action<string> mark) {
+        // An unconnected sender makes packet sampling deterministic, without
+        // publishing fixture IDs into the real room or racing its send timer.
+        var net = new NetClient(new PacketManager());
+        var sources = new List<GameObject>();
+        var entities = new List<Entity>();
+        Entity Make(string name, ulong id) {
+            var source = new GameObject(name); source.SetActive(false); sources.Add(source);
+            var wait = new Wait(); wait.Reset(); wait.time = 1000;
+            var fsm = Create(source, null, wait);
+            fsm.FsmVariables.StringVariables = new[] { new FsmString("Attack label") { Value = null } };
+            var e = new Entity(net, id, EntityType.DynamicHazard, source); entities.Add(e);
+            return e;
+        }
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        var packetField = typeof(ClientUpdateManager).BaseType.GetField("CurrentUpdatePacket", flags);
+        var sampleField = typeof(Entity).GetField("nextFsmSample", flags);
+        var tick = typeof(Entity).GetMethod("OnUpdate", flags);
+        FsmString Variable(GameObject go) => go.GetComponent<PlayMakerFSM>().FsmVariables.StringVariables[0];
+        EntityHostFsmData Roundtrip(EntityHostFsmData data) {
+            var packet = new Packet(); data.WriteData(packet);
+            var copy = new EntityHostFsmData(); copy.ReadData(new Packet(packet.ToArray())); return copy;
+        }
+        try {
+            var sender = Make("HollowConnect string sender", 0xffffffffffffffc0UL); sender.InitializeHost();
+            var receiver = Make("HollowConnect string receiver", 0xffffffffffffffc1UL); receiver.InitializeClient();
+            var cache = new EntityHostFsmData();
+            foreach (var value in new[] { "armed", "phase-two", null }) {
+                packetField.SetValue(net.UpdateManager, new ServerUpdatePacket());
+                Variable(sender.Object.Host).Value = value;
+                sampleField.SetValue(sender, 0f); tick.Invoke(sender, null);
+                var outgoing = (ServerUpdatePacket)packetField.GetValue(net.UpdateManager);
+                if (!outgoing.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw))
+                    throw new Exception("String transition did not publish a reliable update");
+                var update = ((RawPacketDataCollection)raw).DataInstances.Cast<ReliableEntityUpdate>().Single(u => u.Id == sender.Id);
+                if (!update.HostFsmData.TryGetValue(0, out var data) || !data.Types.Contains(EntityHostFsmData.Type.Strings) ||
+                    !data.Strings.TryGetValue(0, out var sent) || sent != (value ?? string.Empty))
+                    throw new Exception("Null-initialized FSM string transition was omitted or not wire-safe");
+                cache.MergeData(Roundtrip(data));
+                receiver.UpdateHostFsmData(new Dictionary<byte, EntityHostFsmData> { [0] = Roundtrip(data) });
+                if (Variable(receiver.Object.Host).Value != (value ?? string.Empty) || Variable(receiver.Object.Client).Value != (value ?? string.Empty))
+                    throw new Exception("String transition did not reach native and replica FSMs");
+                mark("PASS FSM string live transition " + (value ?? "null-to-empty"));
+            }
+            packetField.SetValue(net.UpdateManager, new ServerUpdatePacket());
+            sampleField.SetValue(sender, 0f); tick.Invoke(sender, null);
+            var unchanged = (ServerUpdatePacket)packetField.GetValue(net.UpdateManager);
+            if (unchanged.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var same) &&
+                ((RawPacketDataCollection)same).DataInstances.Cast<ReliableEntityUpdate>().Any(u => u.Id == sender.Id &&
+                    u.HostFsmData.Values.Any(d => d.Types.Contains(EntityHostFsmData.Type.Strings))))
+                throw new Exception("Unchanged null string was published repeatedly");
+            var late = Make("HollowConnect string late receiver", 0xffffffffffffffc2UL); late.InitializeClient();
+            late.UpdateHostFsmData(new Dictionary<byte, EntityHostFsmData> { [0] = Roundtrip(cache) });
+            if (Variable(late.Object.Host).Value != string.Empty || Variable(late.Object.Client).Value != string.Empty)
+                throw new Exception("Late string snapshot did not preserve the clear");
+            Variable(late.Object.Host).Value = "stale local value";
+            late.MakeHost();
+            if (Variable(late.Object.Host).Value != string.Empty)
+                throw new Exception("Takeover did not restore the cleared string snapshot");
+            mark("PASS FSM string null deduplication, late snapshot and takeover");
+            yield return null;
+        } finally {
+            foreach (var e in entities) e.Destroy();
+            foreach (var source in sources) Object.Destroy(source);
+            net.UpdateManager.StopUpdates(); net.Disconnect();
+        }
+    }
+
     private static PlayMakerFSM Create(GameObject source, FsmFloat variable, params FsmStateAction[] actions) {
         var fsm = source.AddComponent<PlayMakerFSM>();
         fsm.Reset();
