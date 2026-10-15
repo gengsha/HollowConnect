@@ -18,7 +18,7 @@
 
 ## 验证与失败记录
 
-复用现有 `coverage` 双端探针，配置见 [Smoke README](../tests/Smoke/README.md)。测试目标为真实场景的 `dream_plat_small`，38 个实体，入口 `door_dreamReturn`。靠近由真实 Unity 触发器驱动，没有调用平台 Show/Hide 或设置平台 FSM；实际站立要求角色自然下落、onGround 为真且脚底接近平台碰撞顶面。
+复用现有 `coverage` 双端探针，配置见源码包中的 `tests/Smoke/README.md`。测试目标为真实场景的 `dream_plat_small`，38 个实体，入口 `door_dreamReturn`。靠近由真实 Unity 触发器驱动，没有调用平台 Show/Hide 或设置平台 FSM；实际站立要求角色自然下落、onGround 为真且脚底接近平台碰撞顶面。
 
 | 运行目录（均在 `.test-results`） | 结果与范围 |
 |---|---|
