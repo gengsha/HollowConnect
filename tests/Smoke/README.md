@@ -6,6 +6,8 @@
 
 所有测试模式创建 SilentProbe，启动及每帧将 AudioListener.volume 设为 0；只静音隔离测试进程，不修改用户音量配置。
 
+`coverage` 的 `HOLLOWCONNECT_PERFORMANCE_ASSERTIONS=1` 检查六个耗时回调在真实 Unity 帧上按顺序分帧完成；再让十二个不同的缺失预制体请求共用同帧资源候选，下帧重新查询、清理后释放缓存。缺失项必须返回 null，不允许取错误资源。它验证公共限额与失败路径，不代表全部真实弹幕突发都没有长帧。
+
 `coverage` 的 `HOLLOWCONNECT_COMBAT_SNAPSHOT_ASSERTIONS=1` 使用未连接的发送器检查真实战斗状态采样：未变化去重、复用缓冲后已发布包不变、压缩完整快照经生产编解码和序列过滤处理乱序/重传/回绕、缓存副本及接管。该夹具不冒充真实迟加入网络流程；`HOLLOWCONNECT_COMBAT_ASSERTIONS=1` 另走房间 UDP 与实际 HeroBox 受伤。性能输出的 `allocatedBytes` 仅在运行时提供当前线程分配计数器时有效；Unity Mono 输出 `allocation counter=unavailable` 时不能把零值当作零分配。
 
 `coverage` 中的 `HOLLOWCONNECT_FSM_NULL_STRING_ASSERTIONS=1` 在双方各运行真实 PlayMaker 字符串夹具：初始 null 后赋值、再次改变、清回 null，经生产采样和实际编解码检查原生/副本变量、重复采样、迟加入缓存及接管恢复。夹具使用未连接的 NetClient，不将测试实体发进真实房间；它证明字符串遗漏问题，不证明用户 Mines_11 数组越界的根因。`HOLLOWCONNECT_FSM_LAYOUT_TRACE=1` 仅在测试插件观察登记、Awake 和首次字符串接收时的实体/FSM/变量表，用于继续定位该未解异常。

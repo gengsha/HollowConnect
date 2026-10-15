@@ -213,6 +213,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1") yield return PerformanceAssertions();
             if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COMBAT_SNAPSHOT_ASSERTIONS") == "1") yield return FsmContinuationChecks.CombatSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_NULL_STRING_ASSERTIONS") == "1") yield return FsmContinuationChecks.StringSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1") yield return DreamPlatformAssertions(round);

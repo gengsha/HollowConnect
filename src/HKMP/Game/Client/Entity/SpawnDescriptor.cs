@@ -13,7 +13,20 @@ namespace Hkmp.Game.Client.Entity;
 internal static class SpawnDescriptor {
     private static readonly Dictionary<Type, FieldInfo[]> PrefabFields = new();
     private static readonly Dictionary<(string, EntityType), GameObject> ResourcePrefabs = new();
-    internal static void Clear() => ResourcePrefabs.Clear();
+    private static GameObject[] resourceCandidates;
+    private static int resourceFrame = -1;
+    internal static void Clear() {
+        ResourcePrefabs.Clear(); resourceCandidates = null; resourceFrame = -1;
+    }
+    private static GameObject[] ResourcesThisFrame() {
+        // Missing or ambiguous assets still retry next frame. A burst of
+        // pending spawns must not repeat the same global scan in one frame.
+        if (resourceCandidates == null || resourceFrame != Time.frameCount) {
+            resourceCandidates = Resources.FindObjectsOfTypeAll<GameObject>().Where(p => p != null && !p.scene.IsValid()).ToArray();
+            resourceFrame = Time.frameCount;
+        }
+        return resourceCandidates;
+    }
     internal static IEnumerable<GameObject> Prefabs(FsmStateAction action) {
         if (action == null) yield break;
         var type = action.GetType();
@@ -29,7 +42,6 @@ internal static class SpawnDescriptor {
     internal static string PrefabName(FsmStateAction action, EntityType type) =>
         Prefabs(action).FirstOrDefault(p => type == EntityType.DynamicHazard ? EntityRegistry.IsHazard(p) : EntityRegistry.TryGetSpawnEntry(p, out var e) && e.Type == type)?.name ?? "";
     internal static GameObject Create(EntitySpawn data, Entity source) {
-        var fsms = source.Object.Host != null ? source.Object.Host.GetComponentsInChildren<PlayMakerFSM>(true) : Array.Empty<PlayMakerFSM>();
         var owner=EntityReferences.Walk(source.Object.Host,data.FsmPath);
         var fsm = owner==null?null:owner.GetComponents<PlayMakerFSM>().FirstOrDefault(f => f.FsmName == data.Fsm);
         var state = fsm?.FsmStates.FirstOrDefault(s => s.Name == data.State);
@@ -38,6 +50,7 @@ internal static class SpawnDescriptor {
             (data.SpawnedType == EntityType.DynamicHazard ? EntityRegistry.IsHazard(p) : EntityRegistry.TryGetSpawnEntry(p, out var entry) && entry.Type == data.SpawnedType);
         var candidates = Prefabs(action).Where(Match).Distinct().ToArray();
         if (candidates.Length != 1) {
+            var fsms = source.Object.Host != null ? source.Object.Host.GetComponentsInChildren<PlayMakerFSM>(true) : Array.Empty<PlayMakerFSM>();
             candidates = fsms.SelectMany(f => f.FsmStates).SelectMany(s => s.Actions).SelectMany(Prefabs).Where(Match).Distinct().ToArray();
         }
         if(candidates.Length!=1 && source.Object.Host!=null) {
@@ -53,7 +66,7 @@ internal static class SpawnDescriptor {
             if (ResourcePrefabs.TryGetValue(key, out var cached) && cached != null && !cached.scene.IsValid() && Match(cached))
                 candidates = new[] { cached };
             else {
-                candidates = Resources.FindObjectsOfTypeAll<GameObject>().Where(p => !p.scene.IsValid() && Match(p)).ToArray();
+                candidates = ResourcesThisFrame().Where(Match).ToArray();
                 // Pooled hazards can arrive in large bursts. Reuse only a
                 // unique native asset; misses and ambiguity still retry/fail.
                 if (candidates.Length == 1) ResourcePrefabs[key] = candidates[0];
