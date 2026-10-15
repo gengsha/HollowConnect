@@ -207,6 +207,17 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1") yield return DreamPlatformAssertions(round);
+            if (scene == "Mines_35" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_FLIP_ASSERTIONS") == "1") yield return LocalFlipAssertions(round);
+            if (scene == "Ruins2_04" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_ROOT_ANIMATION_ASSERTIONS") == "1") {
+                var knight = Entities.Values.First(e => e.Type == EntityType.GreatHuskSentry);
+                var animated = manager.IsSceneHost ? knight.Object.Host : knight.Object.Client;
+                var sprite = animated.GetComponent<tk2dBaseSprite>();
+                var framesSeen = new HashSet<int>();
+                var deadline = Time.realtimeSinceStartup + 3;
+                while (Time.realtimeSinceStartup < deadline) { framesSeen.Add(sprite.spriteId); yield return null; }
+                if (!animated.GetComponent<tk2dSpriteAnimator>().enabled || framesSeen.Count < 3) throw new Exception("Native root animation stopped: frames=" + framesSeen.Count);
+                Mark("PASS native root animation continues on " + (manager.IsSceneHost ? "authority" : "replica") + " frames=" + framesSeen.Count);
+            }
             if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") == "1") {
                 foreach (var group in Entities.Values.GroupBy(e => e.Type)) Mark("TYPE " + group.Key + " count=" + group.Count());
                 foreach (var e in Entities.Values.Where(e => e.Type is EntityType.CrystalCrawler or EntityType.CrystallisedHusk or EntityType.CrystalTurret or EntityType.SoulTwister or EntityType.SoulWarrior)) Dump(e.Object.Host);

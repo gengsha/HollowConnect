@@ -21,13 +21,6 @@
         "fsm_name": "Lift Control"
     },
     {
-        "base_object_name": "Mines Platform",
-        "type": "CrystalPeakPlatform",
-        "components": [
-            "FlipPlatform"
-        ]
-    },
-    {
         "base_object_name": "F Plat",
         "type": "DreamPlatform",
         "components": [

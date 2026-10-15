@@ -592,8 +592,6 @@ internal class EntityManager {
             .Concat(Object.FindObjectsOfType<BigCentipede>(true).Select(centipede => centipede.gameObject))
             // Concatenate all GameObjects for CameraLockArea components
             .Concat(Object.FindObjectsOfType<CameraLockArea>(true).Select(cameraLockArea => cameraLockArea.gameObject))
-            // Concatenate all GameObjects for FlipPlatform components
-            .Concat(Object.FindObjectsOfType<FlipPlatform>(true).Select(flipPlatform => flipPlatform.gameObject))
             // Concatenate all GameObjects for DreamPlatform components
             .Concat(Object.FindObjectsOfType<DreamPlatform>(true).Select(dreamPlatform => dreamPlatform.gameObject))
             // Filter out GameObjects not in the current scene
