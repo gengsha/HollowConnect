@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MonoMod.RuntimeDetour;
 using Hkmp.Game.Client.Entity;
 using HollowConnect;
 using Modding;
@@ -20,7 +21,7 @@ public sealed class DeathProbe : MonoBehaviour {
     private int sounds;
     private string deathState;
     private readonly HashSet<string> clips = new HashSet<string>();
-    private string benchScene => host ? "Town" : "Crossroads_47";
+    private string benchScene => host || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_SHARED_BENCH") == "1" ? "Town" : "Crossroads_47";
     private static T Field<T>(object obj, string key) => (T)obj.GetType().GetField(key, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj);
     private readonly object logLock = new object();
     private void Log(string value) { lock (logLock) File.AppendAllText(Path.Combine(root, role + ".log"), DateTime.UtcNow.ToString("O") + " " + value + "\n"); }
@@ -297,6 +298,29 @@ public sealed class DeathProbe : MonoBehaviour {
     }
     private IEnumerator ReturnMotion(string label) {
         var hero = HeroController.instance; var body = hero.GetComponent<Rigidbody2D>();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_INPUT_CHECK") == "1") {
+            Log("RETURN INPUT " + label + " input=" + hero.acceptingInput + " relinquished=" + hero.controlReqlinquished +
+                " state=" + hero.hero_state + " ground=" + hero.cState.onGround + " hazard=" + hero.cState.hazardDeath + "/" + hero.cState.hazardRespawning +
+                " pause=" + PlayerData.instance.GetBool("disablePause") + " bench=" + PlayerData.instance.GetBool("atBench") +
+                " map=" + hero.CanQuickMap() + " inventory=" + hero.CanOpenInventory());
+            var inventory = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.name == "Inventory" && f.FsmName == "Inventory Control");
+            if (PlayerData.instance.GetBool("atBench")) {
+                Require(hero.CanOpenInventory(), "native inventory allowed immediately after party release");
+                yield return Press(InputHandler.Instance.inputActions.openInventory);
+                yield return Until(() => inventory.ActiveStateName == "Opened", "native inventory opened after party release", 5);
+                Log("INVENTORY OPEN RESULT state=" + inventory.ActiveStateName + " input=" + hero.acceptingInput + " relinquished=" + hero.controlReqlinquished);
+                yield return new WaitForSecondsRealtime(.3f);
+                yield return Press(InputHandler.Instance.inputActions.openInventory);
+                yield return Until(() => inventory.ActiveStateName == "Closed", "native inventory closed after party release", 5);
+                Log("INVENTORY CLOSE RESULT state=" + inventory.ActiveStateName + " input=" + hero.acceptingInput + " relinquished=" + hero.controlReqlinquished +
+                    " bench=" + PlayerData.instance.GetBool("atBench"));
+                var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == PlayerData.instance.GetString("respawnMarkerName") && f.FsmName == "Bench Control");
+                yield return Until(() => bench.ActiveStateName == "Resting", label + " native bench wake reaches input listeners", 10);
+                yield return Press(InputHandler.Instance.inputActions.jump);
+                yield return Until(() => !PlayerData.instance.GetBool("atBench") && hero.acceptingInput && !hero.controlReqlinquished,
+                    label + " native jump input leaves bench after closing inventory", 5);
+            }
+        }
         if (scene.StartsWith("Dream_") || scene.StartsWith("GG_")) {
             var wake = hero.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Dream Return");
             yield return Until(() => wake.ActiveStateName == "Ready", label + " native wake input prompt", 10);
@@ -309,14 +333,50 @@ public sealed class DeathProbe : MonoBehaviour {
         Log("RETURN PHYSICS " + label + " gravity=" + body.gravityScale + " cachedGravity=" + Field<float>(hero, "prevGravityScale") + " simulated=" + body.simulated);
         Require(body.simulated, label + " restores simulation");
         Require(body.gravityScale > 0, label + " restores native gravity");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_INPUT_CHECK") == "1") {
+            yield return Until(() => hero.cState.onGround, label + " naturally grounded before action eligibility checks", 10);
+            bool Can(string name) => (bool)typeof(HeroController).GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
+            Log("RETURN ACTIONS attack=" + Can("CanAttack") + " jump=" + Can("CanJump") + " map=" + hero.CanQuickMap() + " bench=" + PlayerData.instance.GetBool("atBench"));
+            Require(Can("CanAttack") && Can("CanJump") && hero.CanQuickMap(), label + " native actions eligible before input checks");
+        }
         for (var jump = 1; jump <= 2; jump++) {
             yield return Until(() => hero.cState.onGround && hero.acceptingInput, label + " grounded before jump " + jump, 10);
-            typeof(HeroController).GetMethod("HeroJump", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
-            typeof(HeroController).GetMethod("Jump", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_INPUT_CHECK") == "1") yield return Press(InputHandler.Instance.inputActions.jump);
+            else {
+                typeof(HeroController).GetMethod("HeroJump", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
+                typeof(HeroController).GetMethod("Jump", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
+            }
             Require(body.velocity.y > 0, label + " native jump " + jump + " rises");
             yield return Until(() => body.velocity.y < -1, label + " native jump " + jump + " falls again", 4);
         }
         yield return Until(() => hero.cState.onGround, label + " lands after repeated jumps", 10);
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_INPUT_CHECK") == "1") {
+            bool Can(string name) => (bool)typeof(HeroController).GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
+            Require(Can("CanAttack") && Can("CanJump") && hero.CanQuickMap(), label + " native attack, jump and quick map eligible");
+            yield return Press(InputHandler.Instance.inputActions.attack);
+            Require(hero.cState.attacking, label + " attack input reaches native action");
+            yield return Until(() => !hero.cState.attacking, label + " native attack finishes", 3);
+            var inventory = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.name == "Inventory" && f.FsmName == "Inventory Control");
+            yield return Press(InputHandler.Instance.inputActions.openInventory);
+            yield return Until(() => inventory.ActiveStateName == "Opened", label + " inventory input opens after standing", 5);
+            yield return new WaitForSecondsRealtime(.3f);
+            yield return Press(InputHandler.Instance.inputActions.openInventory);
+            yield return Until(() => inventory.ActiveStateName == "Closed" && hero.acceptingInput && !hero.controlReqlinquished,
+                label + " inventory input closes and restores native control after standing", 5);
+        }
+    }
+    // Test-only input boundary: let the native FSM and HeroController consume a
+    // press normally, including their input gates. Do not call an action method.
+    private IEnumerator Press(InControl.PlayerAction action) {
+        var frame = Time.frameCount + 1;
+        using (new Hook(typeof(InControl.OneAxisInputControl).GetProperty("WasPressed").GetGetMethod(),
+            new Func<Func<InControl.OneAxisInputControl, bool>, InControl.OneAxisInputControl, bool>((orig, self) =>
+                ReferenceEquals(self, action) ? Time.frameCount == frame : orig(self))))
+        using (new Hook(typeof(InControl.OneAxisInputControl).GetProperty("IsPressed").GetGetMethod(),
+            new Func<Func<InControl.OneAxisInputControl, bool>, InControl.OneAxisInputControl, bool>((orig, self) =>
+                ReferenceEquals(self, action) ? Time.frameCount >= frame : orig(self)))) {
+            yield return new WaitForSecondsRealtime(.12f);
+        }
     }
     private void Update() {
         if (!started || HeroController.instance == null) return;

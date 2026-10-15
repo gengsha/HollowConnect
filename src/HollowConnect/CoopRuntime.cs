@@ -53,7 +53,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     private Vector2? warpEntry;
     private string warpScene;
     private HeroController lockedHero;
-    private bool noDamage, heroBoxInactive, simulated;
+    private bool noDamage, heroBoxInactive, simulated, restoreControl, restoreAnimation;
     internal Vector3 DeathPosition { get; private set; }
     internal uint DeathSerial => downSerial;
     private string deathScene;
@@ -253,7 +253,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         shades.Synchronize();
         if (Time.unscaledTime >= nextPresence) { nextPresence = Time.unscaledTime + .1f; SendPresence(); }
         if (Resetting && !readySent && !changingScene && Playable && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == retryScene) {
-            Lock(); readySent = true; Send(new Message { Kind = Kind.Ready, Scene = retryScene });
+            Lock(true); readySent = true; Send(new Message { Kind = Kind.Ready, Scene = retryScene });
         }
         if (!Playable || Resetting || changingScene || Returning) return;
         if (Down && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
@@ -343,11 +343,15 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
     private int AfterTakeDamage(int hazard, int damage) => EntryProtected ? 0 : damage;
 
-    private void Lock() {
+    private void Lock(bool preserveNativeControl = false) {
         var hero = HeroController.instance;
         if (hero == null || lockedHero == hero) return;
         lockedHero = hero; var body = hero.GetComponent<Rigidbody2D>();
         simulated = body.simulated; noDamage = hero.takeNoDamage; heroBoxInactive = HeroBox.inactive;
+        // A bench or dream wake can still own control after hero-in-position.
+        // Releasing the party barrier must not interrupt its animation or input.
+        restoreControl = !preserveNativeControl || !hero.controlReqlinquished;
+        restoreAnimation = !preserveNativeControl || hero.GetComponent<HeroAnimationController>().controlEnabled;
         hero.RelinquishControl(); hero.takeNoDamage = true; body.velocity = Vector2.zero; hero.AffectedByGravity(false); HeroBox.inactive = true;
         body.simulated = false;
     }
@@ -355,7 +359,8 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (lockedHero != null) {
             lockedHero.takeNoDamage = noDamage;
             HeroBox.inactive = heroBoxInactive;
-            lockedHero.RegainControl(); lockedHero.StartAnimationControl();
+            if (restoreControl) lockedHero.RegainControl();
+            if (restoreAnimation) lockedHero.StartAnimationControl();
             var body = lockedHero.GetComponent<Rigidbody2D>();
             body.simulated = simulated; body.velocity = Vector2.zero;
         }
@@ -449,7 +454,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (!Connected || Session != session || !Resetting || CoopContext.Epoch != round) yield break;
         changingScene = false;
         retryScene = UnitySceneManager.GetActiveScene().name;
-        Lock();
+        Lock(true);
     }
 
     private void CancelTransitions() {
@@ -486,7 +491,7 @@ public sealed class CoopRuntime : MonoBehaviour {
             yield return null;
         }
         if (Connected && Returning && !Resetting) {
-            changingScene = false; Lock();
+            changingScene = false; Lock(true);
             var pos = HeroController.instance.transform.position;
             Send(new Message { Kind = Kind.BenchReady, Serial = downSerial, Aux = sequence,
                 Scene = UnitySceneManager.GetActiveScene().name, X = pos.x, Y = pos.y });

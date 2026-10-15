@@ -50,6 +50,8 @@
 
 复活运动检查在个人 F6、全队回椅和特殊区域返回后，等待原生入场与反应保护完成，再连续两次调用原生 HeroJump / Jump，要求正重力、起跳、负向落速和最终落地。悬空测试靶子使用 AffectedByGravity(false) 保留原生缓存；返回后不再 PrepareHero。梦境返回的 Dream Return/Ready 原本等待玩家按键，探针发送其 ListenForJump.wasPressed 配置的原生事件完成唤醒，未直接改 FSM 状态。超时保存角色物理、输入及附近/骑士 FSM 状态。
 
+`HOLLOWCONNECT_DEATH_INPUT_CHECK=1` 加强上述返回检查：在原版长椅起身前打开、关闭物品栏，再按跳跃离椅；随后用输入接口连续跳跃、攻击，并在站立时再次开关物品栏，要求原生控制和地图资格恢复。测试只临时替换指定 InControl action 的按下/按住读取，让原版监听器和角色输入分支自行处理，不调用跳跃或攻击方法，也不强行 RegainControl。长椅仍须自然完成唤醒动画。`HOLLOWCONNECT_DEATH_SHARED_BENCH=1` 让双方都回 Town，默认仍为不同个人长椅；配合 `HOLLOWCONNECT_DEATH_FIRST=host/guest` 交换死亡顺序。
+
 `coverage` 的 `HOLLOWCONNECT_COVERAGE_PERFORMANCE=1` 用自然落地的免伤靶子观察灵魂法师系列下砸，每两秒记录实体数量、帧耗时和临时 detour 测得的登记、退休、接收生成、预制体查找与处理耗时。它关闭逐帧位置文件和重复实体详列，保留开场 FSM/预制体及最终生成数量；未观察到原生 Quake Down 必须失败。`HOLLOWCONNECT_COVERAGE_SCENES=GG_Soul_Master,GG_Soul_Tyrant` 选择两个变体，`HOLLOWCONNECT_COVERAGE_AUTHORITY=guest` 让服务器房主显示副本。`HOLLOWCONNECT_COVERAGE_SOUL_PHASE2=1` 用原生 HealthManager 伤害推进二阶段，不设置 Boss FSM。该同机诊断不等于真实双机 FRP 或完整招式验收。
 
 普通远程敌人诊断可加 `HOLLOWCONNECT_COVERAGE_PROFILE=1`：临时统计实体 Tick、CombatState 采样/应用耗时和按类型生成的应用层字节；这些是累计量，不等于单帧耗时或实际网卡流量。`HOLLOWCONNECT_COVERAGE_ENTRY_GATE=right1` 选择真实存在的入场门，配合 `HOLLOWCONNECT_COVERAGE_SCENES=Mines_11,Ruins1_30`。`HOLLOWCONNECT_COVERAGE_NEAR_TARGET=1` 在入场后把免伤靶子放到首个目标旁并悬停，以触发原生范围判断；不设置敌人 FSM。它要求水晶房观察到 CrystalCrawler/Beam、圣所观察到 Mage Orb 生成，否则失败。这仍不证明全部招式、伤害或真实双机掉帧已通过。
