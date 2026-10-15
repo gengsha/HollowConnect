@@ -44,6 +44,8 @@
 
 `coverage` 的 `HOLLOWCONNECT_COVERAGE_PERFORMANCE=1` 用自然落地的免伤靶子观察灵魂法师系列下砸，每两秒记录实体数量、帧耗时和临时 detour 测得的登记、退休、接收生成、预制体查找与处理耗时。它关闭逐帧位置文件和重复实体详列，保留开场 FSM/预制体及最终生成数量；未观察到原生 Quake Down 必须失败。`HOLLOWCONNECT_COVERAGE_SCENES=GG_Soul_Master,GG_Soul_Tyrant` 选择两个变体，`HOLLOWCONNECT_COVERAGE_AUTHORITY=guest` 让服务器房主显示副本。`HOLLOWCONNECT_COVERAGE_SOUL_PHASE2=1` 用原生 HealthManager 伤害推进二阶段，不设置 Boss FSM。该同机诊断不等于真实双机 FRP 或完整招式验收。
 
+普通远程敌人诊断可加 `HOLLOWCONNECT_COVERAGE_PROFILE=1`：临时统计实体 Tick、CombatState 采样/应用耗时和按类型生成的应用层字节；这些是累计量，不等于单帧耗时或实际网卡流量。`HOLLOWCONNECT_COVERAGE_ENTRY_GATE=right1` 选择真实存在的入场门，配合 `HOLLOWCONNECT_COVERAGE_SCENES=Mines_11,Ruins1_30`。`HOLLOWCONNECT_COVERAGE_NEAR_TARGET=1` 在入场后把免伤靶子放到首个目标旁并悬停，以触发原生范围判断；不设置敌人 FSM。它要求水晶房观察到 CrystalCrawler/Beam、圣所观察到 Mage Orb 生成，否则失败。这仍不证明全部招式、伤害或真实双机掉帧已通过。
+
 0.1.10 新增 `HOLLOWCONNECT_SMOKE_MODE=grimm-motion`。`HOLLOWCONNECT_GRIMM_SCENE=GG_Grimm/GG_Grimm_Nightmare` 选择房间，`HOLLOWCONNECT_GRIMM_AUTHORITY=host/guest` 交换先入顺序，`HOLLOWCONNECT_GRIMM_ENTRY_DELAY` 指定后来者延迟秒数。直接观察原生 FireGrimmBall 的推力、网络登记后的协程和横向运动，另检查横向火蝠、副本无重力 / 速度和位置样本。要求至少 8 次保留发射参数、3 次正确方向横向运动和 3 个横向飞行火蝠；不能用两端共同错误的位置一致替代它。
 
 `HOLLOWCONNECT_GRIMM_HANDOFF=1` 在气球火球一轮结束后让原权威离房，要求新权威继续发射上述原生攻击，再让原权威重新入房核对移动弹幕。这不证明飞行中弹幕接管。双方正常断开后才停止服务器，任一 `.failed` 均为失败。当前角色免伤但仍会受到原生运动与碰撞，招式未触发 / 样本不足也必须失败；诊断记录 Hero 和 Boss 的站位及原生状态，不能隐藏这种失败。

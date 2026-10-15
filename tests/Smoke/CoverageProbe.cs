@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Hkmp.Game.Client.Entity;
+using Hkmp.Game.Client.Entity.Component;
 using Hkmp.Networking.Packet.Data;
 using HollowConnect;
 using HutongGames.PlayMaker;
@@ -31,6 +32,11 @@ public sealed class CoverageProbe : MonoBehaviour {
     private double registrationMs, retirementMs, replicaSpawnMs;
     private int registrations, retirements, replicaSpawns;
     private readonly List<double> prefabTimes = new(), processTimes = new();
+    private readonly Dictionary<string, (int Calls, double Ms, long Bytes)> costs = new();
+    private void Cost(string key, long start, long bytes = 0) {
+        costs.TryGetValue(key, out var old);
+        costs[key] = (old.Calls + 1, old.Ms + (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency, old.Bytes + bytes);
+    }
     private void ObservePerformance() {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
         double Milliseconds(long start) => (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
@@ -64,6 +70,24 @@ public sealed class CoverageProbe : MonoBehaviour {
             (Func<Func<EntityProcessor, EntityProcessor>, EntityProcessor, EntityProcessor>)((orig, p) => {
                 var start = System.Diagnostics.Stopwatch.GetTimestamp(); var result = orig(p);
                 processTimes.Add(Milliseconds(start)); return result;
+            })));
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") != "1") return;
+        performanceHooks.Add(new Hook(typeof(Entity).GetMethod("OnUpdate", flags),
+            (Action<Action<Entity>, Entity>)((orig, e) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(e); Cost("entity-tick/" + e.Type, start);
+            })));
+        performanceHooks.Add(new Hook(typeof(CombatStateComponent).GetMethod("Tick", flags),
+            (Action<Action<CombatStateComponent>, CombatStateComponent>)((orig, c) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c); Cost("combat-capture", start);
+            })));
+        performanceHooks.Add(new Hook(typeof(CombatStateComponent).GetMethod("Update"),
+            (Action<Action<CombatStateComponent, EntityNetworkData, bool>, CombatStateComponent, EntityNetworkData, bool>)((orig, c, d, snapshot) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c, d, snapshot); Cost("combat-apply", start, d.Packet.Length);
+            })));
+        performanceHooks.Add(new Hook(typeof(Hkmp.Networking.Client.ClientUpdateManager).GetMethod("AddEntityData"),
+            (Action<Action<Hkmp.Networking.Client.ClientUpdateManager, ulong, EntityNetworkData>, Hkmp.Networking.Client.ClientUpdateManager, ulong, EntityNetworkData>)((orig, m, id, d) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(m, id, d);
+                Cost("send/" + d.Type + "/" + (Entities.TryGetValue(id, out var e) ? e.Type.ToString() : "unknown"), start, d.Packet.Length);
             })));
     }
     private void Trace(int round) {
@@ -105,7 +129,7 @@ public sealed class CoverageProbe : MonoBehaviour {
     private IEnumerator Until(Func<bool> f,string label) { var end=Time.realtimeSinceStartup+50; while(!f()&&Time.realtimeSinceStartup<end) yield return null; if(!f()) throw new Exception("Timeout "+label); Mark("PASS "+label); }
     private bool In(string scene)=>runtime.Playable&&GameManager.instance.sceneName==scene;
     private void Freeze() { var h=HeroController.instance; h.takeNoDamage=true; h.AffectedByGravity(false); h.GetComponent<Rigidbody2D>().velocity=Vector2.zero; }
-    private void Enter(string scene)=>GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo{SceneName=scene,EntryGateName=scene.StartsWith("GG_")?"door_dreamEnter":"left1",Visualization=GameManager.SceneLoadVisualizations.Default,WaitForSceneTransitionCameraFade=true});
+    private void Enter(string scene)=>GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo{SceneName=scene,EntryGateName=Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_ENTRY_GATE") ?? (scene.StartsWith("GG_")?"door_dreamEnter":"left1"),Visualization=GameManager.SceneLoadVisualizations.Default,WaitForSceneTransitionCameraFade=true});
     private sealed class Log : Hkmp.Logging.ILogger {
         private readonly CoverageProbe p; internal Log(CoverageProbe p){this.p=p;}
         public void Info(string s){} public void Debug(string s){} public void Fine(string s){}
@@ -118,6 +142,7 @@ public sealed class CoverageProbe : MonoBehaviour {
         Mark("OBJECT "+Describe(go)+" pos="+go.transform.position+" components="+string.Join(",",go.GetComponents<Component>().Where(c=>c!=null).Select(c=>c.GetType().Name)));
         foreach(var f in go.GetComponents<PlayMakerFSM>()) {
             Mark("FSM "+f.FsmName+"="+f.ActiveStateName+" global="+string.Join(",",f.Fsm.GlobalTransitions.Select(t=>t.EventName+"->"+t.ToState)));
+            Mark("STRINGS " + string.Join(",", f.FsmVariables.StringVariables.Select(v => v.Name + "=" + v.Value)));
             foreach(var v in f.FsmVariables.GameObjectVariables) Mark("VAR "+v.Name+"="+Describe(v.Value));
             foreach(var s in f.FsmStates) {
                 Mark("STATE "+s.Name+" "+string.Join(",",s.Actions.Select(a=>a.GetType().Name))+" transitions="+string.Join(",",s.Transitions.Select(t=>t.EventName+"->"+t.ToState)));
@@ -181,6 +206,17 @@ public sealed class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") == "1") {
+                foreach (var group in Entities.Values.GroupBy(e => e.Type)) Mark("TYPE " + group.Key + " count=" + group.Count());
+                foreach (var e in Entities.Values.Where(e => e.Type is EntityType.CrystalCrawler or EntityType.CrystallisedHusk or EntityType.CrystalTurret or EntityType.SoulTwister or EntityType.SoulWarrior)) Dump(e.Object.Host);
+                costs.Clear();
+            }
+            if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_NEAR_TARGET") == "1") {
+                var target = Entities.Values.FirstOrDefault(e => e.Type is EntityType.CrystalCrawler or EntityType.CrystallisedHusk or EntityType.SoulTwister or EntityType.SoulWarrior);
+                if (target == null) throw new Exception("No native ranged target in " + scene);
+                Freeze(); HeroController.instance.transform.position = target.Object.Host.transform.position + new Vector3(4, 0, 0);
+                Mark("NATIVE TARGET " + target.Type + " hero=" + HeroController.instance.transform.position);
+            }
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SOUL_PHASE2") == "1") {
                 var phase1 = Entities.Values.Single(e => e.Type is EntityType.SoulMaster or EntityType.SoulTyrant);
                 var phase2 = Entities.Values.Single(e => e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2);
@@ -218,17 +254,23 @@ public sealed class CoverageProbe : MonoBehaviour {
                     Mark("LIVE "+e.Id+" "+e.Type+" "+Describe(go)+" pos="+go.transform.position+" state="+string.Join(",",go.GetComponents<PlayMakerFSM>().Select(f=>f.FsmName+"="+f.ActiveStateName))+" colliders="+string.Join(",",go.GetComponentsInChildren<Collider2D>(true).Select(c=>c.gameObject.name+"/"+c.enabled+"/"+c.isTrigger+"/active="+c.gameObject.activeInHierarchy))+" damage="+string.Join(",",go.GetComponentsInChildren<DamageHero>(true).Select(d=>d.gameObject.name+"/"+d.enabled+"/"+d.damageDealt)));
                 }
             }
-            if(performance && manager.IsSceneHost) foreach(var e in Entities.Values.Where(e=>e.Object.Host!=null && (e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant)))
+            if(performance && manager.IsSceneHost) foreach(var e in Entities.Values.Where(e=>e.Object.Host!=null && (e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant or EntityType.CrystalCrawler or EntityType.CrystallisedHusk or EntityType.SoulTwister or EntityType.SoulWarrior)))
                 foreach(var f in e.Object.Host.GetComponents<PlayMakerFSM>()) phaseStates.Add(e.Type + "/" + f.ActiveStateName);
             yield return null;}
             if(performance) {
                 if(manager.IsSceneHost && (scene=="GG_Soul_Master" || scene=="GG_Soul_Tyrant") && !phaseStates.Any(s=>s.EndsWith("/Quake Down",StringComparison.Ordinal)))
                     throw new Exception("Native Soul slam was not observed " + scene);
+                if (manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_NEAR_TARGET") == "1") {
+                    if (scene.StartsWith("Mines_") && !phaseStates.Contains("CrystalCrawler/Beam")) throw new Exception("Native laser attack was not observed");
+                    if (scene.StartsWith("Ruins1_") && !spawnCounts.Keys.Any(k => k.StartsWith("Mage Orb", StringComparison.Ordinal))) throw new Exception("Native mage orb spawn was not observed");
+                }
                 foreach(var pair in spawnCounts)Mark("SPAWN COUNT " + pair.Value + " " + pair.Key);Mark("BOSS STATES " + string.Join(",",phaseStates));spawnCounts.Clear();
                 foreach(var times in new[]{(Name:"prefab",Values:prefabTimes),(Name:"process",Values:processTimes)}) {
                     times.Values.Sort();if(times.Values.Count!=0)Mark("COST " + times.Name + " count=" + times.Values.Count + " totalMs=" + times.Values.Sum() + " p95ms=" + times.Values[(int)((times.Values.Count-1)*.95)] + " maxms=" + times.Values.Last());
                     times.Values.Clear();
                 }
+                foreach (var pair in costs.OrderByDescending(p => p.Value.Ms)) Mark("PROFILE " + pair.Key + " calls=" + pair.Value.Calls + " totalMs=" + pair.Value.Ms + " bytes=" + pair.Value.Bytes);
+                costs.Clear();
             }
             Flag(role+".sample."+round);yield return Until(()=>Has((host?"guest":"host")+".sample."+round),"both sampled "+scene);
             foreach(var item in matched.OrderBy(p=>p.Key))Mark("POSITION MATCHES "+scene+" "+item.Key+"="+item.Value);matched.Clear();
