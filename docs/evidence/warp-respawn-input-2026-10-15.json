@@ -111,5 +111,43 @@
   "strictLogGateChecks": 14,
   "realTwoMachineFrp": false,
   "buildCommit": "0572b99edf772dd2931c00478c8ebe46d6bd26f1",
-  "releaseReady": false
+  "releaseReady": false,
+  "supplementalRuns": [
+    {
+      "run": "warp-godhome-cbc1de3-native-20261015",
+      "buildCommit": "cbc1de31cf3a97c48d8e798bf0a56aaec8d57903",
+      "bothDone": true,
+      "bothShutdown": true,
+      "serverStopped": true,
+      "strictLogsAfterStop": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "F5C990836FC7FC5C0DD043371C16C110F8396FB29D1F39E0C9178270C317EE6B"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "B0A6108A1B7A768267C988F2F43797A8AFA5DD2D05AFAC5B5A3D2829C65F0A5B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "D9FCA338667ACC2EB07444F9FCED7061FABEC1A7F69B545FE648C78EB705605A"
+        }
+      ],
+      "fixtureChanges": [
+        "Wait for production CanStartWarp before issuing F8",
+        "Run intentional observer error injection only when explicitly enabled; strict gate unchanged"
+      ],
+      "scope": [
+        "Ordinary F8 in both directions",
+        "Native Grimm death advances sequence and waits for downed participant",
+        "Cross-room and same-room native sequence context repair",
+        "Reverse Godhome warp",
+        "Grimm dynamic projectile positions",
+        "Accepted arrival completes after disconnect",
+        "Native projectile audio"
+      ],
+      "isolatedSmokePluginsDisabled": true
+    }
+  ]
 }

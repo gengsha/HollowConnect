@@ -208,7 +208,10 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
             yield return Until(() => !pd.GetBool("atBench") && HeroController.instance.acceptingInput &&
                 !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) {
             pd.SetBool("hasDreamNail", true);
+            pd.SetBool("hasLantern", true);
         }
         HeroController.instance.RegainControl(); HeroController.instance.StartAnimationControl(); Freeze();
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); }

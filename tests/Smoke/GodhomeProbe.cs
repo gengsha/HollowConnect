@@ -198,7 +198,8 @@ public sealed class GodhomeProbe : MonoBehaviour {
             foreach (var action in state.Actions.OfType<SpawnObjectFromGlobalPool>())
                 Mark("FIREBAT SPAWN " + state.Name + " enabled=" + action.Enabled + " prefab=" + action.gameObject.Value?.name + " fsms=" + string.Join(",", action.gameObject.Value.GetComponents<PlayMakerFSM>().Select(f => f.FsmName)));
         }
-        yield return ObserverFaults(grimm);
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_GODHOME_FAULT_ASSERTIONS") == "1")
+            yield return ObserverFaults(grimm);
         Flag(role + ".grimm"); yield return Until(() => Has(host ? "guest.grimm" : "host.grimm"), "both Grimm rooms");
         HeroController.instance.transform.position = new Vector3(90, 8, 0); Freeze();
         yield return Arsenal(35);
@@ -333,6 +334,9 @@ public sealed class GodhomeProbe : MonoBehaviour {
     private IEnumerator Warp(string scene) {
         yield return Until(() => runtime.Peers.Values.Any(p => p.State?.Scene == scene && p.State.IsReady), "warp target presence");
         runtime.Selected = runtime.Peers.First(p => p.Value.State?.Scene == scene).Key;
+        yield return Until(() => (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime),
+            "native local entrance permits F8");
+        if (Has(role + ".failed")) yield break;
         yield return new WaitForSecondsRealtime(.5f); // Current room heartbeat reaches the server before F8.
         var before = fades; var pressed = false;
         runtime.KeyPressed = key => key == KeyCode.F8 && !pressed && (pressed = true);

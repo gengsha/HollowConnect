@@ -2,6 +2,12 @@
 
 此项目不进入运行安装包，不能放在日常游戏的 Mods 目录中。
 
+`progress` 配合 `HOLLOWCONNECT_DREAM_WARRIORS=all` 检查七位普通战士之梦，`HOLLOWCONNECT_DREAM_SUMMONER=host|guest` 选择唯一交互发起者。双方实际加载原生场景，从 NPC 交互入口和 Yes/No 选择启动挑战，由原生 HealthManager.Hit 造成致命伤害，等原生死亡收尾后各自完成原生领奖。发起者先领并留在房间，队友再领；检查重复完成、旧挑战不能重复领奖或重启，副机通过真实 UDP 提交提前完成必须被服务器拒绝。`inspect` 只导出状态机，不算战斗验收。各战士之间经过中立场景并等旧 boss 附加场景卸载，避免直接强跳导致原生同名 Warrior 文件夹查错；不将该前置处理当作生产修复。
+
+战士之梦测试的内存角色预先具备梦之钉和灯笼；无眼的原生 NPC 在没有灯笼时会自行停用，不能将缺少挑战资格的运行记为同步失败。
+
+`godhome` 的主动观察器故障注入需显式设置 `HOLLOWCONNECT_GODHOME_FAULT_ASSERTIONS=1`，故障日志仍须被严格日志门槛拒绝，不能与普通通过的运行合并。F8 夹具先等待本机原生入场允许操作，再发送一次按键；不会修改生产输入门槛。
+
 `progress` 模式用无存档写入的双客户端检查遗忘十字路鹿角站共享：购买者由 `HOLLOWCONNECT_PROGRESS_BUYER=host|guest` 选择，`HOLLOWCONNECT_PROGRESS_PROMPT=1` 让接收者正在原生购买对话内。探针程序化进入原生交互入口，随后通过原生 Yes/No 控制 FSM 的选择事件支付，保留真正的 TakeGeo、授权和开站动画。断言当前房间无需重新加载即可使用、仅购买者扣 50 吉欧、对话结束、控制恢复、重复进度 offer 不改变钱或原生动作。`HOLLOWCONNECT_PROGRESS_BASELINE=1` 在旧实现上确认接收者还能再次付费并明确失败；不能计入验收。之后实际购买科尼法首张地图并跨 Crossroads_08、Crossroads_30 检查双端角色/快照，`HOLLOWCONNECT_MAP_BOTH=1` 覆盖双方购买；地图和吉欧仍为个人数据。`HOLLOWCONNECT_PROGRESS_INSPECT=1` 只导出原生购买 FSM，不是购买验收。成功路径使用已有 ProbeShutdown 完成网络退出后才写终态。
 
 所有测试模式创建 SilentProbe，启动及每帧将 AudioListener.volume 设为 0；只静音隔离测试进程，不修改用户音量配置。
