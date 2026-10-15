@@ -400,6 +400,8 @@ internal static class FsmContinuationChecks {
                 throw new Exception("Delayed combat snapshot disabled a newer native/replica collider or child");
             entity.UpdateData(new List<EntityNetworkData> { Hkmp.Game.Server.SnapshotPayload.Copy(publishedData) }, true);
             if (!collider.enabled || !replicaChild.activeSelf) throw new Exception("Complete cached combat snapshot lost collider or child state");
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_SNAPSHOT_ASSERTIONS") == "1")
+                yield return NestedCombatSnapshots(entity, older, newer, mark);
             entity.UpdateIsActive(true); entity.MakeHost();
             if (!collider.enabled || !child.activeSelf)
                 throw new Exception("Takeover restored stale combat collider or child state");
@@ -409,6 +411,55 @@ internal static class FsmContinuationChecks {
             receiver.StopUpdates(); entity?.Destroy();
             if (entity?.Object.Client != null) Object.Destroy(entity.Object.Client);
             Object.Destroy(source);
+        }
+    }
+
+    private static IEnumerator NestedCombatSnapshots(Entity entity, byte[] older, byte[] newer, Action<string> mark) {
+        foreach (var transfer in new[] { false, true }) foreach (var snapshotNewer in new[] { false, true }) {
+            var receiver = new ClientUpdateManager();
+            ClientUpdatePacket Make(ushort sequence, bool nested, bool active, byte[] bytes) {
+                var packet = new ClientUpdatePacket { Sequence = sequence };
+                var update = new ReliableEntityUpdate { Id = entity.Id, IsActive = active };
+                update.UpdateTypes.UnionWith(new[] { EntityUpdateType.Active, EntityUpdateType.Data });
+                update.GenericData.Add(new EntityNetworkData { Type = EntityComponentType.CombatState, Packet = new Packet(bytes) });
+                if (nested) {
+                    var scene = new ClientPlayerAlreadyInScene(); scene.ReliableEntityUpdateList.Add(update);
+                    if (transfer) packet.SetSendingPacketData(ClientUpdatePacketId.SceneHostTransfer, new HostTransfer { SceneName = "fixture", Snapshot = scene });
+                    else packet.SetSendingPacketData(ClientUpdatePacketId.PlayerAlreadyInScene, scene);
+                } else {
+                    var batch = new PacketDataCollection<ReliableEntityUpdate>(); batch.DataInstances.Add(update);
+                    packet.SetSendingPacketData(ClientUpdatePacketId.ReliableEntityUpdate, batch);
+                }
+                return packet;
+            }
+            void Apply(ReliableEntityUpdate update, bool snapshot) {
+                if (update.UpdateTypes.Contains(EntityUpdateType.Active)) entity.UpdateIsActive(update.IsActive);
+                if (update.UpdateTypes.Contains(EntityUpdateType.Data)) entity.UpdateData(update.GenericData, snapshot);
+            }
+            void Deliver(ClientUpdatePacket outgoing) {
+                var wire = new Packet(); outgoing.CreatePacket(wire);
+                var incoming = new ClientUpdatePacket();
+                if (!incoming.ReadPacket(PacketManager.ReadDatagram(wire.ToArray()))) throw new Exception("Nested combat datagram did not decode");
+                receiver.OnReceivePacket<ClientUpdatePacket, ClientUpdatePacketId>(incoming);
+                foreach (var data in incoming.GetPacketData().Values) {
+                    var scene = data is HostTransfer handoff ? handoff.Snapshot : data as ClientPlayerAlreadyInScene;
+                    if (scene != null) foreach (var update in scene.ReliableEntityUpdateList) Apply(update, true);
+                    else if (data is RawPacketDataCollection batch) foreach (var update in batch.DataInstances.OfType<ReliableEntityUpdate>()) Apply(update, false);
+                }
+            }
+            receiver.StartUpdates();
+            try {
+                var latest = Make(0, snapshotNewer, true, newer);
+                var stale = Make(65534, !snapshotNewer, false, older);
+                Deliver(latest);
+                var carrier = new ClientUpdatePacket { Sequence = 1 }; carrier.SetLostReliableData(stale);
+                Deliver(carrier); Deliver(stale); Deliver(latest);
+                if (!entity.Object.Client.activeSelf || !entity.Object.Host.GetComponent<BoxCollider2D>().enabled ||
+                    !entity.Object.Client.GetComponent<BoxCollider2D>().enabled || !entity.Object.Client.transform.Find("Child").gameObject.activeSelf)
+                    throw new Exception("Nested room snapshot/live update rolled back native/replica collider, child or visibility");
+                mark("PASS nested room combat order transfer=" + transfer + " snapshotNewer=" + snapshotNewer);
+                yield return null;
+            } finally { receiver.StopUpdates(); }
         }
     }
 

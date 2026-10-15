@@ -71,6 +71,12 @@ internal static class Program {
             Test("resent combat snapshots preserve newer collider state across sequence " + sequence, () => ReliabilityProbe.ReorderedCombatSnapshots(sequence, true));
         }
         Test("client receive and main-thread dispatch preserve reordered fragmented entity updates", ReliabilityProbe.ClientReceivePath);
+        foreach (var sequence in new ushort[] { 20, 0 })
+            foreach (var transfer in new[] { false, true })
+                foreach (var snapshotNewer in new[] { false, true })
+                    foreach (var resend in new[] { false, true })
+                        Test($"room snapshot/live order: sequence={sequence} transfer={transfer} snapshotNewer={snapshotNewer} resend={resend}",
+                            () => SceneSnapshotProbe.Ordering(sequence, transfer, snapshotNewer, resend));
         foreach (var sequence in new ushort[] { 22, 1 }) Test("reliable resend order preserves snapshots and events across sequence " + sequence, () => {
             ServerUpdatePacket StatePacket(ushort seq, byte state, bool active) {
                 var result = new ServerUpdatePacket { Sequence = seq };

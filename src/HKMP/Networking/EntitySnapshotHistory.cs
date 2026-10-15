@@ -46,6 +46,18 @@ internal sealed class EntitySnapshotHistory {
             foreach (var item in collection.DataInstances) Filter(item, revision);
             return;
         }
+        // Initial room and takeover snapshots share the original datagram's
+        // revision with live updates. Their nested fields must neither roll
+        // back newer updates nor be overwritten by older delayed updates.
+        if (data is HostTransfer transfer) {
+            Filter(transfer.Snapshot, revision);
+            return;
+        }
+        if (data is ClientPlayerAlreadyInScene scene) {
+            foreach (var item in scene.EntityUpdateList) Filter(item, revision);
+            foreach (var item in scene.ReliableEntityUpdateList) Filter(item, revision);
+            return;
+        }
         if (data is not BaseEntityUpdate update || update.Id == 0) return;
         if (update is ReliableEntityUpdate eventsOnly &&
             !eventsOnly.UpdateTypes.Contains(EntityUpdateType.Active) &&
