@@ -319,9 +319,16 @@ internal static class FsmContinuationChecks {
         }
     }
 
+    internal static IEnumerator CombatSnapshots(Action<string> mark) {
+        var net = new NetClient(new PacketManager());
+        try { yield return CombatSnapshots(net, mark); }
+        finally { net.UpdateManager.StopUpdates(); net.Disconnect(); }
+    }
+
     private static IEnumerator CombatSnapshots(NetClient net, Action<string> mark) {
         var source = new GameObject("HollowConnect combat ordering fixture"); source.SetActive(false);
         var child = new GameObject("Child"); child.transform.SetParent(source.transform, false);
+        for (var i = 0; i < 6; i++) new GameObject("Visual " + i).transform.SetParent(source.transform, false);
         var collider = source.AddComponent<BoxCollider2D>();
         Entity entity = null;
         var receiver = new Hkmp.Networking.Server.ServerUpdateManager();
@@ -346,6 +353,27 @@ internal static class FsmContinuationChecks {
                     .GenericData.Last(d => d.Type == EntityComponentType.CombatState).Packet.ToArray();
             }
             var older = Capture(false); var newer = Capture(true);
+            var published = (ServerUpdatePacket)current.GetValue(net.UpdateManager);
+            published.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var publishedRaw);
+            var publishedData = ((RawPacketDataCollection)publishedRaw).DataInstances.Cast<ReliableEntityUpdate>()
+                .Single(u => u.Id == id).GenericData.Last(d => d.Type == EntityComponentType.CombatState);
+            // Force only the sampling deadline, preserving production history.
+            // Two unchanged samples reuse scratch storage; a later mutation
+            // must neither resend unchanged state nor alter the queued payload.
+            void Sample() {
+                typeof(CombatStateComponent).GetField("next", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(combat, 0f);
+                combat.IsControlled = false;
+                try { tick.Invoke(combat, null); } finally { combat.IsControlled = true; }
+            }
+            current.SetValue(net.UpdateManager, new ServerUpdatePacket()); Sample(); Sample();
+            var unchanged = (ServerUpdatePacket)current.GetValue(net.UpdateManager);
+            if (unchanged.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out _))
+                throw new Exception("Unchanged combat snapshot was sent repeatedly");
+            collider.enabled = false; Sample();
+            var changed = (ServerUpdatePacket)current.GetValue(net.UpdateManager);
+            if (!changed.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out _) || !publishedData.Packet.ToArray().SequenceEqual(newer))
+                throw new Exception("Combat scratch reuse missed a change or mutated a published snapshot");
+            mark("PASS unchanged combat sampling and changed scratch preserve queued snapshots");
             var manager = new PacketManager();
             manager.RegisterServerUpdatePacketHandler<ReliableEntityUpdate>(ServerUpdatePacketId.ReliableEntityUpdate,
                 (_, update) => entity.UpdateData(update.GenericData, false));
@@ -370,6 +398,8 @@ internal static class FsmContinuationChecks {
             var replicaChild = entity.Object.Client.transform.Find("Child").gameObject;
             if (!collider.enabled || !entity.Object.Client.GetComponent<BoxCollider2D>().enabled || !replicaChild.activeSelf)
                 throw new Exception("Delayed combat snapshot disabled a newer native/replica collider or child");
+            entity.UpdateData(new List<EntityNetworkData> { Hkmp.Game.Server.SnapshotPayload.Copy(publishedData) }, true);
+            if (!collider.enabled || !replicaChild.activeSelf) throw new Exception("Complete cached combat snapshot lost collider or child state");
             entity.UpdateIsActive(true); entity.MakeHost();
             if (!collider.enabled || !child.activeSelf)
                 throw new Exception("Takeover restored stale combat collider or child state");

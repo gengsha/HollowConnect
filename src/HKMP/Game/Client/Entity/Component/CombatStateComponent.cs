@@ -28,7 +28,8 @@ internal sealed class CombatStateComponent : EntityComponent {
     }
     private sealed class Node {internal string Path;internal Parts Host,Client;}
     private Node[] nodes;
-    private byte[] previous;
+    private Packet previous;
+    private EntityNetworkData sample;
     private float next,rebuild;
     private readonly Dictionary<string,Node> lookup=new();
     private readonly ulong id;
@@ -78,7 +79,8 @@ internal sealed class CombatStateComponent : EntityComponent {
     private void Tick() {
         if(IsControlled||CoopContext.Resetting||GameObject.Host==null||Time.unscaledTime<next)return;
         next=Time.unscaledTime+.05f;if(nodes==null||Time.unscaledTime>=rebuild)Build();if(nodes==null)return;
-        var data=new EntityNetworkData{Type=EntityComponentType.CombatState};var p=data.Packet;p.Write((ushort)nodes.Length);
+        sample??=new EntityNetworkData{Type=EntityComponentType.CombatState};
+        var p=sample.Packet;p.Clear();p.Write((ushort)nodes.Length);
         foreach(var n in nodes){
             var h=n.Host;var t=h.Transform;p.Write(n.Path);p.Write(t!=null);if(t==null)continue;
             p.Write(t.gameObject.activeSelf);p.Write((byte)t.gameObject.layer);
@@ -108,13 +110,16 @@ internal sealed class CombatStateComponent : EntityComponent {
             }
             p.Write(Count(h.Particles));for(var k=0;k<Count(h.Particles);k++){var ps=h.Particles[k];p.Write(ps!=null&&ps.isPlaying);p.Write(ps!=null&&ps.isEmitting);}
         }
-        var bytes=p.ToArray();if(previous!=null&&previous.SequenceEqual(bytes))return;previous=bytes;SendData(data);
+        if(p.ContentEquals(previous))return;
+        // Published packets can still be in the send queue or reliable history.
+        // Reuse only the unpublished sample, never a previously sent buffer.
+        var data=sample;previous=p;sample=null;data.Packet=CombatStatePayload.Encode(p);SendData(data);
     }
     public override void InitializeHost(){previous=null;next=0;rebuild=0;}
     private static byte ReadCount(Packet p){var count=p.ReadByte();if(count>16)throw new FormatException("Too many combat components");return count;}
     public override void Update(EntityNetworkData data,bool snapshot) {
-        if(!IsControlled)return;if(nodes==null||Time.unscaledTime>=rebuild)Build();var p=data.Packet;
-        var count=p.ReadUShort();if(count>256)throw new FormatException("Too many combat nodes");
+        if(!IsControlled)return;if(nodes==null||Time.unscaledTime>=rebuild)Build();
+        var p=CombatStatePayload.Decode(data.Packet,out var count);if(count>256)throw new FormatException("Too many combat nodes");
         for(var i=0;i<count;i++){
             var path=p.ReadString();if(path.Length>2048)throw new FormatException("Invalid combat path");lookup.TryGetValue(path,out var n);
             if(n==null){var target=EntityReferences.Resolve("e:"+id+"/"+path,true);if(target!=null){n=new Node{Path=path,Client=new Parts(target.transform)};lookup[path]=n;}}

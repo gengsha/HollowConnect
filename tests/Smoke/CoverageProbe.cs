@@ -32,10 +32,13 @@ public sealed partial class CoverageProbe : MonoBehaviour {
     private double registrationMs, retirementMs, replicaSpawnMs;
     private int registrations, retirements, replicaSpawns;
     private readonly List<double> prefabTimes = new(), processTimes = new();
-    private readonly Dictionary<string, (int Calls, double Ms, long Bytes)> costs = new();
-    private void Cost(string key, long start, long bytes = 0) {
+    private static readonly Func<long> allocatedBytes = typeof(GC).GetMethod("GetAllocatedBytesForCurrentThread", Type.EmptyTypes) is MethodInfo allocationMethod
+        ? (Func<long>)Delegate.CreateDelegate(typeof(Func<long>), allocationMethod) : null;
+    private readonly Dictionary<string, (int Calls, double Ms, long Bytes, long Allocated)> costs = new();
+    private void Cost(string key, long start, long bytes = 0, long allocationStart = -1) {
+        var allocated = allocationStart < 0 ? 0 : allocatedBytes() - allocationStart;
         costs.TryGetValue(key, out var old);
-        costs[key] = (old.Calls + 1, old.Ms + (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency, old.Bytes + bytes);
+        costs[key] = (old.Calls + 1, old.Ms + (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency, old.Bytes + bytes, old.Allocated + allocated);
     }
     private void ObservePerformance() {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
@@ -72,17 +75,20 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                 processTimes.Add(Milliseconds(start)); return result;
             })));
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") != "1") return;
+        Mark("PROFILE allocation counter=" + (allocatedBytes == null ? "unavailable" : "current-thread"));
         performanceHooks.Add(new Hook(typeof(Entity).GetMethod("OnUpdate", flags),
             (Action<Action<Entity>, Entity>)((orig, e) => {
                 var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(e); Cost("entity-tick/" + e.Type, start);
             })));
         performanceHooks.Add(new Hook(typeof(CombatStateComponent).GetMethod("Tick", flags),
             (Action<Action<CombatStateComponent>, CombatStateComponent>)((orig, c) => {
-                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c); Cost("combat-capture", start);
+                var allocationStart = allocatedBytes?.Invoke() ?? -1;
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c); Cost("combat-capture", start, allocationStart: allocationStart);
             })));
         performanceHooks.Add(new Hook(typeof(CombatStateComponent).GetMethod("Update"),
             (Action<Action<CombatStateComponent, EntityNetworkData, bool>, CombatStateComponent, EntityNetworkData, bool>)((orig, c, d, snapshot) => {
-                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c, d, snapshot); Cost("combat-apply", start, d.Packet.Length);
+                var allocationStart = allocatedBytes?.Invoke() ?? -1;
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c, d, snapshot); Cost("combat-apply", start, d.Packet.Length, allocationStart);
             })));
         performanceHooks.Add(new Hook(typeof(Hkmp.Networking.Client.ClientUpdateManager).GetMethod("AddEntityData"),
             (Action<Action<Hkmp.Networking.Client.ClientUpdateManager, ulong, EntityNetworkData>, Hkmp.Networking.Client.ClientUpdateManager, ulong, EntityNetworkData>)((orig, m, id, d) => {
@@ -207,6 +213,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COMBAT_SNAPSHOT_ASSERTIONS") == "1") yield return FsmContinuationChecks.CombatSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_NULL_STRING_ASSERTIONS") == "1") yield return FsmContinuationChecks.StringSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1") yield return DreamPlatformAssertions(round);
             if (scene == "Mines_35" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_FLIP_ASSERTIONS") == "1") yield return LocalFlipAssertions(round);
@@ -283,7 +290,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                     times.Values.Sort();if(times.Values.Count!=0)Mark("COST " + times.Name + " count=" + times.Values.Count + " totalMs=" + times.Values.Sum() + " p95ms=" + times.Values[(int)((times.Values.Count-1)*.95)] + " maxms=" + times.Values.Last());
                     times.Values.Clear();
                 }
-                foreach (var pair in costs.OrderByDescending(p => p.Value.Ms)) Mark("PROFILE " + pair.Key + " calls=" + pair.Value.Calls + " totalMs=" + pair.Value.Ms + " bytes=" + pair.Value.Bytes);
+                foreach (var pair in costs.OrderByDescending(p => p.Value.Ms)) Mark("PROFILE " + pair.Key + " calls=" + pair.Value.Calls + " totalMs=" + pair.Value.Ms + " bytes=" + pair.Value.Bytes + " allocatedBytes=" + pair.Value.Allocated);
                 costs.Clear();
             }
             Flag(role+".sample."+round);yield return Until(()=>Has((host?"guest":"host")+".sample."+round),"both sampled "+scene);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Hkmp.Math;
 
@@ -78,6 +79,36 @@ internal class Packet : IPacket {
         return _buffer.ToArray();
     }
 
+    // Only the owner of an unpublished scratch packet may reuse its storage.
+    internal void Clear() {
+        _buffer.Clear();
+        _readableBuffer = null;
+        _readPos = 0;
+    }
+
+    internal bool ContentEquals(Packet other) {
+        if (other == null || _buffer.Count != other._buffer.Count) return false;
+        for (var i = 0; i < _buffer.Count; i++)
+            if (_buffer[i] != other._buffer[i]) return false;
+        return true;
+    }
+
+    private void WriteBits(ulong value, int bytes) {
+        // Keep the existing BitConverter wire order without allocating an
+        // array for every scalar in a frequently sampled combat snapshot.
+        if (BitConverter.IsLittleEndian) {
+            for (var i = 0; i < bytes; i++) _buffer.Add((byte)(value >> (i * 8)));
+        } else {
+            for (var i = bytes - 1; i >= 0; i--) _buffer.Add((byte)(value >> (i * 8)));
+        }
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
+    private struct FloatBits {
+        [FieldOffset(0)] internal float Value;
+        [FieldOffset(0)] internal uint Bits;
+    }
+
     /// <summary>
     /// Write an array of bytes to the packet.
     /// </summary>
@@ -121,37 +152,38 @@ internal class Packet : IPacket {
 
     /// <inheritdoc />
     public void Write(ushort value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        WriteBits(value, 2);
     }
 
     /// <inheritdoc />
     public void Write(uint value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        WriteBits(value, 4);
     }
 
     /// <inheritdoc />
     public void Write(ulong value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        WriteBits(value, 8);
     }
 
     /// <inheritdoc />
     public void Write(sbyte value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        // The old BitConverter overload promoted sbyte to short on the wire.
+        Write((short)value);
     }
 
     /// <inheritdoc />
     public void Write(short value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        Write(unchecked((ushort)value));
     }
 
     /// <inheritdoc />
     public void Write(int value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        Write(unchecked((uint)value));
     }
 
     /// <inheritdoc />
     public void Write(long value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        Write(unchecked((ulong)value));
     }
 
     #endregion
@@ -160,12 +192,12 @@ internal class Packet : IPacket {
 
     /// <inheritdoc />
     public void Write(float value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        Write(new FloatBits { Value = value }.Bits);
     }
 
     /// <inheritdoc />
     public void Write(double value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        Write(BitConverter.DoubleToInt64Bits(value));
     }
 
     #endregion
@@ -174,7 +206,7 @@ internal class Packet : IPacket {
 
     /// <inheritdoc />
     public void Write(bool value) {
-        _buffer.AddRange(BitConverter.GetBytes(value));
+        _buffer.Add(value ? (byte)1 : (byte)0);
     }
 
     /// <inheritdoc />
