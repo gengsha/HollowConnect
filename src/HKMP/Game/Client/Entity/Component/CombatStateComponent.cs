@@ -102,7 +102,9 @@ internal sealed class CombatStateComponent : EntityComponent {
                 var d=h.Damage[k];p.Write(d!=null&&d.enabled);p.Write(d==null?0:d.damageDealt);p.Write(d==null?1:d.hazardType);p.Write(d!=null&&d.shadowDashHazard);
             }
             p.Write(Count(h.Sprites));for(var k=0;k<Count(h.Sprites);k++){
-                var s=h.Sprites[k];p.Write(s==null?-1:s.spriteId);WriteColor(p,s==null?Color.white:s.color);
+                // Root animation is replayed separately; Update only applies
+                // child frame IDs. Unused root frames must not resend hitboxes.
+                var s=h.Sprites[k];p.Write(s==null||n.Path.Length==0?-1:s.spriteId);WriteColor(p,s==null?Color.white:s.color);
             }
             p.Write(Count(h.Particles));for(var k=0;k<Count(h.Particles);k++){var ps=h.Particles[k];p.Write(ps!=null&&ps.isPlaying);p.Write(ps!=null&&ps.isEmitting);}
         }
