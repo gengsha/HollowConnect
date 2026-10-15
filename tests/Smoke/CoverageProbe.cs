@@ -31,6 +31,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
     private readonly Dictionary<string, int> spawnCounts = new();
     private double registrationMs, retirementMs, replicaSpawnMs;
     private int registrations, retirements, replicaSpawns;
+    private int compressedInitialSnapshots;
     private readonly List<double> prefabTimes = new(), processTimes = new();
     private static readonly Func<long> allocatedBytes = typeof(GC).GetMethod("GetAllocatedBytesForCurrentThread", Type.EmptyTypes) is MethodInfo allocationMethod
         ? (Func<long>)Delegate.CreateDelegate(typeof(Func<long>), allocationMethod) : null;
@@ -87,6 +88,10 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             })));
         performanceHooks.Add(new Hook(typeof(CombatStateComponent).GetMethod("Update"),
             (Action<Action<CombatStateComponent, EntityNetworkData, bool>, CombatStateComponent, EntityNetworkData, bool>)((orig, c, d, snapshot) => {
+                if (snapshot && c.IsControlled) {
+                    var bytes = d.Packet.ToArray();
+                    if (bytes.Length >= 4 && bytes[0] == 255 && bytes[1] == 255) compressedInitialSnapshots++;
+                }
                 var allocationStart = allocatedBytes?.Invoke() ?? -1;
                 var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c, d, snapshot); Cost("combat-apply", start, d.Packet.Length, allocationStart);
             })));
@@ -194,6 +199,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         var seconds=float.Parse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SECONDS")??"20",System.Globalization.CultureInfo.InvariantCulture);
         for(var round=0;round<scenes.Length;round++) {
             var scene=scenes[round];
+            compressedInitialSnapshots = 0;
             BossSequenceController.Reset(); PlayerData.instance.SetInt("bossStatueTargetLevel",0);
             var sequences=Resources.LoadAll<BossSequence>("GG");
             var sequence=sequences.FirstOrDefault(s=>Enumerable.Range(0,s.Count).Any(i=>s.GetSceneAt(i)==scene));
@@ -213,6 +219,10 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (performance && !manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1")
+                yield return Until(() => compressedInitialSnapshots > 0, "compressed cached room snapshot " + scene);
+            if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") == "1")
+                Mark("PROFILE compressed initial room snapshots=" + compressedInitialSnapshots);
             if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1") yield return PerformanceAssertions();
             if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COMBAT_SNAPSHOT_ASSERTIONS") == "1") yield return FsmContinuationChecks.CombatSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_NULL_STRING_ASSERTIONS") == "1") yield return FsmContinuationChecks.StringSnapshots(Mark);
