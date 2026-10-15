@@ -102,5 +102,6 @@ internal enum EntityComponentType : ushort {
     EnemyRoster,
     Retired,
     ExtraDamage,
-    CombatState
+    CombatState,
+    DreamWarrior
 }

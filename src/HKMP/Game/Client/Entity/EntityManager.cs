@@ -271,7 +271,7 @@ internal class EntityManager {
         if (entityUpdate.Id == 0) {
             foreach (var data in entityUpdate.GenericData) {
                 if (data.Type == EntityComponentType.Music) MusicComponent.ReceiveRoom(data, alreadyInSceneUpdate);
-                if (data.Type == EntityComponentType.BossSceneComplete || data.Type == EntityComponentType.BossSceneContext || data.Type == EntityComponentType.SceneLayout || data.Type == EntityComponentType.EnemyRoster)
+                if (data.Type == EntityComponentType.BossSceneComplete || data.Type == EntityComponentType.BossSceneContext || data.Type == EntityComponentType.SceneLayout || data.Type == EntityComponentType.EnemyRoster || data.Type == EntityComponentType.DreamWarrior)
                     _bossRoom.Receive(data);
             }
             return true;

@@ -1007,7 +1007,29 @@ internal abstract class ServerManager : IServerManager {
             _netServer.GetUpdateManagerForClient(peer.Key)?.AddEntityData(key.EntityId, new List<EntityNetworkData> { data });
         }
     }
-    /// <summary>Handle reliable state from the authority or a scoped platform request from a peer.</summary>
+    private void UpdateDreamWarrior(ushort id, ServerPlayerData player, EntityNetworkData data) {
+        if (!Client.Entity.DreamWarriorSynchronizer.Keys.TryGetValue(player.CurrentScene, out var expected)) return;
+        var bytes = data.Packet.ToArray();
+        if (bytes.Length > 128) return;
+        var packet = new Packet(bytes);
+        var key = packet.ReadString(); var stage = packet.ReadByte();
+        if (key != expected || stage < 1 || stage > 2 || stage == 2 && !player.IsSceneHost) return;
+        var roomKey = new ServerEntityKey(player.CurrentScene, 0UL);
+        if (!_entityData.TryGetValue(roomKey, out var entity)) _entityData[roomKey] = entity = new ServerEntityData();
+        var previous = entity.GenericData.Find(d => d.Type == EntityComponentType.DreamWarrior);
+        if (previous != null) {
+            var old = new Packet(previous.Packet.ToArray()); old.ReadString();
+            if (stage <= old.ReadByte()) return;
+            entity.GenericData.Remove(previous);
+        }
+        var accepted = new EntityNetworkData { Type = EntityComponentType.DreamWarrior };
+        accepted.Packet.Write(key); accepted.Packet.Write(stage);
+        entity.GenericData.Add(accepted);
+        SendDataInSameScene(id, player.CurrentScene, otherId =>
+            _netServer.GetUpdateManagerForClient(otherId)?.AddEntityData(0UL, new List<EntityNetworkData> { accepted }));
+    }
+
+    /// <summary>Handle reliable state from the authority or a scoped platform/warrior request from a peer.</summary>
     private void OnReliableEntityUpdate(ushort id, ReliableEntityUpdate entityUpdate) {
         lock (worldLock) {
         
@@ -1018,6 +1040,10 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (entityUpdate.SceneName != playerData.CurrentScene || entityUpdate.Visit != playerData.SceneVisit || entityUpdate.Epoch != CoopContext.Epoch || CoopContext.Resetting) return;
+
+        if (entityUpdate.Id == 0 && entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data))
+            foreach (var data in entityUpdate.GenericData.Where(d => d.Type == EntityComponentType.DreamWarrior))
+                UpdateDreamWarrior(id, playerData, data);
 
         if (!playerData.IsSceneHost) {
             var platformKey = new ServerEntityKey(playerData.CurrentScene, entityUpdate.Id);
@@ -1057,7 +1083,7 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data)) {
-            var relayedData = entityUpdate.GenericData;
+            var relayedData = entityUpdate.GenericData.Where(d => d.Type != EntityComponentType.DreamWarrior).ToList();
             if (relayedData.Any(d => d.Type == EntityComponentType.DreamPlatform)) {
                 foreach (var data in relayedData.Where(d => d.Type == EntityComponentType.DreamPlatform))
                     UpdateDreamPlatform(id, serverEntityKey, entityData, data, true);
@@ -1101,7 +1127,7 @@ internal abstract class ServerManager : IServerManager {
             }
 
             foreach (var updateData in entityUpdate.GenericData) {
-                if (updateData.Type == EntityComponentType.DreamPlatform) continue;
+                if (updateData.Type == EntityComponentType.DreamPlatform || updateData.Type == EntityComponentType.DreamWarrior) continue;
                 if (updateData.Type >= EntityComponentType.Death && updateData.Type != EntityComponentType.SpecialDeath && updateData.Type != EntityComponentType.ExtraDamage) {
                     ReplaceExistingDataWithSameType(updateData.Type, updateData.Packet);
                 }

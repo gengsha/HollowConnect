@@ -15,6 +15,7 @@ namespace Hkmp.Game.Client.Entity;
 internal sealed class BossRoomSynchronizer {
     private readonly NetClient client;
     private readonly EntityManager entities;
+    private readonly DreamWarriorSynchronizer warriors;
     private string pending, latest;
     private string layout, sentLayout;
     private string roster, sentRoster;
@@ -22,11 +23,11 @@ internal sealed class BossRoomSynchronizer {
     private float next;
     private uint visit, epoch;
     internal BossRoomSynchronizer(NetClient client, EntityManager entities) {
-        this.client = client; this.entities = entities;
+        this.client = client; this.entities = entities; warriors = new DreamWarriorSynchronizer(client, entities);
     }
-    internal void Register() { On.BossSceneController.EndBossScene += End; MonoBehaviourUtil.Instance.OnUpdateEvent += Tick; }
-    internal void Destroy() { On.BossSceneController.EndBossScene -= End; MonoBehaviourUtil.Instance.OnUpdateEvent -= Tick; }
-    internal void Clear() { pending = latest = layout = sentLayout = roster = sentRoster = null; sent = applying = takeover = false; next = 0; visit = CoopContext.LocalVisit; epoch = CoopContext.Epoch; }
+    internal void Register() { warriors.Register(); On.BossSceneController.EndBossScene += End; MonoBehaviourUtil.Instance.OnUpdateEvent += Tick; }
+    internal void Destroy() { warriors.Destroy(); On.BossSceneController.EndBossScene -= End; MonoBehaviourUtil.Instance.OnUpdateEvent -= Tick; }
+    internal void Clear() { warriors.Clear(); pending = latest = layout = sentLayout = roster = sentRoster = null; sent = applying = takeover = false; next = 0; visit = CoopContext.LocalVisit; epoch = CoopContext.Epoch; }
     internal void AuthorityTransferred() { takeover = true; }
     private static bool Owns(BossSceneController controller) {
         var scene = controller.gameObject.scene.name;
@@ -52,6 +53,7 @@ internal sealed class BossRoomSynchronizer {
         client.UpdateManager.AddEntityData(0UL, data);
     }
     internal void Receive(EntityNetworkData data) {
+        if (data.Type == EntityComponentType.DreamWarrior) { warriors.Receive(data); return; }
         var context = data.Packet.ReadString();
         if (context.Length > 32768) throw new FormatException("Boss context exceeds limit");
         if (data.Type == EntityComponentType.EnemyRoster) roster = context;
@@ -63,6 +65,7 @@ internal sealed class BossRoomSynchronizer {
         if (visit != CoopContext.LocalVisit || epoch != CoopContext.Epoch) Clear();
         if (!client.IsConnected || !entities.IsSceneHostDetermined || CoopContext.Resetting) return;
         try {
+            warriors.Tick();
             if (entities.IsSceneHost && Time.unscaledTime >= next) {
                 next = Time.unscaledTime + 1;
                 var currentLayout = BossSceneLayout.Capture();
