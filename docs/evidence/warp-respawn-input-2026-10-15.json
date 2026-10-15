@@ -1,0 +1,115 @@
+{
+  "packaged": false,
+  "regressionPassed": 147,
+  "rejectedRuns": {
+    "dream": "wipe-dream-accepted-20261015: fixture retained initial atBench across scene transition",
+    "godhome": "warp-godhome-accepted-20261015: reverse F8 timeout; intentional observer error also rejected strict log gate"
+  },
+  "baselineBinaries": ".test-results/warp-wake-0572b99-binaries-20261015",
+  "runs": [
+    {
+      "run": "warp-greenpath-accepted-20261015",
+      "bothDone": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "E7F3FF243078F338D96BD9E8F251C92FE3F5BBCCBA76936C5FADEE3965567432"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6505A6FFC4641E7AEA1AB093FF6AE7940748574CB0D648889423CEF4CC124FDC"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "0546F3E6112CE0B2B0AE91470F8F351C77DB42C397FD041C458A90C31334827F"
+        }
+      ],
+      "strictLogsAfterStop": true,
+      "bothShutdown": true
+    },
+    {
+      "run": "warp-dream-accepted-20261015",
+      "bothDone": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "E7F3FF243078F338D96BD9E8F251C92FE3F5BBCCBA76936C5FADEE3965567432"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6505A6FFC4641E7AEA1AB093FF6AE7940748574CB0D648889423CEF4CC124FDC"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "0546F3E6112CE0B2B0AE91470F8F351C77DB42C397FD041C458A90C31334827F"
+        }
+      ],
+      "strictLogsAfterStop": true,
+      "bothShutdown": true
+    },
+    {
+      "run": "wipe-personal-accepted-20261015",
+      "bothDone": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "E7F3FF243078F338D96BD9E8F251C92FE3F5BBCCBA76936C5FADEE3965567432"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6505A6FFC4641E7AEA1AB093FF6AE7940748574CB0D648889423CEF4CC124FDC"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "0546F3E6112CE0B2B0AE91470F8F351C77DB42C397FD041C458A90C31334827F"
+        }
+      ],
+      "strictLogsAfterStop": true,
+      "bothShutdown": true
+    },
+    {
+      "run": "wipe-shared-accepted-20261015",
+      "bothDone": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "E7F3FF243078F338D96BD9E8F251C92FE3F5BBCCBA76936C5FADEE3965567432"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6505A6FFC4641E7AEA1AB093FF6AE7940748574CB0D648889423CEF4CC124FDC"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "0546F3E6112CE0B2B0AE91470F8F351C77DB42C397FD041C458A90C31334827F"
+        }
+      ],
+      "strictLogsAfterStop": true,
+      "bothShutdown": true
+    },
+    {
+      "run": "wipe-dream-native-start-accepted-20261015",
+      "bothDone": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "E7F3FF243078F338D96BD9E8F251C92FE3F5BBCCBA76936C5FADEE3965567432"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6505A6FFC4641E7AEA1AB093FF6AE7940748574CB0D648889423CEF4CC124FDC"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "0546F3E6112CE0B2B0AE91470F8F351C77DB42C397FD041C458A90C31334827F"
+        }
+      ],
+      "strictLogsAfterStop": true,
+      "bothShutdown": true
+    }
+  ],
+  "strictLogGateChecks": 14,
+  "realTwoMachineFrp": false,
+  "buildCommit": "0572b99edf772dd2931c00478c8ebe46d6bd26f1",
+  "releaseReady": false
+}

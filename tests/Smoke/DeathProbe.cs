@@ -118,6 +118,13 @@ public sealed class DeathProbe : MonoBehaviour {
         var bench = GameObject.FindGameObjectsWithTag("RespawnPoint").FirstOrDefault(g => g.name == "RestBench");
         Log("CHECKPOINT " + benchScene + " markers=" + string.Join(",", GameObject.FindGameObjectsWithTag("RespawnPoint").Select(g => g.name)));
         Require(bench != null, "actual personal bench marker exists");
+        if (pd.GetBool("atBench")) {
+            var control = bench.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Bench Control");
+            yield return Until(() => control.ActiveStateName == "Resting", "initial native bench ready");
+            yield return Press(InputHandler.Instance.inputActions.jump);
+            yield return Until(() => !pd.GetBool("atBench") && HeroController.instance.acceptingInput &&
+                !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
+        }
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); }
         else yield return Until(() => Has("server.started"), "server started");
         yield return new WaitForSecondsRealtime(1);
