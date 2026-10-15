@@ -1,7 +1,7 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$version = '0.1.15'
+$version = '0.1.16'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
 $taskEvidencePath=Join-Path $root "docs/evidence/runtime-room-$version.json"

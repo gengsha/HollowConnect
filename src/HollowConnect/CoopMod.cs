@@ -19,7 +19,7 @@ public sealed class Settings {
 public sealed class CoopMod : Mod, IGlobalSettings<Settings>, IMenuMod {
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
-    public const string Version = "0.1.15";
+    public const string Version = "0.1.16";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override void Initialize() {
