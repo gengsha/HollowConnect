@@ -1,0 +1,204 @@
+{
+  "recordedAtUtc": "2026-10-15T15:47:26.5401452Z",
+  "buildCommit": "cdc9f339d5eee975c44e185fa729a175b6525233",
+  "packaged": false,
+  "installed": false,
+  "releaseReady": false,
+  "realTwoMachineFrp": false,
+  "scope": "Reuse existing per-field original-datagram revision filtering inside initial room and authority transfer snapshots. Same-machine isolated Unity clients with real UDP/DTLS; synthetic ordering fixtures are independent and never published to the real room. Silent in-memory characters; all three SaveGame overloads intercepted.",
+  "protectedFields": [
+    "position",
+    "active",
+    "sparse FSM state and variables",
+    "CombatState"
+  ],
+  "unchangedScope": "Room ID 0 and other GenericData types keep their existing handling. Preserve room envelope, players, spawns, untouched sparse fields and reliable actions; no wire-format change or new retransmission.",
+  "build": {
+    "log": ".test-results/scene-snapshot-final-build-20261015.log",
+    "errors": 0,
+    "warnings": 1,
+    "warning": "Existing CS1573 XML comment missing isActive parameter in ClientUpdateManager.AddEntityHostFsmData"
+  },
+  "binaryArchive": ".test-results/scene-snapshot-cdc9f33-binaries-20261015",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "4F3D70AA1C2CC2715EE8EFEAA005FF9E8ACAC89F928919D33BBAAAB83A161567"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "A98C6CA821C58D47976BE1E918CC49DE0BADF53EA40551577920399D3DE53A35"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "B00C29249A4CF52290EC0DFD983AA72D303CE2D2856D3988CED044255FE9EEBE"
+    }
+  ],
+  "regression": {
+    "passed": 163,
+    "failed": 0,
+    "log": ".test-results/scene-snapshot-final-regression-20261015.log"
+  },
+  "strictLogGate": {
+    "checks": 14,
+    "log": ".test-results/scene-snapshot-final-log-gate-20261015.log"
+  },
+  "baseline": {
+    "log": ".test-results/scene-snapshot-baseline-valid-20261015.log",
+    "engineState": "Pre-fix production logic with corrected fixture player Position",
+    "passed": 147,
+    "failed": 16,
+    "failure": "A delayed room snapshot/live update rolled back newer active, FSM, position or combat state",
+    "matrix": "Initial/transfer x newer snapshot/live x delayed original/reliable resend x ordinary/wrapped sequence, through real NetClient framing, decoding, deduplication and main-thread dispatch",
+    "alsoChecked": [
+      "untouched sparse field retained",
+      "room player and spawn metadata retained",
+      "reliable action exactly once",
+      "duplicate original suppressed"
+    ]
+  },
+  "invalidPreliminaryControl": {
+    "log": ".test-results/scene-snapshot-baseline-20261015.log",
+    "passed": 147,
+    "failed": 16,
+    "reason": "Fixture player Position missing; NullReferenceException during serialization before meaningful production assertions",
+    "productionBugEvidence": false,
+    "preserved": true
+  },
+  "unityBaseline": {
+    "run": "scene-snapshot-unity-baseline-20261015",
+    "bothFailed": true,
+    "failure": "Nested room snapshot/live update rolled back native/replica collider, child or visibility",
+    "engineArchive": ".test-results/dream-warrior-cbc1de3-binaries-20261015/HKMP.dll",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "F5C990836FC7FC5C0DD043371C16C110F8396FB29D1F39E0C9178270C317EE6B"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "9BCADA7E74523B705CB9F0C07057AA075BD831324D032167D4321BD7F29909B1"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "9C9CC59475198C4F0480C760F0E8F5B0296484B469E741D2B7E1BD143471E099"
+      }
+    ],
+    "limitation": "Old HKMP engine with current candidate modules and Smoke fixture, isolates engine behavior; not a full previous-release acceptance"
+  },
+  "runs": [
+    {
+      "run": "scene-snapshot-cdc9f33-unity-20261015",
+      "mode": "coverage: Mines_11, isolated synthetic ordering fixtures",
+      "bothDone": true,
+      "bothShutdown": true,
+      "serverStopped": true,
+      "strictLogsAfterStop": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "4F3D70AA1C2CC2715EE8EFEAA005FF9E8ACAC89F928919D33BBAAAB83A161567"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "A98C6CA821C58D47976BE1E918CC49DE0BADF53EA40551577920399D3DE53A35"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B00C29249A4CF52290EC0DFD983AA72D303CE2D2856D3988CED044255FE9EEBE"
+        }
+      ],
+      "roles": {
+        "host": {
+          "finalPass": true,
+          "nestedOrderingCombinations": 4,
+          "nativeReplicaAndTakeover": true
+        },
+        "guest": {
+          "finalPass": true,
+          "nestedOrderingCombinations": 4,
+          "nativeReplicaAndTakeover": true
+        }
+      }
+    },
+    {
+      "run": "scene-snapshot-cdc9f33-godhome-faults-20261015",
+      "mode": "godhome: real transport with fixed-seed application-message faults",
+      "bothDone": true,
+      "bothShutdown": true,
+      "serverStopped": true,
+      "strictLogsAfterStop": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "4F3D70AA1C2CC2715EE8EFEAA005FF9E8ACAC89F928919D33BBAAAB83A161567"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "A98C6CA821C58D47976BE1E918CC49DE0BADF53EA40551577920399D3DE53A35"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B00C29249A4CF52290EC0DFD983AA72D303CE2D2856D3988CED044255FE9EEBE"
+        }
+      ],
+      "roles": {
+        "host": {
+          "finalPass": true,
+          "faults": {
+            "pattern": "fixed-seed",
+            "messages": 18168,
+            "dropped": 2800,
+            "reordered": 1727,
+            "duplicated": 803,
+            "nestedResends": 0
+          }
+        },
+        "guest": {
+          "finalPass": true,
+          "faults": {
+            "pattern": "fixed-seed",
+            "messages": 5943,
+            "dropped": 918,
+            "reordered": 567,
+            "duplicated": 262,
+            "nestedResends": 0
+          }
+        }
+      }
+    }
+  ],
+  "faultCountingScope": "Complete application messages before DTLS encryption, counted by test transport hooks; not network-interface UDP datagrams. Godhome nestedResends=0; reliable resend ordering is covered by the separate 16-case matrix.",
+  "godhomeChecks": [
+    "ordinary bidirectional F8 with input, fade and camera restored",
+    "native Grimm dynamic attacks observed and positions synchronized",
+    "native death advances sequence while downed replica waits until transition is allowed",
+    "cross-room and same-room pantheon context repair",
+    "accepted native warp completes after disconnect",
+    "native projectile audio retained"
+  ],
+  "historicalUnresolved": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved"
+  ],
+  "unverified": [
+    "Real two-machine FRP",
+    "Unique cause of the five historical unresolved reports",
+    "Complete current-build seven-warrior matrix and five warp/respawn cases; earlier acceptance remains tied to its own build",
+    "All bosses and all story rooms",
+    "Room ID 0 and other GenericData revision protection"
+  ],
+  "finalVerification": {
+    "log": ".test-results/scene-snapshot-cdc9f33-final-verification-20261015.log",
+    "isolatedClientsStopped": true,
+    "isolatedSmokePluginsDisabled": true,
+    "productionTestIsolatedAndArchiveHashesMatch": true,
+    "postStopLogsScanned": true,
+    "priorReleaseArchiveUnchanged": true,
+    "priorRelease": "dist/HollowConnect-0.1.16-windows.zip",
+    "priorReleaseSha256": "CB63E6327E08565BD8DF71021C5A062FAB7066432D002B97790CC9D749BB9734"
+  }
+}
