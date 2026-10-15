@@ -979,11 +979,35 @@ internal abstract class ServerManager : IServerManager {
         }
     }
 
-    /// <summary>
-    /// Callback method for when a reliable entity update is received from a player.
-    /// </summary>
-    /// <param name="id">The ID of the player.</param>
-    /// <param name="entityUpdate">The ReliableEntityUpdate packet data.</param>
+    private void UpdateDreamPlatform(ushort id, ServerEntityKey key, ServerEntityData entity, EntityNetworkData data, bool authority) {
+        if (entity.Retired || data.Packet.Length != 3) return;
+        var bytes = data.Packet.ToArray();
+        var action = bytes[2];
+        if (action > DreamPlatformComponent.Register || (!authority && action == DreamPlatformComponent.Register)) return;
+        var registered = entity.DreamPlatformPlayers != null;
+        if (!registered) {
+            if (!authority || action != DreamPlatformComponent.Register) return;
+            entity.DreamPlatformPlayers = new HashSet<ushort>();
+        }
+        // Requests describe only this sender. Never trust a client-supplied
+        // total or count duplicate enter/exit callbacks twice.
+        var present = action == DreamPlatformComponent.Entered ||
+            (action == DreamPlatformComponent.Register && System.BitConverter.ToUInt16(bytes, 0) != 0);
+        var changed = present ? entity.DreamPlatformPlayers.Add(id) : entity.DreamPlatformPlayers.Remove(id);
+        if (changed || !registered) PublishDreamPlatform(key, entity);
+    }
+    private void PublishDreamPlatform(ServerEntityKey key, ServerEntityData entity) {
+        var data = new EntityNetworkData { Type = EntityComponentType.DreamPlatform };
+        data.Packet.Write((ushort)entity.DreamPlatformPlayers.Count);
+        data.Packet.Write(DreamPlatformComponent.State);
+        entity.GenericData.RemoveAll(d => d.Type == EntityComponentType.DreamPlatform);
+        entity.GenericData.Add(data);
+        foreach (var peer in _playerData) {
+            if (peer.Value.CurrentScene != key.Scene) continue;
+            _netServer.GetUpdateManagerForClient(peer.Key)?.AddEntityData(key.EntityId, new List<EntityNetworkData> { data });
+        }
+    }
+    /// <summary>Handle reliable state from the authority or a scoped platform request from a peer.</summary>
     private void OnReliableEntityUpdate(ushort id, ReliableEntityUpdate entityUpdate) {
         lock (worldLock) {
         
@@ -993,7 +1017,15 @@ internal abstract class ServerManager : IServerManager {
             return;
         }
 
-        if (!playerData.IsSceneHost || entityUpdate.SceneName != playerData.CurrentScene || entityUpdate.Visit != playerData.SceneVisit || entityUpdate.Epoch != CoopContext.Epoch || CoopContext.Resetting) return;
+        if (entityUpdate.SceneName != playerData.CurrentScene || entityUpdate.Visit != playerData.SceneVisit || entityUpdate.Epoch != CoopContext.Epoch || CoopContext.Resetting) return;
+
+        if (!playerData.IsSceneHost) {
+            var platformKey = new ServerEntityKey(playerData.CurrentScene, entityUpdate.Id);
+            if (_entityData.TryGetValue(platformKey, out var platform) && platform.DreamPlatformPlayers != null && entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data))
+                foreach (var data in entityUpdate.GenericData.Where(d => d.Type == EntityComponentType.DreamPlatform))
+                    UpdateDreamPlatform(id, platformKey, platform, data, false);
+            return;
+        }
 
         // Create the key for the entity data
         var serverEntityKey = new ServerEntityKey(
@@ -1025,14 +1057,20 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data)) {
+            var relayedData = entityUpdate.GenericData;
+            if (relayedData.Any(d => d.Type == EntityComponentType.DreamPlatform)) {
+                foreach (var data in relayedData.Where(d => d.Type == EntityComponentType.DreamPlatform))
+                    UpdateDreamPlatform(id, serverEntityKey, entityData, data, true);
+                relayedData = relayedData.Where(d => d.Type != EntityComponentType.DreamPlatform).ToList();
+            }
             if (entityUpdate.Id == 0 && entityUpdate.GenericData.Any(d => d.Type == EntityComponentType.BossSceneComplete)) Logger.Info("Boss room completion relayed: " + playerData.CurrentScene);
-            SendDataInSameScene(
+            if (relayedData.Count != 0) SendDataInSameScene(
                 id,
                 playerData.CurrentScene,
                 otherId => {
                     _netServer.GetUpdateManagerForClient(otherId)?.AddEntityData(
                         entityUpdate.Id,
-                        entityUpdate.GenericData
+                        relayedData
                     );
                 }
             );
@@ -1063,6 +1101,7 @@ internal abstract class ServerManager : IServerManager {
             }
 
             foreach (var updateData in entityUpdate.GenericData) {
+                if (updateData.Type == EntityComponentType.DreamPlatform) continue;
                 if (updateData.Type >= EntityComponentType.Death && updateData.Type != EntityComponentType.SpecialDeath && updateData.Type != EntityComponentType.ExtraDamage) {
                     ReplaceExistingDataWithSameType(updateData.Type, updateData.Packet);
                 }
@@ -1147,6 +1186,10 @@ internal abstract class ServerManager : IServerManager {
         }
         
         Logger.Info($"Handling player leave scene (dc: {disconnected}) for ID {id}, left scene: {sceneName}");
+
+        // Update retained membership before constructing a takeover snapshot.
+        foreach (var platform in _entityData.Where(p => p.Key.Scene == sceneName && p.Value.DreamPlatformPlayers != null))
+            if (platform.Value.DreamPlatformPlayers.Remove(id)) PublishDreamPlatform(platform.Key, platform.Value);
 
         // If the current scene of the player is the one being left, we can set it to an empty string
         // It can happen that enter scene data arrives earlier than the leave scene packet, in which case this will

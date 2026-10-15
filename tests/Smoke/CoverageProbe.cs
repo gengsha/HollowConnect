@@ -17,7 +17,7 @@ using Object = UnityEngine.Object;
 namespace HollowConnect.Smoke;
 
 // Private in-memory characters; ProbeMod suppresses every save overload.
-public sealed class CoverageProbe : MonoBehaviour {
+public sealed partial class CoverageProbe : MonoBehaviour {
     private string root, role;
     private bool host;
     private CoopRuntime runtime;
@@ -206,6 +206,7 @@ public sealed class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1") yield return DreamPlatformAssertions(round);
             if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") == "1") {
                 foreach (var group in Entities.Values.GroupBy(e => e.Type)) Mark("TYPE " + group.Key + " count=" + group.Count());
                 foreach (var e in Entities.Values.Where(e => e.Type is EntityType.CrystalCrawler or EntityType.CrystallisedHusk or EntityType.CrystalTurret or EntityType.SoulTwister or EntityType.SoulWarrior)) Dump(e.Object.Host);
