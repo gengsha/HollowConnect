@@ -150,6 +150,19 @@
       "evidence": "../CRYSTAL-SOUL-PERFORMANCE-2026-10-15.md",
       "supplementalEvidence": "../FSM-STRING-SYNC-2026-10-15.md",
       "releaseRequirement": "Reproduce with both peers entity and FSM variable layouts, then validate the cause-specific correction. Do not resize arrays or skip values to hide the error."
+    },
+    {
+      "id": "godhome-final-single-f8-timeout-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Runtime test observation; production defect not established",
+      "sourceRun": "version-017-godhome-faults-20261015",
+      "observation": "After earlier Godhome warp/Grimm/progression checks passed under fixed-seed message faults, a single final F8 did not produce the expected transition/disconnect/arrival within 45 seconds. The original run lacks per-press eligibility and request trace.",
+      "supplementalRuns": [
+        "version-017-godhome-faults-trace-20261016"
+      ],
+      "diagnostic": "Trace-only rerun on identical production DLLs passed. Final-step fixture originally waited for Playable/remote presence but did not explicitly wait for production CanStartWarp; later test changes add that precondition and request/eligibility diagnostics. This does not prove the unique original cause.",
+      "releaseRequirement": "Retain the failed run and distinguish local input eligibility, server rejection, delivery and response eligibility on recurrence. A later successful run does not resolve this observation."
     }
   ]
 }

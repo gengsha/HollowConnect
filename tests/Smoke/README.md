@@ -8,6 +8,8 @@
 
 `godhome` 的主动观察器故障注入需显式设置 `HOLLOWCONNECT_GODHOME_FAULT_ASSERTIONS=1`，故障日志仍须被严格日志门槛拒绝，不能与普通通过的运行合并。F8 夹具先等待本机原生入场允许操作，再发送一次按键；不会修改生产输入门槛。
 
+末步“传送已接受后断线”同样等待生产 `CanStartWarp`，保留一次按键、原 45 秒超时和断线到达断言。诊断记录传送资格、发出/已处理序号和本地提示；0.1.17 首次末步超时缺少相应轨迹，追踪和补前置后通过不能唯一解释旧失败。该失败单独保留，不因重跑通过自动关闭。
+
 `progress` 模式用无存档写入的双客户端检查遗忘十字路鹿角站共享：购买者由 `HOLLOWCONNECT_PROGRESS_BUYER=host|guest` 选择，`HOLLOWCONNECT_PROGRESS_PROMPT=1` 让接收者正在原生购买对话内。探针程序化进入原生交互入口，随后通过原生 Yes/No 控制 FSM 的选择事件支付，保留真正的 TakeGeo、授权和开站动画。断言当前房间无需重新加载即可使用、仅购买者扣 50 吉欧、对话结束、控制恢复、重复进度 offer 不改变钱或原生动作。`HOLLOWCONNECT_PROGRESS_BASELINE=1` 在旧实现上确认接收者还能再次付费并明确失败；不能计入验收。之后实际购买科尼法首张地图并跨 Crossroads_08、Crossroads_30 检查双端角色/快照，`HOLLOWCONNECT_MAP_BOTH=1` 覆盖双方购买；地图和吉欧仍为个人数据。`HOLLOWCONNECT_PROGRESS_INSPECT=1` 只导出原生购买 FSM，不是购买验收。成功路径使用已有 ProbeShutdown 完成网络退出后才写终态。
 
 所有测试模式创建 SilentProbe，启动及每帧将 AudioListener.volume 设为 0；只静音隔离测试进程，不修改用户音量配置。

@@ -35,6 +35,8 @@ public sealed class GodhomeProbe : MonoBehaviour {
         nextDiagnostic = Time.realtimeSinceStartup + 5;
         var room = Field<object>(manager, "_bossRoom");
         Mark("DIAGNOSTIC scene=" + Hkmp.CoopContext.LocalScene + " playable=" + runtime.Playable + " host=" + manager.IsSceneHost +
+            " canWarp=" + typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime) +
+            " warpSerial=" + Field<uint>(runtime, "warpSerial") + "/" + Field<uint>(runtime, "handledWarp") + " notice=" + Field<string>(runtime, "status") +
             " ready=" + Hkmp.CoopContext.BossTransitionReady?.Invoke() + " pending=" + Field<string>(room, "pending") + " latest=" + Field<string>(room, "latest") +
             " unscaled=" + Time.unscaledTime + " realtime=" + Time.realtimeSinceStartup + " tickNext=" + Field<float>(room, "next") +
             " controller=" + (BossSceneController.Instance == null ? "null" : BossSceneController.Instance.gameObject.scene.name + "/" + BossSceneController.Instance.isActiveAndEnabled) +
@@ -274,6 +276,9 @@ public sealed class GodhomeProbe : MonoBehaviour {
             yield return Until(() => Has("host.offline-warp-target"), "ordinary target ready");
             yield return Until(() => runtime.Peers.Values.Any(p => p.State?.Scene == "Town" && p.State.IsReady), "ordinary target presence");
             runtime.Selected = runtime.Peers.First(p => p.Value.State?.Scene == "Town").Key;
+            yield return Until(() => (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime),
+                "native local entrance permits final disconnect F8");
+            if (Has(role + ".failed")) yield break;
             yield return new WaitForSecondsRealtime(.5f);
             var armed = true; var before = fades;
             void DisconnectAcceptedWarp(On.GameManager.orig_BeginSceneTransition orig, GameManager gm, GameManager.SceneLoadInfo info) {
@@ -282,7 +287,14 @@ public sealed class GodhomeProbe : MonoBehaviour {
                 armed = false; Field<NetClient>(engine.ClientManager, "_netClient").Disconnect();
             }
             On.GameManager.BeginSceneTransition += DisconnectAcceptedWarp;
-            var pressed = false; runtime.KeyPressed = key => key == KeyCode.F8 && !pressed && (pressed = true);
+            var pressed = false; runtime.KeyPressed = key => {
+                if (key != KeyCode.F8 || pressed) return false;
+                pressed = true;
+                Mark("OFFLINE WARP PRESS canStart=" + typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime) +
+                    " input=" + HeroController.instance.acceptingInput + " transitioning=" + HeroController.instance.cState.transitioning +
+                    " transition=" + HeroController.instance.transitionState);
+                return true;
+            };
             yield return Until(() => !armed && !runtime.Connected && In("Town"), "in-flight warp arrives after disconnect");
             runtime.KeyPressed = _ => false; On.GameManager.BeginSceneTransition -= DisconnectAcceptedWarp;
             yield return new WaitForSecondsRealtime(2);
