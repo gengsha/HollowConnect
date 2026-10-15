@@ -272,10 +272,15 @@ public sealed class DeathProbe : MonoBehaviour {
         }
         PrepareHero(); pd.SetInt("geo", host ? 111 : 222); Flag(role + ".wipe-ready");
         yield return Until(() => Has((host ? "guest" : "host") + ".wipe-ready"), "both ready for full failure");
+        yield return Until(() => !runtime.EntryProtected, "arrival protection expires before lethal party hits", 10);
         var first = Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_FIRST");
         if (string.IsNullOrEmpty(first)) first = "guest";
-        if (role == first) { Die(); Flag(first + ".wipe-down"); }
-        else { yield return Until(() => Has(first + ".wipe-down") && runtime.Peers.Values.Any(p => p.Life == HollowConnect.Core.Life.Down), first + " down first"); Die(); }
+        void LethalHit() {
+            PrepareHero(false); pd.SetInt("health", 1);
+            HeroController.instance.TakeDamage(null, GlobalEnums.CollisionSide.left, 1, 1);
+        }
+        if (role == first) { LethalHit(); Flag(first + ".wipe-down"); }
+        else { yield return Until(() => Has(first + ".wipe-down") && runtime.Peers.Values.Any(p => p.Life == HollowConnect.Core.Life.Down), first + " down first"); LethalHit(); }
         yield return Until(() => runtime.ReleasedRound == 1 && !runtime.Resetting && In(benchScene), "full team failure returns each to own bench", 75);
         Require(pd.GetString("respawnScene") == benchScene && pd.GetString("respawnMarkerName") == "RestBench" && pd.GetInt("respawnType") == 1, "wipe never writes another player's checkpoint");
         Require(pd.GetInt("geo") == 0 && pd.GetInt("geoPool") == (host ? 111 : 222) && pd.GetString("shadeScene") == scene, "wipe performs one native death penalty per player");
@@ -314,12 +319,14 @@ public sealed class DeathProbe : MonoBehaviour {
                 yield return Until(() => inventory.ActiveStateName == "Closed", "native inventory closed after party release", 5);
                 Log("INVENTORY CLOSE RESULT state=" + inventory.ActiveStateName + " input=" + hero.acceptingInput + " relinquished=" + hero.controlReqlinquished +
                     " bench=" + PlayerData.instance.GetBool("atBench"));
-                var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == PlayerData.instance.GetString("respawnMarkerName") && f.FsmName == "Bench Control");
-                yield return Until(() => bench.ActiveStateName == "Resting", label + " native bench wake reaches input listeners", 10);
-                yield return Press(InputHandler.Instance.inputActions.jump);
-                yield return Until(() => !PlayerData.instance.GetBool("atBench") && hero.acceptingInput && !hero.controlReqlinquished,
-                    label + " native jump input leaves bench after closing inventory", 5);
             }
+        }
+        if (PlayerData.instance.GetBool("atBench")) {
+            var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == PlayerData.instance.GetString("respawnMarkerName") && f.FsmName == "Bench Control");
+            yield return Until(() => bench.ActiveStateName == "Resting", label + " native bench wake reaches input listeners", 10);
+            yield return Press(InputHandler.Instance.inputActions.jump);
+            yield return Until(() => !PlayerData.instance.GetBool("atBench") && hero.acceptingInput && !hero.controlReqlinquished,
+                label + " native jump input leaves bench", 5);
         }
         if (scene.StartsWith("Dream_") || scene.StartsWith("GG_")) {
             var wake = hero.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Dream Return");

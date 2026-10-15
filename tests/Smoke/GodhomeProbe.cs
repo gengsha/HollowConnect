@@ -138,7 +138,16 @@ public sealed class GodhomeProbe : MonoBehaviour {
         On.GameManager.FadeSceneIn += (orig, gm) => { fades++; orig(gm); };
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
-        yield return Until(() => In("Town"), "unsaved character ready"); Freeze();
+        yield return Until(() => In("Town"), "unsaved character ready");
+        if (pd.GetBool("atBench")) {
+            var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
+            yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
+            var jump = bench.Fsm.ActiveState.Actions.OfType<ListenForJump>().Single();
+            bench.Fsm.Event(jump.wasPressed);
+            yield return Until(() => !pd.GetBool("atBench") && HeroController.instance.acceptingInput &&
+                !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
+        }
+        Freeze();
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); }
         else yield return Until(() => Has("server.started"), "server ready");
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(engine.ClientManager,true);
@@ -284,6 +293,7 @@ public sealed class GodhomeProbe : MonoBehaviour {
         if (Has(role + ".failed")) yield break;
         Check(nativeAudioFaults == 0, "native projectile audio survives godhome warps and authority changes");
         if (Has(role + ".failed")) yield break;
+        yield return ProbeShutdown.Run(engine, root, role);
         Mark("FINAL PASS");
         Flag(role + ".done");
     }

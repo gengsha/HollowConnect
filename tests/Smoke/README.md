@@ -133,4 +133,6 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 
 梦之钉剧情平台专项复用 `coverage`：设置 `HOLLOWCONNECT_COVERAGE_SCENES=Dream_Nailcollection`、`HOLLOWCONNECT_COVERAGE_ENTRY_GATE=door_dreamReturn`、`HOLLOWCONNECT_COVERAGE_SECONDS=1`、`HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS=1`，可用 `HOLLOWCONNECT_COVERAGE_AUTHORITY=guest` 交换先入顺序。等待原生入口、输入和快照就绪后，以真实碰撞触发靠近，要求双方显隐及人数一致、角色实际落在原生平台上；重复请求/伪造总人数不改变计数，副机不能发布状态。再验证双方离开范围、有人留在范围时换房重入、权威离房接管和接管后实际站立。离房阶段仅在测试插件中抑制目标平台的 exit 回调，确保服务器能自行清理离房玩家，不依赖 Unity 一定报告 exit。探针不调用平台 Show/Hide，不设置平台 FSM；同机双端通过不代表完整剧情或真实 FRP 已验收。
 
+`HOLLOWCONNECT_WARP_ASSERTIONS=1` 在 `Fungus1_02` 或 `Dream_Nailcollection` 验证真实窄平台上的 F8 落点。双方各传送三次，`HOLLOWCONNECT_WARP_CROSS_ROOM=1` 使第一次跨 Town，后两次同房；苍绿场景另用真实酸水碰撞检查复位点、复位期间拒绝 F8 请求和注入的延迟回复、恢复后两次跳跃落地。`HOLLOWCONNECT_WARP_UNSUPPORTED=1` 再验证无支撑目标：同房不移动角色或复位点，跨房回到可操作的原版入口。落点断言使用真实角色碰撞体和地形，死亡复位走原生流程；延迟回复是探针注入，并非真实网络故障测试。
+
 水晶翻转平台本地运行专项：`coverage` 中设置 `HOLLOWCONNECT_COVERAGE_SCENES=Mines_35`、`HOLLOWCONNECT_LOCAL_FLIP_ASSERTIONS=1`。要求真实场景 21 个平台均未注册为实体且没有复制；双方轮流实际落在同一平台上，触发原生翻转、尖刺切换及自然恢复，另一端的平台须保持原位。`HOLLOWCONNECT_ROOT_ANIMATION_ASSERTIONS=1` 在 `Ruins2_04` 另要求两端原生大盾守卫动画至少出现三个不同精灵帧，拒绝通过停动画减少流量。二者可配合既有性能计数，对比修改前后的整房 CombatState 生成量；初次/接管完整快照和命中盒仍用现有专项验证。

@@ -190,7 +190,18 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         CoopMod.Settings.ShareProgress=false;
         PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
-        yield return Until(()=>In("Town"),"unsaved Town");Freeze();
+        yield return Until(()=>In("Town"),"unsaved Town");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_ASSERTIONS") == "1" && PlayerData.instance.GetBool("atBench")) {
+            // Leave the initial native bench before forcing a room transition.
+            // Its resting body is kinematic until the get-up flow finishes.
+            var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
+            yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
+            var jump = bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single();
+            bench.Fsm.Event(jump.wasPressed);
+            yield return Until(() => !PlayerData.instance.GetBool("atBench") && HeroController.instance.acceptingInput &&
+                !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
+        }
+        Freeze();
         if(host){engine.ServerManager.Start(29650,false);Flag("server.started");}else yield return Until(()=>Has("server.started"),"server");
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(engine.ClientManager,true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(engine.ClientManager,new object[]{"127.0.0.1",29650,"coverage"+role});
@@ -227,6 +238,13 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COMBAT_SNAPSHOT_ASSERTIONS") == "1") yield return FsmContinuationChecks.CombatSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_NULL_STRING_ASSERTIONS") == "1") yield return FsmContinuationChecks.StringSnapshots(Mark);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1") yield return DreamPlatformAssertions(round);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_ASSERTIONS") == "1") yield return WarpAssertions(round);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_INSPECT") == "1") {
+                foreach (var c in Object.FindObjectsOfType<Collider2D>().Where(c => c.gameObject.scene.name == scene &&
+                    (c.gameObject.layer == 8 && c.bounds.size.x < 6 || c.name.IndexOf("acid", StringComparison.OrdinalIgnoreCase) >= 0)))
+                    Mark("WARP GEOMETRY " + c.name + " layer=" + c.gameObject.layer + " trigger=" + c.isTrigger + " bounds=" + c.bounds +
+                        " components=" + string.Join(",", c.GetComponents<Component>().Where(v => v != null).Select(v => v.GetType().Name)));
+            }
             if (scene == "Mines_35" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_FLIP_ASSERTIONS") == "1") yield return LocalFlipAssertions(round);
             if (scene == "Ruins2_04" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_ROOT_ANIMATION_ASSERTIONS") == "1") {
                 var knight = Entities.Values.First(e => e.Type == EntityType.GreatHuskSentry);

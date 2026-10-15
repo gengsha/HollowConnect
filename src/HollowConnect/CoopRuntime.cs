@@ -67,6 +67,12 @@ public sealed class CoopRuntime : MonoBehaviour {
     internal bool Connected => api != null && api.NetClient.IsConnected && Session.Length > 0;
     internal bool Playable => HeroController.instance != null && GameManager.instance != null &&
         !GameManager.instance.IsInSceneTransition && HeroController.instance.isHeroInPosition;
+    private bool CanStartWarp => Playable && !Down && !Resetting && !Returning && !changingScene &&
+        HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished &&
+        !HeroController.instance.cState.dead && !HeroController.instance.cState.hazardDeath &&
+        !HeroController.instance.cState.hazardRespawning && !HeroController.instance.cState.transitioning &&
+        HeroController.instance.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION &&
+        !GameManager.instance.isPaused && Time.timeScale > 0;
 
     public void Initialize(IClientApi clientApi, CoopClientAddon addon) {
         api = clientApi;
@@ -232,7 +238,7 @@ public sealed class CoopRuntime : MonoBehaviour {
                 if (Shared && granted.Merge(m.Key, m.Value)) ApplyProgress(m.Key, m.Value);
                 break;
             case Kind.Warp:
-                if (m.Serial <= handledWarp || Down || Resetting || Returning || changingScene) break;
+                if (m.Serial <= handledWarp || !CanStartWarp) break;
                 handledWarp = m.Serial; teammateWarp = StartCoroutine(WarpTo(m)); break;
         }
     }
@@ -272,6 +278,7 @@ public sealed class CoopRuntime : MonoBehaviour {
             }
         }
         if (!Down && WarpEnabled && KeyPressed(CoopMod.Settings.TeleportKey)) {
+            if (!CanStartWarp) { Notice("当前无法传送，请等待操作或复位完成"); return; }
             if (!Peers.ContainsKey(Selected)) Selected = Peers.Keys.OrderBy(i => i).FirstOrDefault();
             if (Peers.ContainsKey(Selected)) Send(new Message { Kind = Kind.WarpRequest, Target = Selected, Serial = ++warpSerial });
             else Notice("没有可传送的队友");
@@ -499,11 +506,55 @@ public sealed class CoopRuntime : MonoBehaviour {
         benchReturn = null;
     }
 
+    private static bool TryWarpLanding(Vector2 target, string scene, out Vector2 landing) {
+        var hero = HeroController.instance;
+        Physics2D.SyncTransforms();
+        var bounds = hero.GetComponent<Collider2D>().bounds;
+        var centerOffset = (Vector2)(bounds.center - hero.transform.position);
+        var size = (Vector2)bounds.size;
+        // Peers do not collide with each other. Prefer the supported position
+        // they already occupy, especially on a platform narrower than 1.5 units.
+        foreach (var dx in new[] { 0f, 1.5f, -1.5f, 3f, -3f }) {
+            var origin = new Vector2(target.x + dx, target.y + bounds.extents.y);
+            foreach (var hit in Physics2D.RaycastAll(origin, Vector2.down, size.y + 4, 1 << 8)) {
+                if (hit.collider.gameObject.scene.name != scene || hit.collider.isTrigger || hit.distance == 0 || hit.normal.y < .5f) continue;
+                var pos = new Vector2(origin.x, hit.point.y + bounds.extents.y - centerOffset.y + .05f);
+                if (Math.Abs(pos.y - target.y) > 3) continue;
+                var blocked = Physics2D.OverlapBoxAll(pos + centerOffset, size * .98f, 0).Any(c => {
+                    if (c.gameObject.scene.name != scene) return false;
+                    if (!c.isTrigger && c.gameObject.layer == 8) return true;
+                    var damage = c.GetComponent<DamageHero>();
+                    return damage != null && damage.enabled && damage.damageDealt > 0;
+                });
+                if (blocked) continue;
+                landing = pos; return true;
+            }
+        }
+        landing = default; return false;
+    }
+
     private Vector2? FindWarpEntry(On.GameManager.orig_FindEntryPoint orig, GameManager self, string name, UnityEngine.SceneManagement.Scene scene) =>
         warpEntry.HasValue && name == "dreamGate" && scene.name == warpScene ? warpEntry : orig(self, name, scene);
 
     private void CompleteWarpEntry(On.HeroController.orig_EnterSceneDreamGate orig, HeroController self) {
         var ownArrival = warpEntry.HasValue && GameManager.instance.sceneName == warpScene && GameManager.instance.entryGateName == "dreamGate";
+        if (ownArrival) {
+            // Preload entry-point queries can run before the new scene's physics
+            // is ready. Resolve here, before native entry saves its hazard point.
+            var found = TryWarpLanding(warpEntry.Value, warpScene, out var landing);
+            if (!found) {
+                var scene = UnitySceneManager.GetSceneByName(warpScene);
+                foreach (var entrance in scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<TransitionPoint>(true))) {
+                    if (!entrance.isActiveAndEnabled || !TryWarpLanding((Vector2)entrance.transform.position + entrance.entryOffset, warpScene, out landing)) continue;
+                    found = true; break;
+                }
+            }
+            if (found) {
+                self.SetHeroParent(null);
+                self.transform.position = new Vector3(landing.x, landing.y, self.transform.position.z);
+                Physics2D.SyncTransforms();
+            }
+        }
         orig(self);
         // Native dream-gate travel relies on the Dream Nail FSM to fade in
         // and release control. F8 does not run that FSM. Complete our own
@@ -516,7 +567,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private IEnumerator WarpTo(Message m) {
-        if (!Playable || !Party.Finite(m.X) || !Party.Finite(m.Y)) yield break;
+        if (!CanStartWarp || !Party.Finite(m.X) || !Party.Finite(m.Y)) yield break;
         var session = Session;
         changingScene = true;
         var rollback = BossTravel.SaveState();
@@ -541,7 +592,8 @@ public sealed class CoopRuntime : MonoBehaviour {
             var warned = false;
             yield return null;
             while (Connected && Session == session && m.Round == CoopContext.Epoch &&
-                (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene || !Playable)) {
+                (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene || !Playable ||
+                 api.ClientManager is Hkmp.Game.Client.ClientManager manager && !manager.SceneSnapshotReady)) {
                 if (!warned && Time.realtimeSinceStartup >= deadline) { warned = true; Notice("传送加载尚未完成，请检查游戏日志"); }
                 yield return null;
             }
@@ -550,15 +602,15 @@ public sealed class CoopRuntime : MonoBehaviour {
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == m.Scene && !Down && !Resetting && !Returning) {
             var target = Peers.TryGetValue(m.Target, out var peer) && peer.State != null && peer.State.Scene == m.Scene && Now - peer.Seen < 1.5
                 ? new Vector2(peer.State.X, peer.State.Y) : new Vector2(m.X, m.Y);
-            var found = false;
-            foreach (var offset in new[] { new Vector2(1.5f, 0), new Vector2(-1.5f, 0), Vector2.zero, new Vector2(0, 2), new Vector2(3, 1), new Vector2(-3, 1) }) {
-                var pos = target + offset;
-                if (Physics2D.OverlapBox(pos, new Vector2(.8f, 1.8f), 0, 1 << 8) != null) continue;
+            var found = TryWarpLanding(target, m.Scene, out var pos);
+            if (found) {
                 var hero = HeroController.instance;
-                hero.transform.position = new Vector3(pos.x, pos.y, hero.transform.position.z);
+                hero.SetHeroParent(null);
                 hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                hero.SetHazardRespawn(hero.transform.position, false); hero.ResetAirMoves();
-                GameCameras.instance.cameraController.PositionToHero(false); found = true; break;
+                hero.transform.position = new Vector3(pos.x, pos.y, hero.transform.position.z);
+                Physics2D.SyncTransforms();
+                hero.SetHazardRespawn(hero.transform.position, hero.cState.facingRight); hero.ResetAirMoves();
+                GameCameras.instance.cameraController.PositionToHero(false);
             }
             Notice(found ? "已到达队友身边" : "队友附近没有安全落点");
         }
