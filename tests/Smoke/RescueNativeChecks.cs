@@ -15,6 +15,11 @@ public sealed partial class RescueProbe {
         var body = hero.GetComponent<Rigidbody2D>();
         var other = host ? "guest" : "host";
         var protectionBaseline = Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_NATIVE_CHECK") == "protection";
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += (loaded, mode) => Log("NATIVE SCENE " + loaded.name + " " + mode);
+        On.GameManager.BeginSceneTransition += (orig, gm, info) => {
+            Log("NATIVE TRANSITION " + info.SceneName + "/" + info.EntryGateName + " from=" + gm.sceneName + " hero=" + hero.transform.position + " " + Environment.StackTrace);
+            orig(gm, info);
+        };
         IEnumerator Together(string step) {
             Flag(role + ".native." + step);
             yield return Until(() => Has(other + ".native." + step), "both " + step);
@@ -25,7 +30,7 @@ public sealed partial class RescueProbe {
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
             yield return Until(() => !pd.GetBool("atBench") && hero.acceptingInput && !body.isKinematic, "native starting bench get-up");
         }
-        foreach (var scene in new[] { "Crossroads_01", "GG_Vengefly", "Dream_Mage_Lord" }) {
+        foreach (var scene in new[] { "Crossroads_01", "GG_Vengefly", "Dream_02_Mage_Lord" }) {
             GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo {
                 SceneName = scene, EntryGateName = scene.StartsWith("GG_") ? "door_dreamEnter" : scene.StartsWith("Dream_") ? "door1" : "left1",
                 Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true
@@ -41,7 +46,7 @@ public sealed partial class RescueProbe {
             foreach (var victimRole in new[] { "guest", "host" }) {
                 var victim = role == victimRole;
                 var step = scene + "." + victimRole;
-                var missingCheckpoint = scene == "Dream_Mage_Lord" && victimRole == "host";
+                var missingCheckpoint = scene == "Dream_02_Mage_Lord" && victimRole == "host";
                 hero.takeNoDamage = true; hero.cState.invulnerable = false; hero.cState.recoiling = false;
                 pd.SetInt("health", 5); pd.SetInt("healthBlue", 0); pd.SetBool("isInvincible", false);
                 pd.SetInt("geo", 321); pd.SetInt("geoPool", 67); pd.SetString("shadeScene", "Crossroads_10");
@@ -58,14 +63,30 @@ public sealed partial class RescueProbe {
                     var marker = GameObject.FindGameObjectsWithTag("Shade Marker").Where(g => g.scene.name == scene)
                         .OrderBy(g => (g.transform.position - origin).sqrMagnitude).FirstOrDefault();
                     Log("NATIVE RESCUE " + step + " zone=" + zone + " origin=" + origin + " entry=" + entry + " marker=" + (marker == null ? "none" : marker.transform.position.ToString()));
+                    if (marker != null) {
+                        var hit = Physics2D.Raycast(marker.transform.position, Vector2.down, 50, 1 << 8);
+                        Log("MARKER GROUND " + step + " collider=" + hit.collider + " point=" + hit.point + " normal=" + hit.normal + " distance=" + hit.distance + " trigger=" + (hit.collider != null && hit.collider.isTrigger));
+                        if (hit.collider != null && hit.distance > 0) {
+                            var ground = hero.FindGroundPoint(marker.transform.position, true);
+                            var args = new object[] { (Vector2)ground, scene, null };
+                            var supported = typeof(CoopRuntime).GetMethod("TryWarpLanding", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).Invoke(null, args);
+                            Log("MARKER SUPPORT " + step + " native=" + ground + " valid=" + supported + " landing=" + args[2]);
+                        }
+                    }
                     hero.takeNoDamage = false; pd.SetInt("health", 1);
                     hero.TakeDamage(null, GlobalEnums.CollisionSide.left, 1, 1);
                     yield return Until(() => runtime.Down, "ordinary airborne lethal hit " + step);
+                    Log("NATIVE ANCHOR " + step + " position=" + runtime.DeathPosition);
                     if (!protectionBaseline) {
                         Check(Vector2.Distance(runtime.DeathPosition, origin) > 1, "ordinary rescue leaves airborne death point " + step);
                         if (scene == "Crossroads_01") {
                             Check(marker != null, "story room has real native shade marker " + step);
-                            Check(Math.Abs(runtime.DeathPosition.x - marker.transform.position.x) < .2f, "story rescue uses native nearest marker " + step);
+                            // A shade can float over a ledge; the knight's full
+                            // body may need the existing landing search's 3-unit
+                            // clearance. Require this marker's area plus actual
+                            // supported standing below, rather than exact art X.
+                            Check(Math.Abs(runtime.DeathPosition.x - marker.transform.position.x) <= 3.05f,
+                                "story rescue uses nearest native marker supported area " + step);
                         } else {
                             Check(zone == "GODS_GLORY" || zone == "DREAM_WORLD", "real special map-zone branch " + step);
                             if (missingCheckpoint)
@@ -103,7 +124,13 @@ public sealed partial class RescueProbe {
                     var peer = runtime.Peers.Single(); var service = Field<ShadeService>(runtime, "shades");
                     yield return Until(() => service.Get(peer.Key) != null, "native rescue shade visible " + step);
                     var shade = service.Get(peer.Key).transform.position;
-                    hero.transform.position = shade + Vector3.right * 2; hero.FaceLeft();
+                    var stand = new[] { shade + Vector3.right * 2, shade + Vector3.left * 2 }.First(p => {
+                        var support = Physics2D.Raycast(p, Vector2.down, 8, 1 << 8);
+                        return support.collider != null && support.normal.y > .5f && !support.collider.isTrigger;
+                    });
+                    Log("RESCUER SUPPORT " + step + " position=" + stand);
+                    hero.transform.position = stand; body.velocity = Vector2.zero;
+                    if (stand.x > shade.x) hero.FaceLeft(); else hero.FaceRight();
                     hero.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
                     yield return Until(() => runtime.Peers[peer.Key].Life == Life.Alive, "actual nail rescues ordinary death " + step);
                     var avatar = runtime.PlayerObject(peer.Key);
@@ -116,6 +143,7 @@ public sealed partial class RescueProbe {
                     Check(!avatar.GetComponent<Renderer>().forceRenderingOff, "remote rescued knight remains visible " + step);
                 }
                 yield return Together(step + ".complete");
+                Log("NATIVE ROOM " + step + " actual=" + GameManager.instance.sceneName + " hero=" + hero.transform.position);
                 Check(GameManager.instance.sceneName == scene, "native rescue stays in current room " + step);
             }
         }

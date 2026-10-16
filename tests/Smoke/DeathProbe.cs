@@ -263,7 +263,9 @@ public sealed class DeathProbe : MonoBehaviour {
             Require(sounds == before + 1, "remote temporary down plays one native hit sound");
             var fx = Object.FindObjectsOfType<ParticleSystem>().FirstOrDefault(p => p.name == "HollowConnect down particles");
             Require(fx != null && fx.particleCount > 0 && fx.particleCount <= 16, "native down particle burst is present and bounded");
-            var peer = runtime.Peers.First(); Require(runtime.RequestShadeHit(peer.Key, peer.Value.DownSerial), "rescue request accepted for current death");
+            var peer = runtime.Peers.First();
+            HeroController.instance.transform.position = new Vector3(peer.Value.State.X + 2, peer.Value.State.Y, HeroController.instance.transform.position.z);
+            Require(runtime.RequestShadeHit(peer.Key, peer.Value.DownSerial), "rescue request accepted for current death");
             yield return Until(() => Has("guest.rescued"), "guest rescued");
             Require(pd.GetInt("geo") == 123 && pd.GetString("shadeScene") == "", "teammate rescue does not change host's geo"); Flag("host.rescue-checked");
             yield return Until(() => Has("guest.giveup"), "guest completed formal personal death", 70);
