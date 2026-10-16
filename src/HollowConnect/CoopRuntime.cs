@@ -347,7 +347,20 @@ public sealed class CoopRuntime : MonoBehaviour {
         self.transform.position = DeathPosition;
         deathCamera = GameCameras.instance?.cameraController;
         if (deathCamera != null) {
-            cameraMode = deathCamera.mode; cameraPosition = deathCamera.transform.position;
+            cameraMode = deathCamera.mode;
+            // The native rescue point can be outside the death view. Move
+            // before storing the frozen anchor, using native scene/lock bounds.
+            deathCamera.camTarget.PositionToStart();
+            var view = deathCamera.KeepWithinSceneBounds(deathCamera.camTarget.transform.position);
+            deathCamera.SnapTo(view.x, view.y);
+            var visible = deathCamera.cam.WorldToViewportPoint(DeathPosition);
+            if (visible.z <= 0 || visible.x <= 0 || visible.x >= 1 || visible.y <= 0 || visible.y >= 1) {
+                // A disabled hero may have crossed an obsolete lock area.
+                // Keep that area's native ownership, but show the rescue point.
+                view = deathCamera.KeepWithinSceneBounds(DeathPosition);
+                deathCamera.SnapTo(view.x, view.y);
+            }
+            cameraPosition = deathCamera.transform.position;
             deathCamera.FreezeInPlace();
         }
         Down = true; downSerial++; Lock(); Heal(1);

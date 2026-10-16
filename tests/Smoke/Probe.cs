@@ -375,22 +375,25 @@ public sealed class Probe : MonoBehaviour {
         } else {
             yield return Until(() => Has("guest.down-request"), "first down requested"); Freeze();
             HeroController.instance.transform.position += new Vector3(2, 0, 0);
-            var deathAnchor = HeroController.instance.transform.position;
             var camera = GameCameras.instance.cameraController;
-            var deathCamera = camera.transform.position; var previousMode = camera.mode;
+            var previousMode = camera.mode;
             var hero = HeroController.instance;
             hero.takeNoDamage = false; hero.cState.invulnerable = hero.cState.recoiling = false;
             pd.SetBool("isInvincible", false); hero.SetDamageMode(GlobalEnums.DamageMode.FULL_DAMAGE);
             hero.TakeDamage(null, GlobalEnums.CollisionSide.left, 99, 1);
             yield return Until(() => runtime.Down, "lethal TakeDamage enters guest shade state");
+            var deathAnchor = runtime.DeathPosition;
+            var deathCamera = camera.transform.position;
             HeroController.instance.transform.position += new Vector3(8, 5, 0); camera.transform.position += new Vector3(8, 5, 0);
             yield return new WaitForSecondsRealtime(.6f);
+            var rescueView = camera.cam.WorldToViewportPoint(deathAnchor);
             if (!runtime.Down || !AliveScene("Crossroads_01") || Vector3.Distance(HeroController.instance.transform.position, deathAnchor) > .001f ||
                 Vector3.Distance(camera.transform.position, deathCamera) > .001f || camera.mode != CameraController.CameraMode.FROZEN ||
+                rescueView.z <= 0 || rescueView.x <= 0 || rescueView.x >= 1 || rescueView.y <= 0 || rescueView.y >= 1 ||
                 HeroController.instance.GetComponent<Rigidbody2D>().simulated || !HeroController.instance.GetComponent<Renderer>().forceRenderingOff) {
                 Mark("FAIL death anchor, camera freeze or ghost body"); Flag(role + ".failed"); yield break;
             }
-            Mark("PASS shade stays at death anchor; camera frozen; body hidden without bench respawn"); Flag("guest.anchor-verified");
+            Mark("PASS shade stays at safe anchor; frozen camera sees rescue point; body hidden without bench respawn"); Flag("guest.anchor-verified");
             yield return Until(() => !runtime.Down && pd.GetInt("health") == 1 && pd.GetInt("healthBlue") == 0,
                 "guest rescued with exactly one health");
             if (Vector3.Distance(HeroController.instance.transform.position, deathAnchor) > .1f || camera.mode != previousMode ||
