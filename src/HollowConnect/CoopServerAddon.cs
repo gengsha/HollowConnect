@@ -82,19 +82,30 @@ public sealed class CoopServerAddon : ServerAddon {
         }
     }
 
+    private static Message DeathCount(string name, uint count) => new Message {
+        Kind = Kind.DeathCount, Name = name, Serial = count
+    };
     private void Receive(ushort id, Message m) {
         var player = api.ServerManager.GetPlayer(id);
         if (player == null) return;
         if (m.Kind == Kind.Hello) {
             party.Join(id, player.Username);
-            Send(id, new Message { Kind = Kind.Welcome, Id = id, Value = (shared ? 1 : 0) | (rescue ? 2 : 0) | (warp ? 4 : 0) | (entryProtection ? 8 : 0) });
+            Send(id, new Message { Kind = Kind.Welcome, Id = id, Name = player.Username, Value = (shared ? 1 : 0) | (rescue ? 2 : 0) | (warp ? 4 : 0) | (entryProtection ? 8 : 0) });
             foreach (var pair in progress.Values) Send(id, new Message { Kind = Kind.ProgressGrant, Key = pair.Key, Value = pair.Value });
+            foreach (var standing in party.Deaths.Deaths) Send(id, DeathCount(standing.Key, standing.Value));
             if (party.Resetting) {
                 Send(id, new Message { Kind = Kind.Wipe });
             }
             return;
         }
-        if (m.Session != party.Session || m.Round != party.Round || !party.Members.TryGetValue(id, out var member)) return;
+        if (m.Session != party.Session || !party.Members.TryGetValue(id, out var member)) return;
+        // A death counted just before the reliable wipe can arrive in the previous round.
+        if (m.Kind == Kind.DeathCount || m.Kind == Kind.DeathHistory) {
+            var name = m.Kind == Kind.DeathCount ? member.Name : m.Name;
+            if (m.Round <= party.Round && party.Deaths.Merge(name, m.Serial)) Broadcast(DeathCount(name, m.Serial));
+            return;
+        }
+        if (m.Round != party.Round) return;
         switch (m.Kind) {
             case Kind.Presence:
                 if (party.Presence(id, m.Round, m.Serial, m.Scene, m.X, m.Y, m.IsReady,

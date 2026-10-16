@@ -45,6 +45,69 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        Test("replica positions interpolate rendered frames between sparse authority samples", () => {
+            var h = new Hkmp.Fsm.PositionHistory();
+            Check(h.Add(UnityEngine.Vector3.zero, 0));
+            Check(!h.Add(new UnityEngine.Vector3(1, 0, 0), .05f));
+            Near(h.Evaluate(.075f).x, .5f); Near(h.Evaluate(.0875f).x, .75f);
+            Near(h.Evaluate(.1f).x, 1);
+        });
+        Test("replica positions hold at a stop and never extrapolate into hazards", () => {
+            var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0); h.Add(new UnityEngine.Vector3(2, 0, 0), .05f);
+            Near(h.Evaluate(3).x, 2); Near(h.Latest.x, 2);
+        });
+        Test("replica teleports and long packet gaps reset stale presentation history", () => {
+            var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0);
+            Check(h.Add(new UnityEngine.Vector3(20, 0, 0), .05f)); Near(h.Evaluate(.05f).x, 20);
+            Check(h.Add(new UnityEngine.Vector3(21, 0, 0), 1)); Near(h.Evaluate(1).x, 21);
+            h.Clear(); Check(!h.HasSamples); Check(h.Add(UnityEngine.Vector3.zero, 2));
+        });
+        Test("replica packet bursts coalesce without duplicate timestamps or unbounded storage", () => {
+            var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0);
+            for (var i = 1; i < 30; i++) { h.Add(new UnityEngine.Vector3(i, 0, 0), i * .01f); h.Add(new UnityEngine.Vector3(i + .1f, 0, 0), i * .01f); }
+            Near(h.Evaluate(.3f).x, 25.1f); Near(h.Evaluate(1).x, 29.1f);
+        });
+        Test("death standings ignore duplicate and older reliable reports", () => {
+            var p = Two(); Check(p.RecordDeaths(1, 1)); Check(!p.RecordDeaths(1, 1)); Check(p.RecordDeaths(1, 3));
+            Check(!p.RecordDeaths(1, 2)); Check(!p.RecordDeaths(99, 1)); Check(!p.RecordDeaths(1, uint.MaxValue)); Check(p.Deaths.Get("host") == 3);
+        });
+        Test("death standings count downed players once across rescue and formal return", () => {
+            var p = Returnable(); Check(p.RecordDeaths(2, 1)); Check(p.Revive(1, 2, 0, 1, 100));
+            Check(p.Deaths.Get("guest") == 1); Check(Down(p, 2, 0, 2)); Check(p.RecordDeaths(2, 2)); Check(p.GiveUp(2, 0, 2));
+            Check(p.FinishReturn(2, 0, 2, 2, "GuestBenchRoom", 0, 0, 100)); Check(p.Deaths.Get("guest") == 2);
+        });
+        Test("death standings survive full-team retry and restore into a new room", () => {
+            var p = Two(); Down(p, 1, 0, 1); Down(p, 2, 0, 1); p.RecordDeaths(1, 1); p.RecordDeaths(2, 1);
+            Check(p.BeginWipe()); Check(Ready(p, 1, p.Round)); Check(Ready(p, 2, p.Round)); Check(p.TryRelease());
+            Check(p.Deaths.Get("host") == 1 && p.Deaths.Get("guest") == 1);
+            var saved = p.Deaths.Copy(); var reopened = Two();
+            foreach (var entry in saved.Deaths) reopened.Deaths.Merge(entry.Key, entry.Value);
+            Check(reopened.Deaths.Get("host") == 1 && reopened.Deaths.Get("guest") == 1);
+            reopened.Leave(2); Check(reopened.Deaths.Get("guest") == 1);
+        });
+        Test("death count message preserves reliable saved totals and Chinese names", () => {
+            var m = Roundtrip(new Message { Kind = Kind.DeathCount, Session = "party", Id = 2, Serial = 8, Name = "队友" });
+            Check(m.Kind == Kind.DeathCount && m.Serial == 8 && m.Name == "队友" && m.IsReliable && !m.DropReliableDataIfNewerExists);
+        });
+        Test("copied death histories merge by maximum without doubling or rollback", () => {
+            var saved = new DeathStatistics(); saved.Merge("队友", 12); saved.Merge("房主", 3);
+            var board = new DeathStatistics();
+            for (var i = 0; i < 3; i++) foreach (var entry in saved.Deaths) board.Merge(entry.Key, entry.Value);
+            Check(board.Get("队友") == 12 && board.Get("房主") == 3);
+            Check(board.Increment("队友") == 13); Check(!board.Merge("队友", 12));
+            Check(!board.Merge("", 4) && !board.Merge("bad", uint.MaxValue));
+            var history = Roundtrip(new Message { Kind = Kind.DeathHistory, Name = "队友", Serial = 13 });
+            Check(history.IsReliable && history.Serial == 13 && history.Name == "队友");
+        });
+        Test("save-specific death data copies isolate slots and missing data starts empty", () => {
+            var first = new DeathStatistics(); first.Merge("队友", 9);
+            var second = first.Copy();
+            Check(second.Get("队友") == 9);
+            first.Increment("队友"); Check(second.Get("队友") == 9);
+            var empty = new DeathStatistics { Deaths = null }.Copy(); Check(empty.Deaths.Count == 0);
+            second = new DeathStatistics(); Check(second.Deaths.Count == 0);
+            Check(first.Get("队友") == 10);
+        });
         Test("main-thread backlog yields between complete callbacks and preserves FIFO", ClientSessionProbe.BacklogBudget);
         Test("scalar packet encoding preserves BitConverter wire bytes and floating-point bits", PacketEncodingProbe.WireFormat);
         Test("reused scratch snapshots do not change published packets", PacketEncodingProbe.ScratchOwnership);

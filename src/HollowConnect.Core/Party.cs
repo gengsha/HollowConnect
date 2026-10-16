@@ -23,10 +23,14 @@ public sealed class Party {
     public uint Round { get; private set; }
     public bool Resetting { get; private set; }
     public readonly Dictionary<ushort, Member> Members = new Dictionary<ushort, Member>();
+    public readonly DeathStatistics Deaths = new DeathStatistics();
     public void Join(ushort id, string name) {
         if (!Members.ContainsKey(id)) Members[id] = new Member { Id = id, Name = name, Life = Life.Loading };
     }
     public void Leave(ushort id) => Members.Remove(id);
+    public bool RecordDeaths(ushort id, uint count) {
+        return Members.TryGetValue(id, out var member) && Deaths.Merge(member.Name, count);
+    }
     public bool Presence(ushort id, uint round, uint sequence, string scene, float x, float y,
         bool ready, bool hasMap, float mx, float my, double now) {
         if (round != Round || !Members.TryGetValue(id, out var m) || sequence <= m.Sequence ||

@@ -45,6 +45,8 @@ public sealed class CoopRuntime : MonoBehaviour {
     internal uint ReleasedRound;
     internal bool Shared, RescueEnabled, WarpEnabled, Down, Resetting, Returning;
     private uint sequence, downSerial, warpSerial, handledWarp;
+    private string localName = "";
+    private Vector2 deathScroll;
     private float nextPresence, nextProgress;
     private bool readySent, changingScene;
     private bool giveUpRequested;
@@ -108,11 +110,13 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private void OnConnect() {
+        localName = "";
         Session = ""; Peers.Clear(); offered.Clear(); granted = new ProgressLedger(); sequence = 0; handledWarp = 0; ReleasedRound = 0;
         entryProtection.Clear(); protectionSceneHandle = int.MinValue; protectionSession = "";
         Send(new Message { Kind = Kind.Hello });
     }
     private void OnDisconnect() {
+        localName = "";
         CancelBenchReturn();
         CancelTransitions();
         shades.Clear(); Unlock(); Down = Resetting = changingScene = false; Session = ""; Peers.Clear(); offered.Clear();
@@ -131,13 +135,22 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (m.Kind == Kind.Welcome) {
             if (Session.Length != 0 && Session != m.Session) return;
             Session = m.Session; LocalId = m.Id; CoopContext.Epoch = m.Round;
+            localName = m.Name;
+            CoopMod.Statistics.Merge(localName, 0);
+            foreach (var entry in CoopMod.Statistics.Deaths)
+                Send(new Message { Kind = Kind.DeathHistory, Name = entry.Key, Serial = entry.Value });
             Shared = (m.Value & 1) != 0; RescueEnabled = (m.Value & 2) != 0; WarpEnabled = (m.Value & 4) != 0;
             protectEntry = (m.Value & 8) != 0;
-            Notice("协作连接已建立" + (Shared ? " · 共享进度开启" : ""));
+            Notice("协作连接已建立" + (Shared ? " · 共享进度开启" : "") + " · 按住 " + CoopMod.Settings.DeathLeaderboardKey + " 查看死亡榜");
             nextPresence = nextProgress = 0;
             return;
         }
         if (m.Session != Session || Session.Length == 0) return;
+        // Absolute saved totals merge by maximum; copied histories must not add twice.
+        if (m.Kind == Kind.DeathCount) {
+            CoopMod.Statistics.Merge(m.Name, m.Serial);
+            return;
+        }
         if (m.Kind == Kind.Wipe) {
             // Welcome may carry the current round to a late joiner who has
             // never released it. Completed rounds, however, cannot reopen.
@@ -152,6 +165,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (m.Round != CoopContext.Epoch) return;
         switch (m.Kind) {
             case Kind.Roster:
+                CoopMod.Statistics.Merge(m.Name, 0);
                 if (m.Id == LocalId) break;
                 if (!Peers.TryGetValue(m.Id, out var p)) Peers[m.Id] = p = new Peer();
                 if (p.State != null && m.Serial < p.State.Serial) break;
@@ -316,6 +330,8 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private IEnumerator OnDie(On.HeroController.orig_Die orig, HeroController self) {
+        if (Connected && !Down && !Resetting && !Returning)
+            Send(new Message { Kind = Kind.DeathCount, Serial = CoopMod.Statistics.Increment(localName) });
         if (!Connected || !RescueEnabled || PlayerData.instance.permadeathMode != 0) { yield return orig(self); yield break; }
         if (Down || Resetting || Returning) yield break;
         personalDeath = new PersonalDeath(self, () => orig(self));
@@ -686,6 +702,17 @@ public sealed class CoopRuntime : MonoBehaviour {
             Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点 · 队友继续战斗" :
             "暗影形态 · 等待队友击破暗影，一血复活\n按 " + CoopMod.Settings.GiveUpKey + " 放弃救援，按原版死亡规则返回", style);
         map.DrawOverlay(style);
+        if (Input.GetKey(CoopMod.Settings.DeathLeaderboardKey)) {
+            var width = Mathf.Min(350, Screen.width - 20);
+            var height = Mathf.Min(430, Screen.height - 110);
+            GUILayout.BeginArea(new Rect(Screen.width - width - 10, 100, width, height), GUI.skin.box);
+            GUILayout.Label("本存档累计死亡榜 · 倒地计一次", style);
+            deathScroll = GUILayout.BeginScrollView(deathScroll);
+            var rank = 0;
+            foreach (var entry in CoopMod.Statistics.Deaths.OrderByDescending(s => s.Value).ThenBy(s => s.Key, StringComparer.Ordinal))
+                GUILayout.Label(++rank + ". " + entry.Key + (entry.Key == localName ? "（你）" : "") + "   " + entry.Value + " 次", style);
+            GUILayout.EndScrollView(); GUILayout.EndArea();
+        }
     }
 
     private void OnDestroy() {

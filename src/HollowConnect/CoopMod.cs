@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Hkmp.Api.Client;
+using HollowConnect.Core;
 using Modding;
 using UnityEngine;
 
@@ -14,17 +15,25 @@ public sealed class Settings {
     public KeyCode SelectTeammateKey = KeyCode.F7;
     public KeyCode TeleportKey = KeyCode.F8;
     public KeyCode GiveUpKey = KeyCode.F6;
+    public KeyCode DeathLeaderboardKey = KeyCode.F5;
 }
 
-public sealed class CoopMod : Mod, IGlobalSettings<Settings>, IMenuMod {
+public sealed class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSettings<DeathStatistics>, IMenuMod {
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
-    public const string Version = "0.1.18";
+    public static DeathStatistics Statistics = new DeathStatistics();
+    public const string Version = "0.1.19";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override void Initialize() {
-        Log("HollowConnect initialized; compatible engine: HKMP 3.0.0-hc10");
+        Log("HollowConnect initialized; compatible engine: HKMP 3.0.0-hc11");
+        // The API skips OnLoadLocal when a slot has no data for this mod.
+        // Reset before every load so switching to an older save cannot inherit another slot's board.
+        On.GameManager.LoadGame += (orig, self, slot, callback) => { Statistics = new DeathStatistics(); orig(self, slot, callback); };
+        ModHooks.NewGameHook += () => Statistics = new DeathStatistics();
     }
+    public void OnLoadLocal(DeathStatistics value) => Statistics = value?.Copy() ?? new DeathStatistics();
+    public DeathStatistics OnSaveLocal() => Statistics;
     public void OnLoadGlobal(Settings value) => Settings = value ?? new Settings();
     public Settings OnSaveGlobal() => Settings;
     public bool ToggleButtonInsideMenu => false;

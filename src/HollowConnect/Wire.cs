@@ -6,7 +6,7 @@ namespace HollowConnect;
 
 public enum Channel { Presence, Event }
 public enum Kind : byte { Hello, Welcome, Presence, Roster, Down, ShadeHit, Revived, Wipe, Ready, Release, ProgressOffer, ProgressGrant, WarpRequest, Warp, Left,
-    GiveUpRequest, Returning, BenchReady, Returned, GiveUpDenied }
+    GiveUpRequest, Returning, BenchReady, Returned, GiveUpDenied, DeathCount, DeathHistory }
 
 public static class Wire {
     // Both senders accumulate messages into HKMP collections before transmission.
