@@ -1,0 +1,139 @@
+{
+  "kind": "read-only-user-log-and-source-audit",
+  "recordedAtUtc": "2026-10-16T16:33:37.292124+00:00",
+  "localDate": "2026-10-17",
+  "sourceCommit": "77ec94eecc2b238657ba756d1901418d0887dce3",
+  "version": "0.1.19",
+  "engineVersion": "3.0.0-hc11",
+  "gameDirectory": "E:/SteamLibrary/steamapps/common/Hollow Knight",
+  "installedBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "9202C83DA507CAB28922D7E3AE6FED85747863F513D4EB4A5DCB3FC0F647BEF4",
+      "productVersion": "1.0.0+e34ba2b4ac8e24c3c5fd93f831713b316a11ed65"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "F01D86DA83E74BBA49FC7F1F1EEF6A04A123AC1F5494C204B9646538E2B58D2C",
+      "productVersion": "1.0.0+e34ba2b4ac8e24c3c5fd93f831713b316a11ed65"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "96A1371F553F161D406F2C1659DBCF3157D7EE7756AAB5BE61F45F15B9B93B29",
+      "productVersion": "1.0.0+e34ba2b4ac8e24c3c5fd93f831713b316a11ed65"
+    }
+  ],
+  "logSnapshots": [
+    {
+      "name": "Player.log",
+      "bytes": 783029,
+      "sha256": "03F32F5BD18AFD461EC28768BF18B8B05E4C5F8826CDA15079936AF4910F8AE8"
+    },
+    {
+      "name": "Player-prev.log",
+      "bytes": 339729,
+      "sha256": "E43F4EE3130329D7C0486C754FDCC876FD617450822B80E066D753FE0351E8CF"
+    },
+    {
+      "name": "ModLog.txt",
+      "bytes": 118810,
+      "sha256": "64BF17F049496C37947FEA0AA15FCC28CA01E4E81DB551D6D1FBF163F82DBD8C"
+    }
+  ],
+  "nativeAssembly": {
+    "path": "E:\\SteamLibrary\\steamapps\\common\\Hollow Knight\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+    "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+    "bytes": 4064768
+  },
+  "playMakerAssembly": {
+    "path": "E:\\SteamLibrary\\steamapps\\common\\Hollow Knight\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+    "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+    "bytes": 212480
+  },
+  "staticAudit": {
+    "typeCount": 3578,
+    "dataFilesScanned": 1854,
+    "auditSha256": "2CE848603730A81619C15FDC4DD91718F823C0AFAD5849FA8E72AF1C7C841B66"
+  },
+  "observations": {
+    "stagSceneVisits": [
+      14,
+      16,
+      22
+    ],
+    "stagDestinations": [
+      "Ruins1_29",
+      "Ruins1_29",
+      "Ruins2_08"
+    ],
+    "unknownStateWarnings": {
+      "scene": "GG_Radiance",
+      "total": 753,
+      "state3": 378,
+      "state4": 375,
+      "modLogLines": [
+        82,
+        875
+      ]
+    },
+    "missingHeroErrors": {
+      "currentLog": 9840,
+      "previousLog": 4971,
+      "context": "Mostly long no-hero/menu intervals; not proof of sustained combat slowdown."
+    },
+    "frameTelemetryAvailable": false,
+    "nativeAssetUnload": {
+      "samples": 14,
+      "maxMilliseconds": 346.5576,
+      "above100Milliseconds": 13,
+      "scope": "Scene/menu loading only; not attributed uniquely to this mod."
+    }
+  },
+  "findings": [
+    {
+      "id": "stag-warp-transient-scene-wait",
+      "classification": "confirmed static risk; strong candidate for reported incident",
+      "evidence": [
+        "CoopRuntime.cs:71,327,644,669,672",
+        "CoopServerAddon.cs:158",
+        "SceneUtil.cs:14"
+      ],
+      "mechanism": "Destination readiness excludes neither cinematics nor relinquished control. An accepted warp waits for the original scene and snapshot indefinitely. Thirty seconds only displays a warning. An automatic scene advance can retain changingScene, causing the sender to advertise Loading and preventing reverse warps.",
+      "incidentUniquelyConfirmed": false,
+      "missingEvidence": "Logs do not record warp request/accept serial, target scene or changingScene transitions."
+    },
+    {
+      "id": "radiance-state-layout-warning-spam",
+      "classification": "observed warning; confirmed logging overhead; layout cause unresolved",
+      "mechanism": "753 rejected FSM states in GG_Radiance. Each warning uses stack-frame origin lookup and log output. Exact entity/FSM is absent from the message."
+    },
+    {
+      "id": "continuous-child-animation-full-snapshots",
+      "classification": "confirmed static overhead; frame impact unmeasured",
+      "mechanism": "The changing child ClipTimeSeconds is included before ContentEquals, keeping full CombatState snapshots dirty at up to 20 Hz. Snapshot compression/decompression and all-node application remain on the main thread."
+    },
+    {
+      "id": "periodic-component-rebuild-allocations",
+      "classification": "confirmed static allocation path; frame impact unmeasured",
+      "mechanism": "Both sides rebuild component arrays and MaterialPropertyBlocks every two seconds. Client Parts are constructed then discarded when preserving old animation/motion history. Lookup preservation also linearly searches old nodes for each new node."
+    },
+    {
+      "id": "no-hero-polling-and-gui-allocation",
+      "classification": "observed no-hero logging; static candidate callers; frame impact unmeasured",
+      "mechanism": "HeroController.instance logs and searches when no hero exists. Playable and other polling use it; per-frame shade sets, GUIStyle and overlay sorting add allocations. Caller-specific attribution is unavailable."
+    }
+  ],
+  "limits": [
+    "No frame-time trace, FPS benchmark, GC allocation measurement or vanilla A/B comparison.",
+    "No runtime reproduction of the stag incident.",
+    "No tests, gameplay source edits, build, installation, save changes, game restart or debugger attachment.",
+    "Existing runtime findings and P5 exit remain open."
+  ],
+  "minimalFollowup": [
+    "Reject non-gameplay destinations and target cutscenes before accepting a warp; keep map presence separate from teleport eligibility.",
+    "Clear only this warp operation after scene abandonment or failure, preserving native scene transition control; add concise request/accept/end reasons.",
+    "Locate the exact Radiance entity/FSM causing state mismatch, then repair its mapping rather than suppress warnings.",
+    "Avoid rebuilding unchanged Parts and sending a complete state solely for advancing presentation time; preserve complete initial/takeover snapshots.",
+    "If requested, measure frame-time and GC in isolated identical scenes with and without the mod; avoid broad regression reruns."
+  ]
+}
