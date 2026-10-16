@@ -1118,6 +1118,26 @@ internal class Entity {
     public void InitializeClient() {
         _pausedNativeMotion.Clear();
         WaitingForEntrance.Remove(this);
+        if (!_isSceneHostDetermined && Type == EntityType.ColosseumManager && _originalIsActive) {
+            // The replica's Manager FSM stays disabled, but its entrance
+            // checkpoint belongs to each local player, including late arrivals.
+            var checkpoint = _fsms.Host.FirstOrDefault(f => f.FsmName == "Manager")?
+                .FsmStates.FirstOrDefault(s => s.Name == "Set Respawn");
+            if (checkpoint != null) {
+                foreach (var action in checkpoint.Actions.Where(a => a.Enabled)) {
+                    switch (action) {
+                        case HutongGames.PlayMaker.Actions.SetPlayerDataString s when s.stringName.Value is "respawnScene" or "respawnMarkerName":
+                            PlayerData.instance.SetString(s.stringName.Value, s.value.Value); break;
+                        case HutongGames.PlayMaker.Actions.SetPlayerDataInt i when i.intName.Value == "respawnType":
+                            PlayerData.instance.SetInt(i.intName.Value, i.value.Value); break;
+                        case HutongGames.PlayMaker.Actions.SetPlayerDataBool b when b.boolName.Value == "respawnFacingRight":
+                            PlayerData.instance.SetBool(b.boolName.Value, b.value.Value); break;
+                    }
+                }
+                if (checkpoint.Actions.OfType<HutongGames.PlayMaker.Actions.SendMessage>().Any(a => a.Enabled && a.functionCall.FunctionName == "SaveGame"))
+                    global::GameManager.instance.SaveGame();
+            }
+        }
         _isSceneHostDetermined = true;
         entranceEvents.Clear();
         EntityReferences.DisableDetachedParts(this, false);
