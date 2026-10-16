@@ -4,7 +4,7 @@
   "releaseReady": false,
   "retestOmitted": true,
   "userRequest": "这一次测试花了太多时间了,直接打包新版本不用重新测试了,下次测试不用选本次你认为没有复发风险的检测",
-  "recordedAtUtc": "2026-10-16T08:57:26.633351+00:00",
+  "recordedAtUtc": "2026-10-16T16:57:26.633351+08:00",
   "runs": [],
   "scope": "Version-only production rebuild and packaging. No regression, log-gate, runtime, or installer tests were repeated. Prior results remain attached to their original hashes; not acceptance of the rebuilt 0.1.18 binaries.",
   "previousValidationSource": "docs/evidence/colosseum-checkpoint-fsm-bounds-2026-10-16.json",
@@ -21,5 +21,24 @@
     "docs/evidence/hazard-rescue-2026-10-16.json"
   ],
   "installed": false,
-  "realTwoMachineFrp": false
+  "realTwoMachineFrp": false,
+  "buildCommit": "1fc0f0139488346fc4d08e3005eeb0c1c90ff93e",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "203FC8BEC9BD1151FDE15186A888AEDD5BAEB1FB598F9B526FCB672662244975",
+      "productVersion": "1.0.0+1fc0f0139488346fc4d08e3005eeb0c1c90ff93e"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "D3439AC9DE384EC0930AA2727BA4740FCBE2602844278107AC01EF8653555D25",
+      "productVersion": "1.0.0+1fc0f0139488346fc4d08e3005eeb0c1c90ff93e"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "A91F480518773D1B4CD37314390798E046D6B04CF4372E0C0776AC4C030133E7",
+      "productVersion": "1.0.0+1fc0f0139488346fc4d08e3005eeb0c1c90ff93e"
+    }
+  ],
+  "productionChangeSinceValidation": "Only CoopMod.Version changed from 0.1.17 to 0.1.18 after the validated production source at 498daad; source diff inspected. Build metadata and hashes changed; these new hashes were not runtime-tested."
 }
