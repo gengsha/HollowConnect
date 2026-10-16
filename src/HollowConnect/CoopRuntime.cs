@@ -7,6 +7,7 @@ using Hkmp;
 using Hkmp.Api.Client;
 using Hkmp.Api.Client.Networking;
 using Hkmp.Game.Client.Save;
+using Hkmp.Util;
 using HollowConnect.Core;
 using Modding;
 using UnityEngine;
@@ -70,7 +71,8 @@ public sealed class CoopRuntime : MonoBehaviour {
     internal bool Connected => api != null && api.NetClient.IsConnected && Session.Length > 0;
     internal bool Playable => HeroController.instance != null && GameManager.instance != null &&
         !GameManager.instance.IsInSceneTransition && HeroController.instance.isHeroInPosition;
-    private bool CanStartWarp => Playable && !Down && !Resetting && !Returning && !changingScene &&
+    private bool CanStartWarp => Playable && !SceneUtil.IsNonGameplayScene(UnitySceneManager.GetActiveScene().name) &&
+        !Down && !Resetting && !Returning && !changingScene &&
         HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished &&
         !HeroController.instance.cState.dead && !HeroController.instance.cState.hazardDeath &&
         !HeroController.instance.cState.hazardRespawning && !HeroController.instance.cState.transitioning &&
@@ -269,8 +271,11 @@ public sealed class CoopRuntime : MonoBehaviour {
                 if (Shared && granted.Merge(m.Key, m.Value)) ApplyProgress(m.Key, m.Value);
                 break;
             case Kind.Warp:
-                if (m.Serial <= handledWarp || !CanStartWarp) break;
-                handledWarp = m.Serial; teammateWarp = StartCoroutine(WarpTo(m)); break;
+                if (m.Serial <= handledWarp || !CanStartWarp || string.IsNullOrEmpty(m.Scene) || SceneUtil.IsNonGameplayScene(m.Scene)) break;
+                handledWarp = m.Serial;
+                var travel = StartCoroutine(WarpTo(m));
+                teammateWarp = changingScene ? travel : null;
+                break;
         }
     }
 
@@ -324,7 +329,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         var pd = PlayerData.instance;
         var message = new Message { Kind = Kind.Presence, Serial = ++sequence, Scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
             X = pos.x, Y = pos.y, HasMap = hasMap, MapX = hasMap ? location.x : 0, MapY = hasMap ? location.y : 0,
-            IsReady = Playable && !changingScene && !Returning, Key = pd.GetString("respawnScene") ?? "",
+            IsReady = CanStartWarp, Key = pd.GetString("respawnScene") ?? "",
             Name = pd.GetString("respawnMarkerName") ?? "", Value = pd.GetInt("respawnType") };
         BossTravel.Capture(message); Send(message);
     }
@@ -642,54 +647,69 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private IEnumerator WarpTo(Message m) {
-        if (!CanStartWarp || !Party.Finite(m.X) || !Party.Finite(m.Y)) yield break;
+        if (!CanStartWarp || string.IsNullOrEmpty(m.Scene) || SceneUtil.IsNonGameplayScene(m.Scene) ||
+            !Party.Finite(m.X) || !Party.Finite(m.Y)) yield break;
         var session = Session;
         changingScene = true;
-        var rollback = BossTravel.SaveState();
-        var prepared = false;
-        try { prepared = BossTravel.Prepare(m); }
-        catch (Exception e) { UnityEngine.Debug.LogError("HollowConnect boss travel prepare: " + e); }
-        if (!prepared) {
-            rollback(); Notice("无法恢复队友的神居上下文，请检查日志");
-            changingScene = false; teammateWarp = null; yield break;
-        }
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene) {
-            warpEntry = new Vector2(m.X, m.Y);
-            warpScene = m.Scene;
-            try { GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo { SceneName = m.Scene,
-                EntryGateName = "dreamGate", EntryDelay = 0, Visualization = GameManager.SceneLoadVisualizations.Dream,
-                WaitForSceneTransitionCameraFade = true }); }
-            catch (Exception e) {
-                rollback(); warpEntry = null; warpScene = null; changingScene = false; teammateWarp = null;
-                Notice("传送加载被拒绝，已恢复原上下文"); UnityEngine.Debug.LogError(e); yield break;
+        try {
+            var rollback = BossTravel.SaveState();
+            var prepared = false;
+            try { prepared = BossTravel.Prepare(m); }
+            catch (Exception e) { UnityEngine.Debug.LogError("HollowConnect boss travel prepare: " + e); }
+            if (!prepared) {
+                rollback(); Notice("无法恢复队友的神居上下文，请检查日志");
+                changingScene = false; teammateWarp = null; yield break;
             }
-            var deadline = Time.realtimeSinceStartup + 30;
-            var warned = false;
-            yield return null;
-            while (Connected && Session == session && m.Round == CoopContext.Epoch &&
-                (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene || !Playable ||
-                 api.ClientManager is Hkmp.Game.Client.ClientManager manager && !manager.SceneSnapshotReady)) {
-                if (!warned && Time.realtimeSinceStartup >= deadline) { warned = true; Notice("传送加载尚未完成，请检查游戏日志"); }
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene) {
+                warpEntry = new Vector2(m.X, m.Y);
+                warpScene = m.Scene;
+                try { GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo { SceneName = m.Scene,
+                    EntryGateName = "dreamGate", EntryDelay = 0, Visualization = GameManager.SceneLoadVisualizations.Dream,
+                    WaitForSceneTransitionCameraFade = true }); }
+                catch (Exception e) {
+                    rollback(); warpEntry = null; warpScene = null; changingScene = false; teammateWarp = null;
+                    Notice("传送加载被拒绝，已恢复原上下文"); UnityEngine.Debug.LogError(e); yield break;
+                }
+                var deadline = Time.realtimeSinceStartup + 30;
+                var entered = false;
                 yield return null;
+                while (Connected && Session == session && m.Round == CoopContext.Epoch &&
+                    (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene || !Playable ||
+                     api.ClientManager is Hkmp.Game.Client.ClientManager manager && !manager.SceneSnapshotReady)) {
+                    if (Time.realtimeSinceStartup >= deadline) {
+                        Notice("传送等待已结束；场景加载完成后可再次传送");
+                        yield break;
+                    }
+                    entered |= UnitySceneManager.GetActiveScene().name == m.Scene;
+                    // Native travel may advance through another scene. Never wait
+                    // forever for an intermediate cutscene that has already left.
+                    if (entered && !GameManager.instance.IsInSceneTransition && Playable &&
+                        UnitySceneManager.GetActiveScene().name != m.Scene) yield break;
+                    yield return null;
+                }
+            }
+            if (Connected && Session == session && m.Round == CoopContext.Epoch && Playable &&
+                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == m.Scene && !Down && !Resetting && !Returning) {
+                var target = Peers.TryGetValue(m.Target, out var peer) && peer.State != null && peer.State.Scene == m.Scene && Now - peer.Seen < 1.5
+                    ? new Vector2(peer.State.X, peer.State.Y) : new Vector2(m.X, m.Y);
+                var found = TryWarpLanding(target, m.Scene, out var pos);
+                if (found) {
+                    var hero = HeroController.instance;
+                    hero.SetHeroParent(null);
+                    hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                    hero.transform.position = new Vector3(pos.x, pos.y, hero.transform.position.z);
+                    Physics2D.SyncTransforms();
+                    hero.SetHazardRespawn(hero.transform.position, hero.cState.facingRight); hero.ResetAirMoves();
+                    GameCameras.instance.cameraController.PositionToHero(false);
+                }
+                Notice(found ? "已到达队友身边" : "队友附近没有安全落点");
+            }
+        } finally {
+            changingScene = false; teammateWarp = null;
+            if (GameManager.instance == null || !GameManager.instance.IsInSceneTransition) {
+                warpEntry = null; warpScene = null;
             }
         }
-        if (Connected && Session == session && m.Round == CoopContext.Epoch && Playable &&
-            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == m.Scene && !Down && !Resetting && !Returning) {
-            var target = Peers.TryGetValue(m.Target, out var peer) && peer.State != null && peer.State.Scene == m.Scene && Now - peer.Seen < 1.5
-                ? new Vector2(peer.State.X, peer.State.Y) : new Vector2(m.X, m.Y);
-            var found = TryWarpLanding(target, m.Scene, out var pos);
-            if (found) {
-                var hero = HeroController.instance;
-                hero.SetHeroParent(null);
-                hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                hero.transform.position = new Vector3(pos.x, pos.y, hero.transform.position.z);
-                Physics2D.SyncTransforms();
-                hero.SetHazardRespawn(hero.transform.position, hero.cState.facingRight); hero.ResetAirMoves();
-                GameCameras.instance.cameraController.PositionToHero(false);
-            }
-            Notice(found ? "已到达队友身边" : "队友附近没有安全落点");
-        }
-        changingScene = false; teammateWarp = null;
     }
 
     internal void Notice(string message) { status = message; statusUntil = Time.unscaledTime + 5; }

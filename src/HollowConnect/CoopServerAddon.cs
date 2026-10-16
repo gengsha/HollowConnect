@@ -158,7 +158,8 @@ public sealed class CoopServerAddon : ServerAddon {
             case Kind.WarpRequest:
                 if (!warp || party.Resetting || member.Life != Life.Alive ||
                     !party.Members.TryGetValue(m.Target, out var target) || target.Life != Life.Alive || Now - target.Seen > 1.5 ||
-                    string.IsNullOrEmpty(target.Scene) || !destinations.TryGetValue(target.Id, out var destination) || !destination.IsReady ||
+                    string.IsNullOrEmpty(target.Scene) || SceneUtil.IsNonGameplayScene(target.Scene) ||
+                    !destinations.TryGetValue(target.Id, out var destination) || !destination.IsReady ||
                     lastWarp.TryGetValue(id, out var last) && Now - last < 3) break;
                 lastWarp[id] = Now;
                 Send(id, new Message { Kind = Kind.Warp, Target = target.Id, Serial = m.Serial,

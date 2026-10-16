@@ -192,6 +192,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved Town");
         if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_ASSERTIONS") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_TRAVEL_ASSERTIONS") == "1" ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1") && PlayerData.instance.GetBool("atBench")) {
             // Leave the initial native bench before forcing a room transition.
             // Its resting body is kinematic until the get-up flow finishes.
@@ -243,6 +244,8 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_TRAVEL_ASSERTIONS") == "1")
+                yield return WarpTravelAssertions(round);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENVIRONMENT_INSPECT") == "1")
                 foreach (var e in Entities.Values) {
                     Mark("ENV ENTITY " + e.Type + " name=" + e.Object.Host.name);
