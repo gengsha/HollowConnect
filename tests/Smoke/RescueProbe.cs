@@ -14,7 +14,7 @@ namespace HollowConnect.Smoke;
 
 // Actual two-client nail collision, accepted rescuer identity, native visuals,
 // capped soul, unreliable-roster ordering and replay protection.
-public sealed class RescueProbe : MonoBehaviour {
+public sealed partial class RescueProbe : MonoBehaviour {
     private string root, role;
     private bool host;
     private CoopRuntime runtime;
@@ -70,6 +70,12 @@ public sealed class RescueProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_HAZARD_RESCUE_CHECK") == "1") {
+            yield return HazardRescueChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS hazard rescue at native safe point"); Flag(role + ".done");
+            yield break;
+        }
         GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo { SceneName = "Crossroads_01", EntryGateName = "left1",
             Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true });
         yield return Until(() => runtime.Playable && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Crossroads_01" &&

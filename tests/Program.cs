@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using Hkmp.Game.Client.Entity;
 using Hkmp.Game.Client.Entity.Component;
 using Hkmp.Game.Server;
@@ -12,7 +13,10 @@ using HollowConnect.Core;
 
 internal static class Program {
     private static int passed, failed;
+    private static readonly HashSet<string> selected = Environment.GetEnvironmentVariable("HOLLOWCONNECT_TEST_SELECTION") is string selectionPath
+        ? new HashSet<string>(File.ReadAllLines(selectionPath).Where(s => s.Length > 0)) : null;
     private static void Test(string name, Action test) {
+        if (selected != null && !selected.Remove(name)) return;
         try { test(); passed++; Console.WriteLine("PASS " + name); }
         catch (Exception e) { failed++; Console.WriteLine("FAIL " + name + ": " + e); }
     }
@@ -636,6 +640,7 @@ internal static class Program {
         Test("active UDP receive failure remains an error and cannot fabricate a received datagram", ClientSessionProbe.ReceiveFailureNeverBecomesData);
         Test("disconnect or reconnect inside a completed chunk callback preserves the new receiver", ChunkReceiverProbe.ResetFromCallback);
         Test("malformed slice bounds and lengths cannot corrupt a following valid chunk", ChunkReceiverProbe.MalformedSlices);
+        if (selected != null) foreach (var name in selected) { failed++; Console.WriteLine("FAIL selected test not found: " + name); }
         Console.WriteLine("RESULT " + passed + " passed, " + failed + " failed");
         return failed == 0 ? 0 : 1;
     }

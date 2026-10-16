@@ -38,6 +38,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     private string protectionSession = "";
     private bool protectEntry;
     private bool takingDamage, nativeHitPlayed;
+    private int damageHazard;
     internal Func<KeyCode, bool> KeyPressed = Input.GetKeyDown;
     internal string Session = "";
     internal ushort LocalId, Selected;
@@ -304,6 +305,14 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (Down || Resetting || Returning) yield break;
         personalDeath = new PersonalDeath(self, () => orig(self));
         DeathPosition = self.transform.position; deathScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        // Lethal spikes/acid/pits call Die before native hazard recovery runs.
+        // Reuse its grounded safe point for rescue, retaining the original
+        // death position in PersonalDeath for a later give-up or party wipe.
+        if (takingDamage && (damageHazard == 2 || damageHazard == 3 || damageHazard == 5)) {
+            DeathPosition = self.FindGroundPoint(PlayerData.instance.GetVector3("hazardRespawnLocation"), true);
+            self.SetHeroParent(null);
+            self.transform.position = DeathPosition;
+        }
         deathCamera = GameCameras.instance?.cameraController;
         if (deathCamera != null) {
             cameraMode = deathCamera.mode; cameraPosition = deathCamera.transform.position;
@@ -340,9 +349,9 @@ public sealed class CoopRuntime : MonoBehaviour {
         GlobalEnums.CollisionSide side, int damage, int hazard) {
         if (Connected && (Down || Resetting || Returning)) return;
         if (EntryProtected && hazard == 1) return;
-        takingDamage = true; nativeHitPlayed = false;
+        takingDamage = true; nativeHitPlayed = false; damageHazard = hazard;
         try { orig(self, source, side, damage, hazard); }
-        finally { takingDamage = false; }
+        finally { takingDamage = false; damageHazard = 0; }
     }
     private void TrackHitSound(On.HeroAudioController.orig_PlaySound orig, HeroAudioController self, GlobalEnums.HeroSounds sound) {
         if (takingDamage && (int)sound == 8) nativeHitPlayed = true;
