@@ -181,11 +181,25 @@ public sealed class CoopRuntime : MonoBehaviour {
             case Kind.Revived:
                 if (Resetting || m.Serial == 0 || m.Target == m.Id) break;
                 if (m.Id == LocalId && Down && m.Serial == downSerial && !Resetting) {
+                    // A moving/disappearing platform may have left since Down.
+                    // Never release the knight into an unsupported rescue.
+                    var rescued = HeroController.instance;
+                    var landing = TryWarpLanding(DeathPosition, deathScene, out var supported)
+                        ? new Vector3(supported.x, supported.y, DeathPosition.z) : FindRescuePosition(rescued);
+                    if (!landing.HasValue) {
+                        // The server has accepted the old episode. Advertise a
+                        // fresh Down before using its existing personal-return
+                        // protocol; retain the original native death context.
+                        downSerial++;
+                        SendDown(); RequestPersonalReturn();
+                        break;
+                    }
+                    rescued.transform.position = landing.Value;
+                    Physics2D.SyncTransforms();
                     giveUpRequested = false;
                     shades.Remove(m.Id); Down = false; Unlock();
                     personalDeath = null;
                     PlayerData.instance.SetInt("healthBlue", 0); Heal(1); Notice("队友击破了你的暗影，一血复活");
-                    var rescued = HeroController.instance;
                     rescued.StartCoroutine("Invulnerable", rescued.INVUL_TIME);
                     PlayRescueFeedback(m);
                 }
@@ -267,9 +281,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         }
         if (!Playable || Resetting || changingScene || Returning) return;
         if (Down && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
-            giveUpRequested = true;
-            Send(new Message { Kind = Kind.GiveUpRequest, Serial = downSerial,
-                Scene = personalDeath?.Destination ?? "", Key = personalDeath?.Marker ?? "", Value = personalDeath?.RespawnType ?? 0 });
+            RequestPersonalReturn();
             Notice("正在放弃救援，按原版死亡规则返回自己的复活点…");
         }
         if (Shared && Time.unscaledTime >= nextProgress) { nextProgress = Time.unscaledTime + .5f; CheckProgress(); }
@@ -308,7 +320,8 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (Down || Resetting || Returning) yield break;
         personalDeath = new PersonalDeath(self, () => orig(self));
         deathScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        DeathPosition = FindRescuePosition(self);
+        var landing = FindRescuePosition(self);
+        DeathPosition = landing ?? self.transform.position;
         self.SetHeroParent(null);
         self.transform.position = DeathPosition;
         deathCamera = GameCameras.instance?.cameraController;
@@ -318,13 +331,25 @@ public sealed class CoopRuntime : MonoBehaviour {
         }
         Down = true; downSerial++; Lock(); Heal(1);
         shades.Synchronize();
-        var message = new Message { Kind = Kind.Down, Serial = downSerial, Scene = deathScene, X = DeathPosition.x, Y = DeathPosition.y,
-            Key = personalDeath.Destination, Name = personalDeath.Marker, Value = personalDeath.RespawnType };
-        PlayDownFeedback(message, !takingDamage || !nativeHitPlayed); Send(message);
-        Notice("你已化为暗影；等待队友击破救援，或按 " + CoopMod.Settings.GiveUpKey + " 放弃并回自己的复活点");
+        var message = SendDown();
+        PlayDownFeedback(message, !takingDamage || !nativeHitPlayed);
+        if (landing.HasValue) Notice("你已化为暗影；等待队友击破救援，或按 " + CoopMod.Settings.GiveUpKey + " 放弃并回自己的复活点");
+        else RequestPersonalReturn();
     }
 
-    private Vector3 FindRescuePosition(HeroController hero) {
+    private Message SendDown() {
+        var message = new Message { Kind = Kind.Down, Serial = downSerial, Scene = deathScene, X = DeathPosition.x, Y = DeathPosition.y,
+            Key = personalDeath.Destination, Name = personalDeath.Marker, Value = personalDeath.RespawnType };
+        Send(message); return message;
+    }
+    private void RequestPersonalReturn() {
+        giveUpRequested = true;
+        Send(new Message { Kind = Kind.GiveUpRequest, Serial = downSerial,
+            Scene = personalDeath?.Destination ?? "", Key = personalDeath?.Marker ?? "", Value = personalDeath?.RespawnType ?? 0 });
+        Notice("正在按原版死亡规则返回自己的复活点…");
+    }
+
+    private Vector3? FindRescuePosition(HeroController hero) {
         var origin = hero.transform.position;
         bool Ground(Vector2 point, out Vector3 position) {
             position = origin;
@@ -348,7 +373,7 @@ public sealed class CoopRuntime : MonoBehaviour {
             if (marker != null && Ground(marker.transform.position, out var marked)) return marked;
         }
         if (Ground(PlayerData.instance.GetVector3("hazardRespawnLocation"), out var safe)) return safe;
-        return Ground(origin, out var nearby) ? nearby : origin;
+        return Ground(origin, out var nearby) ? nearby : (Vector3?)null;
     }
 
     private void PlayDownFeedback(Message m, bool sound) {
