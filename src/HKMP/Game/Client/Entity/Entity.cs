@@ -886,7 +886,7 @@ internal class Entity {
                 EntityHostFsmData.Type type,
                 Dictionary<byte, TData> dataDict
             ) {
-                for (byte i = 0; i < fsmVars.Length; i++) {
+                for (byte i = 0; i < fsmVars.Length && i < snapshotArray.Length && i < byte.MaxValue; i++) {
                     var fsmVar = fsmVars[i];
                     var snapshotVar = snapshotArray[i];
 
@@ -959,7 +959,7 @@ internal class Entity {
                 data.Vec3s
             );
 
-            for (var i = 0; i < fsm.FsmVariables.GameObjectVariables.Length && i < 255; i++) {
+            for (var i = 0; i < fsm.FsmVariables.GameObjectVariables.Length && i < snapshot.Objects.Length && i < 255; i++) {
                 var key = EntityReferences.Capture(fsm.FsmVariables.GameObjectVariables[i].Value);
                 if (snapshot.Objects[i] == key) continue;
                 snapshot.Objects[i] = key; data.Types.Add(EntityHostFsmData.Type.Objects); data.Objects[(byte)i] = key;
@@ -1268,26 +1268,26 @@ internal class Entity {
             
             var snapshot = _fsmSnapshots[fsmIndex];
 
-            for (var i = 0; i < snapshot.Floats.Length; i++) {
+            for (var i = 0; i < snapshot.Floats.Length && i < fsm.FsmVariables.FloatVariables.Length; i++) {
                 fsm.FsmVariables.FloatVariables[i].Value = snapshot.Floats[i];
             }
-            for (var i = 0; i < snapshot.Ints.Length; i++) {
+            for (var i = 0; i < snapshot.Ints.Length && i < fsm.FsmVariables.IntVariables.Length; i++) {
                 fsm.FsmVariables.IntVariables[i].Value = snapshot.Ints[i];
             }
-            for (var i = 0; i < snapshot.Bools.Length; i++) {
+            for (var i = 0; i < snapshot.Bools.Length && i < fsm.FsmVariables.BoolVariables.Length; i++) {
                 fsm.FsmVariables.BoolVariables[i].Value = snapshot.Bools[i];
             }
-            for (var i = 0; i < snapshot.Strings.Length; i++) {
+            for (var i = 0; i < snapshot.Strings.Length && i < fsm.FsmVariables.StringVariables.Length; i++) {
                 fsm.FsmVariables.StringVariables[i].Value = snapshot.Strings[i];
             }
-            for (var i = 0; i < snapshot.Vector2s.Length; i++) {
+            for (var i = 0; i < snapshot.Vector2s.Length && i < fsm.FsmVariables.Vector2Variables.Length; i++) {
                 fsm.FsmVariables.Vector2Variables[i].Value = snapshot.Vector2s[i];
             }
-            for (var i = 0; i < snapshot.Vector3s.Length; i++) {
+            for (var i = 0; i < snapshot.Vector3s.Length && i < fsm.FsmVariables.Vector3Variables.Length; i++) {
                 fsm.FsmVariables.Vector3Variables[i].Value = snapshot.Vector3s[i];
             }
 
-            for (var i = 0; i < snapshot.Objects.Length; i++) {
+            for (var i = 0; i < snapshot.Objects.Length && i < fsm.FsmVariables.GameObjectVariables.Length; i++) {
                 if (snapshot.Objects[i] != null && snapshot.Objects[i] != "@local") {
                     var resolved = EntityReferences.Resolve(snapshot.Objects[i], false);
                     if (resolved != null || snapshot.Objects[i].Length == 0) fsm.FsmVariables.GameObjectVariables[i].Value = resolved;
@@ -1607,12 +1607,13 @@ internal class Entity {
                 EntityHostFsmData.Type type,
                 Dictionary<byte, TBase> dataDict,
                 TFsm[] fsmVarArray,
+                int snapshotLength,
                 Action<byte, TFsm, TBase> setValueAction
             ) {
                 if (data.Types.Contains(type)) {
                     foreach (var pair in dataDict) {
-                        if (fsmVarArray.Length <= pair.Key) {
-                            Logger.Warn($"Tried to update host FSM var ({typeof(TBase)}) for unknown index: {pair.Key}");
+                        if (fsmVarArray.Length <= pair.Key || snapshotLength <= pair.Key) {
+                            Logger.Warn($"Entity {Id} ({Type}, {SourceScene}), FSM {fsmIndex} ({hostFsm.FsmName}): unmapped {type} index {pair.Key}, local={fsmVarArray.Length}, snapshot={snapshotLength}");
                         } else {
                             setValueAction.Invoke(pair.Key, fsmVarArray[pair.Key], pair.Value);
                         }
@@ -1634,6 +1635,7 @@ internal class Entity {
                     EntityHostFsmData.Type.Floats,
                     data.Floats,
                     fsm.FsmVariables.FloatVariables,
+                    snapshot.Floats.Length,
                     (index, fsmVar, value) => {
                         fsmVar.Value = value;
                         snapshot.Floats[index] = value;
@@ -1643,6 +1645,7 @@ internal class Entity {
                     EntityHostFsmData.Type.Ints,
                     data.Ints,
                     fsm.FsmVariables.IntVariables,
+                    snapshot.Ints.Length,
                     (index, fsmVar, value) => {
                         fsmVar.Value = value;
                         snapshot.Ints[index] = value;
@@ -1652,6 +1655,7 @@ internal class Entity {
                     EntityHostFsmData.Type.Bools,
                     data.Bools,
                     fsm.FsmVariables.BoolVariables,
+                    snapshot.Bools.Length,
                     (index, fsmVar, value) => {
                         fsmVar.Value = value;
                         snapshot.Bools[index] = value;
@@ -1661,6 +1665,7 @@ internal class Entity {
                     EntityHostFsmData.Type.Strings,
                     data.Strings,
                     fsm.FsmVariables.StringVariables,
+                    snapshot.Strings.Length,
                     (index, fsmVar, value) => {
                         fsmVar.Value = value;
                         snapshot.Strings[index] = value;
@@ -1670,6 +1675,7 @@ internal class Entity {
                     EntityHostFsmData.Type.Vector2s,
                     data.Vec2s,
                     fsm.FsmVariables.Vector2Variables,
+                    snapshot.Vector2s.Length,
                     (index, fsmVar, value) => {
                         fsmVar.Value = (UnityEngine.Vector2) value;
                         snapshot.Vector2s[index] = (UnityEngine.Vector2) value;
@@ -1679,6 +1685,7 @@ internal class Entity {
                     EntityHostFsmData.Type.Vector3s,
                     data.Vec3s,
                     fsm.FsmVariables.Vector3Variables,
+                    snapshot.Vector3s.Length,
                     (index, fsmVar, value) => {
                         fsmVar.Value = (Vector3) value;
                         snapshot.Vector3s[index] = (Vector3) value;
