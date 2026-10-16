@@ -90,6 +90,9 @@ public sealed partial class RescueProbe : MonoBehaviour {
         Freeze(); Flag(role + ".ready"); yield return Until(() => Has((host ? "guest" : "host") + ".ready") && runtime.Peers.Count == 1, "both ready");
         yield return Ordering();
         Flag(role + ".ordered"); yield return Until(() => Has((host ? "guest" : "host") + ".ordered"), "ordering probes complete");
+        // Isolate the rescue's AddMPCharge reward from native enemies that
+        // can wander into either swing beside the new grounded anchors.
+        ModHooks.SoulGainHook += amount => { Log("native combat soul excluded from reward fixture: " + amount); return 0; };
         for (var i = 0; i < 4; i++) yield return Trial(i);
         yield return ProbeShutdown.Run(engine,root,role);
         Log("FINAL PASS rescue soul and native feedback"); Flag(role + ".done");
@@ -159,11 +162,18 @@ public sealed partial class RescueProbe : MonoBehaviour {
             typeof(CoopRuntime).GetMethod("Send", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime,
                 new object[] { new Message { Kind = Kind.ShadeHit, Target = target, Serial = serial + 1, Scene = "Crossroads_01" } });
             var pos = service.Get(target).transform.position; var h = HeroController.instance;
-            h.transform.position = pos + new Vector3(-2, 0, h.transform.position.z); h.FaceLeft(); h.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
+            // Rescue anchors now sit by native ground. Swing away in clear
+            // air so a nearby native enemy cannot award unrelated nail soul.
+            h.transform.position = pos + new Vector3(-2, 6, 0); h.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            h.FaceLeft(); h.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
             yield return new WaitForSecondsRealtime(.75f);
+            Log(prefix + " missed swing state=" + runtime.Peers[target].Life + " soul=" + pd.GetInt("MPCharge") + "/" + before +
+                " reserve=" + pd.GetInt("MPReserve") + "/" + beforeReserve + " hero=" + h.transform.position + " shade=" + pos);
             Check(runtime.Peers[target].Life == Life.Down && pd.GetInt("MPCharge") == before && pd.GetInt("MPReserve") == beforeReserve, prefix + " rejected request and missed swing grant no reward");
+            h.transform.position = pos + Vector3.left * 2; h.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             h.FaceRight(); h.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
             yield return Until(() => runtime.Peers[target].Life == Life.Alive, prefix + " actual nail rescue accepted");
+            Log(prefix + " accepted rescue soul=" + pd.GetInt("MPCharge") + " reserve=" + pd.GetInt("MPReserve"));
             Check(pd.GetInt("MPCharge") == (i == 1 || i == 2 ? 99 : 33) && pd.GetInt("MPReserve") == (i == 1 ? 24 : i == 2 ? 33 : 0), prefix + " rescuer soul and reserve match native cap");
             version = runtime.Peers[target].LifeVersion;
             var effects = Object.FindObjectsOfType<RescueBreakEffect>().Length;
