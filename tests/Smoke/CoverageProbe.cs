@@ -243,7 +243,16 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENVIRONMENT_INSPECT") == "1")
+                foreach (var e in Entities.Values) {
+                    Mark("ENV ENTITY " + e.Type + " name=" + e.Object.Host.name);
+                    foreach (var part in EntityReferences.Parts(e.Id))
+                        if (part.Host != null) Mark("ENV PART " + e.Type + " path=" + part.Path + " components=" +
+                            string.Join(",", part.Host.GetComponents<Component>().Where(c => c != null).Select(c => c.GetType().Name)));
+                }
             if (geometryTrace) TraceSceneGeometry();
+            if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENVIRONMENT_ASSERTIONS") == "1")
+                yield return EnvironmentStateChecks();
             if (scene == "Fungus1_28" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_CLIFFS_INTERIOR_CHECK") == "1")
                 yield return CliffsInteriorCheck(round);
             if (performance && !manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1")

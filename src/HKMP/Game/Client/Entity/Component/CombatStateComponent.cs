@@ -25,9 +25,18 @@ internal sealed class CombatStateComponent : EntityComponent {
         internal PositionInterpolation Motion;
         internal ParticleSystem[] Particles;
         internal MaterialPropertyBlock[] Blocks;
-        internal Parts(Transform t) {
-            Transform=t;Colliders=t.GetComponents<Collider2D>();Renderers=t.GetComponents<Renderer>();
-            Damage=t.GetComponents<DamageHero>();Sprites=t.GetComponents<tk2dBaseSprite>();Particles=t.GetComponents<ParticleSystem>();
+        private UnityEngine.Component[] components;
+        private static readonly List<UnityEngine.Component> scratch = new();
+        internal Parts(Transform t) { Transform=t; Refresh(); }
+        internal void Refresh() {
+            Transform.GetComponents(scratch);
+            var unchanged=components != null && components.Length == scratch.Count;
+            if (unchanged) for (var i=0;i<scratch.Count;i++)
+                if (components[i] != scratch[i]) { unchanged=false; break; }
+            if (unchanged) return;
+            components=scratch.ToArray();
+            Colliders=components.OfType<Collider2D>().ToArray();Renderers=components.OfType<Renderer>().ToArray();
+            Damage=components.OfType<DamageHero>().ToArray();Sprites=components.OfType<tk2dBaseSprite>().ToArray();Particles=components.OfType<ParticleSystem>().ToArray();
             Animators=Sprites.Select(s=>s.GetComponent<tk2dSpriteAnimator>()).ToArray();
             AnimationTimes=new float[Sprites.Length];AnimationClips=new string[Sprites.Length];
             Blocks=new MaterialPropertyBlock[Renderers.Length];for(var i=0;i<Blocks.Length;i++)Blocks[i]=new MaterialPropertyBlock();
@@ -49,17 +58,36 @@ internal sealed class CombatStateComponent : EntityComponent {
         // Retain the original binding when native SetParent removes a child
         // from the hierarchy. Rebuilding by its current path loses its final
         // activation/hitbox state and its counterpart during authority transfer.
-        nodes=EntityReferences.Parts(id).Where(p=>p.Host!=null && EntityReferences.Owner(p.Host)?.Id==id)
-            .Take(256).Select(p=>new Node{Path=p.Path,Host=new Parts(p.Host.transform),Client=p.Client==null?null:new Parts(p.Client.transform)}).ToArray();
+        nodes=EntityReferences.Parts(id).Where(p=>p.Host!=null && EntityReferences.Owner(p.Host)?.Id==id &&
+                (p.Path.Length==0 || !IsDecoration(p.Host)))
+            .Take(256).Select(p=> {
+                if (lookup.TryGetValue(p.Path, out var prior) && prior.Host?.Transform == p.Host.transform &&
+                    prior.Client?.Transform == (p.Client == null ? null : p.Client.transform)) {
+                    prior.Host.Refresh(); prior.Client?.Refresh(); return prior;
+                }
+                return new Node{Path=p.Path,Host=new Parts(p.Host.transform),Client=p.Client==null?null:new Parts(p.Client.transform)};
+            }).ToArray();
         // Keep a deleted child's terminal state across hierarchy refreshes.
         // Otherwise a refresh can discard the last "gone" update and leave
         // a roar wave or other effect frozen on the replica.
         if(old!=null){var live=new HashSet<string>(nodes.Select(n=>n.Path));nodes=nodes.Concat(old.Where(n=>n.Host.Transform==null&&!live.Contains(n.Path))).Take(256).ToArray();}
-        // Keep presentation history and animation progress across the periodic rebuild.
-        if(old!=null)foreach(var n in nodes){var prior=old.FirstOrDefault(p=>p.Path==n.Path);if(prior?.Client?.Transform==n.Client?.Transform)n.Client=prior?.Client;}
         lookup.Clear();
         foreach(var n in nodes)lookup[n.Path]=n;
         rebuild=Time.unscaledTime+2;
+    }
+    // Ambient/corpse particles have no shared gameplay state. Their local
+    // particle playback follows the enclosing object's native activation.
+    // Keep anything with an FSM, collider, damage or unknown controller.
+    internal static bool IsDecoration(GameObject go) {
+        if (go.GetComponent<ParticleSystem>() == null || go.transform.childCount != 0) return false;
+        foreach (var c in go.GetComponents<UnityEngine.Component>()) {
+            if (c == null) return false;
+            if (c is Transform || c is ParticleSystem || c is ParticleSystemRenderer) continue;
+            var name=c.GetType().Name;
+            if (name != "SetParticleScale" && name != "ParticleSystemAutoDestroy" &&
+                name != "ParticleSystemAutoDisable" && name != "KeepWorldScalePositive") return false;
+        }
+        return true;
     }
     internal void PrepareTakeover() {
         Build();
