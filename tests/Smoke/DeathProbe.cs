@@ -15,7 +15,7 @@ namespace HollowConnect.Smoke;
 
 public sealed class DeathProbe : MonoBehaviour {
     private string role, root, scene, dreamReturn;
-    private bool host, started;
+    private bool host, started, nativeDreamDeath;
     private CoopRuntime runtime;
     private Hkmp.Game.GameManager engine;
     private int sounds;
@@ -44,7 +44,7 @@ public sealed class DeathProbe : MonoBehaviour {
             var h = HeroController.instance; var b = h.GetComponent<Rigidbody2D>();
             Log("TIMEOUT HERO " + name + " pos=" + h.transform.position + " velocity=" + b.velocity + " gravity=" + b.gravityScale +
                 " cachedGravity=" + Field<float>(h, "prevGravityScale") + " simulated=" + b.simulated + " ground=" + h.cState.onGround + " input=" + h.acceptingInput + " state=" + h.hero_state);
-            foreach (var f in Object.FindObjectsOfType<PlayMakerFSM>().Where(f => f.transform.IsChildOf(h.transform) || (f.gameObject.scene.name == GameManager.instance.sceneName &&
+            foreach (var f in Object.FindObjectsOfType<PlayMakerFSM>().Where(f => f.name == "Inventory" || f.transform.IsChildOf(h.transform) || (f.gameObject.scene.name == GameManager.instance.sceneName &&
                 (f.name.IndexOf("Dream", StringComparison.OrdinalIgnoreCase) >= 0 || Vector2.Distance(f.transform.position, h.transform.position) < 5))))
                 Log("TIMEOUT FSM " + f.name + "/" + f.FsmName + "=" + f.ActiveStateName + " actions=" + string.Join(",", f.Fsm.ActiveState?.Actions.Select(a => a.GetType().Name) ?? Enumerable.Empty<string>()));
         }
@@ -53,7 +53,8 @@ public sealed class DeathProbe : MonoBehaviour {
     private bool In(string name) => HeroController.instance != null && HeroController.instance.isHeroInPosition &&
         !GameManager.instance.IsInSceneTransition && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == name;
     private void Enter(string name) => GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo {
-        SceneName = name, EntryGateName = name.StartsWith("Dream_") ? "door1" : name.StartsWith("GG_") ? "door_dreamEnter" : "left1",
+        SceneName = name, EntryGateName = name.StartsWith("Dream_") ? "door1" : name.StartsWith("GG_") ? "door_dreamEnter" :
+            name == "White_Palace_18" ? "top1" : name == "White_Palace_20" ? "bot1" : name == "White_Palace_17" ? "right1" : "left1",
         Visualization = name.StartsWith("Dream_") || name.StartsWith("GG_") ? GameManager.SceneLoadVisualizations.Dream : GameManager.SceneLoadVisualizations.Default,
         WaitForSceneTransitionCameraFade = true });
     private void PrepareHero(bool immune = true) {
@@ -87,6 +88,11 @@ public sealed class DeathProbe : MonoBehaviour {
         scene = Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_SCENE");
         if (string.IsNullOrEmpty(scene)) scene = "Crossroads_01";
         Log("native personal death probe; muted; all save overloads intercepted");
+        ModHooks.SetPlayerStringHook += (key, value) => {
+            if (key == "respawnScene" || key == "respawnMarkerName" || key == "shadeScene")
+                Log("NATIVE STRING " + key + "=" + value + " scene=" + GameManager.instance?.sceneName);
+            return value;
+        };
         Hkmp.Logging.Logger.AddLogger(new EngineLog(this));
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += (loaded, mode) =>
             Log("SCENE " + loaded.name + " gates=" + string.Join(",", loaded.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<TransitionPoint>(true)).Select(g => g.name + "/" + g.gameObject.activeInHierarchy)));
@@ -149,7 +155,15 @@ public sealed class DeathProbe : MonoBehaviour {
                     Enumerable.Range(0, nativeSequence.Count).First(i => nativeSequence.GetSceneAt(i) == scene));
             } else BossSceneController.SetupEvent = boss => { boss.BossLevel = 0; };
         }
-        Enter(scene); yield return Until(() => In(scene), "combat room entered"); PrepareHero(false);
+        Enter(scene); yield return Until(() => In(scene), "combat room entered");
+        // Bottom entrances still need native upward motion after in-position;
+        // freezing gravity before EnterScene finishes strands that coroutine.
+        yield return Until(() => HeroController.instance.acceptingInput && !HeroController.instance.cState.transitioning &&
+            HeroController.instance.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION,
+            "native combat entrance finishes before damage fixture");
+        var deathZone = GameManager.instance.GetCurrentMapZone().ToString();
+        nativeDreamDeath = deathZone == "DREAM_WORLD" || deathZone == "GODS_GLORY";
+        PrepareHero(false);
         pd.SetInt("health", 5); pd.SetInt("healthBlue", 0);
         Require(runtime.EntryProtected, "entry protection initially active");
         HeroController.instance.TakeDamage(null, GlobalEnums.CollisionSide.left, 1, 1);
@@ -179,6 +193,8 @@ public sealed class DeathProbe : MonoBehaviour {
         yield return FeedbackOrdering();
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_DISCONNECT") == "1") {
             yield return DisconnectDeath(manager);
+        } else if (scene.StartsWith("Room_Colosseum_") || scene == "Room_Final_Boss_Core" || scene == "Dream_Final_Boss") {
+            yield return ExceptionDeath();
         } else if (scene != "Crossroads_01") {
             yield return SpecialDeath();
         } else {
@@ -310,15 +326,55 @@ public sealed class DeathProbe : MonoBehaviour {
         Require(pd.GetString("respawnScene") == benchScene, "implicit dream return preserves personal bench");
         yield return ReturnMotion("special-zone return");
     }
+    private IEnumerator ExceptionDeath() {
+        var pd = PlayerData.instance;
+        var expectedScene = scene.StartsWith("Room_Colosseum_") ? "Room_Colosseum_02" : "Room_Final_Boss_Atrium";
+        var expected = scene.StartsWith("Room_Colosseum_") ? new Vector2(27.2f, 45.6f) : new Vector2(219, 10);
+        var actualBench = pd.GetString("respawnScene");
+        var nativeOnly = Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_NATIVE_ONLY") == "1";
+        if (nativeOnly) {
+            runtime.RescueEnabled = false;
+            Log("CONTROL native death bypasses co-op down, personal-return and party-release handling");
+        }
+        Log("EXCEPTION CONTEXT " + scene + " zone=" + GameManager.instance.GetCurrentMapZone() + " checkpoint=" + pd.GetString("respawnScene") + "/" + pd.GetString("respawnMarkerName"));
+        foreach (var fsm in Object.FindObjectsOfType<PlayMakerFSM>().Where(f => f.name == "Colosseum Manager"))
+            foreach (var state in fsm.FsmStates)
+                foreach (var action in state.Actions.OfType<HutongGames.PlayMaker.Actions.SetPlayerDataString>())
+                    Log("COLOSSEUM NATIVE SETTER " + fsm.FsmName + "/" + state.Name + " enabled=" + fsm.enabled + " active=" + fsm.ActiveStateName + " " +
+                        string.Join(",", action.GetType().GetFields().Where(f => f.IsPublic).Select(f => f.Name + "=" + f.GetValue(action))));
+        Die();
+        yield return Until(() => (nativeOnly || runtime.ReleasedRound == 1) && !runtime.Resetting && In(actualBench) && !HeroController.instance.cState.dead,
+            "native exception returns to own current checkpoint", 75);
+        Log("EXCEPTION SHADE " + pd.GetString("shadeScene") + " " + pd.GetFloat("shadePositionX") + "," + pd.GetFloat("shadePositionY"));
+        Require(pd.GetInt("geo") == 0 && pd.GetInt("geoPool") == (host ? 123 : 456) && pd.GetBool("soulLimited"),
+            "exception charges one personal native death penalty");
+        Require(pd.GetString("shadeScene") == expectedScene && Vector2.Distance(new Vector2(pd.GetFloat("shadePositionX"), pd.GetFloat("shadePositionY")), expected) < .01f,
+            "exception uses actual native cross-room shade location");
+        Require(clips.Contains("Death") && !Object.FindObjectsOfType<ShadeView>().Any(), "exception has native death and no rescue shade left");
+        yield return ReturnMotion("exception return");
+    }
     private IEnumerator ReturnMotion(string label) {
         var hero = HeroController.instance; var body = hero.GetComponent<Rigidbody2D>();
+        if (PlayerData.instance.GetBool("atBench")) {
+            var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == PlayerData.instance.GetString("respawnMarkerName") && f.FsmName == "Bench Control");
+            yield return Until(() => bench.ActiveStateName == "Resting", label + " native bench ready for inventory and jump", 10);
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_INPUT_CHECK") == "1") {
             Log("RETURN INPUT " + label + " input=" + hero.acceptingInput + " relinquished=" + hero.controlReqlinquished +
                 " state=" + hero.hero_state + " ground=" + hero.cState.onGround + " hazard=" + hero.cState.hazardDeath + "/" + hero.cState.hazardRespawning +
                 " pause=" + PlayerData.instance.GetBool("disablePause") + " bench=" + PlayerData.instance.GetBool("atBench") +
                 " map=" + hero.CanQuickMap() + " inventory=" + hero.CanOpenInventory());
             var inventory = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.name == "Inventory" && f.FsmName == "Inventory Control");
-            if (PlayerData.instance.GetBool("atBench")) {
+            Log("INVENTORY BEFORE state=" + inventory.ActiveStateName + " active=" + inventory.gameObject.activeInHierarchy + " enabled=" + inventory.enabled +
+                " gameState=" + GameManager.instance.gameState + " ui=" + UIManager.instance.uiState + " paused=" + GameManager.instance.isPaused +
+                " scale=" + Time.timeScale);
+            if (scene == "Dream_Final_Boss") {
+                Log("INVENTORY VARIABLES " + string.Join(",", inventory.FsmVariables.BoolVariables.Select(v => v.Name + "=" + v.Value)));
+                foreach (var state in inventory.FsmStates)
+                    Log("INVENTORY STATE " + state.Name + " actions=" + string.Join(",", state.Actions.Select(a => a.GetType().Name)) +
+                        " transitions=" + string.Join(",", state.Transitions.Select(t => t.EventName + "->" + t.ToState)));
+            }
+            if (PlayerData.instance.GetBool("atBench") && Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_STAND_FIRST") != "1") {
                 Require(hero.CanOpenInventory(), "native inventory allowed immediately after party release");
                 yield return Press(InputHandler.Instance.inputActions.openInventory);
                 yield return Until(() => inventory.ActiveStateName == "Opened", "native inventory opened after party release", 5);
@@ -337,7 +393,7 @@ public sealed class DeathProbe : MonoBehaviour {
             yield return Until(() => !PlayerData.instance.GetBool("atBench") && hero.acceptingInput && !hero.controlReqlinquished,
                 label + " native jump input leaves bench", 5);
         }
-        if (scene.StartsWith("Dream_") || scene.StartsWith("GG_")) {
+        if (nativeDreamDeath) {
             var wake = hero.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Dream Return");
             yield return Until(() => wake.ActiveStateName == "Ready", label + " native wake input prompt", 10);
             var jump = wake.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single();
@@ -385,6 +441,25 @@ public sealed class DeathProbe : MonoBehaviour {
     // press normally, including their input gates. Do not call an action method.
     private IEnumerator Press(InControl.PlayerAction action) {
         var frame = Time.frameCount + 1;
+        using (new Hook(typeof(HutongGames.PlayMaker.Actions.ListenForInventory).GetMethod("OnUpdate"),
+            new Action<Action<HutongGames.PlayMaker.Actions.ListenForInventory>, HutongGames.PlayMaker.Actions.ListenForInventory>((orig, self) => {
+                if (ReferenceEquals(action, InputHandler.Instance.inputActions.openInventory) && Time.frameCount >= frame && Time.frameCount <= frame + 3)
+                    Log("INVENTORY LISTENER frame=" + Time.frameCount + " expected=" + frame + " pressed=" + action.WasPressed +
+                        " paused=" + GameManager.instance.isPaused + " state=" + self.Fsm.ActiveStateName + " event=" + self.wasPressed?.Name + " active=" + self.Fsm.Active +
+                        " target=" + self.Fsm.EventTarget?.target +
+                        " sameInput=" + ReferenceEquals(Field<InputHandler>(self, "inputHandler"), InputHandler.Instance) +
+                        " nativePressed=" + Field<InputHandler>(self, "inputHandler").inputActions.openInventory.WasPressed);
+                orig(self);
+                if (ReferenceEquals(action, InputHandler.Instance.inputActions.openInventory) && Time.frameCount == frame)
+                    Log("INVENTORY AFTER LISTENER state=" + self.Fsm.ActiveStateName + " heroCan=" + HeroController.instance.CanOpenInventory() +
+                        " gameplay=" + GameManager.instance.IsGameplayScene() + " vars=" + string.Join(",", self.Fsm.Variables.BoolVariables.Select(v => v.Name + "=" + v.Value)));
+                if (scene == "Dream_Final_Boss" && ReferenceEquals(action, InputHandler.Instance.inputActions.openInventory) && Time.frameCount == frame)
+                    foreach (var call in self.Fsm.States.Single(s => s.Name == "Can Open Inventory?").Actions.OfType<HutongGames.PlayMaker.Actions.CallMethodProper>()) {
+                        var cached = Field<UnityEngine.Object>(call, "cachedBehaviour");
+                        Log("INVENTORY CALL " + call.behaviour + "/" + call.methodName + " target=" + self.Fsm.GetOwnerDefaultTarget(call.gameObject) +
+                            " cached=" + cached + " hero=" + ReferenceEquals(cached, HeroController.instance) + " gm=" + ReferenceEquals(cached, GameManager.instance));
+                    }
+            })))
         using (new Hook(typeof(InControl.OneAxisInputControl).GetProperty("WasPressed").GetGetMethod(),
             new Func<Func<InControl.OneAxisInputControl, bool>, InControl.OneAxisInputControl, bool>((orig, self) =>
                 ReferenceEquals(self, action) ? Time.frameCount == frame : orig(self))))

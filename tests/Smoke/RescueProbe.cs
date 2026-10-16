@@ -27,6 +27,16 @@ public sealed partial class RescueProbe : MonoBehaviour {
     private IEnumerator Until(Func<bool> test, string s, float seconds = 45) {
         var end = Time.realtimeSinceStartup + seconds;
         while (!test() && Time.realtimeSinceStartup < end) yield return null;
+        if (!test() && HeroController.instance != null) {
+            var hero = HeroController.instance; var body = hero.GetComponent<Rigidbody2D>();
+            Log("TIMEOUT HERO " + s + " scene=" + GameManager.instance.sceneName + " pos=" + hero.transform.position +
+                " velocity=" + body.velocity + " gravity=" + body.gravityScale + " input=" + hero.acceptingInput +
+                " transition=" + hero.transitionState + " down=" + runtime.Down + " returning=" + runtime.Returning +
+                " health=" + PlayerData.instance.health + " invulnerable=" + hero.cState.invulnerable + " recoil=" + hero.cState.recoiling +
+                " hazard=" + hero.cState.hazardDeath + "/" + hero.cState.hazardRespawning);
+            foreach (var fsm in Object.FindObjectsOfType<PlayMakerFSM>().Where(f => f.name == "White Palace Lift"))
+                Log("TIMEOUT LIFT " + fsm.name + "/" + fsm.FsmName + "=" + fsm.ActiveStateName + " pos=" + fsm.transform.position);
+        }
         Check(test(), s);
     }
     private void Inject(Message m) {
@@ -70,6 +80,12 @@ public sealed partial class RescueProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_EDGE_CHECK"))) {
+            yield return EdgeRescueChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS rescue edge audit"); Flag(role + ".done");
+            yield break;
+        }
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_NATIVE_CHECK"))) {
             yield return NativeRescueChecks();
             yield return ProbeShutdown.Run(engine, root, role);

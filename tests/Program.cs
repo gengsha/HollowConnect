@@ -484,6 +484,16 @@ internal static class Program {
             p.Presence(2, 0, 2, "Boss", 2, 0, true, true, 1, 2, 101);
             Check(p.Members[2].Life == Life.Returning && !p.Members[2].HasMap);
         });
+        Test("unsupported accepted rescue can return under a fresh death serial", () => {
+            var p = Returnable();
+            Check(p.Revive(1, 2, 0, 1, 100));
+            Check(p.Down(2, 0, 2, "Boss", 2, 0, 100));
+            Check(!p.Revive(1, 2, 0, 1, 100) && !p.GiveUp(2, 0, 1));
+            Check(p.GiveUp(2, 0, 2) && p.Members[1].Life == Life.Alive && p.Round == 0);
+            Check(!p.FinishReturn(2, 0, 1, 2, "GuestBenchRoom", 1, 2, 100));
+            Check(p.FinishReturn(2, 0, 2, 2, "GuestBenchRoom", 1, 2, 100));
+            Check(!p.Revive(1, 2, 0, 1, 100) && p.Members[2].Life == Life.Alive);
+        });
         Test("rescue and give up accept only the first successful action", () => {
             var p = Returnable(); Check(p.Revive(1, 2, 0, 1, 100)); Check(!p.GiveUp(2, 0, 1));
             p = Returnable(); Check(p.GiveUp(2, 0, 1)); Check(!p.Revive(1, 2, 0, 1, 100));
