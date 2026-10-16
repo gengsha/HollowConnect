@@ -1,0 +1,1044 @@
+{
+  "date": "2026-10-16",
+  "productionCommit": "25d03c9de070fff4be3f328c4524b40f67e3eba8",
+  "currentDeliveredVersion": "0.1.17",
+  "packaged": false,
+  "installed": false,
+  "releaseReady": false,
+  "problem": "Lethal spikes/acid left rescue shade in hazardous terrain; rescue could immediately kill the revived player.",
+  "change": "Use native FindGroundPoint(hazardRespawnLocation, true) for lethal hazard types 2, 3, 5 after preserving PersonalDeath context.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "32CE50E0E925BFA7498A93980D2A3A6F405B21C9D05C922F8F703673637148D9"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "FC3A30C20A74D99C2978A525245DCBFE4B4EF7B103809434755C5614E29CA05F"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "52B850CEF3EABB17DD4901E2A26754C5B24F5F04042E6A496C6C4A7F084A8722"
+    }
+  ],
+  "binaryLocationChecks": [
+    {
+      "path": "src/HKMP/bin/Release/net472/HKMP.dll",
+      "sha256": "32CE50E0E925BFA7498A93980D2A3A6F405B21C9D05C922F8F703673637148D9",
+      "matches": true
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.dll",
+      "sha256": "FC3A30C20A74D99C2978A525245DCBFE4B4EF7B103809434755C5614E29CA05F",
+      "matches": true
+    },
+    {
+      "path": "src/HollowConnect.Core/bin/Release/netstandard2.0/HollowConnect.Core.dll",
+      "sha256": "52B850CEF3EABB17DD4901E2A26754C5B24F5F04042E6A496C6C4A7F084A8722",
+      "matches": true
+    },
+    {
+      "path": "tests/bin/Release/net472/HKMP.dll",
+      "sha256": "32CE50E0E925BFA7498A93980D2A3A6F405B21C9D05C922F8F703673637148D9",
+      "matches": true
+    },
+    {
+      "path": "tests/bin/Release/net472/HollowConnect.dll",
+      "sha256": "FC3A30C20A74D99C2978A525245DCBFE4B4EF7B103809434755C5614E29CA05F",
+      "matches": true
+    },
+    {
+      "path": "tests/bin/Release/net472/HollowConnect.Core.dll",
+      "sha256": "52B850CEF3EABB17DD4901E2A26754C5B24F5F04042E6A496C6C4A7F084A8722",
+      "matches": true
+    },
+    {
+      "path": "tests/Smoke/bin/Release/net472/HKMP.dll",
+      "sha256": "32CE50E0E925BFA7498A93980D2A3A6F405B21C9D05C922F8F703673637148D9",
+      "matches": true
+    },
+    {
+      "path": "tests/Smoke/bin/Release/net472/HollowConnect.dll",
+      "sha256": "FC3A30C20A74D99C2978A525245DCBFE4B4EF7B103809434755C5614E29CA05F",
+      "matches": true
+    },
+    {
+      "path": "tests/Smoke/bin/Release/net472/HollowConnect.Core.dll",
+      "sha256": "52B850CEF3EABB17DD4901E2A26754C5B24F5F04042E6A496C6C4A7F084A8722",
+      "matches": true
+    },
+    {
+      "path": ".test-results/game-host/hollow_knight_Data/Managed/Mods/HKMP/HKMP.dll",
+      "sha256": "32CE50E0E925BFA7498A93980D2A3A6F405B21C9D05C922F8F703673637148D9",
+      "matches": true
+    },
+    {
+      "path": ".test-results/game-host/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.dll",
+      "sha256": "FC3A30C20A74D99C2978A525245DCBFE4B4EF7B103809434755C5614E29CA05F",
+      "matches": true
+    },
+    {
+      "path": ".test-results/game-host/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.Core.dll",
+      "sha256": "52B850CEF3EABB17DD4901E2A26754C5B24F5F04042E6A496C6C4A7F084A8722",
+      "matches": true
+    },
+    {
+      "path": ".test-results/game-guest/hollow_knight_Data/Managed/Mods/HKMP/HKMP.dll",
+      "sha256": "32CE50E0E925BFA7498A93980D2A3A6F405B21C9D05C922F8F703673637148D9",
+      "matches": true
+    },
+    {
+      "path": ".test-results/game-guest/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.dll",
+      "sha256": "FC3A30C20A74D99C2978A525245DCBFE4B4EF7B103809434755C5614E29CA05F",
+      "matches": true
+    },
+    {
+      "path": ".test-results/game-guest/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.Core.dll",
+      "sha256": "52B850CEF3EABB17DD4901E2A26754C5B24F5F04042E6A496C6C4A7F084A8722",
+      "matches": true
+    }
+  ],
+  "nativeInputs": [
+    {
+      "path": "E:\\SteamLibrary\\steamapps\\common\\Hollow Knight\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "bytes": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": "E:\\SteamLibrary\\steamapps\\common\\Hollow Knight\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "bytes": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "baseline": {
+    "run": "hazard-rescue-017-baseline-20261016",
+    "build": "original delivered 0.1.17",
+    "result": "reproduced incorrect acid rescue location",
+    "failures": [
+      {
+        "role": "host",
+        "failure": "2026-10-16T04:41:48.1124930Z FAIL System.Exception: remote shade uses native safe point Fungus1_02.guest",
+        "sha256": "A378353D237911569F9B46837EF9BDAFCF36A5184359E16791323FD3A81C78C2"
+      },
+      {
+        "role": "guest",
+        "failure": "2026-10-16T04:41:48.0762936Z FAIL System.Exception: rescue anchor uses native safe point Fungus1_02.guest",
+        "sha256": "001F5FC46C2C99DA543765A0C5137D25D36AD632336184EED2EE32D7DAA6EB48"
+      }
+    ]
+  },
+  "regression": {
+    "passed": 121,
+    "failed": 0,
+    "selection": {
+      "method": "Most recent Git changes across each Test registration/body span and directly referenced tests/*Probe.cs; ties by registration line, then name. Existing 163 item names from the prior full passing run.",
+      "baseRecentCount": 100,
+      "directRelatedAdditionalCount": 21,
+      "selectedCount": 121,
+      "recent": [
+        {
+          "name": "client receive and main-thread dispatch preserve reordered fragmented entity updates",
+          "sourceLine": 73,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=False snapshotNewer=False resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=False snapshotNewer=False resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=False snapshotNewer=True resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=False snapshotNewer=True resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=True snapshotNewer=False resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=True snapshotNewer=False resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=True snapshotNewer=True resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=0 transfer=True snapshotNewer=True resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=False snapshotNewer=False resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=False snapshotNewer=False resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=False snapshotNewer=True resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=False snapshotNewer=True resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=True snapshotNewer=False resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=True snapshotNewer=False resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=True snapshotNewer=True resend=False",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "room snapshot/live order: sequence=20 transfer=True snapshotNewer=True resend=True",
+          "sourceLine": 78,
+          "lastChange": "cdc9f339d5eee975c44e185fa729a175b6525233",
+          "historyRank": 6
+        },
+        {
+          "name": "main-thread backlog yields between complete callbacks and preserves FIFO",
+          "sourceLine": 44,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "one received datagram commits parent, child and addon updates in the same Unity frame",
+          "sourceLine": 629,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "queued callbacks from a retired client session never execute",
+          "sourceLine": 630,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "initial player messages wait for queued game setup and cannot survive disconnect",
+          "sourceLine": 631,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "server rejection fully releases the client DTLS session",
+          "sourceLine": 632,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "rapid handshake cancellation, rejection and old timeouts cannot affect a new DTLS session",
+          "sourceLine": 634,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "room shutdown cancels receiving before waiting for the final outgoing update",
+          "sourceLine": 635,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "active UDP receive failure remains an error and cannot fabricate a received datagram",
+          "sourceLine": 636,
+          "lastChange": "d19766006c964206e2105dcff258fdb8b56e1bc2",
+          "historyRank": 16
+        },
+        {
+          "name": "scalar packet encoding preserves BitConverter wire bytes and floating-point bits",
+          "sourceLine": 45,
+          "lastChange": "2cde6bd1c7bd837ee5dcfbfcb173ccaa9f88a27d",
+          "historyRank": 17
+        },
+        {
+          "name": "reused scratch snapshots do not change published packets",
+          "sourceLine": 46,
+          "lastChange": "2cde6bd1c7bd837ee5dcfbfcb173ccaa9f88a27d",
+          "historyRank": 17
+        },
+        {
+          "name": "compressed combat updates preserve independent full snapshots and reject invalid lengths",
+          "sourceLine": 47,
+          "lastChange": "2cde6bd1c7bd837ee5dcfbfcb173ccaa9f88a27d",
+          "historyRank": 17
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=0 lostStep=12",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=0 lostStep=13",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=0 lostStep=90",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=0 lostStep=91",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=65523 lostStep=12",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=65523 lostStep=13",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=65523 lostStep=90",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers both enter directions once: start=65523 lostStep=91",
+          "sourceLine": 50,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "selective ACK loss evidence tolerates reordering and duplicate reports: 12",
+          "sourceLine": 53,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "selective ACK loss evidence tolerates reordering and duplicate reports: 65535",
+          "sourceLine": 53,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "periodic loss delivers at congested send rate",
+          "sourceLine": 56,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "reliable loss retains its timeout fallback without newer ACK evidence",
+          "sourceLine": 57,
+          "lastChange": "44ae5d17537f4f257c7d553e11694dc0c57abe98",
+          "historyRank": 46
+        },
+        {
+          "name": "nested reliable retransmissions retain origin across sequence 1",
+          "sourceLine": 59,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "nested reliable retransmissions retain origin across sequence 22",
+          "sourceLine": 59,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "nested addon retransmissions retain origin across sequence wrap",
+          "sourceLine": 60,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "consumed retransmission origins and delayed originals execute once",
+          "sourceLine": 61,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "consumed origins survive beyond the 64-packet ACK history and sequence wrap",
+          "sourceLine": 62,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "consumed addon origins and duplicate carriers execute once",
+          "sourceLine": 63,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "delayed datagrams keep newer sparse entity snapshots across sequence 1",
+          "sourceLine": 65,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "delayed datagrams keep newer sparse entity snapshots across sequence 22",
+          "sourceLine": 65,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "delayed resends keep newer sparse entity snapshots across sequence 1",
+          "sourceLine": 66,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "delayed resends keep newer sparse entity snapshots across sequence 22",
+          "sourceLine": 66,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "consumed origins allow fresh payloads after a complete ushort sequence wrap",
+          "sourceLine": 68,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "delayed combat snapshots preserve newer collider state across sequence 1",
+          "sourceLine": 70,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "delayed combat snapshots preserve newer collider state across sequence 20",
+          "sourceLine": 70,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "resent combat snapshots preserve newer collider state across sequence 1",
+          "sourceLine": 71,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "resent combat snapshots preserve newer collider state across sequence 20",
+          "sourceLine": 71,
+          "lastChange": "b4bea7f41134db9d9d675b4a267b12990569171d",
+          "historyRank": 49
+        },
+        {
+          "name": "stopping after a peer closes DTLS permits reopening the same server port",
+          "sourceLine": 617,
+          "lastChange": "ff332b8f21e09d1db616ee52bd69b7d872f37fca",
+          "historyRank": 52
+        },
+        {
+          "name": "DTLS close retires a peer after its final snapshot without waiting for heartbeat timeout",
+          "sourceLine": 618,
+          "lastChange": "ff332b8f21e09d1db616ee52bd69b7d872f37fca",
+          "historyRank": 52
+        },
+        {
+          "name": "failed bind can be stopped safely and retried on the same port",
+          "sourceLine": 619,
+          "lastChange": "ff332b8f21e09d1db616ee52bd69b7d872f37fca",
+          "historyRank": 52
+        },
+        {
+          "name": "reliable resend order preserves snapshots and events across sequence 1",
+          "sourceLine": 80,
+          "lastChange": "38d7480c269e11840c0fb96d76dbf71bd4ebe34e",
+          "historyRank": 62
+        },
+        {
+          "name": "reliable resend order preserves snapshots and events across sequence 22",
+          "sourceLine": 80,
+          "lastChange": "38d7480c269e11840c0fb96d76dbf71bd4ebe34e",
+          "historyRank": 62
+        },
+        {
+          "name": "addon resends preserve chronological collections and newest scalar without mutating sends",
+          "sourceLine": 117,
+          "lastChange": "38d7480c269e11840c0fb96d76dbf71bd4ebe34e",
+          "historyRank": 62
+        },
+        {
+          "name": "final entity snapshot is consumed before same-datagram disconnect",
+          "sourceLine": 139,
+          "lastChange": "e4ad923426e5f9609c68f6356cedbe4512fd308d",
+          "historyRank": 66
+        },
+        {
+          "name": "replica cancellation remains final after a destroyed-target exit failure",
+          "sourceLine": 158,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "replica exit still detaches observers when coroutine cancellation fails",
+          "sourceLine": 164,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "reentrant replica cleanup cannot run the same exit twice",
+          "sourceLine": 170,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "reliable revive identifies the accepted rescuer independently of victim",
+          "sourceLine": 175,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "personal checkpoint rejects invalid types and permits native implicit destinations",
+          "sourceLine": 179,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "entry protection waits for actual readiness and a reaction interval",
+          "sourceLine": 187,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "interrupted arrival restarts grace but combat input loss cannot rearm it",
+          "sourceLine": 193,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "wipe freezes a separate respawn destination and type for every member",
+          "sourceLine": 200,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "native implicit returns need no invented common bench or marker",
+          "sourceLine": 208,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "personal dream return accepts the native gate and does not reset survivors",
+          "sourceLine": 214,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "avatar room and both participants' visits survive all scene packets",
+          "sourceLine": 219,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "late teammate leave and duplicate enter cannot remove a newer avatar",
+          "sourceLine": 227,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "queued snapshots freeze generic data, FSM dictionaries and scale",
+          "sourceLine": 235,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "pre-entry movement keeps newest peer visit and independent changed fields",
+          "sourceLine": 243,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "pre-entry animation retains visual frame without replaying attack effects",
+          "sourceLine": 253,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "wide entity IDs survive position, reliable state and spawn serialization",
+          "sourceLine": 260,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "dense boss action batches retain more than 255 ordered updates and following fields",
+          "sourceLine": 267,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "oversized entity action batches and component payloads reject partial serialization",
+          "sourceLine": 277,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "same-type spawn sources retain exact owner, action, prefab and origin",
+          "sourceLine": 284,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "malformed spawn descriptors cannot enter a deferred queue",
+          "sourceLine": 292,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "static identity is stable when unrelated entities are omitted or reordered",
+          "sourceLine": 298,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "pooled spawn lifetimes cannot reuse a static or earlier dynamic identity",
+          "sourceLine": 305,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "server entity key equality retains high bits and scene scope",
+          "sourceLine": 309,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "only a newer explicit health reset opens a death tombstone",
+          "sourceLine": 313,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "object-reference snapshots preserve clearing, state and the eighth flag bit",
+          "sourceLine": 319,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "retired projectile snapshots keep only dependencies needed by a live child",
+          "sourceLine": 326,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "spawn dependency cycles are bounded during late join",
+          "sourceLine": 335,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "Hall of Gods tier, return gate and authoritative itinerary survive addon messages",
+          "sourceLine": 342,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "invalid challenge tier and oversized itinerary are rejected",
+          "sourceLine": 347,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "new game's early hero event waits for matching scene preparation",
+          "sourceLine": 352,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "ordinary transitions publish after preparation and distinguish reentry",
+          "sourceLine": 359,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "old scene requests cannot publish into a different scene",
+          "sourceLine": 365,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "disconnect discards pending and prepared scene entry",
+          "sourceLine": 369,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "Mantis Claw is idempotent",
+          "sourceLine": 374,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "abilities never regress",
+          "sourceLine": 377,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "spells take maximum, not sum",
+          "sourceLine": 378,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "invalid progress is rejected",
+          "sourceLine": 379,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "maps, currency, health and equipment are private",
+          "sourceLine": 380,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        }
+      ],
+      "additionalRelated": [
+        {
+          "name": "late heartbeat cannot revive downed guest",
+          "sourceLine": 397,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "guest down then host down creates one wipe",
+          "sourceLine": 400,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "host down then guest down creates one wipe",
+          "sourceLine": 404,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "new attempt rejects stale down and presence",
+          "sourceLine": 407,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "loading player prevents false team wipe",
+          "sourceLine": 427,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "rescue validates distance and death episode",
+          "sourceLine": 430,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "rescue validates scene, life and freshness",
+          "sourceLine": 434,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "rescue cannot happen twice",
+          "sourceLine": 439,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "old down event cannot undo successful rescue",
+          "sourceLine": 440,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "reliable death anchor overrides last heartbeat and cannot drift",
+          "sourceLine": 443,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "second death event cannot move an existing shade",
+          "sourceLine": 450,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "shade hit cannot revive another death episode",
+          "sourceLine": 454,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "death anchor rejects nonfinite positions and invalid scene",
+          "sourceLine": 464,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "give up uses personal bench without resetting the surviving teammate",
+          "sourceLine": 468,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "alive players and missing checkpoints cannot give up",
+          "sourceLine": 474,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "duplicate give up and new down events cannot interrupt returning",
+          "sourceLine": 478,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "rescue and give up accept only the first successful action",
+          "sourceLine": 483,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "old death and round cannot request or finish a bench return",
+          "sourceLine": 487,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "give up cannot bypass full-team failure",
+          "sourceLine": 520,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "authority transfer carries health and terminal death snapshot",
+          "sourceLine": 593,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        },
+        {
+          "name": "terminal death is an immutable tombstone",
+          "sourceLine": 605,
+          "lastChange": "18a2daaf4a32746b5b2ec4d271d3b07a397cd0aa",
+          "historyRank": 81
+        }
+      ]
+    },
+    "log": ".test-results/hazard-rescue-selection-20261016/final-regression.log",
+    "logSha256": "056DDAD612BA75C6A78A4C12A5FD1B7019F4A0538062451430093B9D93B41B1D",
+    "logGateChecks": 14,
+    "logGateSha256": "4E64A4DEC6D6B5C447F1D237DAD5A77BAF07AB26C6AF3202416E96D3186BED89"
+  },
+  "runtimeRuns": [
+    {
+      "run": "hazard-rescue-final-20261016",
+      "bothDone": true,
+      "bothShutdown": true,
+      "serverStopped": true,
+      "sameProductionBinaries": true,
+      "strictLogsAfterStop": true,
+      "terminals": [
+        {
+          "role": "host",
+          "final": "2026-10-16T04:47:47.3490371Z FINAL PASS hazard rescue at native safe point",
+          "passedChecks": 42
+        },
+        {
+          "role": "guest",
+          "final": "2026-10-16T04:47:47.3490371Z FINAL PASS hazard rescue at native safe point",
+          "passedChecks": 43
+        }
+      ],
+      "logs": [
+        {
+          "file": "guest-unity.log",
+          "bytes": 118828,
+          "sha256": "1E24ACB6B8170BA900BA6B7FC8FBE92624E4AA3FCDFC3553B6256305347F498E"
+        },
+        {
+          "file": "guest.log",
+          "bytes": 4082,
+          "sha256": "7D277303F9FAE76E2A01096B3BE02AC84334729C16856FCBC2D3B3D8168C2A10"
+        },
+        {
+          "file": "host-unity.log",
+          "bytes": 116562,
+          "sha256": "4FE6271A4F8F6FB14C879EFF07C6EAF7C855FEE77EBDB7F9CB5C2CAA9FA97B61"
+        },
+        {
+          "file": "host.log",
+          "bytes": 4031,
+          "sha256": "30E9A333B67E91A65D5C46FE62A9EBFE914E817DBA4DD4F7E7C66063A6EC7F7D"
+        }
+      ]
+    },
+    {
+      "run": "hazard-rescue-death-regression-20261016",
+      "bothDone": true,
+      "bothShutdown": true,
+      "serverStopped": true,
+      "sameProductionBinaries": true,
+      "strictLogsAfterStop": true,
+      "terminals": [
+        {
+          "role": "host",
+          "final": "2026-10-16T04:49:07.1685537Z FINAL PASS native personal death Crossroads_01",
+          "passedChecks": 62
+        },
+        {
+          "role": "guest",
+          "final": "2026-10-16T04:49:07.1685537Z FINAL PASS native personal death Crossroads_01",
+          "passedChecks": 90
+        }
+      ],
+      "logs": [
+        {
+          "file": "guest-unity.log",
+          "bytes": 131792,
+          "sha256": "6914A84477AD0C956FB25B670975C102819C13316945048F82091C0CBF0D545E"
+        },
+        {
+          "file": "guest.log",
+          "bytes": 14822,
+          "sha256": "F59A72E163755EBE55FA0117F09F835D8CD22383FF07745D78BD8C3B08002072"
+        },
+        {
+          "file": "host-unity.log",
+          "bytes": 130586,
+          "sha256": "C4EB0D85995E4BFF35D28FFB9B91AA6D321425CE9079C349981779C962DF35C3"
+        },
+        {
+          "file": "host.log",
+          "bytes": 15999,
+          "sha256": "61CB324D1B15339B892233AD3563D9AFCC764C776E1A98DE1D629FB2D8619209"
+        }
+      ]
+    },
+    {
+      "run": "hazard-rescue-standard-regression-20261016",
+      "bothDone": true,
+      "bothShutdown": true,
+      "serverStopped": true,
+      "sameProductionBinaries": true,
+      "strictLogsAfterStop": true,
+      "terminals": [
+        {
+          "role": "host",
+          "final": "2026-10-16T04:51:12.1249345Z FINAL PASS rescue soul and native feedback",
+          "passedChecks": 61
+        },
+        {
+          "role": "guest",
+          "final": "2026-10-16T04:51:12.1259624Z FINAL PASS rescue soul and native feedback",
+          "passedChecks": 62
+        }
+      ],
+      "logs": [
+        {
+          "file": "guest-unity.log",
+          "bytes": 109098,
+          "sha256": "51C1D5300DB16C85D23757DA2DBBBC2A8245360E3880C4FBB23DDD121347FD38"
+        },
+        {
+          "file": "guest.log",
+          "bytes": 4493,
+          "sha256": "D12C1DE16AE65B1E9455C2D53EAC34211E2AFFBDC6D88AAB4E427D1364C776C4"
+        },
+        {
+          "file": "host-unity.log",
+          "bytes": 111090,
+          "sha256": "1BDB08F608706F9A4F53FF336D2585584505A293FFF27663887F333E38290993"
+        },
+        {
+          "file": "host.log",
+          "bytes": 4446,
+          "sha256": "1A19E6BB955E371328E02B84B1DD90E7016CE22B1DC6FFF236AD98F6674EDF55"
+        }
+      ]
+    }
+  ],
+  "otherRuns": [
+    {
+      "run": "hazard-rescue-candidate-20261016",
+      "accepted": false,
+      "reason": "Guest acid rescue passed, then stale collider reference failed in the probe."
+    },
+    {
+      "run": "hazard-rescue-reacquire-20261016",
+      "accepted": false,
+      "reason": "Guest acid rescue passed, then the probe found no acid collider. Rescuer stood near left exit; accidental room exit is suspected, not proven. Probe moved inside and added same-room assertions."
+    },
+    {
+      "run": "hazard-rescue-native-stand-20261016",
+      "acceptedAsFinalBuild": false,
+      "reason": "All four hazard rescue cases and strict logs passed, but this was a precommit build."
+    }
+  ],
+  "cleanup": {
+    "isolatedProcessesStopped": true,
+    "smokeDisabled": [
+      ".test-results/game-host/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.Smoke.dll.disabled-hazard-rescue-20261016",
+      ".test-results/game-guest/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.Smoke.dll.disabled-hazard-rescue-20261016"
+    ],
+    "normalGameUnchanged": true,
+    "personalSavesUnchanged": true
+  },
+  "limits": [
+    "Same-machine isolated Unity clients with real UDP; not two-machine FRP.",
+    "Physical lethal acid and spikes only; type 5 pit branch has not had a real pit probe.",
+    "Two-second survival and control observation after each hazard rescue.",
+    "No exhaustive moving-platform/special-story-hazard coverage or hazard-death-to-F6/wipe combinations.",
+    "Six previous unresolved game issues remain open.",
+    "No version bump, packaging or daily-game installation."
+  ],
+  "unresolved": [
+    "Old Dung Defender re-entry camera freeze of unknown cause",
+    "Hornet Thrown/inactive needle after disconnect takeover",
+    "False Knight late-entry takeover second armor break without head exposure",
+    "Persistent mutual invisibility after both buy maps",
+    "Mines_11 FSM string-array bounds error",
+    "Guest cliff-interior apparent room overlap blocking passage, not reproduced"
+  ]
+}
