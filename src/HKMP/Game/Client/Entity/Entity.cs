@@ -1134,8 +1134,8 @@ internal class Entity {
                             PlayerData.instance.SetBool(b.boolName.Value, b.value.Value); break;
                     }
                 }
-                if (checkpoint.Actions.OfType<HutongGames.PlayMaker.Actions.SendMessage>().Any(a => a.Enabled && a.functionCall.FunctionName == "SaveGame"))
-                    global::GameManager.instance.SaveGame();
+                if (checkpoint.Actions.OfType<HutongGames.PlayMaker.Actions.SendMessage>().Any(a => a.Enabled && a.functionCall.FunctionName == "SetCurrentMapZoneAsRespawn"))
+                    global::GameManager.instance.SetCurrentMapZoneAsRespawn();
             }
         }
         _isSceneHostDetermined = true;
