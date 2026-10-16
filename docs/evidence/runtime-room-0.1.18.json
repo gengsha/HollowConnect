@@ -1,0 +1,25 @@
+{
+  "version": "0.1.18",
+  "engineVersion": "3.0.0-hc10",
+  "releaseReady": false,
+  "retestOmitted": true,
+  "userRequest": "这一次测试花了太多时间了,直接打包新版本不用重新测试了,下次测试不用选本次你认为没有复发风险的检测",
+  "recordedAtUtc": "2026-10-16T08:57:26.633351+00:00",
+  "runs": [],
+  "scope": "Version-only production rebuild and packaging. No regression, log-gate, runtime, or installer tests were repeated. Prior results remain attached to their original hashes; not acceptance of the rebuilt 0.1.18 binaries.",
+  "previousValidationSource": "docs/evidence/colosseum-checkpoint-fsm-bounds-2026-10-16.json",
+  "previousValidationSha256": "46130B156C7CC1AB5C5A800B7ED74D6FFC565D26123693D0ABDA8887F6DC53C3",
+  "previousProductionBuildCommit": "498daadc9f10838e35fbc0224a2d41bbed701b41",
+  "previousProductionBinaries": {
+    "HKMP.dll": "527FC05CEB793BF058C7F682713B844099BB01C505590E2415FAC8B4CF993A88",
+    "HollowConnect.dll": "D7322496FBFADAC384F1FA121EF83EFDE9ECF11F9A31D66B3711C1ED97241E2A",
+    "HollowConnect.Core.dll": "E7897EAE1977ECBFB45C1B4F27F3AD34599FFDD09F093ED49AE097CBEFD29685"
+  },
+  "additionalHistoricalEvidence": [
+    "docs/evidence/rescue-edge-audit-2026-10-16.json",
+    "docs/evidence/rescue-native-placement-2026-10-16.json",
+    "docs/evidence/hazard-rescue-2026-10-16.json"
+  ],
+  "installed": false,
+  "realTwoMachineFrp": false
+}

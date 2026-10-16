@@ -1,7 +1,7 @@
-﻿param([switch]$Playtest, [string]$PlaytestBuild='')
+param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
-$version='0.1.17'
+$version='0.1.18'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package=Join-Path $root ('dist\'+$taskPackageName)
@@ -22,13 +22,20 @@ if($Playtest){
     if($manifest.playtestAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $package $taskAuthorizationRelative) -Algorithm SHA256).Hash -or $manifest.playtestAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $root $taskAuthorizationRelative) -Algorithm SHA256).Hash){throw 'Playtest authorization hash differs.'}
     if(@(Compare-Object -ReferenceObject $taskUnresolved -DifferenceObject @($manifest.knownIssues) -Property id,resolved).Count){throw 'Playtest known issues differ from unresolved ledger.'}
 }
+$taskSkipRetest=$Playtest -and $taskAuthorization.retestOmitted -eq $true
+if([bool]$manifest.retestOmitted -ne [bool]$taskSkipRetest){throw 'Retest status differs from request.'}
 if (@($manifest.files).Count -ne 7) { throw 'Incomplete payload manifest.' }
 foreach ($entry in $manifest.files) {
     $payload=Join-Path $package "payload\HKMP\$($entry.name)"
     if ((Get-FileHash -LiteralPath $payload -Algorithm SHA256).Hash -ne $entry.sha256) { throw "Bad payload: $($entry.name)" }
     $tested=Join-Path $root "tests\Smoke\bin\Release\net472\$($entry.name)"
-    if ((Test-Path -LiteralPath $tested) -and (Get-FileHash -LiteralPath $tested -Algorithm SHA256).Hash -ne $entry.sha256) {
+    if (!$taskSkipRetest -and (Test-Path -LiteralPath $tested) -and (Get-FileHash -LiteralPath $tested -Algorithm SHA256).Hash -ne $entry.sha256) {
         throw "Payload differs from native test build: $($entry.name)"
+    }
+}
+if($Playtest){
+    foreach($binary in $taskAuthorization.binaries){
+        if(@($manifest.files | Where-Object {$_.name -eq $binary.name -and $_.sha256 -eq $binary.sha256}).Count -ne 1){throw 'Payload differs from authorized package build.'}
     }
 }
 $taskRuntimeSource=if($Playtest -and $taskAuthorization.runtimeValidation){$taskAuthorizationRelative}else{"docs/evidence/runtime-room-$version.json"}
@@ -36,6 +43,10 @@ if($manifest.runtimeValidationSource -ne $taskRuntimeSource){throw 'Wrong runtim
 $runtime=Get-Content -LiteralPath (Join-Path $package $taskRuntimeSource) -Raw | ConvertFrom-Json
 if($Playtest -and $runtime.runtimeValidation){$runtime=$runtime.runtimeValidation}
 $taskScopedPlaytest=$Playtest -and $taskAuthorization.runtimeValidation
+if($taskSkipRetest){
+    if(!$taskAuthorization.userRequest -or !$runtime.retestOmitted -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc10' -or $runtime.releaseReady -ne $false -or @($runtime.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
+    if(!$runtime.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $package $runtime.previousValidationSource) -Algorithm SHA256).Hash -ne $runtime.previousValidationSha256){throw 'Previous validation reference differs.'}
+}else{
 if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc10' -or @($runtime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($runtime.runs).Count -ne 12)) { throw 'Incomplete or blocked runtime evidence.' }
 foreach ($run in $runtime.runs) {
     if (!$run.bothPassed -or @($run.binaries).Count -ne 3) { throw 'Incomplete runtime result.' }
@@ -50,6 +61,7 @@ foreach ($run in $runtime.runs) {
         if (!(Test-Path -LiteralPath (Join-Path $runDir ($role+'.done'))) -or (Test-Path -LiteralPath (Join-Path $runDir ($role+'.failed')))) { throw 'Runtime completion or failure markers disagree.' }
         if (!(Select-String -LiteralPath (Join-Path $runDir ($role+'.log')) -SimpleMatch 'FINAL PASS' -Quiet)) { throw 'Runtime final pass missing.' }
     }
+}
 }
 if ((Get-FileHash -LiteralPath (Join-Path $package 'dependencies\moddingapi.v77.windows.zip') -Algorithm SHA256).Hash -ne $manifest.apiZipSha256) {
     throw 'Bad API archive.'
@@ -103,4 +115,4 @@ foreach ($kind in 'windows','source') {
     $hash=(Get-FileHash -LiteralPath (Join-Path $root "dist\$name") -Algorithm SHA256).Hash.ToLowerInvariant()
     if (!(Get-Content -LiteralPath (Join-Path $root 'dist\SHA256SUMS.txt') | Where-Object { $_ -eq "$hash  $name" })) { throw "Bad published checksum: $name" }
 }
-Write-Output "PASS $($manifest.releaseChannel) $version $PlaytestBuild`: 7 payload files; $(@($runtime.runs).Count) actual runtime binary records and completion markers; API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; published checksums; no test plugin or private saves."
+Write-Output "PASS $($manifest.releaseChannel) $version $PlaytestBuild`: 7 payload files; $(@($runtime.runs).Count) new runtime records (retestOmitted=$taskSkipRetest); API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; published checksums; no test plugin or private saves."

@@ -1,7 +1,7 @@
-﻿param([switch]$Playtest, [string]$PlaytestBuild='')
+param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$version = '0.1.17'
+$version = '0.1.18'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
 $taskEvidencePath=Join-Path $root "docs/evidence/runtime-room-$version.json"
@@ -18,11 +18,17 @@ if($Playtest){
     if($PlaytestBuild -and $taskAuthorization.buildLabel -ne $PlaytestBuild){throw 'Playtest build label differs from the request record.'}
     foreach($taskRequired in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll'){
         $taskHash=(Get-FileHash -LiteralPath (Join-Path $root ('src/HollowConnect/bin/Release/net472/'+$taskRequired)) -Algorithm SHA256).Hash
-        if(@($taskAuthorization.binaries | Where-Object {$_.name -eq $taskRequired -and $_.sha256 -eq $taskHash}).Count -ne 1){throw 'Playtest production DLL differs from the authorized tested build.'}
+        if(@($taskAuthorization.binaries | Where-Object {$_.name -eq $taskRequired -and $_.sha256 -eq $taskHash}).Count -ne 1){throw 'Playtest production DLL differs from the authorized package build.'}
     }
 }
 $taskScopedPlaytest=$Playtest -and $taskAuthorization.runtimeValidation
 $taskRuntime=if($taskScopedPlaytest){$taskAuthorization.runtimeValidation}else{$taskEvidence}
+# A user-requested package may retain earlier validation without claiming the new hashes were tested.
+$taskSkipRetest=$Playtest -and $taskAuthorization.retestOmitted -eq $true
+if($taskSkipRetest){
+    if(!$taskAuthorization.userRequest -or !$taskEvidence.retestOmitted -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc10' -or $taskEvidence.releaseReady -ne $false -or @($taskEvidence.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
+    if(!$taskEvidence.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $root $taskEvidence.previousValidationSource) -Algorithm SHA256).Hash -ne $taskEvidence.previousValidationSha256){throw 'Previous validation reference differs.'}
+}else{
 if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc10' -or @($taskRuntime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($taskRuntime.runs).Count -ne 12)){throw 'Runtime acceptance is incomplete or blocked; no package created.'}
 foreach($taskRun in $taskRuntime.runs){
     if(!$taskRun.bothPassed){throw 'A runtime acceptance case failed; no release package created.'}
@@ -34,6 +40,7 @@ foreach($taskRun in $taskRuntime.runs){
     foreach($taskBinary in $taskRun.binaries){
         if((Get-FileHash -LiteralPath (Join-Path $root ('src/HollowConnect/bin/Release/net472/'+$taskBinary.name)) -Algorithm SHA256).Hash -ne $taskBinary.sha256){throw 'Production DLL differs from accepted runtime; no release package created.'}
     }
+}
 }
 & dotnet build (Join-Path $root 'src\HollowConnect.Installer\HollowConnect.Installer.csproj') -c Release --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Installer build failed.' }
@@ -54,6 +61,7 @@ $manifest = [ordered]@{
     version = $version
     releaseChannel = if($Playtest){'playtest'}else{'release'}
     releaseReady = if($Playtest){$false}else{$taskEvidence.releaseReady}
+    retestOmitted = [bool]$taskSkipRetest
     buildLabel = $PlaytestBuild
     runtimeValidationSource = if($Playtest -and $taskAuthorization.runtimeValidation){$taskAuthorizationRelative}else{"docs/evidence/runtime-room-$version.json"}
     knownIssues = $taskUnresolved
