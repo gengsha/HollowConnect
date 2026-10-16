@@ -184,7 +184,9 @@ public sealed class CoopRuntime : MonoBehaviour {
                     giveUpRequested = false;
                     shades.Remove(m.Id); Down = false; Unlock();
                     personalDeath = null;
-                    PlayerData.instance.SetInt("healthBlue", 0); Heal(1); Notice("队友击破了你的暗影，原地一血复活");
+                    PlayerData.instance.SetInt("healthBlue", 0); Heal(1); Notice("队友击破了你的暗影，一血复活");
+                    var rescued = HeroController.instance;
+                    rescued.StartCoroutine("Invulnerable", rescued.INVUL_TIME);
                     PlayRescueFeedback(m);
                 }
                 // Roster is unreliable and can already report Alive before the
@@ -247,6 +249,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     private void PlayRescueFeedback(Message m) {
         if (!Playable || m.Scene != CoopContext.LocalScene) return;
         RescueFeedback.Play(new Vector3(m.X, m.Y, 0));
+        if (m.Id != LocalId) RescueFlash.Play(PlayerObject(m.Id));
     }
 
     private void Update() {
@@ -304,15 +307,10 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (!Connected || !RescueEnabled || PlayerData.instance.permadeathMode != 0) { yield return orig(self); yield break; }
         if (Down || Resetting || Returning) yield break;
         personalDeath = new PersonalDeath(self, () => orig(self));
-        DeathPosition = self.transform.position; deathScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        // Lethal spikes/acid/pits call Die before native hazard recovery runs.
-        // Reuse its grounded safe point for rescue, retaining the original
-        // death position in PersonalDeath for a later give-up or party wipe.
-        if (takingDamage && (damageHazard == 2 || damageHazard == 3 || damageHazard == 5)) {
-            DeathPosition = self.FindGroundPoint(PlayerData.instance.GetVector3("hazardRespawnLocation"), true);
-            self.SetHeroParent(null);
-            self.transform.position = DeathPosition;
-        }
+        deathScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        DeathPosition = FindRescuePosition(self);
+        self.SetHeroParent(null);
+        self.transform.position = DeathPosition;
         deathCamera = GameCameras.instance?.cameraController;
         if (deathCamera != null) {
             cameraMode = deathCamera.mode; cameraPosition = deathCamera.transform.position;
@@ -324,6 +322,33 @@ public sealed class CoopRuntime : MonoBehaviour {
             Key = personalDeath.Destination, Name = personalDeath.Marker, Value = personalDeath.RespawnType };
         PlayDownFeedback(message, !takingDamage || !nativeHitPlayed); Send(message);
         Notice("你已化为暗影；等待队友击破救援，或按 " + CoopMod.Settings.GiveUpKey + " 放弃并回自己的复活点");
+    }
+
+    private Vector3 FindRescuePosition(HeroController hero) {
+        var origin = hero.transform.position;
+        bool Ground(Vector2 point, out Vector3 position) {
+            position = origin;
+            // Guard the native extended ground query: without a hit it logs
+            // an error and returns a point near (0,0), including in dreams.
+            var hit = Physics2D.Raycast(point, Vector2.down, 50, 1 << 8);
+            if (hit.collider == null || hit.distance == 0 || hit.collider.isTrigger || hit.collider.gameObject.scene.name != deathScene || hit.normal.y < .5f) return false;
+            var grounded = hero.FindGroundPoint(point, true);
+            if (!TryWarpLanding(grounded, deathScene, out var landing)) return false;
+            position = new Vector3(landing.x, landing.y, origin.z); return true;
+        }
+        var zone = GameManager.instance.GetCurrentMapZone();
+        var hazard = takingDamage && (damageHazard == 2 || damageHazard == 3 || damageHazard == 5);
+        // Native story death chooses the closest Shade Marker. The shade's
+        // Spawn Offset floats its art; the living knight needs ground below it.
+        // Dream/Palace/Godhome and cross-room formal shade exceptions instead
+        // use the current room's native hazard checkpoint for co-op rescue.
+        if (!hazard && zone != "DREAM_WORLD" && zone != "WHITE_PALACE" && zone != "GODS_GLORY") {
+            var marker = GameObject.FindGameObjectsWithTag("Shade Marker")
+                .Where(g => g.scene.name == deathScene).OrderBy(g => (g.transform.position - origin).sqrMagnitude).FirstOrDefault();
+            if (marker != null && Ground(marker.transform.position, out var marked)) return marked;
+        }
+        if (Ground(PlayerData.instance.GetVector3("hazardRespawnLocation"), out var safe)) return safe;
+        return Ground(origin, out var nearby) ? nearby : origin;
     }
 
     private void PlayDownFeedback(Message m, bool sound) {

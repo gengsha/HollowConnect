@@ -70,6 +70,12 @@ public sealed partial class RescueProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_NATIVE_CHECK"))) {
+            yield return NativeRescueChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS native rescue placement and protection"); Flag(role + ".done");
+            yield break;
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_HAZARD_RESCUE_CHECK") == "1") {
             yield return HazardRescueChecks();
             yield return ProbeShutdown.Run(engine, root, role);
