@@ -45,6 +45,34 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        foreach (var interval in new[] { .017f, .05f, .1f }) Test("player position history smooths jittered cadence " + interval, () => {
+            var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0);
+            var jitter = new[] { .75f, 1.25f, 1f, .9f, 1.1f };
+            var next = interval; var sample = 0f; var index = 0; var previous = 0f; var moving = 0; var frames = 0;
+            for (var frame = 1; frame <= 288; frame++) {
+                var now = frame / 144f;
+                if (now >= next) { sample = now; h.Add(new UnityEngine.Vector3(now * 6, 0, 0), now); next = now + interval * jitter[index++ % jitter.Length]; }
+                var current = h.Evaluate(now, true).x;
+                if (now > .2f) { frames++; if (current - previous > .001f) moving++; Check(current >= previous - .001f); Check(current - previous < .14f); }
+                previous = current;
+            }
+            Check(moving >= frames * .95f, "sparse movement still holds between packets");
+            Near(h.Evaluate(sample + .31f, true).x, sample * 6);
+            Near(h.Evaluate(sample + 1, true).x, sample * 6);
+        });
+        Test("player forecast is bounded and entities still hold the real endpoint", () => {
+            var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0); h.Add(new UnityEngine.Vector3(7, 0, 0), .05f);
+            Near(h.Evaluate(.175f, true).x, 9); Near(h.Latest.x, 7); Near(h.Evaluate(.31f, true).x, 7);
+            Near(h.Evaluate(1).x, 7);
+        });
+        Test("player teleport gap burst and reuse discard prediction history", () => {
+            var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0);
+            h.Add(new UnityEngine.Vector3(1, 0, 0), .05f); h.Add(new UnityEngine.Vector3(2, 0, 0), .05f);
+            Near(h.Evaluate(.075f, true).x, 1);
+            Check(h.Add(new UnityEngine.Vector3(24, 0, 0), .1f)); Near(h.Evaluate(.1f, true).x, 24);
+            Check(h.Add(new UnityEngine.Vector3(25, 0, 0), .4f)); Near(h.Evaluate(.4f, true).x, 25);
+            h.Clear(); h.Add(new UnityEngine.Vector3(-20, 0, 0), .41f); Near(h.Evaluate(1, true).x, -20);
+        });
         Test("replica positions interpolate rendered frames between sparse authority samples", () => {
             var h = new Hkmp.Fsm.PositionHistory();
             Check(h.Add(UnityEngine.Vector3.zero, 0));

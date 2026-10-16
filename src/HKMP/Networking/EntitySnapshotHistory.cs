@@ -7,11 +7,14 @@ using Hkmp.Networking.Packet.Data;
 namespace Hkmp.Networking;
 
 /// <summary>
-/// Rejects older entity snapshot fields without discarding reliable actions or
+/// Rejects older entity and player snapshot fields without discarding reliable actions or
 /// sparse fields absent from later packets. One instance belongs to one peer
 /// session; revisions are the unwrapped original UDP sequence numbers.
 /// </summary>
 internal sealed class EntitySnapshotHistory {
+    private static readonly PlayerUpdateType[] PlayerMotionFields = {
+        PlayerUpdateType.Position, PlayerUpdateType.Scale, PlayerUpdateType.MapPosition
+    };
     private sealed class Entry {
         public long Latest;
         public readonly Dictionary<(EntityUpdateType Field, byte Axis), long> Fields = new();
@@ -20,10 +23,16 @@ internal sealed class EntitySnapshotHistory {
     }
 
     private readonly Dictionary<(string Scene, uint Visit, uint Epoch, ulong Id), Entry> _entities = new();
+    private sealed class PlayerEntry {
+        public long Latest;
+        public readonly Dictionary<PlayerUpdateType, long> Fields = new();
+    }
+    private readonly Dictionary<(string Scene, uint Visit, uint Epoch, uint PlayerVisit, ushort Id), PlayerEntry> _players = new();
     private long _lastPruned;
 
     public void Clear() {
         _entities.Clear();
+        _players.Clear();
         _lastPruned = 0;
     }
 
@@ -32,6 +41,8 @@ internal sealed class EntitySnapshotHistory {
         var cutoff = revision - SequenceWindow.Size;
         foreach (var key in _entities.Where(pair => pair.Value.Latest < cutoff).Select(pair => pair.Key).ToArray())
             _entities.Remove(key);
+        foreach (var key in _players.Where(pair => pair.Value.Latest < cutoff).Select(pair => pair.Key).ToArray())
+            _players.Remove(key);
         _lastPruned = revision;
     }
 
@@ -56,6 +67,20 @@ internal sealed class EntitySnapshotHistory {
         if (data is ClientPlayerAlreadyInScene scene) {
             foreach (var item in scene.EntityUpdateList) Filter(item, revision);
             foreach (var item in scene.ReliableEntityUpdateList) Filter(item, revision);
+            return;
+        }
+        if (data is PlayerUpdate player) {
+            // Id zero is valid on the server's per-peer receive path, before
+            // the authenticated sender's real player id is stamped onto it.
+            var playerKey = (player.SceneName, player.Visit, player.Epoch, player.PlayerVisit, player.Id);
+            if (!_players.TryGetValue(playerKey, out var playerEntry)) {
+                playerEntry = new PlayerEntry { Latest = revision };
+                _players[playerKey] = playerEntry;
+            }
+            if (revision > playerEntry.Latest) playerEntry.Latest = revision;
+            foreach (var field in PlayerMotionFields) {
+                if (player.UpdateTypes.Contains(field) && !Accept(playerEntry.Fields, field, revision)) player.UpdateTypes.Remove(field);
+            }
             return;
         }
         if (data is not BaseEntityUpdate update || update.Id == 0) return;

@@ -80,6 +80,14 @@ public sealed partial class RescueProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_PLAYER_MOTION_CHECK") == "1") {
+            yield return CoveragePlayerMotionChecks.Run(Log);
+            Flag(role + ".motion");
+            yield return Until(() => Has((host ? "guest" : "host") + ".motion"), "both player motion checks complete");
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS player motion interpolation, bounded prediction and packet ordering"); Flag(role + ".done");
+            yield break;
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEATH_CAMERA_CHECK") == "1") {
             yield return DeathCameraRescueChecks();
             yield return ProbeShutdown.Run(engine, root, role);

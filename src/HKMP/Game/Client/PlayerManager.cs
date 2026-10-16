@@ -211,6 +211,10 @@ internal class PlayerManager {
         var playerContainer = Object.Instantiate(_playerContainerPrefab);
         Object.DontDestroyOnLoad(playerContainer);
         playerContainer.name = PlayerContainerName;
+        var interpolation = playerContainer.GetComponent<PositionInterpolation>();
+        interpolation.Smooth = true;
+        interpolation.WorldSpace = true;
+        interpolation.PredictPlayer = true;
 
         MakeUniqueSpriteAnimator(playerContainer.FindGameObjectInChildren(PlayerObjectPrefabName));
 
@@ -233,10 +237,6 @@ internal class PlayerManager {
             var unityPosition = new Vector3(position.X, position.Y);
 
             playerContainer.GetComponent<PositionInterpolation>().SetNewPosition(unityPosition);
-            // Player containers are normally root objects, but can inherit a
-            // prefab offset after menu/reconnect. Position updates are world
-            // coordinates, so also correct the world transform explicitly.
-            playerContainer.transform.position = unityPosition;
         }
     }
 
@@ -429,7 +429,8 @@ internal class PlayerManager {
 
         _activePlayers[playerData.Id] = playerContainer;
 
-        playerContainer.transform.SetPosition2D(position.X, position.Y);
+        playerContainer.GetComponent<PositionInterpolation>().SetNewPosition(
+            new Vector3(position.X, position.Y, playerContainer.transform.position.z), true);
 
         var playerObject = playerContainer.FindGameObjectInChildren(PlayerObjectPrefabName);
 
