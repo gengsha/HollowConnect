@@ -140,7 +140,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
     private IEnumerator Until(Func<bool> f,string label) { var end=Time.realtimeSinceStartup+50; while(!f()&&Time.realtimeSinceStartup<end) yield return null; if(!f()) throw new Exception("Timeout "+label); Mark("PASS "+label); }
     private bool In(string scene)=>runtime.Playable&&GameManager.instance.sceneName==scene;
     private void Freeze() { var h=HeroController.instance; h.takeNoDamage=true; h.AffectedByGravity(false); h.GetComponent<Rigidbody2D>().velocity=Vector2.zero; }
-    private void Enter(string scene)=>GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo{SceneName=scene,EntryGateName=Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_ENTRY_GATE") ?? (scene.StartsWith("GG_")?"door_dreamEnter":"left1"),Visualization=GameManager.SceneLoadVisualizations.Default,WaitForSceneTransitionCameraFade=true});
+    private void Enter(string scene, string gate = null)=>GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo{SceneName=scene,EntryGateName=gate ?? Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_ENTRY_GATE") ?? (scene.StartsWith("GG_")?"door_dreamEnter":"left1"),Visualization=GameManager.SceneLoadVisualizations.Default,WaitForSceneTransitionCameraFade=true});
     private sealed class Log : Hkmp.Logging.ILogger {
         private readonly CoverageProbe p; internal Log(CoverageProbe p){this.p=p;}
         public void Info(string s){} public void Debug(string s){} public void Fine(string s){}
@@ -191,7 +191,8 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved Town");
-        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_ASSERTIONS") == "1" && PlayerData.instance.GetBool("atBench")) {
+        if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_ASSERTIONS") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1") && PlayerData.instance.GetBool("atBench")) {
             // Leave the initial native bench before forcing a room transition.
             // Its resting body is kinematic until the get-up flow finishes.
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
@@ -208,8 +209,18 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         yield return Until(()=>runtime.Connected,"connect");Flag(role+".connected");yield return Until(()=>Has((host?"guest":"host")+".connected"),"both connected");
         var scenes=(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SCENES")??"GG_Hornet_1,GG_Nailmasters,GG_Mantis_Lords,GG_Uumuu,GG_Ghost_Markoth,GG_Collector,GG_Hollow_Knight,GG_Painter,GG_Nosk,GG_Ghost_No_Eyes,GG_Soul_Tyrant,GG_White_Defender,GG_Grimm").Split(',');
         var seconds=float.Parse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SECONDS")??"20",System.Globalization.CultureInfo.InvariantCulture);
+        var geometryTrace = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1";
+        var guestAlone = geometryTrace && Environment.GetEnvironmentVariable("HOLLOWCONNECT_GEOMETRY_GUEST_ALONE") == "1";
         for(var round=0;round<scenes.Length;round++) {
             var scene=scenes[round];
+            if (guestAlone && host) {
+                if (!In("Town")) throw new Exception("Geometry observer must remain in Town");
+                Flag(role + ".room." + round);
+                yield return Until(() => Has("guest.room." + round), "guest alone entered " + scene);
+                yield return Until(() => Has("guest.sample." + round), "guest alone sampled " + scene);
+                Flag(role + ".sample." + round);
+                continue;
+            }
             compressedInitialSnapshots = 0;
             BossSequenceController.Reset(); PlayerData.instance.SetInt("bossStatueTargetLevel",0);
             var sequences=Resources.LoadAll<BossSequence>("GG");
@@ -222,7 +233,9 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             }
             var guestAuthority=Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_AUTHORITY")=="guest";
             if(host==guestAuthority)yield return new WaitForSecondsRealtime(2);
-            Enter(scene);yield return Until(()=>In(scene),"enter "+scene);
+            if (geometryTrace) EnterGeometryScene(scene);
+            else Enter(scene);
+            yield return Until(()=>In(scene),"enter "+scene);
             if(performance) {
                 var hero=HeroController.instance;hero.takeNoDamage=true;hero.AffectedByGravity(true);hero.IgnoreInputWithoutReset();
                 yield return Until(()=>hero.cState.onGround,"native performance target lands " + scene);
@@ -230,6 +243,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (geometryTrace) TraceSceneGeometry();
             if (performance && !manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1")
                 yield return Until(() => compressedInitialSnapshots > 0, "compressed cached room snapshot " + scene);
             if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") == "1")
