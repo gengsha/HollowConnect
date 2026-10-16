@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-16",
+  "sourceCommits": [
+    "f43528a",
+    "dc34070"
+  ],
+  "developmentVersion": "0.1.19",
+  "engineVersion": "3.0.0-hc11",
+  "packaged": false,
+  "installedDailyGame": false,
+  "personalSavesTouched": false,
+  "releaseReady": false,
+  "selectedTests": {
+    "passed": 14,
+    "failed": 0,
+    "selection": ".test-results/motion-deaths-persistent-selected-20261016.txt",
+    "log": "E:\\projects\\hollowConnect\\.test-results\\motion-deaths-persistent-hc11-selected-20261016.log",
+    "reason": "Changed motion, saved totals and affected message/rescue/checkpoint boundaries; unrelated old matrix omitted."
+  },
+  "runs": [
+    {
+      "name": "p5-watchers-018-baseline-20261016",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\p5-watchers-018-baseline-20261016",
+      "scope": "0.1.18 direct native Watchers -> Uumuu; no reproduction",
+      "bothPassed": true,
+      "strictLogGatePassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "203FC8BEC9BD1151FDE15186A888AEDD5BAEB1FB598F9B526FCB672662244975"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D3439AC9DE384EC0930AA2727BA4740FCBE2602844278107AC01EF8653555D25"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "A91F480518773D1B4CD37314390798E046D6B04CF4372E0C0776AC4C030133E7"
+        }
+      ]
+    },
+    {
+      "name": "p5-motion-persistent-rescue-20261016",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\p5-motion-persistent-rescue-20261016",
+      "scope": "preceding mutual rescue; native Spa/Unn exits; Watchers -> Uumuu; Modding API JSON roundtrip",
+      "bothPassed": true,
+      "strictLogGatePassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "253A1B78E7F66447BAB1316034B4B337D2D764C0394537DA6659837A65BDCC74"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "DEA3B94EE1724B76537020A1457C1770BDB1E9548571CCA9B1CCC4325C77B406"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "4259A64FC4AAB08B240128239C96D191DCED6A83B8F3509A1C31A9A22325B77E"
+        }
+      ]
+    },
+    {
+      "name": "p5-motion-persistent-final-20261016",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\p5-motion-persistent-final-20261016",
+      "scope": "preceding mutual rescue; native Spa/Unn exits; Watchers -> Uumuu; Unity interpolation/child takeover; saved history rehost",
+      "bothPassed": true,
+      "strictLogGatePassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7CEA364EC108BB44535A2EFC316A96E28FB975BA672773A7C6900A5444D7FD4C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "FB9D007786B242A1ADC2AF04B43384A41B09EF3D54B58814EBFCEB42D70ED918"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "4259A64FC4AAB08B240128239C96D191DCED6A83B8F3509A1C31A9A22325B77E"
+        }
+      ]
+    },
+    {
+      "name": "replica-grimm-motion-hc11-20261016",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\replica-grimm-motion-hc11-20261016",
+      "scope": "native fireballs/firebats; later entrant replica movement",
+      "bothPassed": true,
+      "strictLogGatePassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "326F94DA1FC062B1887F980EB1C6F5648FAD43840B4DBAD347C6DCE8BD704110"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "2A6C3E5A026205BCE59871A8611EF252BE8366E94991469B44928B40ADC03B05"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "4259A64FC4AAB08B240128239C96D191DCED6A83B8F3509A1C31A9A22325B77E"
+        }
+      ]
+    }
+  ],
+  "currentBinaryLocationsVerified": [
+    "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HKMP.dll",
+    "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.dll",
+    "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.Core.dll",
+    "E:\\projects\\hollowConnect\\tests\\Smoke\\bin\\Release\\net472\\HKMP.dll",
+    "E:\\projects\\hollowConnect\\tests\\Smoke\\bin\\Release\\net472\\HollowConnect.dll",
+    "E:\\projects\\hollowConnect\\tests\\Smoke\\bin\\Release\\net472\\HollowConnect.Core.dll",
+    "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HKMP.dll",
+    "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HollowConnect.dll",
+    "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HollowConnect.Core.dll",
+    "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HKMP.dll",
+    "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HollowConnect.dll",
+    "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HollowConnect.Core.dll"
+  ],
+  "buildNote": "Runtime binaries built from working source at HEAD 404a265 before source commits. Each run retains its own hashes. Newline normalization changed source/PDB checksums between the last P5 run and Grimm run; no behavioral edits. Do not claim all runs share one hash.",
+  "savedBoard": {
+    "storage": "Modding ILocalSettings: user{slot}.modded.json / HollowConnect / Deaths",
+    "keys": "names",
+    "merge": "maximum absolute cumulative count",
+    "perDeathSaveGame": false,
+    "saveAt": "normal native save times",
+    "sameName": "merged",
+    "renames": "new row",
+    "historyBackfill": false
+  },
+  "p5": {
+    "userReport": "All return to fifth-door entrance after Watchers; separate nearby entry, no F8/disconnect/death this boss; earlier rescues.",
+    "reproduced": false,
+    "fixed": false,
+    "testStartIndex": 28,
+    "nextScene": "GG_Uumuu_V",
+    "fullPantheonTested": false
+  },
+  "grimm": {
+    "nativeLaunches": 72,
+    "forceAndCoroutinePreserved": 72,
+    "movingFireballs": 72,
+    "movingFirebats": 15
+  },
+  "retainedFailures": [
+    {
+      "path": ".test-results/p5-motion-deaths-current-20261016",
+      "cause": "fixture passed write-only Packet to receiver; recreated readable Packet in fixture"
+    },
+    {
+      "path": ".test-results/motion-deaths-persistent-selected-20261016.log",
+      "cause": "non-Unity test constructed Mod and hit native ECall; moved actual API check into Unity"
+    }
+  ],
+  "limitations": [
+    "No full fifth pantheon or real multi-machine FRP coverage",
+    "No full disconnect/takeover regression matrix",
+    "Six historical bugs remain open; new P5 report remains unresolved",
+    "Separate mod JSON callbacks verified; no personal save or daily uninstall test performed"
+  ],
+  "smokeDisabled": true
+}
