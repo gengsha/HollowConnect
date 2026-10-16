@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hkmp.Fsm;
 using Hkmp.Networking.Client;
 using Hkmp.Networking.Packet;
 using Hkmp.Networking.Packet.Data;
@@ -18,11 +19,17 @@ internal sealed class CombatStateComponent : EntityComponent {
         internal Renderer[] Renderers;
         internal DamageHero[] Damage;
         internal tk2dBaseSprite[] Sprites;
+        internal tk2dSpriteAnimator[] Animators;
+        internal float[] AnimationTimes;
+        internal string[] AnimationClips;
+        internal PositionInterpolation Motion;
         internal ParticleSystem[] Particles;
         internal MaterialPropertyBlock[] Blocks;
         internal Parts(Transform t) {
             Transform=t;Colliders=t.GetComponents<Collider2D>();Renderers=t.GetComponents<Renderer>();
             Damage=t.GetComponents<DamageHero>();Sprites=t.GetComponents<tk2dBaseSprite>();Particles=t.GetComponents<ParticleSystem>();
+            Animators=Sprites.Select(s=>s.GetComponent<tk2dSpriteAnimator>()).ToArray();
+            AnimationTimes=new float[Sprites.Length];AnimationClips=new string[Sprites.Length];
             Blocks=new MaterialPropertyBlock[Renderers.Length];for(var i=0;i<Blocks.Length;i++)Blocks[i]=new MaterialPropertyBlock();
         }
     }
@@ -48,6 +55,8 @@ internal sealed class CombatStateComponent : EntityComponent {
         // Otherwise a refresh can discard the last "gone" update and leave
         // a roar wave or other effect frozen on the replica.
         if(old!=null){var live=new HashSet<string>(nodes.Select(n=>n.Path));nodes=nodes.Concat(old.Where(n=>n.Host.Transform==null&&!live.Contains(n.Path))).Take(256).ToArray();}
+        // Keep presentation history and animation progress across the periodic rebuild.
+        if(old!=null)foreach(var n in nodes){var prior=old.FirstOrDefault(p=>p.Path==n.Path);if(prior?.Client?.Transform==n.Client?.Transform)n.Client=prior?.Client;}
         lookup.Clear();
         foreach(var n in nodes)lookup[n.Path]=n;
         rebuild=Time.unscaledTime+2;
@@ -57,6 +66,7 @@ internal sealed class CombatStateComponent : EntityComponent {
         if(nodes==null)return;
         foreach(var n in nodes){
             if(n.Host?.Transform==null||n.Client?.Transform==null)continue;
+            n.Client.Motion?.Flush();
             var source=n.Client.Transform;var target=n.Host.Transform;
             var parentKey=EntityReferences.Capture(source.parent==null?null:source.parent.gameObject);
             var parent=EntityReferences.Resolve(parentKey,false);
@@ -104,9 +114,12 @@ internal sealed class CombatStateComponent : EntityComponent {
                 var d=h.Damage[k];p.Write(d!=null&&d.enabled);p.Write(d==null?0:d.damageDealt);p.Write(d==null?1:d.hazardType);p.Write(d!=null&&d.shadowDashHazard);
             }
             p.Write(Count(h.Sprites));for(var k=0;k<Count(h.Sprites);k++){
-                // Root animation is replayed separately; Update only applies
-                // child frame IDs. Unused root frames must not resend hitboxes.
+                // Root animation has its own stream; only child clips/frames belong here.
+                // Random clips retain authoritative frame selection.
                 var s=h.Sprites[k];p.Write(s==null||n.Path.Length==0?-1:s.spriteId);WriteColor(p,s==null?Color.white:s.color);
+                var a=h.Animators[k];var animated=n.Path.Length!=0&&a!=null&&a.enabled&&a.Playing&&a.CurrentClip!=null&&a.CurrentClip.fps>0&&a.CurrentClip.wrapMode!=tk2dSpriteAnimationClip.WrapMode.RandomFrame&&a.CurrentClip.wrapMode!=tk2dSpriteAnimationClip.WrapMode.RandomLoop;
+                p.Write(animated);
+                if(animated){p.Write(a.CurrentClip.name);p.Write(a.ClipTimeSeconds);p.Write(a.ClipFps);}
             }
             p.Write(Count(h.Particles));for(var k=0;k<Count(h.Particles);k++){var ps=h.Particles[k];p.Write(ps!=null&&ps.isPlaying);p.Write(ps!=null&&ps.isEmitting);}
         }
@@ -142,11 +155,16 @@ internal sealed class CombatStateComponent : EntityComponent {
                 if(parentKey.Length!=0&&parent==null)return;
                 if(parent!=null&&(parent.transform==b.Transform||parent.transform.IsChildOf(b.Transform)))return;
                 if(path.Length==0){
-                    b.Transform.SetParent(parent==null?null:parent.transform,true);
+                    var rootParent=parent==null?null:parent.transform;
+                    if(b.Transform.parent!=rootParent){b.Transform.GetComponent<PositionInterpolation>()?.Flush();b.Transform.SetParent(rootParent,true);}
                     b.Transform.eulerAngles=rot;return;
                 }
-                b.Transform.SetParent(parent==null?null:parent.transform,false);
-                b.Transform.localPosition=pos;b.Transform.localEulerAngles=rot;b.Transform.localScale=scale;
+                var targetParent=parent==null?null:parent.transform;
+                var reparented=b.Transform.parent!=targetParent;
+                if(reparented){b.Motion?.Flush();b.Transform.SetParent(targetParent,false);}
+                b.Motion??=b.Transform.GetComponent<PositionInterpolation>()??b.Transform.gameObject.AddComponent<PositionInterpolation>();
+                b.Motion.Smooth=true;b.Motion.SetNewPosition(pos,snapshot||reparented||!active);
+                b.Transform.localEulerAngles=rot;b.Transform.localScale=scale;
                 b.Transform.gameObject.SetActive(active);
             }
             var cs=ReadCount(p);for(var k=0;k<cs;k++){
@@ -168,9 +186,26 @@ internal sealed class CombatStateComponent : EntityComponent {
             }
             var ss=ReadCount(p);for(var k=0;k<ss;k++){
                 var frame=p.ReadInt();var color=ReadColor(p);if(frame< -1||frame>65535)throw new FormatException("Invalid sprite frame");
-                // Root animations use EntityUpdate; child FSMs are disabled.
+                var animated=p.ReadBool();var clipName=animated?p.ReadString():"";
+                if(clipName.Length>128)throw new FormatException("Invalid child animation");
+                var clipTime=animated?ReadFloat(p,1000000):0;var fps=animated?ReadFloat(p,1000):0;
+                if(clipTime<0||fps<0)throw new FormatException("Invalid child animation timing");
+                // Root clips have their own event stream. Child clips advance
+                // every rendered frame; snapshots must not rewind them at 20Hz.
                 if(n?.Client==null||k>=n.Client.Sprites.Length||n.Client.Sprites[k]==null)continue;
-                var s=n.Client.Sprites[k];s.color=color;if(path.Length!=0&&frame>=0&&s.Collection!=null&&frame<s.Collection.spriteDefinitions.Length){var a=s.GetComponent<tk2dSpriteAnimator>();if(a!=null)a.enabled=false;s.spriteId=frame;}
+                var b=n.Client;var s=b.Sprites[k];s.color=color;
+                if(path.Length==0)continue;
+                var a=b.Animators[k];var clip=animated&&a!=null?a.GetClipByName(clipName):null;
+                if(clip!=null&&clip.frames!=null&&clip.frames.Length!=0){
+                    // Cloned callbacks belong to gameplay; this player runs only the visual clip.
+                    a.AnimationCompleted=null;a.AnimationEventTriggered=null;a.playAutomatically=false;a.enabled=true;
+                    if(snapshot||b.AnimationClips[k]!=clipName||clipTime+.01f<b.AnimationTimes[k]||!a.Playing)
+                        a.Play(clip,clipTime,fps);
+                    a.ClipFps=fps;b.AnimationClips[k]=clipName;b.AnimationTimes[k]=clipTime;
+                }else{
+                    if(a!=null)a.Stop();b.AnimationClips[k]=null;b.AnimationTimes[k]=0;
+                    if(frame>=0&&s.Collection!=null&&frame<s.Collection.spriteDefinitions.Length)s.spriteId=frame;
+                }
             }
             var ps=ReadCount(p);for(var k=0;k<ps;k++){
                 var playing=p.ReadBool();var emitting=p.ReadBool();if(n?.Client==null||k>=n.Client.Particles.Length||n.Client.Particles[k]==null)continue;

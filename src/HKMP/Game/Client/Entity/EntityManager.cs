@@ -242,7 +242,7 @@ internal class EntityManager {
         }
 
         if (entityUpdate.UpdateTypes.Contains(EntityUpdateType.Position)) {
-            entity.UpdatePosition(entityUpdate.Position);
+            entity.UpdatePosition(entityUpdate.Position, alreadyInSceneUpdate);
         }
 
         if (entityUpdate.UpdateTypes.Contains(EntityUpdateType.Scale)) {

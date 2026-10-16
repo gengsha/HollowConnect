@@ -1,76 +1,53 @@
-#define no_interpolation
-
-#if !no_interpolation
-using System.Collections;
-#endif
 using UnityEngine;
 
 namespace Hkmp.Fsm;
 
-/// <summary>
-/// MonoBehaviour for interpolating position between position updates.
-/// </summary>
-internal class PositionInterpolation : MonoBehaviour {
-#if !no_interpolation
-        /// <summary>
-        /// The duration between interpolation of positions.
-        /// </summary>
-        private const float Duration = 1f / 60f;
-
-        /// <summary>
-        /// The last coroutine for interpolation.
-        /// </summary>
-        private Coroutine _lastCoroutine;
-
-        /// <summary>
-        /// Whether this is the first update.
-        /// </summary>
-        private bool _firstUpdate;
-
-        public void Start() {
-            _firstUpdate = true;
+// Presentation follows a short history of authoritative positions. Never run
+// a second AI, extrapolate a projectile through a wall, or smooth a teleport.
+internal sealed class PositionInterpolation : MonoBehaviour {
+    internal bool Smooth;
+    private readonly PositionHistory history = new();
+    private void LateUpdate() {
+        if (Smooth && history.HasSamples) transform.localPosition = history.Evaluate(Time.time);
+    }
+    public void SetNewPosition(Vector3 position, bool immediate = false) {
+        if (!Smooth || immediate || !gameObject.activeInHierarchy) {
+            history.Clear(); transform.localPosition = position; return;
         }
-#endif
+        if (history.Add(position, Time.time)) transform.localPosition = position;
+    }
+    internal void Flush() {
+        if (history.HasSamples) transform.localPosition = history.Latest;
+        history.Clear();
+    }
+    private void OnDisable() => Flush();
+}
 
-    /// <summary>
-    /// Set the new position to interpolate to.
-    /// </summary>
-    /// <param name="newPosition">The new position as Vector3.</param>
-    public void SetNewPosition(Vector3 newPosition) {
-#if no_interpolation
-        transform.localPosition = newPosition;
-#else
-            if (_firstUpdate) {
-                transform.localPosition = newPosition;
-
-                _firstUpdate = false;
-                return;
-            }
-
-            if (_lastCoroutine != null) {
-                StopCoroutine(_lastCoroutine);
-            }
-
-            _lastCoroutine = StartCoroutine(LerpPosition(newPosition, Duration));
+// Fixed storage; several updates dispatched in one frame share one sample.
+internal sealed class PositionHistory {
+    internal const float Delay = .05f;
+    private readonly Vector3[] positions = new Vector3[8];
+    private readonly float[] times = new float[8];
+    private int count;
+    internal bool HasSamples => count != 0;
+    internal Vector3 Latest => positions[count - 1];
+    internal void Clear() => count = 0;
+    internal bool Add(Vector3 position, float time) {
+        if (count == 0 || time - times[count - 1] > .25f || (position - Latest).sqrMagnitude > 64f) {
+            count = 1; positions[0] = position; times[0] = time; return true;
         }
-
-        /// <summary>
-        /// Lerp the position of this instance to the target position over the given duration.
-        /// </summary>
-        /// <param name="targetPosition">The target position as Vector3.</param>
-        /// <param name="duration">The duration as float.</param>
-        /// <returns>An enumerator for this coroutine.</returns>
-        private IEnumerator LerpPosition(Vector3 targetPosition, float duration) {
-            var time = 0f;
-            var startPosition = transform.localPosition;
-
-            while (time < duration) {
-                transform.localPosition = Vector3.Lerp(startPosition, targetPosition, time / duration);
-                time += Time.deltaTime;
-                yield return null;
-            }
-
-            transform.localPosition = targetPosition;
-#endif
+        if (time <= times[count - 1]) { positions[count - 1] = position; return false; }
+        if (count == positions.Length) RemoveFirst();
+        positions[count] = position; times[count++] = time; return false;
+    }
+    internal Vector3 Evaluate(float now) {
+        var time = now - Delay;
+        while (count > 1 && times[1] <= time) RemoveFirst();
+        if (count == 1 || time <= times[0]) return positions[0];
+        return Vector3.Lerp(positions[0], positions[1], (time - times[0]) / (times[1] - times[0]));
+    }
+    private void RemoveFirst() {
+        for (var i = 1; i < count; i++) { positions[i - 1] = positions[i]; times[i - 1] = times[i]; }
+        count--;
     }
 }

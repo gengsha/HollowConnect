@@ -239,7 +239,7 @@ internal class Entity {
             $"Entity '{Object.Host.name}' was original active: {_originalIsActive}, last active: {_lastIsActive}");
 
         // Add a position interpolation component to the enemy so we can smooth out position updates
-        Object.Client.AddComponent<PositionInterpolation>();
+        Object.Client.AddComponent<PositionInterpolation>().Smooth = true;
 
         // Register an update event to send position updates and check for certain value changes
         MonoBehaviourUtil.Instance.OnUpdateEvent += OnUpdate;
@@ -309,7 +309,7 @@ internal class Entity {
             // Unknown native projectile controllers must not integrate motion
             // on top of the authority's transforms. DamageHero stays local.
             foreach (var script in Object.Client.GetComponents<MonoBehaviour>()) {
-                if (script == null || script is HealthManager || script is DamageHero || script is EnemyDeathEffects || script is PlayMakerFSM) continue;
+                if (script == null || script is HealthManager || script is DamageHero || script is EnemyDeathEffects || script is PlayMakerFSM || script is tk2dSpriteAnimator) continue;
                 if (script.GetType().Assembly == typeof(HealthManager).Assembly) { script.StopAllCoroutines(); script.enabled = false; }
             }
         }
@@ -1176,6 +1176,8 @@ internal class Entity {
             return;
         }
 
+        Object.Client.GetComponent<PositionInterpolation>()?.Flush();
+
         if (_hasParent) {
             Logger.Debug("  Entity has parent, only setting local transform");
 
@@ -1338,7 +1340,8 @@ internal class Entity {
     /// Updates the position of the client entity.
     /// </summary>
     /// <param name="position">The new position.</param>
-    public void UpdatePosition(Vector2 position) {
+    /// <param name="snapshot">Place scene-entry snapshots immediately.</param>
+    public void UpdatePosition(Vector2 position, bool snapshot = false) {
         if (Object.Client == null || Object.Host == null) {
             Logger.Warn($"Cannot update position for entity ({Id}, {Type}), client or host object is null");
             return;
@@ -1356,7 +1359,7 @@ internal class Entity {
         }
 
         if (Object.Client.transform.parent != null) unityPos = Object.Client.transform.parent.InverseTransformPoint(unityPos);
-        positionInterpolation.SetNewPosition(unityPos);
+        positionInterpolation.SetNewPosition(unityPos, snapshot);
     }
 
     /// <summary>
