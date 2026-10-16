@@ -113,10 +113,14 @@ public sealed partial class RescueProbe {
                     yield return Until(() => hero.cState.onGround && hero.acceptingInput, "rescued knight stands on native support " + step);
                     Check(!hero.GetComponent<Renderer>().forceRenderingOff, "rescued knight is visible " + step);
                     pd.SetInt("health", 2); hero.takeNoDamage = false;
-                    hero.TakeDamage(null, GlobalEnums.CollisionSide.left, 1, 1);
+                    // Recoil into the platform, so the expiry test does not
+                    // deliberately throw the actor out of the dream arena.
+                    hero.TakeDamage(null, GlobalEnums.CollisionSide.right, 1, 1);
                     Check(pd.health == 1 && !runtime.Down, "normal damage works after protection expires " + step);
                     hero.takeNoDamage = true;
                     yield return Until(() => !hero.cState.invulnerable && !hero.cState.recoiling, "native test hit finishes " + step);
+                    yield return Until(() => hero.cState.onGround && !GameManager.instance.IsInSceneTransition,
+                        "native expiry hit settles on support " + step);
                     Check(pd.GetInt("geo") == 321 && pd.GetInt("geoPool") == 67 && pd.GetString("shadeScene") == "Crossroads_10" &&
                         pd.GetFloat("shadePositionX") == 9 && pd.GetFloat("shadePositionY") == 13, "rescue preserves earlier personal shade and geo " + step);
                 } else {
@@ -145,6 +149,12 @@ public sealed partial class RescueProbe {
                 yield return Together(step + ".complete");
                 Log("NATIVE ROOM " + step + " actual=" + GameManager.instance.sceneName + " hero=" + hero.transform.position);
                 Check(GameManager.instance.sceneName == scene, "native rescue stays in current room " + step);
+                // The expiry check deliberately applies real recoil beside a
+                // ledge. Park both test actors on the native entry support so
+                // that recoil cannot cause a later, unrelated dream fall.
+                hero.transform.position = entry; body.velocity = Vector2.zero;
+                Physics2D.SyncTransforms();
+                yield return Together(step + ".parked");
             }
         }
     }
