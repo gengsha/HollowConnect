@@ -187,7 +187,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         On.HutongGames.PlayMaker.Actions.DestroyObject.OnEnter += (orig,a)=>{ Mark("NATIVE DESTROY "+Describe(a.gameObject.Value)+" from="+a.Fsm?.GameObject?.name+"/"+a.Fsm?.Name+"/"+a.State?.Name); orig(a); };
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += (orig,f,e,d)=>{ if(f.GameObject!=null&&f.GameObject.name.Contains("Mega Jellyfish"))Mark("UUMUU EVENT "+f.GameObject.name+"/"+f.Name+"/"+e?.Name+" active="+f.Active+" state="+f.ActiveStateName);orig(f,e,d); };
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager,"_modSettings").AuthKey=Hkmp.Util.AuthUtil.GenerateAuthKey();
-        CoopMod.Settings.ShareProgress=false;
+        CoopMod.Settings.ShareProgress=Environment.GetEnvironmentVariable("HOLLOWCONNECT_CLIFFS_INTERIOR_CHECK") == "1";
         PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved Town");
@@ -244,6 +244,8 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
             if (geometryTrace) TraceSceneGeometry();
+            if (scene == "Fungus1_28" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_CLIFFS_INTERIOR_CHECK") == "1")
+                yield return CliffsInteriorCheck(round);
             if (performance && !manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1")
                 yield return Until(() => compressedInitialSnapshots > 0, "compressed cached room snapshot " + scene);
             if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") == "1")

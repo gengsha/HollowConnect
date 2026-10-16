@@ -7,11 +7,12 @@
     "role": "guest",
     "hostPresence": "reported with and without host in the affected room",
     "location": "indoor passage at lower right of the large western Howling Cliffs room; exact scene unknown",
-    "symptom": "intended room appears overlapped with unknown terrain; path blocked"
+    "symptom": "intended room appears overlapped with unknown terrain; path blocked",
+    "latestLayoutClue": "我最后的印象是,往右走进入一个房间,右边有一个毫无难度的毛毛虫,虫子左边有一个向下的路,路左边有宝箱,但向下走被重叠的地图挡住了"
   },
   "productionSourceChanged": false,
   "existingPackagesChanged": false,
-  "regressionScope": "Test-plugin changes only: compile and three focused same-machine two-client diagnostics; no full production regression rerun.",
+  "regressionScope": "Test-plugin changes only: compile without rebuilding production references, three earlier entry diagnostics plus two focused shared-progress interior diagnostics. No full production regression rerun.",
   "runs": [
     {
       "run": "cliffs-geometry-017-valid-20261016",
@@ -130,11 +131,146 @@
   "limitations": [
     "Batch-mode in-memory characters; no personal save loaded or written.",
     "Original TransitionPoint trigger invoked with the local hero collider, not a physical walk through every passage.",
-    "No user screenshot or logs from the actual failure; exact room and prior gameplay history unknown.",
-    "Entry-time scene names and collider bounds do not prove every rendered image or every in-room route is correct.",
-    "Shared-progress changes, F8, death, reconnect and long-session combinations were not recreated in these diagnostics.",
+    "Interior tests place the hero above two native openings and require natural falling; they do not walk the full route from the entrance or validate full rendering.",
+    "No user screenshot or logs from the actual failure; Fungus1_28 remains a candidate rather than a user-confirmed room.",
+    "The two interior diagnostics enable shared progress, one authority nail input, and a guest reentry; they do not recreate the prior long play session, grub rescue, F8, death or reconnect combinations.",
     "Successful diagnostics do not resolve the reported obstruction."
   ],
   "nextEvidence": "At the actual obstruction, capture the room image and both clients ModLog.txt and Player.log before restarting; compare loaded scenes and terrain ownership/paths.",
-  "smokeDisabledAfterRuns": true
+  "smokeDisabledAfterRuns": true,
+  "candidateRoom": {
+    "scene": "Fungus1_28",
+    "confirmedByUser": false,
+    "reason": "Only checked Howling Cliffs interior candidate with both a native Grub Bottle and Chest; native relative layout is not an exact match to all recalled directions.",
+    "nativeLandmarks": {
+      "Grub Bottle": [
+        87.01,
+        52.54
+      ],
+      "Chest": [
+        77.93,
+        30.68
+      ]
+    },
+    "testedPassages": [
+      {
+        "label": "left of grub",
+        "start": [
+          73,
+          54.5
+        ],
+        "mustFallBelowY": 32
+      },
+      {
+        "label": "inside opened chest",
+        "start": [
+          77.93,
+          32
+        ],
+        "mustFallBelowY": 14
+      }
+    ],
+    "nativeChestDesign": "Closed Chest covers a shaft; opening disables the closed collider and enables the Opened side colliders.",
+    "asset": {
+      "path": "hollow_knight_Data/level155",
+      "sha256": "A9F49365D6720DD3E90A795F74C9F1DADE05816FB0E408419080CF47C56FB625"
+    }
+  },
+  "interiorRuns": [
+    {
+      "run": "cliffs-interior-017-native-hit-20261016",
+      "status": "interior-checks-complete-no-reproduction",
+      "shareProgress": true,
+      "guestWasSceneAuthority": false,
+      "hostStaysInTown": false,
+      "guestSceneSequence": [
+        "Cliffs_01",
+        "Fungus1_28"
+      ],
+      "guestNaturalPassages": [
+        "left of grub",
+        "inside opened chest"
+      ],
+      "hostNaturalPassages": [
+        "left of grub",
+        "inside opened chest"
+      ],
+      "guestChestStates": [
+        "Opened"
+      ],
+      "openedBy": "host native nail input; both chests observed open",
+      "sampledLoadedScenes": [
+        "Cliffs_01",
+        "Fungus1_28"
+      ],
+      "pairedUnownedTerrainPathsAndBoundsEqual": true,
+      "strictLogsPassedAfterStop": true,
+      "bothNormalNetworkShutdown": true,
+      "productionBinaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7D2484A1EA6269C218A72C37BB1EE2439713A717E0B39D15CF08D44D2DC4B147"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F0480EDBCD10615524A5EE6D1D27C21CB8CEF020CB3E8F2EC65F96A747AF1C48"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "49167F80288794142D7AF335AB26063037A5D81311972C38193CBD9983016BCD"
+        }
+      ]
+    },
+    {
+      "run": "cliffs-interior-017-guest-alone-20261016",
+      "status": "interior-checks-complete-no-reproduction",
+      "shareProgress": true,
+      "guestWasSceneAuthority": true,
+      "hostStaysInTown": true,
+      "guestSceneSequence": [
+        "Cliffs_01",
+        "Fungus1_28",
+        "Cliffs_01",
+        "Fungus1_28"
+      ],
+      "guestNaturalPassages": [
+        "left of grub",
+        "inside opened chest",
+        "left of grub",
+        "inside opened chest"
+      ],
+      "hostNaturalPassages": [],
+      "guestChestStates": [
+        "Opened",
+        "Activated"
+      ],
+      "openedBy": "guest native nail input; native persistent state used on reentry",
+      "sampledLoadedScenes": [
+        "Cliffs_01",
+        "Fungus1_28"
+      ],
+      "pairedUnownedTerrainPathsAndBoundsEqual": null,
+      "strictLogsPassedAfterStop": true,
+      "bothNormalNetworkShutdown": true,
+      "productionBinaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7D2484A1EA6269C218A72C37BB1EE2439713A717E0B39D15CF08D44D2DC4B147"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F0480EDBCD10615524A5EE6D1D27C21CB8CEF020CB3E8F2EC65F96A747AF1C48"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "49167F80288794142D7AF335AB26063037A5D81311972C38193CBD9983016BCD"
+        }
+      ]
+    }
+  ],
+  "rejectedInteriorRun": {
+    "run": "cliffs-interior-017-pair-20261016",
+    "reason": "Probe used HitTaker.Hit, but this native chest listens for nail-layer Trigger2dEventLayer / NAIL HIT. Neither chest opened; both timed out. This is invalid chest stimulation, not a production failure. Left-of-grub drops were observed; this run is excluded from acceptance.",
+    "recovery": "Preserved failed markers and logs. Switched only the test stimulus to actual native attack input and retained original passage assertions."
+  }
 }
