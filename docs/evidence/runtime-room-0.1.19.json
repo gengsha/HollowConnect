@@ -4,7 +4,7 @@
   "releaseReady": false,
   "retestOmitted": true,
   "userRequest": "直接打包我需要测试这一项功能",
-  "recordedAtUtc": "2026-10-16T15:50:01.447773+00:00",
+  "recordedAtUtc": "2026-10-16T15:57:08.283548+00:00",
   "runs": [],
   "scope": "Compile and package-integrity checks only for user testing of movement/animation smoothing. No game, regression or installer tests repeated for this packaging request.",
   "previousValidationSource": "docs/evidence/boss-motion-p5-deaths-2026-10-16.json",
@@ -26,5 +26,23 @@
   ],
   "installed": false,
   "realTwoMachineFrp": false,
-  "productionChangeSinceValidation": "No gameplay or protocol logic changed since the recorded 0.1.19 development checks. Rebuilt assembly metadata/hashes belong to this package only; earlier runs retain their own hashes."
+  "productionChangeSinceValidation": "No gameplay or protocol logic changed since the recorded 0.1.19 development checks. Rebuilt assembly metadata/hashes belong to this package only; earlier runs retain their own hashes.",
+  "buildCommit": "e34ba2b4ac8e24c3c5fd93f831713b316a11ed65",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "9202C83DA507CAB28922D7E3AE6FED85747863F513D4EB4A5DCB3FC0F647BEF4",
+      "productVersion": "1.0.0+e34ba2b4ac8e24c3c5fd93f831713b316a11ed65"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "F01D86DA83E74BBA49FC7F1F1EEF6A04A123AC1F5494C204B9646538E2B58D2C",
+      "productVersion": "1.0.0+e34ba2b4ac8e24c3c5fd93f831713b316a11ed65"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "96A1371F553F161D406F2C1659DBCF3157D7EE7756AAB5BE61F45F15B9B93B29",
+      "productVersion": "1.0.0+e34ba2b4ac8e24c3c5fd93f831713b316a11ed65"
+    }
+  ]
 }
