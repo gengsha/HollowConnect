@@ -4,7 +4,7 @@
 
 竞技场专项使用 `Run-Colosseum.ps1 -RunName <全新名称> -Trial Bronze -First guest -Case return -Wait`。该入口复用现有隔离副本，不构建生产、不删除旧证据；若指定副本仍运行会直接拒绝。`Complete-Colosseum.ps1` 要求双方完成和正常网络退出，仅停止两个确切隔离路径的进程，等待退出后检查严格日志及生产 DLL 哈希。
 
-`Case` 可选 `entry`、`return`、`late`、`bench`、`native`、`lifecycle`、`bounds`、`bounds-baseline` 或只读 `inspect`；三档试炼和两种先入顺序独立选择。`lifecycle` 检查双方轮流断线接管、同房重连、实际换个人长椅和再次报名；首次城镇标题需经过原生 Inert 周期后再坐椅。`bounds` 是独立的真实 PlayMaker 快照边界/字符串夹具，使用未联网的测试 NetClient；`bounds-baseline -EnginePath <旧HKMP.dll>` 明确要求旧引擎出现越界，不计修正通过。测试角色已解锁试炼，尚不覆盖首次付费或逐波通关。仅改插件时构建加 `-p:BuildProjectReferences=false`。
+`Case` 可选 `entry`、`return`、`wipe`、`late`、`bench`、`native`、`lifecycle`、`bounds`、`bounds-baseline` 或只读 `inspect`；三档试炼和两种先入顺序独立选择。`wipe` 不按 F6，检查双方死亡后自动完成一次重试。`lifecycle` 检查双方轮流断线接管、同房重连、实际换个人长椅和再次报名；首次城镇标题需经过原生 Inert 周期后再坐椅。`bounds` 是独立的真实 PlayMaker 快照边界/字符串夹具，使用未联网的测试 NetClient；`bounds-baseline -EnginePath <旧HKMP.dll>` 明确要求旧引擎出现越界，不计修正通过。测试角色已解锁试炼，尚不覆盖首次付费或逐波通关。仅改插件时构建加 `-p:BuildProjectReferences=false`。
 
 `coverage` 配合 `HOLLOWCONNECT_SCENE_GEOMETRY_TRACE=1` 定向调查叠图：记录已加载场景、地形碰撞体路径/边界及入口，不修改或卸载地形。悬崖行程可设 `HOLLOWCONNECT_COVERAGE_SCENES=Cliffs_01,Cliffs_06,Cliffs_01,Fungus1_28,Cliffs_01,Cliffs_04,Cliffs_05,Cliffs_04,Cliffs_01`。先完成原生长椅起身，从 Town 通过有效的 `Cliffs_01/right3` 入口建立起点；后续有相邻入口时，将本机角色碰撞体交给原生 `TransitionPoint.OnTriggerEnter2D`，不是实际操控走过全房。`HOLLOWCONNECT_GEOMETRY_GUEST_ALONE=1` 让房主始终留在 Town，由副机独自往返；默认双方依次进房。输出只证明采样时的场景/碰撞体状态，不等于复现或修复用户的叠图，也不覆盖完整渲染和长时间游玩历史。
 

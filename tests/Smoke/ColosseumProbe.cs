@@ -199,7 +199,7 @@ public sealed class ColosseumProbe : MonoBehaviour {
         RequireCheckpoint();
         Dump("trial"); Flag(role + "." + readyMarker);
         yield return Until(() => Has((host ? "guest" : "host") + "." + readyMarker), "both players trial observations recorded");
-        if (testCase == "return") yield return PersonalReturns();
+        if (testCase is "return" or "wipe") yield return PersonalReturns(testCase == "wipe");
     }
     private IEnumerator CheckpointLifecycle() {
         var manager = Field<Hkmp.Game.Client.Entity.EntityManager>(engine.ClientManager, "_entityManager");
@@ -256,15 +256,18 @@ public sealed class ColosseumProbe : MonoBehaviour {
         Flag(role + ".reentry-hall"); yield return NormalEntry("reentry-arena-ready");
         Require(pd.GetInt("geo") == 10000 && !pd.GetBool("soulLimited"), "checkpoint lifecycle has no death penalty");
     }
-    private IEnumerator PersonalReturns() {
+    private IEnumerator PersonalReturns(bool teamWipe) {
         var peer = host ? "guest" : "host";
-        if (role == first) yield return Until(() => Has(peer + ".returned"), "non-authority completed personal return", 85);
+        if (!teamWipe && role == first) yield return Until(() => Has(peer + ".returned"), "non-authority completed personal return", 85);
         var pd = PlayerData.instance; var checkpoint = pd.GetString("respawnScene");
+        if (teamWipe) runtime.KeyPressed = _ => false;
         pd.SetInt("health", 0);
         HeroController.instance.StartCoroutine((IEnumerator)typeof(HeroController).GetMethod("Die", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(HeroController.instance, null));
-        yield return Until(() => runtime.Down, "native lethal death enters co-op down");
-        var pressed = false; runtime.KeyPressed = key => key == KeyCode.F6 && !pressed && (pressed = true);
-        yield return Until(() => !runtime.Down && !runtime.Returning && ActiveScene == checkpoint && HeroController.instance.isHeroInPosition &&
+        yield return Until(() => runtime.Down || teamWipe && runtime.Resetting, "native lethal death enters co-op down or team wipe");
+        if (!teamWipe) {
+            var pressed = false; runtime.KeyPressed = key => key == KeyCode.F6 && !pressed && (pressed = true);
+        }
+        yield return Until(() => !runtime.Down && !runtime.Returning && !runtime.Resetting && ActiveScene == checkpoint && HeroController.instance.isHeroInPosition &&
             !GameManager.instance.IsInSceneTransition, "formal death reaches recorded checkpoint", 75);
         runtime.KeyPressed = _ => false;
         Require(pd.GetInt("geo") == 0 && pd.GetInt("geoPool") == 10000 && pd.GetBool("soulLimited"), "one native personal death penalty");
@@ -275,6 +278,7 @@ public sealed class ColosseumProbe : MonoBehaviour {
         yield return Until(() => !pd.GetBool("atBench") && HeroController.instance.acceptingInput && !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "return native get up and input");
         Log("OBSERVED PERSONAL RETURN " + ActiveScene + " checkpoint=" + checkpoint); Flag(role + ".returned");
         yield return Until(() => Has(peer + ".returned"), "both actual personal returns observed", 85);
+        if (teamWipe) Require(Hkmp.CoopContext.Epoch == 1, "full-team death completes exactly one retry round without F6");
     }
     private IEnumerator WalkThroughGate() {
         // Inject horizontal intent after native input sampling. Movement,

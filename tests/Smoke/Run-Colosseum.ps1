@@ -1,6 +1,6 @@
 param([Parameter(Mandatory=$true)][string]$RunName, [ValidateSet('host','guest')][string]$First='host',
     [ValidateSet('Bronze','Silver','Gold')][string]$Trial='Bronze', [bool]$Share=$true,
-    [ValidateSet('inspect','entry','return','late','bench','native','bounds','bounds-baseline','lifecycle')][string]$Case='inspect', [switch]$Wait,
+    [ValidateSet('inspect','entry','return','wipe','late','bench','native','bounds','bounds-baseline','lifecycle')][string]$Case='inspect', [switch]$Wait,
     [string]$EnginePath='')
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
