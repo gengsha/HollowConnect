@@ -19,6 +19,76 @@ namespace HollowConnect.Smoke;
 // Real PlayMaker actions through production Entity.MakeHost. These synthetic
 // objects exercise continuation without setting any boss state or physics.
 internal static class FsmContinuationChecks {
+    internal static IEnumerator SnapshotBounds(Action<string> mark, bool baseline) {
+        var net = new NetClient(new PacketManager());
+        var sources = new List<GameObject>(); var entities = new List<Entity>();
+        try {
+            foreach (var replicaOnly in new[] { true, false }) {
+                var source = new GameObject("HollowConnect snapshot bounds " + replicaOnly); source.SetActive(false); sources.Add(source);
+                var wait = new Wait(); wait.Reset(); wait.time = 1000;
+                var fsm = Create(source, null, wait);
+                void Populate(FsmVariables variables, int count) {
+                    variables.FloatVariables = Enumerable.Range(0, count).Select(i => new FsmFloat("Float" + i) { Value = -1 }).ToArray();
+                    variables.IntVariables = Enumerable.Range(0, count).Select(i => new FsmInt("Int" + i) { Value = -1 }).ToArray();
+                    variables.BoolVariables = Enumerable.Range(0, count).Select(i => new FsmBool("Bool" + i)).ToArray();
+                    variables.StringVariables = Enumerable.Range(0, count).Select(i => new FsmString("String" + i) { Value = "untouched" }).ToArray();
+                    variables.Vector2Variables = Enumerable.Range(0, count).Select(i => new FsmVector2("Vector2" + i)).ToArray();
+                    variables.Vector3Variables = Enumerable.Range(0, count).Select(i => new FsmVector3("Vector3" + i)).ToArray();
+                }
+                Populate(fsm.FsmVariables, replicaOnly ? 0 : 1);
+                var entity = new Entity(net, replicaOnly ? 0xffffffffffffffa0UL : 0xffffffffffffffa1UL, EntityType.DynamicHazard, source);
+                entities.Add(entity); entity.InitializeClient();
+                var replica = entity.Object.Client.GetComponent<PlayMakerFSM>();
+                Populate(replica.FsmVariables, replicaOnly ? 1 : 2);
+                if (!replicaOnly) Populate(fsm.FsmVariables, 2);
+                var data = new EntityHostFsmData();
+                data.Types.UnionWith(new[] { EntityHostFsmData.Type.Floats, EntityHostFsmData.Type.Ints, EntityHostFsmData.Type.Bools,
+                    EntityHostFsmData.Type.Strings, EntityHostFsmData.Type.Vector2s, EntityHostFsmData.Type.Vector3s });
+                var bad = (byte)(replicaOnly ? 0 : 1);
+                data.Floats[bad] = 7; data.Ints[bad] = 7; data.Bools[bad] = true; data.Strings[bad] = "orphan";
+                data.Vec2s[bad] = new Hkmp.Math.Vector2(7, 7); data.Vec3s[bad] = new Hkmp.Math.Vector3(7, 7, 7);
+                if (replicaOnly) {
+                    data.Types.Clear(); data.Types.Add(EntityHostFsmData.Type.Strings);
+                } else {
+                    data.Floats[0] = 3; data.Ints[0] = 4; data.Bools[0] = true; data.Strings[0] = "valid";
+                    data.Vec2s[0] = new Hkmp.Math.Vector2(2, 3); data.Vec3s[0] = new Hkmp.Math.Vector3(2, 3, 4);
+                }
+                var threw = false;
+                try { entity.UpdateHostFsmData(new Dictionary<byte, EntityHostFsmData> { [0] = data }); }
+                catch (IndexOutOfRangeException) when (baseline) { threw = true; }
+                if (baseline) {
+                    if (!threw) throw new Exception("Baseline did not reproduce snapshot overflow");
+                    mark("BASELINE CONFIRMED snapshot overflow " + (replicaOnly ? "replica-only variable" : "runtime-expanded variables"));
+                    continue;
+                }
+                if (replica.FsmVariables.StringVariables[bad].Value != "untouched" || replica.FsmVariables.FloatVariables[bad].Value != -1 ||
+                    replica.FsmVariables.IntVariables[bad].Value != -1 || replica.FsmVariables.BoolVariables[bad].Value ||
+                    replica.FsmVariables.Vector2Variables[bad].Value != Vector2.zero || replica.FsmVariables.Vector3Variables[bad].Value != Vector3.zero)
+                    throw new Exception("Unmapped variable partially changed before canonical snapshot validation");
+                if (!replicaOnly) {
+                    entity.MakeHost();
+                    foreach (var current in new[] { fsm, replica })
+                        if (current.FsmVariables.StringVariables[0].Value != "valid" || current.FsmVariables.FloatVariables[0].Value != 3 ||
+                            current.FsmVariables.IntVariables[0].Value != 4 || !current.FsmVariables.BoolVariables[0].Value ||
+                            current.FsmVariables.Vector2Variables[0].Value != new Vector2(2, 3) || current.FsmVariables.Vector3Variables[0].Value != new Vector3(2, 3, 4))
+                            throw new Exception("Valid scalar updates or takeover failed after an unmapped field");
+                    // A later native schema contraction must also survive
+                    // takeover and sampling without manufacturing variables.
+                    Populate(fsm.FsmVariables, 0);
+                    entity.MakeHost();
+                    source.SetActive(true);
+                    typeof(Entity).GetField("nextFsmSample", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(entity, 0f);
+                    typeof(Entity).GetMethod("OnUpdate", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(entity, null);
+                }
+                mark("PASS snapshot bounds preserve all six scalar types " + (replicaOnly ? "replica-only variable" : "runtime-expanded variables and valid takeover"));
+            }
+            yield return null;
+        } finally {
+            foreach (var entity in entities) entity.Destroy();
+            foreach (var source in sources) Object.Destroy(source);
+            net.UpdateManager.StopUpdates(); net.Disconnect();
+        }
+    }
     internal static IEnumerator StringSnapshots(Action<string> mark) {
         // An unconnected sender makes packet sampling deterministic, without
         // publishing fixture IDs into the real room or racing its send timer.

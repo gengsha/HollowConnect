@@ -35,6 +35,7 @@ public sealed class ProbeMod : Mod {
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "rescue") { go.AddComponent<RescueProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "shade-inspect") { go.AddComponent<ShadeInspectProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "death") { go.AddComponent<DeathProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "colosseum") { go.AddComponent<ColosseumProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "grimm-motion") { go.AddComponent<GrimmMotionProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "pantheon") { go.AddComponent<PantheonProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "join") go.AddComponent<JoinProbe>();
