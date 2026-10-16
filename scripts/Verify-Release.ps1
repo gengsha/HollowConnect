@@ -1,7 +1,7 @@
 param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
-$version='0.1.18'
+$version='0.1.19'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package=Join-Path $root ('dist\'+$taskPackageName)
@@ -44,10 +44,10 @@ $runtime=Get-Content -LiteralPath (Join-Path $package $taskRuntimeSource) -Raw |
 if($Playtest -and $runtime.runtimeValidation){$runtime=$runtime.runtimeValidation}
 $taskScopedPlaytest=$Playtest -and $taskAuthorization.runtimeValidation
 if($taskSkipRetest){
-    if(!$taskAuthorization.userRequest -or !$runtime.retestOmitted -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc10' -or $runtime.releaseReady -ne $false -or @($runtime.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
+    if(!$taskAuthorization.userRequest -or !$runtime.retestOmitted -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc11' -or $runtime.releaseReady -ne $false -or @($runtime.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
     if(!$runtime.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $package $runtime.previousValidationSource) -Algorithm SHA256).Hash -ne $runtime.previousValidationSha256){throw 'Previous validation reference differs.'}
 }else{
-if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc10' -or @($runtime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($runtime.runs).Count -ne 12)) { throw 'Incomplete or blocked runtime evidence.' }
+if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc11' -or @($runtime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($runtime.runs).Count -ne 12)) { throw 'Incomplete or blocked runtime evidence.' }
 foreach ($run in $runtime.runs) {
     if (!$run.bothPassed -or @($run.binaries).Count -ne 3) { throw 'Incomplete runtime result.' }
     $runDir=Join-Path $root ('.test-results\'+$run.name)

@@ -1,7 +1,7 @@
 param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$version = '0.1.18'
+$version = '0.1.19'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
 $taskEvidencePath=Join-Path $root "docs/evidence/runtime-room-$version.json"
@@ -26,10 +26,10 @@ $taskRuntime=if($taskScopedPlaytest){$taskAuthorization.runtimeValidation}else{$
 # A user-requested package may retain earlier validation without claiming the new hashes were tested.
 $taskSkipRetest=$Playtest -and $taskAuthorization.retestOmitted -eq $true
 if($taskSkipRetest){
-    if(!$taskAuthorization.userRequest -or !$taskEvidence.retestOmitted -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc10' -or $taskEvidence.releaseReady -ne $false -or @($taskEvidence.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
+    if(!$taskAuthorization.userRequest -or !$taskEvidence.retestOmitted -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc11' -or $taskEvidence.releaseReady -ne $false -or @($taskEvidence.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
     if(!$taskEvidence.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $root $taskEvidence.previousValidationSource) -Algorithm SHA256).Hash -ne $taskEvidence.previousValidationSha256){throw 'Previous validation reference differs.'}
 }else{
-if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc10' -or @($taskRuntime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($taskRuntime.runs).Count -ne 12)){throw 'Runtime acceptance is incomplete or blocked; no package created.'}
+if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc11' -or @($taskRuntime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($taskRuntime.runs).Count -ne 12)){throw 'Runtime acceptance is incomplete or blocked; no package created.'}
 foreach($taskRun in $taskRuntime.runs){
     if(!$taskRun.bothPassed){throw 'A runtime acceptance case failed; no release package created.'}
     if(@($taskRun.binaries).Count -ne 3){throw 'Runtime DLL evidence is incomplete; no release package created.'}

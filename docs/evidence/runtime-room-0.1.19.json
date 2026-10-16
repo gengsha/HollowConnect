@@ -1,0 +1,30 @@
+{
+  "version": "0.1.19",
+  "engineVersion": "3.0.0-hc11",
+  "releaseReady": false,
+  "retestOmitted": true,
+  "userRequest": "直接打包我需要测试这一项功能",
+  "recordedAtUtc": "2026-10-16T15:50:01.447773+00:00",
+  "runs": [],
+  "scope": "Compile and package-integrity checks only for user testing of movement/animation smoothing. No game, regression or installer tests repeated for this packaging request.",
+  "previousValidationSource": "docs/evidence/boss-motion-p5-deaths-2026-10-16.json",
+  "previousValidationSha256": "36AFCB9FC38DBFBDE65513389A9B11228886C228C2994D8494E642E19D9918FC",
+  "previousProductionBuildCommit": "404a265 (working source before f43528a / dc34070)",
+  "previousProductionBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "326F94DA1FC062B1887F980EB1C6F5648FAD43840B4DBAD347C6DCE8BD704110"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "2A6C3E5A026205BCE59871A8611EF252BE8366E94991469B44928B40ADC03B05"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "4259A64FC4AAB08B240128239C96D191DCED6A83B8F3509A1C31A9A22325B77E"
+    }
+  ],
+  "installed": false,
+  "realTwoMachineFrp": false,
+  "productionChangeSinceValidation": "No gameplay or protocol logic changed since the recorded 0.1.19 development checks. Rebuilt assembly metadata/hashes belong to this package only; earlier runs retain their own hashes."
+}
