@@ -19,6 +19,7 @@ namespace HollowConnect.Smoke;
 public sealed partial class ProgressProbe : MonoBehaviour {
     private string root, role;
     private bool host;
+    private bool ResourcesCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESOURCE_CHECK") == "1";
     private sealed class FileLogger : Hkmp.Logging.ILogger {
         private readonly string path;
         private readonly object sync = new object();
@@ -41,6 +42,15 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         while (!ready() && !Has(role + ".failed") && Time.realtimeSinceStartup < deadline) yield return null;
         if (!ready()) {
             Mark("FAIL " + name); Flag(role + ".failed");
+            if (ResourcesCase) {
+                Mark("RESOURCE WAIT hero=" + HeroController.instance?.transform.position + " input=" + HeroController.instance?.acceptingInput +
+                    " relinquished=" + HeroController.instance?.controlReqlinquished + " pause=" + PlayerData.instance?.GetBool("disablePause") +
+                    " inFlight=" + (runtime == null ? -1 : ((System.Collections.IDictionary)ResourceService.GetType().GetField("inFlight", ResourcePrivate).GetValue(ResourceService)).Count));
+                foreach (var f in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene.name == GameManager.instance.sceneName &&
+                    (f.name.Contains("Shop") || f.name == "UI List" || f.name == "Item List")))
+                    Mark("RESOURCE WAIT FSM " + f.name + "/" + f.FsmName + " active=" + f.gameObject.activeInHierarchy + " state=" + f.ActiveStateName);
+                throw new TimeoutException("Resource prerequisite: " + name);
+            }
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) {
                 Mark("HERO pos=" + HeroController.instance?.transform.position + " control=" + HeroController.instance?.acceptingInput);
                 foreach (var f in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.name == "Ghost Warrior NPC")) Dump(f);
@@ -188,7 +198,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         Hkmp.Logging.Logger.AddLogger(new FileLogger(Path.Combine(root, role + "-engine.log")));
-        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null)
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase)
             On.GameManager.EnterHero += (orig, gm, additive) => {
                 var gates = Object.FindObjectsOfType<TransitionPoint>();
                 if (!gates.Any(g => g.name == gm.entryGateName) && gates.Length > 0) {
@@ -202,7 +212,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
-        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null && pd.GetBool("atBench")) {
+        if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase) && pd.GetBool("atBench")) {
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
             yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
@@ -219,6 +229,19 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         typeof(ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
         typeof(ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "progress" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake");
+        if (ResourcesCase) {
+            var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(Resources());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS native resources"); Flag(role + ".done"); }
+            yield break;
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) {
             yield return DreamWarriors();
             yield return ProbeShutdown.Run(engine, root, role);

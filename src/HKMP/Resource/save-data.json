@@ -25817,7 +25817,7 @@
             },
             "Value": {
                 "Sync": true,
-                "SyncType": "Server"
+                "SyncType": "Player"
             }
         },
         {

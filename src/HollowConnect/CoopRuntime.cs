@@ -28,6 +28,10 @@ public sealed class CoopRuntime : MonoBehaviour {
     private IClientAddonNetworkSender<Channel> sender;
     internal readonly Dictionary<ushort, Peer> Peers = new Dictionary<ushort, Peer>();
     private ProgressLedger granted = new ProgressLedger();
+    private ResourceShareService resources;
+    private DeathStatistics resourceSlot;
+    private bool resourceImported;
+    private readonly HashSet<string> offeredResources = new HashSet<string>(StringComparer.Ordinal);
     private readonly Dictionary<string, int> offered = new Dictionary<string, int>();
     private readonly Dictionary<string, FieldInfo> fields = new Dictionary<string, FieldInfo>();
     private readonly SaveChanges sceneSaveChanges = new SaveChanges();
@@ -93,6 +97,11 @@ public sealed class CoopRuntime : MonoBehaviour {
         }
         map = new MapService(this);
         shades = new ShadeService(this);
+        resources = new ResourceShareService(() => Connected && Shared,
+            () => Playable && !Down && !Resetting && !Returning && !changingScene,
+            () => CoopMod.Statistics.Resources, id => Send(new Message { Kind = Kind.ResourceOffer, Key = id }),
+            s => CoopMod.Instance?.Log(s));
+        resources.Register();
         BossTravel.Register();
         CoopContext.CaptureBossContext = BossTravel.CaptureContext;
         CoopContext.ApplyBossContext = BossTravel.ApplyContext;
@@ -112,12 +121,14 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private void OnConnect() {
+        resources.ResetConnection(); offeredResources.Clear();
         localName = "";
         Session = ""; Peers.Clear(); offered.Clear(); granted = new ProgressLedger(); sequence = 0; handledWarp = 0; ReleasedRound = 0;
         entryProtection.Clear(); protectionSceneHandle = int.MinValue; protectionSession = "";
         Send(new Message { Kind = Kind.Hello });
     }
     private void OnDisconnect() {
+        resources.ResetConnection(); offeredResources.Clear();
         localName = "";
         CancelBenchReturn();
         CancelTransitions();
@@ -151,6 +162,10 @@ public sealed class CoopRuntime : MonoBehaviour {
         // Absolute saved totals merge by maximum; copied histories must not add twice.
         if (m.Kind == Kind.DeathCount) {
             CoopMod.Statistics.Merge(m.Name, m.Serial);
+            return;
+        }
+        if (m.Kind == Kind.ResourceGrant) {
+            if (Shared) resources.Receive(m.Key);
             return;
         }
         if (m.Kind == Kind.Wipe) {
@@ -286,6 +301,13 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private void Update() {
+        if (resourceSlot != CoopMod.Statistics) {
+            resourceSlot = CoopMod.Statistics; resourceImported = false;
+            resources.ResetSlot(); offeredResources.Clear();
+        }
+        if (!resourceImported && Playable && !SceneUtil.IsNonGameplayScene(UnitySceneManager.GetActiveScene().name))
+            resourceImported = resources.ImportNativeReceipts();
+        resources.Tick();
         if (!Connected) return;
         RefreshEntryProtection();
         if (lockedHero != null && (Down || Resetting || Returning)) {
@@ -497,6 +519,8 @@ public sealed class CoopRuntime : MonoBehaviour {
     private int OnSetInt(string key, int value) => Shared && Connected && ProgressCatalog.Limits.TryGetValue(key, out var limit)
         ? Math.Min(limit, Math.Max(value, granted.Get(key))) : value;
     private void CheckProgress() {
+        if (resourceImported) foreach (var source in CoopMod.Statistics.Resources.Claimed)
+            if (offeredResources.Add(source)) Send(new Message { Kind = Kind.ResourceOffer, Key = source });
         foreach (var pair in fields) {
             var obj = pair.Value.GetValue(PlayerData.instance);
             var value = obj is bool flag ? (flag ? 1 : 0) : (int)obj;
@@ -523,7 +547,6 @@ public sealed class CoopRuntime : MonoBehaviour {
             }
         } else if ((int)current < value) {
             pd.SetInt(key, value);
-            if (key == "nailSmithUpgrades") pd.SetInt("nailDamage", 5 + 4 * value);
         }
         sceneSaveChanges.ApplyPlayerDataSaveChange(key);
         Notice("共享进度：" + key);
@@ -755,6 +778,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         CancelBenchReturn();
         CancelTransitions();
         shades?.Clear(); Unlock(); map?.Dispose();
+        resources?.Dispose();
         On.HeroController.Die -= OnDie; On.CameraController.LateUpdate -= CameraUpdate; On.GameManager.FindEntryPoint -= FindWarpEntry;
         On.HeroController.TakeDamage -= TakeDamage; ModHooks.AfterTakeDamageHook -= AfterTakeDamage;
         On.HeroAudioController.PlaySound -= TrackHitSound;

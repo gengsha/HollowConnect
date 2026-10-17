@@ -22,6 +22,7 @@ public sealed class CoopServerAddon : ServerAddon {
     private int generation;
     private Party party = new Party();
     private ProgressLedger progress = new ProgressLedger();
+    private ResourceClaims resources = new ResourceClaims();
     private readonly Dictionary<ushort, double> lastWarp = new Dictionary<ushort, double>();
     private readonly Dictionary<ushort, Message> destinations = new Dictionary<ushort, Message>();
     private bool wasStarted, shared, rescue, warp, entryProtection;
@@ -47,7 +48,7 @@ public sealed class CoopServerAddon : ServerAddon {
         var currentGeneration = ((NetServer)api.NetServer).Generation;
         if (!wasStarted || generation != currentGeneration) {
             generation = currentGeneration;
-            wasStarted = true; party = new Party(); progress = new ProgressLedger();
+            wasStarted = true; party = new Party(); progress = new ProgressLedger(); resources = new ResourceClaims();
             lastWarp.Clear(); destinations.Clear(); nextRoster = 0;
             shared = CoopMod.Settings.ShareProgress; rescue = CoopMod.Settings.Rescue; warp = CoopMod.Settings.AllowTeleport;
             entryProtection = CoopMod.Settings.EntryProtection;
@@ -92,6 +93,7 @@ public sealed class CoopServerAddon : ServerAddon {
             party.Join(id, player.Username);
             Send(id, new Message { Kind = Kind.Welcome, Id = id, Name = player.Username, Value = (shared ? 1 : 0) | (rescue ? 2 : 0) | (warp ? 4 : 0) | (entryProtection ? 8 : 0) });
             foreach (var pair in progress.Values) Send(id, new Message { Kind = Kind.ProgressGrant, Key = pair.Key, Value = pair.Value });
+            if (shared) foreach (var source in resources.Claimed) Send(id, new Message { Kind = Kind.ResourceGrant, Key = source });
             foreach (var standing in party.Deaths.Deaths) Send(id, DeathCount(standing.Key, standing.Value));
             if (party.Resetting) {
                 Send(id, new Message { Kind = Kind.Wipe });
@@ -99,6 +101,13 @@ public sealed class CoopServerAddon : ServerAddon {
             return;
         }
         if (m.Session != party.Session || !party.Members.TryGetValue(id, out var member)) return;
+        // Source acquisition survives a wipe: a reliable award from the just
+        // completed round must not be lost when the party begins a new attempt.
+        if (m.Kind == Kind.ResourceOffer) {
+            if (shared && m.Round <= party.Round && resources.TryClaim(m.Key, out _))
+                Broadcast(new Message { Kind = Kind.ResourceGrant, Key = m.Key });
+            return;
+        }
         // A death counted just before the reliable wipe can arrive in the previous round.
         if (m.Kind == Kind.DeathCount || m.Kind == Kind.DeathHistory) {
             var name = m.Kind == Kind.DeathCount ? member.Name : m.Name;

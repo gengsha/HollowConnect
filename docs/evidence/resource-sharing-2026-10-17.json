@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-17",
+  "scope": "resource receipts, personal resource values, full-save isolation, and native shop award",
+  "model_tests": {
+    "selection": "E:/projects/hollowConnect/.test-results/resource-selection-20261017.txt",
+    "passed": 13,
+    "failed": 0
+  },
+  "build": {
+    "configuration": "Release",
+    "hollowconnect_sha256": "2190AEC665FDFAA8A6D966C189E4620CE84ED0BFB43E31C5EDF0EF55E5E6342F",
+    "core_sha256": "0F0D361600B657C0E1CEF0CE6E7A8D51E1A1354E703A62BE4CB690A8D8BDDE93",
+    "hkmp_sha256": "F861D941528EA0434134672388B18BCA20671CD7342D2C3E07FF0BDBD483CACA"
+  },
+  "native_runs": [
+    {
+      "run": "resources-native-20261017-r1",
+      "status": "failed",
+      "stage": "Salubra fixture prerequisite"
+    },
+    {
+      "run": "resources-native-20261017-r2",
+      "status": "failed",
+      "stage": "Salubra fixture selection/cost"
+    },
+    {
+      "run": "resources-native-20261017-r3",
+      "status": "failed",
+      "stage": "shop close timing"
+    },
+    {
+      "run": "resources-native-20261017-r4",
+      "status": "failed",
+      "stage": "batch UI cancel routing"
+    },
+    {
+      "run": "resources-native-20261017-r5",
+      "status": "failed",
+      "stage": "batch UI cancel routing"
+    },
+    {
+      "run": "resources-native-20261017-r6",
+      "status": "failed",
+      "stage": "shop controller remains paused after fixture close"
+    },
+    {
+      "run": "resources-native-20261017-r7",
+      "status": "failed",
+      "stage": "shop controller remains paused after fixture close"
+    },
+    {
+      "run": "resources-native-20261017-r8",
+      "status": "incomplete",
+      "stage": "startup ended without completion marker"
+    }
+  ],
+  "verified": [
+    "native full-save resource and nail fields remain slot-local",
+    "Deepnest_38 vessel persistent mapping is player-specific",
+    "Crossroads_13 Heart Piece native trigger and UI completion",
+    "same-source repeated UDP offers do not duplicate a resource",
+    "native Salubra notch selection and original 120 Geo charge",
+    "guest receives remote notch without Geo charge"
+  ],
+  "unverified": [
+    "final Salubra control release in batch fixture",
+    "Nailsmith native transactions",
+    "reconnect and later conversion stages",
+    "Seer and all story-source variants"
+  ],
+  "limitations": [
+    "simultaneous same-source shop confirmations can both charge before packet arrival; no reservation/refund system",
+    "tagged instant and UDP cases are fixtures, not complete story-source coverage"
+  ]
+}

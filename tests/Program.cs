@@ -45,6 +45,7 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        ResourceClaimsTests.Register(Test);
         foreach (var interval in new[] { .017f, .05f, .1f }) Test("player position history smooths jittered cadence " + interval, () => {
             var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0);
             var jitter = new[] { .75f, 1.25f, 1f, .9f, 1.1f };

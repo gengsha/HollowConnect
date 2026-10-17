@@ -27,7 +27,6 @@ public static class ProgressCatalog {
         }) result[key] = 1;
         for (var i = 1; i <= 40; i++) result["gotCharm_" + i] = 1;
         result["fireballLevel"] = result["quakeLevel"] = result["screamLevel"] = 2;
-        result["nailSmithUpgrades"] = 4;
         return result;
     }
     public static bool IsBoolean(string key) => Limits.TryGetValue(key, out var max) && max == 1;
