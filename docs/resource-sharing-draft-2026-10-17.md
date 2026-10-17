@@ -115,15 +115,55 @@ guard are active and covered by the model and save-isolation checks.
 ## Unity verification status
 
 `tests/Smoke/ProgressResources.cs` is wired into the progress probe. The
-isolated runs covered the actual Crossroads_13 world shard trigger, native
-Salubra selection/payment (120 Geo), guest remote notch award, repeated source
-offers, full-save resource protection, and native UI lifecycle observations.
-The 13 selected model tests passed. The run reached the post-purchase shop
-close fixture, but batch-mode input left the original Salubra controller in a
-paused/controlled state; runs `r1` through `r7` preserve that failure. Run
-`r8` ended during startup without a completion marker. Therefore the resource
-receipt and award paths are locally verified, while the final Salubra control
-release and later Nailsmith/reconnect stages remain unverified in this fixture.
-The tagged instant and UDP source cases remain explicitly labeled fixtures,
-not proof of every story source. See
-`docs/evidence/resource-sharing-2026-10-17.json`.
+13 selected model tests passed. Earlier isolated scenarios observed the actual
+Crossroads_13 world shard trigger, source-offer deduplication and full-save
+resource isolation. Runs `r1` through `r7` retain their native shop fixture
+failures, and `r8` remains incomplete. None is retrospectively a clean pass.
+
+The fixture now waits for the complete native shop/list input state before
+cancelling through the actual `ListenForMenuActions` listener. It requires the
+original close animation and original input/control restoration; it does not
+call `RegainControl` or inject a fallback `CLOSE` event. Run `r9` observed this
+close sequence and the original purchase, but its stale-confirmation fixture
+incorrectly entered an inactive, uninitialized Confirm FSM directly and failed.
+Strict acceptance was rejected. Its later post-stop hash capture also mismatched
+after shared binaries changed and cannot establish an accepted loaded payload.
+
+Run `r10` replaced that shortcut with two real native confirmations opened
+before the host buys. The host paid the original 120 Geo once. The guest kept
+its confirmation open until the source arrived, then confirmed through the
+native cost entry; the queued-source guard prevented another charge/grant.
+Both original close animations released control. Final Geo was 29880/30000
+and slots were 4/4; reopening the shop removed the source without a scene
+reload, and repeated offers changed neither Geo nor slots. These shop scenarios
+passed, but the run later failed a conversion assertion because the faster peer
+had already started the next fragment family. The overall strict gate therefore
+failed; its post-stop hashes were 12/12 matches. Family completion barriers
+were added to the fixture.
+
+Run `r11` failed because skipping shop also skipped the scene load that
+populates original reward prefabs. Strict acceptance was rejected and its
+post-stop hashes matched 12/12. Run `r12` fixes that prerequisite and explicitly
+continues **after** shop, with one initial shard and four initial slots supplied
+by the fixture. It excludes save/world/shop. Both clients passed native tagged
+mask 3-to-4 conversion (health 6, shards 0), vessel 2-to-3 conversion (reserve
+33, fragments 0), three distinct shared ore offers, and each player's two real
+Nailsmith upgrades. Starting at upgrade level 1 with three ore each, the native
+level-2 and level-3 purchases consume one and two ore respectively, restore
+original control, set only that player's nail damage and leave the peer's level
+and ore unchanged. Both actual network disconnect/reconnect sequences preserve
+the loaded profile's source ledger; replay does not refund spent ore or change
+the personal nail. The receipt JSON roundtrip also passed, but this was not a
+process restart or an on-disk save/profile reload.
+
+Run `r12` has both `FINAL PASS` markers, clean strict runtime logs, both normal
+offline markers and the server-stopped marker. The exact isolated processes
+were stopped, all four DLLs matched the recorded build in all three checked
+locations (12/12), and isolated Smoke DLLs were then disabled. This is a passing
+after-shop continuation, not one clean end-to-end run joining the earlier shop
+and world scenarios under one final payload. Seer/all story variants remain
+unverified. Tagged native instants and UDP source offers remain fixtures, not
+proof of every physical/story source. Both confirmations can still charge if
+both players confirm before either source packet arrives; there is no server
+reservation or refund mechanism. See
+`docs/evidence/resource-sharing-2026-10-17.json` for the per-run evidence.

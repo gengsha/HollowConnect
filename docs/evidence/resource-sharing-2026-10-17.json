@@ -1,12 +1,14 @@
 {
   "date": "2026-10-17",
-  "scope": "resource receipts, personal resource values, full-save isolation, and native shop award",
+  "scope": "resource receipts, personal resource values, full-save isolation, native shop award, fragment conversion, personal Nailsmith transactions and reconnect",
+  "evidence_policy": "Verified means an individually observed scenario. Historical failures remain failed. The shop checks in r10 and the passing after-shop continuation r12 are separate runs; they are not a single clean end-to-end hash-accepted run.",
   "model_tests": {
     "selection": "E:/projects/hollowConnect/.test-results/resource-selection-20261017.txt",
     "passed": 13,
     "failed": 0
   },
   "build": {
+    "note": "Initial recorded build; later runs use their own preserved binaries.json. This is not the final combined payload hash.",
     "configuration": "Release",
     "hollowconnect_sha256": "2190AEC665FDFAA8A6D966C189E4620CE84ED0BFB43E31C5EDF0EF55E5E6342F",
     "core_sha256": "0F0D361600B657C0E1CEF0CE6E7A8D51E1A1354E703A62BE4CB690A8D8BDDE93",
@@ -52,6 +54,68 @@
       "run": "resources-native-20261017-r8",
       "status": "incomplete",
       "stage": "startup ended without completion marker"
+    },
+    {
+      "run": "resources-native-20261017-r9",
+      "status": "failed",
+      "stage": "stale confirmation fixture entered an uninitialized inactive Confirm FSM directly",
+      "observed_passes": [
+        "original Salubra Open listener receives menuCancel",
+        "original close animation completes and control is released",
+        "original 120 Geo purchase"
+      ],
+      "strict_gate": "rejected",
+      "post_stop_hashes": "not accepted: checked after shared binaries had changed; mismatch preserved",
+      "evidence": "E:/projects/hollowConnect/.test-results/resources-native-20261017-r9"
+    },
+    {
+      "run": "resources-native-20261017-r10",
+      "status": "failed",
+      "scope": "native shop continuation; save/world cases excluded",
+      "stage": "mask conversion whole-counter assertion raced ahead into the peer's vessel stage; fixture now has per-family barriers",
+      "observed_passes": [
+        "both clients open the real Salubra confirmation with the original source and cost",
+        "host buys once for 120 Geo; guest receives the source while its original confirmation is still open",
+        "guest confirms through the real native cost entry; queued-source guard prevents a second charge or grant",
+        "both original shop close animations release control; host Geo 29880, guest Geo 30000, both slots 4",
+        "reopened stock removes the shared source without a room reload; repeated UDP offer changes neither slots nor Geo"
+      ],
+      "strict_gate": "rejected: later conversion failure means this is not an overall passing run",
+      "post_stop_hashes": "12/12 match, including Smoke",
+      "evidence": "E:/projects/hollowConnect/.test-results/resources-native-20261017-r10"
+    },
+    {
+      "run": "resources-native-20261017-r11",
+      "status": "failed",
+      "scope": "after-shop continuation; save/world/shop cases excluded",
+      "stage": "fixture skipped the native scene load needed to populate reward instant prefabs",
+      "strict_gate": "rejected",
+      "post_stop_hashes": "12/12 match, including Smoke",
+      "evidence": "E:/projects/hollowConnect/.test-results/resources-native-20261017-r11"
+    },
+    {
+      "run": "resources-native-20261017-r12",
+      "status": "passed",
+      "scope": "after-shop continuation; save/world/shop cases explicitly excluded; one initial shard and four initial slots are fixtures",
+      "observed_passes": [
+        "native tagged mask instant converts three shards to a fourth: both maxHealthBase 6, heartPieces 0",
+        "native tagged vessel instant converts two fragments to a third: both MPReserveMax 33, vesselFragments 0",
+        "three distinct shared ore source offers give three ore to each client",
+        "each player's real Nailsmith upgrade to level 2 consumes only that player's first ore, and level 3 consumes that player's remaining two ore",
+        "each native upgrade restores original UI control and nail damage; the peer's nail level and ore stay unchanged",
+        "slot-local receipt JSON roundtrip and each client's real network disconnect/reconnect preserve the loaded profile ledger",
+        "replay after both reconnects cannot refund consumed ore or change the personal nail"
+      ],
+      "strict_gate": "passed for both clients, with required runtime logs",
+      "shutdown": "both normal offline markers and server-stopped marker present; exact isolated processes stopped; isolated Smoke DLLs disabled after hash capture",
+      "post_stop_hashes": "12/12 match, including Smoke; Complete-Colosseum also checked production build and isolated-copy hashes",
+      "evidence": "E:/projects/hollowConnect/.test-results/resources-native-20261017-r12",
+      "binaries": {
+        "hkmp_sha256": "B10D86272F4D441E62A6D83F4502E5D0B793E74FF9BC6DE3EDF6DCEE37F59E87",
+        "hollowconnect_sha256": "40684F6255E3D102A18E886AF4FB2F2774F541B6E26C6B21E2556E1FA8CB499B",
+        "core_sha256": "9837846B483068F3D23003F161D4695F15DA67691CB9B3C91AAE0A93D9EE57F2",
+        "smoke_sha256": "178629FDAA6354AC2DDCE5245150F43251430CC6574BA5E96D1C59E23CA600FA"
+      }
     }
   ],
   "verified": [
@@ -60,16 +124,22 @@
     "Crossroads_13 Heart Piece native trigger and UI completion",
     "same-source repeated UDP offers do not duplicate a resource",
     "native Salubra notch selection and original 120 Geo charge",
-    "guest receives remote notch without Geo charge"
+    "guest receives remote notch without Geo charge",
+    "native Salubra cancel, close animation and original control release on both clients (r10 scenario, overall run failed later)",
+    "queued same-source native confirmation prevents a second charge/grant; stock refresh and repeated-source offer are idempotent (r10 scenario)",
+    "mask 3-to-4 and vessel 2-to-3 conversion through tagged native instants and remote source receipt (r12)",
+    "personal native Nailsmith upgrades, ore spending and resulting nail damage do not change the peer (r12)",
+    "both actual network reconnects preserve the loaded profile's receipt ledger without replaying consumed ore or personal nail upgrades (r12)"
   ],
   "unverified": [
-    "final Salubra control release in batch fixture",
-    "Nailsmith native transactions",
-    "reconnect and later conversion stages",
-    "Seer and all story-source variants"
+    "one aggregate clean end-to-end run spanning save/world/shop/conversion/Nailsmith/reconnect with a single final payload",
+    "Seer and all story-source variants",
+    "actual process restart and on-disk profile reload after the native resource sequence (r12 used JSON roundtrip and actual network reconnect, not process restart)"
   ],
   "limitations": [
     "simultaneous same-source shop confirmations can both charge before packet arrival; no reservation/refund system",
-    "tagged instant and UDP cases are fixtures, not complete story-source coverage"
+    "tagged instant and UDP cases are fixtures, not complete story-source coverage",
+    "r10 shop scenario passes do not erase its overall strict failure; r12 does not rerun save/world/shop",
+    "r9 post-stop hashes cannot identify an accepted loaded payload because shared copies changed before capture"
   ]
 }

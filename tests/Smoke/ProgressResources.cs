@@ -6,6 +6,7 @@ using System.Reflection;
 using HollowConnect;
 using HollowConnect.Core;
 using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
 using MonoMod.RuntimeDetour;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace HollowConnect.Smoke;
 // One bounded native resource scenario in a save-write-blocked memory profile.
 public sealed partial class ProgressProbe {
     private const BindingFlags ResourcePrivate = BindingFlags.Instance | BindingFlags.NonPublic;
+    private bool ResourceContinuationCase => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESOURCE_CONTINUATION"));
+    private bool ResourceAfterShopCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESOURCE_CONTINUATION") == "after-shop";
     private string ResourceOther => host ? "guest" : "host";
     private object ResourceService => typeof(CoopRuntime).GetFields(ResourcePrivate)
         .Single(f => f.FieldType.Name == "ResourceShareService").GetValue(runtime);
@@ -46,9 +49,16 @@ public sealed partial class ProgressProbe {
     }
     private IEnumerator ResourceExpect(string id, int masks, int pieces, int reserve, int fragments, int ore, int slots, string label) {
         var pd = PlayerData.instance;
-        yield return Until(() => LocalResourceClaims.Contains(id) && pd.GetInt("maxHealthBase") == masks &&
+        string previous = null;
+        yield return Until(() => {
+            var actual = "claimed=" + LocalResourceClaims.Contains(id) + " maxHealthBase=" + pd.GetInt("maxHealthBase") +
+                " heartPieces=" + pd.GetInt("heartPieces") + " MPReserveMax=" + pd.GetInt("MPReserveMax") +
+                " vesselFragments=" + pd.GetInt("vesselFragments") + " ore=" + pd.GetInt("ore") + " slots=" + pd.GetInt("charmSlots");
+            if (actual != previous) { Mark("RESOURCE COUNTERS " + label + " " + actual); previous = actual; }
+            return LocalResourceClaims.Contains(id) && pd.GetInt("maxHealthBase") == masks &&
             pd.GetInt("heartPieces") == pieces && pd.GetInt("MPReserveMax") == reserve &&
-            pd.GetInt("vesselFragments") == fragments && pd.GetInt("ore") == ore && pd.GetInt("charmSlots") == slots,
+            pd.GetInt("vesselFragments") == fragments && pd.GetInt("ore") == ore && pd.GetInt("charmSlots") == slots;
+        },
             "source and native counters " + label, 10);
         if (Has(role + ".failed")) throw new Exception("Resource counters mismatch: " + label);
     }
@@ -64,13 +74,33 @@ public sealed partial class ProgressProbe {
         pd.SetInt("nailSmithUpgrades", 1); pd.SetInt("nailDamage", 9); pd.SetBool("honedNail", true);
         ResourceCheck(pd.GetInt("maxHealthBase") == 5 && pd.GetInt("MPReserveMax") == 0 && pd.GetInt("charmSlots") == 3 &&
             LocalResourceClaims.Claimed.Count == 0, "fresh unsaved slot has no imported resources");
-        yield return ResourceSaveIsolation();
-        yield return ResourceWorldConcurrent();
-        yield return ResourceShop();
+        if (ResourceContinuationCase) {
+            // Short continuation of the separately recorded world/source run.
+            // This initial balance is fixture setup, not another tested grant.
+            pd.SetInt("heartPieces", 1);
+            Mark("RESOURCE CONTINUATION skips save/world checks; starts with one fixture shard");
+        } else {
+            yield return ResourceSaveIsolation();
+            yield return ResourceWorldConcurrent();
+        }
+        if (ResourceAfterShopCase) {
+            pd.SetInt("charmSlots", 4);
+            Mark("RESOURCE CONTINUATION also excludes shop; initial slots=4 fixture only");
+            // The native instant reward prefabs are loaded by this scene;
+            // excluding its UI scenario must not exclude the asset lifetime.
+            yield return Room("Room_Charm_Shop");
+            ResourceCheck(new[] { "Heart Piece Instant", "Vessel Fragment Instant" }.All(name =>
+                UnityEngine.Resources.FindObjectsOfTypeAll<GameObject>().Any(g => g.name == name && !g.scene.IsValid())),
+                "original reward prefabs loaded before after-shop continuation");
+        } else yield return ResourceShop();
         yield return ResourceConversionsAndOre();
         yield return ResourcePersonalNails();
         yield return ResourcePersistenceReconnect();
-        Mark("FINAL PASS resources: native world/shop, source replay/concurrency, conversion, personal ore spending and reconnect");
+        Mark(ResourceAfterShopCase
+            ? "FINAL PASS resource after-shop continuation: conversion, personal ore spending and reconnect; save/world/shop cases excluded"
+            : ResourceContinuationCase
+            ? "FINAL PASS resource continuation: native shop/stale confirmation, conversion, personal ore spending and reconnect; save/world cases excluded"
+            : "FINAL PASS resources: native world/shop, source replay/concurrency, conversion, personal ore spending and reconnect");
     }
     private IEnumerator ResourceSaveIsolation() {
         var manager = Field<Hkmp.Game.Client.Save.SaveManager>(engine.ClientManager, "_saveManager");
@@ -144,28 +174,41 @@ public sealed partial class ProgressProbe {
         var region = ResourceFsm("Shop Region", "Shop Region");
         HeroController.instance.transform.position = region.transform.position;
         region.SetState("Take Control"); // native interaction entrance, not payment or award state
-        yield return Until(() => Object.FindObjectsOfType<PlayMakerFSM>(true).Any(f =>
-            f.gameObject.scene.name == "Room_Charm_Shop" && f.FsmName == "Item List Control" && f.ActiveStateName == "Idle" &&
-            f.gameObject.activeInHierarchy), "Salubra original shop UI open", 12);
+        var list = ResourceFsm("Item List", "Item List Control");
+        var input = ResourceFsm("Item List", "ui_list_getinput");
+        var shop = ResourceFsm("Shop Menu", "shop_control");
+        // Item List reaches Idle while the parent still runs its opening
+        // animation. UI ACTIVE, and therefore its input listeners, come later.
+        yield return Until(() => list.gameObject.activeInHierarchy && list.ActiveStateName == "Idle" &&
+            input.ActiveStateName == "Idle" && shop.ActiveStateName == "Open" && region.ActiveStateName == "Shop Up",
+            "Salubra original shop UI open and listening", 12);
         if (Has(role + ".failed")) throw new Exception("Salubra native shop failed to open");
     }
     private IEnumerator ResourceCloseSalubra() {
         var list = ResourceFsm("Item List", "Item List Control");
         var confirm = ResourceFsm("UI List", "Confirm Control");
-        yield return Until(() => list.ActiveStateName == "Idle" && !confirm.gameObject.activeInHierarchy,
-            "native shop confirmation returned to item list", 5);
-        Dump(ResourceFsm("Item List", "ui_list_getinput"));
-        Dump(ResourceFsm("Shop Menu", "shop_control"));
-        Dump(ResourceFsm("Shop Region", "Shop Region"));
-        yield return ResourcePress(InputHandler.Instance.inputActions.menuCancel);
-        // The live listener was exercised above.  In batch mode its input
-        // backend can remain latched after the confirmation animation; use the
-        // shop's own documented close transition only as fixture cleanup.
+        var input = ResourceFsm("Item List", "ui_list_getinput");
         var shop = ResourceFsm("Shop Menu", "shop_control");
-        // Open -> CLOSE is the same native transition used by the live
-        // shop's ListenForMenuActions listener. It enters Down, emits SHOP
-        // CLOSED, and lets Shop Region perform its own Regain Control state.
-        if (shop.ActiveStateName == "Open") shop.SendEvent("CLOSE");
+        var region = ResourceFsm("Shop Region", "Shop Region");
+        yield return Until(() => list.ActiveStateName == "Idle" && !confirm.gameObject.activeInHierarchy &&
+            input.ActiveStateName == "Idle" && shop.ActiveStateName == "Open" && region.ActiveStateName == "Shop Up",
+            "native shop confirmation returned to listening item list", 5);
+        var cancel = InputHandler.Instance.inputActions.menuCancel;
+        var cancelObserved = false;
+        using (new Hook(typeof(ListenForMenuActions).GetMethod("OnUpdate"),
+            (Action<Action<ListenForMenuActions>, ListenForMenuActions>)((orig, action) => {
+                if (action.Fsm == shop.Fsm && action.State.Name == "Open" && cancel.WasPressed) {
+                    cancelObserved = true;
+                    Mark("RESOURCE SHOP native Open listener received cancel");
+                }
+                orig(action);
+            })))
+            yield return ResourcePress(cancel);
+        ResourceCheck(cancelObserved, "Salubra cancel reached the original Open listener");
+        // The listener must drive Open -> Down -> Send Event -> SHOP CLOSED;
+        // Shop Region owns Regain Control. Special Close/Inactive bypass it.
+        yield return Until(() => shop.ActiveStateName == "Idle" && !list.gameObject.activeInHierarchy &&
+            region.ActiveStateName != "Shop Up", "Salubra native close animation completed", 5);
         yield return ResourceIdle("native shop cancel");
     }
     private IEnumerator ResourcePress(InControl.PlayerAction action) {
@@ -180,58 +223,68 @@ public sealed partial class ProgressProbe {
         const string id = "notch:salubraNotch1";
         yield return Room("Room_Charm_Shop");
         var pd = PlayerData.instance; var beforeGeo = pd.GetInt("geo");
-        var receiverGeo = beforeGeo;
-        var cost = 0;
-        // Recipient stays outside UI until its remote award is complete. An
-        // additional stale-confirm attempt then enters the true native shop.
-        if (host) {
-            yield return ResourceOpenSalubra();
-            var list = ResourceFsm("Item List", "Item List Control");
-            var stock = list.GetComponent<ShopMenuStock>();
-            var index = Array.FindIndex(stock.stockInv, g => g != null && g.GetComponent<ShopItemStats>().playerDataBoolName == "salubraNotch1");
-            if (index >= 0) cost = stock.GetCost(index);
-            System.IO.File.WriteAllText(System.IO.Path.Combine(root, "resource.notch-cost"), cost.ToString());
-            Mark("RESOURCE SHOP stock=" + string.Join(",", stock.stockInv.Where(g => g != null).Select(g => g.GetComponent<ShopItemStats>().playerDataBoolName)) +
-                " selected=" + index + " charms=" + pd.GetInt("charmsOwned") + " geo=" + pd.GetInt("geo") + " cost=" + cost);
-            ResourceCheck(index >= 0 && stock.CanBuy(index), "Salubra notch is available for its actual native price");
-            list.FsmVariables.GetFsmInt("Current Item").Value = index;
-            list.SetState("Get Details");
-            yield return Until(() => list.ActiveStateName == "Idle", "native shop selected notch");
-            list.SendEvent("UI CONFIRM");
-            var confirm = ResourceFsm("UI List", "Confirm Control");
-            yield return Until(() => confirm.ActiveStateName == "Listen", "native notch confirmation prompt");
-            Dump(confirm);
+        // Both confirmations are opened through the real Item List. In
+        // particular the recipient's Confirm Control must complete Awake/Init;
+        // SetState on its never-activated prefab is not a native stale prompt.
+        yield return ResourceOpenSalubra();
+        var list = ResourceFsm("Item List", "Item List Control");
+        var stock = list.GetComponent<ShopMenuStock>();
+        var index = Array.FindIndex(stock.stockInv, g => g != null && g.GetComponent<ShopItemStats>().playerDataBoolName == "salubraNotch1");
+        var cost = index >= 0 ? stock.GetCost(index) : 0;
+        Mark("RESOURCE SHOP stock=" + string.Join(",", stock.stockInv.Where(g => g != null).Select(g => g.GetComponent<ShopItemStats>().playerDataBoolName)) +
+            " selected=" + index + " charms=" + pd.GetInt("charmsOwned") + " geo=" + beforeGeo + " cost=" + cost);
+        ResourceCheck(index >= 0 && stock.CanBuy(index), "Salubra notch is available for its actual native price");
+        list.FsmVariables.GetFsmInt("Current Item").Value = index;
+        list.SetState("Get Details");
+        yield return Until(() => list.ActiveStateName == "Idle", "native shop selected notch");
+        list.SendEvent("UI CONFIRM");
+        var confirm = ResourceFsm("UI List", "Confirm Control");
+        yield return Until(() => confirm.gameObject.activeInHierarchy && confirm.ActiveStateName == "Listen", "native notch confirmation prompt");
+        ResourceCheck(confirm.FsmVariables.GetFsmString("PD Bool Name").Value == "salubraNotch1" &&
+            confirm.FsmVariables.GetFsmInt("Cost").Value == cost, "native confirmation carries the selected source and cost");
+        yield return ResourceBarrier("shop-prompts-open");
+        if (!host) {
+            yield return Until(() => ((HashSet<string>)ResourceService.GetType().GetField("queued", ResourcePrivate)
+                .GetValue(ResourceService)).Contains(id), "shared source arrives while original confirmation is open", 12);
+            ResourceCheck(!LocalResourceClaims.Contains(id) && pd.GetInt("charmSlots") == 3,
+                "remote notch waits for the original UI instead of preempting its counters");
+        }
+        // Trace the actual native deduction entry rather than a synthetic
+        // uninitialized state. The production guard may redirect it to Reset.
+        On.HutongGames.PlayMaker.Fsm.hook_EnterState trace = (orig, fsm, state) => {
+            if (ReferenceEquals(fsm, confirm.Fsm) && state.Name == "Deduct Geo and set PD") {
+                Mark("RESOURCE SHOP deduction before flag=" + fsm.Variables.GetFsmString("PD Bool Name").Value +
+                    " claimed=" + LocalResourceClaims.Contains(id) + " queued=" +
+                    ((HashSet<string>)ResourceService.GetType().GetField("queued", ResourcePrivate).GetValue(ResourceService)).Contains(id) +
+                    " geo=" + pd.GetInt("geo") + " slots=" + pd.GetInt("charmSlots"));
+                orig(fsm, state);
+                Mark("RESOURCE SHOP deduction after state=" + fsm.ActiveStateName + " geo=" + pd.GetInt("geo") +
+                    " slots=" + pd.GetInt("charmSlots"));
+            } else orig(fsm, state);
+        };
+        On.HutongGames.PlayMaker.Fsm.EnterState += trace;
+        try {
             var selection = ResourceFsm("UI List", "ui_list");
             selection.FsmVariables.GetFsmInt("Current Item").Value = 1; // live IntSwitch maps 1 to YES
             confirm.SendEvent("UI SELECTION MADE");
-            yield return Until(() => pd.GetInt("charmSlots") == 4 && LocalResourceClaims.Contains(id), "real Salubra purchase grants one notch", 8);
+            if (host)
+                yield return Until(() => pd.GetInt("charmSlots") == 4 && LocalResourceClaims.Contains(id), "real Salubra purchase grants one notch", 8);
             yield return ResourceCloseSalubra();
-            ResourceCheck(beforeGeo - pd.GetInt("geo") == cost, "only original buyer pays the original shop cost");
-        } else {
-            yield return Until(() => pd.GetInt("charmSlots") == 4 && LocalResourceClaims.Contains(id), "notch arrives by production UDP", 20);
-            ResourceCheck(pd.GetInt("geo") == receiverGeo, "shared notch charges recipient no Geo");
-        }
+        } finally { On.HutongGames.PlayMaker.Fsm.EnterState -= trace; }
+        yield return Until(() => pd.GetInt("charmSlots") == 4 && LocalResourceClaims.Contains(id), "notch received exactly once after original UI releases control", 8);
+        Mark("RESOURCE SHOP final geo=" + pd.GetInt("geo") + " slots=" + pd.GetInt("charmSlots") + " claimed=" + LocalResourceClaims.Contains(id));
+        ResourceCheck(beforeGeo - pd.GetInt("geo") == (host ? cost : 0), host
+            ? "only original buyer pays the original shop cost"
+            : "stale native confirmation cannot charge or award a repeated source");
         yield return ResourceBarrier("shop-granted");
-        cost = int.Parse(System.IO.File.ReadAllText(System.IO.Path.Combine(root, "resource.notch-cost")));
         yield return ResourceOpenSalubra();
         var itemList = ResourceFsm("Item List", "Item List Control");
         ResourceCheck(!itemList.GetComponent<ShopMenuStock>().stockInv.Any(g => g != null && g.GetComponent<ShopItemStats>().playerDataBoolName == "salubraNotch1"),
             "shared native source removed from current shop stock without a room reload");
-        // Fault fixture: retain stale confirmation fields then enter the native
-        // cost state. This directly verifies the guard before TakeGeo; it is
-        // not counted as a second ordinary UI purchase.
-        var stale = ResourceFsm("UI List", "Confirm Control");
-        stale.FsmVariables.GetFsmString("PD Bool Name").Value = "salubraNotch1";
-        stale.FsmVariables.GetFsmInt("Cost").Value = cost;
-        var beforeStaleGeo = pd.GetInt("geo");
-        stale.SetState("Deduct Geo and set PD");
-        yield return null;
-        ResourceCheck(pd.GetInt("geo") == beforeStaleGeo && pd.GetInt("charmSlots") == 4,
-            "stale native confirmation cannot charge or award a repeated source");
         yield return ResourceCloseSalubra();
         ResourceSend(id); ResourceSend(id);
         yield return new WaitForSecondsRealtime(.4f);
-        ResourceCheck(pd.GetInt("geo") == beforeStaleGeo && pd.GetInt("charmSlots") == 4, "notch replay leaves money and slots unchanged");
+        ResourceCheck(pd.GetInt("geo") == beforeGeo - (host ? cost : 0) && pd.GetInt("charmSlots") == 4, "notch replay leaves money and slots unchanged");
         yield return ResourceBarrier("shop-complete");
     }
 
@@ -261,6 +314,10 @@ public sealed partial class ProgressProbe {
         yield return ResourceExpect("mask:slyShellFrag3", 6, 0, 0, 0, 0, 4, "mask 3 to 4 conversion");
         yield return ResourceIdle("mask conversion");
         ResourceSend("mask:slyShellFrag3");
+        // A remote numerical rollover completes before the buyer's original
+        // UI. Keep the next source family from changing the other counters
+        // while that buyer still verifies the current family.
+        yield return ResourceBarrier("mask-complete");
         yield return ResourceTaggedInstant("vessel:slyVesselFrag1", "Vessel Fragment Instant");
         yield return ResourceTaggedInstant("vessel:slyVesselFrag2", "Vessel Fragment Instant");
         ResourceCheck(PlayerData.instance.GetInt("vesselFragments") == 2, "two original vessel fragments before remote rollover");
@@ -269,6 +326,7 @@ public sealed partial class ProgressProbe {
         yield return ResourceExpect("vessel:dreamReward5", 6, 0, 33, 0, 0, 4, "vessel 2 to 3 conversion");
         yield return ResourceIdle("vessel conversion");
         ResourceSend("vessel:dreamReward5");
+        yield return ResourceBarrier("vessel-complete");
         // Ore sources are synthetic network-source fixtures here. Actual
         // pickup identity was independently observed in the earlier world case.
         if (host) foreach (var id in ResourceOreSources) ResourceSend(id);
