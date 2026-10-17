@@ -39,6 +39,13 @@ public sealed partial class CoverageProbe {
             (Action<Action<Entity, Dictionary<byte, EntityHostFsmData>>, Entity, Dictionary<byte, EntityHostFsmData>>)((orig, e, data) => {
                 var fsms = Field<HostClientPair<List<PlayMakerFSM>>>(e, "_fsms");
                 var snapshots = Field<List<FsmSnapshot>>(e, "_fsmSnapshots");
+                foreach (var pair in data.Where(p => p.Value.Types.Contains(EntityHostFsmData.Type.State))) {
+                    if (pair.Key >= fsms.Host.Count || fsms.Host[pair.Key] == null) continue;
+                    var f = fsms.Host[pair.Key];
+                    if (pair.Value.CurrentState != byte.MaxValue && pair.Value.CurrentState >= f.FsmStates.Length && seen.Add((e.Id, pair.Key)))
+                        Mark("LAYOUT invalid state id=" + e.Id + " type=" + e.Type + " index=" + pair.Key +
+                            " received=" + pair.Value.CurrentState + " host=" + Layout(f) + " client=" + Layout(fsms.Client[pair.Key]));
+                }
                 foreach (var pair in data.Where(p => p.Value.Types.Contains(EntityHostFsmData.Type.Strings))) {
                     if (!seen.Add((e.Id, pair.Key))) continue;
                     Mark("LAYOUT receive id=" + e.Id + " type=" + e.Type + " index=" + pair.Key +
