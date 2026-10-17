@@ -71,6 +71,13 @@ internal class MusicComponent : EntityComponent {
         foreach (var data in SnapshotDataList) {
             data.Index = index++;
         }
+        // Append after assigning the original shared cue/snapshot indices.
+        // Inserting into the JSON cue list would shift existing snapshots.
+        MusicCueDataList.Add(new MusicCueData { Name = "HKDecline", Index = 23 });
+        SnapshotDataList.Add(new AudioMixerSnapshotData { Name = "Main Only", Index = 24 });
+        SnapshotDataList.Add(new AudioMixerSnapshotData { Name = "HK Decline 2", Index = 25 });
+        SnapshotDataList.Add(new AudioMixerSnapshotData { Name = "HK Decline 3", Index = 26 });
+        SnapshotDataList.Add(new AudioMixerSnapshotData { Name = "HK Decline 4", Index = 27 });
     }
 
     /// <summary>

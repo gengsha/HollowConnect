@@ -77,6 +77,11 @@ internal class Entity {
     /// </summary>
     public HostClientPair<GameObject> Object { get; }
 
+    // The Hollow Knight corpse is the one post-battle subtree that must keep
+    // running locally after the networked boss has been retired.  The helper
+    // is null for every other entity and does not affect their lifecycle.
+    internal FinalBossCorpseContinuation FinalCorpse { get; }
+
     /// <summary>
     /// Host-client pair for the sprite animators.
     /// </summary>
@@ -230,6 +235,11 @@ internal class Entity {
 
             _hasParent = true;
         }
+
+        // Capture the native corpse before the generic replica setup freezes
+        // every cloned rigidbody and disables child FSMs.  This gives a late
+        // player a precise, scene-owned continuation for the local ending.
+        FinalCorpse = FinalBossCorpseContinuation.TryCreate(Type, SourceScene, Object.Host, Object.Client);
 
         Object.Client.transform.localScale = _lastScale = _hasParent 
             ? Object.Host.transform.localScale 
@@ -602,7 +612,7 @@ internal class Entity {
         }
 
         EntityInitializer.RemoveClientTypes(Object.Client);
-        _components[EntityComponentType.CombatState] = new CombatStateComponent(_netClient, Id, Object);
+        _components[EntityComponentType.CombatState] = new CombatStateComponent(_netClient, Id, Object, FinalCorpse);
 
         // Instantiate all types defined in the entity registry, which are passed to the constructor
         foreach (var type in types) {
@@ -1608,6 +1618,11 @@ internal class Entity {
                     // same index
                     if (_fsms.Client[fsmIndex] != null)
                         EntityFsmActions.RegisterStateChange(_fsms.Client[fsmIndex].Fsm, stateName);
+
+                    // A final-boss Die state is the authoritative boundary
+                    // for the local corpse continuation.  Keep this narrow:
+                    // all other FSM state replication remains unchanged.
+                    FinalCorpse?.ObservePhase(hostFsm.FsmName, stateName);
                 }
             }
 
@@ -1723,6 +1738,7 @@ internal class Entity {
         RestoreRestartFlags();
         MonoBehaviourUtil.Instance.OnUpdateEvent -= OnUpdate;
         foreach (var fsm in _fsms.Host) if (fsm != null) fsm.Fsm.StateChanged -= OnHostStateChanged;
+        FinalCorpse?.EntityDestroyed();
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Client));
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Host));
         Cleanup(() => EntityHooks.ForgetActivation(Object.Host));

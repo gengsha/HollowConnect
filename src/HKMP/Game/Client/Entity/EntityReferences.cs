@@ -143,6 +143,10 @@ internal static class EntityReferences {
         foreach (var part in Parts(e.Id).ToArray()) {
             var go = client ? part.Client : part.Host;
             if (go == null || go == root || Owner(go) != e || (root != null && go.transform.IsChildOf(root.transform))) continue;
+            // The final-boss corpse is intentionally detached and continues
+            // under its native FSM for this player. Retiring the network
+            // entity must not disable or destroy that personal ending tree.
+            if (client && e.FinalCorpse?.KeepClientPart(go) == true) continue;
             go.SetActive(false);
             if (destroy) UnityEngine.Object.Destroy(go);
         }

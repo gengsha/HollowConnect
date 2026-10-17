@@ -236,7 +236,7 @@ internal sealed class CombatStateComponent : EntityComponent {
                 void ApplyRenderer(Parts b){if(b==null||k>=b.Renderers.Length||b.Renderers[k]==null)return;var r=b.Renderers[k];r.enabled=enabled;if(sprite&&r is SpriteRenderer sr)sr.color=color;}
             }
             var ds=ReadCount(p);for(var k=0;k<ds;k++){
-                var enabled=p.ReadBool();var amount=p.ReadInt();var hazard=p.ReadInt();var shadow=p.ReadBool();if(amount<0||amount>100||hazard<0||hazard>100)throw new FormatException("Invalid damage");ApplyDamage(n?.Host);ApplyDamage(n?.Client);
+                var enabled=p.ReadBool();var amount=p.ReadInt();var hazard=p.ReadInt();var shadow=p.ReadBool();if(amount<0||amount>100||hazard<0||hazard>100)throw new FormatException("Invalid damage");if(!personal){ApplyDamage(n?.Host);ApplyDamage(n?.Client);}
                 void ApplyDamage(Parts b){if(b==null||k>=b.Damage.Length||b.Damage[k]==null)return;var d=b.Damage[k];d.enabled=enabled;d.damageDealt=amount;d.hazardType=hazard;d.shadowDashHazard=shadow;}
             }
             var ss=ReadCount(p);for(var k=0;k<ss;k++){
