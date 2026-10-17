@@ -1,0 +1,59 @@
+{
+  "version": "0.1.20",
+  "engineVersion": "3.0.0-hc11",
+  "releaseReady": false,
+  "retestOmitted": true,
+  "userRequest": "打包新版",
+  "recordedAtUtc": "2026-10-17T04:54:40.3699714Z",
+  "runs": [],
+  "scope": "Ordinary 0.1.20 package containing the scoped user-flow repairs. Reuse completed per-issue Unity evidence and final 100/0 regression; version-only production rebuild and package-integrity checks, no repeated game/regression/installer suite, no daily installation or personal-save writes.",
+  "previousValidationSource": "docs/evidence/flow-final-regression-20261017.json",
+  "previousValidationSha256": "2B2B690751C73CE879ABEC4FF6460954068897E0B510C8EA64AC295BD97D6744",
+  "previousProductionBuildCommit": "adc76fc50a05ca3e065210d1be6b4a1ee40e3132",
+  "previousProductionBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "CF775CEAADCAE60F8B40B93711769CEE30DBD81F1AE0C40957C58850828EA574"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "7B632757ABBE28664114ABDA8ACEA12243CA6A15A69D6DA0261D60ADF05377DD"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "2D316EF46D3F5739C4AA1C2862B95A3A5EAA1AC20B1C52EA2232FD2895907D94"
+    }
+  ],
+  "scopedUnityEvidence": [
+    "docs/evidence/colosseum-title-reward-20261017.json",
+    "docs/evidence/resource-sharing-2026-10-17.json",
+    "docs/evidence/flow-death-camera-2026-10-17.json",
+    "docs/evidence/flow-player-motion-2026-10-17.json",
+    "docs/evidence/final-boss-runtime-20261017.json"
+  ],
+  "installed": false,
+  "realTwoMachineFrp": false,
+  "productionChangeSinceValidation": "Only CoopMod.Version changes from 0.1.19 to 0.1.20 after the final 100/0 regression; gameplay and packet logic unchanged. Assembly metadata/hashes belong to this build; earlier Unity runs retain their separate original hashes.",
+  "buildCommit": "2b7686a80d660ec1f087302482ecab708d90dafb",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "FD6376CD81C2B299FC7C755248AA1D90884238395FA1C89AD98AC8099C42C9A2",
+      "productVersion": "1.0.0+2b7686a80d660ec1f087302482ecab708d90dafb"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "918C453E4379D78B2DC173EBD2D571CFAF5E19316A35F46343F129E6FB51D5CA",
+      "productVersion": "1.0.0+2b7686a80d660ec1f087302482ecab708d90dafb"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "473B84BB0DE46DF059A9D1A674C99FE953807B22C85AA7B6B58B95A660E6B8F6",
+      "productVersion": "1.0.0+2b7686a80d660ec1f087302482ecab708d90dafb"
+    }
+  ],
+  "compiledConstants": {
+    "hollowConnect": "0.1.20",
+    "hkmp": "3.0.0-hc11"
+  }
+}

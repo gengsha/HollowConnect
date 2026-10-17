@@ -7,8 +7,8 @@
 ## 传送
 
 - 日志记录三次 `Cinematic_Stag_travel` 入场，随后两次进入 `Ruins1_29`、一次进入 `Ruins2_08`。第一次还出现过场场景找不到 tilemap；它单独不能证明 F8 发起经过。
-- [目的地心跳](../src/HollowConnect/CoopRuntime.cs) 的 `IsReady` 只检查位置/转场标志，没有排除非游玩场景，也没有排除目标正在失去操作控制的过场阶段。原生 `GameManager.IsNonGameplayScene()` 和既有 HKMP `SceneUtil` 都把鹿角站动画归为非游玩场景，但这里没有复用这个判断。
-- [服务端](../src/HollowConnect/CoopServerAddon.cs) 接受现有目的地快照后，[WarpTo](../src/HollowConnect/CoopRuntime.cs) 要一直等待“仍在最初目标场景、角色就位、实体快照就绪”。过场自动进入别的房间后，原目标场景条件可能永远不再成立。
+- 目的地心跳（`src/HollowConnect/CoopRuntime.cs`） 的 `IsReady` 只检查位置/转场标志，没有排除非游玩场景，也没有排除目标正在失去操作控制的过场阶段。原生 `GameManager.IsNonGameplayScene()` 和既有 HKMP `SceneUtil` 都把鹿角站动画归为非游玩场景，但这里没有复用这个判断。
+- 服务端（`src/HollowConnect/CoopServerAddon.cs`） 接受现有目的地快照后，WarpTo（`src/HollowConnect/CoopRuntime.cs`） 要一直等待“仍在最初目标场景、角色就位、实体快照就绪”。过场自动进入别的房间后，原目标场景条件可能永远不再成立。
 - 30 秒期限只显示提示，**不会退出等待或清理 `changingScene`**。常规走门也不会清理它。卡住者因此无法再主动 F8；心跳又持续报告未就绪，服务端拒绝队友反向传送。另一人的地图坐标仍可继续被接收，与本次现象相符。
 
 等级：**确认的静态漏洞；本次事件的强候选原因**。日志没有记录 F8 序号、接受的目的地和 `changingScene`，因此还不能唯一证明这次实际卡在此处。最小修正方向是拒绝过场目标，并在本次传送已被其他原生转场取代或失败后结束自己的等待；不能强行解锁原生动画或套用死亡返回流程。
@@ -20,7 +20,7 @@
 | 发现 | 证据与影响 | 判定 |
 |---|---|---|
 | 辐光 FSM 状态不匹配重复写日志 | `ModLog.txt` 在 `GG_Radiance` 的状态 3/4 分别被拒绝 378/375 次，共 753 次。每次日志还查询调用栈来源；同时说明接管用的状态缓存未完整接受 | 警告及开销已发生；具体实体/FSM 未记录，不能直接归因到辐光根对象 |
-| 连续子动画让整包持续变化 | [CombatStateComponent](../src/HKMP/Game/Client/Entity/Component/CombatStateComponent.cs) 在比较前写入 `ClipTimeSeconds`；动画持续播放即可令整实体完整状态以至多 20Hz 发送。主线程继续压缩/解压、读取并应用节点/材质/碰撞数据 | 确认的额外处理路径；对本次帧率的占比未测 |
+| 连续子动画让整包持续变化 | CombatStateComponent（`src/HKMP/Game/Client/Entity/Component/CombatStateComponent.cs`） 在比较前写入 `ClipTimeSeconds`；动画持续播放即可令整实体完整状态以至多 20Hz 发送。主线程继续压缩/解压、读取并应用节点/材质/碰撞数据 | 确认的额外处理路径；对本次帧率的占比未测 |
 | 周期重建产生分配与组件查询 | 每 2 秒新建双方 `Parts`、组件数组和 `MaterialPropertyBlock`；保留旧副本历史前已构造新副本 Parts，随后又弃用。按每个节点线性查找旧节点 | 确认的分配路径；复杂实体多时值得优先测量 |
 | 无玩家时反复找玩家并报错 | 当前日志 9,840 条、前一份 4,971 条。原生 `HeroController.instance` 在不存在时执行查找并报错；模组的 `Playable` 等轮询调用会走此路径 | 多集中于菜单/无玩家阶段，不能拿这个数量直接解释战斗持续掉帧；需区分具体调用者 |
 | 小额逐帧分配 | 暗影服务即使无人倒地也创建集合；GUI 每次回调创建样式、排序队友；五门在心跳中重复序列化整条 Boss 计划 | 静态开销，优先级低于上述路径，尚无分配实测 |
@@ -41,3 +41,5 @@
 | 血量、阶段、死亡、动态生成、换房、迟入、断线接管 | 只核对相关公共路径，旧专项保留原哈希 | 本轮均未运行，不宣称通过或关闭旧问题 |
 
 机器记录、安装 DLL 与原生程序集完整 SHA256 见 [证据](evidence/warp-stag-performance-2026-10-17.json)。原始私人日志保留在忽略的本地目录，报告不包含玩家名字、地址或存档内容。技能静态扫描覆盖 3,578 个类型和 1,854 个数据文件；静态信号不等于全部 Boss 实测安全。
+
+文中源码路径可在随包提供的对应源码 ZIP 中查看。
