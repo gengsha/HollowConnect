@@ -23,7 +23,7 @@ public sealed class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSettings<Dea
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
     public static DeathStatistics Statistics = new DeathStatistics();
-    public const string Version = "0.1.20";
+    public const string Version = "0.1.21";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override void Initialize() {
