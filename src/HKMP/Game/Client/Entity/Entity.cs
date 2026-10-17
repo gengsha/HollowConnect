@@ -149,6 +149,11 @@ internal class Entity {
     private readonly List<FsmSnapshot> _fsmSnapshots;
     private readonly Dictionary<(byte Fsm, byte Variable), float> _pendingReferences = new();
 
+    // A mismatched native FSM layout can send the same invalid state index on
+    // every presence/update tick. Keep the diagnostic useful without doing
+    // main-thread string formatting and log I/O for every packet.
+    private HashSet<(byte Fsm, byte State)> _reportedHostStateIndices;
+
     private bool ApplyObjectReference(byte fsmIndex, byte variable, string key) {
         if (key == "@local") return true;
         bool Apply(PlayMakerFSM fsm, bool client) {
@@ -1591,7 +1596,9 @@ internal class Entity {
                     if (_fsms.Client[fsmIndex] != null)
                         EntityFsmActions.RegisterStateChange(_fsms.Client[fsmIndex].Fsm, string.Empty);
                 } else if (states.Length <= data.CurrentState) {
-                    Logger.Warn($"Tried to update host FSM state for unknown state index: {data.CurrentState}");
+                    _reportedHostStateIndices ??= new();
+                    if (_reportedHostStateIndices.Add((fsmIndex, data.CurrentState)))
+                        Logger.Warn($"Entity {Id} ({Type}, {SourceScene}), FSM {fsmIndex} ({hostFsm.FsmName}): unknown state index {data.CurrentState}, local states={states.Length}");
                 } else {
                     var stateName = states[data.CurrentState].Name;
                     
