@@ -49,8 +49,11 @@ internal sealed class CombatStateComponent : EntityComponent {
     private float next,rebuild;
     private readonly Dictionary<string,Node> lookup=new();
     private readonly ulong id;
-    internal CombatStateComponent(NetClient c,ulong id,HostClientPair<GameObject> objects):base(c,id,objects) {
+    private readonly FinalBossCorpseContinuation finalCorpse;
+    internal CombatStateComponent(NetClient c,ulong id,HostClientPair<GameObject> objects,
+        FinalBossCorpseContinuation finalCorpse = null):base(c,id,objects) {
         this.id=id;MonoBehaviourUtil.Instance.OnUpdateEvent+=Tick;
+        this.finalCorpse=finalCorpse;
     }
     private void Build() {
         if(GameObject.Host==null||GameObject.Client==null)return;
@@ -75,24 +78,41 @@ internal sealed class CombatStateComponent : EntityComponent {
         foreach(var n in nodes)lookup[n.Path]=n;
         rebuild=Time.unscaledTime+2;
     }
-    // Ambient/corpse particles have no shared gameplay state. Their local
-    // particle playback follows the enclosing object's native activation.
-    // Keep anything with an FSM, collider, damage or unknown controller.
+    // Pure presentation leaves have no shared gameplay state. Their local
+    // renderer/particle playback follows the enclosing object's activation.
+    // Keep anything with an FSM, collider, damage, rigidbody or unknown
+    // controller: a visual-looking child can still carry a hitbox or drive a
+    // gameplay transition through one of those components.
     internal static bool IsDecoration(GameObject go) {
-        if (go.GetComponent<ParticleSystem>() == null || go.transform.childCount != 0) return false;
+        if (go == null || go.transform.childCount != 0) return false;
+        var visual = false;
         foreach (var c in go.GetComponents<UnityEngine.Component>()) {
             if (c == null) return false;
-            if (c is Transform || c is ParticleSystem || c is ParticleSystemRenderer) continue;
+            if (c is Transform) continue;
+            if (c is Renderer || c is MeshFilter || c is tk2dBaseSprite || c is tk2dSpriteAnimator) {
+                visual = true;
+                continue;
+            }
             var name=c.GetType().Name;
-            if (name != "SetParticleScale" && name != "ParticleSystemAutoDestroy" &&
-                name != "ParticleSystemAutoDisable" && name != "KeepWorldScalePositive") return false;
+            if (name == "ParticleSystem" || name == "SetParticleScale" ||
+                name == "ParticleSystemAutoDestroy" || name == "ParticleSystemAutoDisable" ||
+                name == "KeepWorldScalePositive" || name == "SimpleFadeOut" ||
+                name == "DeactivateAfter2dtkAnimation") {
+                visual = true;
+                continue;
+            }
+            return false;
         }
-        return true;
+        return visual;
     }
     internal void PrepareTakeover() {
         Build();
         if(nodes==null)return;
         foreach(var n in nodes){
+            // Once the final corpse has detached it belongs to this player's
+            // native ending.  Do not copy that personal subtree back onto a
+            // newly authoritative boss during a host handoff.
+            if(finalCorpse?.IsPersonalPath(n.Path)==true)continue;
             if(n.Host?.Transform==null||n.Client?.Transform==null)continue;
             n.Client.Motion?.Flush();
             var source=n.Client.Transform;var target=n.Host.Transform;
@@ -161,18 +181,23 @@ internal sealed class CombatStateComponent : EntityComponent {
     public override void Update(EntityNetworkData data,bool snapshot) {
         if(!IsControlled)return;if(nodes==null||Time.unscaledTime>=rebuild)Build();
         var p=CombatStatePayload.Decode(data.Packet,out var count);if(count>256)throw new FormatException("Too many combat nodes");
+        var observeSeed=false;var seedPath="";var seedActive=false;var seedParent="";
         for(var i=0;i<count;i++){
             var path=p.ReadString();if(path.Length>2048)throw new FormatException("Invalid combat path");lookup.TryGetValue(path,out var n);
             if(n==null){var target=EntityReferences.Resolve("e:"+id+"/"+path,true);if(target!=null){n=new Node{Path=path,Client=new Parts(target.transform)};lookup[path]=n;}}
-            if(!p.ReadBool()){if(n?.Client?.Transform!=null)n.Client.Transform.gameObject.SetActive(false);continue;}
+            var personal=finalCorpse?.IsPersonalPath(path)==true;
+            if(!p.ReadBool()){if(!personal&&n?.Client?.Transform!=null)n.Client.Transform.gameObject.SetActive(false);continue;}
             var active=p.ReadBool();var layer=p.ReadByte();if(layer>31)throw new FormatException("Invalid combat layer");
             var parentKey=p.ReadString();if(parentKey.Length>2048)throw new FormatException("Invalid combat parent");
+            if(finalCorpse!=null&&path==finalCorpse.Path&&active&&parentKey.Length==0){observeSeed=true;seedPath=path;seedActive=active;seedParent=parentKey;}
             var pos=Vector3.zero;var rot=Vector3.zero;var scale=Vector3.one;if(path.Length!=0){pos=ReadVector(p);rot=ReadVector(p);scale=ReadVector(p);}else rot=ReadVector(p);
             // Dormant native children must remain under the disabled native
             // root until takeover. Detaching and activating both copies creates
             // duplicate terrain colliders and native attack controllers.
-            if(path.Length==0)ApplyTransform(n?.Host);
-            ApplyTransform(n?.Client);
+            if(!personal){
+                if(path.Length==0)ApplyTransform(n?.Host);
+                ApplyTransform(n?.Client);
+            }
             // EntityUpdate sends root position/scale, but rotation was optional
             // in the registry. Rotating roots must also rotate every child hitbox.
             void ApplyTransform(Parts b){
@@ -198,15 +223,17 @@ internal sealed class CombatStateComponent : EntityComponent {
             var cs=ReadCount(p);for(var k=0;k<cs;k++){
                 var enabled=p.ReadBool();var trigger=p.ReadBool();var offset=new Vector2(ReadFloat(p),ReadFloat(p));var kind=p.ReadByte();var size=new Vector2(ReadFloat(p),ReadFloat(p));
                 if(kind>3||size.x<0||size.y<0)throw new FormatException("Invalid collider geometry");
-                ApplyCollider(n?.Host);ApplyCollider(n?.Client);
+                if(!personal){ApplyCollider(n?.Host);ApplyCollider(n?.Client);}
                 void ApplyCollider(Parts b){if(b==null||k>=b.Colliders.Length||b.Colliders[k]==null)return;var c=b.Colliders[k];c.enabled=enabled;c.isTrigger=trigger;c.offset=offset;if(kind==1&&c is BoxCollider2D box)box.size=size;else if(kind==2&&c is CircleCollider2D cir)cir.radius=size.x;else if(kind==3&&c is CapsuleCollider2D cap)cap.size=size;}
             }
             var rs=ReadCount(p);for(var k=0;k<rs;k++){
                 var enabled=p.ReadBool();var sprite=p.ReadBool();var color=sprite?ReadColor(p):Color.white;
                 var flags=p.ReadByte();if(flags>3)throw new FormatException("Invalid material flags");var material=(flags&1)!=0?ReadColor(p):Color.white;var tint=(flags&2)!=0?ReadColor(p):Color.white;
-                ApplyRenderer(n?.Host);ApplyRenderer(n?.Client);
+                if(!personal){
+                    ApplyRenderer(n?.Host);ApplyRenderer(n?.Client);
+                    if(n?.Client!=null&&k<n.Client.Renderers.Length&&n.Client.Renderers[k]!=null&&flags!=0){var r=n.Client.Renderers[k];var block=n.Client.Blocks[k];r.GetPropertyBlock(block);if((flags&1)!=0)block.SetColor("_Color",material);if((flags&2)!=0)block.SetColor("_TintColor",tint);r.SetPropertyBlock(block);}
+                }
                 void ApplyRenderer(Parts b){if(b==null||k>=b.Renderers.Length||b.Renderers[k]==null)return;var r=b.Renderers[k];r.enabled=enabled;if(sprite&&r is SpriteRenderer sr)sr.color=color;}
-                if(n?.Client!=null&&k<n.Client.Renderers.Length&&n.Client.Renderers[k]!=null&&flags!=0){var r=n.Client.Renderers[k];var block=n.Client.Blocks[k];r.GetPropertyBlock(block);if((flags&1)!=0)block.SetColor("_Color",material);if((flags&2)!=0)block.SetColor("_TintColor",tint);r.SetPropertyBlock(block);}
             }
             var ds=ReadCount(p);for(var k=0;k<ds;k++){
                 var enabled=p.ReadBool();var amount=p.ReadInt();var hazard=p.ReadInt();var shadow=p.ReadBool();if(amount<0||amount>100||hazard<0||hazard>100)throw new FormatException("Invalid damage");ApplyDamage(n?.Host);ApplyDamage(n?.Client);
@@ -220,7 +247,7 @@ internal sealed class CombatStateComponent : EntityComponent {
                 if(clipTime<0||fps<0)throw new FormatException("Invalid child animation timing");
                 // Root clips have their own event stream. Child clips advance
                 // every rendered frame; snapshots must not rewind them at 20Hz.
-                if(n?.Client==null||k>=n.Client.Sprites.Length||n.Client.Sprites[k]==null)continue;
+                if(personal||n?.Client==null||k>=n.Client.Sprites.Length||n.Client.Sprites[k]==null)continue;
                 var b=n.Client;var s=b.Sprites[k];s.color=color;
                 if(path.Length==0)continue;
                 var a=b.Animators[k];var clip=animated&&a!=null?a.GetClipByName(clipName):null;
@@ -237,9 +264,12 @@ internal sealed class CombatStateComponent : EntityComponent {
             }
             var ps=ReadCount(p);for(var k=0;k<ps;k++){
                 var playing=p.ReadBool();var emitting=p.ReadBool();if(n?.Client==null||k>=n.Client.Particles.Length||n.Client.Particles[k]==null)continue;
-                var part=n.Client.Particles[k];if(playing&&!part.isPlaying)part.Play(false);else if(!playing&&part.isPlaying)part.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);else if(!emitting&&part.isEmitting)part.Stop(false,ParticleSystemStopBehavior.StopEmitting);
+                if(personal)continue;var part=n.Client.Particles[k];if(playing&&!part.isPlaying)part.Play(false);else if(!playing&&part.isPlaying)part.Stop(false,ParticleSystemStopBehavior.StopEmittingAndClear);else if(!emitting&&part.isEmitting)part.Stop(false,ParticleSystemStopBehavior.StopEmitting);
             }
         }
+        // Let the complete seed packet establish the corpse pose and child
+        // presentation before enabling the native local Corpse FSM.
+        if(observeSeed)finalCorpse.ObserveSeed(seedPath,seedActive,seedParent);
     }
     public override void Destroy()=>MonoBehaviourUtil.Instance.OnUpdateEvent-=Tick;
 }

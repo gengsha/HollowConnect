@@ -16,6 +16,8 @@ public sealed partial class CoverageProbe {
         var source = new GameObject("HollowConnect environment state fixture"); source.SetActive(false);
         var decoration = new GameObject("local corpse particles"); decoration.transform.SetParent(source.transform, false);
         decoration.AddComponent<ParticleSystem>();
+        var visual = new GameObject("local visual flare"); visual.transform.SetParent(source.transform, false);
+        visual.AddComponent<MeshFilter>(); visual.AddComponent<MeshRenderer>();
         var attack = new GameObject("particle attack"); attack.transform.SetParent(source.transform, false);
         attack.AddComponent<ParticleSystem>(); attack.AddComponent<BoxCollider2D>(); attack.AddComponent<DamageHero>();
         var net = new NetClient(new PacketManager()); Entity entity = null;
@@ -31,8 +33,9 @@ public sealed partial class CoverageProbe {
             object PartOf(object node) => node.GetType().GetField("Host", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(node);
             build.Invoke(combat, null);
             var nodes = Nodes();
-            if (nodes.Any(n => PathOf(n).Contains("local%20corpse")) || !nodes.Any(n => PathOf(n).Contains("particle%20attack")))
-                throw new Exception("Decorative particles were synchronized or particle damage was excluded");
+            if (nodes.Any(n => PathOf(n).Contains("local%20corpse")) || nodes.Any(n => PathOf(n).Contains("local%20visual")) ||
+                !nodes.Any(n => PathOf(n).Contains("particle%20attack")))
+                throw new Exception("Decorative leaves were synchronized or particle damage was excluded");
             var attackNode = nodes.Single(n => PathOf(n).Contains("particle%20attack"));
             var part = PartOf(attackNode);
             build.Invoke(combat, null);
@@ -41,7 +44,7 @@ public sealed partial class CoverageProbe {
             attack.AddComponent<CircleCollider2D>(); build.Invoke(combat, null);
             var colliders = (Collider2D[])part.GetType().GetField("Colliders", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(part);
             if (colliders.Length != 2) throw new Exception("Cached binding missed a newly added hitbox");
-            Mark("PASS cosmetic particle leaves excluded, damaging particles retained, bindings reused and new hitboxes refreshed");
+            Mark("PASS cosmetic leaves excluded, damaging particles retained, bindings reused and new hitboxes refreshed");
             yield return null;
         } finally { entity?.Destroy(); Object.Destroy(source); net.Disconnect(); }
     }
