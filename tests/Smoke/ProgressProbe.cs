@@ -20,6 +20,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
     private string root, role;
     private bool host;
     private bool ResourcesCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESOURCE_CHECK") == "1";
+    private bool TeammateDreamCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_TEAMMATE_DREAM") == "1";
     private sealed class FileLogger : Hkmp.Logging.ILogger {
         private readonly string path;
         private readonly object sync = new object();
@@ -208,11 +209,14 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 orig(gm, additive);
             };
         CoopMod.Settings.ShareProgress = true; CoopMod.Settings.EntryProtection = false;
+        if (TeammateDreamCase) CoopMod.Settings.ShareCharms = host
+            ? Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHARM_SHARE") != "0"
+            : Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHARM_SHARE") == "0";
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1); pd.SetInt("geo", 500);
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
-        if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase) && pd.GetBool("atBench")) {
+        if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase) && pd.GetBool("atBench")) {
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
             yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
@@ -229,6 +233,20 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         typeof(ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
         typeof(ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "progress" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake");
+        if (TeammateDreamCase) {
+            var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(TeammateDream());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (Has(role + ".failed")) yield break;
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS teammate dream and charm rules"); Flag(role + ".done"); }
+            yield break;
+        }
         if (ResourcesCase) {
             var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(Resources());
             while (checks.Count > 0) {

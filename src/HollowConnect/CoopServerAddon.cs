@@ -25,7 +25,7 @@ public sealed class CoopServerAddon : ServerAddon {
     private ResourceClaims resources = new ResourceClaims();
     private readonly Dictionary<ushort, double> lastWarp = new Dictionary<ushort, double>();
     private readonly Dictionary<ushort, Message> destinations = new Dictionary<ushort, Message>();
-    private bool wasStarted, shared, rescue, warp, entryProtection;
+    private bool wasStarted, shared, charms, rescue, warp, entryProtection;
     private double nextRoster;
     private static double Now => (DateTime.UtcNow - new DateTime(2020, 1, 1)).TotalSeconds;
 
@@ -51,6 +51,7 @@ public sealed class CoopServerAddon : ServerAddon {
             wasStarted = true; party = new Party(); progress = new ProgressLedger(); resources = new ResourceClaims();
             lastWarp.Clear(); destinations.Clear(); nextRoster = 0;
             shared = CoopMod.Settings.ShareProgress; rescue = CoopMod.Settings.Rescue; warp = CoopMod.Settings.AllowTeleport;
+            charms = CoopMod.Settings.ShareCharms;
             entryProtection = CoopMod.Settings.EntryProtection;
             CoopContext.Epoch = 0; CoopContext.Resetting = false;
             var manager = (ServerManager)api.ServerManager;
@@ -91,8 +92,9 @@ public sealed class CoopServerAddon : ServerAddon {
         if (player == null) return;
         if (m.Kind == Kind.Hello) {
             party.Join(id, player.Username);
-            Send(id, new Message { Kind = Kind.Welcome, Id = id, Name = player.Username, Value = (shared ? 1 : 0) | (rescue ? 2 : 0) | (warp ? 4 : 0) | (entryProtection ? 8 : 0) });
-            foreach (var pair in progress.Values) Send(id, new Message { Kind = Kind.ProgressGrant, Key = pair.Key, Value = pair.Value });
+            Send(id, new Message { Kind = Kind.Welcome, Id = id, Name = player.Username, Value = (shared ? 1 : 0) | (rescue ? 2 : 0) | (warp ? 4 : 0) | (entryProtection ? 8 : 0) | (charms ? 0 : 16) });
+            foreach (var pair in progress.Values)
+                if (ProgressCatalog.CanShare(pair.Key, shared, charms)) Send(id, new Message { Kind = Kind.ProgressGrant, Key = pair.Key, Value = pair.Value });
             if (shared) foreach (var source in resources.Claimed) Send(id, new Message { Kind = Kind.ResourceGrant, Key = source });
             foreach (var standing in party.Deaths.Deaths) Send(id, DeathCount(standing.Key, standing.Value));
             if (party.Resetting) {
@@ -161,7 +163,7 @@ public sealed class CoopServerAddon : ServerAddon {
             case Kind.Ready:
                 party.Ready(id, m.Round, m.Scene); break;
             case Kind.ProgressOffer:
-                if (shared && !party.Resetting && progress.Merge(m.Key, m.Value))
+                if (ProgressCatalog.CanShare(m.Key, shared, charms) && !party.Resetting && progress.Merge(m.Key, m.Value))
                     Broadcast(new Message { Kind = Kind.ProgressGrant, Key = m.Key, Value = m.Value });
                 break;
             case Kind.WarpRequest:

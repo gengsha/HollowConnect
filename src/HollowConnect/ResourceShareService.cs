@@ -77,7 +77,10 @@ internal sealed class ResourceShareService : IDisposable {
     }
     private void PreserveLocalResource(Action<SaveManager, ushort, byte[]> orig, SaveManager manager, ushort index, byte[] value) {
         var mapping = SaveDataMapping.Instance;
-        if (mapping.PlayerDataIndices.TryGetValue(index, out var name) && ResourceCatalog.PreservesPlayerData(name)) return;
+        // Charm ownership belongs to the opt-in, monotonic progress ledger.
+        // Full-save/incremental replay must not bypass its room rule.
+        if (mapping.PlayerDataIndices.TryGetValue(index, out var name) &&
+            (ResourceCatalog.PreservesPlayerData(name) || ProgressCatalog.IsCharm(name) || name == "charmsOwned")) return;
         if (mapping.PersistentBoolIndices.TryGetValue(index, out var item) && ResourceCatalog.PreservesPersistent(item.SceneName, item.Id)) return;
         orig(manager, index, value);
     }

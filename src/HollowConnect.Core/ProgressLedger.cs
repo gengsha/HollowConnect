@@ -30,6 +30,8 @@ public static class ProgressCatalog {
         return result;
     }
     public static bool IsBoolean(string key) => Limits.TryGetValue(key, out var max) && max == 1;
+    public static bool IsCharm(string key) => key != null && key.StartsWith("gotCharm_", StringComparison.Ordinal) && Limits.ContainsKey(key);
+    public static bool CanShare(string key, bool shared, bool charms) => key != null && shared && Limits.ContainsKey(key) && (charms || !IsCharm(key));
 }
 
 public sealed class ProgressLedger {

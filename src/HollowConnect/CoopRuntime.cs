@@ -29,6 +29,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     internal readonly Dictionary<ushort, Peer> Peers = new Dictionary<ushort, Peer>();
     private ProgressLedger granted = new ProgressLedger();
     private ResourceShareService resources;
+    private TeammateDreamNail teammateDream;
     private DeathStatistics resourceSlot;
     private bool resourceImported;
     private readonly HashSet<string> offeredResources = new HashSet<string>(StringComparer.Ordinal);
@@ -48,7 +49,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     internal string Session = "";
     internal ushort LocalId, Selected;
     internal uint ReleasedRound;
-    internal bool Shared, RescueEnabled, WarpEnabled, Down, Resetting, Returning;
+    internal bool Shared, ShareCharms, RescueEnabled, WarpEnabled, Down, Resetting, Returning;
     private uint sequence, downSerial, warpSerial, handledWarp;
     private string localName = "";
     private Vector2 deathScroll;
@@ -102,6 +103,7 @@ public sealed class CoopRuntime : MonoBehaviour {
             () => CoopMod.Statistics.Resources, id => Send(new Message { Kind = Kind.ResourceOffer, Key = id }),
             s => CoopMod.Instance?.Log(s));
         resources.Register();
+        teammateDream = new TeammateDreamNail(this);
         BossTravel.Register();
         CoopContext.CaptureBossContext = BossTravel.CaptureContext;
         CoopContext.ApplyBossContext = BossTravel.ApplyContext;
@@ -121,6 +123,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private void OnConnect() {
+        teammateDream.Reset();
         resources.ResetConnection(); offeredResources.Clear();
         localName = "";
         Session = ""; Peers.Clear(); offered.Clear(); granted = new ProgressLedger(); sequence = 0; handledWarp = 0; ReleasedRound = 0;
@@ -128,6 +131,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         Send(new Message { Kind = Kind.Hello });
     }
     private void OnDisconnect() {
+        teammateDream.Reset();
         resources.ResetConnection(); offeredResources.Clear();
         localName = "";
         CancelBenchReturn();
@@ -154,6 +158,8 @@ public sealed class CoopRuntime : MonoBehaviour {
                 Send(new Message { Kind = Kind.DeathHistory, Name = entry.Key, Serial = entry.Value });
             Shared = (m.Value & 1) != 0; RescueEnabled = (m.Value & 2) != 0; WarpEnabled = (m.Value & 4) != 0;
             protectEntry = (m.Value & 8) != 0;
+            // An older Welcome has no opt-out bit and keeps existing behavior.
+            ShareCharms = (m.Value & 16) == 0;
             Notice("协作连接已建立" + (Shared ? " · 共享进度开启" : "") + " · 按住 " + CoopMod.Settings.DeathLeaderboardKey + " 查看死亡榜");
             nextPresence = nextProgress = 0;
             return;
@@ -283,7 +289,7 @@ public sealed class CoopRuntime : MonoBehaviour {
                 Resetting = false; CoopContext.Resetting = false; readySent = false; Unlock(); personalDeath = null;
                 Notice("全队加载完成，重新出发"); break;
             case Kind.ProgressGrant:
-                if (Shared && granted.Merge(m.Key, m.Value)) ApplyProgress(m.Key, m.Value);
+                if (ProgressCatalog.CanShare(m.Key, Shared, ShareCharms) && granted.Merge(m.Key, m.Value)) ApplyProgress(m.Key, m.Value);
                 break;
             case Kind.Warp:
                 if (m.Serial <= handledWarp || !CanStartWarp || string.IsNullOrEmpty(m.Scene) || SceneUtil.IsNonGameplayScene(m.Scene)) break;
@@ -506,6 +512,15 @@ public sealed class CoopRuntime : MonoBehaviour {
         if (Down && lockedHero != null) lockedHero.transform.position = DeathPosition;
     }
     internal GameObject PlayerObject(ushort id) => api.ClientManager.GetPlayer(id)?.PlayerObject;
+    internal bool CanDreamNail(ushort id) {
+        if (id == LocalId || !Connected || !Playable || Down || Resetting || Returning ||
+            changingScene || GameManager.instance.isPaused || !PlayerData.instance.GetBool("hasDreamNail") ||
+            HeroController.instance.cState.dead || HeroController.instance.cState.hazardDeath || HeroController.instance.cState.hazardRespawning) return false;
+        var target = PlayerObject(id);
+        return target != null && target.activeInHierarchy && Peers.TryGetValue(id, out var peer) &&
+            peer.Life == Life.Alive && peer.State != null && peer.State.IsReady &&
+            peer.State.Scene == CoopContext.LocalScene && Now - peer.Seen < 2;
+    }
     internal bool RequestShadeHit(ushort target, uint serial) {
         if (!Connected || !Playable || Down || Resetting || Returning || changingScene || !RescueEnabled ||
             !Peers.TryGetValue(target, out var peer) || peer.Life != Life.Down || peer.DownSerial != serial ||
@@ -515,13 +530,14 @@ public sealed class CoopRuntime : MonoBehaviour {
         return true;
     }
 
-    private bool OnSetBool(string key, bool value) => Shared && Connected && granted.Get(key) == 1 || value;
+    private bool OnSetBool(string key, bool value) => Connected && ProgressCatalog.CanShare(key, Shared, ShareCharms) && granted.Get(key) == 1 || value;
     private int OnSetInt(string key, int value) => Shared && Connected && ProgressCatalog.Limits.TryGetValue(key, out var limit)
         ? Math.Min(limit, Math.Max(value, granted.Get(key))) : value;
     private void CheckProgress() {
         if (resourceImported) foreach (var source in CoopMod.Statistics.Resources.Claimed)
             if (offeredResources.Add(source)) Send(new Message { Kind = Kind.ResourceOffer, Key = source });
         foreach (var pair in fields) {
+            if (!ProgressCatalog.CanShare(pair.Key, Shared, ShareCharms)) continue;
             var obj = pair.Value.GetValue(PlayerData.instance);
             var value = obj is bool flag ? (flag ? 1 : 0) : (int)obj;
             // Reapply grants received before the local save/hero finished loading.
@@ -532,7 +548,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         }
     }
     private void ApplyProgress(string key, int value) {
-        if (!Playable || !fields.TryGetValue(key, out var field)) return;
+        if (!Playable || !ProgressCatalog.CanShare(key, Shared, ShareCharms) || !fields.TryGetValue(key, out var field)) return;
         var pd = PlayerData.instance;
         var current = field.GetValue(pd);
         if (field.FieldType == typeof(bool)) {
@@ -772,6 +788,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private void OnDestroy() {
+        teammateDream?.Dispose();
         BossTravel.Unregister();
         CoopContext.CaptureBossContext = null; CoopContext.ApplyBossContext = null; CoopContext.BossTransitionReady = null;
         CoopContext.LocalRescueDown = null;

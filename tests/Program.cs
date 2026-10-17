@@ -470,6 +470,18 @@ internal static class Program {
         Test("Mantis Claw is idempotent", () => {
             var l = new ProgressLedger(); Check(l.Merge("hasWalljump", 1)); Check(!l.Merge("hasWalljump", 1)); Check(l.Get("hasWalljump") == 1);
         });
+        Test("charm sharing defaults to existing behavior", () => {
+            Check(new Settings().ShareCharms);
+            for (var i = 1; i <= 40; i++) Check(ProgressCatalog.CanShare("gotCharm_" + i, true, true));
+        });
+        Test("charm sharing toggle leaves other permanent progress available", () => {
+            foreach (var key in ProgressCatalog.Limits.Keys) {
+                Check(ProgressCatalog.CanShare(key, true, false) == !ProgressCatalog.IsCharm(key), key);
+                Check(!ProgressCatalog.CanShare(key, false, true), key);
+            }
+            foreach (var key in new[] { "gotCharm_0", "gotCharm_41", "gotCharm_01", "equippedCharm_1", "charmsOwned", null })
+                Check(!ProgressCatalog.IsCharm(key) && !ProgressCatalog.CanShare(key, true, true));
+        });
         Test("abilities never regress", () => { var l = new ProgressLedger(); l.Merge("hasDash", 1); Check(!l.Merge("hasDash", 0)); Check(l.Get("hasDash") == 1); });
         Test("spells take maximum, not sum", () => { var l = new ProgressLedger(); l.Merge("fireballLevel", 2); Check(!l.Merge("fireballLevel", 1)); Check(l.Get("fireballLevel") == 2); });
         Test("invalid progress is rejected", () => { var l = new ProgressLedger(); Check(!l.Merge("hasWalljump", -1)); Check(!l.Merge("fireballLevel", 99)); Check(!l.Merge(null, 1)); });
