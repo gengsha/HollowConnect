@@ -1,6 +1,8 @@
 # 共享永久进度白名单
 
-布尔字段按 OR 合并；`fireballLevel`、`quakeLevel`、`screamLevel` 上限 2，`nailSmithUpgrades` 上限 4，按最大值合并。能力已有时不再次授予。字段均已与本机游戏 API 反射校验。
+布尔字段按 OR 合并；`fireballLevel`、`quakeLevel`、`screamLevel` 上限 2，按最大值合并。能力已有时不再次授予。字段均已与本机游戏 API 反射校验。
+
+0.1.20 将骨钉等级、伤害和升级消费改为个人独立。护符槽、面具碎片、灵魂容器碎片和苍白矿石按固定来源共享去重，消耗后不会因为重连重新发放；不按资源余额取最大值。来源与验证边界见[本轮修复记录](USER-FLOW-REPAIR-2026-10-17.md)。
 
 0.1.7 另将 `watcherChandelier`（守望者吊灯永久事件）纳入共享，只有房主开启共享进度时合并。
 
@@ -93,7 +95,6 @@
 - `mawlekDefeated`
 - `megaMossChargerDefeated`
 - `monomonDefeated`
-- `nailSmithUpgrades`
 - `openedBlackEggDoor`
 - `openedCityGate`
 - `openedCrossroads`

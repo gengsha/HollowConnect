@@ -1,7 +1,7 @@
 param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$version = '0.1.19'
+$version = '0.1.20'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
 $taskEvidencePath=Join-Path $root "docs/evidence/runtime-room-$version.json"
@@ -56,7 +56,11 @@ foreach ($name in 'Install.ps1','Uninstall.ps1','GamePath.ps1','安装说明.txt
 $installerOutput = Join-Path $root 'src\HollowConnect.Installer\bin\Release\net472'
 foreach ($name in '一键安装.exe','一键安装.exe.config') { Copy-Item -LiteralPath (Join-Path $installerOutput $name) -Destination $package -Force }
 foreach ($name in 'README.md','HKMP-LICENSE','LICENSE','THIRD-PARTY.md') { Copy-Item -LiteralPath (Join-Path $root $name) -Destination $package -Force }
-Copy-Item -LiteralPath (Join-Path $root 'docs') -Destination $package -Recurse -Force
+foreach ($taskDoc in Get-ChildItem -LiteralPath (Join-Path $root 'docs') -File -Recurse | Where-Object { $_.Name -notlike '*.draft' }) {
+    $taskDocTarget = Join-Path $package $taskDoc.FullName.Substring($root.Length + 1)
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $taskDocTarget) | Out-Null
+    Copy-Item -LiteralPath $taskDoc.FullName -Destination $taskDocTarget -Force
+}
 $manifest = [ordered]@{
     version = $version
     releaseChannel = if($Playtest){'playtest'}else{'release'}
@@ -86,7 +90,7 @@ $archive = [IO.Compression.ZipFile]::Open($sourceZip, [IO.Compression.ZipArchive
 try {
     foreach ($name in $sources) {
         $path = Join-Path $root $name
-        $entries = if (Test-Path -LiteralPath $path -PathType Container) { Get-ChildItem -LiteralPath $path -File -Recurse | Where-Object { $_.FullName -notmatch '\\(bin|obj)\\' } } else { Get-Item -LiteralPath $path }
+        $entries = if (Test-Path -LiteralPath $path -PathType Container) { Get-ChildItem -LiteralPath $path -File -Recurse | Where-Object { $_.FullName -notmatch '\\(bin|obj)\\' -and $_.Name -notlike '*.draft' } } else { Get-Item -LiteralPath $path }
         foreach ($file in $entries) {
             $relative = $file.FullName.Substring($root.Length + 1).Replace('\','/')
             [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $file.FullName, $relative, [IO.Compression.CompressionLevel]::Optimal) | Out-Null

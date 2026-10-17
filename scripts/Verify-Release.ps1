@@ -1,7 +1,7 @@
 param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
-$version='0.1.19'
+$version='0.1.20'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package=Join-Path $root ('dist\'+$taskPackageName)
@@ -81,7 +81,7 @@ foreach ($kind in 'windows','source') {
         if ($files.Count -eq 0) { throw "Empty $kind archive." }
         foreach ($entry in $files) {
             $relative=$entry.FullName.Replace('\','/')
-            if ($relative -match '(^|/)(\.test-results|vendor|bin|obj)/|HollowConnect\.Smoke\.dll$|user\d+.*\.dat$|(?:unity|engine)\.log$') { throw "Private/build file in $kind : $relative" }
+            if ($relative -match '(^|/)(\.test-results|vendor|bin|obj)/|HollowConnect\.Smoke\.dll$|user\d+.*\.dat$|(?:unity|engine)\.log$|\.draft$') { throw "Private/build/draft file in $kind : $relative" }
             if ($kind -eq 'source' -and $relative -match '\.(dll|exe|pdb)$') { throw "Binary in source archive: $relative" }
             $base=if ($kind -eq 'windows') { $package } else { $root }
             $original=Join-Path $base $relative
