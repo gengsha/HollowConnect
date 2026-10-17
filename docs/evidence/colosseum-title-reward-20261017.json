@@ -1,0 +1,183 @@
+{
+  "generatedUtc": "2026-10-17T04:47:44.2108625Z",
+  "scope": "Bronze Colosseum late entrant title/music and first notch reward",
+  "status": "PASS_SCOPED",
+  "titleAndWaveOneMusic": {
+    "run": ".test-results/colosseum-title-20261017-r1",
+    "verdict": "PASS; both FINAL PASS and strict logs/hash verification",
+    "observations": [
+      "Late entrant native AreaTitleController has areaEvent COLOSSEUM",
+      "No empty-key _MAIN/_SUB/_SUPER placeholders",
+      "Actual local AudioSource plays and advances Colosseum music"
+    ],
+    "production": "Entity.cs preserves local Music Control and native title configuration FSM. Current production uses the actual native audio cue receipt carried in existing Battle Control string snapshots.",
+    "limitation": "This earlier probe held Wave 1. Its old current-Battle-state replay was superseded after inspection found Wave 2 and Wave 3 emit no MUSIC event; see lateWaveMusic for the final implementation verification.",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "D0866C6A9D994E360FF39F26D92E7EED120E4CF964961D7A57FDD552B819F350"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "27A8AB368FCFEFAE04A356A1EBE5A44E906AB8731591CD5E21E877AD9AF5CA17"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "AE17F92F8938E42B3DCFD650CFE8B4D928694A486669DFEED5E6F27CA462D54A"
+      },
+      {
+        "name": "HollowConnect.Smoke.dll",
+        "sha256": "17A249811852AA61FFFB1A6B2CAA5E46135C1CBA38907D64A9045A09AEE58212"
+      }
+    ]
+  },
+  "nativeWaveEvidence": {
+    "run": ".test-results/colosseum-victory-20261017-r3",
+    "verdict": "OBSERVED NATIVE WAVES AND SHINY; reward interaction failed in fixture",
+    "fixture": "Only already-active registered enemies receive ApplyExtraDamage; original death callbacks, wave counters and timers advance the Bronze waves",
+    "observations": [
+      "Battle Control reached native End",
+      "Geo Pool reached native Give Shiny?",
+      "Actual first-completion Shiny activated and completed its native fling"
+    ],
+    "failedAssertion": "actual notch inspect range; fixture used item position before it completed a horizontal fling"
+  },
+  "rewardContinuation": {
+    "run": ".test-results/colosseum-reward-continuation-20261017-r3",
+    "verdict": "PASS; both FINAL PASS, orderly offline shutdown, strict logs and installed/build hashes verified; runner exit 0",
+    "fixture": "Explicit short continuation from the exact Geo Pool/Give Shiny? entry observed by nativeWaveEvidence. This does not claim another full-wave victory. Held first-wave enemies are cleared and native takeNoDamage protects the pickup animation.",
+    "interaction": "Waits for original Shiny Control/Idle after fling; uses HeroController.FindGroundPoint to stand on original floor, then original Up input, inspect FSM and Notch action",
+    "observations": [
+      "First entrant original IncrementPlayerDataInt changes charmSlots from 3 to 4",
+      "Native reward UI ends and restores hero input/control/pause eligibility",
+      "Late entrant receives exactly one notch via production resource sharing UDP",
+      "Both players retain colosseumBronzeCompleted and source ledger notch:colosseumBronze",
+      "After both leave and reload, counts remain 4",
+      "Collected source is disabled or destroyed and cannot enter another Notch award"
+    ],
+    "production": "ResourceShareService.cs and ResourceCatalog source receipts provide the late entrant reward and deduplication; Entity.cs title/music fixes do not grant resources",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "E35DDECC1FE3185EF13B44D89D300C7143A03849946FC8F3A75EE5DB2B5B870A"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "787922EDE306BCC26E9747467FE62D5C159EF890CC4A64BFA593A2C3D4FDD2B5"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "5503662830FDC3537F2CF0FD0091884D44CB7A09B934C106488DA66F8EF9C795"
+      },
+      {
+        "name": "HollowConnect.Smoke.dll",
+        "sha256": "930AE5318EEB1C40BCE18D4DF588584E2DFE4450926836B863FCCA7884F79300"
+      }
+    ]
+  },
+  "retainedFailures": [
+    {
+      "run": ".test-results/colosseum-victory-20261017-r1",
+      "reason": "Wave hold/observation fixture; not accepted as reward proof"
+    },
+    {
+      "run": ".test-results/colosseum-victory-20261017-r2",
+      "reason": "Wave deadline/hold fixture and strict gate failure; not accepted as reward proof"
+    },
+    {
+      "run": ".test-results/colosseum-victory-20261017-r3",
+      "reason": "Native waves and Shiny observed; inspect standing position failed before pickup"
+    },
+    {
+      "run": ".test-results/colosseum-reward-continuation-20261017-r1",
+      "reason": "Actual inspect and Hero Down reached, but held-wave enemies interrupted pickup before Notch"
+    },
+    {
+      "run": ".test-results/colosseum-reward-continuation-20261017-r2",
+      "reason": "Actual notch and receipt reached both peers; host repeat-source assertion dereferenced Shiny already destroyed by production suppression, preventing orderly pass shutdown"
+    }
+  ],
+  "testEnvironment": "Two isolated copies on one machine, real UDP, disposable in-memory profile 99, save writes blocked. Does not substitute for two-machine latency/play testing.",
+  "nativeAssemblies": [
+    {
+      "path": "E:\\SteamLibrary\\steamapps\\common\\Hollow Knight\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "bytes": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": "E:\\SteamLibrary\\steamapps\\common\\Hollow Knight\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "bytes": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "lateWaveMusic": {
+    "run": ".test-results/colosseum-wave2-music-20261017-r1",
+    "verdict": "PASS; both FINAL PASS, orderly offline shutdown, strict logs and installed/build hashes verified; runner exit 0",
+    "production": "Both scene Battle Control instances append one presentation string before FSM caches and snapshot arrays are constructed. The native Music Control StateChanged callback records actual MUSIC target events, with a revision for repeated cues. Existing string snapshots retain the last effective cue even when the present wave has no MUSIC action. Replica changes only its local audio child; native AI stays disabled. No new packet kind or network component.",
+    "observations": [
+      "First entrant advances the actual native entry and Wave 1 then is held in actual Wave 2 for the late entrant",
+      "Wave 2 itself has no MUSIC action; both peers read retained 1:MUSIC 1 and play S57 COLOSSEUM INTENSITY 1",
+      "Actual wave enemy deaths advance the original FSM to Wave 5",
+      "The following original MUSIC 2 event changes both local AudioSources to S57 COLOSSEUM INTENSITY 2",
+      "Native area key and title assertions pass during Wave 2 late entry"
+    ],
+    "staticReview": [
+      "Native delayed events are recorded only when their target Music Control state is actually entered; no wave number or state array order is used",
+      "Native Sting explicitly stops the prior AudioSource and plays a short one-shot; later review found its real global entry is Sting Pause/Sting Delay Long, so this r1 run does not prove Sting receipt coverage",
+      "Authority takeover retains the received string snapshot and restarts only its native Music Control with the retained cue",
+      "Destroy removes the native Music Control StateChanged subscription"
+    ],
+    "limitations": "Wave 2 late entry and subsequent MUSIC 2 final playback are runtime verified. Later review found GenericData could replay the same MUSIC cue twice or create a delayed replica coroutine; r1 does not prove deduplication. The final fix filters only recognized arena BroadcastAll MUSIC actions and records every actual global music entry. Every individual Bronze/Silver/Gold wave and authority takeover has not been rerun in this scoped verification.",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "B10D86272F4D441E62A6D83F4502E5D0B793E74FF9BC6DE3EDF6DCEE37F59E87"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "40684F6255E3D102A18E886AF4FB2F2774F541B6E26C6B21E2556E1FA8CB499B"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "9837846B483068F3D23003F161D4695F15DA67691CB9B3C91AAE0A93D9EE57F2"
+      },
+      {
+        "name": "HollowConnect.Smoke.dll",
+        "sha256": "405CAA427EB3CD6DE34A7369F9A51713BCA4488D014957EF993B6C80D3AF0B19"
+      }
+    ]
+  },
+  "musicBoundary": {
+    "run": ".test-results/colosseum-music-boundary-20261017-r1",
+    "verdict": "PASS; both FINAL PASS, orderly offline shutdown, strict logs and installed/build hashes verified; runner exit 0",
+    "fixture": "Actual native registration and Wave 1 late join. Battle Control stays held; original SendEventByName.OnEnter actions are called directly and its original UpdateDelayedEvents is pumped. This is audio-only verification, not natural Wave 28 combat or victory.",
+    "production": "Only ColosseumManager BroadcastAll SendEventByName/V2 MUSIC events recognized by the actual native audio global table skip GenericData send and apply; native host actions run normally. The existing retained cue snapshots are the only replica audio replay path. RecordArenaMusic maps the actual global transition target, including Sting Pause and Sting Delay Long.",
+    "observations": [
+      "Original MUSIC 2 enters Set Music 2 once per peer",
+      "Original MUSIC 4 retains its 5.5-second delay, does not arrive early and enters Set Music 4 once per peer",
+      "Original MUSIC STING enters Sting Pause once, then native Sting once per peer",
+      "Original MUSIC SILENT enters None once per peer",
+      "After a further six seconds, no stale generic coroutine replays MUSIC 4 and the latest silent AudioSource remains stopped",
+      "Native area key and non-placeholder title assertions continue to pass"
+    ],
+    "limitations": "No additional full wave/reward run; no new authority-transfer run; Sting Delay Long is mapped from the native global table but not independently triggered in this short case.",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "B515FA4BC5A1822DAD91454DB3D9449A762F2252E95D1902A76F9E4AE6B35E13"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "318E79553F8AAD4D7B52526B3318729F9BA21FF7C4D09BC1F52BB40E9A439021"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "54CCFDA3AF2E2C150EACB532068B14B6E87DE8DC260A51083DF3C75768468A7D"
+      },
+      {
+        "name": "HollowConnect.Smoke.dll",
+        "sha256": "95D8FA36720BB5F64C62314CCC6D642150A782F010C489680193CD78A3CF7FF1"
+      }
+    ]
+  }
+}

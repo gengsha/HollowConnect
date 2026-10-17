@@ -82,6 +82,14 @@ internal class Entity {
     // is null for every other entity and does not affect their lifecycle.
     internal FinalBossCorpseContinuation FinalCorpse { get; }
 
+    // The native audio child retains its current cue across waves whose FSM
+    // states emit no MUSIC event. Carry that presentation receipt in the
+    // existing Battle Control string snapshot, including for late entrants.
+    private const string ArenaMusicVariable = "HollowConnect Arena Music";
+    private PlayMakerFSM _arenaHostMusic, _arenaClientMusic;
+    private FsmString _arenaHostCue, _arenaClientCue;
+    private string _lastAppliedArenaCue;
+
     /// <summary>
     /// Host-client pair for the sprite animators.
     /// </summary>
@@ -295,6 +303,7 @@ internal class Entity {
             Host = Object.Host.GetComponents<PlayMakerFSM>().OrderBy(f => f.FsmName, StringComparer.Ordinal).ToList(),
             Client = Object.Client.GetComponents<PlayMakerFSM>().OrderBy(f => f.FsmName, StringComparer.Ordinal).ToList()
         };
+        PrepareArenaMusic();
 
         _hookedActions = new Dictionary<FsmStateAction, HookedEntityAction>();
         _hookedTypes = new HashSet<Type>();
@@ -314,6 +323,18 @@ internal class Entity {
         }
         foreach (var fsm in Object.Client.GetComponentsInChildren<PlayMakerFSM>(true)) {
             if (_fsms.Client.Contains(fsm)) continue;
+            // The arena manager's music controller is a child FSM rather than
+            // the registered Battle Control FSM.  It must remain live on a
+            // replica so the manager's native MUSIC events can reach its local
+            // AudioSource (the battle FSM itself stays authoritative).
+            if (Type == EntityType.ColosseumManager && fsm.gameObject.name == "Music Control" &&
+                fsm.FsmName == "Control") continue;
+            // AreaTitleController.Start reads its configuration through
+            // PlayMakerFSM.FindFsmOnGameObject, which only lists enabled FSMs.
+            // Disabling this one-state data holder makes native title code
+            // use an empty area key and display the _MAIN/_SUB placeholders.
+            if (Type == EntityType.ColosseumManager && fsm.gameObject.name == "Area Title Controller" &&
+                fsm.FsmName == "Area Title Controller") continue;
             fsm.enabled = false;
         }
         foreach (var body in Object.Client.GetComponentsInChildren<Rigidbody2D>(true)) {
@@ -721,7 +742,7 @@ internal class Entity {
     /// </summary>
     /// <param name="self">The FSM action instance that was entered.</param>
     private void OnActionEntered(FsmStateAction self) {
-        if (_isControlled) {
+        if (_isControlled || IsArenaMusicBroadcast(self)) {
             return;
         }
 
@@ -795,6 +816,7 @@ internal class Entity {
         var hostObjectActive = Object.Host.activeSelf;
 
         if (_isControlled) {
+            ApplyArenaMusic();
             if (hostObjectActive) {
                 if (!_isSceneHostDetermined) {
                     Logger.Debug($"Entity '{Object.Host.name}' host object became active, but scene host is not determined yet, re-disabling for now");
@@ -1349,6 +1371,12 @@ internal class Entity {
             finally { state.Actions = oldActions; }
         }
         RestoreRestartFlags();
+        // The former replica already received this receipt in its normal
+        // string snapshot. Restart only its native audio child on takeover.
+        var arenaCue = _arenaHostCue?.Value;
+        var arenaSplit = arenaCue?.IndexOf(':') ?? -1;
+        if (arenaSplit >= 0 && _arenaHostMusic != null)
+            _arenaHostMusic.SendEvent(arenaCue.Substring(arenaSplit + 1));
     }
 
     /// <summary>
@@ -1566,6 +1594,7 @@ internal class Entity {
                 var state = fsm.FsmStates[stateIndex];
                 if (actionIndex >= state.Actions.Length) continue;
                 var action = state.Actions[actionIndex];
+                if (IsArenaMusicBroadcast(action)) continue;
                 
                 Logger.Debug($"Received entity network data for FSM: {fsm.Fsm.Name}, {state.Name}, {actionIndex} ({action.GetType()})");
 
@@ -1718,6 +1747,94 @@ internal class Entity {
                 );
             }
         }
+
+        ApplyArenaMusic();
+    }
+
+    private void PrepareArenaMusic() {
+        if (Type != EntityType.ColosseumManager) return;
+        PlayMakerFSM Music(GameObject owner) => owner.GetComponentsInChildren<PlayMakerFSM>(true)
+            .FirstOrDefault(f => f.gameObject.name == "Music Control" && f.FsmName == "Control");
+        _arenaHostMusic = Music(Object.Host); _arenaClientMusic = Music(Object.Client);
+        if (_arenaHostMusic == null || _arenaClientMusic == null) return;
+        FsmString Append(List<PlayMakerFSM> fsms) {
+            var battle = fsms.FirstOrDefault(f => f.FsmName == "Battle Control");
+            if (battle == null) return null;
+            var cue = battle.FsmVariables.FindFsmString(ArenaMusicVariable);
+            if (cue != null) return cue;
+            cue = new FsmString { Name = ArenaMusicVariable, Value = string.Empty };
+            battle.FsmVariables.StringVariables = battle.FsmVariables.StringVariables.Concat(new[] { cue }).ToArray();
+            return cue;
+        }
+        // Append before ProcessHostFsm captures any variable arrays or caches.
+        // This changes the two scene instances only, never the FSM asset.
+        _arenaHostCue = Append(_fsms.Host); _arenaClientCue = Append(_fsms.Client);
+        _arenaHostMusic.Fsm.StateChanged += OnArenaMusicChanged;
+        // Registration can find a native audio controller already playing.
+        // Its retained New Track binding identifies the actual cue directly.
+        var current = _arenaHostMusic.Fsm.ActiveState;
+        if (current?.Name == "New Track") {
+            var clip = _arenaHostMusic.FsmVariables.FindFsmObject("New Track")?.Value;
+            current = _arenaHostMusic.FsmStates.FirstOrDefault(s => s.Actions
+                .OfType<HutongGames.PlayMaker.Actions.SetObjectValue>().Any(a => a.objectValue.Value == clip && clip != null));
+        }
+        if (current != null) RecordArenaMusic(current);
+    }
+
+    private void OnArenaMusicChanged(FsmState state) {
+        if (destroyed || _isSceneHostDetermined && _isControlled) return;
+        RecordArenaMusic(state);
+    }
+
+    private void RecordArenaMusic(FsmState state) {
+        if (_arenaHostCue == null) return;
+        // Observe the audio controller itself after native delayed events
+        // actually reach it. Do not infer playback from wave numbers/order.
+        var transition = _arenaHostMusic.Fsm.GlobalTransitions.FirstOrDefault(t => t.ToState == state.Name &&
+            t.EventName.StartsWith("MUSIC ", StringComparison.Ordinal));
+        if (transition == null) return;
+        var old = _arenaHostCue.Value ?? string.Empty;
+        var split = old.IndexOf(':');
+        uint.TryParse(split < 0 ? string.Empty : old.Substring(0, split), out var revision);
+        _arenaHostCue.Value = unchecked(revision + 1) + ":" + transition.EventName;
+        // Existing FSM sampling snapshots this value. Request the next sample
+        // immediately so it is not tied to a later battle-state transition.
+        nextFsmSample = 0;
+    }
+
+    private bool IsArenaMusicBroadcast(FsmStateAction action) {
+        if (Type != EntityType.ColosseumManager || _arenaHostMusic == null) return false;
+        FsmEventTarget target;
+        string eventName;
+        switch (action) {
+            case HutongGames.PlayMaker.Actions.SendEventByName cue:
+                target = cue.eventTarget; eventName = cue.sendEvent.Value;
+                break;
+            case HutongGames.PlayMaker.Actions.SendEventByNameV2 cue:
+                target = cue.eventTarget; eventName = cue.sendEvent.Value;
+                break;
+            default: return false;
+        }
+        // The retained audio receipt already replays these events after the
+        // native delay. Generic action replay would run them twice and could
+        // start another delayed coroutine on the replica.
+        return target.target == FsmEventTarget.EventTarget.BroadcastAll &&
+            eventName?.StartsWith("MUSIC ", StringComparison.Ordinal) == true &&
+            _arenaHostMusic.Fsm.GlobalTransitions.Any(t => t.EventName == eventName);
+    }
+
+    private void ApplyArenaMusic() {
+        if (!_isControlled || _arenaClientMusic == null || _arenaClientCue == null || Object.Client == null ||
+            !Object.Client.activeInHierarchy) return;
+        var receipt = _arenaClientCue.Value;
+        if (string.IsNullOrEmpty(receipt) || receipt == _lastAppliedArenaCue) return;
+        var split = receipt.IndexOf(':');
+        if (split < 0) return;
+        var eventName = receipt.Substring(split + 1);
+        if (!_arenaClientMusic.Fsm.GlobalTransitions.Any(t => t.EventName == eventName && eventName.StartsWith("MUSIC ", StringComparison.Ordinal))) return;
+        _arenaClientMusic.gameObject.SetActive(true);
+        _arenaClientMusic.SendEvent(eventName);
+        _lastAppliedArenaCue = receipt;
     }
 
     /// <summary>
@@ -1738,6 +1855,7 @@ internal class Entity {
         RestoreRestartFlags();
         MonoBehaviourUtil.Instance.OnUpdateEvent -= OnUpdate;
         foreach (var fsm in _fsms.Host) if (fsm != null) fsm.Fsm.StateChanged -= OnHostStateChanged;
+        if (_arenaHostMusic != null) _arenaHostMusic.Fsm.StateChanged -= OnArenaMusicChanged;
         FinalCorpse?.EntityDestroyed();
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Client));
         Cleanup(() => EntityFsmActions.ForgetActions(Object.Host));
