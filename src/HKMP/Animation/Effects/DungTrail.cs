@@ -25,10 +25,10 @@ internal class DungTrail : AnimationEffect {
         var spawnObjectAction = dungControlFsm.GetFirstAction<SpawnObjectFromGlobalPoolOverTime>("Equipped");
 
         // Spawn the dung trail object, which will despawn itself
-        spawnObjectAction.gameObject.Value.Spawn(
+        RemotePlayerVisuals.Track(spawnObjectAction.gameObject.Value.Spawn(
             playerObject.transform.position,
             Quaternion.identity
-        );
+        ));
 
         // Check whether we have already created a dung particle, and if so, we don't need to create another
         var playerEffects = playerObject.FindGameObjectInChildren("Effects");
@@ -37,7 +37,7 @@ internal class DungTrail : AnimationEffect {
         }
 
         var setParticleEmissionAction = dungControlFsm.GetFirstAction<SetParticleEmission>("Emit Pause");
-        var dungParticleEffect = Object.Instantiate(
+        var dungParticleEffect = RemotePlayerVisuals.Instantiate(
             setParticleEmissionAction.gameObject.GameObject.Value,
             playerEffects.transform
         );

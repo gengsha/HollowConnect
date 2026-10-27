@@ -20,8 +20,51 @@ internal static class BossTravel {
     private static string planSequence;
     private static BossSceneController configured;
     private static string statueKey = "";
+    private static Action transientRestore;
+    internal static string CurrentSequenceName {
+        get {
+            try { return ((BossSequence)Sequence.GetValue(null))?.name ?? ""; }
+            catch { return ""; }
+        }
+    }
+    internal static bool HasTransientContext => transientRestore != null;
     internal static void Register() { On.BossSequence.GetBossScene += GetBoss; On.BossSequence.CanLoad += CanLoad; On.BossChallengeUI.LoadBoss_int_bool += LoadHall; }
-    internal static void Unregister() { On.BossSequence.GetBossScene -= GetBoss; On.BossSequence.CanLoad -= CanLoad; On.BossChallengeUI.LoadBoss_int_bool -= LoadHall; plan = null; configured = null; statueKey = ""; }
+    internal static void Unregister() {
+        RestoreTransientContext();
+        On.BossSequence.GetBossScene -= GetBoss; On.BossSequence.CanLoad -= CanLoad; On.BossChallengeUI.LoadBoss_int_bool -= LoadHall;
+        plan = null; configured = null; statueKey = "";
+    }
+    // Remote boss context is a runtime overlay. Keep one pre-overlay snapshot
+    // until the caller has either completed the native sequence or accepted a
+    // native scene load. This is the last line of defence when a disconnect or
+    // exception interrupts a synchronizer tick.
+    internal static void RememberTransientContext() {
+        if (transientRestore == null && PlayerData.instance != null) transientRestore = SaveState();
+    }
+    internal static void CommitTransientContext() { transientRestore = null; }
+    internal static void RestoreTransientContext() {
+        var restore = transientRestore; transientRestore = null;
+        if (restore == null) return;
+        try { restore(); } catch (Exception e) { UnityEngine.Debug.LogError("HollowConnect boss context restore: " + e); }
+    }
+    // Emergency recovery abandons the current room/sequence deliberately.
+    // Clear only runtime BossTravel/BossSequence state so the next native load
+    // cannot re-enter a stale Pantheon or dream callback. Completion fields in
+    // PlayerData remain untouched.
+    internal static void ResetForEmergency() {
+        RestoreTransientContext();
+        try {
+            if (BossSequenceController.IsInSequence) {
+                BossSequenceController.RestoreBindings();
+            }
+        } catch (Exception e) { UnityEngine.Debug.LogError("HollowConnect emergency boss reset failed: " + e); }
+        BossSequenceController.Reset();
+        PlayerData.instance.SetVariable<BossSequenceController.BossSequenceData>("currentBossSequence", null);
+        if (BossSceneController.Instance != null)
+            typeof(BossSceneController).GetField("restoreBindingsOnDestroy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(BossSceneController.Instance, false);
+        plan = null; planSequence = null; configured = null; statueKey = "";
+        BossSceneController.SetupEvent = null;
+    }
     private static void LoadHall(On.BossChallengeUI.orig_LoadBoss_int_bool orig, BossChallengeUI self, int level, bool hide) {
         orig(self, level, hide);
         var statue = (BossStatue)typeof(BossChallengeUI).GetField("bossStatue", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(self);
@@ -59,26 +102,53 @@ internal static class BossTravel {
     private static bool CanLoad(On.BossSequence.orig_CanLoad orig, BossSequence self, int index) =>
         plan != null && self.name == planSequence && index >= 0 && index < plan.Length ? plan[index].Load : orig(self, index);
     private static bool Matches(BossSequence sequence, int index, string scene) => sequence != null && index >= 0 && index < sequence.Count && sequence.GetSceneAt(index) == scene;
-    internal static void Capture(Message m) {
-        if (BossSceneController.Instance != null) m.BossLevel = BossSceneController.Instance.BossLevel;
-        if (m.BossLevel >= 0 && !BossSequenceController.IsInSequence) {
-            m.BossStatueKey = statueKey; m.BossReturnGate = PlayerData.instance.GetString("bossReturnEntryGate");
+    private static bool NeedsSequenceSetup(BossSceneController controller, BossSequence sequence, int index) {
+        if (controller.customExitPoint != null) {
+            // Native rest-room setup already advances the index to its exit.
+            // Reusing that setup must not increment it a second time.
+            return !Matches(sequence, index - 1, controller.gameObject.scene.name) || index >= sequence.Count ||
+                controller.customExitPoint.targetScene != sequence.GetSceneAt(index) || controller.customExitPoint.entryPoint != "door_dreamEnter";
         }
-        if (!BossSequenceController.IsInSequence) return;
+        var callbacks = typeof(BossSceneController).GetField("OnBossSceneComplete", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(controller) as Action;
+        return callbacks == null || !callbacks.GetInvocationList().Any(d => (d.Method.DeclaringType?.FullName ?? "").StartsWith("BossSequenceController+"));
+    }
+    internal static bool Capture(Message m) {
+        if (BossSceneController.Instance != null) m.BossLevel = BossSceneController.Instance.BossLevel;
+        if (m.BossLevel >= 0 || BossSequenceController.IsInSequence) {
+            m.BossReturnScene = PlayerData.instance.GetString("dreamReturnScene") ?? "";
+            m.BossReturnGate = PlayerData.instance.GetString("bossReturnEntryGate") ?? "";
+        }
+        if (m.BossLevel >= 0 && !BossSequenceController.IsInSequence) {
+            m.BossStatueKey = statueKey;
+        }
+        if (!BossSequenceController.IsInSequence) return true;
         var sequence = (BossSequence)Sequence.GetValue(null);
         var index = (int)Index.GetValue(null);
         var data = (BossSequenceController.BossSequenceData)Data.GetValue(null);
-        if (data == null || !(Matches(sequence, index, m.Scene) || Matches(sequence, index - 1, m.Scene))) return;
+        if (data == null || !(Matches(sequence, index, m.Scene) || Matches(sequence, index - 1, m.Scene))) return false;
         m.BossSequence = sequence.name; m.BossIndex = index;
         m.BossBindings = (int)data.bindings; m.BossDoor = data.playerData;
         m.BossPlan = JsonConvert.SerializeObject(Enumerable.Range(0, sequence.Count).Select(i => new Step {
             Name = sequence.GetBossScene(i).name, Scene = sequence.GetSceneAt(i), Load = sequence.CanLoad(i) }).ToArray());
+        return true;
     }
-    internal static string CaptureContext() { var m = new Message { Scene = Hkmp.CoopContext.LocalScene }; Capture(m); return JsonConvert.SerializeObject(m); }
+    internal static string CaptureContext() { var m = new Message { Scene = Hkmp.CoopContext.LocalScene }; return Capture(m) ? JsonConvert.SerializeObject(m) : null; }
     internal static bool ApplyContext(string context) {
-        if (context.Length > 32768) return false;
+        if (string.IsNullOrEmpty(context) || context.Length > 32768) return false;
         var m = JsonConvert.DeserializeObject<Message>(context);
-        return m != null && m.Scene == Hkmp.CoopContext.LocalScene && Prepare(m);
+        if (m == null || m.Scene != Hkmp.CoopContext.LocalScene) return false;
+        // A rejected update must restore only its own changes, preserving any
+        // earlier accepted overlay instead of rolling the entire room back.
+        var rollback = SaveState();
+        var previousRestore = transientRestore;
+        try {
+            var applied = Prepare(m);
+            if (!applied) { rollback(); transientRestore = previousRestore; }
+            return applied;
+        } catch {
+            rollback(); transientRestore = previousRestore;
+            throw;
+        }
     }
     internal static Action SaveState() {
         var sequence = Sequence.GetValue(null); var data = JsonConvert.DeserializeObject<BossSequenceController.BossSequenceData>(JsonConvert.SerializeObject(Data.GetValue(null))); var index = Index.GetValue(null);
@@ -91,25 +161,41 @@ internal static class BossTravel {
         var equipped = Enumerable.Range(1, 40).Select(i => pd.GetBool("equippedCharm_" + i)).ToArray();
         var overcharmed = pd.GetBool("overcharmed"); var health = pd.GetInt("health"); var blue = pd.GetInt("healthBlue");
         var mp = pd.GetInt("MPCharge"); var reserve = pd.GetInt("MPReserve"); var gate = pd.GetString("bossReturnEntryGate");
+        var returnScene = pd.GetString("dreamReturnScene");
         var saved = PlayerData.instance.GetVariable<BossSequenceController.BossSequenceData>("currentBossSequence");
         return () => {
             Sequence.SetValue(null, sequence); Data.SetValue(null, data); Index.SetValue(null, index); BossSceneController.SetupEvent = setup;
             plan = oldPlan; planSequence = oldName; configured = oldConfigured;
             statueKey = oldStatue; if (oldController != null) restoreField.SetValue(oldController, oldRestore);
-            pd.SetVariable("equippedCharms", charms.ToList()); pd.SetBool("overcharmed", overcharmed);
-            for (var i = 1; i <= 40; i++) pd.SetBool("equippedCharm_" + i, equipped[i - 1]);
-            HeroController.instance.CharmUpdate(); pd.SetInt("health", health); pd.SetInt("healthBlue", blue); pd.SetInt("MPCharge", mp); pd.SetInt("MPReserve", reserve); pd.SetString("bossReturnEntryGate", gate);
-            EventRegister.SendEvent(BossSequenceController.BoundNail ? "SHOW BOUND NAIL" : "HIDE BOUND NAIL");
-            EventRegister.SendEvent(BossSequenceController.BoundCharms ? "SHOW BOUND CHARMS" : "HIDE BOUND CHARMS");
-            EventRegister.SendEvent(BossSequenceController.BoundSoul ? "BIND VESSEL ORB" : "UNBIND VESSEL ORB");
-            PlayerData.instance.SetVariable("currentBossSequence", saved);
+            if (pd != null) {
+                pd.SetVariable("equippedCharms", charms.ToList()); pd.SetBool("overcharmed", overcharmed);
+                for (var i = 1; i <= 40; i++) pd.SetBool("equippedCharm_" + i, equipped[i - 1]);
+                HeroController.instance?.CharmUpdate(); pd.SetInt("health", health); pd.SetInt("healthBlue", blue); pd.SetInt("MPCharge", mp); pd.SetInt("MPReserve", reserve); pd.SetString("bossReturnEntryGate", gate);
+                pd.SetVariable("currentBossSequence", saved);
+                pd.SetString("dreamReturnScene", returnScene);
+            }
+            try { EventRegister.SendEvent(BossSequenceController.BoundNail ? "SHOW BOUND NAIL" : "HIDE BOUND NAIL"); } catch { }
+            try { EventRegister.SendEvent(BossSequenceController.BoundCharms ? "SHOW BOUND CHARMS" : "HIDE BOUND CHARMS"); } catch { }
+            try { EventRegister.SendEvent(BossSequenceController.BoundSoul ? "BIND VESSEL ORB" : "UNBIND VESSEL ORB"); } catch { }
         };
     }
     internal static bool Prepare(Message m) {
         if (m.BossLevel < -1 || m.BossLevel > 2 || m.BossBindings < 0 || m.BossBindings > 15 || m.BossIndex < 0 || m.BossIndex > 256) return false;
         if (!Application.CanStreamedLevelBeLoaded(m.Scene)) return false;
+        // The native result screen reads these together. A guest joining by
+        // warp never runs the source door's actions that normally set them.
+        // Empty legacy/test context leaves the local pair intact; a partial
+        // or invalid route must not replace a usable return destination.
+        var hasReturn = m.BossReturnScene.Length != 0;
+        if (hasReturn && (m.BossReturnGate.Length == 0 ||
+            !Application.CanStreamedLevelBeLoaded(m.BossReturnScene) || Hkmp.Util.SceneUtil.IsNonGameplayScene(m.BossReturnScene))) return false;
         var sameRoom = Hkmp.CoopContext.LocalScene == m.Scene;
         var controller = sameRoom ? BossSceneController.Instance : null;
+        // Same-room heartbeats cannot turn an active Pantheon into a statue
+        // fight or reconfigure a controller whose native completion has begun.
+        if (sameRoom && BossSequenceController.IsInSequence && m.BossSequence.Length == 0) return false;
+        if (controller != null && (bool)typeof(BossSceneController).GetField("endedScene", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(controller)) return false;
+        RememberTransientContext();
         if (m.BossSequence.Length == 0) {
             if (!sameRoom && BossSceneController.Instance != null)
                 typeof(BossSceneController).GetField("restoreBindingsOnDestroy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(BossSceneController.Instance, false);
@@ -122,6 +208,7 @@ internal static class BossTravel {
             PlayerData.instance.SetVariable<BossSequenceController.BossSequenceData>("currentBossSequence", null);
             if (m.BossLevel >= 0) {
                 statueKey = m.BossStatueKey;
+                if (hasReturn) PlayerData.instance.SetString("dreamReturnScene", m.BossReturnScene);
                 if (m.BossReturnGate.Length != 0) PlayerData.instance.SetString("bossReturnEntryGate", m.BossReturnGate);
                 if (controller != null) ConfigureHall(controller, m);
                 else BossSceneController.SetupEvent = self => ConfigureHall(self, m);
@@ -142,13 +229,17 @@ internal static class BossTravel {
         var data = (BossSequenceController.BossSequenceData)Data.GetValue(null);
         var changed = !BossSequenceController.IsInSequence || data == null || data.bossSequenceName != m.BossSequence || (int)data.bindings != m.BossBindings || data.playerData != m.BossDoor;
         plan = incoming; planSequence = m.BossSequence;
+        if (hasReturn) {
+            PlayerData.instance.SetString("dreamReturnScene", m.BossReturnScene);
+            PlayerData.instance.SetString("bossReturnEntryGate", m.BossReturnGate);
+        }
         if (changed) {
             if (BossSequenceController.IsInSequence) BossSequenceController.RestoreBindings();
             BossSequenceController.SetupNewSequence(sequence, (BossSequenceController.ChallengeBindings)m.BossBindings, m.BossDoor);
         }
         Index.SetValue(null, m.BossIndex);
         PlayerData.instance.SetVariable("currentBossSequence", (BossSequenceController.BossSequenceData)Data.GetValue(null));
-        if (!sameRoom || changed) {
+        if (!sameRoom || changed || controller != null && NeedsSequenceSetup(controller, sequence, m.BossIndex)) {
             Setup.Invoke(null, null);
             var native = BossSceneController.SetupEvent;
             if (sameRoom && controller != null) {

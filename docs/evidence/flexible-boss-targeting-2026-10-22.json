@@ -1,0 +1,1050 @@
+{
+  "date": "2026-10-22",
+  "version": "0.1.31",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.1.31-l5",
+  "delivery": "source_and_local_build_no_package",
+  "scope": "Host-owned flexible boss targeting, attack commitments, generated attacks, takeover continuity and locked room settings",
+  "binaries": [
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HKMP.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HKMP.dll",
+      "bytes": 1798656,
+      "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.dll",
+      "bytes": 180224,
+      "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.Core.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.Core.dll",
+      "bytes": 37376,
+      "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+    }
+  ],
+  "environment": {
+    "network": "same-machine localhost UDP",
+    "copies": [
+      ".test-results/game-host",
+      ".test-results/game-guest"
+    ],
+    "saveWrites": "intercepted",
+    "dependencies": [
+      {
+        "role": "host",
+        "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+        "size": 4064768,
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      {
+        "role": "host",
+        "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+        "size": 212480,
+        "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+      },
+      {
+        "role": "guest",
+        "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+        "size": 4064768,
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      {
+        "role": "guest",
+        "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+        "size": 212480,
+        "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+      }
+    ]
+  },
+  "core": {
+    "passed": 35,
+    "failed": 0,
+    "selection": {
+      "path": ".analysis/flexible-target-20261022/core.selection.txt",
+      "absolutePath": "E:\\projects\\hollowConnect\\.analysis\\flexible-target-20261022\\core.selection.txt",
+      "bytes": 2556,
+      "sha256": "576DF943CB1DAE820879CE254E1A326519C976DDF435F42EEE2DF19EF2ED5752"
+    },
+    "log": {
+      "path": ".analysis/flexible-target-20261022/core-final.log",
+      "absolutePath": "E:\\projects\\hollowConnect\\.analysis\\flexible-target-20261022\\core-final.log",
+      "bytes": 3243,
+      "sha256": "81D7B010C50FA78A050608E6AEF30A4461F6433C15EB4E42C7DA171BF24C84BE"
+    }
+  },
+  "runtime": {
+    "directPassed": 7,
+    "roomMatrixPassed": 12,
+    "totalPassed": 19,
+    "runs": [
+      {
+        "name": "flex-host",
+        "run": ".test-results/flex-20261022-flex-host-b",
+        "status": "passed",
+        "started": "2026-10-22T11:25:58.2313295Z",
+        "ended": "2026-10-22T11:26:38.8853311Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-20261022-flex-host-b/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-flex-host-b\\host.log",
+            "bytes": 8570,
+            "sha256": "1BE0E23AD10CE46595AF929FBB007918621CE8A62672D009A532C90E22F950B7"
+          },
+          {
+            "path": ".test-results/flex-20261022-flex-host-b/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-flex-host-b\\guest.log",
+            "bytes": 7239,
+            "sha256": "E3E0A80AD04EC26BE66A85921221F7071EEB948ADEE64E12D9432E5BDCD78A79"
+          }
+        ]
+      },
+      {
+        "name": "flex-guest",
+        "run": ".test-results/flex-20261022-flex-guest-c",
+        "status": "passed",
+        "started": "2026-10-22T11:37:57.1010754Z",
+        "ended": "2026-10-22T11:38:35.6543822Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-20261022-flex-guest-c/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-flex-guest-c\\host.log",
+            "bytes": 7288,
+            "sha256": "E2432AE3C17891CD23D9C1683843169DD33F4F1E748CAF92B041E555796E44E8"
+          },
+          {
+            "path": ".test-results/flex-20261022-flex-guest-c/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-flex-guest-c\\guest.log",
+            "bytes": 8521,
+            "sha256": "342991902F90A6C8418148987CD3E3397CDE2B03D4B11E17A0C697E8779253B1"
+          }
+        ]
+      },
+      {
+        "name": "nkg-host",
+        "run": ".test-results/flex-20261022-nkg-host-c",
+        "status": "passed",
+        "started": "2026-10-22T11:31:10.9617282Z",
+        "ended": "2026-10-22T11:32:29.1315799Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-20261022-nkg-host-c/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-nkg-host-c\\host.log",
+            "bytes": 7572,
+            "sha256": "E7AA41187F57AD5F4FD72E4CC9584A49CC49983136E11672D4BD25ECF1D06694"
+          },
+          {
+            "path": ".test-results/flex-20261022-nkg-host-c/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-nkg-host-c\\guest.log",
+            "bytes": 7051,
+            "sha256": "5C432E77A90CB6D0F668394CC11927819A7AF2FFEF1F92EE7A3C4731F271C937"
+          }
+        ]
+      },
+      {
+        "name": "nkg-guest",
+        "run": ".test-results/flex-20261022-nkg-guest-c",
+        "status": "passed",
+        "started": "2026-10-22T11:33:37.1085249Z",
+        "ended": "2026-10-22T11:34:40.1779805Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-20261022-nkg-guest-c/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-nkg-guest-c\\host.log",
+            "bytes": 6996,
+            "sha256": "4816F828213CB97EDCF0459B8748130259A6EAB2EDC47F9FB13EB68424B4944A"
+          },
+          {
+            "path": ".test-results/flex-20261022-nkg-guest-c/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-nkg-guest-c\\guest.log",
+            "bytes": 7600,
+            "sha256": "B4222AE88880A9F23A967277D2B65DE2743229E77B8E5161BF22CA94CD15FB0C"
+          }
+        ]
+      },
+      {
+        "name": "native-target-host",
+        "run": ".test-results/flex-20261022-native-target-host-c",
+        "status": "passed",
+        "started": "2026-10-22T11:36:20.395764Z",
+        "ended": "2026-10-22T11:37:00.6603955Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-20261022-native-target-host-c/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-native-target-host-c\\host.log",
+            "bytes": 3654,
+            "sha256": "B58BEFD287165521B2734E3AACD05F1201B243E6F6ABE6C44545CB30226FBD37"
+          },
+          {
+            "path": ".test-results/flex-20261022-native-target-host-c/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-native-target-host-c\\guest.log",
+            "bytes": 1473,
+            "sha256": "B1CF139AB4FD0B85C894C5E7FDBEF1EF0C409854DCC51B5BA8BD0611E96D3918"
+          }
+        ]
+      },
+      {
+        "name": "native-target-guest",
+        "run": ".test-results/flex-20261022-native-target-guest-c",
+        "status": "passed",
+        "started": "2026-10-22T11:38:35.9783521Z",
+        "ended": "2026-10-22T11:39:18.5305799Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-20261022-native-target-guest-c/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-native-target-guest-c\\host.log",
+            "bytes": 1426,
+            "sha256": "60A14F1AFE2550311F1888A11E11610E76C8E0214D333245ECD18BF6690F2712"
+          },
+          {
+            "path": ".test-results/flex-20261022-native-target-guest-c/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-native-target-guest-c\\guest.log",
+            "bytes": 3373,
+            "sha256": "1B95219C69370A3B7CC68A75D99152B09431790896A3C984BB91CA63FD7EB653"
+          }
+        ]
+      },
+      {
+        "name": "display",
+        "run": ".test-results/flex-20261022-display-c",
+        "status": "passed",
+        "started": "2026-10-22T11:39:18.8333776Z",
+        "ended": "2026-10-22T11:39:39.9587589Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-20261022-display-c/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-display-c\\host.log",
+            "bytes": 1934,
+            "sha256": "2E5DBC0679407667C41BE9F83BFB7C2D6D388F85AB284608D83F800D18E9D186"
+          },
+          {
+            "path": ".test-results/flex-20261022-display-c/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-20261022-display-c\\guest.log",
+            "bytes": 2069,
+            "sha256": "EE13188FDF494135D97CE223E51BA583B054D03CB45415E4B2D7C810935C1CBB"
+          }
+        ]
+      },
+      {
+        "name": "final-native-host-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-native-host-013",
+        "status": "passed",
+        "started": "2026-10-22T11:42:52.2753843Z",
+        "ended": "2026-10-22T11:50:12.6063681Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-native-host-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-native-host-013\\host.log",
+            "bytes": 113570,
+            "sha256": "728299C8A56464D3DA76B57F9B4399F21F6DAA4AF6DF0A84314D7DC85FA4EAEC"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-native-host-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-native-host-013\\guest.log",
+            "bytes": 63111,
+            "sha256": "F1D8B7111681EF4AF0EDC1167200AFAA856E08845D03CCFCE721DE0D283BAFE2"
+          }
+        ]
+      },
+      {
+        "name": "final-native-guest-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-native-guest-013",
+        "status": "passed",
+        "started": "2026-10-22T11:50:12.6099844Z",
+        "ended": "2026-10-22T11:57:33.1680842Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-native-guest-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-native-guest-013\\host.log",
+            "bytes": 119233,
+            "sha256": "9491299534B1FC492423BCDFBA2F5BED6CEF9C56BBD5C4B66E70D8A845BF50B6"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-native-guest-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-native-guest-013\\guest.log",
+            "bytes": 55634,
+            "sha256": "F1BC81340A63BEC1107149B2714DA319B9DAF04D74C3ACA775E2C1F1075F8C92"
+          }
+        ]
+      },
+      {
+        "name": "final-lifecycle-host-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-lifecycle-host-013",
+        "status": "passed",
+        "started": "2026-10-22T11:57:33.1709833Z",
+        "ended": "2026-10-22T12:01:59.4545707Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-lifecycle-host-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-lifecycle-host-013\\host.log",
+            "bytes": 189550,
+            "sha256": "F28D1F3DEC0D8488E85D9692A975C44D038B96B82A0EEFB3B1A2E83DDCF609EB"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-lifecycle-host-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-lifecycle-host-013\\guest.log",
+            "bytes": 172762,
+            "sha256": "9093E05203E86ED9FAF180EB299A8E1C866C98368F87F8D5655349345A4445EA"
+          }
+        ]
+      },
+      {
+        "name": "final-lifecycle-guest-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-lifecycle-guest-013",
+        "status": "passed",
+        "started": "2026-10-22T12:01:59.4564112Z",
+        "ended": "2026-10-22T12:06:49.2655388Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-lifecycle-guest-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-lifecycle-guest-013\\host.log",
+            "bytes": 207388,
+            "sha256": "9C43C3AB8A1ADC81BECCFCB476059698BDFE453433A221A2BF4CDAB77A9C0D72"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-lifecycle-guest-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-lifecycle-guest-013\\guest.log",
+            "bytes": 173537,
+            "sha256": "AC9ECC47B92C1633313BE4C03971806C9A04CD3F787B5AE5F55AF8BC7794EFF0"
+          }
+        ]
+      },
+      {
+        "name": "final-boss-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-boss-013",
+        "status": "passed",
+        "started": "2026-10-22T12:06:49.2670783Z",
+        "ended": "2026-10-22T12:07:35.4142094Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-boss-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-boss-013\\host.log",
+            "bytes": 3248,
+            "sha256": "122663B5AD5CBB67E69EF54F9556089E083D86AE6CEB2DBB89CBDBDB8CB358B8"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-boss-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-boss-013\\guest.log",
+            "bytes": 10379,
+            "sha256": "D204663F2B3B5A84355E033E11A1F62B676C01251AE9D44EE499257BDB385C52"
+          }
+        ]
+      },
+      {
+        "name": "final-boss-late-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-boss-late-013",
+        "status": "passed",
+        "started": "2026-10-22T12:07:35.4157154Z",
+        "ended": "2026-10-22T12:08:29.4459939Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-boss-late-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-boss-late-013\\host.log",
+            "bytes": 3198,
+            "sha256": "A546AF8F7F64F5E528460E1477A44B6966DFDE0484AE599B5D68B8F9A189A0D0"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-boss-late-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-boss-late-013\\guest.log",
+            "bytes": 11977,
+            "sha256": "6C70940A2B022814F0035E6709F856D531481F27410C209C840642ED9321D548"
+          }
+        ]
+      },
+      {
+        "name": "final-grimm-host-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-grimm-host-013",
+        "status": "passed",
+        "started": "2026-10-22T12:08:29.4475026Z",
+        "ended": "2026-10-22T12:10:06.9522837Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-grimm-host-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-grimm-host-013\\host.log",
+            "bytes": 50693,
+            "sha256": "B8D24E7D9F889779C5E6E2A16DFC802EEBD816F8A4918FF603296782C3B710DD"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-grimm-host-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-grimm-host-013\\guest.log",
+            "bytes": 7371,
+            "sha256": "69DD9687DD99661EAA89573BF002170BD6808F1C43164379C1FA84C2849F1ABF"
+          }
+        ]
+      },
+      {
+        "name": "final-grimm-guest-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-grimm-guest-013",
+        "status": "passed",
+        "started": "2026-10-22T12:10:06.954076Z",
+        "ended": "2026-10-22T12:11:43.9601735Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-grimm-guest-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-grimm-guest-013\\host.log",
+            "bytes": 28787,
+            "sha256": "2014E189EAFCA12473E6044746208DC7D0AE0807FD6ECA3CE4B59A8C372B6D38"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-grimm-guest-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-grimm-guest-013\\guest.log",
+            "bytes": 26129,
+            "sha256": "2F1D68801C8A6D88F6D525283D1077E3E42BA8EEDB09681F9354201646D527FC"
+          }
+        ]
+      },
+      {
+        "name": "final-rescue-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-rescue-013",
+        "status": "passed",
+        "started": "2026-10-22T12:11:43.962058Z",
+        "ended": "2026-10-22T12:12:31.1654149Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-rescue-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-rescue-013\\host.log",
+            "bytes": 9377,
+            "sha256": "854F27F1119AB4E67E01F3C872B34EFECD7D2E8EA06EAD3DBA33FEECC7C5C6BF"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-rescue-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-rescue-013\\guest.log",
+            "bytes": 7606,
+            "sha256": "911C78306030C39D4284814DE660128AD3A7C87C335EE28FB83A84C2D69FEF19"
+          }
+        ]
+      },
+      {
+        "name": "final-death-story-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-death-story-013",
+        "status": "passed",
+        "started": "2026-10-22T12:12:31.1674475Z",
+        "ended": "2026-10-22T12:13:27.6058737Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-death-story-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-death-story-013\\host.log",
+            "bytes": 12699,
+            "sha256": "EF9D0177A975A6E29E8F8DB1EF4287547C8B49B1E4247FCA8208772A2403ED3F"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-death-story-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-death-story-013\\guest.log",
+            "bytes": 12998,
+            "sha256": "CDA0D3826CB97713777E66E4D13B8E4EE554D0C2156D801BC27271BFF0693B86"
+          }
+        ]
+      },
+      {
+        "name": "final-full-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-full-013",
+        "status": "passed",
+        "started": "2026-10-22T12:13:27.607384Z",
+        "ended": "2026-10-22T12:14:51.5094607Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-full-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-full-013\\host.log",
+            "bytes": 12574,
+            "sha256": "55D690915EBEB526A554DFF51E550CE41A125C0308B1335B48C388C7AE344908"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-full-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-full-013\\guest.log",
+            "bytes": 9260,
+            "sha256": "C69ED8F2973EA7A31CAAF35A4F83927AE134A30BDB86EAA536B040263598BEDE"
+          }
+        ]
+      },
+      {
+        "name": "final-join-013",
+        "run": ".test-results/flex-matrix-20261022-a-final-join-013",
+        "status": "passed",
+        "started": "2026-10-22T12:14:51.511312Z",
+        "ended": "2026-10-22T12:16:17.1914761Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+          }
+        ],
+        "probeHash": "97AD21F6C35866BBADF270EEF496905276A93BACFF9362A91FD805D5605BE463",
+        "strictLogs": "passed",
+        "logs": [
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-join-013/host.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-join-013\\host.log",
+            "bytes": 2245,
+            "sha256": "84D38E06466435568E8458A47E4C5EFE6DED6C556F24E88F9D03A32DFD76F664"
+          },
+          {
+            "path": ".test-results/flex-matrix-20261022-a-final-join-013/guest.log",
+            "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\flex-matrix-20261022-a-final-join-013\\guest.log",
+            "bytes": 3085,
+            "sha256": "9C31BE7E8192864056E117CBF8BBCD79A503694A2ABEB1D751B221AC10B9384F"
+          }
+        ]
+      }
+    ],
+    "nkgPillars": [
+      {
+        "run": "flex-20261022-nkg-host-c",
+        "nativePillars": 12,
+        "cycles": 3,
+        "samples": [
+          {
+            "Number": 1,
+            "Player": 0,
+            "X": 76.0
+          },
+          {
+            "Number": 2,
+            "Player": 0,
+            "X": 77.2
+          },
+          {
+            "Number": 3,
+            "Player": 0,
+            "X": 78.4
+          },
+          {
+            "Number": 4,
+            "Player": 0,
+            "X": 79.6
+          },
+          {
+            "Number": 5,
+            "Player": 1,
+            "X": 84.98312
+          },
+          {
+            "Number": 6,
+            "Player": 1,
+            "X": 91.2
+          },
+          {
+            "Number": 7,
+            "Player": 1,
+            "X": 92.40001
+          },
+          {
+            "Number": 8,
+            "Player": 1,
+            "X": 93.6
+          },
+          {
+            "Number": 9,
+            "Player": 0,
+            "X": 84.15488
+          },
+          {
+            "Number": 10,
+            "Player": 0,
+            "X": 77.2
+          },
+          {
+            "Number": 11,
+            "Player": 0,
+            "X": 78.4
+          },
+          {
+            "Number": 12,
+            "Player": 0,
+            "X": 79.6000061
+          }
+        ]
+      },
+      {
+        "run": "flex-20261022-nkg-guest-c",
+        "nativePillars": 12,
+        "cycles": 3,
+        "samples": [
+          {
+            "Number": 1,
+            "Player": 1,
+            "X": 76.0
+          },
+          {
+            "Number": 2,
+            "Player": 1,
+            "X": 77.2
+          },
+          {
+            "Number": 3,
+            "Player": 1,
+            "X": 78.4
+          },
+          {
+            "Number": 4,
+            "Player": 1,
+            "X": 79.6
+          },
+          {
+            "Number": 5,
+            "Player": 0,
+            "X": 84.38554
+          },
+          {
+            "Number": 6,
+            "Player": 0,
+            "X": 91.2
+          },
+          {
+            "Number": 7,
+            "Player": 0,
+            "X": 92.4
+          },
+          {
+            "Number": 8,
+            "Player": 0,
+            "X": 93.6
+          },
+          {
+            "Number": 9,
+            "Player": 1,
+            "X": 84.24561
+          },
+          {
+            "Number": 10,
+            "Player": 1,
+            "X": 77.2
+          },
+          {
+            "Number": 11,
+            "Player": 1,
+            "X": 78.4
+          },
+          {
+            "Number": 12,
+            "Player": 1,
+            "X": 79.6
+          }
+        ]
+      }
+    ]
+  },
+  "developmentEvidence": {
+    "hornetGenerationFailure": "flex-host-a required a naturally registered dynamic Hornet attack that the fixture did not reach; inheritance moved to required NKG natural generation checks",
+    "earlierNkg": "nkg-host-a/b are older-binary diagnostics, not final evidence",
+    "failuresPreserved": true
+  },
+  "sources": [
+    {
+      "path": "src/HKMP/CoopContext.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\CoopContext.cs",
+      "bytes": 1739,
+      "sha256": "61EA3325BE43ECA605D6DDE244BF89F9775FD625FCCD23A3233D5DE3704D68C5"
+    },
+    {
+      "path": "src/HKMP/Game/GameManager.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\GameManager.cs",
+      "bytes": 2324,
+      "sha256": "B838633F87E704AB946B8AE4E55D86A52C35F7349E812B04255567475376BDFB"
+    },
+    {
+      "path": "src/HKMP/Version.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Version.cs",
+      "bytes": 239,
+      "sha256": "72944180F48129D9DD7DC30870809812AF9FF6DA71746060DF22BB2DAC0CFC04"
+    },
+    {
+      "path": "src/HKMP/Game/Client/Entity/BossTargeting.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\BossTargeting.cs",
+      "bytes": 9542,
+      "sha256": "8FCAC45F0424FF619FA7060E94DBDCDE9F099CAC6C04D5F711336321E7C9F7B2"
+    },
+    {
+      "path": "src/HKMP/Game/Client/Entity/BossTargetCommitment.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\BossTargetCommitment.cs",
+      "bytes": 1984,
+      "sha256": "6BC068F99BC6C28116AEBF0D6E52FAA9289E0973A6BCCA42A1BD6597E45BFF20"
+    },
+    {
+      "path": "src/HKMP/Game/Client/Entity/Entity.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\Entity.cs",
+      "bytes": 86980,
+      "sha256": "3BE39D29AE43C7F9529926426144B8888E7BB5C9193DFB2E1B1FAA15E7E569E2"
+    },
+    {
+      "path": "src/HKMP/Game/Client/Entity/EntityProcessor.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\EntityProcessor.cs",
+      "bytes": 8990,
+      "sha256": "000DE69AF00E1B8ACDD3F69177CEB3EDD25AC60AA104CA008DACFBCCC82A78D4"
+    },
+    {
+      "path": "src/HKMP/Game/Client/Entity/EntityManager.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\EntityManager.cs",
+      "bytes": 37360,
+      "sha256": "6F33DE12083B12B8AAB14EC35763A1A7F311ECA8B499254C9871CA712EF866E6"
+    },
+    {
+      "path": "src/HKMP/Game/Client/Entity/Action/EntityFsmActions.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\Action\\EntityFsmActions.cs",
+      "bytes": 112851,
+      "sha256": "1B99CA599C9FBEAB9C63470B9F94A958C79732EA61122AC6CBD4344C22E4BC71"
+    },
+    {
+      "path": "src/HollowConnect/BossTargeting.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\BossTargeting.cs",
+      "bytes": 3727,
+      "sha256": "A9EEE9E6459E56E3AA505FF3DB3403426244F1AF10C1B1814069A413047B6FE3"
+    },
+    {
+      "path": "src/HollowConnect/CoopMenu.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\CoopMenu.cs",
+      "bytes": 3964,
+      "sha256": "AB6126BBE5EA6A85580E34BFCCCD1681A822D1A6298450D8F2D81BFC4B642489"
+    },
+    {
+      "path": "src/HollowConnect/RoomSettings.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\RoomSettings.cs",
+      "bytes": 1106,
+      "sha256": "669ADDF8E06F78F565F1B7CA4BEC5134163D8776338A9DE51FF9F06D29438868"
+    },
+    {
+      "path": "src/HollowConnect/CoopMod.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\CoopMod.cs",
+      "bytes": 9076,
+      "sha256": "D96BD323D7F2F5948A2E65439570F1D226E3424A7A8EFAD7DE9E1724454A57E0"
+    },
+    {
+      "path": "src/HollowConnect/CoopRuntime.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\CoopRuntime.cs",
+      "bytes": 84253,
+      "sha256": "1AC436665E13F5E0E2D1B78CBAF249CD5534D399FB13DA4BDFA87D92DD42C8DB"
+    },
+    {
+      "path": "src/HollowConnect/CoopServerAddon.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\CoopServerAddon.cs",
+      "bytes": 23189,
+      "sha256": "F311689F2E99ACA2FF8B30A2C81A7B7B0B16193E53DAA8437F7B73E1690F9D84"
+    },
+    {
+      "path": "tests/BossTargetCommitmentTests.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\tests\\BossTargetCommitmentTests.cs",
+      "bytes": 2477,
+      "sha256": "DDDBAD27A055E354C4FDD2CB31F497CFCDF15E69DF33E26653B175AF523B1CFB"
+    },
+    {
+      "path": "tests/Smoke/FlexibleTargetChecks.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\tests\\Smoke\\FlexibleTargetChecks.cs",
+      "bytes": 14828,
+      "sha256": "D6944AA273C1F3D079F759A4AAE07E449EF5CEF9559C7B13BFC3BDC78EF8C77F"
+    },
+    {
+      "path": "tests/Smoke/NightmarePillarChecks.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\tests\\Smoke\\NightmarePillarChecks.cs",
+      "bytes": 9104,
+      "sha256": "B5E98C9CA629C8B1FDC42B83E30051EDF78263EB9C9482000AB2C20041528C45"
+    }
+  ],
+  "limitations": [
+    "Not every boss, attack state or full-fight progression verified",
+    "No three-player or two-machine FRP/UDP run",
+    "No real save write/read or installed personal game changes"
+  ],
+  "selection": {
+    "path": ".analysis/flexible-target-20261022/selection.md",
+    "absolutePath": "E:\\projects\\hollowConnect\\.analysis\\flexible-target-20261022\\selection.md",
+    "bytes": 5242,
+    "sha256": "C17E0BC9C8049699FC14EF95FDADE37AE555B9311F3131707BB64A8679071D42"
+  }
+}

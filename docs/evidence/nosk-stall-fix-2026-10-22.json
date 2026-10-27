@@ -1,0 +1,69 @@
+{
+  "issue": "Nosk stalls against raised platform",
+  "date": "2026-10-22",
+  "version": "0.1.31",
+  "productionPath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "5DB6EC67CCEB1DF9092DA3E8CA2DDEE83EEB64270F50C29AEF92E684043B5AD2"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "A4A46D21FAA55EE9E6D3B3FAB6C0D10F17FAF8B6FF0547E0FBCF0F25AAFFE6BF"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "9CA2DD18465A05D34C364383BD6894B1CB500EB72A0217530954379AAE755DE1"
+    }
+  ],
+  "buildLog": ".analysis/nosk-stall-fix-20261022/build-final-b.log",
+  "core": {
+    "failed": 0,
+    "log": ".analysis/nosk-stall-fix-20261022/core-final.log",
+    "passed": 5,
+    "selection": ".analysis/nosk-stall-fix-20261022/core-selection.txt"
+  },
+  "finalGame": {
+    "name": "direct",
+    "attempt": "final-b",
+    "mode": "rescue",
+    "options": {
+      "HOLLOWCONNECT_NOSK_STALL_CHECK": "1"
+    },
+    "status": "passed",
+    "started": "2026-10-22T14:25:53.9694494Z",
+    "runnerPid": 32920,
+    "runPath": "E:\\projects\\hollowConnect\\.test-results\\nosk-stall-fix-20261022-direct-final-b",
+    "error": null,
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "5DB6EC67CCEB1DF9092DA3E8CA2DDEE83EEB64270F50C29AEF92E684043B5AD2"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "A4A46D21FAA55EE9E6D3B3FAB6C0D10F17FAF8B6FF0547E0FBCF0F25AAFFE6BF"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "9CA2DD18465A05D34C364383BD6894B1CB500EB72A0217530954379AAE755DE1"
+      }
+    ],
+    "probeHash": "981A9A2066D157C1E7776F768B40E710FE159740C568974D0DC30F45DE690553",
+    "strictLogs": "passed",
+    "ended": "2026-10-22T14:27:06.997664Z"
+  },
+  "development": {
+    "fixtureCompileFailure": ".analysis/nosk-stall-fix-20261022/build-final.log",
+    "baseline": ".test-results/nosk-stall-fix-20261022-direct-inspect-a",
+    "trace": ".test-results/nosk-stall-fix-20261022-direct-trace-a",
+    "intermediate": ".test-results/nosk-stall-fix-20261022-direct-fixed-a"
+  },
+  "audit": ".analysis/nosk-stall-fix-20261022/native/audit.json",
+  "report": "docs/NOSK-STALL-FIX-2026-10-22.md",
+  "scope": "Native story Nosk charge/climb, guest replica motion, native physics/late loops after rebind and existing template/clone checks",
+  "limits": "No full kill, authority handoff, Winged Nosk or full room matrix",
+  "packaged": false,
+  "installed": false
+}

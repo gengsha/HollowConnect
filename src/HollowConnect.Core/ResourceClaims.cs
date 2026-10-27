@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HollowConnect.Core;
 
-public enum ResourceKind { CharmNotch, MaskShard, VesselFragment, PaleOre }
+public enum ResourceKind { CharmNotch, MaskShard, VesselFragment, PaleOre, SimpleKey }
 
 // Identification only. A native flag can be set before the pickup animation
 // actually grants a resource; adapters must observe the native grant endpoint.
@@ -25,11 +25,13 @@ public static class ResourceCatalog {
     private static readonly HashSet<string> personalFields = new HashSet<string>(StringComparer.Ordinal) {
         "ore", "charmSlots", "heartPieces", "maxHealth", "maxHealthBase", "heartPieceCollected", "heartPieceMax",
         "vesselFragments", "MPReserveMax", "vesselFragmentCollected", "vesselFragmentMax",
-        "nailSmithUpgrades", "nailDamage", "honedNail"
+        "nailSmithUpgrades", "nailDamage", "honedNail", "simpleKeys"
     };
+    public static bool IsPersonalKeyDoor(string field) => field == "jijiDoorUnlocked" || field == "bathHouseOpened" ||
+        field == "openedWaterwaysManhole" || field == "godseekerUnlocked";
     public static IEnumerable<ResourceSource> Sources => sources.Values;
     public static bool PreservesPlayerData(string field) => field != null &&
-        (personalFields.Contains(field) || TryPlayerFlag(field, out _));
+        (personalFields.Contains(field) || IsPersonalKeyDoor(field) || TryPlayerFlag(field, out _));
     public static bool PreservesPersistent(string scene, string id) {
         foreach (var source in sources.Values)
             if (source.PersistentId != null && source.Scene == scene && source.PersistentId == id) return true;
@@ -81,6 +83,10 @@ public static class ResourceCatalog {
         foreach (var scene in new[] { "Mines_34", "Abyss_17", "Deepnest_32" }) Pickup("ore", ResourceKind.PaleOre, scene, "Shiny Item Stand");
         Add("ore:dreamReward3", ResourceKind.PaleOre, "RestingGrounds_07", playerFlag: "dreamReward3");
         Add("ore:colosseumSilver", ResourceKind.PaleOre, "Room_Colosseum_Silver", "Shiny Item", "colosseumSilverCompleted");
+        Add("key:slySimpleKey", ResourceKind.SimpleKey, "Room_shop", playerFlag: "slySimpleKey");
+        Pickup("key", ResourceKind.SimpleKey, "Ruins1_17", "Shiny Item");
+        Pickup("key", ResourceKind.SimpleKey, "Abyss_20", "Shiny Item Stand");
+        Add("key:gotLurkerKey", ResourceKind.SimpleKey, "GG_Lurker", playerFlag: "gotLurkerKey");
         return result;
     }
 }

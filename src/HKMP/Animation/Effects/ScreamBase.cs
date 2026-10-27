@@ -40,7 +40,7 @@ internal abstract class ScreamBase : DamageAnimationEffect {
 
         // Get the correct scream heads object and spawn it relative to the remote player
         var scrHeadsObject = localPlayerSpells.FindGameObjectInChildren(screamObjectName);
-        var screamHeads = Object.Instantiate(
+        var screamHeads = RemotePlayerVisuals.Instantiate(
             scrHeadsObject,
             playerSpells.transform
         );

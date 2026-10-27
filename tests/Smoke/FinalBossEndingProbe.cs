@@ -29,7 +29,9 @@ public sealed class FinalBossEndingProbe : MonoBehaviour {
         var end = Time.realtimeSinceStartup + seconds;
         while (!test() && Time.realtimeSinceStartup < end) yield return null;
         if (!test()) {
-            Log("TIMEOUT " + name + " scene=" + Scene + " transition=" + GameManager.instance.IsInSceneTransition);
+            Log("TIMEOUT " + name + " scene=" + Scene + " transition=" + GameManager.instance.IsInSceneTransition +
+                " down=" + runtime?.Down + " spectator=" + runtime?.Spectating + " peer=" +
+                string.Join(",", runtime?.Peers.Values.Select(p => p.Life.ToString()) ?? Array.Empty<string>()));
             foreach (var fsm in Object.FindObjectsOfType<PlayMakerFSM>())
                 if (fsm.name.Contains("Hollow") || fsm.name.Contains("Boss") || fsm.name == "RestBench")
                     Log("TIMEOUT FSM " + fsm.name + "/" + fsm.FsmName + "=" + fsm.ActiveStateName);
@@ -78,6 +80,9 @@ public sealed class FinalBossEndingProbe : MonoBehaviour {
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         CoopMod.Settings.ShareProgress = false; CoopMod.Settings.Rescue = true; CoopMod.Settings.EntryProtection = false;
+        CoopMod.Settings.BossVictoryRescue = true;
+        var spectatorRescue = Environment.GetEnvironmentVariable("HOLLOWCONNECT_FINAL_SPECTATOR") == "1";
+        CoopMod.Settings.SpectateAfterExhaustion = spectatorRescue;
         var pd = PlayerData.instance;
         pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         pd.SetBool("gotShadeCharm", !host); pd.SetBool("hornetBlackFountain", false); pd.SetBool("killedHollowKnight", false);
@@ -109,6 +114,24 @@ public sealed class FinalBossEndingProbe : MonoBehaviour {
         var hero = HeroController.instance; hero.takeNoDamage = true;
         hero.transform.position = new Vector3(40, 11, hero.transform.position.z); hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         var continuationOnly = Environment.GetEnvironmentVariable("HOLLOWCONNECT_FINAL_CASE") == "continuation";
+        var victoryRescue = Environment.GetEnvironmentVariable("HOLLOWCONNECT_FINAL_BOSS_RESCUE") == "1";
+        if (victoryRescue) {
+            hero.AffectedByGravity(true); hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            yield return Until(() => hero.cState.onGround, "final boss rescue fixture has native ground support");
+            hero.SetHazardRespawn(hero.transform.position, true);
+            if (!host) {
+                pd.SetInt("health", 0);
+                hero.StartCoroutine((IEnumerator)typeof(HeroController).GetMethod("Die", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null));
+                yield return Until(() => runtime.Down, "final boss guest shadow before native death boundary");
+                if (spectatorRescue) {
+                    typeof(CoopRuntime).GetMethod("RequestGiveUp", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime, null);
+                    yield return Until(() => runtime.Spectating, "final boss voluntary spectator accepted");
+                }
+                Flag("guest.final-shadow");
+            }
+            yield return Until(() => Has("guest.final-shadow") && (!host || runtime.Peers.Values.Single().Life ==
+                (spectatorRescue ? HollowConnect.Core.Life.Spectating : HollowConnect.Core.Life.Down)), "both see final boss defeated participant");
+        }
         if (continuationOnly) Log("FIXTURE explicit native corpse continuation boundary only; battle/music/death acceptance belongs to preserved r3 logs");
         if (host) {
             var hp = boss.Object.Host.GetComponent<HealthManager>();
@@ -119,23 +142,37 @@ public sealed class FinalBossEndingProbe : MonoBehaviour {
                 var end = Time.realtimeSinceStartup + 55;
                 while (!decline && Time.realtimeSinceStartup < end) {
                     Log("NATIVE DAMAGE before=" + hp.hp + " state=" + control.ActiveStateName);
-                    if (hp.hp > 330) Hit(hp, 80);
+                    // The native third phase begins above the self-stab
+                    // threshold. Keep delivering native hits without killing
+                    // the boss; stopping at 280 leaves Check 6 waiting forever.
+                    if (hp.hp > 80) Hit(hp, Math.Min(80, hp.hp - 1));
                     yield return new WaitForSecondsRealtime(.8f);
                 }
             }
         }
         if (!continuationOnly) {
-            yield return Until(() => decline && Has((host ? "guest" : "host") + ".decline"), "both hear first native self-stab music before death", 55);
+            // With personal world progress, room music is deliberately local
+            // (MusicComponent is not installed). This settlement probe still
+            // requires the authority's actual native self-stab, without making
+            // unrelated replica music a precondition for reaching the corpse.
+            yield return Until(() => Has("host.decline") && (host || !runtime.Shared || decline),
+                "native self-stab reached before final death", 55);
             Require(!pd.GetBool("killedHollowKnight"), "first decline music arrives during battle before native death");
             yield return new WaitForSecondsRealtime(.5f);
             var playing = Resources.FindObjectsOfTypeAll<AudioSource>().Where(a => a.isPlaying && a.clip != null).Select(a => a.clip.name + "@" + a.time.ToString("F2")).ToArray();
-            Require(playing.Length > 0, "native audio sources continue playing after decline cue"); Log("MUSIC PLAYBACK " + string.Join(",", playing));
+            Require(playing.Length > 0, "native audio sources continue during final battle"); Log("MUSIC PLAYBACK " + string.Join(",", playing));
             if (host) {
                 var hp = boss.Object.Host.GetComponent<HealthManager>(); var end = Time.realtimeSinceStartup + 45;
                 while (boss.Object.Host.activeSelf && Time.realtimeSinceStartup < end) { Hit(hp, 80); yield return new WaitForSecondsRealtime(.8f); }
             }
         }
-        yield return checks.Ready(); Flag(role + ".corpse-ready");
+        yield return checks.Ready();
+        if (victoryRescue) {
+            yield return Until(() => !runtime.Down && !runtime.Spectating && runtime.Peers.Values.Single().Life is
+                HollowConnect.Core.Life.Alive or HollowConnect.Core.Life.Loading, "native final boss defeat clears shadow on both endpoints");
+            if (!host) Require(pd.health == 1 && pd.healthBlue == 0 && hero.acceptingInput, "native final boss shadow restored to controllable one-health knight");
+        }
+        Flag(role + ".corpse-ready");
         yield return Until(() => Has((host ? "guest" : "host") + ".corpse-ready"), "both native corpses ready");
         if (!host) { yield return Until(() => Has("host.ending"), "authority finishes its own ending"); yield return new WaitForSecondsRealtime(3); checks.CheckAfterAuthorityLeft(); }
         yield return checks.FinishByNativeFocus(); Flag(role + ".ending");

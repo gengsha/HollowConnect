@@ -1,4 +1,4 @@
-﻿using Hkmp.Util;
+using Hkmp.Util;
 using UnityEngine;
 
 namespace Hkmp.Animation.Effects;
@@ -25,7 +25,7 @@ internal abstract class QuakeDownBase : AnimationEffect {
         var playerEffects = playerObject.FindGameObjectInChildren("Effects");
 
         // Instantiate the Q Flash Start from the prefab in the remote player spells object
-        var qFlashStart = Object.Instantiate(
+        var qFlashStart = RemotePlayerVisuals.Instantiate(
             localPlayerSpells.FindGameObjectInChildren("Q Flash Start"),
             playerSpells.transform
         );
@@ -34,7 +34,7 @@ internal abstract class QuakeDownBase : AnimationEffect {
         Object.Destroy(qFlashStart, 1);
 
         // Instantiate the SD Sharp Flash from the prefab in the remote player effects object
-        var sdSharpFlash = Object.Instantiate(
+        var sdSharpFlash = RemotePlayerVisuals.Instantiate(
             localPlayerSpells.FindGameObjectInChildren("SD Sharp Flash"),
             playerEffects.transform
         );
@@ -44,7 +44,7 @@ internal abstract class QuakeDownBase : AnimationEffect {
 
         // Instantiate the trail object from the prefab and spawn it in the remote player spells object
         // This is the texture that the knight has continually while diving down
-        var qTrail = Object.Instantiate(
+        var qTrail = RemotePlayerVisuals.Instantiate(
             localPlayerSpells.FindGameObjectInChildren(qTrailPrefabName),
             playerSpells.transform
         );

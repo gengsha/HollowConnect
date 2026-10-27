@@ -45,6 +45,9 @@ internal class ServerInfo : IPacketData {
     /// </summary>
     public bool FullSynchronisation { get; set; }
 
+    /// <summary>Keep personal worlds local and synchronize only boss combat.</summary>
+    public bool LocalWorldOnly { get; set; }
+
     /// <summary>
     /// The save data currently used on the server.
     /// </summary>
@@ -69,6 +72,7 @@ internal class ServerInfo : IPacketData {
             ServerSettingsUpdate.WriteData(packet);
             
             packet.Write(FullSynchronisation);
+            packet.Write(LocalWorldOnly);
 
             CurrentSave.WriteData(packet);
         
@@ -116,6 +120,7 @@ internal class ServerInfo : IPacketData {
             ServerSettingsUpdate.ReadData(packet);
 
             FullSynchronisation = packet.ReadBool();
+            LocalWorldOnly = packet.ReadBool();
 
             CurrentSave = new CurrentSave();
             CurrentSave.ReadData(packet);

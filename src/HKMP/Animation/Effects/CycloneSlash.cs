@@ -43,7 +43,7 @@ internal class CycloneSlash : ParryableEffect {
 
         // Get the prefab for the Cyclone Slash and instantiate it relative to the remote player object
         var cycloneObj = localPlayerAttacks.FindGameObjectInChildren("Cyclone Slash");
-        var cycloneSlash = Object.Instantiate(
+        var cycloneSlash = RemotePlayerVisuals.Instantiate(
             cycloneObj,
             playerAttacks.transform
         );

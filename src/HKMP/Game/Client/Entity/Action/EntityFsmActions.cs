@@ -172,6 +172,8 @@ internal static class EntityFsmActions {
     /// <exception cref="InvalidOperationException">Thrown if there is no suitable method for the action and thus
     /// no FSM action will be mimicked.</exception>
     public static void ApplyNetworkDataFromAction(EntityNetworkData data, FsmStateAction action) {
+        if (LocalBattleCompletion.ApplyScriptedCounter(action)) return;
+        if (TargetsLocalBarrier(action)) return;
         var actionType = action.GetType();
         if (!TypeApplyMethodInfos.TryGetValue(actionType, out var methodInfo)) {
             throw new InvalidOperationException(
@@ -196,6 +198,49 @@ internal static class EntityFsmActions {
                 e = e.InnerException;
             }
         }
+    }
+
+    private static bool TargetsLocalBarrier(FsmStateAction action) {
+        // These external writes can bypass ProcessEvent altogether. A local
+        // gate's variables, activation and collision belong to its own FSM.
+        var target = action switch {
+            SetFsmBool a => a.gameObject,
+            SetFsmInt a => a.gameObject,
+            SetFsmFloat a => a.gameObject,
+            SetFsmString a => a.gameObject,
+            ActivateGameObject a => a.gameObject,
+            SetPosition a => a.gameObject,
+            SetRotation a => a.gameObject,
+            SetScale a => a.gameObject,
+            SetParent a => a.gameObject,
+            SetVelocity2d a => a.gameObject,
+            SetVelocityAsAngle a => a.gameObject,
+            SetGravity2dScale a => a.gameObject,
+            SetIsKinematic2d a => a.gameObject,
+            iTweenMoveBy a => a.gameObject,
+            iTweenScaleTo a => a.gameObject,
+            SetBoxCollider2DSizeVector a => a.gameObject1,
+            SetCollider a => a.gameObject,
+            SetCircleCollider a => a.gameObject,
+            SetPolygonCollider a => a.gameObject,
+            SetMeshRenderer a => a.gameObject,
+            SetSpriteRenderer a => a.gameObject,
+            Tk2dPlayAnimation a => a.gameObject,
+            Tk2dPlayAnimationWithEvents a => a.gameObject,
+            Tk2dPlayFrame a => a.gameObject,
+            SetTag a => a.gameObject,
+            AddComponent a => a.gameObject,
+            DestroyComponent a => a.gameObject,
+            CallMethodProper a => a.gameObject,
+            SendMessage a => a.gameObject,
+            _ => null
+        };
+        bool Private(GameObject go) => EntityRegistry.IsLocalOnlyBarrier(go) ||
+            CoopContext.LocalWorldOnly && EntityReferences.Owner(action.Owner) != null && LocalBarrierEvents.PrivateTarget(go);
+        if (target != null && Private(action.Fsm.GetOwnerDefaultTarget(target))) return true;
+        if (action is ActivateAllChildren children) return Private(children.gameObject.Value);
+        if (action is DestroyObject destroy) return Private(destroy.gameObject.Value);
+        return false;
     }
 
     /// <summary>
@@ -437,7 +482,10 @@ internal static class EntityFsmActions {
         var position = Vector3.zero;
         var euler = Vector3.up;
 
-        var spawnPoint = action.spawnPoint.Value;
+        // Match the native temporary target read. Recomputing this from the
+        // untouched Knight variable puts NKG pillars at a different player's
+        // position on the replica, despite the native spawn being correct.
+        var spawnPoint = BossTargeting.Resolve(action.spawnPoint.Value, action);
         if (spawnPoint != null) {
             position = spawnPoint.transform.position;
             if (!action.position.IsNone) {
@@ -751,13 +799,14 @@ internal static class EntityFsmActions {
         var position = Vector3.zero;
         var euler = Vector3.zero;
 
-        if (action.spawnPoint.Value != null) {
-            position = action.spawnPoint.Value.transform.position;
+        var spawnPoint = BossTargeting.Resolve(action.spawnPoint.Value, action);
+        if (spawnPoint != null) {
+            position = spawnPoint.transform.position;
             if (!action.position.IsNone) {
                 position += action.position.Value;
             }
 
-            euler = !action.rotation.IsNone ? action.rotation.Value : action.spawnPoint.Value.transform.eulerAngles;
+            euler = !action.rotation.IsNone ? action.rotation.Value : spawnPoint.transform.eulerAngles;
         } else {
             if (!action.position.IsNone) {
                 position = action.position.Value;
@@ -1912,19 +1961,7 @@ internal static class EntityFsmActions {
     }
 
     private static void ApplyNetworkDataFromAction(EntityNetworkData data, SendEventByName action) {
-        if (action.delay.Value < 1.0 / 1000.0) {
-            action.Fsm.Event(action.eventTarget, action.sendEvent.Value);
-        } else {
-            // We need to delay the event sending ourselves, because the FSM that we are executing in is not enabled
-            // The usual implementation of SendEventByName will thus not work
-            MonoBehaviourUtil.Instance.StartCoroutine(DelayEvent());
-
-            IEnumerator DelayEvent() {
-                yield return new WaitForSeconds(action.delay.Value);
-                
-                action.Fsm.Event(action.eventTarget, action.sendEvent.Value);
-            }
-        }
+        LocalBarrierEvents.Replay(action.Fsm, action.eventTarget, action.sendEvent.Value, action.delay.Value, action.State);
     }
 
     #endregion
@@ -1940,19 +1977,7 @@ internal static class EntityFsmActions {
     }
 
     private static void ApplyNetworkDataFromAction(EntityNetworkData data, SendEventByNameV2 action) {
-        if (action.delay.Value < 1.0 / 1000.0) {
-            action.Fsm.Event(action.eventTarget, action.sendEvent.Value);
-        } else {
-            // We need to delay the event sending ourselves, because the FSM that we are executing in is not enabled
-            // The usual implementation of SendEventByNameV2 will thus not work
-            MonoBehaviourUtil.Instance.StartCoroutine(DelayEvent());
-
-            IEnumerator DelayEvent() {
-                yield return new WaitForSeconds(action.delay.Value);
-                
-                action.Fsm.Event(action.eventTarget, action.sendEvent.Value);
-            }
-        }
+        LocalBarrierEvents.Replay(action.Fsm, action.eventTarget, action.sendEvent.Value, action.delay.Value, action.State);
     }
 
     #endregion
@@ -2453,6 +2478,7 @@ internal static class EntityFsmActions {
     #endregion
     
     #region CallMethodProper
+
 
     private static bool GetNetworkDataFromAction(EntityNetworkData data, CallMethodProper action) {
         Logger.Debug($"Getting network data for CallMethodProper: {action.Fsm.GameObject.name}, {action.Fsm.Name}");
@@ -3213,6 +3239,32 @@ internal static class EntityFsmActions {
 
     #endregion
     
+    // Instant native defeat states can be followed by another state in the
+    // same network update. Keep their executed metadata in the reliable action
+    // stream, rather than relying only on the latest continuation snapshot.
+    private static bool GetNetworkDataFromAction(EntityNetworkData data, SetPlayerDataBool action) {
+        var entity = EntityReferences.Owner(action.Fsm.GameObject);
+        return entity != null && BossDefeatSignals.LocalDefeatFlags(entity.Type, action.Fsm.Name,
+            action.State.Name, new FsmStateAction[] { action }).Any();
+    }
+
+    private static void ApplyNetworkDataFromAction(EntityNetworkData data, SetPlayerDataBool action) {
+        var entity = EntityReferences.Owner(action.Fsm.GameObject);
+        if (entity != null) BossDefeatSignals.ApplyLocalDefeatRecord(entity.Type, entity.SourceScene, action.State);
+    }
+
+    // Absolute Radiance's active terminal actions select a cinematic through
+    // this one local flag, then EndGGBossScene. Its old ChangeToScene action is
+    // disabled in the native prefab. Keep arbitrary static variables private.
+    private static bool GetNetworkDataFromAction(EntityNetworkData data, SetStaticVariable action) {
+        var entity = EntityReferences.Owner(action.Fsm.GameObject);
+        return entity != null && BossDefeatSignals.IsAbsoluteEndingFlag(entity.Type, entity.SourceScene, action);
+    }
+    private static void ApplyNetworkDataFromAction(EntityNetworkData data, SetStaticVariable action) {
+        var entity = EntityReferences.Owner(action.Fsm.GameObject);
+        if (entity != null) BossDefeatSignals.ApplyFinalCinematicRecord(entity.Type, entity.SourceScene, action.State);
+    }
+
     #region EndGGBossScene
 
     private static bool GetNetworkDataFromAction(EntityNetworkData data, EndGGBossScene action) {

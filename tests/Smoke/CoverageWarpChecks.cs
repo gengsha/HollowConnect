@@ -16,16 +16,24 @@ public sealed partial class CoverageProbe {
         DreamPlatform platform = null;
         Collider2D FindFloor() {
             if (scene == "Dream_Nailcollection") {
-                var e = Entities.Values.First(v => v.Type == EntityType.DreamPlatform && v.Object.Host.name == "dream_plat_small");
-                platform = (manager.IsSceneHost ? e.Object.Host : e.Object.Client).GetComponent<DreamPlatform>();
+                platform = UnityEngine.Object.FindObjectsOfType<DreamPlatform>().Single(p =>
+                    p.gameObject.scene.name == scene && p.name == "dream_plat_small");
                 return platform.GetComponentsInChildren<Collider2D>().First(c => !c.isTrigger && c.enabled);
             }
-            return UnityEngine.Object.FindObjectsOfType<Collider2D>().Single(c => c.gameObject.scene.name == scene && c.name == "fung_plat_float_12");
+            var found = UnityEngine.Object.FindObjectsOfType<Collider2D>().SingleOrDefault(c => c.gameObject.scene.name == scene && c.name == "fung_plat_float_12");
+            if (found == null) throw new Exception("Warp fixture missing native platform in " + scene +
+                "; active=" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name + "; gm=" + GameManager.instance.sceneName +
+                "; transition=" + GameManager.instance.IsInSceneTransition + "; snapshot=" + engine.ClientManager.SceneSnapshotReady +
+                "; candidates=" + string.Join(",", UnityEngine.Object.FindObjectsOfType<Collider2D>(true)
+                    .Where(c => c.name == "fung_plat_float_12").Select(c => c.name + "@" + c.gameObject.scene.name +
+                        "/active=" + c.gameObject.activeInHierarchy + "/enabled=" + c.enabled)));
+            return found;
         }
         var floor = FindFloor();
         var other = host ? "guest" : "host";
         bool Can(string method) => (bool)typeof(HeroController).GetMethod(method, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null);
-        string State() => "pos=" + hero.transform.position + " velocity=" + body.velocity + " floor=" + floor.bounds +
+        string State() => "scene=" + GameManager.instance.sceneName + " pos=" + hero.transform.position + " velocity=" + body.velocity +
+            " floor=" + (floor == null ? "missing" : floor.bounds.ToString()) +
             " gravity=" + body.gravityScale + " cachedGravity=" + Field<float>(hero, "prevGravityScale") + " body=" + body.bodyType + "/" + body.simulated +
             " ground=" + hero.cState.onGround + " input=" + hero.acceptingInput + " relinquished=" + hero.controlReqlinquished +
             " hazard=" + hero.cState.hazardDeath + "/" + hero.cState.hazardRespawning + " state=" + hero.hero_state +
@@ -40,7 +48,7 @@ public sealed partial class CoverageProbe {
         }
         IEnumerator Together(string label) {
             var key = ".warp." + round + "." + label;
-            Flag(role + key); yield return Check(() => Has(other + key), "both " + label);
+            Flag(role + key); yield return Check(() => Has(other + key), "both " + label, 20);
         }
         IEnumerator Land() {
             floor = FindFloor();
@@ -93,6 +101,11 @@ public sealed partial class CoverageProbe {
                 yield return Check(() => pressed && Field<uint>(runtime, "handledWarp") > before, actor + " F8 accepted over real UDP");
                 runtime.KeyPressed = _ => false;
                 yield return Check(() => !Field<bool>(runtime, "changingScene"), actor + " relocation completed");
+                Mark("WARP RELOCATED " + State() + " active=" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name +
+                    " loaded=" + UnityEngine.SceneManagement.SceneManager.GetSceneByName(scene).isLoaded +
+                    " transition=" + GameManager.instance.IsInSceneTransition + " snapshot=" + engine.ClientManager.SceneSnapshotReady);
+                yield return Check(() => In(scene) && !hero.cState.transitioning && engine.ClientManager.SceneSnapshotReady,
+                    actor + " native destination and snapshot ready");
                 floor = FindFloor();
                 Mark("WARP ARRIVAL " + State());
                 yield return new WaitForSecondsRealtime(1);

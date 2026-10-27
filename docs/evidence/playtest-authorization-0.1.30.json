@@ -1,0 +1,42 @@
+{
+  "version": "0.1.30",
+  "action": "package-for-user-playtest",
+  "buildLabel": "",
+  "buildCommit": "49d97def4e1051bc00c2095a1e985d7f201fd034",
+  "workingTreeHasUncommittedChanges": true,
+  "userRequest": "也就是目前为止没什么明显bug,那打包0.1.30吧",
+  "recordedAtUtc": "2026-10-21T09:49:50.9060055Z",
+  "retestOmitted": true,
+  "retestOmissionReason": "Routine packaging/version scope chosen under repository instructions; the user did not request another gameplay suite. Prior completed tests are referenced on their original hashes.",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "CD5630FFFBDFDBE08E8362093B0951331BBDA7A950100DC7CDB3F6187AA45CBF",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    }
+  ],
+  "scope": "Package current accumulated fixes as 0.1.30 using existing playtest delivery workflow. Include rescue quotas and Beta spectating, boss room failure, Failed Champion registration, Gorb additive cleanup and living-player boss targeting. Correct stale Soul Master unresolved status. Do not clear historical records or claim all bugs are gone."
+}

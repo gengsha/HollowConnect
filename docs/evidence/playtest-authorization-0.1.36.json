@@ -1,0 +1,42 @@
+{
+  "version": "0.1.36",
+  "action": "package-for-user-playtest",
+  "buildLabel": "",
+  "workingTreeHasUncommittedChanges": true,
+  "userRequest": "打包新版",
+  "recordedAtUtc": "2026-10-24T12:33:29.3256333Z",
+  "retestOmitted": true,
+  "channelReason": "User requested a new package after receiving the current known-issue status. Continue the existing playtest channel; this records task scope, not individual approval of each finding or full release certification.",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "boss-settlement-disconnect-delivery-race",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "144186D2227E8A157EE737576E5E32668509DFD3704FB5EC2FF5264DF8B0AEBC"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "E821ACBEA45AD064520BF14301DBE22969E6C616FB2195F842FBA1C5EF8AADC3"
+    }
+  ],
+  "scope": "Complete 0.1.36 package containing recent rescue/hazard fixes, Hornet Sentinel remote nail repair, F1 damage board, Pleasure House shared door progress and all prior fixes. No new game/core tests or installation."
+}

@@ -1,0 +1,303 @@
+{
+  "version": "0.1.33",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.1.33-l6",
+  "releaseReady": false,
+  "retestOmitted": false,
+  "createdAtUtc": "2026-10-23T08:16:21.0791489Z",
+  "scope": "User-requested scoped validation: 16 related core checks, 194 native menu assertions and six direct dual-client cases; no full room/Boss matrix.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+    }
+  ],
+  "core": {
+    "selection": ".analysis/release-0.1.33-20261023/core.selection.txt",
+    "log": ".analysis/release-0.1.33-20261023/build-core.log",
+    "sha256": "2CC929C176E523CF2F6712EDB9D898DCEA9A80ED9CD81B8CC221707F41F1590A",
+    "failed": 0,
+    "passed": 16
+  },
+  "menu": {
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+      }
+    ],
+    "assertions": 194,
+    "path": ".analysis/menu-description-20261023/release-033",
+    "strictLogs": "passed",
+    "passed": true
+  },
+  "fileWorkflow": {
+    "log": ".analysis/release-0.1.33-20261023/workflow.log",
+    "sha256": "02403E5D8A323F0EA8A874CB38C837E3FA5DA799309E2ADF42912D80DD05A3C0",
+    "failed": 0,
+    "passed": 9
+  },
+  "gameDependencies": [
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "runs": [
+    {
+      "name": "release-033-p5-presentation-a",
+      "case": "p5-presentation",
+      "group": "direct",
+      "mode": "coverage",
+      "options": {
+        "HOLLOWCONNECT_P5_FOUR_ONLY": "GG_Ghost_Markoth,GG_Grey_Prince_Zote,GG_Traitor_Lord",
+        "HOLLOWCONNECT_COVERAGE_SECONDS": "2",
+        "HOLLOWCONNECT_P5_FOUR": "final",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-23T07:53:55.0034665Z",
+      "ended": "2026-10-23T07:55:10.5193788Z",
+      "minutes": 1.26,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+        }
+      ]
+    },
+    {
+      "name": "release-033-p5-uumuu-a",
+      "case": "p5-uumuu",
+      "group": "direct",
+      "mode": "coverage",
+      "options": {
+        "HOLLOWCONNECT_P5_FOUR_ONLY": "GG_Uumuu",
+        "HOLLOWCONNECT_COVERAGE_SECONDS": "2",
+        "HOLLOWCONNECT_P5_FOUR": "final",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-23T07:55:11.0852103Z",
+      "ended": "2026-10-23T07:56:04.3507654Z",
+      "minutes": 0.89,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+        }
+      ]
+    },
+    {
+      "name": "release-033-feedback-b",
+      "case": "feedback",
+      "group": "direct",
+      "mode": "progress",
+      "options": {
+        "HOLLOWCONNECT_REMOTE_FEEDBACK": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-23T08:13:46.690747Z",
+      "ended": "2026-10-23T08:14:10.6204315Z",
+      "minutes": 0.4,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+        }
+      ]
+    },
+    {
+      "name": "release-033-ranking-prefix-b",
+      "case": "ranking-prefix",
+      "group": "direct",
+      "mode": "pantheon",
+      "options": {
+        "HOLLOWCONNECT_DAMAGE_RANKING": "on",
+        "HOLLOWCONNECT_INITIAL_SNAPSHOT_DELAY_MS": "0",
+        "HOLLOWCONNECT_DAMAGE_CHECK_ROOMS": "2"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-23T08:14:10.8182758Z",
+      "ended": "2026-10-23T08:14:46.2244191Z",
+      "minutes": 0.59,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+        }
+      ]
+    },
+    {
+      "name": "release-033-ranking-final-a",
+      "case": "ranking-final",
+      "group": "direct",
+      "mode": "pantheon",
+      "options": {
+        "HOLLOWCONNECT_DAMAGE_FINAL_ONLY": "1",
+        "HOLLOWCONNECT_DAMAGE_RANKING": "on",
+        "HOLLOWCONNECT_INITIAL_SNAPSHOT_DELAY_MS": "0",
+        "HOLLOWCONNECT_DAMAGE_FINAL_TIER": "2"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-23T08:14:46.2276947Z",
+      "ended": "2026-10-23T08:15:16.0274437Z",
+      "minutes": 0.5,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+        }
+      ]
+    },
+    {
+      "name": "release-033-ranking-off-a",
+      "case": "ranking-off",
+      "group": "direct",
+      "mode": "pantheon",
+      "options": {
+        "HOLLOWCONNECT_DAMAGE_RANKING": "off",
+        "HOLLOWCONNECT_INITIAL_SNAPSHOT_DELAY_MS": "0"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-23T08:15:16.0305107Z",
+      "ended": "2026-10-23T08:15:43.3459692Z",
+      "minutes": 0.46,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "407ABB8227D86DF6FCACD809F344BC3F394CE0ECB2BE3261FA5A3B409E678E10"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37019430FC94912FEA86896A29C96A1CA7924A08178B25E67A6A7D39A6E4F988"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "04C48D675B4FD4FFB0979E467839915FEDE3B80DF0DF591802D35ABB7F9DC0CF"
+        }
+      ]
+    }
+  ],
+  "validationAttempts": [
+    {
+      "accepted": false,
+      "run": "release-033-feedback-a",
+      "observation": "Feedback assertions completed, but stopping host before guest produced late client DTLS ConnectionReset errors after the first log check. Original logs/markers retained. Cleanup now stops guest first and checks strict logs again after both processes exit; only this case rerun.",
+      "classification": "fixture cleanup"
+    },
+    {
+      "accepted": false,
+      "run": "release-033-ranking-prefix-a",
+      "observation": "Guest Unity log stopped at Creating Mod Logger; guest probe log never appeared. Host later hit its deadline. Unique startup cause unconfirmed; one unchanged game/fixture retry permitted. Runner adds a 45-second test-plugin startup boundary. Original run retained.",
+      "classification": "guest startup/environment observation"
+    }
+  ],
+  "limits": [
+    "Historical unresolved findings keep their status; later passing checks do not uniquely explain an earlier failure.",
+    "No complete continuous P1/P5, Pantheon 3-5 full completion, post-credits reload, every-boss/all-phase, two-machine FRP, three-player or real private-save write/reload acceptance.",
+    "P1 Oro final arena previously stalled in native Death Air under the focused damage-ranking fixture; cause unconfirmed and final P1 completion not certified.",
+    "Only the scoped 0.1.33 validation source governs this package; previous full room matrices remain historical evidence. No interactive installer execution is claimed."
+  ],
+  "testLogic": [
+    {
+      "path": "tests/Smoke/RemoteFeedbackChecks.cs",
+      "sha256": "1D58ECDFC475DF194B8632B2CA7E58D3AC1D22BA2B21C4F312B8FA39DF8080DE"
+    },
+    {
+      "path": "tests/Smoke/P5FourChecks.cs",
+      "sha256": "7BC9E7F9CB149E916E0C20F43A4E1F484BE806C5C3EC6380799C40FAF724F7FA"
+    },
+    {
+      "path": "tests/Smoke/DamageRankingChecks.cs",
+      "sha256": "D0C3B6DC54ED67864F64FB50850FDDC160DD608089C7D067B7267A4C79F93996"
+    },
+    {
+      "path": "tests/Smoke/MenuLayoutProbe.cs",
+      "sha256": "35CB8FC4717D945D5FCBA909ADAC1884EEA0C4B0A91DD2715F0F1073AD7471D6"
+    },
+    {
+      "path": "tests/Smoke/Run-Two.ps1",
+      "sha256": "45356DF0556D26704988D3EFFCBC9C9BE750837FE950A83E13848AEF280C3B81"
+    }
+  ]
+}

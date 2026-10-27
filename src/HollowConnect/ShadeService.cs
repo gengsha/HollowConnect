@@ -26,7 +26,7 @@ internal sealed class ShadeService {
             if (native != null) library = native.Library;
         }
         var wanted = new HashSet<ushort>();
-        if (runtime.Down) {
+        if (runtime.Down && !runtime.Spectating && runtime.RescueAvailable) {
             wanted.Add(runtime.LocalId);
             Ensure(runtime.LocalId, runtime.DeathSerial, runtime.DeathPosition, HeroController.instance.gameObject);
         }
@@ -51,6 +51,9 @@ internal sealed class ShadeService {
             view.Initialize(runtime, id, serial, library);
             views[id] = view;
         }
+        // Story anchors can be replaced by a server-confirmed position during
+        // the same death. Godhome retains its fixed original anchor.
+        if (!runtime.IsGodhomeRescueScene()) view.transform.position = new Vector3(anchor.x, anchor.y, 0);
         view.HideAvatar(avatar);
     }
 
@@ -69,8 +72,7 @@ internal sealed class ShadeView : MonoBehaviour, IHitResponder {
     private tk2dSpriteAnimator animator;
     private Transform visual;
     private Collider2D hitbox;
-    private GameObject hiddenAvatar;
-    private readonly List<(Renderer renderer, bool wasHidden)> hidden = new List<(Renderer, bool)>();
+    private readonly PlayerVisualHide hidden = new();
     private float nextHit;
     private bool broken;
 
@@ -88,7 +90,7 @@ internal sealed class ShadeView : MonoBehaviour, IHitResponder {
 
     private void Update() {
         if (!broken && visual != null) visual.localPosition = new Vector3(0, .12f * Mathf.Sin(Time.time * 2.4f + id), 0);
-        foreach (var entry in hidden) if (entry.renderer != null) entry.renderer.forceRenderingOff = true;
+        hidden.Apply();
     }
 
     public void Hit(HitInstance hit) {
@@ -108,16 +110,10 @@ internal sealed class ShadeView : MonoBehaviour, IHitResponder {
     }
 
     internal void HideAvatar(GameObject avatar) {
-        if (avatar == hiddenAvatar) return;
-        RestoreAvatar(); hiddenAvatar = avatar;
-        if (avatar == null) return;
-        foreach (var renderer in avatar.GetComponentsInChildren<Renderer>(true)) {
-            hidden.Add((renderer, renderer.forceRenderingOff)); renderer.forceRenderingOff = true;
-        }
+        hidden.Hide(avatar);
     }
     internal void RestoreAvatar() {
-        foreach (var entry in hidden) if (entry.renderer != null) entry.renderer.forceRenderingOff = entry.wasHidden;
-        hidden.Clear(); hiddenAvatar = null;
+        hidden.Restore();
     }
     internal void Retire() { broken = true; if (hitbox != null) hitbox.enabled = false; RestoreAvatar(); }
     private void OnDestroy() { RestoreAvatar(); }

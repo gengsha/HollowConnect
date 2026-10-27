@@ -103,5 +103,8 @@ internal enum EntityComponentType : ushort {
     Retired,
     ExtraDamage,
     CombatState,
-    DreamWarrior
+    DreamWarrior,
+    RadianceArena,
+    BossCombatScope,
+    EncounterSummon
 }

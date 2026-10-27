@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Hkmp.Game;
 using Hkmp.Game.Client.Entity;
+using Hkmp.Game.Server;
 using Hkmp.Game.Settings;
 using Hkmp.Math;
 using Hkmp.Networking.Packet;
@@ -477,14 +478,18 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
     /// <param name="data">The host FSM data to add.</param>
     public void AddEntityHostFsmData(ulong entityId, byte fsmIndex, EntityHostFsmData data) {
         lock (Lock) {
+            // A received update fans out to several independently timed senders.
+            // Neither their pending nor detached batches may share mutable FSM
+            // dictionaries or vectors with another recipient or the caller.
+            var owned = SnapshotPayload.Copy(data);
             var entityUpdate = FindOrCreateEntityUpdate<ReliableEntityUpdate>(entityId);
 
             entityUpdate.UpdateTypes.Add(EntityUpdateType.HostFsm);
 
             if (entityUpdate.HostFsmData.TryGetValue(fsmIndex, out var existingData)) {
-                existingData.MergeData(data);
+                existingData.MergeData(owned);
             } else {
-                entityUpdate.HostFsmData.Add(fsmIndex, data);
+                entityUpdate.HostFsmData.Add(fsmIndex, owned);
             }
         }
     }

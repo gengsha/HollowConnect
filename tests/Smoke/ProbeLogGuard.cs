@@ -26,7 +26,8 @@ internal sealed class ProbeLogGuard : Hkmp.Logging.ILogger {
     private static bool ModException(string text) =>
         (text.IndexOf("Exception",StringComparison.OrdinalIgnoreCase)>=0 &&
          (text.IndexOf("Hkmp.",StringComparison.OrdinalIgnoreCase)>=0 || text.IndexOf("HollowConnect.",StringComparison.OrdinalIgnoreCase)>=0)) ||
-        text.IndexOf("Spawn expired",StringComparison.OrdinalIgnoreCase)>=0;
+        text.IndexOf("Spawn expired",StringComparison.OrdinalIgnoreCase)>=0 ||
+        text.IndexOf("unknown state index",StringComparison.OrdinalIgnoreCase)>=0;
     private void UnityLog(string message,string stack,LogType type) {
         var text=message+"\n"+stack;
         if(ModException(text))Fail("Unity",text);

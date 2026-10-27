@@ -17,6 +17,7 @@ internal sealed class FinalBossCorpseContinuation {
     private readonly GameObject corpse;
     private readonly PlayMakerFSM corpseFsm;
     private readonly PlayMakerFSM[] dreamEntries;
+    private readonly PlayMakerFSM[] battleEntries;
     private readonly (Rigidbody2D Body, RigidbodyType2D Type, float Gravity, bool Simulated, bool Contacts)[] bodies;
     private readonly string path;
     private readonly int sceneHandle;
@@ -40,6 +41,10 @@ internal sealed class FinalBossCorpseContinuation {
         dreamEntries = hostRoot.GetComponentsInChildren<PlayMakerFSM>(true)
             .Concat(clientRoot.GetComponentsInChildren<PlayMakerFSM>(true))
             .Where(f => f.name == "Dream Enter" && f.FsmName == "Control").ToArray();
+        battleEntries = replica.scene.GetRootGameObjects()
+            .Where(go => go.name == "Boss Control")
+            .SelectMany(go => go.GetComponents<PlayMakerFSM>())
+            .Where(f => f.FsmName == "Battle Start").ToArray();
         // These verified Die actions are personal defeat metadata, never a
         // copied boss state machine or an ending selection.
         var death = phase.FsmStates.Single(s => s.Name == "Die");
@@ -109,6 +114,12 @@ internal sealed class FinalBossCorpseContinuation {
         // local pose. Wait for the authoritative active, detached corpse seed.
         if (!die || !seed || corpse.transform.parent != null || !corpse.activeSelf) return;
         Released = true; Cancel();
+        // A late participant can still have the scene's independent entrance
+        // controller waiting in Revisit. Approaching the completed corpse
+        // would then replay Roar/Fight Start, cancel focus and awaken the dead
+        // source boss. Retire only this scene's battle entrance after both
+        // authoritative death proofs; the corpse and ending FSMs stay native.
+        foreach (var entry in battleEntries) if (entry != null) entry.enabled = false;
         foreach (var motion in corpse.GetComponentsInChildren<PositionInterpolation>(true)) { motion.Flush(); motion.enabled = false; }
         foreach (var body in bodies) {
             if (body.Body == null) continue;

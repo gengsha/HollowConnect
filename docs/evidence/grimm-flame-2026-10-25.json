@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-25",
+  "scope": "Grimm flame location receipts, counter repair and deduplication",
+  "core": "4 passed, 0 failed",
+  "runtime": {
+    "name": "two native flames, alternating authority, legacy repair and replay deduplication",
+    "run": "grimm-flame-final-20261025",
+    "options": {
+      "HOLLOWCONNECT_GRIMM_FLAME": "flow"
+    },
+    "status": "passed",
+    "started": "2026-10-25T07:41:26.0284618Z",
+    "runnerPid": 29536,
+    "runPath": "E:\\projects\\hollowConnect\\.test-results\\grimm-flame-final-20261025",
+    "error": null,
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "E827C73DB400EFA7D88E9846F525207F09B544B6BADA76BBBD881CDE67FB1B6B"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "9EF65100A70E30E6F807ACCB7C70741F98BC689E0F922EC93DDB70F1BC6FC235"
+      }
+    ],
+    "probeHash": "8ED44FC269E7CD5882B945D1205476AB53632A9EDC65D3EDABE1ECC5BF62B7EC",
+    "dependencies": [
+      {
+        "name": "Assembly-CSharp.dll",
+        "size": 4064768,
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      {
+        "name": "PlayMaker.dll",
+        "size": 212480,
+        "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+      }
+    ],
+    "strictLogs": "passed",
+    "ended": "2026-10-25T07:42:09.2390637Z"
+  },
+  "limits": [
+    "Two real UDP endpoints; three-peer receipt merge covered by core check",
+    "First-round native Mines_10 and Fungus1_10 collection; later round separation checked in core only",
+    "No full room matrix, no packaging or personal save writes"
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "version": "0.1.22",
+  "action": "package-for-user-playtest",
+  "buildLabel": "radiance-20261018",
+  "buildCommit": "49d97def4e1051bc00c2095a1e985d7f201fd034",
+  "workingTreeHasUncommittedChanges": true,
+  "userRequest": "打包吧",
+  "recordedAtUtc": "2026-10-18T06:09:54.7025630Z",
+  "retestOmitted": false,
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "8091374A352DF25D1544E1EAFBE294D2ACB9594D72C20A27F019109F8CF1ECA7",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "BC56F30DA0BF0ACC3BF48BC4452731FEEAAEC71E34186D68AAB6557860E8174E",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    }
+  ],
+  "scope": "User requested packaging of the current Radiance repairs. Three same-machine two-Unity-Player batchmode runs passed on the exact production DLLs: both authority entry orders, native platform/abyss respawn, stable health, late arrival presentation/camera/control, preserved authority HP/phase, and generic UDP warp regression. Package validation rechecks evidence and archive integrity without rerunning Unity or installing to personal games. Ordinary projectile damage was isolated in selected assertions. No all-boss, two-machine FRP, story Radiance, later ascent/final defeat, takeover or long-soak certification. Historical unresolved findings remain open; their inclusion here permits test-channel packaging only.",
+  "evidenceSource": "docs/evidence/radiance-runtime-2026-10-18.json",
+  "evidenceSha256": "573A3123E3D2F9485F0E0B0BFC859E33901BA23E4AC1D9BB16E48816EF78EC6C",
+  "runtimeValidation": {
+    "version": "0.1.22",
+    "engineVersion": "3.0.0-hc11",
+    "releaseReady": false,
+    "method": "Two isolated actual Unity Players, batchmode, local UDP, in-memory unsaved characters",
+    "renderedManualTest": false,
+    "realTwoMachineFrp": false,
+    "runs": [
+      {
+        "name": "radiance-runtime-20261018-final-host",
+        "bothPassed": true,
+        "strictLogsPassedAfterStop": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "8091374A352DF25D1544E1EAFBE294D2ACB9594D72C20A27F019109F8CF1ECA7"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "BC56F30DA0BF0ACC3BF48BC4452731FEEAAEC71E34186D68AAB6557860E8174E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ],
+        "smokeSha256": "FAD8120E199E75240460D7026F6746BBBF574CFCC5A294E248C56D90404B7D83"
+      },
+      {
+        "name": "radiance-runtime-20261018-final-guest",
+        "bothPassed": true,
+        "strictLogsPassedAfterStop": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "8091374A352DF25D1544E1EAFBE294D2ACB9594D72C20A27F019109F8CF1ECA7"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "BC56F30DA0BF0ACC3BF48BC4452731FEEAAEC71E34186D68AAB6557860E8174E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ],
+        "smokeSha256": "FAD8120E199E75240460D7026F6746BBBF574CFCC5A294E248C56D90404B7D83"
+      },
+      {
+        "name": "radiance-runtime-20261018-warp-regression",
+        "bothPassed": true,
+        "strictLogsPassedAfterStop": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "8091374A352DF25D1544E1EAFBE294D2ACB9594D72C20A27F019109F8CF1ECA7"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "BC56F30DA0BF0ACC3BF48BC4452731FEEAAEC71E34186D68AAB6557860E8174E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ],
+        "smokeSha256": "FAD8120E199E75240460D7026F6746BBBF574CFCC5A294E248C56D90404B7D83"
+      }
+    ],
+    "verified": [
+      "Native intro ends normally",
+      "Both roles production F8/UDP on initial arena floor",
+      "Normal Hit events advance native first stun and platform phase",
+      "Both roles native abyss collision/respawn, active platform support and viewport/input recovery",
+      "No repeated hazard loss for 5 seconds without healing",
+      "Cross-room late F8 from Town in both authority orders, native title skipped, stable viewport/input for 28 seconds",
+      "Authority phase and HP unaffected by late presentation",
+      "Non-Radiance warp eligibility, cinematic rejection, timeout/disposal cleanup and real UDP F8 in both directions"
+    ],
+    "limitations": [
+      "Ordinary projectile damage isolated during terrain/presentation assertions",
+      "Does not certify all attacks, later ascent or final defeat",
+      "No story Radiance, authority takeover/disconnect, two-machine FRP, target resolution or long soak"
+    ]
+  }
+}

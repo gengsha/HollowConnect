@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-25",
+  "requestedCase": "Player 1 collects flames 1 and 2, Player 2 collects flame 3, then both progress normally",
+  "result": "passed",
+  "productionChanged": false,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "runtime": {
+    "name": "Offsite collection 1+2 versus 3; complete native upgrade dialogue and unlock next-round spawns",
+    "run": "grimm-split-flow-final2-20261025",
+    "options": {
+      "HOLLOWCONNECT_GRIMM_FLAME": "split-flow"
+    },
+    "status": "passed",
+    "started": "2026-10-25T08:10:14.342834Z",
+    "runnerPid": 22364,
+    "runPath": "E:\\projects\\hollowConnect\\.test-results\\grimm-split-flow-final2-20261025",
+    "error": null,
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+      }
+    ],
+    "probeHash": "739C4D3342128180C64B13487B0DBA9BE3E5CCD710F7C667233CDA234583D22D",
+    "dependencies": [
+      {
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+        "name": "Assembly-CSharp.dll",
+        "size": 4064768
+      },
+      {
+        "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+        "name": "PlayMaker.dll",
+        "size": 212480
+      }
+    ],
+    "strictLogs": "passed",
+    "ended": "2026-10-25T08:11:13.3863485Z"
+  },
+  "endpoints": [
+    {
+      "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-split-flow-final2-20261025\\host.log",
+      "role": "host",
+      "finalPass": true,
+      "done": true
+    },
+    {
+      "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-split-flow-final2-20261025\\guest.log",
+      "role": "guest",
+      "finalPass": true,
+      "done": true
+    }
+  ],
+  "collection": [
+    {
+      "rooms": [
+        "Mines_10",
+        "Ruins1_28"
+      ],
+      "otherPlayerRoom": "Town",
+      "role": "host",
+      "player": 1
+    },
+    {
+      "rooms": [
+        "Fungus1_10"
+      ],
+      "otherPlayerRoom": "Ruins1_28",
+      "role": "guest",
+      "player": 2
+    }
+  ],
+  "assertions": [
+    "Both endpoints received all three distinct first-round flame receipts and count 3",
+    "Native Grimm scene selected 1st Ready independently on both endpoints",
+    "Normal dialogue input advanced native Level Up To 2 through Levelup 3 and End",
+    "Both Grimmchild levels became 2, flame counts reset to 0 and controls restored",
+    "Native next-round Grimmkin spawned in Deepnest_East_03 and RestingGrounds_06",
+    "No first-round receipt was reused for the next-round counter"
+  ],
+  "retainedFailure": {
+    "run": "grimm-split-flow-20261025",
+    "classification": "fixture",
+    "notes": "E:\\projects\\hollowConnect\\.analysis\\grimm-split-flow-20261025\\fixture-notes.md"
+  },
+  "scopeLimits": [
+    "First-round three flames and transition to round two",
+    "No later-round hand-in or Grimm/NKG boss battle",
+    "Native proximity, health/death and quest FSMs exercised; lethal test damage avoids a full combat playthrough",
+    "No personal save writes, packaging or installation"
+  ]
+}

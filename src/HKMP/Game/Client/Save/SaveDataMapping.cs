@@ -13,6 +13,8 @@ namespace Hkmp.Game.Client.Save;
 /// Serializable data class that stores mappings for what scene data should be synchronised and their indices used for networking.
 /// </summary>
 internal class SaveDataMapping {
+    internal static bool IsLocalVinePlatform(PersistentItemKey item) => item?.Id != null &&
+        (item.Id == "Vine Platform" || item.Id.StartsWith("Vine Platform (", System.StringComparison.Ordinal));
     /// <summary>
     /// The file path of the embedded resource file for save data.
     /// </summary>
@@ -179,6 +181,9 @@ internal class SaveDataMapping {
         }
 
         PersistentBoolVarProperties = _persistentBoolsDataValues.ToDictionary(kv => kv.Key, kv => kv.Value);
+        // Keep every network index stable while leaving each player's falling platforms local.
+        foreach (var item in PersistentBoolVarProperties)
+            if (IsLocalVinePlatform(item.Key)) item.Value.Sync = false;
         PersistentBoolIndices = new BiLookup<PersistentItemKey, ushort>();
         foreach (var persistentBoolData in PersistentBoolVarProperties.Keys) {
             PersistentBoolIndices.Add(persistentBoolData, index++);

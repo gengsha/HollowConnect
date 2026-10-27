@@ -1,0 +1,384 @@
+{
+  "date": "2026-10-25",
+  "result": "not_reproduced_in_selected_current_build_cases",
+  "reporterCause": "undetermined",
+  "productionChanged": false,
+  "environment": "Two real Unity clients, existing isolated local game copies, local UDP; no network fault injection",
+  "binaries": [
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HKMP.dll",
+      "name": "HKMP.dll",
+      "size": 1870336,
+      "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.dll",
+      "name": "HollowConnect.dll",
+      "size": 212992,
+      "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.Core.dll",
+      "name": "HollowConnect.Core.dll",
+      "size": 44032,
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "dependencies": [
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "size": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "size": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "size": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "size": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "cases": [
+    {
+      "statusPath": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\grimm-tent-audit-battle-20261025.json",
+      "status": {
+        "name": "Native Grimm story first-battle appearance, matching second-round progress",
+        "run": "grimm-tent-audit-battle-20261025",
+        "options": {
+          "HOLLOWCONNECT_GRIMM_FLAME": "tent-audit",
+          "HOLLOWCONNECT_TENT_STAGE": "battle",
+          "HOLLOWCONNECT_TENT_FIRST": "host"
+        },
+        "status": "passed",
+        "started": "2026-10-25T08:56:00.6733959Z",
+        "runnerPid": 26784,
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-battle-20261025",
+        "error": null,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "probeHash": "C7AD5747D96C6AEB55428E51896D65FCD7C58232E3F7C5DCDDC29F4D2EE94B00",
+        "dependencies": [
+          {
+            "size": 4064768,
+            "name": "Assembly-CSharp.dll",
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+          },
+          {
+            "size": 212480,
+            "name": "PlayMaker.dll",
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+          }
+        ],
+        "strictLogs": "passed",
+        "ended": "2026-10-25T08:56:52.8995455Z"
+      },
+      "endpoints": [
+        {
+          "role": "host",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-battle-20261025\\host.log",
+          "logSha256": "2FB12AD290320AC3FC992832926C71770027C7A9F335D51E2BBFC39589E66F50",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T08:56:49.3150203Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False"
+        },
+        {
+          "role": "guest",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-battle-20261025\\guest.log",
+          "logSha256": "946BF84DC88324060659D2ADC007928A356C13CA1C0E3D21A9B8BE72DD69FC40",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T08:56:49.5365492Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False"
+        }
+      ]
+    },
+    {
+      "statusPath": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\grimm-tent-audit-mixed-20261025.json",
+      "status": {
+        "name": "Mixed foughtGrimm flags, guest authority already fought while host plays first intro",
+        "run": "grimm-tent-audit-mixed-20261025",
+        "options": {
+          "HOLLOWCONNECT_TENT_STAGE": "mixed",
+          "HOLLOWCONNECT_GRIMM_FLAME": "tent-audit",
+          "HOLLOWCONNECT_TENT_FIRST": "guest"
+        },
+        "status": "passed",
+        "started": "2026-10-25T08:58:33.3182644Z",
+        "runnerPid": 29128,
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-mixed-20261025",
+        "error": null,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "probeHash": "C7AD5747D96C6AEB55428E51896D65FCD7C58232E3F7C5DCDDC29F4D2EE94B00",
+        "dependencies": [
+          {
+            "name": "Assembly-CSharp.dll",
+            "size": 4064768,
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+          },
+          {
+            "name": "PlayMaker.dll",
+            "size": 212480,
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+          }
+        ],
+        "strictLogs": "passed",
+        "ended": "2026-10-25T08:59:24.3677398Z"
+      },
+      "endpoints": [
+        {
+          "role": "host",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-mixed-20261025\\host.log",
+          "logSha256": "5A8E925FB25D4B1BE5CA65E93B4BEBBEEAC648C3C99B6384B4E6F43A36776924",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T08:59:21.3334812Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False"
+        },
+        {
+          "role": "guest",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-mixed-20261025\\guest.log",
+          "logSha256": "FD0B4A6E7CA1E69AE38A827237828B6AA3B10E8BE2F340E13359D163FED105F2",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T08:59:13.0369886Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False"
+        }
+      ]
+    },
+    {
+      "statusPath": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\grimm-tent-audit-refight-20261025.json",
+      "status": {
+        "name": "Both participants refight native story Grimm",
+        "run": "grimm-tent-audit-refight-20261025",
+        "options": {
+          "HOLLOWCONNECT_TENT_STAGE": "refight",
+          "HOLLOWCONNECT_GRIMM_FLAME": "tent-audit",
+          "HOLLOWCONNECT_TENT_FIRST": "host"
+        },
+        "status": "passed",
+        "started": "2026-10-25T08:59:24.3697379Z",
+        "runnerPid": 29128,
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-refight-20261025",
+        "error": null,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "probeHash": "C7AD5747D96C6AEB55428E51896D65FCD7C58232E3F7C5DCDDC29F4D2EE94B00",
+        "dependencies": [
+          {
+            "name": "Assembly-CSharp.dll",
+            "size": 4064768,
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+          },
+          {
+            "name": "PlayMaker.dll",
+            "size": 212480,
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+          }
+        ],
+        "strictLogs": "passed",
+        "ended": "2026-10-25T09:00:07.8453242Z"
+      },
+      "endpoints": [
+        {
+          "role": "host",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-refight-20261025\\host.log",
+          "logSha256": "70C57C8C3E9E570150302E390E8440248BFF6EB11715DF7F359FA3492F1B227D",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T09:00:04.2362754Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False"
+        },
+        {
+          "role": "guest",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-refight-20261025\\guest.log",
+          "logSha256": "0FB4DF52A9500908857120BE9E5132D893C02360428B453046A2A69512A81B4A",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T09:00:04.4686794Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False"
+        }
+      ]
+    },
+    {
+      "statusPath": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\grimm-tent-audit-anger-20261025.json",
+      "status": {
+        "name": "Native story Grimm angry roar after actual nail hit during Bow",
+        "run": "grimm-tent-audit-anger-20261025",
+        "options": {
+          "HOLLOWCONNECT_GRIMM_FLAME": "tent-audit",
+          "HOLLOWCONNECT_TENT_STAGE": "refight",
+          "HOLLOWCONNECT_TENT_FIRST": "host",
+          "HOLLOWCONNECT_TENT_HIT_BOW": "1"
+        },
+        "status": "passed",
+        "started": "2026-10-25T09:01:30.6118689Z",
+        "runnerPid": 25552,
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-anger-20261025",
+        "error": null,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "probeHash": "83167FDB113C55743BD16CCF9602F6609C04CF2350A76F6EABAB9C3ADFABFC9F",
+        "dependencies": [
+          {
+            "name": "Assembly-CSharp.dll",
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+            "size": 4064768
+          },
+          {
+            "name": "PlayMaker.dll",
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+            "size": 212480
+          }
+        ],
+        "strictLogs": "passed",
+        "ended": "2026-10-25T09:02:27.3259442Z"
+      },
+      "endpoints": [
+        {
+          "role": "host",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-anger-20261025\\host.log",
+          "logSha256": "8299FE5B812966D8178960C2430FE145F5745307F3A23F1A8E42FF6A93ECA2A6",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T09:02:24.0835860Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False sawRoar=True hitBow=True"
+        },
+        {
+          "role": "guest",
+          "log": "E:\\projects\\hollowConnect\\.test-results\\grimm-tent-audit-anger-20261025\\guest.log",
+          "logSha256": "208179BDDE91193DA0A64E1C94F5D919E4407CD0A35976C6E0FD9B8DC10D239A",
+          "done": true,
+          "finalPass": true,
+          "result": "2026-10-25T09:02:12.2787370Z TENT RESULT combat=True native=Battle Start control=True relinquished=False pause=False sawRoar=True hitBow=False"
+        }
+      ]
+    }
+  ],
+  "reusedFirstHandInEvidence": "E:\\projects\\hollowConnect\\.analysis\\grimm-split-flow-20261025\\evidence.json",
+  "preparedSmoke": {
+    "path": "E:\\projects\\hollowConnect\\tests\\Smoke\\bin\\Release\\net472\\HollowConnect.Smoke.dll",
+    "backup": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\prepared-original.dll",
+    "restored": true,
+    "sha256": "739C4D3342128180C64B13487B0DBA9BE3E5CCD710F7C667233CDA234583D22D"
+  },
+  "cleanup": [
+    {
+      "role": "host",
+      "executable": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight.exe",
+      "running": false,
+      "activeProbe": false,
+      "disabledProbe": true
+    },
+    {
+      "role": "guest",
+      "executable": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight.exe",
+      "running": false,
+      "activeProbe": false,
+      "disabledProbe": true
+    }
+  ],
+  "sourceSnapshot": [
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\BossRoarLock.cs",
+      "sha256": "0062464A42830150AF064302B86CE1E1B53841F879F1BFB664F676C5F9FD6FF5"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\LocalBarrierEvents.cs",
+      "sha256": "C273A20325A7EDA9CA142D23AA8E17C5927A1F54398079812B694F3770A59636"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\BossSceneLayout.cs",
+      "sha256": "AD6F7ABB9B4791ADCA6A989B421673907F7C0DBE758BD6F37D5CD91A8707BB15"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\Entity\\BossRoomSynchronizer.cs",
+      "sha256": "D781D5A3A1FBF023C0A21663194F37049881C0AC029DA06ABF2B53478CB27040"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\CoopRuntime.cs",
+      "sha256": "02A9BF9C5F899F6CBF037A90B9017A370E0A6735C48D08888D85C48EE7AC1656"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\EmergencyBenchRecovery.cs",
+      "sha256": "A362135AEADD8009200438F9F5F09CC12ED95722BA826FA47504652359CEC23E"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\GrimmTentDiagnostic.cs",
+      "sha256": "6F1A9236370379FA2E7CC320298A9F1C123DDF680F328D8B04AE2E5C231079FE"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\TentDiagnostic.csproj",
+      "sha256": "66FD89E3D605DF5B7DEDC14576DD1AC5AFE14C2550FDAAB469C3FAFBB7D18199"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\Run-Audit.ps1",
+      "sha256": "B46796FABC9D938603E3FB657F4A78A368276397ED088BDD9BEBDAFE1F76B21E"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.analysis\\grimm-tent-stall-audit-20261025\\Run-Direct.ps1",
+      "sha256": "A95CA40EA6D556B2D49B24F9641E6317ED6CB07E6C410A026A18C42D3E6F0012"
+    }
+  ],
+  "scopeLimits": [
+    "Reporter game/mod version, native FSM state, logs and network history unavailable",
+    "Two local clients do not validate three players or a real internet/FRP session",
+    "Memory-only second-hand-in qualification, native scene trigger/dialogue/child absorb and bow-hit reactions; no personal save writes",
+    "No full boss defeat, dynamic projectile completeness, later-round/NKG flow, late join or authority departure validation in this audit",
+    "Historical roar reorder evidence is a previously fixed issue, not a diagnosis of this screenshot"
+  ]
+}

@@ -42,6 +42,7 @@ internal class GameManager {
 
         NetClient = new NetClient(packetManager);
         var netServer = new NetServer(packetManager);
+        CoopContext.RoomSettingsLocked = () => netServer.IsStarted || NetClient.ConnectionStatus != ClientConnectionStatus.NotConnected;
 
         var clientServerSettings = new ServerSettings();
         if (modSettings.ServerSettings == null) {

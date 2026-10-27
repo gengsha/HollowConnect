@@ -1,18 +1,19 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 
 namespace HollowConnect.Smoke;
 
 // Complete network teardown before a launcher may remove either game process.
 internal static class ProbeShutdown {
     internal static IEnumerator Run(Hkmp.Game.GameManager engine, string root, string role) {
-        var peer=role=="host"?"guest":"host";
+        var roles=(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLES") ?? "host,guest").Split(',');
         File.WriteAllText(Path.Combine(root,role+".shutdown-ready"),"ready");
-        yield return Wait(()=>File.Exists(Path.Combine(root,peer+".shutdown-ready")),"both probes finished");
+        yield return Wait(()=>roles.All(r=>File.Exists(Path.Combine(root,r+".shutdown-ready"))),"all probes finished");
         engine.ClientManager.Disconnect();
         File.WriteAllText(Path.Combine(root,role+".shutdown-offline"),"offline");
-        yield return Wait(()=>File.Exists(Path.Combine(root,peer+".shutdown-offline")),"both clients disconnected");
+        yield return Wait(()=>roles.All(r=>File.Exists(Path.Combine(root,r+".shutdown-offline"))),"all clients disconnected");
         if(role=="host") {
             yield return Wait(()=>engine.ServerManager.Players.Count==0,"server acknowledged disconnects");
             engine.ServerManager.Stop();

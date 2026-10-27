@@ -1,0 +1,444 @@
+{
+  "generatedUtc": "2026-10-24T14:51:51.2118520Z",
+  "version": "0.1.36 local development",
+  "networkVersion": "0.1.36-l8",
+  "behavior": "Ground-first story rescue with witnessed safe aerial fallback; narrow-perch aerial nail approach; revalidation and native air movement restoration; persistent hazards, solids, gates and native NonSlider remain guarded.",
+  "core": {
+    "selection": ".analysis/aerial-rescue-20261024/core.selection.txt",
+    "log": ".analysis/aerial-rescue-20261024/core-final.log",
+    "passed": 27,
+    "failed": 0
+  },
+  "runs": [
+    {
+      "name": "aerial-accept-20261024-hazards",
+      "case": "hazards",
+      "status": "passed",
+      "startedUtc": "2026-10-24T14:39:36.1386278Z",
+      "endedUtc": "2026-10-24T14:40:11.5616225Z",
+      "bothEndpointsDone": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8A85EB2365817F11F799D43F314A175FDCE0356FB2FC6AFC7BADD351EF2090B1"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+        }
+      ],
+      "smokeSha256": "2E25FFE7B830B0B16289738ADCDF99ED28BED477871F0289CDD29342013313C6",
+      "testInputs": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueProbe.cs",
+          "Hash": "CF80AEDD42D6B971D5A5369949741204C7147E040CA044CF75AADEDA9CAD5080"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\StoryRescuePlacementChecks.cs",
+          "Hash": "E84AA6D35C7C6D51E059C08CAC4FF611061F42FDEFA6AED75E4C6E541C6FE0AE"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\StoryAcidRescueChecks.cs",
+          "Hash": "7AC50626D3DFF4A9B8F032A6E4740803C491E50DE4D0AE46AE66F4A61A2B4830"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueHazardRiskChecks.cs",
+          "Hash": "E9054DEFC03161C6A3E0B3B05ED9B449FA8214110C4815B4981BEEF58BBA0E64"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ReportedBossChecks.cs",
+          "Hash": "73CFAB3F331711C2EB53E12C0A558F195F17EE080D4F50DEE217412B5E2AE7C3"
+        }
+      ],
+      "gameDependencies": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        }
+      ]
+    },
+    {
+      "name": "aerial-accept-r2-20261024-air-host",
+      "case": "air-host",
+      "status": "passed",
+      "startedUtc": "2026-10-24T14:46:01.1185725Z",
+      "endedUtc": "2026-10-24T14:49:46.7755407Z",
+      "bothEndpointsDone": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8A85EB2365817F11F799D43F314A175FDCE0356FB2FC6AFC7BADD351EF2090B1"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+        }
+      ],
+      "smokeSha256": "BFA65C975217D735FFDFD552DD712EFC0B19FF6E05AECCF7316D8808F4E5D42E",
+      "testInputs": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ColosseumProbe.cs",
+          "Hash": "8D476EC485EF15021F8C00D1061C950F14B8B8A6A4874CD68437CDF83C7920CB"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ColosseumWallChecks.cs",
+          "Hash": "344EBE154824D823D0F32F7759B60998313C6276B4305F5E353233BF60C869F7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ColosseumAirRescueChecks.cs",
+          "Hash": "49696128AF1F227090B1A33963BAE5C7439DCAE9E837BA41DEB0F2C90A84CB04"
+        }
+      ],
+      "gameDependencies": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        }
+      ]
+    },
+    {
+      "name": "aerial-accept-r2-20261024-blocked",
+      "case": "blocked",
+      "status": "passed",
+      "startedUtc": "2026-10-24T14:49:46.7969335Z",
+      "endedUtc": "2026-10-24T14:50:31.4237382Z",
+      "bothEndpointsDone": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8A85EB2365817F11F799D43F314A175FDCE0356FB2FC6AFC7BADD351EF2090B1"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+        }
+      ],
+      "smokeSha256": "BFA65C975217D735FFDFD552DD712EFC0B19FF6E05AECCF7316D8808F4E5D42E",
+      "testInputs": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueProbe.cs",
+          "Hash": "CF80AEDD42D6B971D5A5369949741204C7147E040CA044CF75AADEDA9CAD5080"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\StoryRescuePlacementChecks.cs",
+          "Hash": "E84AA6D35C7C6D51E059C08CAC4FF611061F42FDEFA6AED75E4C6E541C6FE0AE"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\StoryAcidRescueChecks.cs",
+          "Hash": "7AC50626D3DFF4A9B8F032A6E4740803C491E50DE4D0AE46AE66F4A61A2B4830"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueHazardRiskChecks.cs",
+          "Hash": "E9054DEFC03161C6A3E0B3B05ED9B449FA8214110C4815B4981BEEF58BBA0E64"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ReportedBossChecks.cs",
+          "Hash": "73CFAB3F331711C2EB53E12C0A558F195F17EE080D4F50DEE217412B5E2AE7C3"
+        }
+      ],
+      "gameDependencies": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        }
+      ]
+    },
+    {
+      "name": "aerial-accept-r2-20261024-acid",
+      "case": "acid",
+      "status": "passed",
+      "startedUtc": "2026-10-24T14:50:31.4417539Z",
+      "endedUtc": "2026-10-24T14:51:09.2098986Z",
+      "bothEndpointsDone": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8A85EB2365817F11F799D43F314A175FDCE0356FB2FC6AFC7BADD351EF2090B1"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+        }
+      ],
+      "smokeSha256": "BFA65C975217D735FFDFD552DD712EFC0B19FF6E05AECCF7316D8808F4E5D42E",
+      "testInputs": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueProbe.cs",
+          "Hash": "CF80AEDD42D6B971D5A5369949741204C7147E040CA044CF75AADEDA9CAD5080"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\StoryRescuePlacementChecks.cs",
+          "Hash": "E84AA6D35C7C6D51E059C08CAC4FF611061F42FDEFA6AED75E4C6E541C6FE0AE"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\StoryAcidRescueChecks.cs",
+          "Hash": "7AC50626D3DFF4A9B8F032A6E4740803C491E50DE4D0AE46AE66F4A61A2B4830"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueHazardRiskChecks.cs",
+          "Hash": "E9054DEFC03161C6A3E0B3B05ED9B449FA8214110C4815B4981BEEF58BBA0E64"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ReportedBossChecks.cs",
+          "Hash": "73CFAB3F331711C2EB53E12C0A558F195F17EE080D4F50DEE217412B5E2AE7C3"
+        }
+      ],
+      "gameDependencies": [
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+          "Hash": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+          "Hash": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+          "Hash": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+        },
+        {
+          "Path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+          "Hash": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+        }
+      ]
+    }
+  ],
+  "developmentHistory": [
+    {
+      "name": "aerial-baseline-20261024-air-host",
+      "result": {
+        "case": "air-host",
+        "run": "aerial-baseline-20261024-air-host",
+        "status": "failed",
+        "strictLogs": false,
+        "reason": "Probe failed; classify before continuing; Probe has a failure marker (including failures after done).",
+        "startedUtc": "2026-10-24T14:15:27.9748865Z",
+        "endedUtc": "2026-10-24T14:18:08.5954307Z"
+      },
+      "use": "development evidence only; production or fixture inputs differ from final acceptance"
+    },
+    {
+      "name": "aerial-final-r1-20261024-air-host",
+      "result": {
+        "case": "air-host",
+        "run": "aerial-final-r1-20261024-air-host",
+        "status": "failed",
+        "strictLogs": false,
+        "reason": "Probe failed; classify before continuing; Probe has a failure marker (including failures after done).",
+        "startedUtc": "2026-10-24T14:19:17.2510856Z",
+        "endedUtc": "2026-10-24T14:22:39.613299Z"
+      },
+      "use": "development evidence only; production or fixture inputs differ from final acceptance"
+    },
+    {
+      "name": "aerial-geometry-r2-20261024-hazards",
+      "result": {
+        "case": "hazards",
+        "run": "aerial-geometry-r2-20261024-hazards",
+        "status": "failed",
+        "strictLogs": false,
+        "reason": "Probe failed; classify before continuing; Probe has a failure marker (including failures after done).",
+        "startedUtc": "2026-10-24T14:23:56.2677812Z",
+        "endedUtc": "2026-10-24T14:24:33.6097239Z"
+      },
+      "use": "development evidence only; production or fixture inputs differ from final acceptance"
+    },
+    {
+      "name": "aerial-geometry-r3-20261024-hazards",
+      "result": {
+        "case": "hazards",
+        "run": "aerial-geometry-r3-20261024-hazards",
+        "status": "passed",
+        "strictLogs": true,
+        "reason": "",
+        "startedUtc": "2026-10-24T14:25:02.59036Z",
+        "endedUtc": "2026-10-24T14:25:37.5928757Z"
+      },
+      "use": "development evidence only; production or fixture inputs differ from final acceptance"
+    },
+    {
+      "name": "aerial-final-r4-20261024-air-host",
+      "result": {
+        "case": "air-host",
+        "run": "aerial-final-r4-20261024-air-host",
+        "status": "failed",
+        "strictLogs": false,
+        "reason": "Probe failed; classify before continuing; Probe has a failure marker (including failures after done).",
+        "startedUtc": "2026-10-24T14:26:11.5575527Z",
+        "endedUtc": "2026-10-24T14:29:46.0870771Z"
+      },
+      "use": "development evidence only; production or fixture inputs differ from final acceptance"
+    },
+    {
+      "name": "aerial-final-r5-20261024-air-host",
+      "result": {
+        "case": "air-host",
+        "run": "aerial-final-r5-20261024-air-host",
+        "status": "failed",
+        "strictLogs": false,
+        "reason": "Probe failed; classify before continuing; Probe has a failure marker (including failures after done).",
+        "startedUtc": "2026-10-24T14:34:44.2147329Z",
+        "endedUtc": "2026-10-24T14:38:39.9413492Z"
+      },
+      "use": "development evidence only; production or fixture inputs differ from final acceptance"
+    },
+    {
+      "name": "aerial-accept-20261024-air-host",
+      "result": {
+        "case": "air-host",
+        "run": "aerial-accept-20261024-air-host",
+        "status": "failed",
+        "strictLogs": false,
+        "reason": "Probe failed; classify before continuing; Probe has a failure marker (including failures after done).",
+        "startedUtc": "2026-10-24T14:40:11.5771343Z",
+        "endedUtc": "2026-10-24T14:44:02.5770608Z"
+      },
+      "use": "development evidence only; production or fixture inputs differ from final acceptance"
+    }
+  ],
+  "sources": [
+    {
+      "Path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\StoryRescuePlacement.cs",
+      "Hash": "CDF9BC4C4BFC13E453D8E564664C273DD7AB0C2ACFF0250CAF5938F941E2A0BC"
+    },
+    {
+      "Path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\CoopRuntime.cs",
+      "Hash": "0DAF71BB33A0FE7DC94A2B2A6B62A2B810F7B3BBD24B75B0DE5FFB31CDB0A37D"
+    },
+    {
+      "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ColosseumAirRescueChecks.cs",
+      "Hash": "49696128AF1F227090B1A33963BAE5C7439DCAE9E837BA41DEB0F2C90A84CB04"
+    },
+    {
+      "Path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueHazardRiskChecks.cs",
+      "Hash": "E9054DEFC03161C6A3E0B3B05ED9B449FA8214110C4815B4981BEEF58BBA0E64"
+    }
+  ],
+  "limits": [
+    "Old 0.1.35 user report was not replayed on that installed release. Original baseline stopped before death at a fixture precondition.",
+    "Native Wave 34, both victim roles, one scene authority; no complete Gold trial or cross-machine test.",
+    "Native stage progression uses entry trigger events and real enemy HealthManager deaths; unrelated combat damage isolated.",
+    "Temporary support, old-anchor hazard and accepted-revive support loss are labelled fault injections.",
+    "No version bump, packaging, installation, personal saves or additional game copies. Existing simple-key changes preserved; prior key evidence not recertified for a new DLL."
+  ]
+}

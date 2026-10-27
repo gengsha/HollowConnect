@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-20",
+  "timezone": "Asia/Shanghai",
+  "version": "0.1.27",
+  "status": "source-fixed-tested-not-packaged",
+  "policy": {
+    "vesselConversion": "3 fragments -> 33 reserve capacity, retain remainder",
+    "remoteCollectionUi": false,
+    "nativeLocalPickup": "original animation and control-release flow, duplicate numerical reward suppressed",
+    "remoteFragments": "direct settlement of received batch while native interaction is idle",
+    "worldResources": "union of source IDs, awarded once per local save",
+    "maskConversion": "4 shards -> 1 max health, retain remainder",
+    "oreSpending": "personal and never refunded on reconnect"
+  },
+  "coreTests": {
+    "buildErrors": 0,
+    "passed": 27,
+    "command": "scripts/Build.ps1 -Target Smoke -TestSelection tests/progress-audit.selection.txt -NoRestore",
+    "buildWarnings": 0,
+    "failed": 0
+  },
+  "successfulRuns": [
+    {
+      "name": "direct-resource-full-20261020-b",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "CC525DD05D3120DEB7C03D7D6A7A246021AA209DE127727061E5E4789D0BD099"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "4087E8240F0F7F0788ADBC0312842AE99F0022DF8A8F101A76A36DC6708298F3"
+    },
+    {
+      "name": "direct-resource-union-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "CC525DD05D3120DEB7C03D7D6A7A246021AA209DE127727061E5E4789D0BD099"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "4087E8240F0F7F0788ADBC0312842AE99F0022DF8A8F101A76A36DC6708298F3"
+    },
+    {
+      "name": "direct-resource-off-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "CC525DD05D3120DEB7C03D7D6A7A246021AA209DE127727061E5E4789D0BD099"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "4087E8240F0F7F0788ADBC0312842AE99F0022DF8A8F101A76A36DC6708298F3"
+    },
+    {
+      "name": "direct-resource-join-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "CC525DD05D3120DEB7C03D7D6A7A246021AA209DE127727061E5E4789D0BD099"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "4087E8240F0F7F0788ADBC0312842AE99F0022DF8A8F101A76A36DC6708298F3"
+    },
+    {
+      "name": "direct-resource-regression-20261020-b",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "CC525DD05D3120DEB7C03D7D6A7A246021AA209DE127727061E5E4789D0BD099"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "766E9CDA1A5A693968F72B684EA40E2C53F379A0335FBEF83A20A5B6CB82D6BB"
+    }
+  ],
+  "preservedFailures": [
+    {
+      "name": "direct-resource-full-20261020-a",
+      "reason": "Full-host test fixture omitted native maximum flags; guest direct settlement and no-collection-UI assertion passed. Fixed only test setup and reran with unchanged production DLLs."
+    },
+    {
+      "name": "direct-resource-regression-20261020-a",
+      "reason": "Old test reflected removed private animation-template fields and failed before resource scenarios. Removed obsolete assertion, rebuilt only Smoke and reran with unchanged production DLLs."
+    }
+  ],
+  "personalSavesModified": false,
+  "packaged": false,
+  "installed": false,
+  "limitations": [
+    "No all-game/all-boss matrix or two-machine FRP test",
+    "Entry timing means the first safe update after sources arrive, with existing native interactions allowed to finish",
+    "Legacy full scenario uses fixture ore expenditure; full resource regression uses actual native Nailsmith upgrades"
+  ]
+}

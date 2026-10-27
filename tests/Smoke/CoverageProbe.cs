@@ -32,18 +32,51 @@ public sealed partial class CoverageProbe : MonoBehaviour {
     private double registrationMs, retirementMs, replicaSpawnMs;
     private int registrations, retirements, replicaSpawns;
     private int compressedInitialSnapshots;
+    private int appliedInitialSnapshots;
     private readonly List<double> prefabTimes = new(), processTimes = new();
+    private readonly List<string> slowSteps = new();
+    private bool samplingPerformance;
     private static readonly Func<long> allocatedBytes = typeof(GC).GetMethod("GetAllocatedBytesForCurrentThread", Type.EmptyTypes) is MethodInfo allocationMethod
         ? (Func<long>)Delegate.CreateDelegate(typeof(Func<long>), allocationMethod) : null;
     private readonly Dictionary<string, (int Calls, double Ms, long Bytes, long Allocated)> costs = new();
     private void Cost(string key, long start, long bytes = 0, long allocationStart = -1) {
         var allocated = allocationStart < 0 ? 0 : allocatedBytes() - allocationStart;
+        var elapsed = (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+        if (samplingPerformance && elapsed >= 4) slowSteps.Add(key + " ms=" + elapsed + " frame=" + Time.frameCount);
         costs.TryGetValue(key, out var old);
-        costs[key] = (old.Calls + 1, old.Ms + (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency, old.Bytes + bytes, old.Allocated + allocated);
+        costs[key] = (old.Calls + 1, old.Ms + elapsed, old.Bytes + bytes, old.Allocated + allocated);
     }
     private void ObservePerformance() {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
         double Milliseconds(long start) => (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+        void Slow(string key, long start) {
+            var ms = Milliseconds(start);
+            if (samplingPerformance && ms >= 4) slowSteps.Add(key + " ms=" + ms + " frame=" + Time.frameCount);
+        }
+        foreach (var method in new[] { "ProcessHostFsm", "ProcessClientFsm" }) {
+            var key = method;
+            performanceHooks.Add(new Hook(typeof(Entity).GetMethod(method, flags),
+                (Action<Action<Entity, PlayMakerFSM>, Entity, PlayMakerFSM>)((orig, e, f) => {
+                    var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(e, f);
+                    Slow(key + "/" + e.Type + "/" + f.FsmName, start);
+                })));
+        }
+        performanceHooks.Add(new Hook(typeof(Entity).GetMethod("HandleComponents", flags),
+            (Action<Action<Entity, EntityComponentType[]>, Entity, EntityComponentType[]>)((orig, e, t) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(e, t); Slow("components/" + e.Type, start);
+            })));
+        performanceHooks.Add(new Hook(typeof(EntityReferences).GetMethod("Register", BindingFlags.Static | BindingFlags.NonPublic),
+            (Action<Action<Entity>, Entity>)((orig, e) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(e); Slow("references/" + e.Type, start);
+            })));
+        performanceHooks.Add(new Hook(typeof(EntityInitializer).GetMethod("InitializeFsm"),
+            (Action<Action<PlayMakerFSM>, PlayMakerFSM>)((orig, f) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(f); Slow("init/" + f.name + "/" + f.FsmName, start);
+            })));
+        performanceHooks.Add(new Hook(typeof(Hkmp.Util.ThreadUtil).GetMethod("RunPendingActions", BindingFlags.Static | BindingFlags.NonPublic),
+            (Action<Action>)((orig) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(); Slow("main-thread-queue", start);
+            })));
         performanceHooks.Add(new Hook(typeof(EntityManager).GetMethod("OnGameObjectSpawned", flags),
             (Func<Func<EntityManager, EntitySpawnDetails, bool>, EntityManager, EntitySpawnDetails, bool>)((orig, m, d) => {
                 var before = Entities.Count; var start = System.Diagnostics.Stopwatch.GetTimestamp();
@@ -68,15 +101,19 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         performanceHooks.Add(new Hook(typeof(SpawnDescriptor).GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic),
             (Func<Func<EntitySpawn, Entity, GameObject>, EntitySpawn, Entity, GameObject>)((orig, s, e) => {
                 var start = System.Diagnostics.Stopwatch.GetTimestamp(); var go = orig(s, e);
-                prefabTimes.Add(Milliseconds(start)); return go;
+                if (samplingPerformance) { prefabTimes.Add(Milliseconds(start)); Slow("prefab/" + s.Prefab, start); } return go;
             })));
         performanceHooks.Add(new Hook(typeof(EntityProcessor).GetMethod("Process", Type.EmptyTypes),
             (Func<Func<EntityProcessor, EntityProcessor>, EntityProcessor, EntityProcessor>)((orig, p) => {
                 var start = System.Diagnostics.Stopwatch.GetTimestamp(); var result = orig(p);
-                processTimes.Add(Milliseconds(start)); return result;
+                if (samplingPerformance) { processTimes.Add(Milliseconds(start)); Slow("process/" + p.GameObject.name + "/success=" + p.Success, start); } return result;
             })));
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") != "1") return;
         Mark("PROFILE allocation counter=" + (allocatedBytes == null ? "unavailable" : "current-thread"));
+        performanceHooks.Add(new Hook(typeof(Hkmp.Networking.Client.ClientUpdateManager).GetMethod("UpdateEntityPosition"),
+            (Action<Action<Hkmp.Networking.Client.ClientUpdateManager, ulong, Hkmp.Math.Vector2>, Hkmp.Networking.Client.ClientUpdateManager, ulong, Hkmp.Math.Vector2>)((orig, m, id, p) => {
+                var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(m, id, p); Cost("position-publish", start);
+            })));
         performanceHooks.Add(new Hook(typeof(Entity).GetMethod("OnUpdate", flags),
             (Action<Action<Entity>, Entity>)((orig, e) => {
                 var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(e); Cost("entity-tick/" + e.Type, start);
@@ -94,6 +131,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                 }
                 var allocationStart = allocatedBytes?.Invoke() ?? -1;
                 var start = System.Diagnostics.Stopwatch.GetTimestamp(); orig(c, d, snapshot); Cost("combat-apply", start, d.Packet.Length, allocationStart);
+                if (snapshot && c.IsControlled) appliedInitialSnapshots++;
             })));
         performanceHooks.Add(new Hook(typeof(Hkmp.Networking.Client.ClientUpdateManager).GetMethod("AddEntityData"),
             (Action<Action<Hkmp.Networking.Client.ClientUpdateManager, ulong, EntityNetworkData>, Hkmp.Networking.Client.ClientUpdateManager, ulong, EntityNetworkData>)((orig, m, id, d) => {
@@ -181,19 +219,38 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         yield return Until(()=>Object.FindObjectOfType<CoopRuntime>()!=null&&GameManager.instance!=null&&UnityEngine.SceneManagement.SceneManager.GetActiveScene().name=="Menu_Title","menu");
         runtime=Object.FindObjectOfType<CoopRuntime>();engine=Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"),"_gameManager");manager=Field<EntityManager>(engine.ClientManager,"_entityManager");
         Hkmp.Logging.Logger.AddLogger(new Log(this));
+        if (P5FourCheck) ObserveP5Four();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_TRAVEL_ASSERTIONS") == "1") LocalBarrierChecks.Run(Mark);
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_LAYOUT_TRACE") == "1") ObserveFsmLayouts();
-        var performance = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PERFORMANCE") == "1";
+        var performance = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PERFORMANCE") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_CHECK") == "1";
         if (performance) ObservePerformance();
-        On.HutongGames.PlayMaker.Actions.DestroyObject.OnEnter += (orig,a)=>{ Mark("NATIVE DESTROY "+Describe(a.gameObject.Value)+" from="+a.Fsm?.GameObject?.name+"/"+a.Fsm?.Name+"/"+a.State?.Name); orig(a); };
+        if (!performance) On.HutongGames.PlayMaker.Actions.DestroyObject.OnEnter += (orig,a)=>{ Mark("NATIVE DESTROY "+Describe(a.gameObject.Value)+" from="+a.Fsm?.GameObject?.name+"/"+a.Fsm?.Name+"/"+a.State?.Name); orig(a); };
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += (orig,f,e,d)=>{ if(f.GameObject!=null&&f.GameObject.name.Contains("Mega Jellyfish"))Mark("UUMUU EVENT "+f.GameObject.name+"/"+f.Name+"/"+e?.Name+" active="+f.Active+" state="+f.ActiveStateName);orig(f,e,d); };
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager,"_modSettings").AuthKey=Hkmp.Util.AuthUtil.GenerateAuthKey();
-        CoopMod.Settings.ShareProgress=Environment.GetEnvironmentVariable("HOLLOWCONNECT_CLIFFS_INTERIOR_CHECK") == "1";
+        CoopMod.Settings.ShareProgress=Environment.GetEnvironmentVariable("HOLLOWCONNECT_CLIFFS_INTERIOR_CHECK") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1" || StoryCutsceneCase || DreamTraversalCase;
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_SETTLEMENT"))) {
+            CoopMod.Settings.Rescue = true; CoopMod.Settings.BossVictoryRescue = true;
+            CoopMod.Settings.SpectateAfterExhaustion = true; CoopMod.Settings.RescueLimit = 1;
+            PlayerData.instance.SetBool("visitedDirtmouth", true);
+        }
+        if (RadianceSpectatorCheck) {
+            CoopMod.Settings.Rescue = false;
+            CoopMod.Settings.SpectateAfterExhaustion = true;
+            CoopMod.Settings.RescueLimit = 1;
+            PlayerData.instance.SetBool("visitedDirtmouth", true);
+        }
         PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved Town");
         if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_ASSERTIONS") == "1" ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_TRAVEL_ASSERTIONS") == "1" ||
-            Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1") && PlayerData.instance.GetBool("atBench")) {
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_FRESH_LATE") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1" || P5FourCheck || StoryCutsceneCase || DreamTraversalCase) && PlayerData.instance.GetBool("atBench")) {
             // Leave the initial native bench before forcing a room transition.
             // Its resting body is kinematic until the get-up flow finishes.
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
@@ -208,7 +265,44 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(engine.ClientManager,true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(engine.ClientManager,new object[]{"127.0.0.1",29650,"coverage"+role});
         yield return Until(()=>runtime.Connected,"connect");Flag(role+".connected");yield return Until(()=>Has((host?"guest":"host")+".connected"),"both connected");
+        if (DreamTraversalCase) {
+            yield return DreamTraversalChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS dream traversal " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_TRAVERSAL_STAGE"));
+            Flag(role + ".done");
+            yield break;
+        }
+        if (StoryCutsceneCase) {
+            yield return StoryCutsceneChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS story cutscene " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_STAGE"));
+            Flag(role + ".done");
+            yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_FRESH_LATE") == "1") {
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_ENTRY_LAYOUT") == "1")
+                yield return RadianceEntryLayoutCase();
+            else yield return RadianceFreshLateCase();
+            Mark("FINAL PASS radiance " + (RadianceSpectatorCheck ? "spectator ascent native jumps and camera" : Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_ENTRY_LAYOUT") == "1"
+                ? "rendered pre-challenge entry assertions" : "rendered late platform/ascent assertions"));
+            Flag(role + ".done");
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_SUITE_EXIT") == "1") {
+                yield return Until(() => Has("shutdown.requested"), "suite requests graceful teardown");
+                engine.ClientManager.Disconnect();
+                Flag(role + ".disconnected");
+                if (host) {
+                    yield return Until(() => Has("guest.disconnected"), "guest closes transport before server");
+                    engine.ServerManager.Stop();
+                }
+                Application.Quit();
+            }
+            yield break;
+        }
         var scenes=(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SCENES")??"GG_Hornet_1,GG_Nailmasters,GG_Mantis_Lords,GG_Uumuu,GG_Ghost_Markoth,GG_Collector,GG_Hollow_Knight,GG_Painter,GG_Nosk,GG_Ghost_No_Eyes,GG_Soul_Tyrant,GG_White_Defender,GG_Grimm").Split(',');
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS") == "1")
+            yield return RadiancePrepareSpectatorReturn();
+        if (P5FourCheck) scenes = P5FourScenes();
         var seconds=float.Parse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SECONDS")??"20",System.Globalization.CultureInfo.InvariantCulture);
         var geometryTrace = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1";
         var guestAlone = geometryTrace && Environment.GetEnvironmentVariable("HOLLOWCONNECT_GEOMETRY_GUEST_ALONE") == "1";
@@ -223,9 +317,11 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                 continue;
             }
             compressedInitialSnapshots = 0;
+            appliedInitialSnapshots = 0;
             BossSequenceController.Reset(); PlayerData.instance.SetInt("bossStatueTargetLevel",0);
             var sequences=Resources.LoadAll<BossSequence>("GG");
-            var sequence=sequences.FirstOrDefault(s=>Enumerable.Range(0,s.Count).Any(i=>s.GetSceneAt(i)==scene));
+            var sequence=sequences.FirstOrDefault(s=>System.Text.RegularExpressions.Regex.IsMatch(s.name,P5FourCheck ? @"Tier 5$" : @"Tier \d+$") &&
+                Enumerable.Range(0,s.Count).Any(i=>s.GetSceneAt(i)==scene));
             if(sequence!=null) {
                 var tier=System.Text.RegularExpressions.Regex.Match(sequence.name,@"Tier (\d+)$");
                 if(!tier.Success)throw new Exception("Unknown native sequence name: "+sequence.name);
@@ -236,6 +332,16 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             if(host==guestAuthority)yield return new WaitForSecondsRealtime(2);
             if (geometryTrace) EnterGeometryScene(scene);
             else Enter(scene);
+            if (scene == "Dream_Final_Boss" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_STORY_INSPECT") == "1") {
+                yield return Until(() => UnityEngine.SceneManagement.SceneManager.GetSceneByName(scene).isLoaded, "story scene asset loaded for read-only schema");
+                foreach (var gate in Object.FindObjectsOfType<TransitionPoint>(true).Where(g => g.gameObject.scene.name == scene))
+                    Mark("STORY GATE " + gate.name);
+                foreach (var fsm in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene.name == scene &&
+                    (f.name == "Radiance" || f.name == "Boss Control" || f.name.Contains("Radiant Plat")))) RadianceDumpFsm(fsm);
+                Mark("FINAL PASS story radiance schema observation only");
+                Flag(role + ".done");
+                yield break;
+            }
             yield return Until(()=>In(scene),"enter "+scene);
             if(performance) {
                 var hero=HeroController.instance;hero.takeNoDamage=true;hero.AffectedByGravity(true);hero.IgnoreInputWithoutReset();
@@ -244,8 +350,13 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             yield return Until(()=>manager.IsSceneHostDetermined,"authority "+scene);
             Flag(role+".room."+round);yield return Until(()=>Has((host?"guest":"host")+".room."+round),"both room "+scene);
             Mark("ROOM "+scene+" authority="+manager.IsSceneHost+" entities="+Entities.Count);
+            if (P5FourCheck) yield return P5FourChecks(round, scene);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_TRAVEL_ASSERTIONS") == "1")
                 yield return WarpTravelAssertions(round);
+            if (scene == "GG_Radiance" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS") == "1")
+                yield return RadianceWarpAssertions(round);
+            if (scene == "GG_Radiance" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS") == "1")
+                yield return RadiancePhaseAssertions(round);
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENVIRONMENT_INSPECT") == "1")
                 foreach (var e in Entities.Values) {
                     Mark("ENV ENTITY " + e.Type + " name=" + e.Object.Host.name);
@@ -258,8 +369,12 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                 yield return EnvironmentStateChecks();
             if (scene == "Fungus1_28" && Environment.GetEnvironmentVariable("HOLLOWCONNECT_CLIFFS_INTERIOR_CHECK") == "1")
                 yield return CliffsInteriorCheck(round);
-            if (performance && !manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1")
-                yield return Until(() => compressedInitialSnapshots > 0, "compressed cached room snapshot " + scene);
+            if (performance && !manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1") {
+                if (scene == "GG_Vengefly")
+                    yield return Until(() => appliedInitialSnapshots > 0, "cached room snapshot applied " + scene);
+                else
+                    yield return Until(() => compressedInitialSnapshots > 0, "compressed cached room snapshot " + scene);
+            }
             if (performance && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_PROFILE") == "1")
                 Mark("PROFILE compressed initial room snapshots=" + compressedInitialSnapshots);
             if (round == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_PERFORMANCE_ASSERTIONS") == "1") yield return PerformanceAssertions();
@@ -313,9 +428,22 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             if(performance && manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_COVERAGE_SOUL_PHASE2") != "1")
                 foreach(var e in Entities.Values.Where(e=>e.Type is EntityType.SoulMaster or EntityType.SoulTyrant)) Dump(e.Object.Host);
             if(host && !performance) foreach(var e in Entities.Values.ToArray().Where(e=>e.Object.Host!=null&&e.Object.Host.GetComponent<HealthManager>()!=null)) {Mark("REGISTERED "+e.Id+" "+e.Type);Dump(e.Object.Host);}
+            prefabTimes.Clear(); processTimes.Clear(); slowSteps.Clear(); samplingPerformance = performance;
             var end=Time.realtimeSinceStartup+seconds;var sample=0f;var frames=0;var start=Time.realtimeSinceStartup;
             var frameTimes = new List<float>(); var phaseStates = new HashSet<string>();
-            while(Time.realtimeSinceStartup<end){frames++;if(!performance)Trace(round);else frameTimes.Add(Time.unscaledDeltaTime*1000);if(Time.realtimeSinceStartup>=sample){sample=Time.realtimeSinceStartup+2;
+            var allFrameTimes = new List<float>(); var collections = GC.CollectionCount(0);
+            var frameSpikes = new List<string>();
+            var previousProbeStamp = System.Diagnostics.Stopwatch.GetTimestamp();
+            var previousProbeWork = 0.0; var previousGen0 = GC.CollectionCount(0); var previousGen1 = GC.CollectionCount(1); var previousGen2 = GC.CollectionCount(2);
+            while(Time.realtimeSinceStartup<end){
+                var probeStamp = System.Diagnostics.Stopwatch.GetTimestamp();
+                if(performance && frames > 0 && Time.unscaledDeltaTime > .033333f) {
+                    frameSpikes.Add("FRAME SPIKE scene=" + scene + " frame=" + Time.frameCount + " unityMs=" + Time.unscaledDeltaTime*1000 +
+                        " probeIntervalMs=" + (probeStamp-previousProbeStamp)*1000.0/System.Diagnostics.Stopwatch.Frequency + " priorProbeWorkMs=" + previousProbeWork +
+                        " gc0=" + (GC.CollectionCount(0)-previousGen0) + " gc1=" + (GC.CollectionCount(1)-previousGen1) + " gc2=" + (GC.CollectionCount(2)-previousGen2));
+                }
+                previousProbeStamp=probeStamp;previousGen0=GC.CollectionCount(0);previousGen1=GC.CollectionCount(1);previousGen2=GC.CollectionCount(2);
+                frames++;if(!performance)Trace(round);else {frameTimes.Add(Time.unscaledDeltaTime*1000);if(frames>1)allFrameTimes.Add(Time.unscaledDeltaTime*1000);}if(Time.realtimeSinceStartup>=sample){sample=Time.realtimeSinceStartup+2;
                 Mark("SAMPLE "+scene+" entities="+Entities.Count+" active="+Entities.Values.Count(e=>{var o=manager.IsSceneHost?e.Object.Host:e.Object.Client;return o!=null&&o.activeInHierarchy;})+" frames="+frames+" seconds="+(Time.realtimeSinceStartup-start));
                 if (performance) {
                     frameTimes.Sort(); Mark("PERF p95ms=" + frameTimes[(int)((frameTimes.Count-1)*.95)] + " maxms=" + frameTimes.Last() +
@@ -334,6 +462,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             }
             if(performance && manager.IsSceneHost) foreach(var e in Entities.Values.Where(e=>e.Object.Host!=null && (e.Type is EntityType.SoulMasterPhase2 or EntityType.SoulTyrantPhase2 or EntityType.SoulMaster or EntityType.SoulTyrant or EntityType.CrystalCrawler or EntityType.CrystallisedHusk or EntityType.SoulTwister or EntityType.SoulWarrior)))
                 foreach(var f in e.Object.Host.GetComponents<PlayMakerFSM>()) phaseStates.Add(e.Type + "/" + f.ActiveStateName);
+            previousProbeWork=(System.Diagnostics.Stopwatch.GetTimestamp()-probeStamp)*1000.0/System.Diagnostics.Stopwatch.Frequency;
             yield return null;}
             if(performance) {
                 if(manager.IsSceneHost && (scene=="GG_Soul_Master" || scene=="GG_Soul_Tyrant") && !phaseStates.Any(s=>s.EndsWith("/Quake Down",StringComparison.Ordinal)))
@@ -342,6 +471,14 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                     if (scene.StartsWith("Mines_") && !phaseStates.Contains("CrystalCrawler/Beam")) throw new Exception("Native laser attack was not observed");
                     if (scene.StartsWith("Ruins1_") && !spawnCounts.Keys.Any(k => k.StartsWith("Mage Orb", StringComparison.Ordinal))) throw new Exception("Native mage orb spawn was not observed");
                 }
+                samplingPerformance = false;
+                allFrameTimes.Sort();
+                Mark("FRAME SUMMARY " + scene + " samples=" + allFrameTimes.Count + " p95Ms=" + allFrameTimes[(int)((allFrameTimes.Count-1)*.95)] +
+                    " p99Ms=" + allFrameTimes[(int)((allFrameTimes.Count-1)*.99)] + " maxMs=" + allFrameTimes.Last() +
+                    " over16ms=" + allFrameTimes.Count(t => t > 16.667f) + " over33ms=" + allFrameTimes.Count(t => t > 33.333f) +
+                    " collections=" + (GC.CollectionCount(0) - collections));
+                foreach (var spike in frameSpikes) Mark(spike);
+                foreach (var step in slowSteps) Mark("SLOW " + step);
                 foreach(var pair in spawnCounts)Mark("SPAWN COUNT " + pair.Value + " " + pair.Key);Mark("BOSS STATES " + string.Join(",",phaseStates));spawnCounts.Clear();
                 foreach(var times in new[]{(Name:"prefab",Values:prefabTimes),(Name:"process",Values:processTimes)}) {
                     times.Values.Sort();if(times.Values.Count!=0)Mark("COST " + times.Name + " count=" + times.Values.Count + " totalMs=" + times.Values.Sum() + " p95ms=" + times.Values[(int)((times.Values.Count-1)*.95)] + " maxms=" + times.Values.Last());

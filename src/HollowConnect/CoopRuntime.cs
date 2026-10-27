@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Hkmp;
 using Hkmp.Api.Client;
 using Hkmp.Api.Client.Networking;
+using Hkmp.Game.Client.Entity;
 using Hkmp.Game.Client.Save;
 using Hkmp.Util;
 using HollowConnect.Core;
@@ -23,17 +25,29 @@ public sealed class Peer {
     public Life Life;
 }
 
-public sealed class CoopRuntime : MonoBehaviour {
+public sealed partial class CoopRuntime : MonoBehaviour {
     private IClientApi api;
     private IClientAddonNetworkSender<Channel> sender;
     internal readonly Dictionary<ushort, Peer> Peers = new Dictionary<ushort, Peer>();
     private ProgressLedger granted = new ProgressLedger();
     private ResourceShareService resources;
+    private ProgressPickupService progressPickups;
+    private MapPurchaseService mapPurchases;
     private TeammateDreamNail teammateDream;
     private DeathStatistics resourceSlot;
+    private PlayerData resourcePlayerData;
+    // The server can send its union while the native profile menu is still
+    // open. Keep it for this connection independently of the selected slot,
+    // just as granted keeps abilities until that slot is ready to apply them.
+    private readonly HashSet<string> grantedResources = new HashSet<string>(StringComparer.Ordinal);
     private bool resourceImported;
+    private bool progressAuditRequested;
+    private uint progressAuditSerial;
     private readonly HashSet<string> offeredResources = new HashSet<string>(StringComparer.Ordinal);
     private readonly Dictionary<string, int> offered = new Dictionary<string, int>();
+    private readonly ResourceNotifications resourceNotifications = new ResourceNotifications();
+    private GUIStyle overlayStyle;
+    private SaveSafetySnapshot sampledDebugState;
     private readonly Dictionary<string, FieldInfo> fields = new Dictionary<string, FieldInfo>();
     private readonly SaveChanges sceneSaveChanges = new SaveChanges();
     private MapService map;
@@ -43,6 +57,17 @@ public sealed class CoopRuntime : MonoBehaviour {
     private int protectionSceneHandle = int.MinValue;
     private string protectionSession = "";
     private bool protectEntry;
+    private bool bossHealthScaling;
+    private float bossExtraHealth, bossHealthDecay;
+    internal double CurrentBossHealthMultiplier() {
+        if (!Connected || !bossHealthScaling || Resetting || Returning) return 1;
+        var count = 1;
+        var now = Now;
+        foreach (var peer in Peers.Values)
+            if (peer.State != null && peer.State.Scene == CoopContext.LocalScene && now - peer.Seen < 2 &&
+                peer.Life != Life.Returning) count++;
+        return BossHealthScale.Multiplier(count, bossExtraHealth, bossHealthDecay);
+    }
     private bool takingDamage, nativeHitPlayed;
     private int damageHazard;
     internal Func<KeyCode, bool> KeyPressed = Input.GetKeyDown;
@@ -61,6 +86,10 @@ public sealed class CoopRuntime : MonoBehaviour {
     private string retryScene;
     private Vector2? warpEntry;
     private string warpScene;
+    private int dreamRecoverySceneHandle = int.MinValue;
+    private float dreamRecoveryAfter;
+    private bool dreamRecoveryDone;
+    private bool dreamRecoveryLogged;
     private HeroController lockedHero;
     private bool noDamage, heroBoxInactive, simulated, restoreControl, restoreAnimation;
     internal Vector3 DeathPosition { get; private set; }
@@ -72,6 +101,13 @@ public sealed class CoopRuntime : MonoBehaviour {
     private string status = "";
     private float statusUntil;
     private Font font;
+    private readonly DebugEventRing debugEvents = new DebugEventRing(256);
+    private CoopDebugCommand debugCommand;
+    private bool debugPanel;
+    private bool debugRecoveryArmed;
+    private Vector2 debugScroll;
+    private string debugSignature = "";
+    private string debugExportPath = "";
     internal static double Now => (DateTime.UtcNow - new DateTime(2020, 1, 1)).TotalSeconds;
     internal bool Connected => api != null && api.NetClient.IsConnected && Session.Length > 0;
     internal bool Playable => HeroController.instance != null && GameManager.instance != null &&
@@ -83,6 +119,122 @@ public sealed class CoopRuntime : MonoBehaviour {
         !HeroController.instance.cState.hazardRespawning && !HeroController.instance.cState.transitioning &&
         HeroController.instance.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION &&
         !GameManager.instance.isPaused && Time.timeScale > 0;
+
+    private void DebugEvent(string code, DebugEventSeverity severity = DebugEventSeverity.Info, string detail = "") {
+        var scene = UnitySceneManager.GetActiveScene().name;
+        debugEvents.Add(Now, severity, code, scene, detail);
+    }
+
+    internal void ToggleDebugPanel() {
+        debugPanel = !debugPanel;
+        debugRecoveryArmed = false;
+        if (debugPanel) DebugEvent("debug-panel-opened");
+    }
+
+    internal SaveSafetySnapshot BuildDebugSnapshot() {
+        var gm = GameManager.instance;
+        var hero = HeroController.instance;
+        var camera = GameCameras.instance?.cameraController;
+        var pd = PlayerData.instance;
+        var body = hero == null ? null : hero.GetComponent<Rigidbody2D>();
+        var snapshot = new SaveSafetySnapshot {
+            SceneName = UnitySceneManager.GetActiveScene().name,
+            GameManagerScene = gm?.sceneName ?? "",
+            EntryGateName = gm?.entryGateName ?? "",
+            IsInSceneTransition = gm != null && gm.IsInSceneTransition,
+            HasFinishedEnteringScene = gm != null && gm.HasFinishedEnteringScene,
+            HeroInPosition = hero != null && hero.isHeroInPosition,
+            HeroAcceptingInput = hero != null && hero.acceptingInput,
+            HeroControlRelinquished = hero != null && hero.controlReqlinquished,
+            HeroDead = hero != null && hero.cState.dead,
+            HeroHazardDeath = hero != null && hero.cState.hazardDeath,
+            HeroHazardRespawning = hero != null && hero.cState.hazardRespawning,
+            HeroTransitioning = hero != null && hero.cState.transitioning,
+            HeroBoxInactive = HeroBox.inactive,
+            BodySimulated = body == null || body.simulated,
+            CameraMode = camera?.mode.ToString() ?? "",
+            CameraFrozen = camera != null && camera.mode == CameraController.CameraMode.FROZEN,
+            TransitionState = hero?.transitionState.ToString() ?? "",
+            Connected = Connected,
+            SessionPresent = Session.Length != 0,
+            PeerCount = Peers.Count,
+            ChangingScene = changingScene,
+            Down = Down,
+            Resetting = Resetting,
+            Returning = Returning,
+            HasNativeDeath = personalDeath != null,
+            HasBossContextGuard = BossTravel.HasTransientContext,
+            HasCheckpointReload = checkpointReload != null,
+            HasTeammateWarp = teammateWarp != null,
+            WarpScene = warpScene ?? "",
+            WarpEntry = warpEntry.HasValue ? warpEntry.Value.x.ToString("R") + "," + warpEntry.Value.y.ToString("R") : "",
+            RetryScene = retryScene ?? "",
+            InBossSequence = BossSequenceController.IsInSequence,
+            BossSequenceName = BossTravel.CurrentSequenceName,
+            ResourceReceiptCount = CoopMod.Statistics?.Resources?.Claimed?.Count ?? 0,
+            SharedProgressCount = CoopMod.Statistics?.SharedProgress?.Count ?? 0
+        };
+        if (pd != null) {
+            snapshot.RespawnScene = pd.GetString("respawnScene") ?? "";
+            snapshot.RespawnMarkerName = pd.GetString("respawnMarkerName") ?? "";
+            snapshot.RespawnType = pd.GetInt("respawnType");
+            snapshot.BossReturnEntryGate = pd.GetString("bossReturnEntryGate") ?? "";
+        }
+        return snapshot;
+    }
+
+    private void SampleDebugState() {
+        if (Time.unscaledTime < nextDebugSample) return;
+        nextDebugSample = Time.unscaledTime + .5f;
+        var snapshot = BuildDebugSnapshot();
+        sampledDebugState = snapshot;
+        var signature = string.Join("|", snapshot.SceneName, snapshot.IsInSceneTransition, snapshot.HasFinishedEnteringScene,
+            snapshot.HeroAcceptingInput, snapshot.HeroControlRelinquished, snapshot.HeroBoxInactive, snapshot.BodySimulated,
+            snapshot.HeroInPosition, snapshot.HeroTransitioning, snapshot.TransitionState,
+            snapshot.ChangingScene, snapshot.Down, snapshot.Resetting, snapshot.Returning, snapshot.WarpScene,
+            snapshot.HasCheckpointReload, snapshot.HasTeammateWarp);
+        if (signature == debugSignature) return;
+        debugSignature = signature;
+        var risks = snapshot.RiskCodes();
+        if (risks.Count > 0) DebugEvent("state-risk", DebugEventSeverity.Warning, string.Join(",", risks));
+    }
+    private float nextDebugSample;
+
+    internal string ExportDebugReport() {
+        try {
+            var directory = Path.Combine(Application.persistentDataPath, "HollowConnect", "diagnostics");
+            Directory.CreateDirectory(directory);
+            var name = "diagnostic-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + ".json";
+            var path = Path.Combine(directory, name);
+            File.WriteAllText(path, SafeDiagnosticsFormatter.Format(BuildDebugSnapshot(), debugEvents.Snapshot(), DateTime.UtcNow.ToString("o")));
+            debugExportPath = path;
+            DebugEvent("diagnostic-exported", DebugEventSeverity.Info);
+            return path;
+        } catch (Exception e) {
+            DebugEvent("diagnostic-export-failed", DebugEventSeverity.Critical, e.GetType().Name);
+            UnityEngine.Debug.LogError("HollowConnect diagnostic export failed: " + e);
+            return "";
+        }
+    }
+
+    // This routine only releases HollowConnect's transient locks. It never
+    // calls SaveGame, ReadyForRespawn, SceneData.SaveMyState, or changes any
+    // progress/receipt field. An accepted native scene load is allowed to
+    // finish; the White Defender repair is scoped to its known stale entry.
+    internal void RecoverTransientState() {
+        DebugEvent("recovery-requested", DebugEventSeverity.Warning);
+        if (checkpointReload != null) StopCoroutine(checkpointReload);
+        if (teammateWarp != null) StopCoroutine(teammateWarp);
+        checkpointReload = teammateWarp = null;
+        changingScene = false;
+        if (!Resetting) { readySent = false; retryScene = null; }
+        if (GameManager.instance == null || !GameManager.instance.IsInSceneTransition) {
+            warpEntry = null; warpScene = null;
+        }
+        if (!Down && !Resetting && !Returning) Unlock();
+        RecoverWhiteDefenderDreamEntry();
+        DebugEvent("recovery-complete", DebugEventSeverity.Info);
+    }
 
     public void Initialize(IClientApi clientApi, CoopClientAddon addon) {
         api = clientApi;
@@ -100,15 +252,39 @@ public sealed class CoopRuntime : MonoBehaviour {
         shades = new ShadeService(this);
         resources = new ResourceShareService(() => Connected && Shared,
             () => Playable && !Down && !Resetting && !Returning && !changingScene,
-            () => CoopMod.Statistics.Resources, id => Send(new Message { Kind = Kind.ResourceOffer, Key = id }),
-            s => CoopMod.Instance?.Log(s));
+            LocalResources, id => Send(new Message { Kind = Kind.ResourceOffer, Key = id }),
+            s => CoopMod.Instance?.Log(s), ShowSharedResource);
         resources.Register();
+        progressPickups = new ProgressPickupService(() => Playable);
+        progressPickups.Register();
+        mapPurchases = new MapPurchaseService(key => Connected && Shared && PlayerData.instance != null &&
+            (PlayerData.instance.GetBoolInternal(key) || granted.Get(key) == 1));
+        mapPurchases.Register();
         teammateDream = new TeammateDreamNail(this);
         BossTravel.Register();
         CoopContext.CaptureBossContext = BossTravel.CaptureContext;
         CoopContext.ApplyBossContext = BossTravel.ApplyContext;
-        CoopContext.BossTransitionReady = () => Playable && !Down && !Resetting && !Returning && !changingScene;
-        CoopContext.LocalRescueDown = () => Connected && RescueEnabled && Down;
+        CoopContext.CommitBossContext = BossTravel.CommitTransientContext;
+        CoopContext.RestoreBossContext = BossTravel.RestoreTransientContext;
+        CoopContext.BossTransitionReady = () => Playable && !Down && !Resetting && !Returning && !changingScene && !BossSettlementPending;
+        CoopContext.AwaitBossSettlement = AwaitBossSettlement;
+        CoopContext.LocalRescueDown = () => Connected && Down;
+        CoopContext.LivingBossTarget = LivingBossTarget;
+        CoopContext.FlexibleBossTargetingOn = () => Connected && flexibleBossTargeting;
+        CoopContext.BossTargetSession = () => Session;
+        CoopContext.ChooseBossTarget = ChooseBossTarget;
+        CoopContext.BossTargetObject = BossTargetObject;
+        CoopContext.AttackSourcePlayer = AttackSourcePlayer;
+        CoopMod.ActiveRoomSettingLabel = ActiveRoomSettingLabel;
+        CoopContext.RemotePlayerOpacity = () => float.IsNaN(CoopMod.Settings.OtherPlayerOpacity) ? 1 : Mathf.Clamp01(CoopMod.Settings.OtherPlayerOpacity);
+        CoopContext.PlayerNameColor = id => CoopMod.Settings.ColoredPlayerNames ? MapService.PeerColor(id) : Color.white;
+        CoopContext.BossHealthMultiplier = CurrentBossHealthMultiplier;
+        CoopContext.BossDefeated = ReportBossDefeated;
+        CoopContext.BossEncounter = BeginDamageEncounter;
+        CoopContext.BossDamage = ReportBossDamage;
+        RegisterDamageRanking();
+        CoopContext.FinishRadianceIntro = scene => Playable && !Down && !Resetting && !Returning &&
+            HeroController.instance.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION && FinishRadianceWarpPresentation(scene);
         map.Register();
         On.HeroController.Die += OnDie;
         On.HeroController.TakeDamage += TakeDamage;
@@ -116,31 +292,64 @@ public sealed class CoopRuntime : MonoBehaviour {
         ModHooks.AfterTakeDamageHook += AfterTakeDamage;
         On.CameraController.LateUpdate += CameraUpdate;
         On.GameManager.FindEntryPoint += FindWarpEntry;
+        On.GameManager.BeginSceneTransitionRoutine += TrackNativeTransition;
+        GameManager.SceneTransitionBegan += TrackNativeLoader;
         On.HeroController.EnterSceneDreamGate += CompleteWarpEntry;
         ModHooks.SetPlayerBoolHook += OnSetBool;
         ModHooks.SetPlayerIntHook += OnSetInt;
         font = Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial" }, 18);
+        debugCommand = new CoopDebugCommand(this);
+        api.CommandManager.RegisterCommand(debugCommand);
+        DebugEvent("runtime-initialized", DebugEventSeverity.Info);
+    }
+
+    private static ResourceClaims LocalResources() {
+        if (CoopMod.Statistics.Resources == null) CoopMod.Statistics.Resources = new ResourceClaims();
+        return CoopMod.Statistics.Resources;
     }
 
     private void OnConnect() {
+        CoopMod.RoomRuleRevision++;
+        flexibleBossTargeting = false;
+        DebugEvent("connect-start", DebugEventSeverity.Info);
+        BossTravel.RestoreTransientContext();
         teammateDream.Reset();
-        resources.ResetConnection(); offeredResources.Clear();
+        ResetRescueOptions();
+        ResetStoryRescuePlacement();
+        resources.ResetConnection(); offeredResources.Clear(); resourceNotifications.Clear();
+        grantedResources.Clear();
+        progressAuditRequested = false; progressAuditSerial = 0;
         localName = "";
         Session = ""; Peers.Clear(); offered.Clear(); granted = new ProgressLedger(); sequence = 0; handledWarp = 0; ReleasedRound = 0;
+        dreamRecoverySceneHandle = int.MinValue; dreamRecoveryDone = false;
+        dreamRecoveryLogged = false;
         entryProtection.Clear(); protectionSceneHandle = int.MinValue; protectionSession = "";
         Send(new Message { Kind = Kind.Hello });
     }
     private void OnDisconnect() {
+        ResetDamageRanking();
+        CoopMod.RoomRuleRevision++;
+        flexibleBossTargeting = false;
+        DebugEvent("disconnect", DebugEventSeverity.Warning);
+        BossTravel.RestoreTransientContext();
         teammateDream.Reset();
-        resources.ResetConnection(); offeredResources.Clear();
+        resources.ResetConnection(); offeredResources.Clear(); resourceNotifications.Clear();
+        grantedResources.Clear();
+        progressAuditRequested = false; progressAuditSerial = 0;
         localName = "";
         CancelBenchReturn();
         CancelTransitions();
+        ResetRescueOptions();
+        ResetStoryRescuePlacement();
         shades.Clear(); Unlock(); Down = Resetting = changingScene = false; Session = ""; Peers.Clear(); offered.Clear();
+        ResetBossVictoryRescue();
+        dreamRecoverySceneHandle = int.MinValue; dreamRecoveryDone = false;
+        dreamRecoveryLogged = false;
         CoopContext.Resetting = false; readySent = false; retryScene = null; map.Clear();
         // The original hero owns an accepted formal death; disconnect only
         // abandons our wait and must not cancel its animation/save/return.
         personalDeath = null; entryProtection.Clear(); protectionSession = "";
+        debugSignature = "";
     }
     private void Send(Message message) {
         if (!api.NetClient.IsConnected) return;
@@ -160,18 +369,37 @@ public sealed class CoopRuntime : MonoBehaviour {
             protectEntry = (m.Value & 8) != 0;
             // An older Welcome has no opt-out bit and keeps existing behavior.
             ShareCharms = (m.Value & 16) == 0;
+            bossVictoryRescue = (m.Value & 32) == 0;
+            bossHealthScaling = (m.Value & 64) != 0;
+            SpectateAfterExhaustion = (m.Value & 128) != 0;
+            flexibleBossTargeting = (m.Value & 256) != 0;
+            damageRankingEnabled = (m.Value & 512) != 0;
+            RescueLimit = (int)Math.Min(999u, m.Aux);
+            bossExtraHealth = m.X; bossHealthDecay = m.Y;
+            CoopMod.RoomRuleRevision++;
             Notice("协作连接已建立" + (Shared ? " · 共享进度开启" : "") + " · 按住 " + CoopMod.Settings.DeathLeaderboardKey + " 查看死亡榜");
             nextPresence = nextProgress = 0;
+            progressAuditRequested = Shared;
             return;
         }
         if (m.Session != Session || Session.Length == 0) return;
+        if (m.Kind == Kind.DamageSnapshot) { ReceiveDamageSnapshot(m); return; }
+        if (m.Kind == Kind.ProgressGrant && m.Key == Wire.ProgressAuditKey) {
+            if (Shared && m.Serial > progressAuditSerial) {
+                progressAuditSerial = m.Serial; progressAuditRequested = true;
+            }
+            return;
+        }
         // Absolute saved totals merge by maximum; copied histories must not add twice.
         if (m.Kind == Kind.DeathCount) {
             CoopMod.Statistics.Merge(m.Name, m.Serial);
             return;
         }
         if (m.Kind == Kind.ResourceGrant) {
-            if (Shared) resources.Receive(m.Key);
+            if (Shared && ResourceCatalog.TryGet(m.Key, out _)) {
+                grantedResources.Add(m.Key);
+                resources.Receive(m.Key);
+            }
             return;
         }
         if (m.Kind == Kind.Wipe) {
@@ -181,12 +409,18 @@ public sealed class CoopRuntime : MonoBehaviour {
             CoopContext.Epoch = m.Round; CoopContext.Resetting = true;
             CancelBenchReturn();
             CancelTransitions();
+            StopSpectating();
+            RestoreSpectatorPeers();
             shades.Clear();
             Resetting = true; Down = false; readySent = false; Peers.Clear();
             checkpointReload = StartCoroutine(ReloadCheckpoint(Session, m.Round)); return;
         }
         if (m.Round != CoopContext.Epoch) return;
         switch (m.Kind) {
+            case Kind.RescueStatus:
+                ReceiveRescueStatus(m); break;
+            case Kind.BossVictory:
+                ReceiveBossVictory(m); break;
             case Kind.Roster:
                 CoopMod.Statistics.Merge(m.Name, 0);
                 if (m.Id == LocalId) break;
@@ -197,18 +431,33 @@ public sealed class CoopRuntime : MonoBehaviour {
                 m.Value = (int)p.Life; p.State = m; p.Seen = Now;
                 if (m.Value == (int)Life.Down && uint.TryParse(m.Key, out var incomingDown) && incomingDown >= p.DownSerial) p.DownSerial = incomingDown;
                 break;
+            case Kind.RescueAnchor:
+                ReceiveRescueAnchor(m); break;
+            case Kind.Spectating:
+                ReceiveSpectating(m); break;
+            case Kind.BossSettlementReady:
+                ReceiveBossSettlementReady(m); break;
             case Kind.Left:
                 shades.Remove(m.Id); Peers.Remove(m.Id); map.Remove(m.Id); break;
             case Kind.Down:
-                if (m.Id == LocalId) break;
+                var downLife = m.Value == (int)Life.Spectating ? Life.Spectating : Life.Down;
+                if (m.Id == LocalId) {
+                    if (Down && m.Serial == downSerial && m.Aux >= localDownLifeVersion) {
+                        localDownLifeVersion = m.Aux;
+                        if (Spectating && downLife != Life.Spectating) StopSpectating();
+                        Spectating = downLife == Life.Spectating;
+                        if (Spectating) { shades.Remove(LocalId); HideSpectator(); Notice("救援不可用，正在观战 · 按 " + CoopMod.Settings.GiveUpKey + " 返回"); }
+                    }
+                    break;
+                }
                 if (!Peers.TryGetValue(m.Id, out var downPeer)) Peers[m.Id] = downPeer = new Peer();
                 // An unreliable roster can arrive before the reliable event.
                 // Keep state ordering separate from one-shot presentation.
                 if (m.Aux < downPeer.LifeVersion || m.Serial < downPeer.DownSerial ||
-                    m.Aux == downPeer.LifeVersion && downPeer.Life != Life.Down) break;
-                downPeer.DownSerial = m.Serial; downPeer.LifeVersion = m.Aux; downPeer.Life = Life.Down;
+                    m.Aux == downPeer.LifeVersion && downPeer.Life != downLife) break;
+                downPeer.DownSerial = m.Serial; downPeer.LifeVersion = m.Aux; downPeer.Life = downLife;
                 if (downPeer.State == null) downPeer.State = new Message { Id = m.Id, Name = m.Name };
-                downPeer.State.Value = (int)Life.Down; downPeer.State.Scene = m.Scene;
+                downPeer.State.Value = (int)downLife; downPeer.State.Scene = m.Scene;
                 downPeer.State.X = m.X; downPeer.State.Y = m.Y; downPeer.Seen = Now;
                 if (m.Serial > downPeer.DownFeedbackSerial) {
                     downPeer.DownFeedbackSerial = m.Serial;
@@ -216,14 +465,26 @@ public sealed class CoopRuntime : MonoBehaviour {
                 }
                 break;
             case Kind.Revived:
-                if (Resetting || m.Serial == 0 || m.Target == m.Id) break;
-                if (m.Id == LocalId && Down && m.Serial == downSerial && !Resetting) {
-                    // A moving/disappearing platform may have left since Down.
-                    // Never release the knight into an unsupported rescue.
+            case Kind.BossRevived:
+                var bossRecovery = m.Kind == Kind.BossRevived;
+                if (Resetting || m.Serial == 0 || !bossRecovery && m.Target == m.Id) break;
+                if (m.Id == LocalId && Down && (!Spectating || bossRecovery) && m.Serial == downSerial &&
+                    m.Scene == deathScene && m.Aux > localDownLifeVersion && !Returning && !changingScene) {
+                    // Nail revival revalidates the shade's support. Settlement
+                    // instead uses the server-validated surviving participant.
                     var rescued = HeroController.instance;
-                    var landing = TryWarpLanding(DeathPosition, deathScene, out var supported)
+                    Vector3? landing = bossRecovery ? new Vector3(m.X, m.Y, DeathPosition.z) : !IsGodhomeRescueScene() ? FindStoryRescuePosition(rescued) :
+                        TryWarpLanding(DeathPosition, deathScene, out var supported)
                         ? new Vector3(supported.x, supported.y, DeathPosition.z) : FindRescuePosition(rescued);
                     if (!landing.HasValue) {
+                        if (!IsGodhomeRescueScene()) {
+                            // Keep this accepted death's identity while the
+                            // server transitions its Alive row to Returning.
+                            giveUpRequested = true;
+                            Send(new Message { Kind = Kind.RescueUnavailable, Serial = downSerial, Aux = m.Aux, Scene = deathScene });
+                            Notice("地形已无法承载复活，正在返回自己的复活点…");
+                            break;
+                        }
                         // The server has accepted the old episode. Advertise a
                         // fresh Down before using its existing personal-return
                         // protocol; retain the original native death context.
@@ -233,10 +494,19 @@ public sealed class CoopRuntime : MonoBehaviour {
                     }
                     rescued.transform.position = landing.Value;
                     Physics2D.SyncTransforms();
+                    localDownLifeVersion = m.Aux;
                     giveUpRequested = false;
-                    shades.Remove(m.Id); Down = false; Unlock();
+                    StopSpectating(); shades.Remove(m.Id); Down = false; Unlock();
+                    if (!bossRecovery && !IsGodhomeRescueScene() && rescueAirAnchor) {
+                        // Lock suspended gravity and death may have consumed
+                        // the air moves. Return native movement before letting
+                        // the rescued player recover on the validated wall.
+                        rescued.ResetAirMoves(); rescued.AffectedByGravity(true);
+                    }
+                    if (bossRecovery) GameCameras.instance?.cameraController?.PositionToHero(true);
                     personalDeath = null;
-                    PlayerData.instance.SetInt("healthBlue", 0); Heal(1); Notice("队友击破了你的暗影，一血复活");
+                    PlayerData.instance.SetInt("healthBlue", 0); Heal(1);
+                    Notice(bossRecovery ? "Boss已击败，已在存活队友身边复活 · 不消耗救援次数" : "队友击破了你的暗影，一血复活");
                     rescued.StartCoroutine("Invulnerable", rescued.INVUL_TIME);
                     PlayRescueFeedback(m);
                 }
@@ -250,14 +520,17 @@ public sealed class CoopRuntime : MonoBehaviour {
                     shades.Remove(m.Id);
                     revived.LifeVersion = m.Aux; revived.Life = Life.Alive;
                     if (revived.State != null) revived.State.Value = (int)Life.Alive;
-                    if (m.Target == LocalId && Connected && Playable && !Down && !Returning && !changingScene)
+                    if (!bossRecovery && m.Target == LocalId && Connected && Playable && !Down && !Returning && !changingScene)
                         HeroController.instance.AddMPCharge(RescueFeedback.SoulReward);
                     PlayRescueFeedback(m);
                 }
                 break;
             case Kind.Returning:
                 if (m.Id == LocalId && Down && m.Serial == downSerial && !Resetting && !Returning) {
+                    StopSpectating();
+                    encounterEnded = m.Name == "boss-failed" || m.Name == "boss-victory";
                     giveUpRequested = false; Returning = true; Down = false; shades.Remove(LocalId);
+                    if (m.Name == "boss-failed") Notice("Boss房内无人能继续战斗，本场失败，返回自己的复活点");
                     benchReturn = StartCoroutine(ReturnToBench(m));
                 }
                 if (Peers.TryGetValue(m.Id, out var leaving) && m.Aux > leaving.LifeVersion) {
@@ -267,7 +540,8 @@ public sealed class CoopRuntime : MonoBehaviour {
                 break;
             case Kind.Returned:
                 if (m.Id == LocalId && Returning && m.Serial == downSerial && !Resetting) {
-                    Returning = false; giveUpRequested = false; Unlock(); personalDeath = null; Notice("已回到自己的复活点，队友继续当前战斗");
+                    Returning = false; giveUpRequested = false; Unlock(); personalDeath = null;
+                    Notice(encounterEnded ? "本场已结束，已回到自己的复活点" : "已回到自己的复活点，队友继续当前战斗");
                 }
                 if (Peers.TryGetValue(m.Id, out var returned) && m.Aux > returned.LifeVersion) {
                     returned.LifeVersion = m.Aux; returned.Life = Life.Alive;
@@ -280,7 +554,7 @@ public sealed class CoopRuntime : MonoBehaviour {
             case Kind.GiveUpDenied:
                 if (m.Id == LocalId && m.Serial == downSerial) {
                     giveUpRequested = false;
-                    if (Down) Notice("当前无法放弃：尚无可用长椅，或全队重试已开始");
+                    if (Down) Notice("当前无法放弃或观战：没有可用队友／复活点，或本场重试已开始");
                 }
                 break;
             case Kind.Release:
@@ -289,7 +563,14 @@ public sealed class CoopRuntime : MonoBehaviour {
                 Resetting = false; CoopContext.Resetting = false; readySent = false; Unlock(); personalDeath = null;
                 Notice("全队加载完成，重新出发"); break;
             case Kind.ProgressGrant:
-                if (ProgressCatalog.CanShare(m.Key, Shared, ShareCharms) && granted.Merge(m.Key, m.Value)) ApplyProgress(m.Key, m.Value);
+                if (ProgressCatalog.CanShare(m.Key, Shared, ShareCharms) && granted.Merge(m.Key, m.Value)) {
+                    ApplyProgress(m.Key, granted.Get(m.Key));
+                    // The prompt is deliberately independent of scene/hero
+                    // readiness. A player may be in another room or in a
+                    // native transition when the host grants an ability.
+                    var dreamVictory = m.Key == "falseKnightDreamDefeated" || m.Key == "infectedKnightDreamDefeated" || m.Key == "mageLordDreamDefeated";
+                    Notice((dreamVictory ? "共享通关记录：" : "共享能力已获得：") + ProgressName(m.Key));
+                }
                 break;
             case Kind.Warp:
                 if (m.Serial <= handledWarp || !CanStartWarp || string.IsNullOrEmpty(m.Scene) || SceneUtil.IsNonGameplayScene(m.Scene)) break;
@@ -307,19 +588,43 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private void Update() {
-        if (resourceSlot != CoopMod.Statistics) {
-            resourceSlot = CoopMod.Statistics; resourceImported = false;
+        if (EmergencyShortcutPressed()) RequestEmergencyDirtmouthBench();
+        if (emergencyBenchActive) return;
+        if (KeyPressed(KeyCode.F9)) ToggleDebugPanel();
+        SampleDebugState();
+        if (resourceSlot != CoopMod.Statistics || resourcePlayerData != PlayerData.instance) {
+            resourceSlot = CoopMod.Statistics; resourcePlayerData = PlayerData.instance;
+            resourceImported = false; resourceNotifications.Clear();
             resources.ResetSlot(); offeredResources.Clear();
+            progressAuditRequested = Connected && Shared;
         }
+        progressPickups.Prepare();
         if (!resourceImported && Playable && !SceneUtil.IsNonGameplayScene(UnitySceneManager.GetActiveScene().name))
             resourceImported = resources.ImportNativeReceipts();
+        if (progressAuditRequested && Connected && Shared && Playable && resources.Audit()) {
+            progressAuditRequested = false; resourceImported = true;
+            // ResetSlot only discards work tied to the previous slot. Replay
+            // this session's accepted union after importing the loaded slot's
+            // native history, so already-spent ore is never refunded.
+            foreach (var source in grantedResources) resources.Receive(source);
+            offered.Clear(); offeredResources.Clear(); nextProgress = 0;
+            DebugEvent("progress-join-audit", DebugEventSeverity.Info);
+        }
         resources.Tick();
+        resourceNotifications.Tick(Connected && Shared && Playable && !Down && !Resetting && !Returning &&
+            !GameManager.instance.isPaused && Time.timeScale > 0 &&
+            HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished);
+        RecoverWhiteDefenderDreamEntry();
+        RecoverPendingWarpEntry();
         if (!Connected) return;
+        TickDamageRanking();
+        TickRescueOptions();
+        TickStoryRescuePlacement();
         RefreshEntryProtection();
         if (lockedHero != null && (Down || Resetting || Returning)) {
             lockedHero.RelinquishControl(); lockedHero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             lockedHero.takeNoDamage = true; HeroBox.inactive = true;
-            if (Down) lockedHero.transform.position = DeathPosition;
+            if (Down) lockedHero.transform.position = Spectating ? SpectatorPosition() : DeathPosition;
         }
         shades.Synchronize();
         if (Time.unscaledTime >= nextPresence) { nextPresence = Time.unscaledTime + .1f; SendPresence(); }
@@ -328,8 +633,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         }
         if (!Playable || Resetting || changingScene || Returning) return;
         if (Down && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
-            RequestPersonalReturn();
-            Notice("正在放弃救援，按原版死亡规则返回自己的复活点…");
+            RequestGiveUp();
         }
         if (Shared && Time.unscaledTime >= nextProgress) { nextProgress = Time.unscaledTime + .5f; CheckProgress(); }
         if (KeyPressed(CoopMod.Settings.SelectTeammateKey)) {
@@ -348,6 +652,87 @@ public sealed class CoopRuntime : MonoBehaviour {
         }
     }
 
+    // A dream-gate transition normally calls EnterSceneDreamGate, which
+    // finishes the scene and releases the hero immediately.  The White
+    // Defender story scene can still arrive with the native camera fade and
+    // no-input state left behind when another client is present. Keep this
+    // recovery narrowly scoped to that scene and only run it after the native
+    // scene transition has finished; this restores the same post-entry state
+    // as CompleteWarpEntry without touching ordinary dreams or cutscenes.
+    private void RecoverWhiteDefenderDreamEntry() {
+        var scene = UnitySceneManager.GetActiveScene();
+        if (scene.name != "Dream_04_White_Defender") {
+            dreamRecoverySceneHandle = int.MinValue; dreamRecoveryDone = false; dreamRecoveryLogged = false; return;
+        }
+        if (dreamRecoverySceneHandle != scene.handle) {
+            dreamRecoverySceneHandle = scene.handle;
+            dreamRecoveryAfter = Time.realtimeSinceStartup + 5.5f;
+            dreamRecoveryDone = false;
+            dreamRecoveryLogged = false;
+            return;
+        }
+        if (dreamRecoveryDone || Time.realtimeSinceStartup < dreamRecoveryAfter) return;
+        var gm = global::GameManager.instance;
+        var hero = HeroController.instance;
+        var camera = GameCameras.instance?.cameraController;
+        if (gm == null || hero == null || gm.isPaused || gm.IsLoadingSceneTransition ||
+            !scene.isLoaded || gm.sceneName != scene.name || Down || Resetting || Returning || personalDeath != null ||
+            PlayerData.instance.GetBool("atBench") || PlayerData.instance.GetBool("disablePause") ||
+            hero.cState.dead || hero.cState.hazardDeath || hero.cState.hazardRespawning) return;
+        // A failed old co-op warp can leave the native transition flag set
+        // forever. Give a legitimate dream entry a few extra seconds, then
+        // treat the exact scene plus the stale control state as recoverable.
+        if (gm.IsInSceneTransition && Time.realtimeSinceStartup < dreamRecoveryAfter + 4f) return;
+        var staleEntry = !gm.HasFinishedEnteringScene || !hero.isHeroInPosition ||
+            !hero.acceptingInput || hero.controlReqlinquished || camera != null && camera.mode == CameraController.CameraMode.FROZEN;
+        if (!staleEntry) {
+            dreamRecoveryDone = true; return;
+        }
+        if (!dreamRecoveryLogged) {
+            dreamRecoveryLogged = true;
+            DebugEvent("white-defender-entry-recovery", DebugEventSeverity.Warning);
+            CoopMod.Instance?.Log("Recovering stale White Defender entry state after co-op/disconnect");
+            if (Connected) Notice("已恢复白色防御者梦境入场状态");
+        }
+        if (teammateWarp != null) StopCoroutine(teammateWarp);
+        teammateWarp = null; changingScene = false; warpEntry = null; warpScene = null;
+        if (lockedHero == hero) Unlock();
+        if (!hero.isHeroInPosition) hero.EnterSceneDreamGate();
+        if (!gm.HasFinishedEnteringScene) gm.FinishedEnteringScene();
+        hero.RegainControl(); hero.StartAnimationControl();
+        var body = hero.GetComponent<Rigidbody2D>();
+        if (body != null) { body.simulated = true; body.velocity = Vector2.zero; }
+        HeroBox.inactive = false;
+        if (camera != null && camera.mode == CameraController.CameraMode.FROZEN)
+            camera.SetMode(CameraController.CameraMode.FOLLOWING);
+        camera?.PositionToHero(false);
+        gm.FadeSceneIn();
+        dreamRecoveryDone = true;
+    }
+
+
+    // A native BeginSceneTransition cannot be cancelled by StopCoroutine. If
+    // the native entry callback was skipped (for example after a disconnect),
+    // clear our custom FindEntryPoint override as soon as the accepted load is
+    // no longer running. This prevents a later unrelated dream gate from
+    // reading a stale room/position and gives the native hero its control back.
+    private void RecoverPendingWarpEntry() {
+        if (!warpEntry.HasValue || string.IsNullOrEmpty(warpScene)) return;
+        var gm = GameManager.instance;
+        var hero = HeroController.instance;
+        if (gm == null || gm.IsInSceneTransition) return;
+        if (UnitySceneManager.GetActiveScene().name == warpScene && hero != null && gm.HasFinishedEnteringScene &&
+            hero.isHeroInPosition && !hero.cState.dead && !hero.cState.hazardDeath) {
+            hero.RegainControl(); hero.StartAnimationControl();
+            GameCameras.instance?.cameraController?.PositionToHero(false);
+            gm.FadeSceneIn();
+            DebugEvent("warp-entry-recovered", DebugEventSeverity.Warning);
+        } else {
+            DebugEvent("warp-entry-cleared", DebugEventSeverity.Warning);
+        }
+        warpEntry = null; warpScene = null;
+    }
+
     private void SendPresence() {
         var hero = HeroController.instance;
         if (hero == null) return;
@@ -356,19 +741,23 @@ public sealed class CoopRuntime : MonoBehaviour {
         var hasMap = Playable && !changingScene && !Returning && map.TryLocation(out location);
         var pd = PlayerData.instance;
         var message = new Message { Kind = Kind.Presence, Serial = ++sequence, Scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
+            Aux = InBossEncounter() ? 1u : 0u,
             X = pos.x, Y = pos.y, HasMap = hasMap, MapX = hasMap ? location.x : 0, MapY = hasMap ? location.y : 0,
             IsReady = CanStartWarp, Key = pd.GetString("respawnScene") ?? "",
             Name = pd.GetString("respawnMarkerName") ?? "", Value = pd.GetInt("respawnType") };
-        BossTravel.Capture(message); Send(message);
+        if (!BossTravel.Capture(message)) message.IsReady = false;
+        Send(message);
     }
 
     private IEnumerator OnDie(On.HeroController.orig_Die orig, HeroController self) {
+        if (emergencyBenchActive) yield break;
         if (Connected && !Down && !Resetting && !Returning)
             Send(new Message { Kind = Kind.DeathCount, Serial = CoopMod.Statistics.Increment(localName) });
-        if (!Connected || !RescueEnabled || PlayerData.instance.permadeathMode != 0) { yield return orig(self); yield break; }
+        if (!Connected || !(RescueEnabled || SpectateAfterExhaustion && InBossEncounter()) || PlayerData.instance.permadeathMode != 0) { yield return orig(self); yield break; }
         if (Down || Resetting || Returning) yield break;
         personalDeath = new PersonalDeath(self, () => orig(self));
         deathScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        BeginStoryRescuePlacement(self);
         var landing = FindRescuePosition(self);
         DeathPosition = landing ?? self.transform.position;
         self.SetHeroParent(null);
@@ -376,32 +765,39 @@ public sealed class CoopRuntime : MonoBehaviour {
         deathCamera = GameCameras.instance?.cameraController;
         if (deathCamera != null) {
             cameraMode = deathCamera.mode;
-            // The native rescue point can be outside the death view. Move
-            // before storing the frozen anchor, using native scene/lock bounds.
-            deathCamera.camTarget.PositionToStart();
-            var view = deathCamera.KeepWithinSceneBounds(deathCamera.camTarget.transform.position);
-            deathCamera.SnapTo(view.x, view.y);
+            // Keep the actual battle view when the shade is already visible.
+            // PositionToStart would recenter locked Godhome arenas needlessly.
             var visible = deathCamera.cam.WorldToViewportPoint(DeathPosition);
             if (visible.z <= 0 || visible.x <= 0 || visible.x >= 1 || visible.y <= 0 || visible.y >= 1) {
+                deathCamera.camTarget.PositionToStart();
+                var view = deathCamera.KeepWithinSceneBounds(deathCamera.camTarget.transform.position);
+                deathCamera.SnapTo(view.x, view.y);
+                visible = deathCamera.cam.WorldToViewportPoint(DeathPosition);
                 // A disabled hero may have crossed an obsolete lock area.
                 // Keep that area's native ownership, but show the rescue point.
-                view = deathCamera.KeepWithinSceneBounds(DeathPosition);
-                deathCamera.SnapTo(view.x, view.y);
+                if (visible.z <= 0 || visible.x <= 0 || visible.x >= 1 || visible.y <= 0 || visible.y >= 1) {
+                    view = deathCamera.KeepWithinSceneBounds(DeathPosition);
+                    deathCamera.SnapTo(view.x, view.y);
+                }
             }
             cameraPosition = deathCamera.transform.position;
             deathCamera.FreezeInPlace();
         }
-        Down = true; downSerial++; Lock(); Heal(1);
+        Down = true; Spectating = !RescueAvailable && SpectateAfterExhaustion && InBossEncounter();
+        downSerial++; localDownLifeVersion = 0; Lock(); Heal(1);
+        if (Spectating) HideSpectator();
         shades.Synchronize();
         var message = SendDown();
         PlayDownFeedback(message, !takingDamage || !nativeHitPlayed);
-        if (landing.HasValue) Notice("你已化为暗影；等待队友击破救援，或按 " + CoopMod.Settings.GiveUpKey + " 放弃并回自己的复活点");
+        if (Spectating) Notice("正在观战 · 按 " + CoopMod.Settings.GiveUpKey + " 返回自己的复活点");
+        else if (landing.HasValue && RescueAvailable) Notice("你已化为暗影；等待队友击破救援，或按 " + CoopMod.Settings.GiveUpKey +
+            (SpectateAfterExhaustion ? " 放弃并转入观战" : " 放弃并回自己的复活点"));
         else RequestPersonalReturn();
     }
 
     private Message SendDown() {
         var message = new Message { Kind = Kind.Down, Serial = downSerial, Scene = deathScene, X = DeathPosition.x, Y = DeathPosition.y,
-            Key = personalDeath.Destination, Name = personalDeath.Marker, Value = personalDeath.RespawnType };
+            Key = personalDeath.Destination, Name = personalDeath.Marker, Value = personalDeath.RespawnType, IsReady = InBossEncounter() };
         Send(message); return message;
     }
     private void RequestPersonalReturn() {
@@ -412,6 +808,13 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private Vector3? FindRescuePosition(HeroController hero) {
+        if (!IsGodhomeRescueScene()) return FindStoryRescuePosition(hero);
+        return FindLegacyRescuePosition(hero);
+    }
+
+    // Keep Godhome's established placement algorithm unchanged. Story rescue
+    // uses a separate policy; formal death still belongs to PersonalDeath.
+    private Vector3? FindLegacyRescuePosition(HeroController hero) {
         var origin = hero.transform.position;
         bool Ground(Vector2 point, out Vector3 position) {
             position = origin;
@@ -425,6 +828,13 @@ public sealed class CoopRuntime : MonoBehaviour {
         }
         var zone = GameManager.instance.GetCurrentMapZone();
         var hazard = takingDamage && (damageHazard == 2 || damageHazard == 3 || damageHazard == 5);
+        // White Defender's dream arena keeps a room-local blocker around the
+        // fight. PlayerData.hazardRespawnLocation can still point to the
+        // entry side of that blocker, so using it first can strand the shade
+        // where the living teammate cannot reach it. Prefer the actual death
+        // side when the native room has a supported floor below the victim.
+        var localDream = deathScene == "Dream_04_White_Defender";
+        if (localDream && Ground(origin, out var dreamLocal)) return dreamLocal;
         // Native story death chooses the closest Shade Marker. The shade's
         // Spawn Offset floats its art; the living knight needs ground below it.
         // Dream/Palace/Godhome and cross-room formal shade exceptions instead
@@ -459,6 +869,7 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
     private void TakeDamage(On.HeroController.orig_TakeDamage orig, HeroController self, GameObject source,
         GlobalEnums.CollisionSide side, int damage, int hazard) {
+        if (emergencyBenchActive) return;
         if (Connected && (Down || Resetting || Returning)) return;
         if (EntryProtected && hazard == 1) return;
         takingDamage = true; nativeHitPlayed = false; damageHazard = hazard;
@@ -506,10 +917,16 @@ public sealed class CoopRuntime : MonoBehaviour {
     private void CameraUpdate(On.CameraController.orig_LateUpdate orig, CameraController self) {
         if (Down && self == deathCamera) self.SetMode(CameraController.CameraMode.FROZEN);
         orig(self);
-        if (Down && self == deathCamera) self.transform.position = cameraPosition;
+        if (Down && self == deathCamera) {
+            if (Spectating) {
+                var position = self.KeepWithinSceneBounds(SpectatorPosition());
+                position.z = cameraPosition.z;
+                self.transform.position = position;
+            } else self.transform.position = cameraPosition;
+        }
     }
     private void LateUpdate() {
-        if (Down && lockedHero != null) lockedHero.transform.position = DeathPosition;
+        if (Down && lockedHero != null) lockedHero.transform.position = Spectating ? SpectatorPosition() : DeathPosition;
     }
     internal GameObject PlayerObject(ushort id) => api.ClientManager.GetPlayer(id)?.PlayerObject;
     internal bool CanDreamNail(ushort id) {
@@ -531,8 +948,23 @@ public sealed class CoopRuntime : MonoBehaviour {
     }
 
     private bool OnSetBool(string key, bool value) => Connected && ProgressCatalog.CanShare(key, Shared, ShareCharms) && granted.Get(key) == 1 || value;
-    private int OnSetInt(string key, int value) => Shared && Connected && ProgressCatalog.Limits.TryGetValue(key, out var limit)
-        ? Math.Min(limit, Math.Max(value, granted.Get(key))) : value;
+    private int OnSetInt(string key, int value) {
+        if (Shared && Connected && Playable && key == "guardiansDefeated") {
+            var pd = PlayerData.instance;
+            // Native personal absorption increments after setting its defeat
+            // flag. A previously shared Dreamer must not count a second time.
+            return Math.Max(pd.GetInt("guardiansDefeated"), GuardianCount(pd));
+        }
+        return Shared && Connected && ProgressCatalog.Limits.TryGetValue(key, out var limit)
+            ? Math.Min(limit, ProgressCatalog.Combine(key, value, granted.Get(key))) : value;
+    }
+    private static int GuardianCount(PlayerData pd) => (pd.GetBool("lurienDefeated") ? 1 : 0) +
+        (pd.GetBool("hegemolDefeated") ? 1 : 0) + (pd.GetBool("monomonDefeated") ? 1 : 0);
+    private static void RefreshGuardianCount() {
+        var pd = PlayerData.instance;
+        var count = GuardianCount(pd);
+        if (pd.GetInt("guardiansDefeated") < count) pd.SetInt("guardiansDefeated", count);
+    }
     private void CheckProgress() {
         if (resourceImported) foreach (var source in CoopMod.Statistics.Resources.Claimed)
             if (offeredResources.Add(source)) Send(new Message { Kind = Kind.ResourceOffer, Key = source });
@@ -541,31 +973,90 @@ public sealed class CoopRuntime : MonoBehaviour {
             var obj = pair.Value.GetValue(PlayerData.instance);
             var value = obj is bool flag ? (flag ? 1 : 0) : (int)obj;
             // Reapply grants received before the local save/hero finished loading.
-            if (value < granted.Get(pair.Key)) { ApplyProgress(pair.Key, granted.Get(pair.Key)); value = granted.Get(pair.Key); }
+            var merged = ProgressCatalog.Combine(pair.Key, value, granted.Get(pair.Key));
+            if (value != merged) { ApplyProgress(pair.Key, merged); value = merged; }
             if (value <= 0 || offered.TryGetValue(pair.Key, out var old) && value <= old) continue;
             offered[pair.Key] = value;
             Send(new Message { Kind = Kind.ProgressOffer, Key = pair.Key, Value = value });
         }
+        RefreshRoyalCharmCost();
+        RefreshStagNest();
+        RefreshGuardianCount();
+        RefreshGrimmFlames();
+        // Old grants may already have set Completed without the matching
+        // registration. Repair unchanged saves as well as new resource grants.
+        ResourceShareService.RepairColosseumRegistrations(PlayerData.instance);
     }
     private void ApplyProgress(string key, int value) {
+        if (GrimmFlames.IsKey(key)) { RefreshGrimmFlames(); return; }
         if (!Playable || !ProgressCatalog.CanShare(key, Shared, ShareCharms) || !fields.TryGetValue(key, out var field)) return;
+        if (ProgressCatalog.IsPickup(key) && !resources.Idle) return;
+        progressPickups.Prepare();
         var pd = PlayerData.instance;
         var current = field.GetValue(pd);
         if (field.FieldType == typeof(bool)) {
             if ((bool)current) return;
             pd.SetBool(key, value > 0);
+            if (ProgressCatalog.IsMapPurchase(key) && key != "hasQuill") pd.SetBool("hasMap", true);
             if (key == "hasDash") pd.SetBool("canDash", true);
             if (key == "hasWalljump") pd.SetBool("canWallJump", true);
             if (key == "hasSuperDash") pd.SetBool("canSuperDash", true);
             if (key.StartsWith("gotCharm_", StringComparison.Ordinal)) {
-                var count = Enumerable.Range(1, 40).Count(i => pd.GetBool("gotCharm_" + i));
+                pd.SetBool("hasCharm", true);
+                var count = ProgressCatalog.CharmCount(pd.GetBool, pd.GetInt("royalCharmState"));
                 pd.SetInt("charmsOwned", Math.Max(pd.GetInt("charmsOwned"), count));
             }
-        } else if ((int)current < value) {
-            pd.SetInt(key, value);
+        } else if ((int)current != ProgressCatalog.Combine(key, (int)current, value)) {
+            pd.SetInt(key, ProgressCatalog.Combine(key, (int)current, value));
+            if (key == "royalCharmState") pd.SetInt("charmsOwned", Math.Max(pd.GetInt("charmsOwned"),
+                ProgressCatalog.CharmCount(pd.GetBool, pd.GetInt("royalCharmState"))));
+        }
+        if (key == "royalCharmState") RefreshRoyalCharmCost();
+        if (key is "lurienDefeated" or "hegemolDefeated" or "monomonDefeated") RefreshGuardianCount();
+        if (ProgressCatalog.IsMapPurchase(key)) {
+            GameManager.instance.gameMap?.GetComponent<GameMap>()?.SetupMap();
         }
         sceneSaveChanges.ApplyPlayerDataSaveChange(key);
-        Notice("共享进度：" + key);
+        DreamVictoryProgress.Refresh(key);
+    }
+
+    private void RefreshRoyalCharmCost() {
+        var pd = PlayerData.instance;
+        if (!ShareCharms || pd.GetInt("royalCharmState") != 4 || pd.GetInt("charmCost_36") == 0) return;
+        // Native Void Heart acquisition also clears Kingsoul's notch cost.
+        // A ledger grant skips that cutscene. Reconcile unchanged state too,
+        // so saves affected by the old sync recover on the next progress tick.
+        // Equipment remains personal, including native Pantheon bindings.
+        pd.SetInt("charmCost_36", 0);
+        pd.CalculateNotchesUsed();
+        GameManager.instance.RefreshOvercharm();
+        PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
+        PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
+    }
+
+    private static string ProgressName(string key) {
+        if (GrimmFlames.IsKey(key)) return "格林火焰";
+        switch (key) {
+            case "hasDash": return "冲刺";
+            case "hasWalljump": return "螳螂爪";
+            case "hasSuperDash": return "水晶冲刺";
+            case "hasShadowDash": return "暗影冲刺";
+            case "hasAcidArmour": return "伊思玛的眼泪";
+            case "hasDoubleJump": return "帝王之翼";
+            case "hasDreamNail": return "梦之钉";
+            case "hasDreamGate": return "梦之门";
+            case "hasLantern": return "光蝇之灯";
+            case "hasTramPass": return "电车通行证";
+            case "hasKingsBrand": return "国王印记";
+            case "falseKnightDreamDefeated": return "失败冠军";
+            case "infectedKnightDreamDefeated": return "失落近亲";
+            case "mageLordDreamDefeated": return "灵魂暴君";
+            default: return key;
+        }
+    }
+
+    private void ShowSharedResource(ResourceSource source) {
+        resourceNotifications.Enqueue(source);
     }
 
     private IEnumerator ReloadCheckpoint(string session, uint round) {
@@ -604,6 +1095,7 @@ public sealed class CoopRuntime : MonoBehaviour {
         // stopping our coroutine. Its accepted arrival must still fade in
         // after disconnect; only post-arrival teammate relocation is cancelled.
         if (GameManager.instance == null || !GameManager.instance.IsInSceneTransition) { warpEntry = null; warpScene = null; }
+        DebugEvent("transitions-cancelled", DebugEventSeverity.Warning);
     }
 
     private void CancelBenchReturn() {
@@ -640,36 +1132,103 @@ public sealed class CoopRuntime : MonoBehaviour {
 
     private static bool TryWarpLanding(Vector2 target, string scene, out Vector2 landing) {
         var hero = HeroController.instance;
+        if (hero == null) { landing = default; return false; }
+        if (IsRadianceScene(scene)) {
+            // Radiance has moving platforms and an abyss whose colliders are
+            // not represented by the ordinary terrain raycast. Never place a
+            // player on an arbitrary prop or inside the abyss during a warp.
+            if (TryRadiancePlatformLanding(target, scene, hero, out landing)) return true;
+            // Before the platform phase the arena uses ordinary solid terrain.
+            // Keep the same supported, nearby terrain fallback used elsewhere.
+        }
         Physics2D.SyncTransforms();
-        var bounds = hero.GetComponent<Collider2D>().bounds;
-        var centerOffset = (Vector2)(bounds.center - hero.transform.position);
-        var size = (Vector2)bounds.size;
+        if (!TryWarpBody(hero, out var size, out var centerOffset)) { landing = default; return false; }
         // Peers do not collide with each other. Prefer the supported position
         // they already occupy, especially on a platform narrower than 1.5 units.
-        foreach (var dx in new[] { 0f, 1.5f, -1.5f, 3f, -3f }) {
-            var origin = new Vector2(target.x + dx, target.y + bounds.extents.y);
+        foreach (var dx in WarpSideOffsets(target, size, centerOffset, hero, scene)) {
+            var origin = new Vector2(target.x + dx + centerOffset.x, target.y + centerOffset.y + size.y * .5f + .1f);
             foreach (var hit in Physics2D.RaycastAll(origin, Vector2.down, size.y + 4, 1 << 8)) {
-                if (hit.collider.gameObject.scene.name != scene || hit.collider.isTrigger || hit.distance == 0 || hit.normal.y < .5f) continue;
-                var pos = new Vector2(origin.x, hit.point.y + bounds.extents.y - centerOffset.y + .05f);
+                if (!WarpRoomScene(hit.collider.gameObject.scene.name, scene) || hit.collider.isTrigger || hit.distance == 0 || hit.normal.y < .5f) continue;
+                var damage = hit.collider.GetComponent<DamageHero>();
+                if (damage != null && damage.enabled && damage.damageDealt > 0) continue;
+                var pos = new Vector2(target.x + dx, hit.point.y + size.y * .5f - centerOffset.y + .05f);
                 if (Math.Abs(pos.y - target.y) > 3) continue;
-                var blocked = Physics2D.OverlapBoxAll(pos + centerOffset, size * .98f, 0).Any(c => {
-                    if (c.gameObject.scene.name != scene) return false;
-                    if (!c.isTrigger && c.gameObject.layer == 8) return true;
-                    var damage = c.GetComponent<DamageHero>();
-                    return damage != null && damage.enabled && damage.damageDealt > 0;
-                });
-                if (blocked) continue;
+                if (WarpPlacementBlocked(pos, size, centerOffset, hero, scene)) continue;
                 landing = pos; return true;
             }
         }
         landing = default; return false;
     }
 
+    private static bool IsRadianceScene(string scene) => !string.IsNullOrEmpty(scene) &&
+        (scene == "Dream_Final_Boss" || scene.IndexOf("Radiance", StringComparison.OrdinalIgnoreCase) >= 0);
+
+    // Native additive boss gates and platforms share their parent's warp space.
+    private static bool WarpRoomScene(string candidate, string room) => candidate == room ||
+        candidate.StartsWith(room + "_boss", StringComparison.Ordinal);
+
+    private static bool IsRadiancePlatform(Collider2D collider, string scene) {
+        if (collider == null || !collider.enabled || !collider.gameObject.activeInHierarchy ||
+            collider.isTrigger || !WarpRoomScene(collider.gameObject.scene.name, scene)) return false;
+        // The platform is named "Radiant Plat" in the normal and Godhome
+        // scenes. Check parents as the solid collider is usually a child.
+        for (var current = collider.transform; current != null; current = current.parent) {
+            var name = current.gameObject.name;
+            if (name.IndexOf("Radiant Plat", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                name.IndexOf("Radiance Platform", StringComparison.OrdinalIgnoreCase) >= 0) return true;
+        }
+        return false;
+    }
+
+    private static bool TryRadiancePlatformLanding(Vector2 target, string scene, HeroController hero, out Vector2 landing) {
+        landing = default;
+        Physics2D.SyncTransforms();
+        if (!TryWarpBody(hero, out var size, out var centerOffset)) return false;
+        Collider2D best = null;
+        Vector2 bestPosition = default;
+        var bestScore = float.PositiveInfinity;
+        foreach (var collider in UnityEngine.Object.FindObjectsOfType<Collider2D>()) {
+            if (!IsRadiancePlatform(collider, scene)) continue;
+            var platform = collider.bounds;
+            var halfWidth = Math.Max(.05f, size.x * .5f);
+            var minX = platform.min.x + halfWidth + .03f;
+            var maxX = platform.max.x - halfWidth - .03f;
+            if (maxX < minX) { minX = maxX = platform.center.x; }
+            var x = Mathf.Clamp(target.x + centerOffset.x, minX, maxX) - centerOffset.x;
+            var pos = new Vector2(x, platform.max.y + size.y * .5f - centerOffset.y + .06f);
+            if (WarpPlacementBlocked(pos, size, centerOffset, hero, scene, collider)) continue;
+            var score = (pos - target).sqrMagnitude;
+            if (score >= bestScore) continue;
+            best = collider; bestPosition = pos; bestScore = score;
+        }
+        if (best == null) return false;
+        landing = bestPosition;
+        return true;
+    }
+
+    private static bool IsWarpBlocked(Collider2D collider, HeroController hero, string scene) {
+        if (collider == null || !WarpRoomScene(collider.gameObject.scene.name, scene)) return false;
+        if (hero != null && (collider.gameObject == hero.gameObject || collider.transform.IsChildOf(hero.transform))) return false;
+        var damage = collider.GetComponent<DamageHero>();
+        if (damage != null && damage.enabled && damage.damageDealt > 0) return true;
+        // A fallback beside a native entrance must clear its exit trigger;
+        // otherwise arrival immediately starts another room transition.
+        var exit = collider.GetComponentInParent<TransitionPoint>();
+        if (exit != null && exit.isActiveAndEnabled && !string.IsNullOrEmpty(exit.targetScene)) return true;
+        if (collider.isTrigger) return false;
+        // A target can be above a non-terrain collider (dream platform,
+        // local gate, boss prop, or a detached scene piece). The old check
+        // only rejected layer 8, allowing the hero to be placed inside such
+        // geometry. Use the game's actual layer collision matrix so remote
+        // player bodies and ignored decorative layers remain harmless.
+        return !Physics2D.GetIgnoreLayerCollision(hero.gameObject.layer, collider.gameObject.layer);
+    }
+
     private Vector2? FindWarpEntry(On.GameManager.orig_FindEntryPoint orig, GameManager self, string name, UnityEngine.SceneManagement.Scene scene) =>
         warpEntry.HasValue && name == "dreamGate" && scene.name == warpScene ? warpEntry : orig(self, name, scene);
 
     private void CompleteWarpEntry(On.HeroController.orig_EnterSceneDreamGate orig, HeroController self) {
-        var ownArrival = warpEntry.HasValue && GameManager.instance.sceneName == warpScene && GameManager.instance.entryGateName == "dreamGate";
+        var ownArrival = warpEntry.HasValue && UnitySceneManager.GetActiveScene().name == warpScene && GameManager.instance.entryGateName == "dreamGate";
         if (ownArrival) {
             // Preload entry-point queries can run before the new scene's physics
             // is ready. Resolve here, before native entry saves its hazard point.
@@ -693,7 +1252,12 @@ public sealed class CoopRuntime : MonoBehaviour {
         // scoped arrival while retaining native entry/hero-in-position events.
         if (!ownArrival) return;
         self.RegainControl(); self.StartAnimationControl();
-        GameCameras.instance.cameraController.PositionToHero(false);
+        if (IsRadianceScene(warpScene)) {
+            HeroBox.inactive = false;
+            var body = self.GetComponent<Rigidbody2D>();
+            if (body != null) { body.simulated = true; body.velocity = Vector2.zero; }
+        }
+        GameCameras.instance?.cameraController?.PositionToHero(false);
         GameManager.instance.FadeSceneIn();
         warpEntry = null; warpScene = null;
     }
@@ -703,13 +1267,25 @@ public sealed class CoopRuntime : MonoBehaviour {
             !Party.Finite(m.X) || !Party.Finite(m.Y)) yield break;
         var session = Session;
         changingScene = true;
+        DebugEvent("warp-start", DebugEventSeverity.Info);
+        Action rollback = null;
+        var nativeTransitionAccepted = false;
+        var hadBossContextGuard = BossTravel.HasTransientContext;
+        var crossRoom = UnitySceneManager.GetActiveScene().name != m.Scene;
+        Action commitWarpContext = () => { if (!hadBossContextGuard || crossRoom && nativeTransitionAccepted) BossTravel.CommitTransientContext(); };
         try {
-            var rollback = BossTravel.SaveState();
+            try { rollback = BossTravel.SaveState(); }
+            catch (Exception e) {
+                DebugEvent("warp-snapshot-failed", DebugEventSeverity.Critical, e.GetType().Name);
+                Notice("无法保存传送前的临时上下文，已取消传送");
+                yield break;
+            }
             var prepared = false;
             try { prepared = BossTravel.Prepare(m); }
             catch (Exception e) { UnityEngine.Debug.LogError("HollowConnect boss travel prepare: " + e); }
             if (!prepared) {
-                rollback(); Notice("无法恢复队友的神居上下文，请检查日志");
+                rollback(); rollback = null; commitWarpContext(); Notice("无法恢复队友的神居上下文，请检查日志");
+                DebugEvent("warp-context-rejected", DebugEventSeverity.Warning);
                 changingScene = false; teammateWarp = null; yield break;
             }
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene) {
@@ -719,9 +1295,11 @@ public sealed class CoopRuntime : MonoBehaviour {
                     EntryGateName = "dreamGate", EntryDelay = 0, Visualization = GameManager.SceneLoadVisualizations.Dream,
                     WaitForSceneTransitionCameraFade = true }); }
                 catch (Exception e) {
-                    rollback(); warpEntry = null; warpScene = null; changingScene = false; teammateWarp = null;
+                    rollback(); rollback = null; commitWarpContext(); DebugEvent("warp-native-transition-rejected", DebugEventSeverity.Critical, e.GetType().Name);
+                    warpEntry = null; warpScene = null; changingScene = false; teammateWarp = null;
                     Notice("传送加载被拒绝，已恢复原上下文"); UnityEngine.Debug.LogError(e); yield break;
                 }
+                nativeTransitionAccepted = true;
                 var deadline = Time.realtimeSinceStartup + 30;
                 var entered = false;
                 yield return null;
@@ -730,6 +1308,7 @@ public sealed class CoopRuntime : MonoBehaviour {
                      api.ClientManager is Hkmp.Game.Client.ClientManager manager && !manager.SceneSnapshotReady)) {
                     if (Time.realtimeSinceStartup >= deadline) {
                         Notice("传送等待已结束；场景加载完成后可再次传送");
+                        DebugEvent("warp-timeout", DebugEventSeverity.Warning);
                         yield break;
                     }
                     entered |= UnitySceneManager.GetActiveScene().name == m.Scene;
@@ -746,17 +1325,30 @@ public sealed class CoopRuntime : MonoBehaviour {
                     ? new Vector2(peer.State.X, peer.State.Y) : new Vector2(m.X, m.Y);
                 var found = TryWarpLanding(target, m.Scene, out var pos);
                 if (found) {
+                    if (crossRoom && IsRadianceScene(m.Scene)) FinishRadianceWarpPresentation(m.Scene);
                     var hero = HeroController.instance;
                     hero.SetHeroParent(null);
                     hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                     hero.transform.position = new Vector3(pos.x, pos.y, hero.transform.position.z);
                     Physics2D.SyncTransforms();
                     hero.SetHazardRespawn(hero.transform.position, hero.cState.facingRight); hero.ResetAirMoves();
-                    GameCameras.instance.cameraController.PositionToHero(false);
+                    if (IsRadianceScene(m.Scene)) RestoreRadianceWarpCamera(m.Scene);
+                    else GameCameras.instance?.cameraController?.PositionToHero(false);
+                    nativeTransitionAccepted = true;
                 }
+                DebugEvent(found ? "warp-complete" : "warp-no-safe-landing", found ? DebugEventSeverity.Info : DebugEventSeverity.Warning);
                 Notice(found ? "已到达队友身边" : "队友附近没有安全落点");
             }
         } finally {
+            // Once Unity accepted the native load, its destination context is
+            // needed by the scene even if the networking coroutine is stopped.
+            // Before acceptance, always restore every temporary BossTravel
+            // field so a failed request cannot poison a later save/scene load.
+            if (!nativeTransitionAccepted && rollback != null) {
+                try { rollback(); DebugEvent("warp-context-rolled-back", DebugEventSeverity.Info); }
+                catch (Exception e) { DebugEvent("warp-rollback-failed", DebugEventSeverity.Critical, e.GetType().Name); UnityEngine.Debug.LogError(e); }
+            }
+            commitWarpContext();
             changingScene = false; teammateWarp = null;
             if (GameManager.instance == null || !GameManager.instance.IsInSceneTransition) {
                 warpEntry = null; warpScene = null;
@@ -766,15 +1358,22 @@ public sealed class CoopRuntime : MonoBehaviour {
 
     internal void Notice(string message) { status = message; statusUntil = Time.unscaledTime + 5; }
     private void OnGUI() {
-        if (!Connected) return;
-        var style = new GUIStyle(GUI.skin.label) { font = font, fontSize = 16, alignment = TextAnchor.MiddleCenter };
+        var emergencyNotice = emergencyStatusVisible && Time.unscaledTime < statusUntil;
+        if (!Connected && !debugPanel && !emergencyNotice) return;
+        if (!debugPanel && !(Connected && Input.GetKey(CoopMod.Settings.DeathLeaderboardKey)) && Event.current.type != EventType.Repaint) return;
+        var style = overlayStyle ??= new GUIStyle(GUI.skin.label) { font = font, fontSize = 16, alignment = TextAnchor.MiddleCenter };
         style.normal.textColor = Color.white;
-        if (Time.unscaledTime < statusUntil) GUI.Label(new Rect(0, 70, Screen.width, 36), status, style);
-        if (Down || Resetting || Returning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 70),
-            Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点 · 队友继续战斗" :
-            "暗影形态 · 等待队友击破暗影，一血复活\n按 " + CoopMod.Settings.GiveUpKey + " 放弃救援，按原版死亡规则返回", style);
-        map.DrawOverlay(style);
-        if (Input.GetKey(CoopMod.Settings.DeathLeaderboardKey)) {
+        if ((Connected || emergencyNotice) && Time.unscaledTime < statusUntil) GUI.Label(new Rect(0, 70, Screen.width, 36), status, style);
+        if (Connected) {
+            if (Down || Resetting || Returning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 70),
+                Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点" :
+                Spectating ? "正在观战 · 等待本场结束\n按 " + CoopMod.Settings.GiveUpKey + " 返回自己的复活点" :
+                "暗影形态 · 等待队友击破暗影，一血复活\n按 " + CoopMod.Settings.GiveUpKey +
+                (SpectateAfterExhaustion ? " 放弃救援并转入观战" : " 放弃救援并返回自己的复活点"), style);
+            if (RescueLimit > 0 && Now < rescueCountUntil) GUI.Label(new Rect(0, Screen.height - 42, Screen.width, 32), RescueRemainingText, style);
+            map.DrawOverlay(style);
+        }
+        if (Connected && Input.GetKey(CoopMod.Settings.DeathLeaderboardKey)) {
             var width = Mathf.Min(350, Screen.width - 20);
             var height = Mathf.Min(430, Screen.height - 110);
             GUILayout.BeginArea(new Rect(Screen.width - width - 10, 100, width, height), GUI.skin.box);
@@ -785,22 +1384,81 @@ public sealed class CoopRuntime : MonoBehaviour {
                 GUILayout.Label(++rank + ". " + entry.Key + (entry.Key == localName ? "（你）" : "") + "   " + entry.Value + " 次", style);
             GUILayout.EndScrollView(); GUILayout.EndArea();
         }
+        DrawDebugPanel(style);
+    }
+
+    private void DrawDebugPanel(GUIStyle style) {
+        if (!debugPanel) return;
+        var snapshot = sampledDebugState ?? BuildDebugSnapshot();
+        var width = Mathf.Min(560, Screen.width - 20);
+        var height = Mathf.Min(680, Screen.height - 20);
+        GUILayout.BeginArea(new Rect(10, 10, width, height), GUI.skin.box);
+        GUILayout.Label("HollowConnect 诊断（只读；F9 开关）", style);
+        debugScroll = GUILayout.BeginScrollView(debugScroll, GUILayout.Height(height - 115));
+        GUILayout.Label("场景 " + snapshot.SceneName + " / GM " + snapshot.GameManagerScene + " / 入口 " + snapshot.EntryGateName, style);
+        GUILayout.Label("转换 " + snapshot.IsInSceneTransition + " · Finished " + snapshot.HasFinishedEnteringScene + " · Hero位置 " + snapshot.HeroInPosition, style);
+        GUILayout.Label("输入 " + snapshot.HeroAcceptingInput + " · 控制锁 " + snapshot.HeroControlRelinquished + " · HeroBox禁用 " + snapshot.HeroBoxInactive + " · 刚体 " + snapshot.BodySimulated, style);
+        GUILayout.Label("流程 changing=" + snapshot.ChangingScene + " down=" + snapshot.Down + " reset=" + snapshot.Resetting + " returning=" + snapshot.Returning, style);
+        GUILayout.Label("warp=" + snapshot.WarpScene + " entry=" + snapshot.WarpEntry + " retry=" + snapshot.RetryScene, style);
+        GUILayout.Label("复活点=" + snapshot.RespawnScene + " / " + snapshot.RespawnMarkerName + " type=" + snapshot.RespawnType, style);
+        GUILayout.Label("Boss sequence=" + snapshot.BossSequenceName + " in=" + snapshot.InBossSequence + " guard=" + snapshot.HasBossContextGuard + " gate=" + snapshot.BossReturnEntryGate, style);
+        GUILayout.Label("回执=" + snapshot.ResourceReceiptCount + " 共享进度=" + snapshot.SharedProgressCount + " peers=" + snapshot.PeerCount, style);
+        var risks = snapshot.RiskCodes();
+        GUILayout.Label(risks.Count == 0 ? "风险：未发现当前临时锁异常" : "风险：" + string.Join(", ", risks), style);
+        GUILayout.Label("事件（最近 " + debugEvents.Count + "/" + debugEvents.Capacity + "）", style);
+        foreach (var e in debugEvents.Snapshot().Reverse().Take(20))
+            GUILayout.Label(e.Sequence + " " + e.Severity + " " + e.Code + (e.Detail.Length == 0 ? "" : " · " + e.Detail), style);
+        GUILayout.EndScrollView();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("导出诊断")) ExportDebugReport();
+        if (!debugRecoveryArmed) {
+            if (GUILayout.Button("准备恢复临时状态")) debugRecoveryArmed = true;
+        } else {
+            if (GUILayout.Button("确认恢复（不改存档）")) { RecoverTransientState(); debugRecoveryArmed = false; }
+        }
+        if (GUILayout.Button("关闭")) { debugPanel = false; debugRecoveryArmed = false; }
+        GUILayout.EndHorizontal();
+        if (debugExportPath.Length != 0) GUILayout.Label("最近导出：" + debugExportPath, style);
+        GUILayout.EndArea();
     }
 
     private void OnDestroy() {
+        On.GameManager.BeginSceneTransitionRoutine -= TrackNativeTransition;
+        GameManager.SceneTransitionBegan -= TrackNativeLoader;
         teammateDream?.Dispose();
         BossTravel.Unregister();
-        CoopContext.CaptureBossContext = null; CoopContext.ApplyBossContext = null; CoopContext.BossTransitionReady = null;
+        CoopContext.CaptureBossContext = null; CoopContext.ApplyBossContext = null; CoopContext.CommitBossContext = null; CoopContext.RestoreBossContext = null; CoopContext.BossTransitionReady = null; CoopContext.AwaitBossSettlement = null; CoopContext.ApplyBossEntityComplete = null;
         CoopContext.LocalRescueDown = null;
+        CoopContext.LivingBossTarget = null;
+        CoopContext.FlexibleBossTargetingOn = null;
+        CoopContext.BossTargetSession = null;
+        CoopContext.ChooseBossTarget = null;
+        CoopContext.BossTargetObject = null;
+        CoopContext.AttackSourcePlayer = null;
+        CoopMod.ActiveRoomSettingLabel = null;
+        CoopMod.RoomRuleRevision++;
+        CoopContext.RemotePlayerOpacity = null; CoopContext.PlayerNameColor = null; CoopContext.BossHealthMultiplier = null;
+        CoopContext.BossDefeated = null;
+        CoopContext.BossEncounter = null; CoopContext.BossDamage = null;
+        UnregisterDamageRanking();
+        CoopContext.FinishRadianceIntro = null;
+        StopSpectating();
+        RestoreSpectatorPeers();
         CancelBenchReturn();
         CancelTransitions();
         shades?.Clear(); Unlock(); map?.Dispose();
         resources?.Dispose();
+        resourceNotifications.Clear();
+        progressPickups?.Dispose();
+        mapPurchases?.Dispose();
         On.HeroController.Die -= OnDie; On.CameraController.LateUpdate -= CameraUpdate; On.GameManager.FindEntryPoint -= FindWarpEntry;
         On.HeroController.TakeDamage -= TakeDamage; ModHooks.AfterTakeDamageHook -= AfterTakeDamage;
         On.HeroAudioController.PlaySound -= TrackHitSound;
         On.HeroController.EnterSceneDreamGate -= CompleteWarpEntry;
         ModHooks.SetPlayerBoolHook -= OnSetBool; ModHooks.SetPlayerIntHook -= OnSetInt;
         if (api != null) { api.ClientManager.ConnectEvent -= OnConnect; api.ClientManager.DisconnectEvent -= OnDisconnect; }
+        if (api != null && debugCommand != null) {
+            try { api.CommandManager.DeregisterCommand(debugCommand); } catch { }
+        }
     }
 }

@@ -20,7 +20,7 @@ internal class Focus : AnimationEffect {
 
         // Get the prefab object and instantiate it relative to the player
         var ownerDefaultTarget = chargeAudioPlay.Fsm.GetOwnerDefaultTarget(chargeAudioPlay.gameObject);
-        var newChargeAudioObject = Object.Instantiate(
+        var newChargeAudioObject = RemotePlayerVisuals.Instantiate(
             ownerDefaultTarget,
             playerEffects.transform
         );
@@ -44,7 +44,7 @@ internal class Focus : AnimationEffect {
                 var particleEmissionAction =
                     localSpellControl.GetAction<SetParticleEmissionRate>("Focus", dustIndex++);
                 var dustLObject = particleEmissionAction.gameObject.GameObject.Value;
-                dust = Object.Instantiate(
+                dust = RemotePlayerVisuals.Instantiate(
                     dustLObject,
                     playerEffects.transform
                 );
@@ -69,7 +69,7 @@ internal class Focus : AnimationEffect {
             var meshRendererAction = localSpellControl.GetFirstAction<SetMeshRenderer>("Focus");
             var linesAnimationObject = meshRendererAction.gameObject.GameObject.Value;
 
-            linesAnimation = Object.Instantiate(
+            linesAnimation = RemotePlayerVisuals.Instantiate(
                 linesAnimationObject,
                 playerEffects.transform
             );
@@ -96,7 +96,7 @@ internal class Focus : AnimationEffect {
                     var playAnimationAction = shellFsm.GetFirstAction<Tk2dPlayAnimation>("Shell Up");
 
                     var shellAnimationObject = playAnimationAction.gameObject.GameObject.Value;
-                    var shellAnimation = Object.Instantiate(
+                    var shellAnimation = RemotePlayerVisuals.Instantiate(
                         shellAnimationObject,
                         playerEffects.transform
                     );

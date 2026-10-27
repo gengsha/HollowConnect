@@ -32,7 +32,7 @@ internal class FocusBurst : DamageAnimationEffect {
         var burstAnimationObject = activateObjectAction.gameObject.GameObject.Value;
 
         // Instantiate it relative to the player object
-        var burstAnimation = Object.Instantiate(
+        var burstAnimation = RemotePlayerVisuals.Instantiate(
             burstAnimationObject,
             playerObject.transform
         );
@@ -68,7 +68,7 @@ internal class FocusBurst : DamageAnimationEffect {
         }
 
         // Spawn the correct variant at the player position with default rotation
-        var cloud = Object.Instantiate(
+        var cloud = RemotePlayerVisuals.Instantiate(
             objectVariant,
             playerEffects.transform.position,
             Quaternion.identity

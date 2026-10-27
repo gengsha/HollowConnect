@@ -86,6 +86,9 @@ internal sealed class CoverageFinalBossEndingChecks : IDisposable {
             Require(entity.FinalCorpse.Released && !entity.Object.Host.activeSelf && !entity.Object.Client.activeSelf &&
                 entity.Object.Client.GetComponents<PlayMakerFSM>().All(f => !f.enabled),
                 "only the corpse continues, with both live boss roots inactive and replica AI disabled");
+            Require(corpse.scene.GetRootGameObjects().Where(go => go.name == "Boss Control")
+                .SelectMany(go => go.GetComponents<PlayMakerFSM>()).Where(f => f.FsmName == "Battle Start")
+                .All(f => !f.enabled), "completed replica cannot replay the local battle entrance near its corpse");
         }
     }
     internal void CheckAfterAuthorityLeft() {

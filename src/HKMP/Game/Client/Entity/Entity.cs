@@ -25,6 +25,17 @@ namespace Hkmp.Game.Client.Entity;
 internal class Entity {
     private bool destroyed;
     internal static readonly HashSet<Entity> WaitingForEntrance=new();
+    internal bool EncounterSummonEvent(HutongGames.PlayMaker.Fsm fsm, string signal) =>
+        Type == EntityType.EncounterSummoner && _components.TryGetValue(EntityComponentType.EncounterSummon, out var component) &&
+        ((EncounterSummonComponent)component).NativeEvent(fsm, signal);
+    internal void RequestEncounterSummon() {
+        if (Type == EntityType.EncounterSummoner && _components.TryGetValue(EntityComponentType.EncounterSummon, out var component))
+            ((EncounterSummonComponent)component).RequestNativeWave();
+    }
+    internal void RequestBattleStart(HutongGames.PlayMaker.Fsm sender) {
+        if (_components.TryGetValue(EntityComponentType.EncounterSummon, out var component))
+            ((EncounterSummonComponent)component).RequestBattle(sender);
+    }
     internal bool OwnsHostObject;
     private float nextFsmSample;
     internal static event System.Action<Entity> LifetimeEnded;
@@ -71,6 +82,16 @@ internal class Entity {
     /// The type of the entity.
     /// </summary>
     public EntityType Type { get; }
+    internal bool BossTargetScope { get; set; }
+    internal FsmString BossTargetReceipt;
+    internal HutongGames.PlayMaker.Fsm BossTargetControl;
+    internal uint BossTargetVisit;
+    internal bool InheritedBossTarget;
+    internal string LastBossTargetReceipt;
+    internal BossTargetCommitment BossTargetChoice;
+    internal bool IsNativeAuthority => !destroyed && _isSceneHostDetermined && !_isControlled;
+    internal BossRoarLock RoarLock { get; private set; }
+    private BossIntroCamera introCamera;
 
     /// <summary>
     /// Host-client pair for the game objects.
@@ -194,6 +215,8 @@ internal class Entity {
         GameObject hostObject,
         GameObject clientObject = null,
         bool preserveHostActivation = false,
+        bool bossTargetScope = false,
+        Entity bossTargetSource = null,
         params EntityComponentType[] types
     ) {
         _netClient = netClient;
@@ -201,6 +224,7 @@ internal class Entity {
         SourceScene = hostObject.scene.name;
 
         Type = type;
+        BossTargetScope = bossTargetScope;
 
         _isControlled = true;
         WaitingForEntrance.Add(this);
@@ -304,6 +328,11 @@ internal class Entity {
             Client = Object.Client.GetComponents<PlayMakerFSM>().OrderBy(f => f.FsmName, StringComparer.Ordinal).ToList()
         };
         PrepareArenaMusic();
+        if (Type == EntityType.Grimm || Type == EntityType.TheCollector)
+            RoarLock = new BossRoarLock(this, _fsms.Host, _fsms.Client, PublishFsmBool);
+        if (Type == EntityType.FalseKnight && SourceScene == "GG_Failed_Champion")
+            introCamera = new BossIntroCamera(this, _fsms.Host, _fsms.Client, PublishFsmBool);
+        BossTargeting.Prepare(this, _fsms.Host.ToArray(), _fsms.Client.ToArray(), bossTargetSource);
 
         _hookedActions = new Dictionary<FsmStateAction, HookedEntityAction>();
         _hookedTypes = new HashSet<Type>();
@@ -493,6 +522,10 @@ internal class Entity {
 
     private void OnHostStateChanged(FsmState state) {
         if (destroyed || _isControlled || !_isSceneHostDetermined) return;
+        BossTargeting.StateEntered(this, state);
+        RoarLock?.StateEntered(state);
+        introCamera?.StateEntered(state);
+        BossDefeatSignals.State(Type, Id, state);
         var index = _fsms.Host.FindIndex(f => f != null && ReferenceEquals(f.Fsm, state.Fsm));
         if (index < 0 || index >= byte.MaxValue) return;
         // State entry precedes native OnEnter side effects (including activating
@@ -534,7 +567,8 @@ internal class Entity {
                 _netClient,
                 Id,
                 Object,
-                healthManager
+                healthManager,
+                Type
             );
             _components[EntityComponentType.Death] = hmComponent;
             _components[EntityComponentType.Invincibility] = hmComponent;
@@ -646,6 +680,9 @@ internal class Entity {
             
             addedComponentsString += $" {type}";
         }
+        var battleStart = LocalBattleStart.Find(Object.Host, Type);
+        if (battleStart != null && !_components.ContainsKey(EntityComponentType.EncounterSummon))
+            _components[EntityComponentType.EncounterSummon] = new EncounterSummonComponent(_netClient, Id, Object, battleStart);
         // Every native rigidbody needs these values to continue its current
         // attack on takeover, even when the historical registry omitted them.
         var nativeBody = Object.Host.GetComponent<Rigidbody2D>();
@@ -779,6 +816,7 @@ internal class Entity {
         // Only if the GetNetworkDataFromAction method returns true do we add the entity data
         // for sending
         if (EntityFsmActions.GetNetworkDataFromAction(networkData, self)) {
+            RoarLock?.ActionEntered(self);
             _netClient.UpdateManager.AddEntityData(Id, networkData);
         }
     }
@@ -788,6 +826,8 @@ internal class Entity {
     /// </summary>
     [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
     private void OnUpdate() {
+        RoarLock?.Tick();
+        introCamera?.Tick();
         if (!_isControlled && _isSceneHostDetermined && entranceEvents.Count!=0) ReplayEntranceEvents();
         if (!_isControlled && Object.Host == null && (Id & 0x8000000000000000UL) != 0) {
             LifetimeEnded?.Invoke(this); return;
@@ -1652,6 +1692,10 @@ internal class Entity {
                     // for the local corpse continuation.  Keep this narrow:
                     // all other FSM state replication remains unchanged.
                     FinalCorpse?.ObservePhase(hostFsm.FsmName, stateName);
+                    BossDefeatSignals.ApplyLocalDefeatRecord(Type, SourceScene, states[data.CurrentState]);
+                    BossDefeatSignals.ApplyFinalCinematicRecord(Type, SourceScene, states[data.CurrentState]);
+                    BossGateCompletion.Observe(Type, SourceScene, states[data.CurrentState]);
+                    LocalBattleCompletion.ObserveScriptedCompletion(this, states[data.CurrentState]);
                 }
             }
 
@@ -1749,6 +1793,18 @@ internal class Entity {
         }
 
         ApplyArenaMusic();
+        RoarLock?.Tick();
+        introCamera?.Tick();
+    }
+
+    private void PublishFsmBool(int fsmIndex, FsmBool value) {
+        var index = Array.IndexOf(_fsms.Host[fsmIndex].FsmVariables.BoolVariables, value);
+        if (index < 0 || index >= byte.MaxValue) return;
+        _fsmSnapshots[fsmIndex].Bools[index] = value.Value;
+        var data = new EntityHostFsmData();
+        data.Types.Add(EntityHostFsmData.Type.Bools);
+        data.Bools[(byte)index] = value.Value;
+        _netClient.UpdateManager.AddEntityHostFsmData(Id, (byte)fsmIndex, data);
     }
 
     private void PrepareArenaMusic() {
@@ -1840,14 +1896,19 @@ internal class Entity {
     /// <summary>
     /// Destroys the entity.
     /// </summary>
-    internal void RestoreLocalSimulation() {
+    internal void RestoreLocalSimulation(bool unmatched = false) {
         if (destroyed || OwnsHostObject || Object.Host == null) return;
-        if (!_isSceneHostDetermined) InitializeHost();
+        // An unmatched personal boss has no authority snapshot. Its inactive
+        // replica is only a staging object, so MakeHost would copy that false
+        // activation back over the native encounter and leave it asleep.
+        // Retain the native activation (including deferred entrance actions).
+        if (unmatched || !_isSceneHostDetermined) InitializeHost();
         else if (_isControlled) MakeHost();
     }
     public void Destroy() {
         if (destroyed) return;
         destroyed = true;
+        RoarLock?.Release();
         WaitingForEntrance.Remove(this);
         entranceEvents.Clear();
         _pendingReferences.Clear();

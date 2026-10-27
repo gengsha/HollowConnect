@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-25",
+  "change": "Always confirm a selected join save with the native menu; cancel keeps connection and returns to save selection.",
+  "build": "scripts/Build.ps1 -Target Smoke",
+  "scope": "Three related dual-client cases; no protocol or boss lifecycle changes.",
+  "runs": [
+    {
+      "case": "join",
+      "run": "join-confirm-20261025-c-join",
+      "runnerPid": 5472,
+      "startedUtc": "2026-10-25T13:06:16.7537041Z",
+      "endedUtc": "2026-10-25T13:08:59.544619Z",
+      "status": "passed",
+      "strictLogs": true,
+      "error": "",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9AD765A28E8450128CF7DB00212E557EFA83A26C4750B75D3A60BF746634C6F2"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "58100431537B35D74E5C51811A046A417DF1852E3B12AB7F2DE056A2FC0A0711"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+        }
+      ],
+      "probeSha256": "6B5B6AEA5DBB166A5B4CBF8021111A39CFFDF4E2DD38AB3FC35C64E78605938F",
+      "resultDirectory": "E:\\projects\\hollowConnect\\.test-results\\join-confirm-20261025-c-join"
+    },
+    {
+      "case": "resources-new",
+      "run": "join-confirm-20261025-c-resources-new",
+      "runnerPid": 5472,
+      "startedUtc": "2026-10-25T13:08:59.5702341Z",
+      "endedUtc": "2026-10-25T13:10:09.1913559Z",
+      "status": "passed",
+      "strictLogs": true,
+      "error": "",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9AD765A28E8450128CF7DB00212E557EFA83A26C4750B75D3A60BF746634C6F2"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "58100431537B35D74E5C51811A046A417DF1852E3B12AB7F2DE056A2FC0A0711"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+        }
+      ],
+      "probeSha256": "6B5B6AEA5DBB166A5B4CBF8021111A39CFFDF4E2DD38AB3FC35C64E78605938F",
+      "resultDirectory": "E:\\projects\\hollowConnect\\.test-results\\join-confirm-20261025-c-resources-new"
+    },
+    {
+      "case": "resources-stale",
+      "run": "join-confirm-20261025-c-resources-stale",
+      "runnerPid": 5472,
+      "startedUtc": "2026-10-25T13:10:09.1962766Z",
+      "endedUtc": "2026-10-25T13:11:19.2548852Z",
+      "status": "passed",
+      "strictLogs": true,
+      "error": "",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9AD765A28E8450128CF7DB00212E557EFA83A26C4750B75D3A60BF746634C6F2"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "58100431537B35D74E5C51811A046A417DF1852E3B12AB7F2DE056A2FC0A0711"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+        }
+      ],
+      "probeSha256": "6B5B6AEA5DBB166A5B4CBF8021111A39CFFDF4E2DD38AB3FC35C64E78605938F",
+      "resultDirectory": "E:\\projects\\hollowConnect\\.test-results\\join-confirm-20261025-c-resources-stale"
+    }
+  ],
+  "environment": {
+    "sources": [
+      {
+        "path": "src/HKMP/Ui/SaveJoinConfirmation.cs",
+        "sha256": "C8E3803F2D3E564E3F6448C7D39C937BDFBBA587C8DF49D4B08E9FD294590045"
+      },
+      {
+        "path": "src/HKMP/Ui/UiManager.cs",
+        "sha256": "D6FA5EB0D8B0FBFBCEB538ACE959020F70DCA804DB50CB7D98397486959B0F21"
+      },
+      {
+        "path": "src/HKMP/Game/Client/ClientManager.cs",
+        "sha256": "58700E957EB0C301D15A73181C8395E79608DEE41C621D87F088443AE7CBAC02"
+      },
+      {
+        "path": "tests/Smoke/SaveJoinConfirmationChecks.cs",
+        "sha256": "34326D6E6F4EBEF38931394CCC43119B791B2605849E7AA42C22B4B799A538E7"
+      },
+      {
+        "path": "tests/Smoke/JoinProbe.cs",
+        "sha256": "2E06C6D9F905934DB7B0B4492BA90AD4AD17C17FA4BF1B9E82BD759AEFF3A480"
+      },
+      {
+        "path": "tests/Smoke/MenuResourceChecks.cs",
+        "sha256": "F11AD6B73FDD67DA59FC6A02903692BE19B6A22C9D376DD186705E0604CB818F"
+      },
+      {
+        "path": "tests/Smoke/Probe.cs",
+        "sha256": "D095697B9F483340C729C6735B46C80FEA23C195946150B4123A6B0C93B5AC4E"
+      }
+    ],
+    "dependencies": [
+      {
+        "path": ".test-results\\game-host\\hollow_knight.exe",
+        "sha256": "4D3D0F55AFBB249170241D0DC6FAF9A5DCF3E1ED427A282AE990BB6E4E3A6913"
+      },
+      {
+        "path": ".test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      {
+        "path": ".test-results\\game-host\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+        "sha256": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+      },
+      {
+        "path": ".test-results\\game-guest\\hollow_knight.exe",
+        "sha256": "4D3D0F55AFBB249170241D0DC6FAF9A5DCF3E1ED427A282AE990BB6E4E3A6913"
+      },
+      {
+        "path": ".test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      {
+        "path": ".test-results\\game-guest\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+        "sha256": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+      }
+    ],
+    "isolation": "Existing game-host and game-guest; ProbeMod intercepts SaveGame and SaveGlobalSettings; metadata shown by native profile menu is not a loaded player save."
+  },
+  "screenshot": ".test-results/join-confirm-20261025-c-join/join-save-confirmation.png",
+  "developmentEvidence": {
+    "a": "Stopped after visual QA found underlying native save menu still visible.",
+    "b": "All three passed before the final pending-dialog disconnect cleanup; superseded production hashes."
+  },
+  "privateSaveWrites": "Suppressed by ProbeMod, including mod global preferences."
+}

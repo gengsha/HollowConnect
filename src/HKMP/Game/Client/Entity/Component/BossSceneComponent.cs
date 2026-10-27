@@ -1,6 +1,8 @@
+using System;
 using Hkmp.Networking.Client;
 using Hkmp.Networking.Packet.Data;
 using UnityEngine;
+using Logger = Hkmp.Logging.Logger;
 
 namespace Hkmp.Game.Client.Entity.Component;
 
@@ -20,12 +22,25 @@ internal sealed class BossSceneComponent : EntityComponent {
         if (self != controller || IsControlled || sent || CoopContext.Resetting) return;
         sent = true;
         var data = new EntityNetworkData { Type = EntityComponentType.BossSceneComplete };
-        data.Packet.Write(true); SendData(data);
+        data.Packet.Write(true);
+        try { SendData(data); }
+        catch (Exception e) {
+            Logger.Error($"Boss scene completion send failed scene={controller?.gameObject.scene.name}: {e}");
+        }
     }
     public override void InitializeHost() { }
     public override void Update(EntityNetworkData data, bool snapshot) {
         if (!IsControlled || controller == null || !data.Packet.ReadBool()) return;
-        controller.EndBossScene(); // Native endedScene guard makes replays idempotent.
+        try {
+            // The room synchronizer owns the completion context and sequence
+            // index. Use its guarded fallback when available; the native call
+            // remains the last resort when no synchronizer is registered.
+            if (CoopContext.ApplyBossEntityComplete != null) CoopContext.ApplyBossEntityComplete();
+            else controller.EndBossScene(); // Native endedScene guard makes replays idempotent.
+        }
+        catch (Exception e) {
+            Logger.Error($"Boss scene replica completion failed scene={controller?.gameObject.scene.name}: {e}");
+        }
     }
     public override void Destroy() => On.BossSceneController.EndBossScene -= End;
 }

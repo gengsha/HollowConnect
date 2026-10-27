@@ -23,6 +23,7 @@ internal class EntitySpawnDetails {
     public GameObject GameObject { get; init; }
     public GameObject Source { get; init; }
     public GameObject Prefab { get; init; }
+    internal string AttackTargetReceipt { get; init; }
 }
 
 /// <summary>

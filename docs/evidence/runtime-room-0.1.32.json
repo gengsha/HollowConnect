@@ -1,0 +1,1725 @@
+{
+  "version": "0.1.32",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.1.32-l5",
+  "releaseReady": false,
+  "retestOmitted": false,
+  "createdAtUtc": "2026-10-22T17:09:42.9896988Z",
+  "scope": "Final versioned production binaries: 260 core checks, 12 room lifecycle cases and 25 directly affected specialties. Keep existing playtest channel and historical unresolved findings.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+    }
+  ],
+  "gameDependencies": [
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "core": {
+    "passed": 260,
+    "failed": 0,
+    "log": ".analysis/release-0.1.32-20261022/core.log",
+    "sha256": "9808150F8FB3F16BC75313CA241F38362D95CC40F8AA6D13117F94E39C5D017D"
+  },
+  "runs": [
+    {
+      "name": "release-032-final-native-host-013-a",
+      "case": "final-native-host-013",
+      "group": "room",
+      "mode": "pantheon",
+      "options": {
+        "HOLLOWCONNECT_CAMERA_RING": "1",
+        "HOLLOWCONNECT_NATIVE_ENTRANCE": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:35:49.2563408Z",
+      "ended": "2026-10-22T16:43:10.2773686Z",
+      "minutes": 7.35,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-native-host-013-a/host.log",
+          "sha256": "E3F829982495247E576C4E5231836446634282B0A06CF77FD4BBEB39A054664C"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-native-host-013-a/guest.log",
+          "sha256": "063F8EBC63A476B66BFE202FCCAFABC486468BBF5CA2341E845855429696838F"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-native-guest-013-a",
+      "case": "final-native-guest-013",
+      "group": "room",
+      "mode": "pantheon",
+      "options": {
+        "HOLLOWCONNECT_CAMERA_RING": "1",
+        "HOLLOWCONNECT_NATIVE_ENTRANCE": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:43:10.2954627Z",
+      "ended": "2026-10-22T16:50:26.5500229Z",
+      "minutes": 7.27,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-native-guest-013-a/host.log",
+          "sha256": "1B9DBE84E76C3ABAED4DA71BC43ED67B28E255B57182CD8B7DD411E44A1E8F36"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-native-guest-013-a/guest.log",
+          "sha256": "CAA877E1B8BAB21F9A2E2DC1BDB52D19617C5D4338672C6E3806DC47E07032A1"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-lifecycle-host-013-a",
+      "case": "final-lifecycle-host-013",
+      "group": "room",
+      "mode": "pantheon",
+      "options": {
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:50:26.5677584Z",
+      "ended": "2026-10-22T16:55:11.5405105Z",
+      "minutes": 4.75,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-lifecycle-host-013-a/host.log",
+          "sha256": "B47D70BE70A8BDB60AE597880621457800DB0D9BD3EC6454D344846CFB7BD8CD"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-lifecycle-host-013-a/guest.log",
+          "sha256": "37E541FD849C94736A47438768A4462C5EA0A9D40B28915CC66489884D3CAAC5"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-lifecycle-guest-013-a",
+      "case": "final-lifecycle-guest-013",
+      "group": "room",
+      "mode": "pantheon",
+      "options": {
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:55:11.5586562Z",
+      "ended": "2026-10-22T17:00:00.852577Z",
+      "minutes": 4.82,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-lifecycle-guest-013-a/host.log",
+          "sha256": "A0DB3EB0027FEE0273EBB62242792ED351FAEDAB12CC3302A9084E1033BFB192"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-lifecycle-guest-013-a/guest.log",
+          "sha256": "72BBC4C22D7785C75493EC568A9D2D26A4ECEC45EE4E33F2D325E23F9391E418"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-boss-013-a",
+      "case": "final-boss-013",
+      "group": "room",
+      "mode": "boss",
+      "options": {},
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:00:00.8719789Z",
+      "ended": "2026-10-22T17:00:46.0555968Z",
+      "minutes": 0.75,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-boss-013-a/host.log",
+          "sha256": "038F6B673A9F8CF61DA433B8CABC41FCB9F58982E56FC0272BCEB70A3830C51C"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-boss-013-a/guest.log",
+          "sha256": "E15E20326224E8F0E8C282EBE93094307FD88DF75ACC93AF219C9702A96FE068"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-boss-late-013-a",
+      "case": "final-boss-late-013",
+      "group": "room",
+      "mode": "boss",
+      "options": {
+        "HOLLOWCONNECT_SMOKE_BOSS_LATE": "1",
+        "HOLLOWCONNECT_SMOKE_HANDOFF_DELAY": "2.5"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:00:46.0776297Z",
+      "ended": "2026-10-22T17:01:38.0930413Z",
+      "minutes": 0.87,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-boss-late-013-a/host.log",
+          "sha256": "C847AA8DB5714490FC1B205FB0D403CDCA28CD4F6D9F596866E9E3322F33F3CC"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-boss-late-013-a/guest.log",
+          "sha256": "35DD82C15C4CF4B4667393856C42C41D8CA30967B2BDC26E91222900AAD4C11A"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-grimm-host-013-a",
+      "case": "final-grimm-host-013",
+      "group": "room",
+      "mode": "grimm-motion",
+      "options": {
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "host",
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm",
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:01:38.1172147Z",
+      "ended": "2026-10-22T17:03:14.9645272Z",
+      "minutes": 1.61,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-grimm-host-013-a/host.log",
+          "sha256": "67635F55FD1D00C2A3CCA15A38D429E17CFD80168F0CF73EE8C1A8A3A2D8A588"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-grimm-host-013-a/guest.log",
+          "sha256": "947B1813FBBFEF51F60FC055D74268B5174433E84B7176B668FA3E3F7A095C91"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-grimm-guest-013-a",
+      "case": "final-grimm-guest-013",
+      "group": "room",
+      "mode": "grimm-motion",
+      "options": {
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "guest",
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm",
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:03:14.9818452Z",
+      "ended": "2026-10-22T17:04:51.5474506Z",
+      "minutes": 1.61,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-grimm-guest-013-a/host.log",
+          "sha256": "03A49415D3153396E7FB50D858B9A3A933D140EB891FA173B6E794C154EF38E8"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-grimm-guest-013-a/guest.log",
+          "sha256": "A17C9F1B4D65C7518C75BD968E6E42FB4AE9548FBC50641A82FDEC8585A45CB2"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-rescue-013-a",
+      "case": "final-rescue-013",
+      "group": "room",
+      "mode": "rescue",
+      "options": {},
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:04:51.56522Z",
+      "ended": "2026-10-22T17:05:37.0700613Z",
+      "minutes": 0.76,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-rescue-013-a/host.log",
+          "sha256": "6C350BC42EAF38D8B5EFB903D5C93128B61F5562997B1EC0BF305AF9D778F687"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-rescue-013-a/guest.log",
+          "sha256": "7E449C879102D5FE5E1668CC5CBDD98610C07044BDAB2BFA0006039FB41480BE"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-death-story-013-a",
+      "case": "final-death-story-013",
+      "group": "room",
+      "mode": "death",
+      "options": {},
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:05:37.0911152Z",
+      "ended": "2026-10-22T17:06:32.5583438Z",
+      "minutes": 0.92,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-death-story-013-a/host.log",
+          "sha256": "60B6FB684AEFB601E43119399480F2D89954016A9765D60FB625495D33588DF3"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-death-story-013-a/guest.log",
+          "sha256": "069C407A571B2EF3BD975B6806BA0F0E9FA20A4B710F6CCDAD0D8A221AB87416"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-full-013-a",
+      "case": "final-full-013",
+      "group": "room",
+      "mode": "full",
+      "options": {},
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:06:32.5756057Z",
+      "ended": "2026-10-22T17:07:54.9300227Z",
+      "minutes": 1.37,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-full-013-a/host.log",
+          "sha256": "79EAB13829738423F85E47A3BFDADD540CAA10042168D28F32CA78E4ECA65627"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-full-013-a/guest.log",
+          "sha256": "D30FAE329E2E59D9D727B64E27DB093760CAED0F47C5F2B56C0495BCCC5A9A31"
+        }
+      ]
+    },
+    {
+      "name": "release-032-final-join-013-a",
+      "case": "final-join-013",
+      "group": "room",
+      "mode": "join",
+      "options": {},
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T17:07:54.9473015Z",
+      "ended": "2026-10-22T17:09:18.1262269Z",
+      "minutes": 1.39,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-final-join-013-a/host.log",
+          "sha256": "005A4CDE918D5A013A6EDA174C58D9D019ACAB4D3CC4E870D03F90690F2B15E0"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-final-join-013-a/guest.log",
+          "sha256": "231B5072BFDB38616DF772491B714395200F90A6C1CE728714F56B7B00D722E8"
+        }
+      ]
+    }
+  ],
+  "specialtyRuns": [
+    {
+      "name": "release-032-menu-a",
+      "case": "menu",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_MENU_POINTER_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:04:45.5465639Z",
+      "ended": "2026-10-22T16:05:12.4768708Z",
+      "minutes": 0.45,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "3B99F971EC2F2BC148769F40F297800ED40251FFA6473292F6A24ABA184C7DC4",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-menu-a/host.log",
+          "sha256": "5CE9BFADCF87A6B13A6A6396DD852E2E94A1B81B996BC540313A3C59C9DD1AC1"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-menu-a/guest.log",
+          "sha256": "03CAE82C54099AD15A57D10D4085FED3087C57F2C2340CFDE533F4AFA7B1D32D"
+        }
+      ]
+    },
+    {
+      "name": "release-032-collector-direct-a",
+      "case": "collector-direct",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_COLLECTOR_GATE_CHECK": "inspect"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:05:12.5007819Z",
+      "ended": "2026-10-22T16:06:22.1773729Z",
+      "minutes": 1.16,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "3B99F971EC2F2BC148769F40F297800ED40251FFA6473292F6A24ABA184C7DC4",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-collector-direct-a/host.log",
+          "sha256": "1432EEC0946780A95739D974A627A6C4F4AF4B02637A784B738FB9516EAB3AC9"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-collector-direct-a/guest.log",
+          "sha256": "7D292A27BBC3B8C3968FBB2653FA5AE5E7679F73DE7063AFF6DF360E3785931F"
+        }
+      ]
+    },
+    {
+      "name": "release-032-encounter-boundary-a",
+      "case": "encounter-boundary",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "boundary",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "host"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:06:22.197821Z",
+      "ended": "2026-10-22T16:07:04.0245115Z",
+      "minutes": 0.7,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "3B99F971EC2F2BC148769F40F297800ED40251FFA6473292F6A24ABA184C7DC4",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-boundary-a/host.log",
+          "sha256": "24CE86A038312F10919C7D016067D0A839957C017D1D440651FE73832C2C6125"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-boundary-a/guest.log",
+          "sha256": "8D85535870B923C85E2607B80708C3E8453C2C3BB8C5B3E53342B205A8A1C61F"
+        }
+      ]
+    },
+    {
+      "name": "release-032-encounter-late-host-a",
+      "case": "encounter-late-host",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "late",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "host"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:07:04.0426062Z",
+      "ended": "2026-10-22T16:07:45.3444284Z",
+      "minutes": 0.69,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "3B99F971EC2F2BC148769F40F297800ED40251FFA6473292F6A24ABA184C7DC4",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-late-host-a/host.log",
+          "sha256": "25E3B96A40D19AD19D58508494F1ABCDAF12490BBB41F65D12BA00ED426941EF"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-late-host-a/guest.log",
+          "sha256": "A32E10EE695D3F8351D02F2FDFEBA9E87D1BF394023784A4C065C8009203F3B6"
+        }
+      ]
+    },
+    {
+      "name": "release-032-encounter-outside-guest-a",
+      "case": "encounter-outside-guest",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "outside",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "guest"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:07:45.3675569Z",
+      "ended": "2026-10-22T16:08:26.2929913Z",
+      "minutes": 0.68,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "3B99F971EC2F2BC148769F40F297800ED40251FFA6473292F6A24ABA184C7DC4",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-outside-guest-a/host.log",
+          "sha256": "7464E1BB9443A07A8958C4557AE1BEC28BE14354CF556DDE34ECCD5E9CA20DB5"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-outside-guest-a/guest.log",
+          "sha256": "97A1D2A3F350EAE9647928249F969CD5FCB0975EE64C53CEB44BFE5C281D4B1E"
+        }
+      ]
+    },
+    {
+      "name": "release-032-encounter-partial-guest-a",
+      "case": "encounter-partial-guest",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "partial",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "guest"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:08:26.3157552Z",
+      "ended": "2026-10-22T16:09:07.6294944Z",
+      "minutes": 0.69,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "3B99F971EC2F2BC148769F40F297800ED40251FFA6473292F6A24ABA184C7DC4",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-partial-guest-a/host.log",
+          "sha256": "1B2ACA1C81230EC5540A8EC968234888C6CCBF4957A1A3B5A0BF094F6253CD1A"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-encounter-partial-guest-a/guest.log",
+          "sha256": "C14431ABC4C1042D5AC6CD7C7EB4F74AF58DF0921FE87CCCD1906C299967E215"
+        }
+      ]
+    },
+    {
+      "name": "release-032-nosk-direct-b",
+      "case": "nosk-direct",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_NOSK_STALL_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:13:58.8679159Z",
+      "ended": "2026-10-22T16:15:06.707239Z",
+      "minutes": 1.13,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-nosk-direct-b/host.log",
+          "sha256": "DF42FDED9944BF38719A7ED26C6D3C519CEB7AF42A153A5FBDF335FB04EEBE03"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-nosk-direct-b/guest.log",
+          "sha256": "09D5BC45A89E5024DB94F84191421139211DA628651ABCF6FBBBC48A2D41AF38"
+        }
+      ]
+    },
+    {
+      "name": "release-032-map-exit-direct-a",
+      "case": "map-exit-direct",
+      "group": "specialty",
+      "mode": "progress",
+      "options": {
+        "HOLLOWCONNECT_MAP_EXIT_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:15:43.9140512Z",
+      "ended": "2026-10-22T16:16:21.630621Z",
+      "minutes": 0.63,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-map-exit-direct-a/host.log",
+          "sha256": "2A4D04AEF83D93BE814137FBC10952C754D83F1ECE0F5A81B6F72124A4AD1932"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-map-exit-direct-a/guest.log",
+          "sha256": "7FCCFB57376DDF490EB243C854EF1C4CE3BFFA4F165007CF03A845088C73BB40"
+        }
+      ]
+    },
+    {
+      "name": "release-032-stag-nest-direct-a",
+      "case": "stag-nest-direct",
+      "group": "specialty",
+      "mode": "progress",
+      "options": {
+        "HOLLOWCONNECT_STAG_NEST_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:16:21.6508575Z",
+      "ended": "2026-10-22T16:16:51.6255649Z",
+      "minutes": 0.5,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-stag-nest-direct-a/host.log",
+          "sha256": "20C5F3C4D034917F3DB17FD14C4CB2FC499D0858DA7DFA53402AE2C11128834C"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-stag-nest-direct-a/guest.log",
+          "sha256": "6285A818D72256C361C1A3AEFDA999A93DDADF5BD65A1463E1BE59F73985CA0B"
+        }
+      ]
+    },
+    {
+      "name": "release-032-related-boss-direct-a",
+      "case": "related-boss-direct",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_RELATED_BOSS_SCENE_CHECK": "1"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:16:51.6448547Z",
+      "ended": "2026-10-22T16:17:44.895531Z",
+      "minutes": 0.89,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-related-boss-direct-a/host.log",
+          "sha256": "472FC44054BB2DE5B3644A1561E5446B8DFA1C6A62B51E65B374441E04C52C58"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-related-boss-direct-a/guest.log",
+          "sha256": "DBD58F7CF082CA17424A86B5EF7879D0413D356D2C774F2A8CD1491DEA057209"
+        }
+      ]
+    },
+    {
+      "name": "release-032-rescue-host-a",
+      "case": "rescue-host",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_AUTHORITY": "host",
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_CHECK": "exhaustion"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:17:44.9149085Z",
+      "ended": "2026-10-22T16:18:53.65388Z",
+      "minutes": 1.15,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-host-a/host.log",
+          "sha256": "9138355A8E4A843332357B9D9D0006422E68D4B59ADC1A7966B2E6929DBBB4D2"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-host-a/guest.log",
+          "sha256": "709BD1A97CB5FCF6508C4741FC3FC4422EBA0645DB23A79466520160F303FBFA"
+        }
+      ]
+    },
+    {
+      "name": "release-032-rescue-guest-a",
+      "case": "rescue-guest",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_AUTHORITY": "guest",
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_CHECK": "exhaustion"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:18:53.6732796Z",
+      "ended": "2026-10-22T16:20:02.4900997Z",
+      "minutes": 1.15,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-guest-a/host.log",
+          "sha256": "4FA867B96792B530651E585C259F9C0765B462F94AFA6B1E87DAF1FFA79200F0"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-guest-a/guest.log",
+          "sha256": "FE2E4B0DFD60863DC467489D4EBF23FADAF2977398890CE6B2179608C6CDD3D6"
+        }
+      ]
+    },
+    {
+      "name": "release-032-rescue-no-spectate-a",
+      "case": "rescue-no-spectate",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_RESCUE_RULE_CHECK": "no-spectate"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:20:02.5159119Z",
+      "ended": "2026-10-22T16:20:40.8003988Z",
+      "minutes": 0.64,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-no-spectate-a/host.log",
+          "sha256": "F7150DC1ECE4C593E8CE04DACAEBB4B4681C7E6DFAC65767CFF2B4F14116BBC6"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-no-spectate-a/guest.log",
+          "sha256": "F499EF6CD90CEF05F5C5EE3916285DF77EA4526C3684C70F98B6D38F2C603E59"
+        }
+      ]
+    },
+    {
+      "name": "release-032-rescue-spectator-wipe-a",
+      "case": "rescue-spectator-wipe",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_RESCUE_RULE_CHECK": "spectator-wipe"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:20:40.8235134Z",
+      "ended": "2026-10-22T16:21:24.1455447Z",
+      "minutes": 0.72,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-spectator-wipe-a/host.log",
+          "sha256": "3E38DE4402D0F685747C8716EC8C8DF979A11815192CBD97D9958E6FD5700378"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-spectator-wipe-a/guest.log",
+          "sha256": "D22071B46E834F623B8AB44BF549F3817C629484713FA1148BAE640952FFEB81"
+        }
+      ]
+    },
+    {
+      "name": "release-032-rescue-quota-a",
+      "case": "rescue-quota",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_RESCUE_RULE_CHECK": "quota"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:21:24.1644256Z",
+      "ended": "2026-10-22T16:22:07.4740879Z",
+      "minutes": 0.72,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-quota-a/host.log",
+          "sha256": "7B3024E4EC2BEC8819497A0A225EE61A5211A9AA12CFF5A4375E137844257CE8"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-rescue-quota-a/guest.log",
+          "sha256": "6EF80A64980D72D84EAE908FC2CFFB9CC9D6653DF63564F4B273F7F63FE7408B"
+        }
+      ]
+    },
+    {
+      "name": "release-032-flex-host-a",
+      "case": "flex-host",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_FLEX_TARGET_AUTHORITY": "host"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:22:07.4961089Z",
+      "ended": "2026-10-22T16:22:48.9230555Z",
+      "minutes": 0.69,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-flex-host-a/host.log",
+          "sha256": "6103FBDD2C65073E2607DEC0B1BFCFFDE3299A3DE29189D8A5BE889E4D49F63B"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-flex-host-a/guest.log",
+          "sha256": "933653EFC432A026EC50CD80DF2910BDBE94E5BB7A1E604BE3E15C65FA6815E4"
+        }
+      ]
+    },
+    {
+      "name": "release-032-flex-guest-a",
+      "case": "flex-guest",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_FLEX_TARGET_AUTHORITY": "guest"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:22:48.9474654Z",
+      "ended": "2026-10-22T16:23:34.3586327Z",
+      "minutes": 0.76,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-flex-guest-a/host.log",
+          "sha256": "F99B74A5FFB22EFC170458F639D0BF52BA61202D5689C89CA7175F0E824B319E"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-flex-guest-a/guest.log",
+          "sha256": "A5796468F2AF4E55880BF66395AEF49FE73C1D90D585A4F86AFDE9F2B040305B"
+        }
+      ]
+    },
+    {
+      "name": "release-032-nkg-host-a",
+      "case": "nkg-host",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_FLEX_TARGET_SCENE": "GG_Grimm_Nightmare",
+        "HOLLOWCONNECT_FLEX_TARGET_AUTHORITY": "host"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:23:34.3825743Z",
+      "ended": "2026-10-22T16:24:40.6463453Z",
+      "minutes": 1.1,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-nkg-host-a/host.log",
+          "sha256": "C50A7577913AFC2DCF646EFA3C069ECD98333B1F3FB7026C3A7B6C3373DB0EB9"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-nkg-host-a/guest.log",
+          "sha256": "828FBBEA67E6F4468D424205522AEFB2C9D0FEF287254E097A68C157F8357B8E"
+        }
+      ]
+    },
+    {
+      "name": "release-032-nkg-guest-a",
+      "case": "nkg-guest",
+      "group": "specialty",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_FLEX_TARGET_SCENE": "GG_Grimm_Nightmare",
+        "HOLLOWCONNECT_FLEX_TARGET_AUTHORITY": "guest"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:24:40.6726741Z",
+      "ended": "2026-10-22T16:26:05.6074592Z",
+      "minutes": 1.42,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-nkg-guest-a/host.log",
+          "sha256": "94AEEBF8413A0AC767F28543E63ECD2EDACC46E6CDF97BA179F1FE24FD10FA92"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-nkg-guest-a/guest.log",
+          "sha256": "CCA6DF43E3C1CE5AD48E662BD31CD67010689ADD961F1D837D44432EBFE8EF67"
+        }
+      ]
+    },
+    {
+      "name": "release-032-royal-host-a",
+      "case": "royal-host",
+      "group": "specialty",
+      "mode": "progress",
+      "options": {
+        "HOLLOWCONNECT_RESOURCE_CHECK": "0",
+        "HOLLOWCONNECT_PROGRESS_AUDIT": "royal-charm",
+        "HOLLOWCONNECT_ROYAL_CHARM": "host",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:26:05.6309901Z",
+      "ended": "2026-10-22T16:26:31.7673174Z",
+      "minutes": 0.44,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-royal-host-a/host.log",
+          "sha256": "A122CC871CE3E1533810F6AEE494A5C664FEC8A3BC94BFC6B9C0D40B386A16E3"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-royal-host-a/guest.log",
+          "sha256": "C24BFF69E9108095E8258B32605FDAE105B5B987AC76003CB1120EB8024265B2"
+        }
+      ]
+    },
+    {
+      "name": "release-032-royal-guest-a",
+      "case": "royal-guest",
+      "group": "specialty",
+      "mode": "progress",
+      "options": {
+        "HOLLOWCONNECT_RESOURCE_CHECK": "0",
+        "HOLLOWCONNECT_PROGRESS_AUDIT": "royal-charm",
+        "HOLLOWCONNECT_ROYAL_CHARM": "guest",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:26:31.7896597Z",
+      "ended": "2026-10-22T16:26:57.9348405Z",
+      "minutes": 0.44,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-royal-guest-a/host.log",
+          "sha256": "CB1A0B3E2D56F06D4BB08DD0A0F11B353492D96FE68CC7ADA48766A7D7C44ADE"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-royal-guest-a/guest.log",
+          "sha256": "43A8B0BD4E4CB794E698BFAE65EDD1E0E261FBC2C93C0CB918CFA86E01401A76"
+        }
+      ]
+    },
+    {
+      "name": "release-032-royal-stale-a",
+      "case": "royal-stale",
+      "group": "specialty",
+      "mode": "progress",
+      "options": {
+        "HOLLOWCONNECT_RESOURCE_CHECK": "0",
+        "HOLLOWCONNECT_PROGRESS_AUDIT": "royal-charm",
+        "HOLLOWCONNECT_ROYAL_CHARM": "stale",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:26:57.9613397Z",
+      "ended": "2026-10-22T16:27:23.887509Z",
+      "minutes": 0.43,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-royal-stale-a/host.log",
+          "sha256": "8621EC6E90B6C2FD6DA22BE8A7A2E435BA4BBD0B63BF099E24BDD5C77D2485CB"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-royal-stale-a/guest.log",
+          "sha256": "B03A751DF085950B1DBD56B5B9858B8464EE74C0161C3E39832B3CEAD1F7C051"
+        }
+      ]
+    },
+    {
+      "name": "release-032-gold-walls-host-a",
+      "case": "gold-walls-host",
+      "group": "specialty",
+      "mode": "colosseum",
+      "options": {
+        "HOLLOWCONNECT_COLOSSEUM_SHARE": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0",
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "host",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "walls"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:27:23.9094342Z",
+      "ended": "2026-10-22T16:30:09.8010019Z",
+      "minutes": 2.76,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-gold-walls-host-a/host.log",
+          "sha256": "6257DBB676D1E357CB09CE7C7B467853DEBE32858A27B82893598744BEB4FC04"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-gold-walls-host-a/guest.log",
+          "sha256": "315336BA81083D073C7EC6301E0C52A0F7EB4E7BF443FB3693C754075FAE12F8"
+        }
+      ]
+    },
+    {
+      "name": "release-032-gold-walls-guest-a",
+      "case": "gold-walls-guest",
+      "group": "specialty",
+      "mode": "colosseum",
+      "options": {
+        "HOLLOWCONNECT_COLOSSEUM_SHARE": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0",
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "guest",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "walls"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:30:09.8227762Z",
+      "ended": "2026-10-22T16:32:56.0128766Z",
+      "minutes": 2.77,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-gold-walls-guest-a/host.log",
+          "sha256": "3D40BEA32DC85FBB404E1FEDB0DABA87C2E05FE6180D3E8F330EAC6945DB400C"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-gold-walls-guest-a/guest.log",
+          "sha256": "76156B657D3BD097291B967B27A8BC2C4EE5D8011B5185E88F210E9929022A34"
+        }
+      ]
+    },
+    {
+      "name": "release-032-gold-walls-late-a",
+      "case": "gold-walls-late",
+      "group": "specialty",
+      "mode": "colosseum",
+      "options": {
+        "HOLLOWCONNECT_COLOSSEUM_SHARE": "1",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0",
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "host",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "walls-late"
+      },
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-22T16:32:56.0380304Z",
+      "ended": "2026-10-22T16:35:49.234692Z",
+      "minutes": 2.89,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "362FFA3F51FD61143D562939DE684349F16B160CCBA105FDD6A28B07295037C8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D03A1F17798A7ADEDD0CBD9046B0862BCFDEE0D063C9E8FE47D0023843EAFB3C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "95A0945CB18AE751D3E5316DEE7FDA497CC0DA7465B7B2B27EFFFEAF3FDE28CF",
+      "endpoints": [
+        {
+          "role": "host",
+          "passed": true,
+          "log": ".test-results/release-032-gold-walls-late-a/host.log",
+          "sha256": "A0A5179B7BA0FCA000AD17EA38148AC3A729AE92CCFDFB28C2A4DFA89A2CF35D"
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "log": ".test-results/release-032-gold-walls-late-a/guest.log",
+          "sha256": "3DA9D06E57252797C7EC63FFCDE0DA3B8144516D3CDB062570700ABD358D703D"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "totalPassed": 37,
+    "roomPassed": 12,
+    "specialtyPassed": 25,
+    "failedFinalCases": 0
+  },
+  "selection": ".analysis/release-0.1.32-20261022/selection.md",
+  "runner": ".analysis/release-0.1.32-20261022/Run-Cases.ps1",
+  "baselineDiff": ".analysis/release-0.1.32-20261022/baseline-diff.json",
+  "developmentEvidence": {
+    "noskFixtureCorrection": ".analysis/release-0.1.32-20261022/nosk-fixture-correction.json",
+    "failedSamplingRun": ".test-results/release-032-nosk-direct-a",
+    "productionChanged": false,
+    "preservedEarlierCases": 6,
+    "description": "One-second pose sampling missed a native charge crossing. Observe every frame, retain one-second logs and rerun only Nosk. Previous six cases do not execute the modified coroutine; NoskDump is unchanged."
+  },
+  "environment": {
+    "network": "same-machine localhost UDP",
+    "copies": [
+      ".test-results/game-host",
+      ".test-results/game-guest"
+    ],
+    "saveWrites": "intercepted",
+    "personalGameModified": false
+  },
+  "limitations": [
+    "No real disk-save write/reload, two-machine FRP or three-player spectator chain",
+    "No full continuous Pantheon of Hallownest or every boss/attack/encounter room",
+    "Crossroads Aspid encounter not separately verified",
+    "Historical unresolved findings retained in runtime-blockers-0.1.32.json; passing retries do not prove their cause"
+  ]
+}

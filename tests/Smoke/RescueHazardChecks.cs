@@ -11,6 +11,27 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class RescueProbe {
     private IEnumerator HazardRescueChecks() {
+        using var fixtureDamage = IgnoreExternalCombatDamage(true);
+        using var shadeTrace = new MonoMod.RuntimeDetour.Hook(typeof(ShadeView).GetMethod("Hit"),
+            new Action<Action<ShadeView, HitInstance>, ShadeView, HitInstance>((orig, view, hit) => {
+                Log("HAZARD COLLISION source=" + hit.Source?.name + " target=" + view.transform.position + " serial=" + view.Serial);
+                orig(view, hit);
+            }));
+        using var requestTrace = new MonoMod.RuntimeDetour.Hook(typeof(CoopRuntime).GetMethod("RequestShadeHit", BindingFlags.Instance | BindingFlags.NonPublic),
+            new Func<Func<CoopRuntime, ushort, uint, bool>, CoopRuntime, ushort, uint, bool>((orig, owner, target, serial) => {
+                var sent = orig(owner, target, serial);
+                Log("HAZARD REQUEST target=" + target + " serial=" + serial + " sent=" + sent + " scene=" + Hkmp.CoopContext.LocalScene);
+                return sent;
+            }));
+        using var serverTrace = new MonoMod.RuntimeDetour.Hook(typeof(CoopServerAddon).GetMethod("Receive", BindingFlags.Instance | BindingFlags.NonPublic),
+            new Action<Action<CoopServerAddon, ushort, Message>, CoopServerAddon, ushort, Message>((orig, addon, id, message) => {
+                if (message.Kind == Kind.ShadeHit) {
+                    var party = Field<Party>(addon, "party"); var a = party.Members[id]; var b = party.Members[message.Target];
+                    Log("HAZARD SERVER rescuer=" + a.Life + "/" + a.Scene + "/" + a.X + "/" + a.Y +
+                        " target=" + b.Life + "/" + b.Scene + "/" + b.X + "/" + b.Y + " eligible=" + party.CanRescue(id, message.Target, message.Round, message.Serial, CoopRuntime.Now));
+                }
+                orig(addon, id, message);
+            }));
         var hero = HeroController.instance;
         var pd = PlayerData.instance;
         var body = hero.GetComponent<Rigidbody2D>();
@@ -25,7 +46,10 @@ public sealed partial class RescueProbe {
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
             yield return Until(() => !pd.GetBool("atBench") && hero.acceptingInput && !body.isKinematic, "native starting bench get-up");
         }
-        foreach (var scene in new[] { "Fungus1_02", "GG_Vengefly" }) {
+        // Godhome deliberately keeps the native checkpoint contract. Story
+        // acid now has a separate real walking route in StoryAcidRescueChecks;
+        // teleporting into acid cannot establish a reachable story safe trail.
+        foreach (var scene in new[] { "GG_Vengefly" }) {
             GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo {
                 SceneName = scene, EntryGateName = scene.StartsWith("GG_") ? "door_dreamEnter" : "left1",
                 Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true
@@ -84,7 +108,16 @@ public sealed partial class RescueProbe {
                     // The entry checkpoint is beside the left exit. Stand
                     // inside the room so the rescue swing cannot leave it.
                     hero.transform.position = shade + Vector3.right * 2;
-                    hero.FaceLeft(); hero.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
+                    body.velocity = Vector2.zero; hero.AffectedByGravity(false);
+                    hero.FaceLeft(); Physics2D.SyncTransforms();
+                    yield return new WaitForFixedUpdate();
+                    for (var swing = 0; swing < 4 && runtime.Peers[peer.Key].Life == Life.Down; swing++) {
+                        hero.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
+                        yield return new WaitForSecondsRealtime(.05f);
+                        Log("HAZARD STRIKE " + step + " swing=" + swing + " attack=" + hero.cState.attacking + " hero=" + hero.transform.position + " target=" + shade +
+                            " colliders=" + string.Join(";", hero.GetComponentsInChildren<Collider2D>().Where(c => c.name.Contains("Slash")).Select(c => c.name + ":" + c.enabled + ":" + c.bounds)));
+                        yield return new WaitForSecondsRealtime(.65f);
+                    }
                     yield return Until(() => runtime.Peers[peer.Key].Life == Life.Alive, "actual nail rescue accepted " + step);
                 }
                 yield return Together(step + ".complete");

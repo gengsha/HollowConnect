@@ -2,7 +2,7 @@ using System;
 using Hkmp.Networking.Client;
 using UnityEngine;
 
-namespace Hkmp.Game.Client.Entity.Component; 
+namespace Hkmp.Game.Client.Entity.Component;
 
 /// <summary>
 /// Factory class that instantiates <see cref="EntityComponent"/> by type and additional parameters.
@@ -25,8 +25,10 @@ internal static class ComponentFactory {
         HostClientPair<GameObject> objects
     ) {
         Rigidbody2D rigidBody;
-        
+
         switch (type) {
+            case EntityComponentType.EncounterSummon:
+                return new EncounterSummonComponent(netClient, entityId, objects);
             case EntityComponentType.Rotation:
                 return new RotationComponent(netClient, entityId, objects);
             case EntityComponentType.Velocity:
@@ -50,7 +52,7 @@ internal static class ComponentFactory {
             case EntityComponentType.SpawnJar:
                 var spawnJarClient = objects.Client.GetComponent<SpawnJarControl>();
                 var spawnJarHost = objects.Host.GetComponent<SpawnJarControl>();
-                
+
                 return new SpawnJarComponent(netClient, entityId, objects, new HostClientPair<SpawnJarControl> {
                     Client = spawnJarClient,
                     Host = spawnJarHost
@@ -77,6 +79,8 @@ internal static class ComponentFactory {
                 return new DreamPlatformComponent(netClient, entityId, objects);
             case EntityComponentType.HazardRespawn:
                 return new HazardRespawnComponent(netClient, entityId, objects);
+            case EntityComponentType.RadianceArena:
+                return new RadianceArenaComponent(netClient, entityId, objects);
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, $"Could not instantiate entity component for type: {type}");
         }

@@ -1,0 +1,37 @@
+{
+  "task": "radiance-ending-hud-20261027",
+  "version": "0.2.1",
+  "status": "passed",
+  "rootCause": "Cinematic_Ending_C and its completion scenes disable the persistent HUD camera; the old return path only activated the Canvas and sent IN.",
+  "fix": "RestoreHudAfterCutscene activates and enables hudCamera, activates hudCanvas, enables its PlayMaker FSMs, then sends IN.",
+  "directRun": ".test-results/radiance-ending-hud-20261026-native-c-return-native-f",
+  "directResult": "both endpoints strict pass",
+  "directAssertions": [
+    "Cinematic_Ending_C -> End_Credits -> End_Game_Completion -> PermaDeathUnlock -> Town",
+    "HUD camera active and enabled after return on host and guest",
+    "HUD canvas active in hierarchy after return on host and guest",
+    "HUD FSMs enabled and visible after return on host and guest",
+    "connected session and personal profile preserved"
+  ],
+  "syntheticBoundaryRun": ".test-results/radiance-ending-hud-20261026-boundary-fix",
+  "build": {
+    "smoke": ".analysis/radiance-ending-hud-20261026/build-smoke-final.log",
+    "core": ".analysis/radiance-ending-hud-20261026/build-core-fix.log",
+    "coreTests": {
+      "result": "293 passed, 1 failed",
+      "failure": "preexisting progression fixture missing grimmFlames2",
+      "log": ".analysis/radiance-ending-hud-20261026/core-tests-final.log"
+    }
+  },
+  "hashes": {
+    "HKMP.dll": "9DB32A94BF88A9E31666E708AAA074EE4C62276BCAE29539B0C9381A6CBCE1DA",
+    "HollowConnect.dll": "AA58ACAE98FA02C735B1CD9892CF2700B0FA4E18A997194E3461D9DA2BD12523",
+    "HollowConnect.Core.dll": "746C12EF77F5097A57A7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6",
+    "BouncyCastle.Cryptography.dll": "3D7CED058D7264036323F8CFD87D3203761B5FE45DFDDF1EBCE069C1E36B81B8"
+  },
+  "limitations": [
+    "A separate full native boss run reached the story ending but its old settlement fixture initially mishandled scene aliases; the final direct return run uses the exact native C/credits/completion boundary on both endpoints.",
+    "The direct roundtrip asserts restored HUD state at the personal checkpoint; it does not add a second full lethal-death sequence inside the same ending case.",
+    "No package or installation was requested."
+  ]
+}

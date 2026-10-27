@@ -49,7 +49,7 @@ internal class DescendingDarkLand : DamageAnimationEffect {
         // This is the shockwave that happens when you impact the ground,
         // slightly larger than the Desolate Dive one
         var qSlamObject = localPlayerSpells.FindGameObjectInChildren("Q Slam 2");
-        var quakeSlam = Object.Instantiate(
+        var quakeSlam = RemotePlayerVisuals.Instantiate(
             qSlamObject,
             playerSpells.transform
         );
@@ -76,7 +76,7 @@ internal class DescendingDarkLand : DamageAnimationEffect {
         // Obtain the Q Pillar prefab and instantiate it relative to the player object
         // This is the void-looking column when you impact the ground
         var qPillarObject = localPlayerSpells.FindGameObjectInChildren("Q Pillar");
-        var quakePillar = Object.Instantiate(
+        var quakePillar = RemotePlayerVisuals.Instantiate(
             qPillarObject,
             playerSpells.transform
         );
@@ -85,7 +85,7 @@ internal class DescendingDarkLand : DamageAnimationEffect {
         // Obtain the Q Mega prefab and instantiate it relative to the player object
         // This is the void tornado like effect around the knight when you impact the ground
         var qMegaObject = localPlayerSpells.FindGameObjectInChildren("Q Mega");
-        var qMega = Object.Instantiate(
+        var qMega = RemotePlayerVisuals.Instantiate(
             qMegaObject,
             playerSpells.transform
         );

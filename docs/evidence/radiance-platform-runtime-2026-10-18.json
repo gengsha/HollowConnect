@@ -1,0 +1,281 @@
+{
+  "createdUtc": "2026-10-18T07:33:00.4562697Z",
+  "scope": "Radiance phase-two platforms, late entry, ascent stairs and local camera; targeted verification only",
+  "runtime": "Two isolated real Unity Players on the same computer, batchmode, UDP/DTLS; save writes intercepted",
+  "releaseReady": false,
+  "productionSha256": {
+    "HollowConnect.dll": "BF67B5D776E5D501ABC25C8FCC373C5F0DF75EECF56F9DDCDB710D333DD462BB",
+    "HKMP.dll": "25D39D84BC840FB3D6A9D9F8F3097D35B9D7AB77FDD87652144BE5AF517C72CD",
+    "HollowConnect.Core.dll": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+  },
+  "probeSha256": "5675F08B14AC8FFD396CB81410E7259814BC636F7319C563C220CA433B12DE36",
+  "coreRegression": {
+    "selection": ".test-results/radiance-regression-20261018-core/selection.txt",
+    "result": ".test-results/radiance-regression-20261018-core/final-result.log",
+    "passed": 30,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "run": ".test-results/radiance-arena-20261018-final-r3-statue-f8-host",
+      "scene": "GG_Radiance",
+      "firstEntrant": "host",
+      "lateEntry": "f8",
+      "pantheonContext": false,
+      "bothDone": true,
+      "gracefulExit": true,
+      "strictLogsPassed": true,
+      "roles": [
+        {
+          "role": "host",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 21,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "host-unity.log": "4011D109D9E30F9FE232817866F0E467ADAF701E50B91B827295C1DAEABE246D",
+            "host.log": "A862B652F1D6B9BCA9128B082CD08C30680CE1B801B3F6B4D1B751F1A7C1339F"
+          }
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 21,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "guest-unity.log": "6719D5D55539DC32528DC65D1B91A112F412588C620708939B39F891549B1347",
+            "guest.log": "B0F379850BB2883934A6C28E492FDC80C339AB3372713F375DBCDD5B65B12355"
+          }
+        }
+      ]
+    },
+    {
+      "run": ".test-results/radiance-arena-20261018-final-r3-statue-native-guest",
+      "scene": "GG_Radiance",
+      "firstEntrant": "guest",
+      "lateEntry": "native",
+      "pantheonContext": false,
+      "bothDone": true,
+      "gracefulExit": true,
+      "strictLogsPassed": true,
+      "roles": [
+        {
+          "role": "host",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 21,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "host-unity.log": "C3115804A06C23B8526C3F30DC22E8820E967C37F6184CE22499176076A52400",
+            "host.log": "152F001BF589959A33F65E2F0E82A3D768C6D06AD7ACF8D6A7717AFE6FBA8FA4"
+          }
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 21,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "guest-unity.log": "EF19A132FC6AFABCC4BA1F9BF08B11CFA3BA6F82288C95BE18C19E438BDE51B9",
+            "guest.log": "0C1EB4B92F88A4C7310E78DBC105AC93390B9814C1D54A2312F8DED231A43D8E"
+          }
+        }
+      ]
+    },
+    {
+      "run": ".test-results/radiance-arena-20261018-final-r3-p5-f8-guest-fault",
+      "scene": "GG_Radiance",
+      "firstEntrant": "guest",
+      "lateEntry": "f8",
+      "pantheonContext": true,
+      "bothDone": true,
+      "gracefulExit": true,
+      "strictLogsPassed": true,
+      "roles": [
+        {
+          "role": "host",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 21,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": {
+            "dropped": 1774,
+            "messages": 11487,
+            "reordered": 1108,
+            "nestedResends": 0,
+            "duplicated": 495,
+            "pattern": "fixed-seed"
+          },
+          "logSha256": {
+            "host-unity.log": "4BF5509FD1C19286078C0D8887D393114FE4A666F03DD58A8D9DBB1E50F6EAA7",
+            "host.log": "46FC4AFF6B17BB5360FEFBC06FD5C72B60F85377BF738D8BA0F04010FE7187DE"
+          }
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 21,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": {
+            "dropped": 590,
+            "messages": 3820,
+            "reordered": 368,
+            "nestedResends": 0,
+            "duplicated": 165,
+            "pattern": "fixed-seed"
+          },
+          "logSha256": {
+            "guest-unity.log": "8ED3BABECB6DA128385E6E2F025757441B5DBEC210DEE285F580BCBBF4AFDDEE",
+            "guest.log": "5C9ED7D0FB4CFBF2EA401A320834807DCBD538FAEB0B65849C750E72432F620F"
+          }
+        }
+      ]
+    },
+    {
+      "run": ".test-results/radiance-arena-20261018-final-r3-p5-native-host",
+      "scene": "GG_Radiance",
+      "firstEntrant": "host",
+      "lateEntry": "native",
+      "pantheonContext": true,
+      "bothDone": true,
+      "gracefulExit": true,
+      "strictLogsPassed": true,
+      "roles": [
+        {
+          "role": "host",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 24,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "host-unity.log": "EA30A813F1B1F9A770A109D58C5501E0671FC1BDADBD3B3A4459F47A7A6E8B57",
+            "host.log": "915C68C432BE25D46A1A607396971D2F5B387FA054982900FDDE1E3DD8860EEA"
+          }
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "registeredPlatforms": 26,
+          "phaseTwoSolidPlatforms": 7,
+          "ascentSolidPlatforms": 24,
+          "generatedAscentStairs": 18,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "guest-unity.log": "5535DB7FA40F0E64C181F7B666A847AE8942C960090C04B63DB8D86020C2C68B",
+            "guest.log": "D3B614C9BFF0DD664E93D63A4999DBC2157F02BE3D7D8A5680F1E1EF824227DB"
+          }
+        }
+      ]
+    },
+    {
+      "run": ".test-results/radiance-arena-20261018-final-r3-story-f8-host",
+      "scene": "Dream_Final_Boss",
+      "firstEntrant": "host",
+      "lateEntry": "f8",
+      "pantheonContext": false,
+      "bothDone": true,
+      "gracefulExit": true,
+      "strictLogsPassed": true,
+      "roles": [
+        {
+          "role": "host",
+          "passed": true,
+          "registeredPlatforms": 27,
+          "phaseTwoSolidPlatforms": 8,
+          "ascentSolidPlatforms": 18,
+          "generatedAscentStairs": 15,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "host-unity.log": "F797C1DCE5DF835F71F91BF94CC3F1683B53CC7273F8E772BAFA58D1D499FD5D",
+            "host.log": "A48E969F3583D1976085F7C525B9D67566C518658F3B9B1DEC3604E1D7FF4652"
+          }
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "registeredPlatforms": 27,
+          "phaseTwoSolidPlatforms": 8,
+          "ascentSolidPlatforms": 18,
+          "generatedAscentStairs": 15,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "guest-unity.log": "5D004AEC355AE834BAE23B83FD0F5416F55B3D868E4140F4648F1CFD242DAB0A",
+            "guest.log": "C3BE7FA95F7958B5DBB726464947750C9AFE722E279230B63FB909B7D492FE1F"
+          }
+        }
+      ]
+    },
+    {
+      "run": ".test-results/radiance-arena-20261018-final-r3-story-native-guest",
+      "scene": "Dream_Final_Boss",
+      "firstEntrant": "guest",
+      "lateEntry": "native",
+      "pantheonContext": false,
+      "bothDone": true,
+      "gracefulExit": true,
+      "strictLogsPassed": true,
+      "roles": [
+        {
+          "role": "host",
+          "passed": true,
+          "registeredPlatforms": 27,
+          "phaseTwoSolidPlatforms": 8,
+          "ascentSolidPlatforms": 18,
+          "generatedAscentStairs": 15,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "host-unity.log": "99F8E5F1795AE626DEB7E4F808E75FD98E36064CC03DAE70C28F382BE85E8B41",
+            "host.log": "C098A20BACBBCBD3717A2F4B54973627508AC943DA40AD49C8921674A1DCB880"
+          }
+        },
+        {
+          "role": "guest",
+          "passed": true,
+          "registeredPlatforms": 27,
+          "phaseTwoSolidPlatforms": 8,
+          "ascentSolidPlatforms": 18,
+          "generatedAscentStairs": 15,
+          "stairSupportAndViewportChecks": 3,
+          "networkFaults": null,
+          "logSha256": {
+            "guest-unity.log": "227BE97B123B0E670FF0FE3A475595D21B6119F97E8B87939A2FAD443C578737",
+            "guest.log": "5970599EBCF1937DAA26E859CC421935BAEC73534F509F1CB062AAE7A275E068"
+          }
+        }
+      ]
+    }
+  ],
+  "report": "docs/RADIANCE-PLATFORM-FIX-2026-10-18.md",
+  "limitations": [
+    "No real two-machine FRP or target-resolution manual visual run",
+    "No complete Pantheon route or final kill/ending",
+    "No full disconnect/authority-transfer matrix or all-boss certification"
+  ],
+  "packageCreated": false
+}

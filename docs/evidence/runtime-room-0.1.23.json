@@ -1,0 +1,59 @@
+{
+  "version": "0.1.23",
+  "engineVersion": "3.0.0-hc11",
+  "releaseReady": false,
+  "retestOmitted": true,
+  "userRequest": "新版本号打包",
+  "recordedAtUtc": "2026-10-18T07:39:42.5473415Z",
+  "runs": [],
+  "scope": "User requested a new-version package (新版本号打包). Includes the completed Radiance late-entry platform-group, ascent, local camera/presentation and native entry hazard-checkpoint fixes. Six same-machine dual-Unity cases and 30 related core regressions passed before the version bump, with hashes retained in the referenced immutable evidence. After that validation only CoopMod.Version changed in production source from 0.1.22 to 0.1.23; packaging scripts and documentation also updated. Rebuilt production and verify archive integrity only; no new runtime/regression/installer execution or personal-save writes. New addon hash is not runtime certified. Historical unresolved findings remain open; retaining them here permits only this requested playtest-channel package.",
+  "previousValidationSource": "docs/evidence/radiance-platform-runtime-2026-10-18.json",
+  "previousValidationSha256": "B2CA6791FB6C1F3E4F4F805C99E6A36BF7DE3B8AC166129F8E61A01839A365A8",
+  "previousProductionBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "25D39D84BC840FB3D6A9D9F8F3097D35B9D7AB77FDD87652144BE5AF517C72CD"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "BF67B5D776E5D501ABC25C8FCC373C5F0DF75EECF56F9DDCDB710D333DD462BB"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+    }
+  ],
+  "previousRuntimeCaseCount": 6,
+  "previousCoreRegression": {
+    "selection": ".test-results/radiance-regression-20261018-core/selection.txt",
+    "result": ".test-results/radiance-regression-20261018-core/final-result.log",
+    "passed": 30,
+    "failed": 0
+  },
+  "productionChangeSinceValidation": "Only CoopMod.Version changes from 0.1.22 to 0.1.23 in production source. HKMP and HollowConnect.Core DLL hashes are unchanged from the six-case final evidence; rebuilt HollowConnect.dll has a new version constant and a new hash. No post-bump Unity rerun.",
+  "installed": false,
+  "realTwoMachineFrp": false,
+  "buildCommit": "49d97def4e1051bc00c2095a1e985d7f201fd034",
+  "workingTreeHasUncommittedChanges": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "25D39D84BC840FB3D6A9D9F8F3097D35B9D7AB77FDD87652144BE5AF517C72CD",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "EAE2F2113DABD878AB90EACE9FAA3297EED4D5943199E9635B3E0C413911F66D",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    }
+  ],
+  "compiledConstants": {
+    "hollowConnect": "0.1.23",
+    "hkmp": "3.0.0-hc11"
+  }
+}

@@ -59,7 +59,7 @@ internal abstract class SlashBase : ParryableEffect {
 
         // Instantiate the slash gameObject from the given prefab
         // and use the attack gameObject as transform reference
-        var slash = Object.Instantiate(prefab, playerAttacks.transform);
+        var slash = RemotePlayerVisuals.Instantiate(prefab, playerAttacks.transform);
         slash.layer = 17;
         
         float direction;
@@ -227,7 +227,7 @@ internal abstract class SlashBase : ParryableEffect {
         }
 
         // Instantiate the beam from the prefab with the playerObject position
-        var elegyBeam = Object.Instantiate(
+        var elegyBeam = RemotePlayerVisuals.Instantiate(
             elegyBeamPrefab,
             playerObject.transform.position,
             Quaternion.identity

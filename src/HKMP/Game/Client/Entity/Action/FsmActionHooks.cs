@@ -34,6 +34,10 @@ internal static class FsmActionHooks {
     /// Register hooks for the FSM actions.
     /// </summary>
     public static void RegisterHooks() {
+        // Building a MonoMod detour compiles/rebuilds native trampolines.
+        // Install the supported action types before the session starts so a
+        // boss's first projectile only adds an owner lookup during combat.
+        foreach (var type in EntityFsmActions.SupportedActionTypes) EnsureType(type);
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChanged;
     }
 
@@ -53,6 +57,10 @@ internal static class FsmActionHooks {
     /// <param name="action">The action that will be called when the "OnEnter" method executes with the instance
     /// as the parameter to the action.</param>
     public static void RegisterFsmStateActionType(Type type, Action<FsmStateAction> action) {
+        EnsureType(type).HookEvent += action;
+    }
+
+    private static FsmActionHook EnsureType(Type type) {
         if (!TypeEvents.TryGetValue(type, out var fsmActionHook)) {
             fsmActionHook = new FsmActionHook();
 
@@ -66,17 +74,13 @@ internal static class FsmActionHooks {
             TypeEvents.Add(type, fsmActionHook);
         }
 
-        fsmActionHook.HookEvent += action;
+        return fsmActionHook;
     }
     internal static void RemoveObserver(Type type, Action<FsmStateAction> action) {
         if (TypeEvents.TryGetValue(type, out var hook)) hook.Remove(action);
     }
     internal static void RegisterFsmStateActionType(Type type, GameObject owner, Action<FsmStateAction> action) {
-        if (!TypeEvents.ContainsKey(type)) {
-            RegisterFsmStateActionType(type, action);
-            RemoveObserver(type, action);
-        }
-        TypeEvents[type].Owners[owner.GetInstanceID()] = action;
+        EnsureType(type).Owners[owner.GetInstanceID()] = action;
     }
     internal static void RemoveObserver(Type type, GameObject owner, Action<FsmStateAction> action) {
         if (!ReferenceEquals(owner, null) && TypeEvents.TryGetValue(type, out var hook)) hook.Owners.Remove(owner.GetInstanceID());
@@ -90,7 +94,8 @@ internal static class FsmActionHooks {
     private static void OnActionEntered(Action<FsmStateAction> orig, FsmStateAction self) {
         var previous=CurrentAction;
         CurrentAction=self;
-        try { orig(self); } finally { CurrentAction=previous; }
+        try { if (!LocalBattleCompletion.EnterScriptedCounter(self)) orig(self); } finally { CurrentAction=previous; }
+        LocalBattleCompletion.NativeWaveAction(self);
         
         if (!TypeEvents.TryGetValue(self.GetType(), out var fsmActionHook)) {
             Logger.Warn("Hook was fired but no associated hook class was found");

@@ -1,4 +1,4 @@
-﻿using Hkmp.Util;
+using Hkmp.Util;
 using UnityEngine;
 
 namespace Hkmp.Animation.Effects;
@@ -13,7 +13,7 @@ internal class MonarchWings : AnimationEffect {
 
         // Find and spawn the wings object
         var doubleJumpWingsPrefab = HeroController.instance.dJumpWingsPrefab;
-        var doubleJumpWings = Object.Instantiate(
+        var doubleJumpWings = RemotePlayerVisuals.Instantiate(
             doubleJumpWingsPrefab,
             playerEffects.transform
         );
@@ -21,7 +21,7 @@ internal class MonarchWings : AnimationEffect {
 
         // Find and spawn the flash object
         var doubleJumpFlashPrefab = HeroController.instance.dJumpFlashPrefab;
-        var doubleJumpFlash = Object.Instantiate(
+        var doubleJumpFlash = RemotePlayerVisuals.Instantiate(
             doubleJumpFlashPrefab,
             playerEffects.transform
         );
@@ -30,7 +30,7 @@ internal class MonarchWings : AnimationEffect {
 
         // Find and spawn the feathers particle system
         var doubleJumpFeathersObject = HeroController.instance.dJumpFeathers;
-        var doubleJumpFeathers = Object.Instantiate(
+        var doubleJumpFeathers = RemotePlayerVisuals.Instantiate(
             doubleJumpFeathersObject,
             playerEffects.transform
         );

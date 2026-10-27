@@ -39,6 +39,8 @@ internal class GamePatcher {
     /// Register the hooks.
     /// </summary>
     public void RegisterHooks() {
+        Animation.RemotePlayerFeedback.Register();
+        if (CoopContext.LocalWorldOnly) Entity.LocalWorldInteractions.Register();
         // Register IL hook for changing the behaviour of tink effects
         IL.TinkEffect.OnTriggerEnter2D += TinkEffectOnTriggerEnter2D;
         
@@ -47,6 +49,8 @@ internal class GamePatcher {
         IL.HealthManager.TakeDamage += HealthManagerOnTakeDamage;
 
         On.BridgeLever.OnTriggerEnter2D += BridgeLeverOnTriggerEnter2D;
+
+        On.VinePlatformCut.OnTriggerEnter2D += VinePlatformCutOnTriggerEnter2D;
 
         var type = typeof(BridgeLever).GetNestedType("<OpenBridge>d__13", BindingFlags);
         _bridgeLeverIlHook = new ILHook(type.GetMethod("MoveNext", BindingFlags), BridgeLeverOnOpenBridge);
@@ -64,6 +68,8 @@ internal class GamePatcher {
     /// De-register the hooks.
     /// </summary>
     public void DeregisterHooks() {
+        Animation.RemotePlayerFeedback.Unregister();
+        Entity.LocalWorldInteractions.Unregister();
         IL.TinkEffect.OnTriggerEnter2D -= TinkEffectOnTriggerEnter2D;
         
         IL.HealthManager.Invincible -= HealthManagerOnInvincible;
@@ -71,6 +77,8 @@ internal class GamePatcher {
         IL.HealthManager.TakeDamage -= HealthManagerOnTakeDamage;
         
         On.BridgeLever.OnTriggerEnter2D -= BridgeLeverOnTriggerEnter2D;
+
+        On.VinePlatformCut.OnTriggerEnter2D -= VinePlatformCutOnTriggerEnter2D;
         
         _bridgeLeverIlHook?.Dispose();
         
@@ -79,6 +87,7 @@ internal class GamePatcher {
         IL.CameraLockArea.IsInApplicableGameState -= CameraLockAreaOnIsInApplicableGameState;
         
         On.IgnoreHeroCollision.Ignore -= IgnoreHeroCollisionOnIgnore;
+        On.SceneAdditiveLoadConditional.OnEnable -= SceneAdditiveLoadConditionalOnEnable;
     }
     
     /// <summary>
@@ -210,9 +219,15 @@ internal class GamePatcher {
             // Define a label to branch to
             var afterSendEventLabel = c.DefineLabel();
             
-            // Emit the 'isLocalPlayer' bool to the stack
-            c.EmitDelegate(() => isLocalPlayer);
-            // Emit the instruction for branching after the 'SendEvent' call in case of a remote player hit
+            // Hornet's barbs break through BLOCKED HIT rather than health
+            // damage. The authority must accept remote nail contact too;
+            // disabled replica FSMs still cannot run the native reaction.
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Func<TinkEffect, bool>>(tink => isLocalPlayer ||
+                Entity.EntityReferences.Owner(tink.gameObject) is {
+                    Type: Entity.EntityType.HornetSentinelSpike, IsNativeAuthority: true
+                });
+            // Keep other remote tink events under the existing local policy.
             c.Emit(OpCodes.Brfalse, afterSendEventLabel);
             
             // Goto after the 'SendEvent' call to mark the label
@@ -342,6 +357,15 @@ internal class GamePatcher {
         }
     }
     
+    // Remote slash colliders also carry "Nail Attack". The native vine cut
+    // handler must only see our own nail so teammates cannot drop our platform.
+    private void VinePlatformCutOnTriggerEnter2D(On.VinePlatformCut.orig_OnTriggerEnter2D orig,
+        VinePlatformCut self, Collider2D collision) {
+        if (_netClient.IsConnected && collision != null && collision.CompareTag("Nail Attack") &&
+            (HeroController.instance == null || !collision.transform.IsChildOf(HeroController.instance.transform))) return;
+        orig(self, collision);
+    }
+
     /// <summary>
     /// Whether the local player hit the bridge lever.
     /// </summary>
@@ -352,6 +376,7 @@ internal class GamePatcher {
     /// IL Hook below.
     /// </summary>
     private void BridgeLeverOnTriggerEnter2D(On.BridgeLever.orig_OnTriggerEnter2D orig, BridgeLever self, Collider2D collision) {
+        if (Entity.LocalWorldIsolation.Blocks(self.gameObject, collision == null ? null : collision.gameObject)) return;
         var activated = ReflectionHelper.GetField<BridgeLever, bool>(self, "activated");
         
         if (!activated && collision.tag == "Nail Attack") {
@@ -604,7 +629,7 @@ internal class GamePatcher {
         On.SceneAdditiveLoadConditional.orig_OnEnable orig, 
         SceneAdditiveLoadConditional self
     ) {
-        if (self.gameObject.scene.name == "Fungus3_23") {
+        if (!CoopContext.LocalWorldOnly && self.gameObject.scene.name == "Fungus3_23") {
             // Remove the extra boolean test for 'hasShadowDash', which is not needed given that there is a 
             // Shade Gate at the beginning of the room
             self.extraBoolTests = [];

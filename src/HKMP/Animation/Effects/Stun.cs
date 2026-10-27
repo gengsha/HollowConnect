@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Hkmp.Util;
 using HutongGames.PlayMaker.Actions;
 using UnityEngine;
@@ -135,6 +135,7 @@ internal class Stun : AnimationEffect {
                     playerEffects.transform,
                     Vector3.zero
                 );
+                foreach (var bit in spawnedBits) RemotePlayerVisuals.Track(bit);
                 // Destroy all the bits after some time
                 foreach (var bit in spawnedBits) {
                     Object.Destroy(bit, 2.0f);
@@ -154,14 +155,14 @@ internal class Stun : AnimationEffect {
         var damageEffect = HeroController.instance.gameObject.FindGameObjectInChildren("Damage Effect");
 
         // Instantiate a hit crack effect
-        var hitCrack = Object.Instantiate(
+        var hitCrack = RemotePlayerVisuals.Instantiate(
             damageEffect.FindGameObjectInChildren("Hit Crack"),
             playerEffects.transform
         );
         hitCrack.SetActive(true);
 
         // Instantiate a object responsible for particle effects
-        var hitPt1 = Object.Instantiate(
+        var hitPt1 = RemotePlayerVisuals.Instantiate(
             damageEffect.FindGameObjectInChildren("Hit Pt 1"),
             playerEffects.transform
         );
@@ -170,7 +171,7 @@ internal class Stun : AnimationEffect {
         hitPt1.GetComponent<ParticleSystem>().Play();
 
         // Instantiate a object responsible for particle effects
-        var hitPt2 = Object.Instantiate(
+        var hitPt2 = RemotePlayerVisuals.Instantiate(
             damageEffect.FindGameObjectInChildren("Hit Pt 2"),
             playerEffects.transform
         );
@@ -214,7 +215,7 @@ internal class Stun : AnimationEffect {
     private void PlayCarefreeEffect(GameObject playerEffects) {
         // Get the care free shield object from the HeroController and instantiate a copy
         var localCarefreeShield = HeroController.instance.carefreeShield;
-        var carefreeShield = Object.Instantiate(
+        var carefreeShield = RemotePlayerVisuals.Instantiate(
             localCarefreeShield,
             playerEffects.transform
         );

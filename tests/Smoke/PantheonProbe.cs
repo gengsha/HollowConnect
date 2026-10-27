@@ -20,7 +20,7 @@ namespace HollowConnect.Smoke;
 
 // Exercise the actual first-pantheon entry, late entry, death transitions and
 // repeated attempts. No player save is opened and no boss FSM state is forced.
-public sealed class PantheonProbe : MonoBehaviour {
+public sealed partial class PantheonProbe : MonoBehaviour {
     private string role, root;
     private bool host;
     private CoopRuntime runtime;
@@ -119,7 +119,12 @@ public sealed class PantheonProbe : MonoBehaviour {
     }
     private GameObject Visible(Entity e)=>manager.IsSceneHost?e.Object.Host:e.Object.Client;
     private IEnumerator NativeEntrance(BossSequence sequence) {
-        Enter("GG_Atrium");yield return Until(()=>In("GG_Atrium"),"native atrium");SafeHero();
+        var atrium = sequence.name == "Boss Sequence Tier 5" ? "GG_Atrium_Roof" : "GG_Atrium";
+        if (atrium == "GG_Atrium_Roof") GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo {
+            SceneName = atrium, EntryGateName = "bot1", Visualization = GameManager.SceneLoadVisualizations.Default
+        });
+        else Enter(atrium);
+        yield return Until(()=>In(atrium),"native atrium");SafeHero();
         yield return new WaitForSecondsRealtime(1);
         var door=Object.FindObjectsOfType<BossSequenceDoor>(true).Single(d=>d.bossSequence!=null&&d.bossSequence.name==sequence.name);
         var fsm=door.challengeFSM;
@@ -140,7 +145,7 @@ public sealed class PantheonProbe : MonoBehaviour {
         ui.Begin();
         yield return new WaitForSecondsRealtime(2);
         Mark("NATIVE DOOR state="+fsm.ActiveStateName+" timescale="+Time.timeScale+" hero="+HeroController.instance.transform.position);
-        yield return Until(()=>UnityEngine.SceneManagement.SceneManager.GetActiveScene().name=="GG_Boss_Door_Entrance","native door entrance cinematic");
+        yield return Until(()=>UnityEngine.SceneManagement.SceneManager.GetActiveScene().name=="GG_Boss_Door_Entrance" || In(sequence.GetSceneAt(0)),"native door cinematic or direct first boss");
         // New characters must acknowledge the native Godseeker dialogue.
         // Complete text via its public paging API, leaving the entrance FSM
         // and its scene-transition branch in control.
@@ -572,13 +577,12 @@ public sealed class PantheonProbe : MonoBehaviour {
             throw new Exception("Early room-level updates were never applied "+key);
         Mark("PASS early room-level updates drained "+key);
         DumpRoom(key);
-        var cameraEntities=Entities.Values.Where(e=>e.Type==EntityType.CameraLockArea).ToArray();
-        if(manager.IsSceneHost)Flag("camera."+key,string.Join(",",cameraEntities.Select(e=>e.Id+":"+Visible(e).activeInHierarchy)));
-        yield return Until(()=>Has("camera."+key),"camera authority state "+key);
-        var expectedCamera=File.ReadAllText(Path.Combine(root,"camera."+key));
-        var actualCamera=string.Join(",",cameraEntities.Select(e=>e.Id+":"+Visible(e).activeInHierarchy));
-        if(actualCamera!=expectedCamera)throw new Exception("Camera lock state diverged "+key+" expected="+expectedCamera+" actual="+actualCamera);
-        Mark("PASS camera lock state converges "+key);
+        var localLocks=Object.FindObjectsOfType<CameraLockArea>(true)
+            .Where(c=>c.gameObject.scene.name==Hkmp.CoopContext.LocalScene).ToArray();
+        if(Entities.Values.Any(e=>e.Type==EntityType.CameraLockArea)||localLocks.Length==0||
+            localLocks.Any(c=>EntityReferences.Owner(c.gameObject)!=null))
+            throw new Exception("Camera locks must retain native per-player control "+key);
+        Mark("PASS native camera locks remain local "+key);
         var live=Entities.Values.Where(e=>(e.Id>>63)==0&&e.Type!=EntityType.FalseKnightHead&&e.Object.Host!=null&&e.Object.Host.GetComponent<HealthManager>() is HealthManager h&&!h.isDead&&h.hp>0).ToArray();
         if(live.Length==0)throw new Exception("No registered living boss: "+key);
         foreach(var e in live) {
@@ -666,9 +670,15 @@ public sealed class PantheonProbe : MonoBehaviour {
             if(type==LogType.Exception) Mark("UNITY EXCEPTION "+message+"\n"+trace);
         };
         CoopMod.Settings.ShareProgress=false;PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
+        if (DamageRankingCase) { CoopMod.Settings.BossDamageRanking = host ? DamageRankingOn : !DamageRankingOn; CoopMod.Settings.BossHealthScaling = false; }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_RETURN"))) CoopMod.Settings.AllowTeleport = true;
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved character");SafeHero();
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_CHECK")=="1") {
+            yield return FsmTemplateChecks.Run(Mark);
+            if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY")=="template") {
+                Mark("FINAL PASS dormant template initialization and native activation"); Flag(role+".done"); yield break;
+            }
             yield return FsmContinuationChecks.Run(Field<NetClient>(engine.ClientManager,"_netClient"),Mark);
             yield return Both("fsm-continuation-checked");
             if(!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FSM_CONTINUATION_ONLY"))) {
@@ -685,6 +695,10 @@ public sealed class PantheonProbe : MonoBehaviour {
         if(host){engine.ServerManager.Start(29650,false);Flag("server.started");}else yield return Until(()=>Has("server.started"),"server ready");
         ConnectLocal("pantheon"+role);
         yield return Until(()=>runtime.Connected,"handshake");yield return Both("connected");
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_RETURN"))) {
+            yield return EndingReturnChecks(); yield break;
+        }
+        if (DamageRankingCase) { yield return DamageRankingChecks(); yield break; }
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SAME_ROOM_CHECK")=="1") {
             yield return Until(()=>manager.IsSceneHostDetermined,"connect in already loaded room initializes authority",8);
             yield return Until(()=>Field<Dictionary<ushort,Hkmp.Game.Client.ClientPlayerData>>(engine.ClientManager,"_playerData").Values.Any(p=>p.IsInLocalScene&&p.PlayerObject!=null&&p.PlayerObject.activeInHierarchy),"connect in already loaded room creates teammate",8);
@@ -778,11 +792,10 @@ public sealed class PantheonProbe : MonoBehaviour {
             if(role==first){
                 yield return new WaitForSecondsRealtime(3);
                 var boss=Entities.Values.Single(e=>e.Type==EntityType.VengeflyKing);
-                var camera=Entities.Values.Single(e=>e.Type==EntityType.CameraLockArea);
-                if(!nativeEntrance){boss.Object.Host.SetActive(false);camera.Object.Host.SetActive(false);}
+                if(!nativeEntrance)boss.Object.Host.SetActive(false);
                 yield return new WaitForSecondsRealtime(.3f);Flag(role+".started."+attempt);
                 yield return Until(()=>Has((first=="host"?"guest":"host")+".snapshot-ready."+attempt),"late snapshot captured",nativeEntrance?75:20);
-                if(!nativeEntrance){boss.Object.Host.SetActive(true);camera.Object.Host.SetActive(true);}
+                if(!nativeEntrance)boss.Object.Host.SetActive(true);
                 if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PENDING_PEER_CHECK")=="1") {
                     var hero=HeroController.instance;
                     hero.RelinquishControl();hero.GetComponent<Rigidbody2D>().gravityScale=0;hero.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
@@ -867,7 +880,7 @@ public sealed class PantheonProbe : MonoBehaviour {
         while(!In(next)&&Time.realtimeSinceStartup<end) {
             if(In(scene)&&manager.IsSceneHost)foreach(var e in Entities.Values.ToArray()) {
                 var go=e.Object.Host;var h=go==null?null:go.GetComponent<HealthManager>();
-                if(h==null||h.isDead||!go.activeInHierarchy)continue;
+                if(h==null||h.hp<=0||h.isDead||!go.activeInHierarchy)continue;
                 if(e.Type==EntityType.FalseKnight) {
                     var f=go.GetComponents<PlayMakerFSM>().Single(s=>s.FsmName=="FalseyControl");
                     if(Time.realtimeSinceStartup>=sample){sample=Time.realtimeSinceStartup+2;Mark("DEFEAT FK state="+f.ActiveStateName+" hp="+h.hp+" head="+Entities.Values.Single(s=>s.Type==EntityType.FalseKnightHead).Object.Host.GetComponent<HealthManager>().hp+" hero="+HeroController.instance.transform.position+" anim="+go.GetComponent<tk2dSpriteAnimator>().CurrentClip?.name);}

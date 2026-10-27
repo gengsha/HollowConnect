@@ -231,6 +231,20 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
             return;
         }
 
+        var packet = BuildUpdatePacket();
+        if (packet == null) return;
+        foreach (var frame in DatagramFraming.Fragment(packet.ToArray(), _messageId++))
+            DtlsTransport?.Send(frame, 0, frame.Length);
+    }
+
+    // The caller serializes sends with _sendGate. Detach the outgoing batch
+    // under the gameplay lock, then encode it without blocking position and
+    // combat updates on Unity's main thread. The detached batch is immutable
+    // until encoding finishes and congestion tracking takes ownership.
+    internal Packet.Packet BuildUpdatePacket() {
+        lock (_sendGate) return BuildUpdatePacketCore();
+    }
+    private Packet.Packet BuildUpdatePacketCore() {
         var packet = new Packet.Packet();
         TOutgoing updatePacket;
 
@@ -248,25 +262,25 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
                 CurrentUpdatePacket.AckField[i] = receivedQueue.Contains(pastSequence);
             }
 
-            try {
-                CurrentUpdatePacket.CreatePacket(packet);
-            } catch (Exception e) {
-                Logger.Error($"An error occurred while trying to create packet:\n{e}");
-                return;
-            }
-
             // Reset the packet by creating a new instance,
             // but keep the original instance for reliability data re-sending
             updatePacket = CurrentUpdatePacket;
             CurrentUpdatePacket = new TOutgoing();
-            _udpCongestionManager.OnSendPacket(_localSequence, updatePacket);
 
             // Increase (and potentially wrap) the current local sequence number
             _localSequence++;
         }
 
-        foreach (var frame in DatagramFraming.Fragment(packet.ToArray(), _messageId++))
-            DtlsTransport?.Send(frame, 0, frame.Length);
+        try { updatePacket.CreatePacket(packet); }
+        catch (Exception e) {
+            // Preserve reliable receipts if an encoder fails after detaching;
+            // the next carrier still identifies their original batch.
+            ResendReliableData(updatePacket);
+            Logger.Error($"An error occurred while trying to create packet:\n{e}");
+            return null;
+        }
+        lock (Lock) _udpCongestionManager.OnSendPacket(updatePacket.Sequence, updatePacket);
+        return packet;
     }
 
     /// <summary>

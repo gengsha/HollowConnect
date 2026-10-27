@@ -32,7 +32,7 @@ internal class GreatSlash : ParryableEffect {
 
         // Get the prefab for the Great Slash and instantiate it relative to the remote player object
         var greatSlashObject = localPlayerAttacks.FindGameObjectInChildren("Great Slash");
-        var greatSlash = Object.Instantiate(
+        var greatSlash = RemotePlayerVisuals.Instantiate(
             greatSlashObject,
             playerAttacks.transform
         );

@@ -1,19 +1,46 @@
 [
-  { "base_object_name": "Jellyfish Spawner", "fsm_name": "Spawn", "type": "CombatSpawner" },
-    { "base_object_name": "Needle", "type": "DynamicHazard", "components": ["Rotation", "ZPosition"] },
+  {
+    "base_object_name": "Spitter Summon", "fsm_name": "summon", "type": "EncounterSummoner",
+    "components": ["EncounterSummon"],
+    "children": [
+      { "base_object_name": "Super Spitter", "fsm_name": "spitter", "type": "PrimalAspid" },
+      { "base_object_name": "Spitter", "fsm_name": "spitter", "type": "AspidHunter" }
+    ]
+  },
+  { "base_object_name": "Jellyfish Spawner", "fsm_name": "Spawn", "type": "CombatSpawner", "boss_support": true },
+  {
+    "base_object_name": "Balloon Spawner", "fsm_name": "Battle Control", "type": "CombatSpawner", "boss_support": true,
+    "children": [ {
+      "base_object_name": "Balloons", "type": "CombatSpawner",
+      "children": [ { "base_object_name": "Mage Balloon Spawner", "fsm_name": "Control", "type": "Folly" } ]
+    } ]
+  },
+  {
+    "base_object_name": "Balloons", "parent_name": "Battle Scene v2", "type": "CombatSpawner", "boss_support": true,
+    "children": [ { "base_object_name": "Mage Balloon Spawner", "fsm_name": "Control", "type": "Folly" } ]
+  },
+    { "base_object_name": "Needle", "type": "DynamicHazard", "boss_support": true, "components": ["Rotation", "ZPosition"] },
     {
         "base_object_name": "Battle Gate",
         "type": "BattleGate",
-        "fsm_name": "BG Control"
+        "fsm_name": "BG Control",
+        "networked": false
+    },
+    {
+        "base_object_name": "Colosseum Gate",
+        "type": "BattleGate",
+        "fsm_name": "Rise"
     },
     {
         "base_object_name": "Dream Gate",
         "type": "BattleGate",
-        "fsm_name": "Control"
+        "fsm_name": "Control",
+        "networked": false
     },
     {
         "base_object_name": "CameraLockArea",
-        "type": "CameraLockArea"
+        "type": "CameraLockArea",
+        "networked": false
     },
     {
         "base_object_name": "Ruins Lift",
@@ -123,44 +150,59 @@
         "children": [
             {
                 "base_object_name": "Head",
-                "type": "FalseKnightHead",
+                "type": "FalseKnightHead", "boss_support": true,
+                "fsm_name": "Health Check"
+            }
+        ]
+    },
+    {
+        "base_object_name": "False Knight Dream",
+        "type": "FalseKnight",
+        "fsm_name": "FalseyControl",
+        "components": [
+            "Velocity", "Music"
+        ],
+        "children": [
+            {
+                "base_object_name": "Head",
+                "type": "FalseKnightHead", "boss_support": true,
                 "fsm_name": "Health Check"
             }
         ]
     },
     {
         "base_object_name": "FK Barrel Summon",
-        "type": "FalseKnightBarrels",
+        "type": "FalseKnightBarrels", "boss_support": true,
         "fsm_name": "summon"
     },
     {
         "base_object_name": "Normal 1",
-        "type": "FalseKnightFloor",
+        "type": "FalseKnightFloor", "boss_support": true,
         "parent_name": "FK Floor"
     },
     {
         "base_object_name": "Normal 2",
-        "type": "FalseKnightFloor",
+        "type": "FalseKnightFloor", "boss_support": true,
         "parent_name": "FK Floor"
     },
     {
         "base_object_name": "Cracked 1",
-        "type": "FalseKnightFloor",
+        "type": "FalseKnightFloor", "boss_support": true,
         "parent_name": "FK Floor"
     },
     {
         "base_object_name": "Cracked 2",
-        "type": "FalseKnightFloor",
+        "type": "FalseKnightFloor", "boss_support": true,
         "parent_name": "FK Floor"
     },
     {
         "base_object_name": "Broken",
-        "type": "FalseKnightFloor",
+        "type": "FalseKnightFloor", "boss_support": true,
         "parent_name": "FK Floor"
     },
     {
         "base_object_name": "Break Floor",
-        "type": "FalseKnightFloor",
+        "type": "FalseKnightFloor", "boss_support": true,
         "parent_name": "FK Floor"
     },
     {
@@ -181,22 +223,22 @@
         "children": [
             {
                 "base_object_name": "Mawlek Arm L",
-                "type": "BroodingMawlekArm",
+                "type": "BroodingMawlekArm", "boss_support": true,
                 "fsm_name": "Mawlek Arm Control"
             },
             {
                 "base_object_name": "Mawlek Arm R",
-                "type": "BroodingMawlekArm",
+                "type": "BroodingMawlekArm", "boss_support": true,
                 "fsm_name": "Mawlek Arm Control"
             },
             {
                 "base_object_name": "Mawlek Head",
-                "type": "BroodingMawlekHead",
+                "type": "BroodingMawlekHead", "boss_support": true,
                 "fsm_name": "Mawlek Head"
             },
             {
                 "base_object_name": "Dummy",
-                "type": "BroodingMawlekDummy"
+                "type": "BroodingMawlekDummy", "boss_support": true
             }
         ]
     },
@@ -349,7 +391,7 @@
     },
     {
         "base_object_name": "Quirrel Land",
-        "type": "UumuuQuirrel",
+        "type": "UumuuQuirrel", "boss_support": true,
         "fsm_name": "Watch"
     },
     {
@@ -411,12 +453,12 @@
     },
     {
         "base_object_name": "Mantis Lord Throne",
-        "type": "MantisThrone",
+        "type": "MantisThrone", "boss_support": true,
         "fsm_name": "Mantis Throne Sub"
     },
     {
         "base_object_name": "Mantis Lord Throne",
-        "type": "MantisThrone",
+        "type": "MantisThrone", "boss_support": true,
         "fsm_name": "Mantis Throne Main"
     },
     {
@@ -450,18 +492,19 @@
         "base_object_name": "mantis_cage_down",
         "type": "MantisLordCage",
         "fsm_name": "Cage Control",
+        "networked": false,
         "components": [
             "ChildrenActivation"
         ]
     },
     {
         "base_object_name": "mantis_lord_opening_floors",
-        "type": "MantisLordFloor",
+        "type": "MantisLordFloor", "boss_support": true,
         "fsm_name": "Floor Control",
         "children": [
             {
                 "base_object_name": "Floor",
-                "type": "MantisLordFloor"
+                "type": "MantisLordFloor", "boss_support": true
             }
         ]
     },
@@ -528,7 +571,7 @@
     },
     {
         "base_object_name": "Orb Spinner",
-        "type": "SoulMasterOrbSpinner",
+        "type": "SoulMasterOrbSpinner", "boss_support": true,
         "fsm_name": "Summon Orbs"
     },
     {
@@ -538,17 +581,17 @@
     },
     {
         "base_object_name": "Knight Get Fake Quake",
-        "type": "SoulMasterFakeQuake",
+        "type": "SoulMasterFakeQuake", "boss_support": true,
         "fsm_name": "Get Quake"
     },
     {
         "base_object_name": "mage_window",
-        "type": "SoulMasterWindow",
+        "type": "SoulMasterWindow", "boss_support": true,
         "fsm_name": "Break",
         "children": [
             {
                 "base_object_name": "break_ground",
-                "type": "SoulMasterWindow"
+                "type": "SoulMasterWindow", "boss_support": true
             }
         ]
     },
@@ -592,7 +635,7 @@
     },
     {
         "base_object_name": "Spawn Jar",
-        "type": "CollectorJar",
+        "type": "CollectorJar", "boss_support": true,
         "components": [
             "SpawnJar"
         ]
@@ -663,22 +706,22 @@
     },
     {
         "base_object_name": "Dung Ball Large",
-        "type": "LargeDungBall",
+        "type": "LargeDungBall", "boss_support": true,
         "fsm_name": "Ball Control"
     },
     {
         "base_object_name": "Dung Ball Small",
-        "type": "SmallDungBall",
+        "type": "SmallDungBall", "boss_support": true,
         "fsm_name": "Ball Control"
     },
     {
         "base_object_name": "Burrow Effect",
-        "type": "DungDefenderBurrow",
+        "type": "DungDefenderBurrow", "boss_support": true,
         "fsm_name": "Burrow Effect"
     },
     {
         "base_object_name": "Corpse Dung Defender",
-        "type": "DungDefenderCorpse",
+        "type": "DungDefenderCorpse", "boss_support": true,
         "fsm_name": "Corpse"
     },
     {
@@ -745,7 +788,7 @@
     },
     {
         "base_object_name": "Laser Turret Mega",
-        "type": "CrystalGuardianLaser",
+        "type": "CrystalGuardianLaser", "boss_support": true,
         "fsm_name": "Laser Bug Mega",
         "components": [
             "Rotation"
@@ -835,7 +878,7 @@
     },
     {
         "base_object_name": "Vomit Glob Nosk",
-        "type": "NoskBlob",
+        "type": "NoskBlob", "boss_support": true,
         "fsm_name": "Vomit Glob"
     },
     {
@@ -870,7 +913,7 @@
     },
     {
         "base_object_name": "Corpse Infected Knight Dream",
-        "type": "LostKinCorpse",
+        "type": "LostKinCorpse", "boss_support": true,
         "fsm_name": "corpse"
     },
     {
@@ -883,7 +926,7 @@
     },
     {
         "base_object_name": "Corpse Infected Knight",
-        "type": "BrokenVesselCorpse",
+        "type": "BrokenVesselCorpse", "boss_support": true,
         "fsm_name": "corpse"
     },
     {
@@ -1128,7 +1171,7 @@
     },
     {
         "base_object_name": "Sword",
-        "type": "XeroNail",
+        "type": "XeroNail", "boss_support": true,
         "fsm_name": "xero_nail",
         "components": [
             "Rotation", "ZPosition"
@@ -1176,7 +1219,7 @@
     },
     {
         "base_object_name": "Galien Hammer",
-        "type": "GalienScythe",
+        "type": "GalienScythe", "boss_support": true,
         "fsm_name": "Control",
         "components": [
             "Rotation"
@@ -1184,7 +1227,7 @@
     },
     {
         "base_object_name": "Galien Mini Hammer",
-        "type": "GalienMiniScythe",
+        "type": "GalienMiniScythe", "boss_support": true,
         "fsm_name": "FSM"
     },
     {
@@ -1197,7 +1240,7 @@
     },
     {
         "base_object_name": "Markoth Shield",
-        "type": "MarkothShield",
+        "type": "MarkothShield", "boss_support": true,
         "fsm_name": "Control"
     },
     {
@@ -1222,12 +1265,12 @@
     },
     {
         "base_object_name": "Barb Region",
-        "type": "HornetSentinelSpikes",
+        "type": "HornetSentinelSpikes", "boss_support": true,
         "fsm_name": "Spawn Barbs"
     },
     {
         "base_object_name": "Hornet Barb",
-        "type": "HornetSentinelSpike",
+        "type": "HornetSentinelSpike", "boss_support": true,
         "fsm_name": "Control",
         "components": [
             "Rotation"
@@ -1247,17 +1290,18 @@
         "fsm_name": "Control",
         "components": [
             "Music",
-            "HazardRespawn"
+            "HazardRespawn",
+            "RadianceArena"
         ]
     },
     {
         "base_object_name": "Radiant Orb",
-        "type": "RadianceOrb",
+        "type": "RadianceOrb", "boss_support": true,
         "fsm_name": "Orb Control"
     },
     {
         "base_object_name": "Radiant Nail Comb",
-        "type": "RadianceNailComb",
+        "type": "RadianceNailComb", "boss_support": true,
         "fsm_name": "Control",
         "components": [
             "Rotation"
@@ -1265,7 +1309,7 @@
     },
     {
         "base_object_name": "Radiant Nail",
-        "type": "RadianceNail",
+        "type": "RadianceNail", "boss_support": true,
         "fsm_name": "Control",
         "components": [
             "Rotation"
@@ -1330,12 +1374,12 @@
     },
     {
         "base_object_name": "Grimm Firebat",
-        "type": "GrimmBat",
+        "type": "GrimmBat", "boss_support": true,
         "fsm_name": "Control"
     },
     {
         "base_object_name": "Firebat Pillar",
-        "type": "GrimmFirebatPillar",
+        "type": "GrimmFirebatPillar", "boss_support": true,
         "fsm_name": "Control"
     },
     {
@@ -1348,17 +1392,17 @@
     },
     {
         "base_object_name": "Nightmare Firebat",
-        "type": "NightmareKingGrimmBat",
+        "type": "NightmareKingGrimmBat", "boss_support": true,
         "fsm_name": "Control"
     },
     {
         "base_object_name": "Grimm Spike Holder",
-        "type": "GrimmSpikes",
+        "type": "GrimmSpikes", "boss_support": true,
         "fsm_name": "Spike Control"
     },
     {
         "base_object_name": "Flameball Grimmballoon",
-        "type": "GrimmFireball"
+        "type": "GrimmFireball", "boss_support": true
     },
     {
         "base_object_name": "Hive Knight",
@@ -1370,12 +1414,12 @@
     },
     {
         "base_object_name": "Hive Knight Glob",
-        "type": "HiveKnightSpike",
+        "type": "HiveKnightSpike", "boss_support": true,
         "fsm_name": "Control"
     },
     {
         "base_object_name": "Bee Dropper",
-        "type": "HiveKnightBee",
+        "type": "HiveKnightBee", "boss_support": true,
         "fsm_name": "Control",
         "components": [
             "Rotation"
@@ -1447,7 +1491,7 @@
     },
     {
         "base_object_name": "HK Prime Blast",
-        "type": "PureVesselBlast",
+        "type": "PureVesselBlast", "boss_support": true,
         "fsm_name": "Control"
     },
     {
@@ -1457,7 +1501,7 @@
     },
     {
         "base_object_name": "Glob Dropper",
-        "type": "WingedNoskGlobDropper",
+        "type": "WingedNoskGlobDropper", "boss_support": true,
         "fsm_name": "Dropper"
     },
     {
@@ -1493,16 +1537,20 @@
     {
         "base_object_name": "Absolute Radiance",
         "type": "AbsoluteRadiance",
-        "fsm_name": "Control"
+        "fsm_name": "Control",
+        "components": [
+            "HazardRespawn",
+            "RadianceArena"
+        ]
     },
     {
         "base_object_name": "Radiant Plat",
-        "type": "RadiancePlatform",
+        "type": "RadiancePlatform", "boss_support": true,
         "fsm_name": "radiant_plat"
     },
     {
         "base_object_name": "Abyss Pit",
-        "type": "RadianceAbyss",
+        "type": "RadianceAbyss", "boss_support": true,
         "fsm_name": "Ascend"
     }
 ]

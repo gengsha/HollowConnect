@@ -31,7 +31,7 @@ internal class DashSlash : ParryableEffect {
 
         // Get the prefab for the Dash Slash and instantiate it relative to the remote player object
         var dashSlashObject = localPlayerAttacks.FindGameObjectInChildren("Dash Slash");
-        var dashSlash = Object.Instantiate(
+        var dashSlash = RemotePlayerVisuals.Instantiate(
             dashSlashObject,
             playerObject.transform.parent
         );

@@ -29,8 +29,13 @@ namespace Hkmp.Game.Server;
 /// each player, to prevent sending redundant traffic.
 /// </summary>
 internal abstract class ServerManager : IServerManager {
+    internal bool LocalWorldOnly { get; private set; }
     private readonly object worldLock = new object();
     public void ResetCoopEntities() { lock (worldLock) _entityData.Clear(); }
+    // Transport-level check for addon point-to-point sends. A player can still
+    // be in the roster while their update manager has already been retired.
+    internal bool IsPlayerConnected(ushort id) =>
+        _netServer.IsStarted && _netServer.GetUpdateManagerForClient(id) != null;
 
     #region Internal server manager variables and properties
 
@@ -63,6 +68,13 @@ internal abstract class ServerManager : IServerManager {
     /// Dictionary mapping player IDs to their server player data instances.
     /// </summary>
     private readonly ConcurrentDictionary<ushort, ServerPlayerData> _playerData;
+    internal bool TryGetCoopSceneScope(ushort id, string scene, out uint visit, out bool authority) {
+        lock (worldLock) {
+            visit = 0; authority = false;
+            if (!_playerData.TryGetValue(id, out var player) || player.CurrentScene != scene) return false;
+            visit = player.SceneVisit; authority = player.IsSceneHost; return true;
+        }
+    }
 
     private readonly ConcurrentDictionary<ServerEntityKey, ServerEntityData> _entityData;
     
@@ -368,7 +380,8 @@ internal abstract class ServerManager : IServerManager {
             Stop();
         }
 
-        FullSynchronisation = fullSynchronisation;
+        LocalWorldOnly = CoopContext.HostLocalWorldOnly?.Invoke() ?? false;
+        FullSynchronisation = fullSynchronisation && !LocalWorldOnly;
         
         RegisterCommands();
         RegisterPacketHandlers();
@@ -1029,7 +1042,26 @@ internal abstract class ServerManager : IServerManager {
             _netServer.GetUpdateManagerForClient(otherId)?.AddEntityData(0UL, new List<EntityNetworkData> { accepted }));
     }
 
-    /// <summary>Handle reliable state from the authority or a scoped platform/warrior request from a peer.</summary>
+    private void UpdateEncounterSummon(ushort id, ServerPlayerData player, ulong entityId, EntityNetworkData data) {
+        var bytes = data.Packet.ToArray();
+        if (entityId == 0 || bytes.Length != 1) return;
+        var key = new ServerEntityKey(player.CurrentScene, entityId);
+        if (!_entityData.TryGetValue(key, out var entity)) {
+            if (!player.IsSceneHost || bytes[0] != Client.Entity.EncounterSummonState.Register) return;
+            _entityData[key] = entity = new ServerEntityData();
+        }
+        if (entity.Retired || !entity.EncounterSummon.Apply(bytes[0], player.IsSceneHost)) return;
+        var accepted = new EntityNetworkData { Type = EntityComponentType.EncounterSummon };
+        accepted.Packet.Write(entity.EncounterSummon.State);
+        entity.GenericData.RemoveAll(d => d.Type == EntityComponentType.EncounterSummon);
+        entity.GenericData.Add(accepted);
+        foreach (var peer in _playerData) {
+            if (peer.Value.CurrentScene != player.CurrentScene) continue;
+            _netServer.GetUpdateManagerForClient(peer.Key)?.AddEntityData(entityId, new List<EntityNetworkData> { accepted });
+        }
+    }
+
+    /// <summary>Handle reliable state from the authority or scoped native requests from a peer.</summary>
     private void OnReliableEntityUpdate(ushort id, ReliableEntityUpdate entityUpdate) {
         lock (worldLock) {
         
@@ -1040,6 +1072,10 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (entityUpdate.SceneName != playerData.CurrentScene || entityUpdate.Visit != playerData.SceneVisit || entityUpdate.Epoch != CoopContext.Epoch || CoopContext.Resetting) return;
+
+        if (entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data))
+            foreach (var data in entityUpdate.GenericData.Where(d => d.Type == EntityComponentType.EncounterSummon))
+                UpdateEncounterSummon(id, playerData, entityUpdate.Id, data);
 
         if (entityUpdate.Id == 0 && entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data))
             foreach (var data in entityUpdate.GenericData.Where(d => d.Type == EntityComponentType.DreamWarrior))
@@ -1083,7 +1119,7 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data)) {
-            var relayedData = entityUpdate.GenericData.Where(d => d.Type != EntityComponentType.DreamWarrior).ToList();
+            var relayedData = entityUpdate.GenericData.Where(d => d.Type != EntityComponentType.DreamWarrior && d.Type != EntityComponentType.EncounterSummon).ToList();
             if (relayedData.Any(d => d.Type == EntityComponentType.DreamPlatform)) {
                 foreach (var data in relayedData.Where(d => d.Type == EntityComponentType.DreamPlatform))
                     UpdateDreamPlatform(id, serverEntityKey, entityData, data, true);
@@ -1127,7 +1163,7 @@ internal abstract class ServerManager : IServerManager {
             }
 
             foreach (var updateData in entityUpdate.GenericData) {
-                if (updateData.Type == EntityComponentType.DreamPlatform || updateData.Type == EntityComponentType.DreamWarrior) continue;
+                if (updateData.Type == EntityComponentType.DreamPlatform || updateData.Type == EntityComponentType.DreamWarrior || updateData.Type == EntityComponentType.EncounterSummon) continue;
                 if (updateData.Type >= EntityComponentType.Death && updateData.Type != EntityComponentType.SpecialDeath && updateData.Type != EntityComponentType.ExtraDamage) {
                     ReplaceExistingDataWithSameType(updateData.Type, updateData.Packet);
                 }
@@ -1599,6 +1635,7 @@ internal abstract class ServerManager : IServerManager {
         };
 
         serverInfo.FullSynchronisation = FullSynchronisation;
+        serverInfo.LocalWorldOnly = LocalWorldOnly;
         
         // Construct the player info to send to the new client in the server info
         var playerInfo = new List<(ushort, string)>();
@@ -1833,6 +1870,8 @@ internal abstract class ServerManager : IServerManager {
             out persistentItemData)
         ) {
             Logger.Debug($"  Found PersistentBoolData: {persistentItemData.Id}, {persistentItemData.SceneName}");
+
+            if (SaveDataMapping.IsLocalVinePlatform(persistentItemData)) return;
             
             if (!SaveDataMapping.Instance.PersistentBoolVarProperties.TryGetValue(persistentItemData, out varProps)) {
                 return;

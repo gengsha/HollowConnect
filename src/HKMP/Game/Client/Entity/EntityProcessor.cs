@@ -51,6 +51,9 @@ internal class EntityProcessor {
     /// </summary>
     public ulong? SpawnedId { get; init; }
     public bool AllowHazard { get; init; }
+    public bool BossCombatSpawn { get; init; }
+    public bool BossTargetScope { get; init; }
+    public Entity BossTargetSource { get; init; }
 
     /// <summary>
     /// The list of entities that were created during the processing.
@@ -74,11 +77,14 @@ internal class EntityProcessor {
 
     }
 
+    internal static bool ShouldNetwork(EntityRegistryEntry entry) => LocalWorldIsolation.Allows(entry);
+
     /// <summary>
     /// Process the game object set in this instance with the parameter set in this instance.
     /// </summary>
     /// <returns>The instance of this class for convenience.</returns>
     public EntityProcessor Process() {
+        if (GameObject != null && LocalStoryScene.Contains(GameObject.scene.name)) return this;
         Process(GameObject);
         return this;
     }
@@ -98,6 +104,7 @@ internal class EntityProcessor {
         IEnumerable<EntityRegistryEntry> entries = null,
         GameObject parentClientObject = null, GameObject parentHostObject = null
     ) {
+        if (LocalStoryScene.IsTraversalPlatform(gameObject)) return;
         EntityRegistryEntry foundEntry;
 
         // If the given entries are null, query the entity registry for all top-level entries
@@ -111,6 +118,11 @@ internal class EntityProcessor {
             if (!EntityRegistry.TryGetEntry(entries, gameObject, out foundEntry)) {
                 return;
             }
+        }
+
+        if (!LocalWorldIsolation.Allows(foundEntry, BossCombatSpawn || parentHostObject != null)) {
+            Logger.Debug($"Leaving local-trigger entity '{gameObject.name}' under native scene control");
+            return;
         }
 
         if (_entities.Values.Any(e => e.Object.Host == gameObject || e.Object.Client == gameObject)) return;
@@ -127,6 +139,8 @@ internal class EntityProcessor {
         
         // Depending on whether a parent object was given we create the entity with this parent object
         Entity entity;
+        var targetSource = EntityReferences.Owner(parentHostObject) ?? BossTargetSource;
+        var targetScope = BossTargetScope || BossDefeatSignals.IsBoss(foundEntry.Type) || targetSource?.BossTargetScope == true;
         if (parentClientObject == null) {
             Logger.Debug($"Registering entity ({foundEntry.Type}) '{gameObject.name}' with ID '{id}'");
 
@@ -136,6 +150,7 @@ internal class EntityProcessor {
                 foundEntry.Type,
                 gameObject,
                 preserveHostActivation: SpawnedId.HasValue && LateLoad && IsSceneHostDetermined && IsSceneHost,
+                bossTargetScope: targetScope, bossTargetSource: targetSource,
                 types: componentTypes
             );
         } else {
@@ -164,6 +179,7 @@ internal class EntityProcessor {
                 gameObject,
                 clientObject,
                 preserveHostActivation: SpawnedId.HasValue && LateLoad && IsSceneHostDetermined && IsSceneHost,
+                bossTargetScope: targetScope, bossTargetSource: targetSource,
                 types: componentTypes
             );
         }

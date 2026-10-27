@@ -1,0 +1,170 @@
+{
+  "generatedAtUtc": "2026-10-24T17:30:00.9913229Z",
+  "version": "0.1.37",
+  "issue": "Banker Spa NPC deactivated by peer attack while local dialogue retains input ownership",
+  "productionChanges": [
+    "New BankerDialogue.Ignore: only TAKE DAMAGE to exact Ruins_Bathhouse/Banker Spa NPC while native NPC/npc_control Talking is true.",
+    "EntityHooks.ProcessEvent invokes this narrow recipient check; native dialogue, withdrawal and geo actions remain intact.",
+    "CoopMod version 0.1.37, existing l8 network suffix."
+  ],
+  "baseline": {
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "D3B17D9790C7F6B195D94ACA2AC5653ECBBEADCB9C8F212495F2D504F0ABB7E7"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "29E08EAD843996161B2CEDDC524B9ADE69167936D57EE1705A0959E50D40FDB6"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+      }
+    ],
+    "observation": "Real peer nail entered tink_effect then Hit Around/Cancel NPC/Withdraw/Give Geo. NPC child became inactive while Meet owned hero input/disablePause.",
+    "status": "reproduced",
+    "name": "banker-before-20261025",
+    "evidence": ".test-results/banker-before-20261025/host.log"
+  },
+  "nativePreflight": "banker-inspect3-20261025",
+  "retainedFailures": [
+    {
+      "reason": "Legacy powershell executable lacks Get-FileHash. No game run. Runner relaunched using bundled pwsh.",
+      "name": "banker-inspect-20261025",
+      "classification": "runner environment"
+    },
+    {
+      "reason": "bankerTheft is Int32, not Boolean. Metadata confirmed and fixture corrected before native inspection.",
+      "name": "banker-inspect2-20261025",
+      "classification": "fixture"
+    },
+    {
+      "reason": "Fsm namespace ambiguity; fully qualified native Fsm type before final successful build.",
+      "name": "build-0.1.37.log",
+      "classification": "compile"
+    }
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "1FB0CB2442BB2742FD13540B04E8BDCB259C1EA8D2711E8E4E23844BE6E06A57"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+    }
+  ],
+  "runs": [
+    {
+      "name": "banker-final-host-20261025",
+      "options": {
+        "HOLLOWCONNECT_BANKER_CASE": "dialogue",
+        "HOLLOWCONNECT_BANKER_TALKER": "host"
+      },
+      "ended": "2026-10-24T17:28:11.8329976Z",
+      "probeHash": "151E71CB00E67A526A3EA992D66B17174A9EDD023BDBB23C92D1238557132F4A",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "1FB0CB2442BB2742FD13540B04E8BDCB259C1EA8D2711E8E4E23844BE6E06A57"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+        }
+      ],
+      "dependencies": [
+        {
+          "size": 4064768,
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+          "name": "Assembly-CSharp.dll"
+        },
+        {
+          "size": 212480,
+          "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+          "name": "PlayMaker.dll"
+        }
+      ],
+      "bothPassed": true,
+      "started": "2026-10-24T17:27:26.9076402Z",
+      "strictLogs": "passed"
+    },
+    {
+      "name": "banker-final-guest-20261025",
+      "options": {
+        "HOLLOWCONNECT_BANKER_CASE": "dialogue",
+        "HOLLOWCONNECT_BANKER_TALKER": "guest"
+      },
+      "ended": "2026-10-24T17:28:58.3498326Z",
+      "probeHash": "151E71CB00E67A526A3EA992D66B17174A9EDD023BDBB23C92D1238557132F4A",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "1FB0CB2442BB2742FD13540B04E8BDCB259C1EA8D2711E8E4E23844BE6E06A57"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "C2CB4851E3FE3CEEB602F23DC5AE2AE904E92D9D805AF905D0F27873C91FFEE4"
+        }
+      ],
+      "dependencies": [
+        {
+          "size": 4064768,
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+          "name": "Assembly-CSharp.dll"
+        },
+        {
+          "size": 212480,
+          "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+          "name": "PlayMaker.dll"
+        }
+      ],
+      "bothPassed": true,
+      "started": "2026-10-24T17:28:11.8357808Z",
+      "strictLogs": "passed"
+    }
+  ],
+  "unrelatedSourcesPreserved": [
+    {
+      "sha256": "CDF9BC4C4BFC13E453D8E564664C273DD7AB0C2ACFF0250CAF5938F941E2A0BC",
+      "path": "src/HollowConnect/StoryRescuePlacement.cs"
+    },
+    {
+      "sha256": "0DAF71BB33A0FE7DC94A2B2A6B62A2B810F7B3BBD24B75B0DE5FFB31CDB0A37D",
+      "path": "src/HollowConnect/CoopRuntime.cs"
+    },
+    {
+      "sha256": "258137368033B0C727C777934A4C27D35BF18AF2DB6D57B747CBC7CF5950822C",
+      "path": "src/HollowConnect/ResourceShareService.cs"
+    },
+    {
+      "sha256": "88F805F2BEA80621DF82FC79E9E588D007F47E7374A8CFBF9D385E5F1EAF0837",
+      "path": "src/HKMP/Game/Client/Entity/LocalBattleCompletion.cs"
+    },
+    {
+      "sha256": "8079F0A1A401E73F30093AE6713355BB4A51393E3834A74B1F345EBD1768E179",
+      "path": "src/HKMP/Game/Client/Entity/Component/EncounterSummonComponent.cs"
+    },
+    {
+      "sha256": "783613171C377E802DD6EB898A89CFD52C7A04BB2C50A78DE009E13E8CAB7A4A",
+      "path": "src/HKMP/Game/Client/Entity/ColosseumEntrance.cs"
+    }
+  ],
+  "limits": [
+    "No new full room or boss matrix. Earlier encounter and colosseum evidence retains original hashes.",
+    "Existing isolated game copies only; ProbeMod blocks saves. No installation or personal-save edits."
+  ]
+}

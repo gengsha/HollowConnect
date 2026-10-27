@@ -1,0 +1,33 @@
+{
+  "localDate": "2026-10-20",
+  "version": "0.1.26",
+  "status": "source-fixed-targeted-accepted",
+  "packaged": false,
+  "productionHashes": {
+    "HKMP.dll": "03ED66E2BD52A47D064662242F36129F45519A2BF872FD5EBC4228AAF523F5F7",
+    "HollowConnect.dll": "222B5D57407955784F4A8FDB7437D5CD08F715755946FB6CD48B6422B756E02D",
+    "HollowConnect.Core.dll": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787",
+    "HollowConnect.Smoke.dll": "9DA3FB3901F5E687E92C109134DFE91DE40B9F27EEAE160F95EBBF0A6A4D5C89"
+  },
+  "coreSelection": { "file": "tests/barrier-sync.selection.txt", "passed": 4, "failed": 0 },
+  "runtimeRuns": [
+    { "run": "soul-barrier-20261020-g-outside-on-guest", "scope": "Soul Master outside/live entry, sharing on", "strict": true },
+    { "run": "soul-barrier-20261020-g-phase1-off-host", "scope": "Soul Master phase-one late entry, sharing off", "strict": true },
+    { "run": "soul-barrier-20261020-g-phase2-on-guest", "scope": "Soul Master phase-two late entry, sharing on", "strict": true },
+    { "run": "soul-barrier-20261020-g-complete-on-host", "scope": "Soul Master completed late entry, sharing on", "strict": true },
+    { "run": "soul-barrier-20261020-f-complete-off-guest", "scope": "Soul Master completed late entry, sharing off", "strict": true },
+    { "run": "soul-barrier-20261020-i-personal-fake-off-host", "scope": "late player personal fake-spell cinematic and control recovery", "strict": true },
+    { "run": "barrier-related-20261020-a-late-host", "scope": "local closed battle late entry", "strict": true },
+    { "run": "barrier-related-20261020-a-outside-guest", "scope": "local closed battle outside trigger", "strict": true },
+    { "run": "barrier-risk-20261020-a-boundary", "scope": "local barrier event/action boundary fixtures", "strict": true },
+    { "run": "barrier-risk-20261020-a-mother-host", "scope": "Gruz Mother and native child wave, host authority", "strict": true },
+    { "run": "barrier-risk-20261020-a-mother-guest", "scope": "Gruz Mother and native child wave, guest authority", "strict": true },
+    { "run": "barrier-radiance-20261020-a-story-f8-host", "scope": "story Radiance camera/phase regression", "strict": true }
+  ],
+  "limitations": [
+    "No packaging or release ZIP was produced.",
+    "Mantis cage and Colosseum wall use receiver/action fixtures in this change; full native encounters are covered by separate historical suites.",
+    "No real two-machine FRP, third-party combat mod, or save write/reload certification.",
+    "Terminal damage in Soul Master probes is injected after native phase entry; it is not a full manual combat certification."
+  ]
+}

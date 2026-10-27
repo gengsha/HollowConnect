@@ -10,6 +10,7 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class RescueProbe {
     private IEnumerator DeathCameraRescueChecks() {
+        using var fixtureDamage = IgnoreExternalCombatDamage();
         var hero = HeroController.instance;
         var pd = PlayerData.instance;
         var body = hero.GetComponent<Rigidbody2D>();
@@ -34,24 +35,22 @@ public sealed partial class RescueProbe {
         yield return Until(() => hero.cState.onGround, "camera fixture native safe checkpoint grounded");
         safe = hero.transform.position; hero.SetHazardRespawn(safe, true);
         var cameraController = GameCameras.instance.cameraController;
-        var markers = GameObject.FindGameObjectsWithTag("Shade Marker").Where(g => g.scene.name == "Crossroads_01").ToArray();
+        var size = hero.GetComponent<Collider2D>().bounds.size;
+        var offset = hero.GetComponent<Collider2D>().bounds.center - hero.transform.position;
         var candidates = new System.Collections.Generic.List<(Vector3 Origin, Vector3 Safe, float Distance)>();
         for (var x = 10f; x < cameraController.sceneWidth - 10; x += 7)
             for (var y = 10f; y < cameraController.sceneHeight - 8; y += 7) {
                 var origin = new Vector3(x, y, hero.transform.position.z);
                 if (Physics2D.OverlapBox(origin, new Vector2(2, 3), 0, 1 << 8) != null) continue;
-                var marker = markers.OrderBy(g => (g.transform.position - origin).sqrMagnitude).FirstOrDefault();
-                if (marker == null) continue;
-                var hit = Physics2D.Raycast(marker.transform.position, Vector2.down, 50, 1 << 8);
+                var hit = Physics2D.Raycast(origin, Vector2.down, 19, 1 << 8);
                 if (hit.collider == null || hit.distance == 0 || hit.collider.isTrigger || hit.normal.y < .5f) continue;
-                var ground = hero.FindGroundPoint(marker.transform.position, true);
-                var args = new object[] { (Vector2)ground, "Crossroads_01", null };
-                if (!(bool)typeof(CoopRuntime).GetMethod("TryWarpLanding", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, args)) continue;
-                var supported = (Vector2)args[2];
-                var anchor = new Vector3(supported.x, supported.y, origin.z);
+                var anchor = new Vector3(hit.point.x, hit.point.y + size.y / 2 - offset.y + .07f, origin.z);
+                if (origin.y - anchor.y > 18 || origin.y - anchor.y < 5) continue;
+                var neighbours = new[] { -2f, 2f }.Select(dx => Physics2D.Raycast(anchor + Vector3.right * dx, Vector2.down, 3, 1 << 8)).ToArray();
+                if (neighbours.Any(h => h.collider == null || h.collider.isTrigger || h.normal.y < .7f || Math.Abs(h.point.y - hit.point.y) > .2f)) continue;
                 candidates.Add((origin, anchor, Vector2.Distance(origin, anchor)));
             }
-        Check(candidates.Count > 0, "native story room has clear death positions and supported Shade Marker");
+        Check(candidates.Count > 0, "native story room has clear airborne death positions above supported floor");
         var ordered = candidates.OrderByDescending(c => Math.Abs(c.Origin.x - c.Safe.x)).ThenByDescending(c => c.Distance).ToArray();
         var source = ordered[0];
         Log("CAMERA STORY GEOMETRY size=" + cameraController.sceneWidth + "x" + cameraController.sceneHeight +
@@ -86,13 +85,13 @@ public sealed partial class RescueProbe {
                         observation.VisibleWorld.Contains(new Vector2(candidate.Safe.x, candidate.Safe.y + .5f))) continue;
                     source = candidate; before = observation; break;
                 }
-                Check(before != null, "natural native camera shows death origin but not its safe Shade Marker " + victimRole);
+                Check(before != null, "natural native camera shows airborne death origin but not supported landing " + victimRole);
                 Log("DEATH CAMERA SOURCE " + victimRole + " hero=" + hero.transform.position + " checkpoint=" + safe +
                     " view=" + before.VisibleWorld + " camera=" + camera.transform.position);
                 pd.SetInt("health", 1); hero.takeNoDamage = false;
                 hero.TakeDamage(null, GlobalEnums.CollisionSide.left, 1, 1);
                 yield return Until(() => runtime.Down, "actual native lethal damage enters rescue " + victimRole);
-                Check(Vector2.Distance(runtime.DeathPosition, source.Safe) < .2f, "native Shade Marker selected for far death " + victimRole);
+                Check(Vector2.Distance(runtime.DeathPosition, source.Safe) < 1.6f, "story rescue projects to supported death-side floor " + victimRole);
                 yield return CoverageDeathCameraChecks.WhileDown(runtime, before, victimRole, Log);
                 Flag(step + ".view-checked");
                 yield return Until(() => !runtime.Down && pd.health == 1, "real nail rescue returns one health " + victimRole);

@@ -1,0 +1,298 @@
+{
+  "version": "0.1.35",
+  "action": "package-for-user-playtest",
+  "buildLabel": "",
+  "workingTreeHasUncommittedChanges": true,
+  "userRequest": "做出必要检查打包新版；此前要求时间紧、不要过度验证，平台跑酷采用守梦人逻辑，其他 Boss 战斗不要改。",
+  "recordedAtUtc": "2026-10-24T08:56:59.2286793Z",
+  "retestOmitted": false,
+  "channelReason": "User authorizes a new package within the existing playtest channel and limited validation scope. Carry existing unresolved findings; do not imply full release acceptance or individual user review of each finding.",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "boss-settlement-disconnect-delivery-race"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "91BF38F5E9DF04C50B8295C3AFA3CFC6DB1402664F96D35764CC9D739CADA083"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "0495C6B011A33BCAEDB53810E1E2DDBAB167219EBD441E69803B1C80A5BFC48E"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+    }
+  ],
+  "scope": "Complete 0.1.35 package with native local dream traversal, personal story trigger isolation and shared guardian count repair; retain prior gameplay fixes and known issues.",
+  "runtimeValidation": {
+    "version": "0.1.35",
+    "engineVersion": "3.0.0-hc13",
+    "addonNetworkVersion": "0.1.35-l7",
+    "releaseReady": false,
+    "retestOmitted": false,
+    "createdAtUtc": "2026-10-24T08:56:59.2286793Z",
+    "scope": "Five final-hash dual-client cases: three dream entry platform routes, first Dreamer platforms, Lurien native absorption/shared flags/count and duplicate absorption; 28 selected progress core checks.",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "91BF38F5E9DF04C50B8295C3AFA3CFC6DB1402664F96D35764CC9D739CADA083"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "0495C6B011A33BCAEDB53810E1E2DDBAB167219EBD441E69803B1C80A5BFC48E"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+      }
+    ],
+    "runs": [
+      {
+        "name": "package-0135-traversal-20261024-a1-dream-01-false-knight",
+        "group": "direct",
+        "mode": "coverage",
+        "scene": "Dream_01_False_Knight",
+        "stage": "local",
+        "bothPassed": true,
+        "strictLogs": "passed",
+        "nativeSceneExceptions": "passed (existing pre-Town SetupHeroRefs startup exception only)",
+        "started": "2026-10-24T08:52:29.4726673Z",
+        "ended": "2026-10-24T08:53:12.6272651Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "91BF38F5E9DF04C50B8295C3AFA3CFC6DB1402664F96D35764CC9D739CADA083"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0495C6B011A33BCAEDB53810E1E2DDBAB167219EBD441E69803B1C80A5BFC48E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+          }
+        ],
+        "smokeSha256": "4A7B767BA8FC6C24B551D5DE362CA711436F61AC87E88655ABDD5C1A8209D873"
+      },
+      {
+        "name": "package-0135-traversal-20261024-a1-dream-02-mage-lord",
+        "group": "direct",
+        "mode": "coverage",
+        "scene": "Dream_02_Mage_Lord",
+        "stage": "local",
+        "bothPassed": true,
+        "strictLogs": "passed",
+        "nativeSceneExceptions": "passed (existing pre-Town SetupHeroRefs startup exception only)",
+        "started": "2026-10-24T08:53:12.6432682Z",
+        "ended": "2026-10-24T08:53:55.3617497Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "91BF38F5E9DF04C50B8295C3AFA3CFC6DB1402664F96D35764CC9D739CADA083"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0495C6B011A33BCAEDB53810E1E2DDBAB167219EBD441E69803B1C80A5BFC48E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+          }
+        ],
+        "smokeSha256": "4A7B767BA8FC6C24B551D5DE362CA711436F61AC87E88655ABDD5C1A8209D873"
+      },
+      {
+        "name": "package-0135-traversal-20261024-a1-dream-03-infected-knight",
+        "group": "direct",
+        "mode": "coverage",
+        "scene": "Dream_03_Infected_Knight",
+        "stage": "local",
+        "bothPassed": true,
+        "strictLogs": "passed",
+        "nativeSceneExceptions": "passed (existing pre-Town SetupHeroRefs startup exception only)",
+        "started": "2026-10-24T08:53:55.3691965Z",
+        "ended": "2026-10-24T08:54:37.8562541Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "91BF38F5E9DF04C50B8295C3AFA3CFC6DB1402664F96D35764CC9D739CADA083"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0495C6B011A33BCAEDB53810E1E2DDBAB167219EBD441E69803B1C80A5BFC48E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+          }
+        ],
+        "smokeSha256": "4A7B767BA8FC6C24B551D5DE362CA711436F61AC87E88655ABDD5C1A8209D873"
+      },
+      {
+        "name": "package-0135-progress-20261024-a1-dream-guardian-lurien",
+        "group": "direct",
+        "mode": "coverage",
+        "scene": "Dream_Guardian_Lurien",
+        "stage": "progress",
+        "bothPassed": true,
+        "strictLogs": "passed",
+        "nativeSceneExceptions": "passed (existing pre-Town SetupHeroRefs startup exception only)",
+        "started": "2026-10-24T08:54:37.8969884Z",
+        "ended": "2026-10-24T08:55:46.8191754Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "91BF38F5E9DF04C50B8295C3AFA3CFC6DB1402664F96D35764CC9D739CADA083"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0495C6B011A33BCAEDB53810E1E2DDBAB167219EBD441E69803B1C80A5BFC48E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+          }
+        ],
+        "smokeSha256": "4A7B767BA8FC6C24B551D5DE362CA711436F61AC87E88655ABDD5C1A8209D873"
+      },
+      {
+        "name": "package-0135-first-dreamer-20261024-a1",
+        "group": "direct",
+        "mode": "coverage",
+        "scene": "Dream_Nailcollection",
+        "stage": "local",
+        "bothPassed": true,
+        "strictLogs": "passed",
+        "nativeSceneExceptions": "passed (existing pre-Town SetupHeroRefs startup exception only)",
+        "started": "2026-10-24T08:55:46.8601985Z",
+        "ended": "2026-10-24T08:56:20.4197965Z",
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "91BF38F5E9DF04C50B8295C3AFA3CFC6DB1402664F96D35764CC9D739CADA083"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "0495C6B011A33BCAEDB53810E1E2DDBAB167219EBD441E69803B1C80A5BFC48E"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+          }
+        ],
+        "smokeSha256": "4A7B767BA8FC6C24B551D5DE362CA711436F61AC87E88655ABDD5C1A8209D873"
+      }
+    ],
+    "build": {
+      "status": "passed",
+      "log": ".analysis/package-0.1.35-20261024/build.log",
+      "sha256": "8F91216BFF8C1310527BB71ABD5922E9F18EC69FB3955735DEE48378B36CA89E"
+    },
+    "core": {
+      "passed": 28,
+      "failed": 0,
+      "selection": "tests/progress-audit.selection.txt",
+      "log": ".analysis/package-0.1.35-20261024/core.log",
+      "sha256": "6D3C65589F4C2841095D287F9FC32DF24C923B0980AB4D9DA01B452F293495A9"
+    },
+    "gameDependencies": [
+      {
+        "path": "E:\\projects\\hollowConnect\\vendor\\references\\Assembly-CSharp.dll",
+        "size": 4064768,
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      {
+        "path": "E:\\projects\\hollowConnect\\vendor\\references\\PlayMaker.dll",
+        "size": 212480,
+        "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+      },
+      {
+        "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+        "size": 4064768,
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      {
+        "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+        "size": 4064768,
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      }
+    ],
+    "unchangedCombatAndProgressSource": [
+      {
+        "path": "src/HKMP/Game/Client/Entity/Component/DreamPlatformComponent.cs",
+        "sha256": "B219C10FB57A5B6F77BB610AF71EB30463370BDF9AC7D22D9B9AFDC1FABAE6FA",
+        "unchanged": true
+      },
+      {
+        "path": "src/HKMP/Game/Client/Entity/Component/RadianceArenaComponent.cs",
+        "sha256": "5C396EE436B4C4F135B7594D305EFB73E0EBCD32FB54C185CF0F7A52CD8DF8A0",
+        "unchanged": true
+      },
+      {
+        "path": "src/HKMP/Game/Client/Entity/BossRoomSynchronizer.cs",
+        "sha256": "D781D5A3A1FBF023C0A21663194F37049881C0AC029DA06ABF2B53478CB27040",
+        "unchanged": true
+      },
+      {
+        "path": "src/HKMP/Game/Client/Entity/BossSceneLayout.cs",
+        "sha256": "AD6F7ABB9B4791ADCA6A989B421673907F7C0DBE758BD6F37D5CD91A8707BB15",
+        "unchanged": true
+      },
+      {
+        "path": "src/HKMP/Resource/entity-registry.json",
+        "sha256": "CB6036E2324CA8CEEFF1CC4029729813F5409050AEC64AD208A788A76AF78263",
+        "unchanged": true
+      },
+      {
+        "path": "src/HollowConnect/CoopRuntime.cs",
+        "sha256": "C7F75AA08C3BE1479F1D5F2D7C50E8B12BDA76AB9305932A08764E552DB33B7F",
+        "unchanged": true
+      }
+    ],
+    "testLogic": [
+      {
+        "path": "tests/Smoke/CoverageProbe.cs",
+        "sha256": "6F65ACD2BC1B939D724935A5B529F4C8C72B59EF8DA3F2C7121E091925C9D469"
+      },
+      {
+        "path": "tests/Smoke/DreamTraversalChecks.cs",
+        "sha256": "E1527257159CC76B2790510249A61D6D0159E3275DA38B3E05E7A42507F3AB81"
+      },
+      {
+        "path": "tests/Smoke/CoverageDreamPlatforms.cs",
+        "sha256": "5F66B4456B5C1ED6FD890F4A56FC74D72B50E9E412119995DC5E306C569574C9"
+      },
+      {
+        "path": "tests/Smoke/StoryCutsceneChecks.cs",
+        "sha256": "BEC532ACA5D9584C2A2807E1E4F6EA93B24A8ECC385A3585EF0CB979B83AF4EC"
+      },
+      {
+        "path": "tests/Smoke/Run-Two.ps1",
+        "sha256": "45356DF0556D26704988D3EFFCBC9C9BE750837FE950A83E13848AEF280C3B81"
+      },
+      {
+        "path": "tests/Smoke/Assert-ProbeLogs.ps1",
+        "sha256": "AC2A85B29096DD5588EDAB98377FEBED51C80AE767E2A49CB71F132506DB7C26"
+      }
+    ],
+    "report": "docs/UPDATE-0.1.35.md",
+    "limits": [
+      "Existing unsaved isolated game copies, localhost UDP; no personal saves modified",
+      "No full boss battles, Radiance ascent, room matrix, continuous Pantheons or cross-machine FRP",
+      "Historical unresolved findings retained; earlier specialty runs keep their original production hashes"
+    ]
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "recordedAtUtc": "2026-10-24T12:33:29.3256333Z",
+  "evidenceKind": "Historical pre-version-bump specialty evidence; not final 0.1.36 runtime validation",
+  "scope": "Hornet Sentinel remote nail hits; Uumuu rescue; hazard checks and F1; Pleasure House door progress; Lost Kin leave/reentry and personal rewards",
+  "previousPackagedValidationSource": "docs/evidence/runtime-room-0.1.35.json",
+  "previousPackagedValidationSha256": "220C956388264DEFB9B6C608E60B27BD37E9A0077AD1E78E5AF6562EA1D2A468",
+  "reports": [
+    ".analysis/hornet-uumuu-rescue-20261024/report.md",
+    ".analysis/rescue-hazard-f1-20261024/report.md",
+    ".analysis/lost-kin-key-feedback-20261024/report.md"
+  ],
+  "evidence": [
+    {
+      "source": ".analysis/hornet-uumuu-rescue-20261024/followup-verification.json",
+      "sha256": "ACC2E0AD5B786224554820BF42411DCE8D7E7854675CDC21CD20D2B6FD5439E9",
+      "data": {
+        "verifiedUtc": "2026-10-24T11:18:51.61835Z",
+        "fixedZapEvidence": "reported-uumuu-final-20261024-l/host.log:132",
+        "coreChecksPassed": 6,
+        "baselineFailure": "reported-uumuu-trace-20261024-k/host.log:136",
+        "gameCases": [
+          {
+            "strictLogs": "passed by Run-Targeted",
+            "state": "passed",
+            "path": "E:\\projects\\hollowConnect\\.test-results\\reported-uumuu-final-20261024-l",
+            "run": "reported-uumuu-final-20261024-l",
+            "productionHashesMatch": true,
+            "probeHash": "B4B0462F0565648D81724B2939988B95C7126FC41372E8ECDCCA2AA97FEF5F7F"
+          },
+          {
+            "strictLogs": "passed by Run-Targeted",
+            "state": "passed",
+            "path": "E:\\projects\\hollowConnect\\.test-results\\reported-acid-final-20261024-m",
+            "run": "reported-acid-final-20261024-m",
+            "productionHashesMatch": true,
+            "probeHash": "B4B0462F0565648D81724B2939988B95C7126FC41372E8ECDCCA2AA97FEF5F7F"
+          },
+          {
+            "strictLogs": "passed by Run-Targeted",
+            "state": "passed",
+            "path": "E:\\projects\\hollowConnect\\.test-results\\reported-hornet-final-20261024-n",
+            "run": "reported-hornet-final-20261024-n",
+            "productionHashesMatch": true,
+            "probeHash": "B4B0462F0565648D81724B2939988B95C7126FC41372E8ECDCCA2AA97FEF5F7F"
+          }
+        ],
+        "production": [
+          {
+            "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8",
+            "name": "HKMP.dll"
+          },
+          {
+            "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69",
+            "name": "HollowConnect.Core.dll"
+          },
+          {
+            "sha256": "1B01B62352A7C2DABDB0107C91BC6C15B6ECE5E003AF5C79591FD058D315CC5E",
+            "name": "HollowConnect.dll"
+          }
+        ]
+      }
+    },
+    {
+      "source": ".analysis/rescue-hazard-f1-20261024/final-verification.json",
+      "sha256": "4E0103E7279FFCB16C8B4A7DFDF6606A770D11A43016402C570296E3EC59D3BF",
+      "data": {
+        "verifiedUtc": "2026-10-24T11:52:03.9805678Z",
+        "production": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "EDDA803BD544E6B7635BDE11FE17D3A9D064CE44E9D45C21D0A68DA3E3B791E7"
+          }
+        ],
+        "selectedRuns": [
+          {
+            "run": "rescue-risk-native-20261024-b",
+            "state": "passed",
+            "endpoints": [
+              "host",
+              "guest"
+            ],
+            "strictLogs": "passed",
+            "productionHashes": "match frozen and current",
+            "probeSha256": "8FD6DB6430C3DF62F3A7E2DFB26D2274FBCBE190BE5BB83F80B7F0046801F871",
+            "isolatedProcesses": "stopped"
+          },
+          {
+            "run": "rescue-risk-uumuu-20261024-c",
+            "state": "passed",
+            "endpoints": [
+              "host",
+              "guest"
+            ],
+            "strictLogs": "passed",
+            "productionHashes": "match frozen and current",
+            "probeSha256": "8FD6DB6430C3DF62F3A7E2DFB26D2274FBCBE190BE5BB83F80B7F0046801F871",
+            "isolatedProcesses": "stopped"
+          },
+          {
+            "run": "rescue-risk-acid-route-20261024-f",
+            "state": "passed",
+            "endpoints": [
+              "host",
+              "guest"
+            ],
+            "strictLogs": "passed",
+            "productionHashes": "match frozen and current",
+            "probeSha256": "E812193E5414D85C5F819B0FB7D6432DA7011014FE17322DB110FDE4231B6EEE",
+            "isolatedProcesses": "stopped"
+          }
+        ],
+        "nativeDependencies": [
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+          }
+        ],
+        "unchangedPriorSources": "all previously recorded sources match; only acid test diagnostics added afterward",
+        "core": {
+          "rerun": false,
+          "count": 8,
+          "state": "passed in prior execution",
+          "selection": "core.selection.txt"
+        },
+        "retainedFailures": [
+          {
+            "classification": "fixture required an unsupported full-landing counterexample; corrected fixture verifies shared body clearance",
+            "run": "rescue-risk-native-20261024-a"
+          },
+          {
+            "classification": "unconfirmed acid-position assertion; e/f diagnostic runs did not reproduce; not counted as passed",
+            "run": "rescue-risk-acid-20261024-d"
+          }
+        ],
+        "probeReuse": "b/c sources unchanged; e/f only add acid diagnostics/repetition, each probe hash preserved",
+        "limitations": "No full room/boss matrix. The cause of d remains unconfirmed. Native spike clearance regression verified; no complete unsafe supported landing reproduced."
+      }
+    },
+    {
+      "source": ".analysis/lost-kin-key-feedback-20261024/final-evidence.json",
+      "sha256": "D6F2D6DACF1835F376D551E85AEB8089D9CEC8DF5CAD9FDA0AA2FE68C74399CC",
+      "data": {
+        "verifiedUtc": "2026-10-24T12:22:51.2570988Z",
+        "reportedVersion": "0.1.33, confirmed by user; predates Lost Kin corpse fix in 0.1.34",
+        "selection": {
+          "state": "passed",
+          "end": "2026-10-24T12:20:28.6369285Z",
+          "runnerPid": 33436,
+          "started": "2026-10-24T12:18:22.3851146Z",
+          "completed": [
+            "kin-key-feedback-verified2",
+            "kin-feedback-reentry-verified2"
+          ],
+          "current": "kin-feedback-reentry-verified2"
+        },
+        "binaries": [
+          {
+            "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8",
+            "name": "HKMP.dll"
+          },
+          {
+            "sha256": "D938D839CB142080D6B07F0E6E58BD6D9BD8967B5404F19588263AA09210DC9E",
+            "name": "HollowConnect.dll"
+          },
+          {
+            "sha256": "E821ACBEA45AD064520BF14301DBE22969E6C616FB2195F842FBA1C5EF8AADC3",
+            "name": "HollowConnect.Core.dll"
+          }
+        ],
+        "runs": [
+          {
+            "run": "kin-key-feedback-verified2",
+            "case": "key",
+            "state": "passed",
+            "endpoints": [
+              "host",
+              "guest"
+            ],
+            "strictLogs": "passed",
+            "production": [
+              {
+                "name": "HKMP.dll",
+                "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+              },
+              {
+                "name": "HollowConnect.dll",
+                "sha256": "D938D839CB142080D6B07F0E6E58BD6D9BD8967B5404F19588263AA09210DC9E"
+              },
+              {
+                "name": "HollowConnect.Core.dll",
+                "sha256": "E821ACBEA45AD064520BF14301DBE22969E6C616FB2195F842FBA1C5EF8AADC3"
+              }
+            ],
+            "smokeSha256": "0272B90995A7428F9206F049A17EB50923D16D61E597A1680DF8B6DC485FB4BD",
+            "started": "2026-10-24T12:18:22.4741908Z",
+            "ended": "2026-10-24T12:19:21.9158542Z",
+            "processes": "stopped"
+          },
+          {
+            "run": "kin-feedback-reentry-verified2",
+            "case": "reentry",
+            "state": "passed",
+            "endpoints": [
+              "host",
+              "guest"
+            ],
+            "strictLogs": "passed",
+            "production": [
+              {
+                "name": "HKMP.dll",
+                "sha256": "00E490405485891C0D9FD17AF98FA7F0C4A288DB54DECE0D073E2A12B812CAE8"
+              },
+              {
+                "name": "HollowConnect.dll",
+                "sha256": "D938D839CB142080D6B07F0E6E58BD6D9BD8967B5404F19588263AA09210DC9E"
+              },
+              {
+                "name": "HollowConnect.Core.dll",
+                "sha256": "E821ACBEA45AD064520BF14301DBE22969E6C616FB2195F842FBA1C5EF8AADC3"
+              }
+            ],
+            "smokeSha256": "0272B90995A7428F9206F049A17EB50923D16D61E597A1680DF8B6DC485FB4BD",
+            "started": "2026-10-24T12:19:21.9265379Z",
+            "ended": "2026-10-24T12:20:28.6348602Z",
+            "processes": "stopped"
+          }
+        ],
+        "core": {
+          "result": "8 passed, 0 failed",
+          "reusedAfterLabelOnly": true,
+          "log": "core-final.log",
+          "selection": "core-selection.txt"
+        },
+        "native": [
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+            "size": 4064768
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+            "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+            "size": 4064768
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+            "size": 212480
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+            "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+            "size": 212480
+          }
+        ],
+        "sources": [
+          {
+            "path": "src/HollowConnect.Core/ProgressLedger.cs",
+            "sha256": "8F4B19004AD6DA3A61F381F373EF52004C042373B76909DC38FD9C1708248202"
+          },
+          {
+            "path": "src/HollowConnect/CoopRuntime.cs",
+            "sha256": "50375A4C4B631326633C30E8B9F5474FCB789DBE05FF9B1F34B25D1A00DE1C45"
+          },
+          {
+            "path": "tests/Program.cs",
+            "sha256": "11F67CC7BAB68A1136B1F7111816F08B92E938AC9B06A49CF3FA5AC73335A74B"
+          },
+          {
+            "path": "tests/Smoke/LostKinLifecycleChecks.cs",
+            "sha256": "B1C3892EC6BE517EC57A7D1C364CF39AF0D8FDECDF8509BCC7E1D539039A9085"
+          },
+          {
+            "path": "tests/Smoke/PleasureHouseFeedbackChecks.cs",
+            "sha256": "4BE16E397186B869742EB41812B4D69F05BB908CED2A9CDCCCD6B28D55805E88"
+          },
+          {
+            "path": "tests/Smoke/DreamVariantAudit.cs",
+            "sha256": "C8AB23D6A6E08DDEAB9B0E5555B2197FFEA06249CB2E393908CB0AE64C2CD7CD"
+          },
+          {
+            "path": "tests/Smoke/ProgressProbe.cs",
+            "sha256": "EE9D701EE12EB7797D59A896062891423C339E5B684782D9051BC2F7BEFDBA47"
+          },
+          {
+            "path": "src/HKMP/Game/Client/Entity/BossDefeatSignals.cs",
+            "sha256": "09D3F98E0CA44CF816A04C0D0479CBF5A5904097D9CB4586FAA48E66A0A29E1E"
+          }
+        ],
+        "preservedPreviousFixes": [
+          {
+            "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\StoryRescuePlacement.cs",
+            "sha256": "E212FBDCDDC5D9DEA4627FFF02B68A2A43700C719231101C8B4B874E9A900095"
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\DamageRankingRuntime.cs",
+            "sha256": "6045D48DB3E9EDCA7B88A86AE1D26EFA2532E3800C598C0CE734D2333DD313B0"
+          },
+          {
+            "path": "E:\\projects\\hollowConnect\\src\\HKMP\\Game\\Client\\GamePatcher.cs",
+            "sha256": "B22F7ACE02F956ED43E5178D6A0F5198C438D1C29BB37E6E9BC54EAFA7DE93C5"
+          }
+        ],
+        "historical": {
+          "productReproduction": "kin-key-feedback-baseline-b; original production, native unlock did not reach dream participant",
+          "fixtureFailure": "kin-key-feedback-baseline-a; corrected offset collider placement/control prerequisites",
+          "reentryBaseline": "kin-feedback-reentry-baseline-c; passed before product changes",
+          "beforeFinalLabel": [
+            "kin-key-feedback-final-d",
+            "kin-feedback-reentry-final-e"
+          ]
+        },
+        "limitations": [
+          "No uninvolved-player key loss reproduced",
+          "No Lost Kin reentry completion failure reproduced on current implementation",
+          "Same-machine UDP, isolated unsaved characters; explicit scene transition used for leave/reentry",
+          "No already-loaded Pleasure House active-dialogue refresh case, FRP or disconnect coverage"
+        ]
+      }
+    }
+  ],
+  "limits": [
+    "Each historical run retains its actual production hashes; no final-version runtime claim.",
+    "The acid anchor assertion and non-opener key-loss report remain unresolved.",
+    "No new game or core tests during packaging."
+  ]
+}

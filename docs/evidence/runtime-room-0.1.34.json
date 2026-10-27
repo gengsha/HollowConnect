@@ -1,0 +1,110 @@
+{
+  "version": "0.1.34",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.1.34-l7",
+  "releaseReady": false,
+  "retestOmitted": false,
+  "createdAtUtc": "2026-10-23T16:37:12.6132619Z",
+  "scope": "Final production hashes: one two-client ending HUD exit-interface fixture; native OUT, MainMenu/MainMenuNoSave hooks, ContinueGame and checkpoint return. No new game runs for packaging.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "E45A950AB764944B5AC0180BF26CF4785E9B52C7B34CF36FB1E3C1643F5C05DA"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "11AAF59971FABEAFA1E2BFD0F6A2865C11124A7E7E75E6AFBCED228E92080047"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+    }
+  ],
+  "runs": [
+    {
+      "name": "ending-hud-20261024-a1",
+      "group": "direct",
+      "mode": "ending-hud",
+      "bothPassed": true,
+      "strictLogs": "passed",
+      "started": "2026-10-23T16:05:47.7375789Z",
+      "ended": "2026-10-23T16:06:20.872547Z",
+      "options": {
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "scope": "Host MainMenu and guest MainMenuNoSave native cutscene exit hooks, HUD restoration, personal checkpoint and connected uninvolved teammate; not a full ending replay.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "E45A950AB764944B5AC0180BF26CF4785E9B52C7B34CF36FB1E3C1643F5C05DA"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "11AAF59971FABEAFA1E2BFD0F6A2865C11124A7E7E75E6AFBCED228E92080047"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "20D8D11C22ADE2F4661A1FCE915543F77905ABE4CD0EC678E0496D1D0627CD69"
+        }
+      ],
+      "smokeSha256": "C2F951315FAF6A6EF8229EC9D13C918FB57A09F68D18D28938CAA41513826958"
+    }
+  ],
+  "limits": [
+    "No full ending, continuous Pantheon, twelve-case room matrix, three-player session or cross-machine FRP rerun on these final hashes.",
+    "Earlier dream, Path of Pain, roar, camera, summon and return-path checks retain their original production hashes in the linked specialty reports.",
+    "Existing unresolved findings and the immediate-disconnect settlement race remain open."
+  ],
+  "build": {
+    "status": "passed",
+    "sha256": "581BCBC94821D0D1204A7D1F9B9800F3BC71DB0BD65DBEFA7CD7676FBBDDB188",
+    "log": ".analysis/ending-hud-20261023/build.log"
+  },
+  "gameDependencies": [
+    {
+      "role": "host",
+      "name": "Assembly-CSharp.dll",
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+      "size": 4064768
+    },
+    {
+      "role": "host",
+      "name": "PlayMaker.dll",
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+      "size": 212480
+    },
+    {
+      "role": "guest",
+      "name": "Assembly-CSharp.dll",
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+      "size": 4064768
+    },
+    {
+      "role": "guest",
+      "name": "PlayMaker.dll",
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+      "size": 212480
+    }
+  ],
+  "testLogic": [
+    {
+      "path": "tests/Smoke/EndingHudProbe.cs",
+      "sha256": "1CC1B8800B7D1D40B722176ADB82A0FBB8C9B5D3831A408B8DED9A3552127286"
+    },
+    {
+      "path": "tests/Smoke/Probe.cs",
+      "sha256": "15598799593027520A9C3FC08942A7215D72BCD04CD53D02486764124E0BFCCA"
+    },
+    {
+      "path": "tests/Smoke/Run-Two.ps1",
+      "sha256": "45356DF0556D26704988D3EFFCBC9C9BE750837FE950A83E13848AEF280C3B81"
+    },
+    {
+      "path": "tests/Smoke/Assert-ProbeLogs.ps1",
+      "sha256": "AC2A85B29096DD5588EDAB98377FEBED51C80AE767E2A49CB71F132506DB7C26"
+    }
+  ],
+  "previousValidationSource": "docs/evidence/runtime-room-0.1.34-before-20261024.json",
+  "previousValidationSha256": "7A007707CD021CA97E2C9FF33F5C2235F16AF992ACBA291C92416C17AC9FDC5D",
+  "report": "docs/ENDING-HUD-FIX-2026-10-24.md"
+}

@@ -32,7 +32,7 @@ internal class DiveAntic : AnimationEffect {
 
         // Instantiate the Q Charge object from the prefab in the local spell control
         // Instantiate it relative to the remote player position
-        var qCharge = Object.Instantiate(
+        var qCharge = RemotePlayerVisuals.Instantiate(
             localSpellControl.gameObject.FindGameObjectInChildren("Q Charge"),
             playerSpellControl.transform
         );

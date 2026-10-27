@@ -1,4 +1,4 @@
-﻿using Hkmp.Util;
+using Hkmp.Util;
 using UnityEngine;
 
 namespace Hkmp.Animation.Effects;
@@ -25,7 +25,7 @@ internal class NailArtCharged : AnimationEffect {
 
         // Create a new art charged object from the prefab in the hero controller
         var artChargedObject = HeroController.instance.artChargedEffect;
-        var artCharged = Object.Instantiate(
+        var artCharged = RemotePlayerVisuals.Instantiate(
             artChargedObject,
             playerAttacks.transform
         );
@@ -39,7 +39,7 @@ internal class NailArtCharged : AnimationEffect {
 
         // Create a new art charge flash object
         var artChargedFlashObject = HeroController.instance.artChargedFlash;
-        var artChargedFlash = Object.Instantiate(
+        var artChargedFlash = RemotePlayerVisuals.Instantiate(
             artChargedFlashObject,
             playerAttacks.transform
         );

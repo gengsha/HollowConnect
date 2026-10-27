@@ -14,7 +14,7 @@ namespace HollowConnect.Smoke;
 
 // Tests only. The arena trigger and native HealthManager damage drive every
 // phase; this fixture never sets a boss FSM state or reads/writes a player save.
-public sealed class BossProbe : MonoBehaviour {
+public sealed partial class BossProbe : MonoBehaviour {
     private string role, root;
     private bool host;
     private Hkmp.Game.GameManager engine;
@@ -126,6 +126,12 @@ public sealed class BossProbe : MonoBehaviour {
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         CoopMod.Settings.ShareProgress = false;
+        if (DisplayMenuCheck) ConfigureDisplayMenuChecks();
+        if (BalanceCheck) {
+            CoopMod.Settings.BossHealthScaling = host;
+            CoopMod.Settings.BossExtraHealthPerPlayer = host ? .6f : 3;
+            CoopMod.Settings.OtherPlayerOpacity = host ? .45f : .7f;
+        }
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => In("Town"), "unsaved character ready");
@@ -138,6 +144,15 @@ public sealed class BossProbe : MonoBehaviour {
         yield return Until(() => runtime.Connected, "boss test handshake");
         if (Has(role + ".failed")) yield break;
         Flag(role + ".connected"); yield return Until(() => Has(host ? "guest.connected" : "host.connected"), "both connected");
+        if (DisplayMenuCheck) {
+            yield return DisplayMenuChecks();
+            if (Has(role + ".failed")) yield break;
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS local display menu and host difficulty controls");
+            Flag(role + ".done");
+            yield break;
+        }
+        if (BalanceCheck) yield return BalanceVisualChecks();
         if (!host && LateGuest) {
             yield return Until(() => Has("host.head-damaged"), "late join waits for already-exposed native boss");
             yield return new WaitForSecondsRealtime(2.2f);
@@ -159,9 +174,17 @@ public sealed class BossProbe : MonoBehaviour {
                 e.Object.Host.GetComponent<HealthManager>().ApplyExtraDamage(1000);
             var control = Control(boss); var hm = boss.Object.Host.GetComponent<HealthManager>();
             yield return Until(() => control.ActiveStateName == "Idle", "arena trigger starts native boss AI", 20);
+            if (BalanceCheck) {
+                if (!LateGuest) yield return Until(() => runtime.CurrentBossHealthMultiplier() > 1.5, "same arena roster ready for boss balance");
+                yield return BalanceDamageChecks(hm, LateGuest ? 1 : 1.6);
+                if (Has(role + ".failed")) yield break;
+            }
             hm.ApplyExtraDamage(hm.hp);
             yield return Until(() => control.ActiveStateName == "Opened", "native armor damage exposes head without terminal death", 20);
             if (!Check(boss.Object.Host.activeInHierarchy && !hm.isDead && hm.hp == 65, "armor phase remains alive and resets phase health")) yield break;
+            var battleControl = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.FsmName == "Battle Control");
+            if (!Check(battleControl.FsmVariables.GetFsmInt("Battle Enemies").Value > 0,
+                "native armour special death leaves local battle unfinished")) yield break;
             var headHealth = head.Object.Host.GetComponent<HealthManager>(); headHealth.ApplyExtraDamage(7);
             if (!Check(headHealth.hp == 33 && !headHealth.isDead, "exposed head takes partial native damage")) yield break;
             Mark("AUTHORITY exposed position="+boss.Object.Host.transform.position+" scale="+boss.Object.Host.transform.lossyScale);
@@ -270,10 +293,16 @@ public sealed class BossProbe : MonoBehaviour {
             var headHealth = head.Object.Host.GetComponent<HealthManager>();
             if (!Check(control.ActiveStateName == "Opened" && headHealth.hp == expectedHeadHealth && headHealth.hp>0 && hm.hp == 65 && !hm.isDead &&
                 boss.Object.Host.activeInHierarchy && head.Object.Host.activeInHierarchy, "handoff preserves live exposed phase and both health values")) yield break;
+            var localBattleControl = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.FsmName == "Battle Control");
+            var localBattleCountBeforeHead = localBattleControl.FsmVariables.GetFsmInt("Battle Enemies").Value;
+            var localBattleStateBeforeHead = localBattleControl.ActiveStateName;
             headHealth.ApplyExtraDamage(headHealth.hp);
             yield return Until(() => control.FsmVariables.GetFsmInt("Stunned Amount").Value == 1 && control.FsmVariables.GetFsmInt("Rages").Value == 1 &&
                 control.ActiveStateName != "Opened" && control.ActiveStateName != "Open Uuup", "native head defeat advances phase after transfer", 20);
             ArenaPose(boss, "AFTER HEAD PHASE", true);
+            if (!Check(localBattleControl.FsmVariables.GetFsmInt("Battle Enemies").Value == localBattleCountBeforeHead &&
+                localBattleControl.ActiveStateName == localBattleStateBeforeHead,
+                "native head phase after takeover preserves this player's local battle counter and state")) yield break;
             if (!Check(!Object.FindObjectsOfType<Collider2D>().Any(c => c.name == "FK Terrain Block" && c.enabled),
                 "native head recovery removes detached terrain without replica collider residue")) yield break;
             var pos = boss.Object.Host.transform.position;
@@ -299,8 +328,14 @@ public sealed class BossProbe : MonoBehaviour {
             hm.ApplyExtraDamage(5);
             if (!Check(hm.hp == 60 && !hm.isDead, "continued armor damage remains live after transfer")) yield break;
             Flag("guest.continued"); yield return Until(() => Has("host.returned"), "returning client sees continued boss");
+            if (BalanceCheck) {
+                yield return Until(() => runtime.CurrentBossHealthMultiplier() > 1.5, "returning player restores two-player difficulty");
+                yield return BalanceDamageChecks(hm, 1.6);
+                Flag("balance.damage-complete");
+            }
         }
         if (Has(role + ".failed")) yield break;
+        if (BalanceCheck && host) yield return Until(() => Has("balance.damage-complete"), "new authority scaled damage completes");
         yield return ProbeShutdown.Run(engine,root,role);
         yield return null; yield return null;
         if (!host && !Check(detachedReplicaTerrain == null, "disconnect destroys the detached replica even after live entity table retirement")) yield break;

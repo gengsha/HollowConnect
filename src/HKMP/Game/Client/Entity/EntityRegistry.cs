@@ -19,6 +19,22 @@ internal static class EntityRegistry {
     internal static EntityRegistryEntry Transient(GameObject go) => new EntityRegistryEntry {
         BaseObjectName = go.name, Type = EntityType.DynamicHazard, ComponentTypes = new[] { EntityComponentType.Rotation, EntityComponentType.ZPosition }
     };
+    // Entrance gates keep per-player triggers. Colosseum's moving walls are
+    // shared arena geometry and follow the battle authority instead.
+    internal static bool IsLocalOnlyBarrier(EntityType type) => type is
+        EntityType.BattleGate or EntityType.MantisLordCage or EntityType.CameraLockArea;
+
+    internal static bool IsLocalOnlyBarrier(GameObject go) {
+        if (go == null) return false;
+        for (var transform = go.transform; transform != null; transform = transform.parent) {
+            var name = transform.name;
+            foreach (var entry in LocalBarrierEntries) {
+                if (!name.Contains(entry.BaseObjectName)) continue;
+                if (entry.FsmName == null || transform.GetComponents<PlayMakerFSM>().Any(f => f.FsmName == entry.FsmName)) return true;
+            }
+        }
+        return false;
+    }
     /// <summary>
     /// The file path of the embedded resource file for the entity registry.
     /// </summary>
@@ -28,12 +44,17 @@ internal static class EntityRegistry {
     /// List of all entity registry entries that are loaded from the embedded file.
     /// </summary>
     private static List<EntityRegistryEntry> Entries { get; }
+    private static EntityRegistryEntry[] SpawnEntries { get; }
+    private static EntityRegistryEntry[] LocalBarrierEntries { get; }
 
     static EntityRegistry() {
         Entries = FileUtil.LoadObjectFromEmbeddedJson<List<EntityRegistryEntry>>(EntityRegistryFilePath);
         if (Entries == null) {
             Logger.Warn("Could not load entity registry");
         }
+        SpawnEntries = Entries?.SelectMany(Flatten).ToArray() ?? System.Array.Empty<EntityRegistryEntry>();
+        // Root entries identify their whole local subtree.
+        LocalBarrierEntries = Entries?.Where(e => IsLocalOnlyBarrier(e.Type)).ToArray() ?? System.Array.Empty<EntityRegistryEntry>();
     }
 
     /// <summary>
@@ -51,7 +72,7 @@ internal static class EntityRegistry {
 
     // A registered child may also be spawned as a detached pooled root.
     internal static bool TryGetSpawnEntry(GameObject gameObject, out EntityRegistryEntry entry) =>
-        TryGetEntry(Entries.SelectMany(Flatten), gameObject, out entry);
+        TryGetEntry(SpawnEntries, gameObject, out entry);
     private static IEnumerable<EntityRegistryEntry> Flatten(EntityRegistryEntry entry) {
         yield return entry;
         if (entry.Children != null)
@@ -75,9 +96,17 @@ internal static class EntityRegistry {
         var ambiguous = false;
         foundEntry = null;
         if (gameObject == null) return false;
+        // Reading Unity's name crosses the native boundary and creates a new
+        // managed string. Do it once, rather than once per registry entry for
+        // every projectile and every candidate prefab.
+        var objectName = gameObject.name;
+
+        // The name card also has a Control FSM, but its native timed text
+        // animation must never be cloned/frozen as the Grey Prince boss.
+        if (objectName.StartsWith("Grey Prince Title", System.StringComparison.Ordinal)) return false;
 
         foreach (var entry in entries) {
-            if (!gameObject.name.Contains(entry.BaseObjectName)) {
+            if (!objectName.Contains(entry.BaseObjectName)) {
                 continue;
             }
 
@@ -178,6 +207,13 @@ internal class EntityRegistryEntry {
     [JsonConverter(typeof(StringEnumConverter))]
     [JsonProperty("type")]
     public EntityType Type { get; set; }
+
+    [JsonProperty("networked")]
+    public bool Networked { get; set; } = true;
+
+    /// <summary>A scene-owned boss attack/support object outside its hierarchy.</summary>
+    [JsonProperty("boss_support")]
+    public bool BossSupport { get; set; }
     
     /// <summary>
     /// The name of the FSM that this entity has. Can be empty if the entity does not have a FSM.

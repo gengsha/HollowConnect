@@ -1,4 +1,4 @@
-﻿using Hkmp.Util;
+using Hkmp.Util;
 using UnityEngine;
 
 namespace Hkmp.Animation.Effects;
@@ -20,7 +20,7 @@ internal class WallSlide : AnimationEffect {
         // Otherwise, create a new one from the prefab in the HeroController
         if (wallSlideDustObject == null) {
             var wallSlideDustPrefab = HeroController.instance.wallslideDustPrefab.gameObject;
-            wallSlideDustObject = Object.Instantiate(
+            wallSlideDustObject = RemotePlayerVisuals.Instantiate(
                 wallSlideDustPrefab,
                 playerEffects.transform
             );

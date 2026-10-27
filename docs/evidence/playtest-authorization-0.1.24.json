@@ -1,0 +1,274 @@
+{
+  "version": "0.1.24",
+  "action": "package-for-user-playtest",
+  "buildLabel": "",
+  "buildCommit": "49d97def4e1051bc00c2095a1e985d7f201fd034",
+  "workingTreeHasUncommittedChanges": true,
+  "userRequest": "新版本号打包；随后反馈“完全没修好”，本次继续修复并交付纠正版。",
+  "recordedAtUtc": "2026-10-18T08:31:24.8235850Z",
+  "retestOmitted": false,
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    }
+  ],
+  "scope": "Corrected 0.1.24 user playtest delivery following the failed 0.1.23 package. Stops Unity visibility callbacks from restarting disabled replica FSMs and erasing rendered platform state. Ten final-version dual-Unity Radiance cases cover ordinary pre-challenge arrival (F8/native, both first-entry orders), statue/P5 Absolute and ordinary phase-two late arrival, all ascent platforms, actual camera rendering, collision, gravity support, input and camera. One supplemental native corpse/Focus A-B continuation and 30 related core regressions passed. Localhost isolated copies only, save writes intercepted; no whole Radiance kill, complete P5, two-machine FRP, installer execution or personal-save writes. Existing unresolved findings remain open. The tested production hashes are packaged unchanged.",
+  "evidenceSource": "docs/evidence/radiance-render-runtime-2026-10-18.json",
+  "evidenceSha256": "5D04074B8140E9273CAD6C3C467516020DB069C2D40EBF995549661124868463",
+  "runtimeValidation": {
+    "version": "0.1.24",
+    "engineVersion": "3.0.0-hc11",
+    "releaseReady": false,
+    "retestOmitted": false,
+    "userRequest": "新版本号打包；随后反馈“完全没修好”，本次继续修复并交付纠正版。",
+    "recordedAtUtc": "2026-10-18T08:31:24.8235850Z",
+    "scope": "Corrected 0.1.24 user playtest delivery following the failed 0.1.23 package. Stops Unity visibility callbacks from restarting disabled replica FSMs and erasing rendered platform state. Ten final-version dual-Unity Radiance cases cover ordinary pre-challenge arrival (F8/native, both first-entry orders), statue/P5 Absolute and ordinary phase-two late arrival, all ascent platforms, actual camera rendering, collision, gravity support, input and camera. One supplemental native corpse/Focus A-B continuation and 30 related core regressions passed. Localhost isolated copies only, save writes intercepted; no whole Radiance kill, complete P5, two-machine FRP, installer execution or personal-save writes. Existing unresolved findings remain open. The tested production hashes are packaged unchanged.",
+    "evidenceSource": "docs/evidence/radiance-render-runtime-2026-10-18.json",
+    "evidenceSha256": "5D04074B8140E9273CAD6C3C467516020DB069C2D40EBF995549661124868463",
+    "runs": [
+      {
+        "name": "radiance-visual-20261018-final-r2-entry-story-f8-host",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-entry-story-native-host",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-entry-story-f8-guest",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-entry-story-native-guest",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-p2-statue-f8-host",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-p2-statue-native-guest",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-p2-p5-f8-guest-fault",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-p2-p5-native-host",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-p2-story-f8-host",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      },
+      {
+        "name": "radiance-visual-20261018-final-r2-p2-story-native-guest",
+        "bothPassed": true,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD"
+          }
+        ]
+      }
+    ],
+    "supplementalContinuation": "radiance-visual-20261018-final-continuation",
+    "coreRegression": {
+      "passed": 30,
+      "failed": 0,
+      "selection": {
+        "path": ".test-results/radiance-visual-20261018-core/selection.txt",
+        "bytes": 2369,
+        "sha256": "CC7BDE9D557570FC64DA6FE994FAF7432B77CC09A4AD5A0B9EA85A47F58103C2"
+      },
+      "result": {
+        "path": ".test-results/radiance-visual-20261018-core/final-result.log",
+        "bytes": 3031,
+        "sha256": "7BD41C2D713525DD63D5CF4DE54E43BC49E2D66CD8CDE39B4D5560E823659085"
+      }
+    },
+    "installed": false,
+    "realTwoMachineFrp": false,
+    "buildCommit": "49d97def4e1051bc00c2095a1e985d7f201fd034",
+    "workingTreeHasUncommittedChanges": true,
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "ACB3EF2738D63E307B29112F05BE2EDDE2549B34D949E5732DEFB747A2A4C831",
+        "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "E6D242BDEBE60A38E67785B033F5FBDB3CFECB1D1F83172138480AE0C7B04879",
+        "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD",
+        "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+      }
+    ],
+    "compiledConstants": {
+      "hollowConnect": "0.1.24",
+      "hkmp": "3.0.0-hc11"
+    }
+  }
+}

@@ -55,10 +55,11 @@ references without canceling the original game flow.
 
 All remote sources wait behind any native resource flow, including a different
 fragment source, so cached fragment counts cannot collide with native rollover.
-Persistent receipt flags are committed after the original flow completes and
-again when applying a remote grant. Physical pickup retirement runs only after
-that point. Shop refresh is limited to changed shop sources. A queued known
-shop receipt blocks the native cost state before it can deduct Geo.
+Persistent receipt flags are committed after the original local flow completes.
+Remote logical grants do not write those flags or retire the local object; the
+later native interaction remains responsible for its own marker. Shop state is
+left to the original FSM, and a queued known source only suppresses its positive
+resource write.
 
 ## Conservative old-save handling and limits
 
@@ -78,6 +79,26 @@ automatic fee refunds. Once a remote source is queued, its local cost preflight
 blocks further purchase. Remote resource application may wait for the shop or
 reward UI to close to protect the original control-release sequence.
 
+## Host-save ledger and local presentation
+
+The server generation is seeded from `DeathStatistics.Resources` and
+`DeathStatistics.SharedProgress`, which are saved per host slot. A newly accepted
+resource or progress offer is written back to that host object before its
+reliable grant is broadcast. A late join therefore receives the host's saved
+source IDs even after the server process has restarted.
+When the game switches save slots, the addon rebinds both ledgers to the new
+`DeathStatistics` instance before accepting offers, so receipts never cross
+slots.
+
+Receiving a source records only its logical ID and applies the missing local
+resource. It does not set the local `SceneData` activation marker or deactivate
+the native pickup. If the player later interacts with that source, the original
+FSM, animation, sound and control-release flow still run; the positive numeric
+write is intercepted so the resource is not added a second time. Remote mask and
+vessel sources show a short animation at the receiving player's current position,
+remote ore uses the lower-left pickup notice, and ability notices are independent
+of room distance and hero readiness.
+
 Before declaring verified, check the hooked native delegates in a game copy
 and verify: simultaneous same-source acquisition, local fragment conversion
 with a different queued remote source, Seer / shop delayed instant creation,
@@ -92,7 +113,8 @@ SceneData, and runs SaveChanges. These writes bypass ModHooks and cannot be
 treated as an observed native acquisition. Setting only
 `persistentBoolData.activated` in our adapter is insufficient: native SaveState
 reads the FSM variable and could overwrite the receipt on disable/unload. The
-active service writes both before retiring the original pickup.
+active service writes both only after a real local native flow has completed;
+remote logical claims leave the original pickup active.
 
 The current normal mod-server UI starts with `fullSynchronisation=false`.
 ClientManager.OnSaveUpdate and ServerManager.OnSaveUpdate return before these

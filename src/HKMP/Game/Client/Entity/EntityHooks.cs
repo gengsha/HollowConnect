@@ -15,6 +15,8 @@ internal static class EntityHooks {
     internal static void Register() {
         if (registered) return;
         registered = true;
+        LocalBattleCompletion.Register();
+        BossDamageScaling.Register();
         On.tk2dSpriteAnimator.Play_tk2dSpriteAnimationClip_float_float += Animate;
         On.ObjectPool.Recycle_GameObject += Recycle;
         On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += Activate;
@@ -28,6 +30,9 @@ internal static class EntityHooks {
     internal static void Unregister() {
         if (!registered) return;
         registered = false;
+        LocalBattleCompletion.Unregister();
+        BossGateCompletion.Clear();
+        BossDamageScaling.Unregister();
         On.tk2dSpriteAnimator.Play_tk2dSpriteAnimationClip_float_float -= Animate;
         On.ObjectPool.Recycle_GameObject -= Recycle;
         On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= Activate;
@@ -78,18 +83,42 @@ internal static class EntityHooks {
     private static void Extra(On.HealthManager.orig_ApplyExtraDamage orig, HealthManager self, int amount) {
         if (Extras.TryGetValue(self.GetInstanceID(), out var handler)) handler(orig, self, amount);
         else orig(self, amount);
+        // A native boss can finish inside ApplyExtraDamage and destroy its
+        // object before the per-entity component's next update.  Check the
+        // authority object at the end of the native call while the terminal
+        // flags are still available.  HealthDeath performs all boss/phase
+        // filtering and is idempotent at the co-op report layer.
+        var owner = EntityReferences.Owner(self.gameObject);
+        if (owner != null && owner.Object.Host == self && self.isDead && self.hp <= 0 && !self.hasSpecialDeath && !self.deathReset)
+            BossDefeatSignals.HealthDeath(owner.Type, owner.Id);
     }
     private static void EnterState(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, HutongGames.PlayMaker.Fsm self,
         HutongGames.PlayMaker.FsmState state) {
+        if (IsDisabledReplicaFsm(self)) return;
         var entity = EntityReferences.Owner(self.GameObject);
-        if (entity == null) orig(self, state);
+        if (entity == null) {
+            orig(self, state);
+            LocalBattleCompletion.LocalStateEntered(self);
+            BossGateCompletion.LocalStateEntered(self);
+        }
         else entity.EnterNativeState(orig, self, state);
     }
     private static void ProcessEvent(On.HutongGames.PlayMaker.Fsm.orig_ProcessEvent orig, HutongGames.PlayMaker.Fsm self,
         HutongGames.PlayMaker.FsmEvent ev, HutongGames.PlayMaker.FsmEventData data) {
+        if (BankerDialogue.Ignore(self, ev?.Name) || LocalBarrierEvents.Ignore(self, ev?.Name)) return;
         var entity = EntityReferences.Owner(self.GameObject);
+        if (entity?.EncounterSummonEvent(self, ev?.Name) == true) return;
+        if (IsDisabledReplicaFsm(self)) return;
         if (entity != null && entity.QueueEntranceEvent(self, ev)) return;
         orig(self, ev, data);
+    }
+    private static bool IsDisabledReplicaFsm(HutongGames.PlayMaker.Fsm fsm) {
+        // Unity delivers visibility/collision messages even to disabled
+        // MonoBehaviours. PlayMaker's ProcessEvent starts an unstarted FSM,
+        // replaying Init on the replica and erasing its authoritative state.
+        // Enabled local continuations (for example a detached final corpse)
+        // retain their native events; the authority's objects are unaffected.
+        return fsm.Owner is PlayMakerFSM owner && !owner.enabled && EntityReferences.IsReplica(owner.gameObject);
     }
     private static void Broadcast(On.HutongGames.PlayMaker.Fsm.orig_BroadcastEvent_FsmEvent_bool orig,
         HutongGames.PlayMaker.Fsm self, HutongGames.PlayMaker.FsmEvent ev, bool excludeSelf) {

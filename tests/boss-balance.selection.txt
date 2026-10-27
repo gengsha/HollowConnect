@@ -1,0 +1,4 @@
+boss balance default curve and bounded invalid configuration
+boss balance fractional poison and armor hits cannot round to permanent immunity
+boss balance count changes never create negative damage or accumulate a second multiplier
+boss balance host configuration uses existing reliable welcome layout

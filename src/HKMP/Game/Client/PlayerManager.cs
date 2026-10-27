@@ -107,6 +107,7 @@ internal class PlayerManager {
         _skinManager.RegisterHooks();
         
         CustomHooks.HeroControllerStartAction += HeroControllerOnStart;
+        CoopContext.PlayerVisualSettingsChanged += RefreshNameColors;
     }
 
     /// <summary>
@@ -116,6 +117,7 @@ internal class PlayerManager {
         _skinManager.DeregisterHooks();
         
         CustomHooks.HeroControllerStartAction -= HeroControllerOnStart;
+        CoopContext.PlayerVisualSettingsChanged -= RefreshNameColors;
     }
 
     /// <summary>
@@ -440,7 +442,8 @@ internal class PlayerManager {
         playerContainer.SetActive(true);
         playerContainer.SetActiveChildren(true);
 
-        AddNameToPlayer(playerContainer, name, team);
+        AddNameToPlayer(playerContainer, name, team, playerData.Id);
+        Animation.RemotePlayerVisuals.Track(playerObject);
 
         // Let the SkinManager update the skin
         _skinManager.UpdatePlayerSkin(playerObject, skinId);
@@ -501,7 +504,8 @@ internal class PlayerManager {
     /// <param name="playerContainer">The GameObject for the player container.</param>
     /// <param name="name">The username that the object should have.</param>
     /// <param name="team">The team that the player is on.</param>
-    public void AddNameToPlayer(GameObject playerContainer, string name, Team team = Team.None) {
+    /// <param name="peerId">Remote player identity; absent for the local hero.</param>
+    public void AddNameToPlayer(GameObject playerContainer, string name, Team team = Team.None, ushort? peerId = null) {
         // Create a name object to set the username to, slightly above the player object
         var nameObject = playerContainer.FindGameObjectInChildren(UsernameObjectName);
 
@@ -513,7 +517,7 @@ internal class PlayerManager {
 
         if (textMeshObject) {
             textMeshObject.text = name.ToUpper();
-            ChangeNameColor(textMeshObject, team);
+            ChangeNameColor(textMeshObject, team, peerId);
         }
 
         nameObject.SetActive(_serverSettings.DisplayNames);
@@ -572,7 +576,7 @@ internal class PlayerManager {
         var nameObject = playerData.PlayerContainer.FindGameObjectInChildren(UsernameObjectName);
         var textMeshObject = nameObject.GetComponent<TextMeshPro>();
 
-        ChangeNameColor(textMeshObject, team);
+        ChangeNameColor(textMeshObject, team, id);
 
         // Toggle body damage on if:
         // PvP is enabled and body damage is enabled AND
@@ -674,12 +678,29 @@ internal class PlayerManager {
         _skinManager.ResetLocalPlayerSkin();
     }
 
+    private void RefreshNameColors() {
+        // Only existing player labels; no scene scan or team/network updates.
+        foreach (var pair in _activePlayers) {
+            if (pair.Value == null) continue;
+            var name = pair.Value.FindGameObjectInChildren(UsernameObjectName)?.GetComponent<TextMeshPro>();
+            if (name != null) ChangeNameColor(name, GetPlayerTeam(pair.Key), pair.Key);
+        }
+        var ownName = HeroController.instance == null ? null :
+            HeroController.instance.gameObject.FindGameObjectInChildren(UsernameObjectName)?.GetComponent<TextMeshPro>();
+        if (ownName != null) ChangeNameColor(ownName, LocalPlayerTeam);
+    }
+
     /// <summary>
     /// Change the color of a TextMeshPro object according to the team.
     /// </summary>
     /// <param name="textMeshObject">The TextMeshPro object representing the name.</param>
     /// <param name="team">The team that the name should be colored after.</param>
-    private void ChangeNameColor(TextMeshPro textMeshObject, Team team) {
+    /// <param name="peerId">Remote player identity; absent for the local hero.</param>
+    private void ChangeNameColor(TextMeshPro textMeshObject, Team team, ushort? peerId = null) {
+        if (CoopContext.PlayerNameColor != null) {
+            textMeshObject.color = peerId.HasValue ? CoopContext.PlayerNameColor(peerId.Value) : Color.white;
+            return;
+        }
         switch (team) {
             case Team.Moss:
                 textMeshObject.color = new Color(0f / 255f, 150f / 255f, 0f / 255f);

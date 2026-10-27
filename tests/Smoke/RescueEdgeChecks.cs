@@ -196,6 +196,8 @@ public sealed partial class RescueProbe {
                 hero.takeNoDamage = false; pd.SetInt("health", 1); hero.cState.invulnerable = false;
                 hero.SetDamageMode(GlobalEnums.DamageMode.FULL_DAMAGE);
                 var lethalPosition = hero.transform.position;
+                var lethalBounds = hero.GetComponent<Collider2D>().bounds;
+                var lethalOffset = lethalBounds.center - lethalPosition;
                 Log("EDGE LETHAL PRE " + step + " input=" + hero.acceptingInput + " state=" + hero.hero_state + " transition=" + hero.transitionState +
                     " damage=" + typeof(HeroController).GetMethod("CanTakeDamage", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(hero, null) +
                     " invincible=" + pd.GetBool("isInvincible") + " dead=" + hero.cState.dead + " health=" + pd.health + " blue=" + pd.GetInt("healthBlue"));
@@ -214,7 +216,10 @@ public sealed partial class RescueProbe {
                         .OrderBy(g => (g.transform.position - lethalPosition).sqrMagnitude).FirstOrDefault();
                 if (shadeMarker != null) ground = hero.FindGroundPoint(shadeMarker.transform.position, true);
                 Log("EDGE ANCHOR " + step + "=" + runtime.DeathPosition + " initial=" + safe + " current=" + checkpoint + " ground=" + ground);
-                Check(Vector2.Distance(runtime.DeathPosition, ground) < 3.05f, "edge uses supported native death marker or checkpoint " + step);
+                var feet = runtime.DeathPosition + lethalOffset - Vector3.up * lethalBounds.extents.y;
+                Check(Physics2D.RaycastAll(feet + Vector3.up * .2f, Vector2.down, .6f).Any(h => h.collider.enabled && !h.collider.isTrigger &&
+                    h.normal.y > .7f && h.collider.GetComponentInParent<DamageHero>() == null && StoryFixtureScene(h.collider.gameObject, scene)),
+                    "story edge anchor has real local support instead of checkpoint priority " + step);
                 yield return Until(() => !runtime.Down && pd.health == 1, "edge actual rescue restores one health " + step);
                 Check(hero.cState.invulnerable, "edge native rescue protection " + step);
                 hero.takeNoDamage = true;

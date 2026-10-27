@@ -1,4 +1,5 @@
-param([switch]$ReuseNativeHost,[string]$StartAt,[string[]]$Only)
+param([switch]$ReuseNativeHost,[switch]$NoBuild,[string]$StartAt,[string[]]$Only,
+    [ValidatePattern('^[a-z0-9][a-z0-9-]{0,50}$')][string]$RunPrefix)
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $taskCases=@(
@@ -21,17 +22,25 @@ if($Only){
 }
 if($StartAt -and !($taskCases | Where-Object {$_.Name -eq $StartAt})){throw 'Unknown suite starting case'}
 $taskStarted=!$StartAt
+$taskSmokePrepared=[bool]$NoBuild
 foreach($taskCase in $taskCases){
     if($taskCase.Name -eq $StartAt){$taskStarted=$true}
     if(!$taskStarted){continue}
+    $taskRunName=if($RunPrefix){$RunPrefix+'-'+$taskCase.Name}else{$taskCase.Name}
     if(!$taskCase.Existing){
+        if(!$taskSmokePrepared){
+            & (Join-Path $taskRoot 'scripts\Build.ps1') -Target Smoke
+            $taskSmokePrepared=$true
+        }
         foreach($taskEnv in @(Get-ChildItem Env: | Where-Object {$_.Name -like 'HOLLOWCONNECT_*'})){
             [Environment]::SetEnvironmentVariable($taskEnv.Name,$null,'Process')
         }
         foreach($taskKey in $taskCase.Env.Keys){[Environment]::SetEnvironmentVariable($taskKey,$taskCase.Env[$taskKey],'Process')}
-        & (Join-Path $PSScriptRoot 'Run-Two.ps1') -RunName $taskCase.Name -Mode $taskCase.Mode *> (Join-Path $taskRoot ('.test-results/'+$taskCase.Name+'.launch.log'))
+        & (Join-Path $PSScriptRoot 'Run-Two.ps1') -RunName $taskRunName -Mode $taskCase.Mode -NoBuild *> (Join-Path $taskRoot ('.test-results/'+$taskRunName+'.launch.log'))
+        (Get-FileHash -LiteralPath (Join-Path $PSScriptRoot 'bin/Release/net472/HollowConnect.Smoke.dll')).Hash |
+            Set-Content -LiteralPath (Join-Path $taskRoot ('.test-results/'+$taskRunName+'/probe-sha256.txt'))
     }
-    $taskDir=Join-Path $taskRoot ('.test-results/'+$taskCase.Name)
+    $taskDir=Join-Path $taskRoot ('.test-results/'+$taskRunName)
     Write-Output ('RUN '+$taskCase.Name)
     $taskDeadline=[DateTime]::UtcNow.AddMinutes(12)
     while(!(Test-Path -LiteralPath (Join-Path $taskDir 'host.done')) -or !(Test-Path -LiteralPath (Join-Path $taskDir 'guest.done'))){

@@ -1,4 +1,4 @@
-﻿using Hkmp.Util;
+using Hkmp.Util;
 using UnityEngine;
 
 namespace Hkmp.Animation.Effects;
@@ -23,7 +23,7 @@ internal class ThornsOfAgony : DamageAnimationEffect {
         var playerEffects = playerObject.FindGameObjectInChildren("Effects");
 
         // Instantiate the Thorn Hit object relative to the player effects object
-        var thornHit = Object.Instantiate(
+        var thornHit = RemotePlayerVisuals.Instantiate(
             thornHitObject,
             playerEffects.transform
         );

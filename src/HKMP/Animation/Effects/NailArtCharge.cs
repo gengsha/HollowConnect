@@ -1,4 +1,4 @@
-﻿using Hkmp.Util;
+using Hkmp.Util;
 using UnityEngine;
 
 namespace Hkmp.Animation.Effects;
@@ -20,7 +20,7 @@ internal class NailArtCharge : AnimationEffect {
         // Create a new art charge object from the prefab in the hero controller
         // This is the soul-like particles that flow towards the player
         var artChargeObject = HeroController.instance.artChargeEffect;
-        var artCharge = Object.Instantiate(
+        var artCharge = RemotePlayerVisuals.Instantiate(
             artChargeObject,
             playerAttacks.transform
         );

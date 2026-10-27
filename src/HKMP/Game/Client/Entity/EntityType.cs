@@ -244,4 +244,5 @@ internal enum EntityType {
     GrimmFirebatPillar,
     DynamicHazard,
     CombatSpawner,
+    EncounterSummoner,
 }

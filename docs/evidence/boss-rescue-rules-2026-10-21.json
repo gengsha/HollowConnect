@@ -1,0 +1,1999 @@
+{
+  "date": "2026-10-21",
+  "version": "0.1.29",
+  "addonNetworkVersion": "0.1.29-l2",
+  "delivery": "source_only_after_existing_package",
+  "production": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+    }
+  ],
+  "betaLabelChange": {
+    "note": "After the six rescue-rule and four Radiance checks, only the spectator menu title/description gained Beta; defaults and behavior were unchanged. Subsequent regression binaries are separately recorded.",
+    "diff": ".analysis/boss-wipe-rule-20261021/beta-label.diff",
+    "diffSha256": "38CA33E7AD507056DF9F392FB75E4A9456EA20A4177CD9D1E1711213F22DA97C",
+    "testedBeforeLabel": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+      }
+    ]
+  },
+  "coreTests": {
+    "passed": 238,
+    "failed": 0,
+    "log": ".analysis/boss-wipe-rule-20261021/core-final.log",
+    "sha256": "91732E2454AE8EFB630F6E9EA208B8F1E8EED71EEFC1598E6A235AC88312676A"
+  },
+  "settingsSaveGuard": {
+    "result": {
+      "run": "radiance-spectator-20261021-e-final-beta-story-host-story-f8-host",
+      "settingsSha256Before": "F3B67DBA3C769CA67DDA554C28430877014EE426CAEFD2BC3A079E81DC46DC72",
+      "settingsSha256After": "F3B67DBA3C769CA67DDA554C28430877014EE426CAEFD2BC3A079E81DC46DC72",
+      "unchangedAfterBothGracefulQuits": true
+    },
+    "sha256": "06892078F0D4244A286FBD62F8DB741719512AED5ADF0EA1AF1A5C5ED44359FB",
+    "earlierSideEffect": "Before the test-only global-save hook was installed, graceful fixture exits wrote disposable global preferences. No native save writes; the separate preference side effect is documented.",
+    "restoration": {
+      "beforeSha256": "F3B67DBA3C769CA67DDA554C28430877014EE426CAEFD2BC3A079E81DC46DC72",
+      "afterSha256": "80CF76DEB3E0C36C66B4E1564D64A111DF26019C352A1231FF0E08428D592913",
+      "restoredToCurrentDefaults": {
+        "Rescue": true,
+        "ShareProgress": true,
+        "RescueLimit": 0,
+        "SpectateAfterExhaustion": false
+      },
+      "otherFieldsUnchanged": true,
+      "originalPreTestValuesKnown": false
+    },
+    "restorationSha256": "D93D792D23C59CECB72AA629C729CF918891741F4D40CCBA4BD98E01E54E3E20"
+  },
+  "passedRuns": [
+    {
+      "run": "rescue-rules-20261021-h-native-control",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": "native-control",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/host.log",
+          "sha256": "2B8E11223FCDCC2FBDC9317BE061FBBEACAFFD14E0D6A75C7DD131C463E9A4E1"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/guest.log",
+          "sha256": "3BC3A0A37BC4FB923C3613B9F6C79800704E4FB639B111F43E28F2D2700509D2"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/host-unity.log",
+          "sha256": "7F1E2D19F070CA1DDC0542302C8B07AE314E4C2699B1DD667D06B356835FE869"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/guest-unity.log",
+          "sha256": "5D519C0BE495A3F41F7CB8DE664BCEF9C9F140BA332040DD195FCF89375323CF"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/probe-sha256.txt",
+          "sha256": "E1EEE8B327788A6B0FE1E5B540BE49921D489C143AE9C4B779E9F4088157578A"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-native-control/case.json",
+          "sha256": "91DFF8DBE1DCB7A393075F14F6FE108C349E01A330363CD6F3E598E92EBEE33D"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-h-traveller",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": "traveller",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/host.log",
+          "sha256": "00A5B842906FC3056B016452CF21BE614AEE983B4C722EA4550A21E7D8C4E0CF"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/guest.log",
+          "sha256": "2CD63FDBE058F43770D13A8091858FEABDD4A827B4923018D7B4B745BFBAB44E"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/host-unity.log",
+          "sha256": "962855F761C83630CF03C7528E78377CF828010796EA4D17D4F346FBA041B671"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/guest-unity.log",
+          "sha256": "AA724A5964D60B7F68C6BFEC80D86AE578DB026CBE972A6FBD292015B9E4288E"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/probe-sha256.txt",
+          "sha256": "E1EEE8B327788A6B0FE1E5B540BE49921D489C143AE9C4B779E9F4088157578A"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-traveller/case.json",
+          "sha256": "D58C1A6A5780CB868D92D34A99B2E2557194AD1CD17D4ADE5DD69517529643AA"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-h-quota",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": "quota",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/host.log",
+          "sha256": "2C2ACC217426A6716E410BB6AD815B0EAC22605EA1958E643B820A9C92A8A803"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/guest.log",
+          "sha256": "128300D67C41A8DD5E8AAADE966D0FDA3AFCDBFCE4E8798AB430F7220DB89E18"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/host-unity.log",
+          "sha256": "5D1C5E78EE941033B224098C74947B4805E55DC377D6B43FA53E605DF9433484"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/guest-unity.log",
+          "sha256": "D0F5D115F728DCEEC9FBF318E73C727FF175F00D3F4A23A981B48EFA9E613A68"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/probe-sha256.txt",
+          "sha256": "E1EEE8B327788A6B0FE1E5B540BE49921D489C143AE9C4B779E9F4088157578A"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-quota/case.json",
+          "sha256": "7BE04BD80592DFC6573FE831A9C9DA4538E9C52B47E85BAA6A3CF9E1E76284A2"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-h-off-spectate",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": "off-spectate",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/host.log",
+          "sha256": "1171ABF9C2632062B7E382B71057045B7BC6DCB995D2F8A8DB4D5B037A84FD52"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/guest.log",
+          "sha256": "F0B6039A10D6BEE6E4F00F06604214FE8F0D09E00AC3F87D390D517B668F5995"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/host-unity.log",
+          "sha256": "A2059ED41E52A43A849876C62B2CF61D134C786CCFC02AE3AD6F4E357927B186"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/guest-unity.log",
+          "sha256": "7158FFD151B510F69B619DB8E14FF5DE52977F8C52D984726B151B8A8B92CFED"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/probe-sha256.txt",
+          "sha256": "E1EEE8B327788A6B0FE1E5B540BE49921D489C143AE9C4B779E9F4088157578A"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-off-spectate/case.json",
+          "sha256": "EBBF13D74A6E09CB4014586B7D52FAB89F4108B070243F7924244B11D8A75EBF"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-h-spectator-wipe",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": "spectator-wipe",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/host.log",
+          "sha256": "6ECB9D7BE57B08DC94C1EEC6011726C66709B8EA21217C5F930AC0DDC46F215F"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/guest.log",
+          "sha256": "662BE3E66B4F2AEE5A909CAAD1548B92706579C16DECBE100C6FC6BC8E4E78B2"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/host-unity.log",
+          "sha256": "E625E7F507DBDA60D57AA0CC8BEB69D828B2A4EC6875B66CF9AA4A0921BF82C7"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/guest-unity.log",
+          "sha256": "62828D1778ED618B86C0C57391DFEAE1C2F91077B54B019453C5DD332489B207"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/probe-sha256.txt",
+          "sha256": "E1EEE8B327788A6B0FE1E5B540BE49921D489C143AE9C4B779E9F4088157578A"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-spectator-wipe/case.json",
+          "sha256": "19053B6B5C8F8FD6510BEA28D3AD89207A381AA561CAF62224BED63577D4EAA2"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-h-no-spectate",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": "no-spectate",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/host.log",
+          "sha256": "3DDFBE4EC6DA33A2878A2BF6CFC0D8FDD08B28403FCDF450D6171652D5B743EB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/guest.log",
+          "sha256": "05715395C7EBB0008F18F637F4E455C3B7D5318F0E344A619B9ED7FEA93E1743"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/host-unity.log",
+          "sha256": "982D6128BF66C3D12D40F9D52C5A5EF0FE4C16492B6E6A1293D248653785794D"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/guest-unity.log",
+          "sha256": "A905BF7166E4D995E83C6226E649401C548E524A37150F9CD5AF8A0613F3FA4B"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/probe-sha256.txt",
+          "sha256": "E1EEE8B327788A6B0FE1E5B540BE49921D489C143AE9C4B779E9F4088157578A"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-h-no-spectate/case.json",
+          "sha256": "DFD3B316E516ACE63A563C3116D5A7C63B3D5D32A14AD7C40CD2B73CEBDA97A4"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "radiance-spectator-20261021-b-story-host-story-f8-host",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": {
+        "Name": "story-f8-host",
+        "Authority": "host",
+        "Entry": "f8",
+        "Scene": "Dream_Final_Boss",
+        "P5": "0",
+        "Faults": "0"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/host.log",
+          "sha256": "DA8776996FED17B4BAC4414722FAB1B665F1626E3B0EAC4C4926701E4797A08A"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/guest.log",
+          "sha256": "581786AD5C4A503CBCED1A1589B8B0D636D0FA4CD0AC4A2B91D91037F604CF7D"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/host-unity.log",
+          "sha256": "B99051A31B4FEF0A9CFD73DE232BC053C27D613B83119971E5E776F12C4A6623"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/guest-unity.log",
+          "sha256": "291FB18D29BDD7229BAFA2131948D0E3A4C95F16885628F5A0D12CA9EF492CE5"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/probe-binary.json",
+          "sha256": "11D58692376F0A15F510135E36CF63F9F6076543F031FEAB25B0DFC3A7B307CB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/strict-pass.txt",
+          "sha256": "FEF08E232AD66535073F5D5D69D3CE3D1535727EB5B0530C97888A949BB6A925"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/case.json",
+          "sha256": "C401BB2B2398D21E54BFB42FF2B919CE58BCD7C898F2101A819F239679524A31"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/host-spectator-ascent-6056240134491093453.png",
+          "sha256": "20E28985AF16344E9D651932EB2C52C5141BA1E26DA26CB9FB1E1AE967F1B626"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-host-story-f8-host/host-spectator-ascent-6244293532822340591.png",
+          "sha256": "524131B04EBB42A26A93251F89AF149AE16C16D0EED54628B94AC8C2733417E1"
+        }
+      ],
+      "camera": "2026-10-21T04:13:18.8858135Z PASS spectator full ascent camera range=45.93784..140.7067 samples=180 steps=15"
+    },
+    {
+      "run": "radiance-spectator-20261021-b-story-guest-story-native-guest",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": {
+        "Entry": "native",
+        "Faults": "0",
+        "P5": "0",
+        "Scene": "Dream_Final_Boss",
+        "Name": "story-native-guest",
+        "Authority": "guest"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/host.log",
+          "sha256": "606F7153D076502AA36F9AD1FA8DA375FF9014A20905AB71E4ECEBB5D14080A5"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/guest.log",
+          "sha256": "97C45972CF14C9810AB275F0AA55E592100D968D9B290E91FA09E7BC7D921A40"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/host-unity.log",
+          "sha256": "86BCA4088A570D58A1A6DF0BE6C10F91BE45F0B46CC96EB46E44DE820A1E66A8"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/guest-unity.log",
+          "sha256": "B82E767D4938B7130F6D68CA4B9A2CA77C08E6FDA453E02A079C754C7389B649"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/probe-binary.json",
+          "sha256": "11D58692376F0A15F510135E36CF63F9F6076543F031FEAB25B0DFC3A7B307CB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/strict-pass.txt",
+          "sha256": "FEF08E232AD66535073F5D5D69D3CE3D1535727EB5B0530C97888A949BB6A925"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/case.json",
+          "sha256": "43A1AA1F011470C187D241DB0BADCF9E32E11B6F8338B90194FA9DA905D16CF3"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/guest-spectator-ascent-6056240134491093453.png",
+          "sha256": "43D37E7353496874323BEBDB9212E81312A984E183F92084B3AFC8ED99445E34"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-story-guest-story-native-guest/guest-spectator-ascent-6244293532822340591.png",
+          "sha256": "D45C438FDD1AA69B938D011273C600FBA966F2A48E083A28B3D5FEDF1EE0979B"
+        }
+      ],
+      "camera": "2026-10-21T04:15:20.8180004Z PASS spectator full ascent camera range=45.93784..140.7642 samples=180 steps=15"
+    },
+    {
+      "run": "radiance-spectator-20261021-c-absolute-host-statue-native-guest",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": {
+        "P5": "0",
+        "Authority": "guest",
+        "Scene": "GG_Radiance",
+        "Faults": "0",
+        "Name": "statue-native-guest",
+        "Entry": "native"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/host.log",
+          "sha256": "7E088C7BBABB15971DC0C0A998BED53F38753D8941066CF48A028BC4928F3745"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/guest.log",
+          "sha256": "B68E949C026204C01E2D2C6533050678FAE74D9263D80342170195E2E46DBB4F"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/host-unity.log",
+          "sha256": "38718C32C8EBE816B01A389F331EDE43A36C27C57AE5C6487A7C66F1EC5F8021"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/guest-unity.log",
+          "sha256": "D21B7644048A22B019293C9F5A903C9A50E2B038B865470ECAF3A4335D42490E"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/probe-binary.json",
+          "sha256": "BBCBB8340D71B70A4063721DCDC1F611EC3A2E88A9E30B84EB53276C22C42CAD"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/strict-pass.txt",
+          "sha256": "FEF08E232AD66535073F5D5D69D3CE3D1535727EB5B0530C97888A949BB6A925"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/case.json",
+          "sha256": "D332C2031A3DFCE919527DAECF93D9A8F5B38177967281EE1080FC4296DCA6A4"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/host-spectator-ascent-8011634827813402183.png",
+          "sha256": "773E8C1CC590116444B1956019354E83B9ED2BCC012877FC9C6EFD08BE507533"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-host-statue-native-guest/host-spectator-ascent-8186092372610287557.png",
+          "sha256": "6A7BAE446832D12CD1902E8A343F21961CEBECA3A2790FC4E20034D4768E604D"
+        }
+      ],
+      "camera": "2026-10-21T04:20:53.4018583Z PASS spectator full ascent camera range=45.93783..156.4095 samples=216 steps=18"
+    },
+    {
+      "run": "radiance-spectator-20261021-c-absolute-guest-statue-f8-host",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": {
+        "P5": "0",
+        "Authority": "host",
+        "Scene": "GG_Radiance",
+        "Faults": "0",
+        "Name": "statue-f8-host",
+        "Entry": "f8"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/host.log",
+          "sha256": "0915DEC9564E82FB5360654B194095A89F84301C5A6DE46559251E7D29B1350B"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/guest.log",
+          "sha256": "DA35D5DAAE9A6E94F4CC762B37EFD531730F1A67D5884EC3816ED66804DB25BF"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/host-unity.log",
+          "sha256": "9B636A7B6B9DAF29ECEA0965BE1E0063F128EC4BB0E01DBC084A08064339EF61"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/guest-unity.log",
+          "sha256": "35ABFDF211E321993F25E6EB3D9E249D42BE10A4CD703F225A9D574CEE65B990"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/probe-binary.json",
+          "sha256": "BBCBB8340D71B70A4063721DCDC1F611EC3A2E88A9E30B84EB53276C22C42CAD"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/strict-pass.txt",
+          "sha256": "FEF08E232AD66535073F5D5D69D3CE3D1535727EB5B0530C97888A949BB6A925"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/case.json",
+          "sha256": "DE0BA703DB6073CC69024537D9220A3456D63BC697AE805EDC46EDC160ABB4D6"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/guest-spectator-ascent-8011634827813402183.png",
+          "sha256": "74AE15FC3F38590CA200EDBAE97B32697CCFF696FF8BC1D8A61D6F5D8B26B841"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-c-absolute-guest-statue-f8-host/guest-spectator-ascent-8186092372610287557.png",
+          "sha256": "0371B95DBE0487A0480B0030DC6E4BE749D3FBBBB72C2CC57E82BA20094BC75A"
+        }
+      ],
+      "camera": "2026-10-21T04:22:42.0383894Z PASS spectator full ascent camera range=45.93784..156.0534 samples=216 steps=18"
+    },
+    {
+      "run": "radiance-spectator-20261021-e-final-beta-story-host-story-f8-host",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": {
+        "Name": "story-f8-host",
+        "Scene": "Dream_Final_Boss",
+        "Authority": "host",
+        "P5": "0",
+        "Faults": "0",
+        "Entry": "f8"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/host.log",
+          "sha256": "4F37B92416E8EFDA4F53B6BDDEBA0906B1B46BE8EAE605C2FB8961B2D2746B10"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/guest.log",
+          "sha256": "C62193AC4F60D4CEBC50B9592A5ED1BA54F0145D7A7B69B01456384CB65D2C34"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/host-unity.log",
+          "sha256": "9EA2D177058D1F16862E9A6BEDCF5A1212A035A42E20D6D0FFFC93BBA157E068"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/guest-unity.log",
+          "sha256": "4C608958E9D452AD8A6B7E71CD75F7B5B615BE0B8EED1ABF3C935C32AEF76ADE"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/probe-binary.json",
+          "sha256": "C334258CC74CDB5FF8DB92FDEC5B6AE6047BEF2FB6C1ABDA7ACE28DFB90527BB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/strict-pass.txt",
+          "sha256": "FEF08E232AD66535073F5D5D69D3CE3D1535727EB5B0530C97888A949BB6A925"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/case.json",
+          "sha256": "275C84EA67DAD99A9DE449479F6847FACA85CE20BBE086CFD13DF971D0C8797D"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/host-spectator-ascent-6056240134491093453.png",
+          "sha256": "D2F61304CE238E3718CE5064D8DFDC7FA8653278CC96D7D936607590684D072F"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-e-final-beta-story-host-story-f8-host/host-spectator-ascent-6244293532822340591.png",
+          "sha256": "9FA8155578E3285DD9D4C754B9EBF75B76611E30E5EC9636CB895D0474173AF8"
+        }
+      ],
+      "camera": "2026-10-21T04:50:28.1205262Z PASS spectator full ascent camera range=45.98853..140.2796 samples=180 steps=15"
+    },
+    {
+      "run": "rescue-rule-regression-20261021-e-final-rescue-013",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-rescue-013/host.log",
+          "sha256": "3C52B713C0CA7CFC902EDC213BFA5CD23046F699B1F952CAEC6519E4F9A4A951"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-rescue-013/guest.log",
+          "sha256": "50565B82C6F7CF65CF43DD8B4BAB5877577FB68F3E9E326F62132B4661951BE7"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-rescue-013/host-unity.log",
+          "sha256": "D397EAE35E3DD58D37C447C097A196ECFE52538DDB6C4DE56A46EE307370A20C"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-rescue-013/guest-unity.log",
+          "sha256": "2FB0F7058E45FF298CC51E6A1E6E006764602BF35B1725EB642B5FA473DBC43E"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-rescue-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-rescue-013/probe-sha256.txt",
+          "sha256": "AFB299A1145B622084C6C6815C07B057271F1A35BE448D4F670E1D5B2C1E1590"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-rescue-013/strict-pass.txt",
+          "sha256": "68819D77C66C8D76D971505AFB9E2D364815AF6A6AB2873A86D5D16125676D68"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rule-regression-20261021-f-final-death-story-013",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-death-story-013/host.log",
+          "sha256": "93E0F048E6DA99147B6303442A9336E22FC5B7CE0F25F4EC7A7DA901A48C1FBA"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-death-story-013/guest.log",
+          "sha256": "8A4ABA9E68C28ACB9D11CE6ADE4C86385EBD017287FD8308D3E43B0B37B8921B"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-death-story-013/host-unity.log",
+          "sha256": "F007E6FA4762D11E9DC5ED9837A2D6376E34EC660AA3A6E936449033DFDF6187"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-death-story-013/guest-unity.log",
+          "sha256": "7E59CB665D81DDE1D46F3579D4199121C0877571B81190F3E04D1C9211613B43"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-death-story-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-death-story-013/probe-sha256.txt",
+          "sha256": "D18CBE50D28BA4111EF872CDCDA829934D324411389782CCA28D28B90B309CD1"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-death-story-013/strict-pass.txt",
+          "sha256": "68819D77C66C8D76D971505AFB9E2D364815AF6A6AB2873A86D5D16125676D68"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-victory-20261021-d-health-host",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": {
+        "Authority": "host",
+        "Disabled": "0",
+        "Case": "health",
+        "Name": "health-host"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/host.log",
+          "sha256": "5B20E6332C342F398AF162AA8669789FEAFE9C590957ED1166843A4872527B7E"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/guest.log",
+          "sha256": "CE1743E13D88F956EF54AD4C276257ED7E653236612E2E16762BBAA7C383A454"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/host-unity.log",
+          "sha256": "636B0D2255C05AAEBACF5E87DF30CDF7D1EFC2CC0BC31BEF526C5A4B3406A076"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/guest-unity.log",
+          "sha256": "AFC70BF35D0D4804A7DA576E6088530B2B5F82826CEBD8F79453A4F5AA3924DF"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/probe-sha256.txt",
+          "sha256": "CF364A91B8BA9772BDCBDBD2277F2D3AC68E048249054AB7B61E04DB429E63E7"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-host/case.json",
+          "sha256": "B0FA3C13923135F90E6E20FD57830A857457D8CB99F8AE39A825617E7AECFECC"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-victory-20261021-d-health-guest",
+      "outcome": "pass_with_strict_runtime_logs",
+      "case": {
+        "Authority": "guest",
+        "Disabled": "0",
+        "Case": "health",
+        "Name": "health-guest"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/host.log",
+          "sha256": "203511ED9B19278C3A9C7D2080D7F672080E4FD78F25E78DF4BA751DB635E538"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/guest.log",
+          "sha256": "E1FE59203ED4BFF4423808F857E606A2F237FFD796079E00840D15C26A1F7CED"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/host-unity.log",
+          "sha256": "3F75062F3353ADE3241B893BEF1AEC555D633F8A18EA8B8D32CE5CBDCAE6129B"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/guest-unity.log",
+          "sha256": "C1FADAEF3C46A01B612E62D7237224BFCCF6C62C659A19E99AE489B4021A407C"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/probe-sha256.txt",
+          "sha256": "CF364A91B8BA9772BDCBDBD2277F2D3AC68E048249054AB7B61E04DB429E63E7"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/strict-pass.txt",
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-d-health-guest/case.json",
+          "sha256": "85A75B31C3B600E58AB89C0492F5A77A8E0AF1F830E7A15ABB07F3F0D7068842"
+        }
+      ],
+      "camera": null
+    }
+  ],
+  "failedAttempts": [
+    {
+      "run": "rescue-rules-20261021-a-traveller",
+      "outcome": "preserved_failure_not_certified",
+      "case": "traveller",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "B1CFEBE5B477156C5EF8B4E1BEF545BA7DE88A8BD361F9401F82460B9A4A7820"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "3CE403040FC70446DC819CDCE7187B32BD9AFF02A23CB811A98BC0022CBA7E04"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/host.log",
+          "sha256": "53F3D70975BA2EEDFAB80B4583BBB217BCAA8FB9ABA958F25D170EA75034297D"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/guest.log",
+          "sha256": "36D82E7C6E216A27BE14A92DC8241A03D6EE50EB874CD64300F57A9A985F1AD2"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/host-unity.log",
+          "sha256": "38ECADC0EAD10AACD799C172C02518124AE3A6383E78C454322EC4F9AAD0FFE9"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/guest-unity.log",
+          "sha256": "62BEFD5E4A173001CB4395FAE10D1291AE2612FD0996CABE436936B739D0F435"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/binaries.json",
+          "sha256": "0445DED84977B2152CF1322DCC3C5083959C6D1D9652D2BA21D3149F352B6DC5"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/probe-sha256.txt",
+          "sha256": "2AC860328FC8D0BBCA583E93881ECE7FA3561997028BF4DE8746AADE30B165AE"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/case.json",
+          "sha256": "D58C1A6A5780CB868D92D34A99B2E2557194AD1CD17D4ADE5DD69517529643AA"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-a-traveller/guest.failed",
+          "sha256": "047672EEDF1AB101BDF260E59DF29F47576BD803404C6E70BE9456A2BB407DAC"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-b-traveller",
+      "outcome": "preserved_failure_not_certified",
+      "case": "traveller",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "B1CFEBE5B477156C5EF8B4E1BEF545BA7DE88A8BD361F9401F82460B9A4A7820"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "3CE403040FC70446DC819CDCE7187B32BD9AFF02A23CB811A98BC0022CBA7E04"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/host.log",
+          "sha256": "12CE9660CE6E131A36C29055FD606F2DCAB768D8F4643AE782CD01D44FFB0644"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/guest.log",
+          "sha256": "383F219015BDE580AA65FB693B02F5231684052DB600B3B7716BCD09D4D89228"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/host-unity.log",
+          "sha256": "35249D65C0D4F4C5445AC30A04647993AAE12F923FD971F68184012FAE2E5BC6"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/guest-unity.log",
+          "sha256": "AB37D94AA9CE7AF955555AA48C19274EEF5EEDC9AAB136D8C1990C59EE8604F1"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/binaries.json",
+          "sha256": "0445DED84977B2152CF1322DCC3C5083959C6D1D9652D2BA21D3149F352B6DC5"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/probe-sha256.txt",
+          "sha256": "9A2602F57DF0C1DA298CFA4908D0339208BAAE3B7CCC13050181C0BE8EFF1055"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/case.json",
+          "sha256": "D58C1A6A5780CB868D92D34A99B2E2557194AD1CD17D4ADE5DD69517529643AA"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-b-traveller/guest.failed",
+          "sha256": "A0F15EE289C5405B81392141ADEF08EA98E56FA26CB396C19458D8F08AB568FF"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-c-traveller",
+      "outcome": "preserved_failure_not_certified",
+      "case": "traveller",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "B1CFEBE5B477156C5EF8B4E1BEF545BA7DE88A8BD361F9401F82460B9A4A7820"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "3CE403040FC70446DC819CDCE7187B32BD9AFF02A23CB811A98BC0022CBA7E04"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/host.log",
+          "sha256": "C2DD5B68C739E6CA743F870126CE16C8CA47CDC0F70310B4C4FA3EF38AC1D820"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/guest.log",
+          "sha256": "51909AEBD19961E754A977499644DD6721B34E2322A9870F597DF6BF8A252F07"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/host-unity.log",
+          "sha256": "07E3DCF34A0083665DA0A20C058A9C5AE20935F12A8FE4F256CACF1BA4F4E005"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/guest-unity.log",
+          "sha256": "CA87EF0629905DD56E61F5BACAE4236E92AAAF43FA2C4FC88043AD477E9835EB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/binaries.json",
+          "sha256": "0445DED84977B2152CF1322DCC3C5083959C6D1D9652D2BA21D3149F352B6DC5"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/probe-sha256.txt",
+          "sha256": "6943B350E6C0F55E311D4DBC8BE7004DCBF421B0FFDC7FFA1053EEF585659698"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/case.json",
+          "sha256": "D58C1A6A5780CB868D92D34A99B2E2557194AD1CD17D4ADE5DD69517529643AA"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-c-traveller/guest.failed",
+          "sha256": "B6A09CA29B05CC3B6AA5C7654F23E3C5201D03908D5FB90557BAE98CC66EFE1C"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-d-quota",
+      "outcome": "preserved_failure_not_certified",
+      "case": "quota",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "B1CFEBE5B477156C5EF8B4E1BEF545BA7DE88A8BD361F9401F82460B9A4A7820"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "3CE403040FC70446DC819CDCE7187B32BD9AFF02A23CB811A98BC0022CBA7E04"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/host.log",
+          "sha256": "AE8254655F86FD4F7992E609FB9F2388A6159B3CA4187A83003442667E1D4966"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/guest.log",
+          "sha256": "26F7F4D9B51FC793FB69BAC534B14A9C4E169269E97221A5EFC2B3E39E3C7F2B"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/host-unity.log",
+          "sha256": "AAFC9B81BA4090C0CD64893648851AFEC2B5432B466D04463648E2512F9046D3"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/guest-unity.log",
+          "sha256": "615F18934D4C14A99C6BDA5912294DB7C540403ED7428C5CC01C1E81F2FD0EEB"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/binaries.json",
+          "sha256": "0445DED84977B2152CF1322DCC3C5083959C6D1D9652D2BA21D3149F352B6DC5"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/probe-sha256.txt",
+          "sha256": "0042064E4E1BC90199E831CC40F9F8AD9993E3280404C576491706C97F5ED976"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/case.json",
+          "sha256": "7BE04BD80592DFC6573FE831A9C9DA4538E9C52B47E85BAA6A3CF9E1E76284A2"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-d-quota/guest.failed",
+          "sha256": "F98114EC21666F0C2CA05BA465E08233DA32C9443BB45F021BA567C9F8CB482C"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-e-traveller",
+      "outcome": "preserved_failure_not_certified",
+      "case": "traveller",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "BD106D9A93FD6C6516FF7C95155E17A6BBFB8085D772EDFCAD85E7E7BAE3EB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "3CE403040FC70446DC819CDCE7187B32BD9AFF02A23CB811A98BC0022CBA7E04"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/host.log",
+          "sha256": "838A24182BB897D22B1ECD2D8E5D2D66564F4687C19B7FB5E54C97019BA93CC6"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/guest.log",
+          "sha256": "98D609FA0885285C2E45D9890BDB7D7ED545C255CA472DB55C9751C651DE7441"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/host-unity.log",
+          "sha256": "BD879960E2931C5CE76ACE9C6C83498AA5A11C25830F9699A32B65933A3E594C"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/guest-unity.log",
+          "sha256": "B99C212C3C873151931FCDCF7B4E033261120D6A85097568E0349434AE6F58F6"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/binaries.json",
+          "sha256": "8268664AF3D9D0BA9F6C52EF0A5C639B184E136C1DFB01063B4F9D58986E3FA3"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/probe-sha256.txt",
+          "sha256": "D3A9F483F5BC0726DCEA0FE79D38F287F6528A32F6CA598A6EAC713940884217"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/case.json",
+          "sha256": "D58C1A6A5780CB868D92D34A99B2E2557194AD1CD17D4ADE5DD69517529643AA"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-e-traveller/host.failed",
+          "sha256": "E3773A4A1FDBA069DD822E2132BCC5106800C795F0AC2FE5C0C037B8D172DB64"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-f-traveller",
+      "outcome": "preserved_failure_not_certified",
+      "case": "traveller",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "B1CFEBE5B477156C5EF8B4E1BEF545BA7DE88A8BD361F9401F82460B9A4A7820"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "3CE403040FC70446DC819CDCE7187B32BD9AFF02A23CB811A98BC0022CBA7E04"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/host.log",
+          "sha256": "EDDA749C3CD8B2FAF442C2619E542A0A8E97245345B7E63CB273F318A15941EE"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/guest.log",
+          "sha256": "0F5540A3AA0B1FF6E30A5B65AEB04F4EA2EA3EAC5890FD60B0FB3B524714520E"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/host-unity.log",
+          "sha256": "EA879A8BEB8DF947D2BDD15F898D3105FA63F150431607543C9A2F7515D562B0"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/guest-unity.log",
+          "sha256": "296496D847A37B335A1CD69B7496E047EBFF18FCC44E4120668CEF488D7D87E9"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/binaries.json",
+          "sha256": "0445DED84977B2152CF1322DCC3C5083959C6D1D9652D2BA21D3149F352B6DC5"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/probe-sha256.txt",
+          "sha256": "7C87AEDCC3B09F9FBDADB677CF9EB0507F158D280CF80F647F3087A044B12762"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/case.json",
+          "sha256": "D58C1A6A5780CB868D92D34A99B2E2557194AD1CD17D4ADE5DD69517529643AA"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-f-traveller/guest.failed",
+          "sha256": "9137EAA16257D8FDE4A48A169B48869049E032CF75675488626256A341ACCFCD"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rules-20261021-g-native-control",
+      "outcome": "preserved_failure_not_certified",
+      "case": "native-control",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "B1CFEBE5B477156C5EF8B4E1BEF545BA7DE88A8BD361F9401F82460B9A4A7820"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "3CE403040FC70446DC819CDCE7187B32BD9AFF02A23CB811A98BC0022CBA7E04"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/host.log",
+          "sha256": "A1516AB13C971E4A428CA7D238DF30082738D8C0846845C6D60BF93142E275E1"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/guest.log",
+          "sha256": "98F918E7FC4AA66615924D3F763908135DB7138C0468FB0FB2C7043656716CBE"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/host-unity.log",
+          "sha256": "C51A5BB54EDA969B604CB8F6BE46C59C9F7A46DEC3FE3E57A5D2152D27DEAE92"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/guest-unity.log",
+          "sha256": "0386EF1C19885F0E2D09BBAF5405FCF16DACF085DB5462F9809AF665BDC1FFDA"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/binaries.json",
+          "sha256": "0445DED84977B2152CF1322DCC3C5083959C6D1D9652D2BA21D3149F352B6DC5"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/probe-sha256.txt",
+          "sha256": "59EEDD3C7D1A6E83F9A74624F081E4422388634C3BC5724FFA58E35A87659885"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/case.json",
+          "sha256": "91DFF8DBE1DCB7A393075F14F6FE108C349E01A330363CD6F3E598E92EBEE33D"
+        },
+        {
+          "path": ".test-results/rescue-rules-20261021-g-native-control/guest.failed",
+          "sha256": "F30B25692FED59550DD038006DDF9A558BF89D70B91CB8453A5EAE45B3C652C1"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "radiance-spectator-20261021-a-story-host-story-f8-host",
+      "outcome": "preserved_failure_not_certified",
+      "case": {
+        "P5": "0",
+        "Scene": "Dream_Final_Boss",
+        "Faults": "0",
+        "Authority": "host",
+        "Name": "story-f8-host",
+        "Entry": "f8"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-a-story-host-story-f8-host/host.log",
+          "sha256": "FAF6F9BD1B7AA3D6C24D85B6D194853433562CBCFD49B444D0C51D3B595ECF8E"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-a-story-host-story-f8-host/host-unity.log",
+          "sha256": "82E21632D52008FD065392F6C1FE5149F6CAB2A845E91BE71D8389A250828785"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-a-story-host-story-f8-host/guest-unity.log",
+          "sha256": "A06F016C509A26C6FBC23B3CE473BBBD56B2EDF6BB284C9485CB47D3335948C7"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-a-story-host-story-f8-host/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-a-story-host-story-f8-host/probe-binary.json",
+          "sha256": "11D58692376F0A15F510135E36CF63F9F6076543F031FEAB25B0DFC3A7B307CB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-a-story-host-story-f8-host/case.json",
+          "sha256": "1D9868C3CD2DFA095BF818148F4B8A4503771A23A612E88584C83C258B33DDB4"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-a-story-host-story-f8-host/host.failed",
+          "sha256": "B24D6D33736ECD5604A4B17BC9C6481039FAC362BB7DF044EF1C10A2BFD21DB6"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "radiance-spectator-20261021-b-absolute-host-statue-native-guest",
+      "outcome": "preserved_failure_not_certified",
+      "case": {
+        "Entry": "native",
+        "Faults": "0",
+        "P5": "0",
+        "Scene": "GG_Radiance",
+        "Name": "statue-native-guest",
+        "Authority": "guest"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5278CBD6CC3DE45B08AE77025580FC0874BF783182511A0DA10FFE2A0FB3C766"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/host.log",
+          "sha256": "7F8C6EEC1A2E417D5E45AA77EFC64E66D6F8077AFB09CFBA160F8D8AA14E9EB7"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/guest.log",
+          "sha256": "5F49E8EC2E90020091966F5D9CE2077CBA06FE08EBBCED351676B4CB326CB511"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/host-unity.log",
+          "sha256": "129E8D51FC906B4B8DA22466F89670327F7E2935F76B1DB23F7FAAA945E24D6D"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/guest-unity.log",
+          "sha256": "D2570448E2AC42E05BCA8CE9BA0ED0A7322359F65C5CE5DBC153FD3AE4265AA3"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/binaries.json",
+          "sha256": "736D4B445F16DF867F4635409EEFF664A00A443592248C53948CEA87FBEF1EBB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/probe-binary.json",
+          "sha256": "11D58692376F0A15F510135E36CF63F9F6076543F031FEAB25B0DFC3A7B307CB"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/case.json",
+          "sha256": "16849BA0F99D1B1740C5875A894BDC3570DB77CF78C62225BE6CCE97188A1FF9"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/host.failed",
+          "sha256": "B24D6D33736ECD5604A4B17BC9C6481039FAC362BB7DF044EF1C10A2BFD21DB6"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/host-spectator-ascent-8011634827813402183.png",
+          "sha256": "B38A0F7EE93B96BA73E53568C5B77D7EDB6EB1350727F2D625093600D3FED1C0"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-b-absolute-host-statue-native-guest/host-spectator-ascent-8186092372610287557.png",
+          "sha256": "6CEE56CB927E095516FCCDE1780734D4AB5953BFE5D16DC515D2D0C663CB5C22"
+        }
+      ],
+      "camera": "2026-10-21T04:17:14.8685854Z PASS spectator full ascent camera range=45.93784..156.3128 samples=216 steps=18"
+    },
+    {
+      "run": "rescue-rule-regression-20261021-a-final-rescue-013",
+      "outcome": "preserved_failure_not_certified",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-a-final-rescue-013/host.log",
+          "sha256": "668C0D7242A823012CF652CD08D1C2FA801365B9B926AD0C8CF414D81E4F2984"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-a-final-rescue-013/guest.log",
+          "sha256": "ABEC12FA8FFF4F26FD06765C67E03AECA7D5354BC7D1A74A540F3E9EAAF4C351"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-a-final-rescue-013/host-unity.log",
+          "sha256": "3478DA540AA40C589C2A39D444854A9C3F1DE60D7C76195FBBE8556730E10528"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-a-final-rescue-013/guest-unity.log",
+          "sha256": "A2EE307FFC3D1CDD379CB2D389633E55DECF413F65CDAB75881E6CC2D381AA95"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-a-final-rescue-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-a-final-rescue-013/host.failed",
+          "sha256": "282C69E8D2A43CCA1CF31E6596893D6B2DE4C444A5F6EF310647BF5ABD857C39"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-a-final-rescue-013/guest.failed",
+          "sha256": "9AE6CFBC517FB6AC5AD4D6E3AB92D4CBBBF43F78534D80A56B95FE245EE4F6C2"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rule-regression-20261021-b-final-rescue-013",
+      "outcome": "preserved_failure_not_certified",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-b-final-rescue-013/host.log",
+          "sha256": "469AB2E02394AA092600C86A28AF4A9CDAC4D7C1E6D96D09296B4DC94C16DD90"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-b-final-rescue-013/guest.log",
+          "sha256": "71E25B994A511F808CAF721905B1957E88FE515BA9E5B23E83BF3179A005DF0F"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-b-final-rescue-013/host-unity.log",
+          "sha256": "58F286B631ABBF7D8C1882DA3E4687D95CDAF5596C7956A37E695B2EE6814AE8"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-b-final-rescue-013/guest-unity.log",
+          "sha256": "1C30F83DBD2B6A59C13126DD66940CF52199D13E01B688BF811C8BB0E2FC07DF"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-b-final-rescue-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-b-final-rescue-013/host.failed",
+          "sha256": "282C69E8D2A43CCA1CF31E6596893D6B2DE4C444A5F6EF310647BF5ABD857C39"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-b-final-rescue-013/guest.failed",
+          "sha256": "BFDA93DA6CF5842E3932356269291575FC59F3E78AC083A886BEF4A3D568935B"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rule-regression-20261021-c-final-rescue-013",
+      "outcome": "preserved_failure_not_certified",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-c-final-rescue-013/host.log",
+          "sha256": "89B0DBB71356DAEA4EC1A9AFB2C481742F8F39D75471F04EE189BF8D75F6E990"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-c-final-rescue-013/guest.log",
+          "sha256": "DD5BC905C70CA8FCCD769EDDDF4346922DC90C04983E050C68669A4C2BA6EF26"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-c-final-rescue-013/host-unity.log",
+          "sha256": "F15B3C6A262F0F67BFDE52F74984D28F953C522E139C0E232FB75B096477539A"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-c-final-rescue-013/guest-unity.log",
+          "sha256": "0DDBCBD5125B3B6601F229478E235030CC8376F004F7FD2EBC36BA1F08591594"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-c-final-rescue-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-c-final-rescue-013/host.failed",
+          "sha256": "AFF763BE7470F37840EAAB58A6C09E5D398DF3EE7594B4F107AA5F9143EBF94E"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-c-final-rescue-013/guest.failed",
+          "sha256": "2C468A494AD996951D3EFC8D737073B4F48E9CF3AC8C3319E5DC1F2B995E8435"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rule-regression-20261021-d-final-rescue-013",
+      "outcome": "preserved_failure_not_certified",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/host.log",
+          "sha256": "93BCC26CC9BB8D9DC87385D2D1955C7A044B2BFDB6D77FAA6DCF2413A7D45DD5"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/guest.log",
+          "sha256": "C6AC85DC62F8C29F0135817C3CE92AFE38198139018CF64EA7E06CF517939FE2"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/host-unity.log",
+          "sha256": "EE51910E7DC3CC9FE3D095D32C1D3D0E5EF4E0C13AF9A1218AA00E3FA3B3785E"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/guest-unity.log",
+          "sha256": "C98C908FAF64EBC1702AF56E3A1FDD8AF9D0712D4AAE049A1D130CBB6D460FE3"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/probe-sha256.txt",
+          "sha256": "F4D928BDDBE7DB1D9DE515F2AEF5A20E75DBD4EF682FE289EE94F10A0597D6C4"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/host.failed",
+          "sha256": "B9CF65FA8461455947D958987BC9E4083AF78492908F2E7EB7653C060E1B44FA"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-d-final-rescue-013/guest.failed",
+          "sha256": "C38AED569E391F40C79A55DC3A95BBE737BCF2809E692ABB13CF7132B105454E"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rule-regression-20261021-e-final-death-story-013",
+      "outcome": "preserved_failure_not_certified",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/host.log",
+          "sha256": "5CB97870C943F2F802F95E2C52FE9081274FDDC7C3C3AEC5878F5CD62275117C"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/guest.log",
+          "sha256": "85E23C71CB13258A7A973681CDC009CC91FDC65750D0301652E279E119F341A7"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/host-unity.log",
+          "sha256": "870F581114E3E423724F097A773A377F6945B786A93E5CE77BE6C72245B0B842"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/guest-unity.log",
+          "sha256": "22893B89465322391671E7CF7A7894E191B54C9B1045B23D79BC327C26244144"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/probe-sha256.txt",
+          "sha256": "AFB299A1145B622084C6C6815C07B057271F1A35BE448D4F670E1D5B2C1E1590"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/host.failed",
+          "sha256": "752A03E0685F3DA300535AEFAC37270CC439169B97D5B21763BC526B07BAD4F4"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-e-final-death-story-013/guest.failed",
+          "sha256": "8557CB32644FD47AE34A36EECAE0970D887CC12B8EE8B5BAE6DBD99D1AA4AB29"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-rule-regression-20261021-f-final-full-013",
+      "outcome": "preserved_failure_not_certified",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/host.log",
+          "sha256": "13CB02FF6B20C75792280FB451648C3CD10F7C71C0A52AC4132A7C6ED4859E6D"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/guest.log",
+          "sha256": "37D82EFDA56F19A52C486C4F72C957B2485CF73DB911A347350B8708796F8709"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/host-unity.log",
+          "sha256": "1ECDB170C42F252365D06A98C3596D7CDFCBDB6A37E3936C0BCFA2A2411F4F94"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/guest-unity.log",
+          "sha256": "1F9F386A8986181DE3C971BC796525C3CD0B4FEA969A1A1394257EB76AF7D33F"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/probe-sha256.txt",
+          "sha256": "D18CBE50D28BA4111EF872CDCDA829934D324411389782CCA28D28B90B309CD1"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/host.failed",
+          "sha256": "0F90C490EF14123C07F313589EC17D3B600E9B1ACC7C2594E4D3F421EF76428D"
+        },
+        {
+          "path": ".test-results/rescue-rule-regression-20261021-f-final-full-013/guest.failed",
+          "sha256": "BFDA93DA6CF5842E3932356269291575FC59F3E78AC083A886BEF4A3D568935B"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-victory-20261021-a-health-host",
+      "outcome": "preserved_failure_not_certified",
+      "case": {
+        "Name": "health-host",
+        "Authority": "host",
+        "Disabled": "0",
+        "Case": "health"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/host.log",
+          "sha256": "8238AB3C8DC15F23EAA1E10ADB199319E8732C4E9E1DC8DA823020F82C3068CC"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/guest.log",
+          "sha256": "F7641C1703BDEDB971D5B4DABF1109AC605EA4451C005DBC6A7D4DD3DEA47320"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/host-unity.log",
+          "sha256": "B281AA647D5B120ADD2C9BF3C23196D6F9E47F61D86A77859D86AF504B84F520"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/guest-unity.log",
+          "sha256": "0D7196483CB49BB703ED9DA146F7B47FD4CD542B67862EC8766EC923BE102419"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/probe-sha256.txt",
+          "sha256": "AAA3CDF0D0F60A9A924B858C8C354887D7A7AC46E2B26A63F0CF166DA9B93263"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/case.json",
+          "sha256": "18DF86BE03AF8349FA684DF3290E2BE3897FABF48CF002B145D6E45C25C45ACC"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/host.failed",
+          "sha256": "C33C8C9B79DB1333FEA3879577854F675CCA8186738BB8EB7A17D85DC485D993"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-a-health-host/guest.failed",
+          "sha256": "C33C8C9B79DB1333FEA3879577854F675CCA8186738BB8EB7A17D85DC485D993"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-victory-20261021-b-health-host",
+      "outcome": "preserved_failure_not_certified",
+      "case": {
+        "Disabled": "0",
+        "Authority": "host",
+        "Name": "health-host",
+        "Case": "health"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/host.log",
+          "sha256": "D71C6618D9F8B88EF2C1544EDAF9968F45E4E2460B2281A871DF07B289ED8E91"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/guest.log",
+          "sha256": "4B08CE3A4E326AB0A39FD41E66C8D50D4C185537FC28668F405ABC72EDEE93CB"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/host-unity.log",
+          "sha256": "8A057DB0019C51B9B5DE43C8B2ED3FBA8D84CBC465F5C13818FE777F0EDE09DD"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/guest-unity.log",
+          "sha256": "58FA84ADB676B88BA1B93A6215AA5EA482F2F06E025937FDC0D85EA4D29C6A9D"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/probe-sha256.txt",
+          "sha256": "9EFB4E0743ABB7396740AFE28D96D6941B26A3DB4ACCA59813DEB5D1AEBDF9EC"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/case.json",
+          "sha256": "E95EFCDF7AE6FC2524C752A13503AC1C8BF9C942F25D6F43166F8898B5E993EC"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/host.failed",
+          "sha256": "CC7453F8478DAAE33ACD9ED7B8FAF5AB1BD152778F99EF0B5662E5049F0244B4"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-b-health-host/guest.failed",
+          "sha256": "CC7453F8478DAAE33ACD9ED7B8FAF5AB1BD152778F99EF0B5662E5049F0244B4"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "rescue-victory-20261021-c-health-host",
+      "outcome": "preserved_failure_not_certified",
+      "case": {
+        "Case": "health",
+        "Disabled": "0",
+        "Name": "health-host",
+        "Authority": "host"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/host.log",
+          "sha256": "F0E231936BF09056C9963B828B67EAC7F26575D84F34EEF915984C5752D712D1"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/guest.log",
+          "sha256": "2651F488B7F534A2089AF75AF1EBBEC58932FF2BD1D4CFD116E60F51D7F64617"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/host-unity.log",
+          "sha256": "D5BAD1E6F81A158DACACB2D77CD877F3D9812BC13B78A0A059D0DC367ACB30D0"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/guest-unity.log",
+          "sha256": "C1A1D62498023C9647DA306DB663AD7AD78B5690CCE7168FF9F841536DE18593"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/probe-sha256.txt",
+          "sha256": "8A1A89B627992B326AB7A4B3F3546B8340C195FD847090202E24EF944FFC38C1"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/case.json",
+          "sha256": "360CE28195F63C3641E34224D97EF1AC89CC3304E33AD946770D965B96B53DF4"
+        },
+        {
+          "path": ".test-results/rescue-victory-20261021-c-health-host/guest.failed",
+          "sha256": "DD472420087E895BFA0AAB47EFB2397DEC9DBEA7E8ABCC7B98E813CBD00C189C"
+        }
+      ],
+      "camera": null
+    },
+    {
+      "run": "radiance-spectator-20261021-d-final-beta-story-host-story-f8-host",
+      "outcome": "preserved_failure_not_certified",
+      "case": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "66785A8E7CF2283E65E9545C068F63F188A4FAE8B4CFBE5467B0E6B53D0FEB7B"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "files": [
+        {
+          "path": ".test-results/radiance-spectator-20261021-d-final-beta-story-host-story-f8-host/host-unity.log",
+          "sha256": "7B675572E3CF824229ACDAC82833F9D4389256FDE30C8F4B21345EDE27407FE3"
+        },
+        {
+          "path": ".test-results/radiance-spectator-20261021-d-final-beta-story-host-story-f8-host/binaries.json",
+          "sha256": "F698DE817E2543F1198136345814C4389E5C33E8D51F6FEDB2B6703C3971B1AB"
+        }
+      ],
+      "camera": null
+    }
+  ],
+  "limits": [
+    "Existing isolated copies only; no personal save writes.",
+    "Real localhost UDP; not two-machine or FRP.",
+    "Dirtmouth already visited in new fixtures; first-visit title compatibility is not certified.",
+    "Radiance: staged placement on each native step, then native jump input/physics, 12 sampled frames per step; no spectator/camera positioning in fixture.",
+    "Not continuous manual climbing, full boss combat, full Pantheon route, or three-player validation.",
+    "Full regression final-full-013 remains failed: SetupHeroRefs native exception followed by Mantis Claw synchronization timeout; root cause unassigned.",
+    "Existing dream boss audit findings remain open; historical ZIPs unchanged."
+  ]
+}

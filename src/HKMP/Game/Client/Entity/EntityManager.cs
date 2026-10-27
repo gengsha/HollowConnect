@@ -53,6 +53,43 @@ internal class EntityManager {
     }
     private readonly Queue<PendingUpdate> _receivedUpdates;
     private readonly HashSet<ulong> _retiredIds = new();
+    private readonly HashSet<ulong> _localWorldIds = new();
+    private readonly HashSet<string> _privateBossScenes = new();
+    private HashSet<ulong> _bossScope;
+    internal bool IsPrivateBossScene(string scene) => CoopContext.LocalWorldOnly && _privateBossScenes.Contains(scene) &&
+        !_entities.Values.Any(e => e.SourceScene == scene && BossDefeatSignals.IsBoss(e.Type));
+    internal bool HasSharedBoss => _entities.Values.Any(e => BossDefeatSignals.IsBoss(e.Type));
+    internal string CaptureBossScope() => Newtonsoft.Json.JsonConvert.SerializeObject(
+        _entities.Keys.Concat(_retiredIds).Where(id => (id >> 63) == 0).OrderBy(id => id).ToArray());
+    internal void AcceptBossScope(string json) {
+        if (!CoopContext.LocalWorldOnly || IsSceneHost || json.Length > 32768) return;
+        var ids = Newtonsoft.Json.JsonConvert.DeserializeObject<ulong[]>(json);
+        if (ids == null || ids.Length > 2048 || ids.Any(id => id == 0 || (id >> 63) != 0)) return;
+        var additions = _bossScope != null && ids.Any(id => !_bossScope.Contains(id));
+        _bossScope = new HashSet<ulong>(ids);
+        _localWorldIds.ExceptWith(_bossScope);
+        // Later phases may add native scene objects after the initial scope.
+        // Revisit only when authority adds identities, otherwise a previously
+        // private phase would stay outside the shared encounter forever.
+        if (additions) for (var i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++) {
+            var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+            if (scene.isLoaded && (scene.name == CoopContext.LocalScene || scene.name.StartsWith(CoopContext.LocalScene + "_", StringComparison.Ordinal)))
+                FindEntitiesInScene(scene, true);
+        }
+        // Different local progression can legitimately select different
+        // boss/defeated scenes. Release unmatched native bosses instead of
+        // forcing the authority's world layout or leaving them dormant.
+        var local = _entities.Values.Where(e => (e.Id >> 63) == 0 && !_bossScope.Contains(e.Id)).ToArray();
+        foreach (var entity in local) {
+            _localWorldIds.Add(entity.Id);
+            if (BossDefeatSignals.IsBoss(entity.Type)) _privateBossScenes.Add(entity.SourceScene);
+            entity.RestoreLocalSimulation(unmatched: true);
+        }
+        foreach (var entity in local) {
+            _entities.Remove(entity.Id);
+            entity.Destroy();
+        }
+    }
     private bool hooksRegistered, clearing;
     private int? preparedSceneHandle;
 
@@ -76,8 +113,10 @@ internal class EntityManager {
     public void RegisterHooks() {
         if (hooksRegistered) return;
         hooksRegistered = true;
+        LocalStoryScene.Register();
         EntityHooks.Register();
         CombatSpawns.Register();
+        BossTargeting.Register();
         SpawnJarComponent.RegisterHooks();
         Entity.LifetimeEnded += RetireLifetime;
         _bossRoom.Register();
@@ -98,6 +137,7 @@ internal class EntityManager {
     public void DeregisterHooks() {
         if (!hooksRegistered) return;
         hooksRegistered = false;
+        LocalStoryScene.Unregister();
         _bossRoom.Destroy();
         Entity.LifetimeEnded -= RetireLifetime;
         MonoBehaviourUtil.Instance.OnUpdateEvent -= RetryPending;
@@ -114,6 +154,7 @@ internal class EntityManager {
         preparedSceneHandle = null;
         EntityHooks.Unregister();
         CombatSpawns.Unregister();
+        BossTargeting.Unregister();
         SpawnJarComponent.DeregisterHooks();
     }
 
@@ -121,6 +162,7 @@ internal class EntityManager {
     /// Initializes the entity manager if we are the scene host.
     /// </summary>
     public void InitializeSceneHost(bool applyPending = true) {
+        applyingSnapshot = !applyPending;
         Logger.Debug("We are scene host, releasing control of all registered entities");
 
         IsSceneHost = true;
@@ -142,6 +184,7 @@ internal class EntityManager {
     /// Initializes the entity manager if we are a scene client.
     /// </summary>
     public void InitializeSceneClient(bool applyPending = true) {
+        applyingSnapshot = !applyPending;
         Logger.Debug("We are scene client, taking control of all registered entities");
 
         IsSceneHost = false;
@@ -156,7 +199,10 @@ internal class EntityManager {
 
     // Live deltas received during entry are newer than the initial snapshot.
     // Commit the base snapshot first, then replay those deltas in receive order.
-    internal void CompleteSceneSnapshot() => CheckReceivedUpdates();
+    internal void CompleteSceneSnapshot() {
+        try { CheckReceivedUpdates(); }
+        finally { applyingSnapshot = false; }
+    }
 
     /// <summary>
     /// Updates the entity manager if we become the scene host.
@@ -177,11 +223,16 @@ internal class EntityManager {
 
     private readonly Dictionary<ulong, EntitySpawn> _pendingSpawns = new();
     private readonly Dictionary<ulong, float> _spawnDeadlines = new();
+    private static readonly long SpawnFrameBudget = System.Diagnostics.Stopwatch.Frequency / 500;
+    private int spawnFrame = -1;
+    private long spawnTicks;
+    private bool budgetDeferred, applyingSnapshot;
     /// <summary>Reconstruct one authoritative dynamic lifetime.</summary>
     /// <param name="spawn">The authoritative spawn descriptor.</param>
     public void SpawnEntity(EntitySpawn spawn) {
         if (spawn.SceneName != CoopContext.LocalScene || spawn.Visit != CoopContext.LocalVisit || spawn.Epoch != CoopContext.Epoch) return;
         if (_retiredIds.Contains(spawn.Id)) return;
+        if (CoopContext.LocalWorldOnly && _localWorldIds.Contains(spawn.SourceId)) return;
         if (!IsSceneHostDetermined) { DeferSpawn(spawn); return; }
         if (_entities.TryGetValue(spawn.Id, out var existing)) {
             if (existing.Type != spawn.SpawnedType) Logger.Error($"Spawn identity/type mismatch: {spawn.Id}");
@@ -192,24 +243,32 @@ internal class EntityManager {
             DeferSpawn(spawn);
             return;
         }
-        var obj = SpawnDescriptor.Create(spawn, source);
-        if (obj == null) obj = EntitySpawner.SpawnEntityGameObject(spawn.SpawningType, spawn.SpawnedType, source.Object.Client, source.GetClientFsms());
-        if (obj == null) {
-            DeferSpawn(spawn);
-            return;
+        if (spawnFrame != Time.frameCount) { spawnFrame = Time.frameCount; spawnTicks = 0; }
+        if (!applyingSnapshot && spawnTicks >= SpawnFrameBudget) {
+            budgetDeferred = true; DeferSpawn(spawn, false); return;
         }
-        obj.transform.position = new Vector3(spawn.X, spawn.Y, spawn.Z);
-        var processor = new EntityProcessor { GameObject = obj, IsSceneHost = IsSceneHost,
-            IsSceneHostDetermined = IsSceneHostDetermined, LateLoad = false, SpawnedId = spawn.Id, AllowHazard = true }.Process();
-        if (!processor.Success) { Logger.Warn($"Spawn registration failed: {spawn.Id}, {spawn.SpawnedType}"); UnityEngine.Object.Destroy(obj); }
-        else {processor.Entities[0].OwnsHostObject=true;foreach(var e in processor.Entities){e.InitializeClient();e.UpdateIsActive(spawn.Active);}SpawnDescriptor.Bind(spawn, source, processor.Entities[0]);}
-        _pendingSpawns.Remove(spawn.Id); _spawnDeadlines.Remove(spawn.Id);
+        var started = System.Diagnostics.Stopwatch.GetTimestamp();
+        try {
+            var obj = SpawnDescriptor.Create(spawn, source);
+            if (obj == null) obj = EntitySpawner.SpawnEntityGameObject(spawn.SpawningType, spawn.SpawnedType, source.Object.Client, source.GetClientFsms());
+            if (obj == null) {
+                DeferSpawn(spawn);
+                return;
+            }
+            obj.transform.position = new Vector3(spawn.X, spawn.Y, spawn.Z);
+            var processor = new EntityProcessor { GameObject = obj, IsSceneHost = IsSceneHost,
+                IsSceneHostDetermined = IsSceneHostDetermined, LateLoad = false, SpawnedId = spawn.Id, AllowHazard = true,
+                BossCombatSpawn = true, BossTargetScope = source.BossTargetScope, BossTargetSource = source }.Process();
+            if (!processor.Success) { Logger.Warn($"Spawn registration failed: {spawn.Id}, {spawn.SpawnedType}"); UnityEngine.Object.Destroy(obj); }
+            else {processor.Entities[0].OwnsHostObject=true;foreach(var e in processor.Entities){e.InitializeClient();e.UpdateIsActive(spawn.Active);}SpawnDescriptor.Bind(spawn, source, processor.Entities[0]);}
+            _pendingSpawns.Remove(spawn.Id); _spawnDeadlines.Remove(spawn.Id);
+        } finally { spawnTicks += System.Diagnostics.Stopwatch.GetTimestamp() - started; }
     }
-    private void DeferSpawn(EntitySpawn spawn) {
+    private void DeferSpawn(EntitySpawn spawn, bool warn = true) {
         if (_pendingSpawns.Count >= 1024) return;
         if (!_spawnDeadlines.ContainsKey(spawn.Id)) {
             _spawnDeadlines[spawn.Id] = Time.unscaledTime + 15;
-            Logger.Warn($"Spawn deferred: {spawn.Id}, source {spawn.SourceId}, {spawn.Fsm}/{spawn.State}/{spawn.ActionIndex}, {spawn.SpawnedType}");
+            if (warn) Logger.Warn($"Spawn deferred: {spawn.Id}, source {spawn.SourceId}, {spawn.Fsm}/{spawn.State}/{spawn.ActionIndex}, {spawn.SpawnedType}");
         }
         _pendingSpawns[spawn.Id] = spawn;
     }
@@ -224,6 +283,7 @@ internal class EntityManager {
         // ID 0 carries reliable room data only. Snapshots may also include an
         // empty position record for it; there is no Unity entity to wait for.
         if (entityUpdate.Id == 0) return true;
+        if (_localWorldIds.Contains(entityUpdate.Id)) return true;
         if (_retiredIds.Contains(entityUpdate.Id)) return true;
         if (IsSceneHost) {
             return true;
@@ -270,12 +330,13 @@ internal class EntityManager {
         if (!IsSceneHostDetermined) { QueueUpdate(entityUpdate, alreadyInSceneUpdate); return false; }
         if (entityUpdate.Id == 0) {
             foreach (var data in entityUpdate.GenericData) {
-                if (data.Type == EntityComponentType.Music) MusicComponent.ReceiveRoom(data, alreadyInSceneUpdate);
-                if (data.Type == EntityComponentType.BossSceneComplete || data.Type == EntityComponentType.BossSceneContext || data.Type == EntityComponentType.SceneLayout || data.Type == EntityComponentType.EnemyRoster || data.Type == EntityComponentType.DreamWarrior)
+                if (data.Type == EntityComponentType.Music && !CoopContext.LocalWorldOnly) MusicComponent.ReceiveRoom(data, alreadyInSceneUpdate);
+                if (data.Type == EntityComponentType.BossSceneComplete || data.Type == EntityComponentType.BossSceneContext || data.Type == EntityComponentType.SceneLayout || data.Type == EntityComponentType.EnemyRoster || data.Type == EntityComponentType.DreamWarrior || data.Type == EntityComponentType.BossCombatScope)
                     _bossRoom.Receive(data);
             }
             return true;
         }
+        if (_localWorldIds.Contains(entityUpdate.Id)) return true;
         if (entityUpdate.GenericData.Any(d => d.Type == EntityComponentType.Retired)) {
             _retiredIds.Add(entityUpdate.Id);
             if (_entities.TryGetValue(entityUpdate.Id, out var retired)) {
@@ -326,10 +387,18 @@ internal class EntityManager {
     private bool OnGameObjectSpawned(EntitySpawnDetails details) {
         // Unity compares destroyed objects equal to null. Do not mistake a
         // missing spawn result for an already registered, destroyed entity.
-        if (clearing || details.GameObject == null || !IsSceneHost) return false;
+        if (clearing || details.GameObject == null) return false;
         var sourceObject = details.Source ?? details.Action?.Fsm?.GameObject;
         var source = EntityReferences.Owner(sourceObject);
-        if (source==null && details.Prefab!=null)
+        if (!IsSceneHost) {
+            // Native activation can spawn and detach a hazard before scene
+            // authority is known (Markoth's first shield). Pausing its boss
+            // later cannot stop that detached copy. Preserve managed replicas.
+            if (source != null && !source.IsNativeAuthority && EntityReferences.Owner(details.GameObject) == null)
+                details.GameObject.SetActive(false);
+            return false;
+        }
+        if (source==null && details.Prefab!=null && !CoopContext.LocalWorldOnly)
             source=_entities.Values.FirstOrDefault(e=>e.Object.Host!=null&&e.Object.Host.scene.name==UnityEngine.SceneManagement.SceneManager.GetActiveScene().name&&e.Object.Host.GetComponent<HealthManager>()!=null);
         if (source == null) return false;
         var old = EntityReferences.Owner(details.GameObject);
@@ -339,9 +408,14 @@ internal class EntityManager {
         var id = EntityIdentity.Dynamic();
         var position = details.GameObject.transform.position;
         var processor = new EntityProcessor { GameObject = details.GameObject, IsSceneHost = true,
-            IsSceneHostDetermined = IsSceneHostDetermined, LateLoad = true, SpawnedId = id, AllowHazard = true }.Process();
+            IsSceneHostDetermined = IsSceneHostDetermined, LateLoad = true, SpawnedId = id, AllowHazard = true,
+            BossCombatSpawn = true, BossTargetScope = source.BossTargetScope, BossTargetSource = source }.Process();
         if (!processor.Success) return false;
         var top = processor.Entities[0];
+        if (details.AttackTargetReceipt != null && top.BossTargetReceipt != null) {
+            top.BossTargetReceipt.Value = details.AttackTargetReceipt;
+            top.InheritedBossTarget = true;
+        }
         var action = details.Action;
         var spawn = new EntitySpawn { Id = top.Id, SourceId = source.Id, SpawningType = source.Type, SpawnedType = top.Type,
             Fsm = action?.Fsm?.Name ?? "", State = action?.State?.Name ?? "",
@@ -371,11 +445,16 @@ internal class EntityManager {
     }
     private float nextRetry;
     private void RetryPending() {
-        if (!IsSceneHostDetermined || Time.unscaledTime < nextRetry) return;
-        nextRetry = Time.unscaledTime + .1f;
+        if (!IsSceneHostDetermined) return;
+        // Native spawns must be observed each frame; batching them every
+        // 100 ms delayed attacks and rebuilt a whole burst in a single frame.
         CombatSpawns.Flush();
+        if (Time.unscaledTime < nextRetry && !budgetDeferred) return;
+        var retryReferences = Time.unscaledTime >= nextRetry;
+        if (retryReferences) nextRetry = Time.unscaledTime + .1f;
+        budgetDeferred = false;
         if (_pendingSpawns.Count != 0 || _receivedUpdates.Count != 0) CheckReceivedUpdates();
-        foreach (var entity in _entities.Values.ToArray()) entity.RetryReferences();
+        if (retryReferences) foreach (var entity in _entities.Values.ToArray()) entity.RetryReferences();
     }
 
     private void CheckReceivedUpdates() {
@@ -383,7 +462,8 @@ internal class EntityManager {
         foreach (var spawn in _pendingSpawns.Values.ToArray()) {
             if (Time.unscaledTime > _spawnDeadlines[spawn.Id]) {
                 _pendingSpawns.Remove(spawn.Id); _spawnDeadlines.Remove(spawn.Id);
-                Logger.Error($"Spawn expired without a matching source/prefab: {spawn.Id}, {spawn.SpawnedType}"); continue;
+                if (!CoopContext.LocalWorldOnly) Logger.Error($"Spawn expired without a matching source/prefab: {spawn.Id}, {spawn.SpawnedType}");
+                continue;
             }
             if (!_entities.ContainsKey(spawn.SourceId)) continue;
             _pendingSpawns.Remove(spawn.Id);
@@ -396,7 +476,7 @@ internal class EntityManager {
         _receivedUpdates.Clear();
         foreach (var pending in pendingUpdates) {
             var update = pending.Update;
-            if (_retiredIds.Contains(update.Id) || Time.unscaledTime > pending.Deadline) continue;
+            if (_retiredIds.Contains(update.Id) || _localWorldIds.Contains(update.Id) || Time.unscaledTime > pending.Deadline) continue;
             if (update.Id != 0 && !_entities.ContainsKey(update.Id)) {
                 if (_receivedUpdates.Count < 4096) _receivedUpdates.Enqueue(pending);
                 continue;
@@ -458,8 +538,12 @@ internal class EntityManager {
         _receivedUpdates.Clear();
         _pendingSpawns.Clear();
         _spawnDeadlines.Clear();
+        budgetDeferred = applyingSnapshot = false; spawnFrame = -1; spawnTicks = 0;
         _retiredIds.Clear();
-        _bossRoom.Clear();
+        _localWorldIds.Clear();
+        _privateBossScenes.Clear();
+        _bossScope = null;
+        _bossRoom.Clear(sceneChanged);
         foreach (var entity in previous) {
             try { entity.Destroy(); }
             catch (Exception e) { Logger.Warn($"Room cleanup ({entity.Id}, {entity.Type}): {e}"); }
@@ -470,6 +554,9 @@ internal class EntityManager {
             }
         }
 
+        // A native boss may destroy its health object before entity teardown.
+        // Damage registrations belong to this room visit, including retired bodies.
+        BossDamageScaling.Clear();
         // Clear the list of entities and the queue of received updates that have not been applied yet
         EntityFsmActions.ClearActions();
         EntityReferences.Clear();
@@ -521,6 +608,7 @@ internal class EntityManager {
     }
 
     private void FindEntitiesInScene(Scene scene, bool lateLoad) {
+        if (LocalStoryScene.Contains(scene.name)) return;
         // Find all EnemyDeathEffects components
         var objectsToCheck = Object.FindObjectsOfType<EnemyDeathEffects>()
             // Filter out EnemyDeathEffects components not in the current scene
@@ -528,6 +616,8 @@ internal class EntityManager {
             // Project each death effect to their GameObject and the corpse of the pre-instantiated EnemyDeathEffects
             // component
             .SelectMany(enemyDeathEffects => {
+                if (CoopContext.LocalWorldOnly && (!EntityRegistry.TryGetEntry(enemyDeathEffects.gameObject, out var entry) ||
+                    !LocalWorldIsolation.Allows(entry))) return new[] { enemyDeathEffects.gameObject };
                 try {
                     enemyDeathEffects.PreInstantiate();
                 } catch (Exception) {
@@ -549,6 +639,7 @@ internal class EntityManager {
             .Concat(Object.FindObjectsOfType<PlayMakerFSM>(true)
                 .Where(fsm => fsm.gameObject.scene == scene)
                 .SelectMany(fsm => {
+                    if (CoopContext.LocalWorldOnly) return new[] { fsm.gameObject };
                     if (!fsm.name.StartsWith("Colosseum Cage Small") &&
                         !fsm.name.StartsWith("Colosseum Cage Large") &&
                         !fsm.name.StartsWith("Colosseum Cage Zote")) {
@@ -600,11 +691,17 @@ internal class EntityManager {
             .OrderBy(obj => StablePath(obj.transform), StringComparer.Ordinal).ToArray();
 
         foreach (var obj in objectsToCheck) {
+            if (CoopContext.LocalWorldOnly && !IsSceneHost && _bossScope != null && EntityRegistry.TryGetEntry(obj, out var scopedEntry) &&
+                !_bossScope.Contains(EntityIdentity.Static(obj, scopedEntry.Type))) {
+                if (BossDefeatSignals.IsBoss(scopedEntry.Type)) _privateBossScenes.Add(obj.scene.name);
+                continue;
+            }
             try {
                 new EntityProcessor { GameObject = obj, IsSceneHost = IsSceneHost,
                     IsSceneHostDetermined = IsSceneHostDetermined, LateLoad = lateLoad }.Process();
             } catch (Exception e) { Logger.Error($"Scene entity registration failed: {scene.name}/{obj.name}: {e}"); }
         }
+        ColosseumEntrance.Prepare(scene);
     }
 
     /// <summary>

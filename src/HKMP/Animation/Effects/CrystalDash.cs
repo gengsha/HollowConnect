@@ -19,7 +19,7 @@ internal class CrystalDash : AnimationEffect {
 
         if (sdBurstObject != null) {
             // Instantiate the crystal dash initial burst when launcher
-            var sdBurst = Object.Instantiate(
+            var sdBurst = RemotePlayerVisuals.Instantiate(
                 sdBurstObject,
                 playerEffects.transform
             );
@@ -33,7 +33,7 @@ internal class CrystalDash : AnimationEffect {
 
         if (sdTrailObject != null) {
             // Instantiate the crystal dash trail that is visible during the dash
-            var sdTrail = Object.Instantiate(
+            var sdTrail = RemotePlayerVisuals.Instantiate(
                 sdTrailObject,
                 playerEffects.transform
             );
@@ -62,7 +62,7 @@ internal class CrystalDash : AnimationEffect {
             if (distance < AnimationManager.EffectDistanceThreshold) {
                 // Instantiate the glow object that flashes the screen once a crystal dash starts
                 // According to FSM this object destroys itself after it is done
-                var sdBurstGlow = Object.Instantiate(
+                var sdBurstGlow = RemotePlayerVisuals.Instantiate(
                     sdBurstGlowObject,
                     playerEffects.transform
                 );
@@ -98,7 +98,7 @@ internal class CrystalDash : AnimationEffect {
         superDashAudioObject.GetComponent<AudioSource>().Play();
 
         var particleEmitAction = superDashFsm.GetFirstAction<PlayParticleEmitter>("G Left");
-        var particleEmitter = Object.Instantiate(
+        var particleEmitter = RemotePlayerVisuals.Instantiate(
             particleEmitAction.gameObject.GameObject.Value,
             playerEffects.transform
         );

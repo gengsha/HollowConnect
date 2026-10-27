@@ -137,6 +137,9 @@ internal class ModMenu {
     /// Initialize the mod menu by registering hooks.
     /// </summary>
     public void Initialize() {
+        On.UnityEngine.UI.MenuOptionHorizontal.OnPointerClick += (orig, option, pointer) => {
+            if (!MenuPointerNavigation.HandleClick(option, pointer)) orig(option, pointer);
+        };
         _netClient.ConnectEvent += _ => {
             OnClientConnectionChange(true);
         };
@@ -200,7 +203,7 @@ internal class ModMenu {
             }
         );
 
-        _hkmpMenu = builder.Build();
+        _hkmpMenu = MenuPointerNavigation.Attach(builder.Build());
 
         _clientSettingsMenu = CreateClientSettingsMenu();
         _serverSettingsMenu = CreateServerSettingsMenu();
@@ -280,7 +283,7 @@ internal class ModMenu {
             }
         );
 
-        return builder.Build();
+        return MenuPointerNavigation.Attach(builder.Build());
     }
 
     /// <summary>
@@ -421,7 +424,7 @@ internal class ModMenu {
             );
         });
 
-        return builder.Build();
+        return MenuPointerNavigation.Attach(builder.Build());
     }
 
     /// <summary>

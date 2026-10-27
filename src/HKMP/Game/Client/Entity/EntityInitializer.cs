@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Hkmp.Game.Client.Entity.Action;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
@@ -14,6 +15,8 @@ namespace Hkmp.Game.Client.Entity;
 /// to game objects (such as child objects).
 /// </summary>
 internal static class EntityInitializer {
+    private static readonly FieldInfo TemplateField = typeof(PlayMakerFSM).GetField(
+        "fsmTemplate", BindingFlags.Instance | BindingFlags.NonPublic);
     /// <summary>
     /// Array of state names that indicates that it is a initializing state.
     /// </summary>
@@ -122,9 +125,33 @@ internal static class EntityInitializer {
         foreach (var state in statesToInit)
             foreach (var action in state.Actions.OfType<FindChild>())
                 if (action.Enabled) BindCachedReference(action);
+        foreach (var state in statesToInit)
+            foreach (var action in state.Actions.OfType<FindAlertRange>())
+                if (action.Enabled) BindCachedReference(action);
     }
 
     private static bool BindCachedReference(FsmStateAction action) {
+        if (action is FindAlertRange range) {
+            if (range.storeResult == null || range.storeResult.IsNone || range.Fsm == null) return true;
+            var target = range.Fsm.GetOwnerDefaultTarget(range.target);
+            var found = target == null ? null : AlertRange.Find(target, range.childName);
+            if (found == null && target != null) {
+                // Moss detaches its Attack Range during native Init. A later
+                // authority resumes Hidden, so direct child lookup now fails.
+                // Its paired FindChild still retains the local detached object.
+                foreach (var rangeChild in range.Fsm.States.SelectMany(s => s.Actions).OfType<FindChild>()) {
+                    if (!rangeChild.Enabled || rangeChild.childName?.Value != range.childName || rangeChild.Fsm == null ||
+                        rangeChild.Fsm.GetOwnerDefaultTarget(rangeChild.gameObject) != target) continue;
+                    var cached = rangeChild.storeResult?.Value;
+                    if (cached != null) found = cached.GetComponent<AlertRange>();
+                    if (found != null) break;
+                }
+            }
+            // Rebinding must not erase a live component merely because its
+            // original parent no longer contains it.
+            if (found != null) range.storeResult.Value = found;
+            return true;
+        }
         if (action is FindChild child) {
             if (child.storeResult == null || child.storeResult.IsNone || child.Fsm == null) return true;
             var target = child.Fsm.GetOwnerDefaultTarget(child.gameObject);
@@ -174,16 +201,51 @@ internal static class EntityInitializer {
         }
     }
 
+    private static void Reprocess(PlayMakerFSM fsm, bool expandTemplate = false) {
+        // Preprocess(owner) resets event-handler flags, but an initialized
+        // action's Awake does not run again to restore its physics/late loop.
+        // Nosk's Climb then sets upward speed once and never maintains it.
+        // Preserve both native update requirements when rebinding any FSM.
+        var fixedUpdate = fsm.Fsm.HandleFixedUpdate;
+        var lateUpdate = fsm.Fsm.HandleLateUpdate;
+        if (expandTemplate) fsm.Preprocess();
+        else fsm.Fsm.Preprocess(fsm);
+        if (fixedUpdate && !fsm.Fsm.HandleFixedUpdate) fsm.Fsm.HandleFixedUpdate = true;
+        if (lateUpdate && !fsm.Fsm.HandleLateUpdate) fsm.Fsm.HandleLateUpdate = true;
+        fsm.Fsm.Preprocessed = true;
+        fsm.AddEventHandlerComponents();
+    }
+
     /// <summary>
-    /// Check whether the given FSM needs to be pre-processed by doing a loop over all states and actions to see if
-    /// any references to the FSM are missing, which causes issues if we want to hook or initialize the FSM.
+    /// Rebind missing action owners without replacing live state or native update handlers.
     /// </summary>
     /// <param name="fsm">The PlayMaker FSM to check and potentially pre-process.</param>
     public static void CheckPreProcessFsm(PlayMakerFSM fsm) {
+        // A dormant prefab's serialized default state can already have
+        // owners AND Preprocessed=true, while Awake has not expanded its
+        // template. That flag alone does not prove a usable network schema.
+        var template = fsm.FsmTemplate;
+        var states = fsm.FsmStates;
+        if (template != null && !fsm.Fsm.Started && states.Length == 1 &&
+            states[0].Name == "State 1" && states[0].Actions.Length == 0) {
+            Reprocess(fsm, true);
+            TemplateField.SetValue(fsm, null);
+            return;
+        }
+
+        // Preserve an already expanded native instance, including changes
+        // made by Awake/OnEnable. PlayMakerFSM.Preprocess would reconstruct
+        // it from the template and erase those live values and actions.
+        if (template != null && !fsm.Fsm.Started) TemplateField.SetValue(fsm, null);
+        if (!fsm.Fsm.Preprocessed) {
+            Reprocess(fsm);
+            return;
+        }
+
         foreach (var state in fsm.FsmStates) {
             if (state.Fsm == null) {
                 Logger.Debug($"Reference to FSM in state '{state.Name}' was null, pre-processing FSM...");
-                fsm.Preprocess();
+                Reprocess(fsm);
                 break;
             }
 
@@ -191,7 +253,7 @@ internal static class EntityInitializer {
             foreach (var action in state.Actions) {
                 if (action.Fsm == null) {
                     Logger.Debug($"Reference to FSM in action '{action.GetType()}' in state '{state.Name}' was null, pre-processing FSM...");
-                    fsm.Preprocess();
+                    Reprocess(fsm);
                     wasPreProcessed = true;
                     break;
                 }

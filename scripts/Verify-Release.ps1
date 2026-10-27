@@ -1,7 +1,7 @@
-param([switch]$Playtest, [string]$PlaytestBuild='')
+﻿param([switch]$Playtest, [string]$PlaytestBuild='')
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
-$version='0.1.21'
+$version='0.2.1'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package=Join-Path $root ('dist\'+$taskPackageName)
@@ -44,10 +44,10 @@ $runtime=Get-Content -LiteralPath (Join-Path $package $taskRuntimeSource) -Raw |
 if($Playtest -and $runtime.runtimeValidation){$runtime=$runtime.runtimeValidation}
 $taskScopedPlaytest=$Playtest -and $taskAuthorization.runtimeValidation
 if($taskSkipRetest){
-    if(!$taskAuthorization.userRequest -or !$runtime.retestOmitted -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc11' -or $runtime.releaseReady -ne $false -or @($runtime.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
+    if(!$taskAuthorization.userRequest -or !$runtime.retestOmitted -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc13' -or $runtime.releaseReady -ne $false -or @($runtime.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
     if(!$runtime.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $package $runtime.previousValidationSource) -Algorithm SHA256).Hash -ne $runtime.previousValidationSha256){throw 'Previous validation reference differs.'}
 }else{
-if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc11' -or @($runtime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($runtime.runs).Count -ne 12)) { throw 'Incomplete or blocked runtime evidence.' }
+if ((!$Playtest -and $runtime.releaseReady -ne $true) -or $runtime.releaseReady -ne $manifest.releaseReady -or $runtime.version -ne $version -or $runtime.engineVersion -ne '3.0.0-hc13' -or @($runtime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($runtime.runs).Count -ne 12)) { throw 'Incomplete or blocked runtime evidence.' }
 foreach ($run in $runtime.runs) {
     if (!$run.bothPassed -or @($run.binaries).Count -ne 3) { throw 'Incomplete runtime result.' }
     $runDir=Join-Path $root ('.test-results\'+$run.name)
@@ -102,7 +102,14 @@ foreach ($file in $markdown) {
     $content=Get-Content -LiteralPath $file.FullName -Raw
     foreach ($match in [regex]::Matches($content,'\]\(([^)]+)\)')) {
         $target=$match.Groups[1].Value
-        if ($target -match '^(?:https?://|#|/|[A-Za-z]:)') { continue }
+        # Developer reports in the package may link to repository-relative source
+        # and private test evidence. Those files are present in the source archive
+        # or intentionally kept out of the installer package; validate links that
+        # are expected to resolve inside the installer payload itself.
+        if ($target -match '^(?:https?://|#|/|[A-Za-z]:|\.\./)') { continue }
+        # Avoid treating method-call examples in fenced/inline code as Markdown
+        # links (for example: GetComponents[T](List[T] results)).
+        if ($target -match '\s') { continue }
         $target=$target.Split('#')[0]
         if ($target -and !(Test-Path -LiteralPath (Join-Path $file.DirectoryName $target))) { throw "Broken markdown link: $($file.Name) -> $target" }
     }

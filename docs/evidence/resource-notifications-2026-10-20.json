@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-20",
+  "timezone": "Asia/Shanghai",
+  "version": "0.1.27",
+  "status": "source-fixed-tested-not-packaged",
+  "behavior": {
+    "presentation": "Native Relic Get Msg, original resource sprites and localized UI names",
+    "batching": "Pending awards coalesced by kind and displayed serially with quantity",
+    "maskAndVessel": "Direct numerical settlement; no collection or completion animation",
+    "deduplication": "No notification on duplicate sources or reconnect replay",
+    "worldResources": "Union by source ID",
+    "nail": "Personal",
+    "oreSpending": "Never refunded",
+    "lifecycle": "Pending and active notifications cleared on connection/slot reset and runtime destruction"
+  },
+  "coreTests": {
+    "command": "scripts/Build.ps1 -Target Smoke -TestSelection tests/progress-audit.selection.txt -NoRestore",
+    "passed": 27,
+    "failed": 0,
+    "buildWarnings": 0,
+    "buildErrors": 0
+  },
+  "successfulRuns": [
+    {
+      "name": "resource-notification-full-20261020-c",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "productionHashesMatch": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "EA6F8D3AEA92AD2F7ECF4D1556B9FF8CC9C133941DFD839E136DBE0D88C0B3C0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "7C27D6A6187F1B48BE2A2AB592FD8C5E8291CE94CFCB208A1DC12D78CA929C1F",
+      "screenshots": [
+        "guest-notification-CharmNotch.png",
+        "guest-notification-MaskShard.png",
+        "guest-notification-PaleOre.png",
+        "guest-notification-VesselFragment.png"
+      ]
+    },
+    {
+      "name": "resource-notification-union-20261020-b",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "productionHashesMatch": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "EA6F8D3AEA92AD2F7ECF4D1556B9FF8CC9C133941DFD839E136DBE0D88C0B3C0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "80A3DFFB55B5923FA087C3FBE08D1BBF58A869AFAC240A7CCF3256BC057643F3",
+      "screenshots": [
+        "guest-notification-MaskShard.png",
+        "guest-notification-VesselFragment.png",
+        "host-notification-MaskShard.png",
+        "host-notification-VesselFragment.png"
+      ]
+    },
+    {
+      "name": "resource-notification-off-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "productionHashesMatch": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "EA6F8D3AEA92AD2F7ECF4D1556B9FF8CC9C133941DFD839E136DBE0D88C0B3C0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "7C27D6A6187F1B48BE2A2AB592FD8C5E8291CE94CFCB208A1DC12D78CA929C1F",
+      "screenshots": []
+    },
+    {
+      "name": "resource-notification-regression-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "productionHashesMatch": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "EA6F8D3AEA92AD2F7ECF4D1556B9FF8CC9C133941DFD839E136DBE0D88C0B3C0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "80A3DFFB55B5923FA087C3FBE08D1BBF58A869AFAC240A7CCF3256BC057643F3",
+      "screenshots": []
+    }
+  ],
+  "visuallyReviewed": [
+    "resource-notification-full-20261020-c/guest-notification-CharmNotch.png",
+    "resource-notification-full-20261020-c/guest-notification-PaleOre.png",
+    "resource-notification-union-20261020-b/host-notification-MaskShard.png",
+    "resource-notification-union-20261020-b/host-notification-VesselFragment.png"
+  ],
+  "intermediateRuns": [
+    {
+      "name": "resource-popup-inspect-20261020-a",
+      "purpose": "Read-only native popup/FSM investigation, earlier production hash"
+    },
+    {
+      "name": "resource-notification-full-20261020-a",
+      "purpose": "Logical checks passed; screenshot target aspect cropped native HUD"
+    },
+    {
+      "name": "resource-notification-full-20261020-b",
+      "purpose": "Native projection preserved for capture; before final top-status removal and pause guard"
+    },
+    {
+      "name": "resource-notification-union-20261020-a",
+      "purpose": "Logical and strict log checks passed; CJK text mesh required explicit batch capture refresh; production hashes unchanged in b"
+    }
+  ],
+  "preservedInconclusive": [
+    {
+      "name": "resource-notification-union-rendered-20261020-a",
+      "reason": "Non-batch hidden host did not reach Probe initialization in 45 seconds; startup command failed before guest launch; not claimed as functional pass"
+    }
+  ],
+  "limits": [
+    "Existing isolated game copies only",
+    "Save writes blocked; no personal save access or changes",
+    "Localhost UDP only, no FRP/two-machine validation",
+    "No full boss/game matrix",
+    "No packaging or installation"
+  ]
+}

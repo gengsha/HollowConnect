@@ -111,6 +111,7 @@ public sealed class DeathProbe : MonoBehaviour {
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         CoopMod.Settings.ShareProgress = false; CoopMod.Settings.Rescue = true; CoopMod.Settings.EntryProtection = true;
+        CoopMod.Settings.RescueLimit = 0; CoopMod.Settings.SpectateAfterExhaustion = false;
         var pd = PlayerData.instance; pd.SetString("respawnScene", benchScene); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         pd.SetInt("geo", host ? 123 : 456); pd.SetInt("geoPool", 0); pd.SetString("shadeScene", ""); pd.SetBool("soulLimited", false);
         dreamReturn = scene.StartsWith("GG_") ? "GG_Atrium" : "Crossroads_10";

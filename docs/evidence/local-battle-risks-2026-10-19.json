@@ -1,0 +1,358 @@
+{
+  "date": "2026-10-19",
+  "sourceVersion": "0.1.25 working-tree local battle completion fix",
+  "status": "11 scoped dual Unity risk cases passed",
+  "productionChangesThisRiskPass": false,
+  "packaged": false,
+  "environment": "two isolated local Unity game processes, real loopback UDP, fresh in-memory profile 99; all save overloads intercepted",
+  "gameAssemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+  "testedBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+    }
+  ],
+  "acceptedCaseCount": 11,
+  "acceptedRuns": [
+    {
+      "name": "boundary",
+      "run": "local-arena-risk-20261019-r2-boundary",
+      "status": "passed both endpoints and strict logs",
+      "scope": "receiver ordering, positive health reset and subsequent counter initialization",
+      "probeSha256": "82CD84022B1A73664DEE6FFD6F3687508C228E7C78755EA2A60682FE57E2915F",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ]
+    },
+    {
+      "name": "reentry-host",
+      "run": "local-arena-risk-20261019-r1-reentry-host",
+      "status": "passed both endpoints and strict logs",
+      "scope": "pending death, unload, fresh snapshot and native reward",
+      "probeSha256": "7C780C7D96BDCA53498B5F83B8A54B9AC044F42223E6EC88786947D0F4887185",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ]
+    },
+    {
+      "name": "reentry-guest",
+      "run": "local-arena-risk-20261019-r1-reentry-guest",
+      "status": "passed both endpoints and strict logs",
+      "scope": "pending death, unload, fresh snapshot and native reward",
+      "probeSha256": "7C780C7D96BDCA53498B5F83B8A54B9AC044F42223E6EC88786947D0F4887185",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ]
+    },
+    {
+      "name": "disconnect-host",
+      "run": "local-arena-risk-20261019-r1-disconnect-host",
+      "status": "passed both endpoints and strict logs",
+      "scope": "real disconnect, retained pending death, takeover and reconnect",
+      "probeSha256": "7C780C7D96BDCA53498B5F83B8A54B9AC044F42223E6EC88786947D0F4887185",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ]
+    },
+    {
+      "name": "disconnect-guest",
+      "run": "local-arena-risk-20261019-r1-disconnect-guest",
+      "status": "passed both endpoints and strict logs",
+      "scope": "real disconnect, retained pending death, takeover and reconnect",
+      "probeSha256": "7C780C7D96BDCA53498B5F83B8A54B9AC044F42223E6EC88786947D0F4887185",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ]
+    },
+    {
+      "name": "phase-handoff",
+      "run": "local-arena-risk-20261019-r3-phase-handoff",
+      "status": "passed both endpoints and strict logs",
+      "scope": "native False Knight armor/head phase and scene authority handoff",
+      "probeSha256": "9BDA7523035FDF3F6FA6B9D6A8286CD09F806218DAFA2EB9E567C171F892010B",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ]
+    },
+    {
+      "name": "phase-late-handoff",
+      "run": "local-arena-risk-20261019-r3-phase-late-handoff",
+      "status": "passed both endpoints and strict logs",
+      "scope": "late phase entry, natural exposure timeout, recovery and scene authority handoff",
+      "probeSha256": "9BDA7523035FDF3F6FA6B9D6A8286CD09F806218DAFA2EB9E567C171F892010B",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ]
+    },
+    {
+      "name": "waves-host",
+      "run": "local-arena-risk-20261019-r3-waves-host",
+      "status": "passed both endpoints and strict logs",
+      "scope": "native Bronze waves 1 through 28 and source reward deduplication",
+      "probeSha256": "9BDA7523035FDF3F6FA6B9D6A8286CD09F806218DAFA2EB9E567C171F892010B",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ],
+      "nativeWaveNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ]
+    },
+    {
+      "name": "waves-guest",
+      "run": "local-arena-risk-20261019-r3-waves-guest",
+      "status": "passed both endpoints and strict logs",
+      "scope": "native Bronze waves 1 through 28 and source reward deduplication",
+      "probeSha256": "9BDA7523035FDF3F6FA6B9D6A8286CD09F806218DAFA2EB9E567C171F892010B",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ],
+      "nativeWaveNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ]
+    },
+    {
+      "name": "mother-host",
+      "run": "local-arena-risk-20261019-r9-mother-host",
+      "status": "passed both endpoints and strict logs",
+      "scope": "actual nail collision, native wake, mother death, seven children and native gates",
+      "probeSha256": "213DD5EF4DADE2AE6F70397A2482BDA620690B79119AC8950B01E0BF5420AD7C",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ],
+      "nativeChildCount": 7
+    },
+    {
+      "name": "mother-guest",
+      "run": "local-arena-risk-20261019-r9-mother-guest",
+      "status": "passed both endpoints and strict logs",
+      "scope": "actual nail collision, native wake, mother death, seven children and native gates",
+      "probeSha256": "213DD5EF4DADE2AE6F70397A2482BDA620690B79119AC8950B01E0BF5420AD7C",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9DDD8A21D065640963CA370033A381C08C0BCF7618B3B1003D91D8C8117E6FDD"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D4EEA255ACD2A5BB0A86E07D967323437C03F7CF987ACA0B74237D1C9E0F8721"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "42391B8B81AEA21FC0BDFB731EA81AEB03AC5CBFF6C98F05DA8031A6D2259409"
+        }
+      ],
+      "nativeChildCount": 7
+    }
+  ],
+  "priorEvidence": "local-battle-completion-2026-10-19.json (8 runtime cases and 9 selected core checks on the same production hashes; not rerun here)",
+  "rejectedFixtureRuns": [
+    {
+      "run": "local-arena-risk-20261019-r1-boundary-host",
+      "reason": "temporary FSM destruction deferred until frame end; all receiver assertions passed but subsequent scene selector failed"
+    },
+    {
+      "run": "local-arena-risk-20261019-r2-phase-handoff",
+      "reason": "invalid fixture assumption that an untriggered local battle must have a positive counter"
+    },
+    {
+      "run": "local-arena-risk-20261019-r4-mother-host",
+      "reason": "invalid fixture assumption that native Gruz Battle Control has a collision entry trigger"
+    },
+    {
+      "run": "local-arena-risk-20261019-r5-mother-host",
+      "reason": "scene schema diagnostic for native wake event; still rejected for wrong collision-entry assumption"
+    },
+    {
+      "run": "local-arena-risk-20261019-r6-mother-host",
+      "reason": "serialized counter 7 mistaken for started battle; off-arena placed children mistaken for spawned combatants; final state Detect rejected"
+    },
+    {
+      "run": "local-arena-risk-20261019-r7-mother-host",
+      "reason": "direct HealthManager hit lacks DamageEnemies TAKE DAMAGE wake event"
+    },
+    {
+      "run": "local-arena-risk-20261019-r8-mother-host",
+      "reason": "direct HitTaker dispatch also lacks DamageEnemies TAKE DAMAGE wake event"
+    }
+  ],
+  "limits": [
+    "No real two-machine FRP test",
+    "No claim for every boss, arena or phase",
+    "Gruz uses actual nail collision to start; subsequent terminal damage is native ApplyExtraDamage",
+    "Receiver reset fixture is not a complete native death/respawn playthrough",
+    "No personal save files or disk save/reload test",
+    "Same production hashes as prior runtime/core evidence; probe hashes vary with test-only fixture corrections"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "version": "0.1.38",
+  "action": "package-for-user-playtest",
+  "userRequest": "先打包新版吧",
+  "sessionConstraint": "解决,只做必要验证,时间紧",
+  "scope": "Complete 0.1.38 Windows installer and source packages including Grimm-flame receipt/counter repair, Colosseum completed-trial registration repair and prior fixes. Existing playtest channel retained. Build and package integrity only after version bump; previous runtime hashes retained without recertification. No installation.",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "boss-settlement-disconnect-delivery-race",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved"
+  ],
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "BB6DADAFAD5B72BFDC55E19769B0FB7C4E0108CE554097071AEB19F7428DBFCE"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ]
+}

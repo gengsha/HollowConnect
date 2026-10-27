@@ -15,6 +15,11 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class CoverageProbe {
     private IEnumerator PerformanceAssertions() {
+        var hooks = typeof(Hkmp.Game.Client.Entity.Action.FsmActionHooks).GetField("TypeEvents", BindingFlags.Static | BindingFlags.NonPublic);
+        var installed = (System.Collections.IDictionary)hooks.GetValue(null);
+        foreach (var type in Hkmp.Game.Client.Entity.Action.EntityFsmActions.SupportedActionTypes)
+            if (!installed.Contains(type)) throw new Exception("Action detour was not prepared before combat: " + type.Name);
+        Mark("PASS all supported FSM action detours installed before native attacks");
         var frames = new List<int>(); var order = new List<int>();
         for (var i = 0; i < 6; i++) {
             var index = i;

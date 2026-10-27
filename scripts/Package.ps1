@@ -1,7 +1,8 @@
-param([switch]$Playtest, [string]$PlaytestBuild='')
+﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$version = '0.1.21'
+. (Join-Path $PSScriptRoot 'PackageTools.ps1')
+$version = '0.2.1'
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
 $taskEvidencePath=Join-Path $root "docs/evidence/runtime-room-$version.json"
@@ -26,10 +27,10 @@ $taskRuntime=if($taskScopedPlaytest){$taskAuthorization.runtimeValidation}else{$
 # A user-requested package may retain earlier validation without claiming the new hashes were tested.
 $taskSkipRetest=$Playtest -and $taskAuthorization.retestOmitted -eq $true
 if($taskSkipRetest){
-    if(!$taskAuthorization.userRequest -or !$taskEvidence.retestOmitted -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc11' -or $taskEvidence.releaseReady -ne $false -or @($taskEvidence.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
+    if(!$taskAuthorization.userRequest -or !$taskEvidence.retestOmitted -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc13' -or $taskEvidence.releaseReady -ne $false -or @($taskEvidence.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
     if(!$taskEvidence.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $root $taskEvidence.previousValidationSource) -Algorithm SHA256).Hash -ne $taskEvidence.previousValidationSha256){throw 'Previous validation reference differs.'}
 }else{
-if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc11' -or @($taskRuntime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($taskRuntime.runs).Count -ne 12)){throw 'Runtime acceptance is incomplete or blocked; no package created.'}
+if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc13' -or @($taskRuntime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($taskRuntime.runs).Count -ne 12)){throw 'Runtime acceptance is incomplete or blocked; no package created.'}
 foreach($taskRun in $taskRuntime.runs){
     if(!$taskRun.bothPassed){throw 'A runtime acceptance case failed; no release package created.'}
     if(@($taskRun.binaries).Count -ne 3){throw 'Runtime DLL evidence is incomplete; no release package created.'}
@@ -80,24 +81,17 @@ $manifest = [ordered]@{
     files = @($files | ForEach-Object { @{name=$_; sha256=(Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $payload $_)).Hash} })
 }
 $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $package 'manifest.json') -Encoding UTF8
-Compress-Archive -Path (Join-Path $package '*') -DestinationPath (Join-Path $root ('dist\'+$taskPackageName+'-windows.zip')) -Force
+$taskWindowsZip=Join-Path $root ('dist\'+$taskPackageName+'-windows.zip')
+Write-HollowArchive -Destination $taskWindowsZip -BasePath $package -Files @(Get-HollowSourceFiles -Path $package)
 $sources = 'src','tests','scripts','docs','README.md','LICENSE','HKMP-LICENSE','THIRD-PARTY.md','Directory.Build.props','.gitignore'
 # Exclude build output and the user's game assemblies from the corresponding source archive.
-Add-Type -AssemblyName System.IO.Compression.FileSystem
 $sourceZip = Join-Path $root ('dist\'+$taskPackageName+'-source.zip')
-if (Test-Path -LiteralPath $sourceZip) { Remove-Item -LiteralPath $sourceZip }
-$archive = [IO.Compression.ZipFile]::Open($sourceZip, [IO.Compression.ZipArchiveMode]::Create)
-try {
+$taskSourceFiles=@(
     foreach ($name in $sources) {
         $path = Join-Path $root $name
-        $entries = if (Test-Path -LiteralPath $path -PathType Container) { Get-ChildItem -LiteralPath $path -File -Recurse | Where-Object { $_.FullName -notmatch '\\(bin|obj)\\' -and $_.Name -notlike '*.draft' } } else { Get-Item -LiteralPath $path }
-        foreach ($file in $entries) {
-            $relative = $file.FullName.Substring($root.Length + 1).Replace('\','/')
-            [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $file.FullName, $relative, [IO.Compression.CompressionLevel]::Optimal) | Out-Null
-        }
+        Get-HollowSourceFiles -Path $path
     }
-} finally { $archive.Dispose() }
-Get-ChildItem -LiteralPath (Join-Path $root 'dist') -Filter 'HollowConnect-*.zip' -File |
-    Sort-Object Name | ForEach-Object { ((Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash.ToLowerInvariant()) + '  ' + $_.Name } |
-    Set-Content -LiteralPath (Join-Path $root 'dist\SHA256SUMS.txt') -Encoding ASCII
+)
+Write-HollowArchive -Destination $sourceZip -BasePath $root -Files $taskSourceFiles
+Update-HollowChecksums -Directory (Join-Path $root 'dist') -ChangedArchives ([IO.Path]::GetFileName($taskWindowsZip)),([IO.Path]::GetFileName($sourceZip)) -Rebuild:$RebuildChecksums
 Write-Output "Packaged $package"

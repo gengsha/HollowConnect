@@ -1,0 +1,39 @@
+{
+  "version": "0.1.22",
+  "action": "package-for-user-playtest",
+  "buildLabel": "",
+  "buildCommit": "49d97def4e1051bc00c2095a1e985d7f201fd034",
+  "workingTreeHasUncommittedChanges": true,
+  "userRequest": "不检查了,直接打包新版",
+  "recordedAtUtc": "2026-10-18T03:50:45.7654258Z",
+  "retestOmitted": true,
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "121CDA755B51CF0B3484FFA962AE3636878FA6790040A56833ACA39A30E8482F",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "9C530F081CE0D311A0401EC1CDDE3C976D053768FE6FCDE0B6D5674F49F73792",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "BB4D3592C2489B97F42161D9696E8D5FD2C0CC08FAAB1B4FC61069C447AF93FD",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    }
+  ],
+  "scope": "User requested stop of remaining checks and immediate new-version packaging. Includes emergency Ctrl+Alt+F12, save safety, debug panel, host-persisted resource sources, native pickup feedback, boss/dream synchronization and smoothness repairs. Reuse completed pre-bump core/emergency and earlier stability evidence only with original hashes; 0.1.22 production compilation and package construction only, no regression/game/installer execution or personal-save writes."
+}

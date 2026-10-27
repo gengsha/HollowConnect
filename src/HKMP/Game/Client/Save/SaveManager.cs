@@ -801,6 +801,8 @@ internal class SaveManager {
                 hitsLeft = value
             });
         } else if (SaveDataMapping.PersistentBoolIndices.TryGetValue(index, out itemData)) {
+            // Also reject historical full-save entries and delayed updates from older clients.
+            if (SaveDataMapping.IsLocalVinePlatform(itemData)) return;
             if (CheckPlayerSpecificHosting(SaveDataMapping.PersistentBoolVarProperties, itemData)) {
                 return;
             }

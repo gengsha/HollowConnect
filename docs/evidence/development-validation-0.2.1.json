@@ -1,0 +1,50 @@
+{
+  "version": "0.2.1",
+  "purpose": "Index of historical development evidence retained during packaging; not new-version runtime acceptance.",
+  "certifiesNewVersion": false,
+  "packagingInputBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "972BC86BF44B693DCAF4096E475CD11DE5B1E36CB3C2C05BC564DCC8B48590D7"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "46E9A64D2A9A2E1C66459650CFFFAE06FC47FD1B1CE15CA9F20DC1403B4E0AA5"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "sources": [
+    {
+      "report": "docs/ADDON-SEND-FAILURE-FIX-2026-10-26.md",
+      "reportSha256": "5FE5E5308A65969CDF9FF4D1F33BD7AA64BDC2A53A286702918C85B7D9911F96",
+      "originalEvidence": ".analysis/send-failure-fix-20261026/evidence.json",
+      "originalEvidenceSha256": "6D8E960D8DA33F42EC4B45CDBD1E9836BF9D0E2921E2E3BAF0BB3219F07E7655"
+    },
+    {
+      "report": "docs/FALSE-KNIGHT-GATE-FIX-2026-10-26.md",
+      "reportSha256": "0C6E9DA9363B562B90DC3DD97FD97ADD5D613AD7B5F5824C195A32061200A950",
+      "originalEvidence": "docs/evidence/false-knight-gate-fix-2026-10-26.json",
+      "originalEvidenceSha256": "1435F214229BEEAB29FB8B99CE1C691CE3458E0763156FCE0D3FED10871D8FDC"
+    },
+    {
+      "report": "docs/A3-COMPLETION-INTENT-FIX-2026-10-26.md",
+      "reportSha256": "2F0AFFE439712D8CB001EA8BD53548C314844947A83C9194D2599599232B4840",
+      "originalEvidence": ".analysis/a3-fix-20261026/evidence.json",
+      "originalEvidenceSha256": "19FA0BE9C238F11F3BAC152CF67D01049C89081D7192FFB7E3F150D710F963E9"
+    },
+    {
+      "report": "docs/HORNET-STORY-GATE-COMPARISON-2026-10-26.md",
+      "reportSha256": "5B4CB584C85A9E51EA9FB0B16F66F33EDB78D5C5DAC6FE66E6B032758875F772",
+      "originalEvidence": ".analysis/hornet-story-compare-20261026/evidence.json",
+      "originalEvidenceSha256": "D62401D6C035062F3FF033F3A0B0B396E54DE012E832D6D2F9EF790FE40A4499"
+    }
+  ],
+  "limits": [
+    "Each source retains its original production hashes and case scope.",
+    "Hornet 0.1.38 and current comparison both passed; the reported three-player lock remains unreproduced.",
+    "No new game runs or final-hash twelve-case matrix during packaging."
+  ]
+}

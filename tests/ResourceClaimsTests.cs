@@ -2,14 +2,164 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using HollowConnect.Core;
+using HollowConnect;
+using System.Reflection;
 
 internal static class ResourceClaimsTests {
     private static void Require(bool ok, string reason) { if (!ok) throw new Exception(reason); }
     internal static void Register(Action<string, Action> test) {
-        test("resource catalog covers 8 notches, 16 mask shards, 9 vessel fragments and 6 ore sources", () => {
+        test("colosseum shared completion restores its own registration without unlocking unpaid trials", () => {
+            var flags = new HashSet<string> { "colosseumBronzeCompleted", "colosseumBronzeOpened", "colosseumSilverCompleted" };
+            Require(ColosseumProgress.RepairRegistrations(flags.Contains, key => flags.Add(key)) == 1, "missing silver registration not repaired");
+            Require(flags.Contains("colosseumSilverOpened") && !flags.Contains("colosseumGoldOpened") && !flags.Contains("colosseumGoldCompleted"), "repair paid the next trial or invented completion");
+            Require(ColosseumProgress.RepairRegistrations(flags.Contains, key => flags.Add(key)) == 0, "repair was not idempotent");
+        });
+        test("colosseum registration repair does not invent prerequisites or completion rewards", () => {
+            var flags = new HashSet<string> { "colosseumSilverCompleted" };
+            ColosseumProgress.RepairRegistrations(flags.Contains, key => flags.Add(key));
+            Require(flags.SetEquals(new[] { "colosseumSilverCompleted", "colosseumSilverOpened" }), "repair changed other trials or resource flags");
+            flags.Clear(); flags.Add("colosseumSilverOpened");
+            Require(ColosseumProgress.RepairRegistrations(flags.Contains, key => flags.Add(key)) == 0 && flags.Count == 1, "registration invented completion");
+            flags.Clear(); flags.Add("colosseumGoldCompleted");
+            Require(ColosseumProgress.RepairRegistrations(flags.Contains, key => flags.Add(key)) == 1 && flags.Contains("colosseumGoldOpened"), "gold completion stayed locked");
+        });
+        test("simple key sources catch up late entrants without refunding personal spending", () => {
+            var ids = ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.SimpleKey).Select(s => s.Id).ToArray();
+            Require(ids.Length == 4, "missing key source");
+            var host = new ResourceClaims(); var hostKeys = 0;
+            foreach (var id in ids) if (host.TryClaim(id, out _)) hostKeys++;
+            hostKeys -= 3;
+            var late = new ResourceClaims(); var lateKeys = 0;
+            foreach (var id in host.Copy().Claimed) if (late.TryClaim(id, out _)) lateKeys++;
+            Require(hostKeys == 1 && lateKeys == 4, "late entrant copied another player's spent balance");
+            lateKeys -= 2;
+            var reloaded = new DeathStatistics { Resources = late }.Copy().Resources;
+            foreach (var id in ids.Reverse().Concat(ids)) if (reloaded.TryClaim(id, out _)) lateKeys++;
+            Require(lateKeys == 2 && reloaded.Claimed.Count == 4, "reconnect refunded spent keys or duplicated a source");
+            var oldSlot = new ResourceClaims(); oldSlot.TryClaim(ids[0], out _);
+            var oldBalance = 0;
+            foreach (var id in ids) if (oldSlot.TryClaim(id, out _)) oldBalance++;
+            Require(oldBalance == 3, "previously obtained and spent local source paid twice");
+        });
+        test("legacy completed collections never invent simple key acquisition history", () => {
+            var claims = new ResourceClaims();
+            ResourceReconciliation.ImportCompletedCollections(claims, 11, 16, 9, 0, 4);
+            Require(claims.Claimed.Count == 39 && ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.SimpleKey)
+                .All(s => !claims.Contains(s.Id)), "full ore or permanent upgrades fabricated key receipts");
+            ResourceCatalog.TryPlayerFlag("gotLurkerKey", out var lurker);
+            Require(lurker?.Kind == ResourceKind.SimpleKey && ResourceCatalog.PreservesPlayerData("slySimpleKey") &&
+                ResourceCatalog.PreservesPlayerData("gotLurkerKey") && ResourceCatalog.PreservesPlayerData("simpleKeys") &&
+                ResourceCatalog.PreservesPersistent("Ruins1_17", "Shiny Item") &&
+                ResourceCatalog.PreservesPersistent("Abyss_20", "Shiny Item Stand"), "save replay can overwrite key ownership");
+        });
+        test("full legacy collections recover all sources without refunding spent ore", () => {
+            var host = new ResourceClaims();
+            Require(ResourceReconciliation.ImportCompletedCollections(host, 11, 16, 9, 0, 4) == 39,
+                "Godseeker totals without story receipts did not recover all sources");
+            Require(ResourceReconciliation.NextRepair(host, 11, 16, 9) == null, "complete host was awarded again");
+            var guest = new ResourceClaims(); var ore = 0;
+            foreach (var id in host.Claimed) if (guest.TryClaim(id, out var source) && source.Kind == ResourceKind.PaleOre) ore++;
+            Require(ore == 6, "fresh guest did not receive six distinct ore sources");
+            ore -= 3;
+            var reopened = guest.Copy();
+            Require(ResourceReconciliation.ImportCompletedCollections(reopened, 11, 16, 9, ore, 3) == 0,
+                "reconnect reimported a spent source");
+            foreach (var id in host.Claimed) if (reopened.TryClaim(id, out var source) && source.Kind == ResourceKind.PaleOre) ore++;
+            Require(ore == 3, "reconnect refunded the guest's upgrade cost");
+        });
+        test("legacy ore collection includes every native upgrade cost and remaining inventory", () => {
+            var spent = new[] { 0, 0, 1, 3, 6 };
+            for (var level = 0; level <= 4; level++) {
+                var claims = new ResourceClaims();
+                claims.TryClaim("ore:dreamReward3", out _);
+                Require(ResourceReconciliation.ImportCompletedCollections(claims, 3, 0, 0, 6 - spent[level], level) == 5,
+                    "full ore collection not recovered at nail level " + level);
+                Require(claims.Claimed.Count == 6, "existing source was duplicated");
+            }
+        });
+        test("partial or invalid legacy totals never invent source identities", () => {
+            foreach (var amounts in new[] { new[] { 10, 15, 8, 0, 0 }, new[] { 3, 0, 0, 2, 3 },
+                new[] { 12, 17, 10, 7, 0 }, new[] { 3, 0, 0, 6, 5 }, new[] { 3, 0, 0, -1, 4 } }) {
+                var claims = new ResourceClaims();
+                Require(ResourceReconciliation.ImportCompletedCollections(claims, amounts[0], amounts[1], amounts[2], amounts[3], amounts[4]) == 0 &&
+                    claims.Claimed.Count == 0, "partial or invalid collection invented receipts");
+            }
+        });
+        test("royal charm halves union in either order and void heart never regresses", () => {
+            for (var first = 0; first <= 4; first++) for (var second = 0; second <= 4; second++) {
+                var ledger = new ProgressLedger(); ledger.Merge("royalCharmState", first); ledger.Merge("royalCharmState", second);
+                var reverse = new ProgressLedger(); reverse.Merge("royalCharmState", second); reverse.Merge("royalCharmState", first);
+                Require(ledger.Get("royalCharmState") == reverse.Get("royalCharmState"), "half union depends on order");
+                Require(!ledger.Merge("royalCharmState", first), "repeated half duplicates progress");
+            }
+            Require(ProgressCatalog.Combine("royalCharmState", 1, 2) == 3 && ProgressCatalog.Combine("royalCharmState", 4, 2) == 4, "royal charm state downgraded or lost a half");
+            Require(ProgressCatalog.CharmCount(_ => true, 0) == 39 && ProgressCatalog.CharmCount(_ => true, 2) == 39 &&
+                ProgressCatalog.CharmCount(_ => true, 3) == 40 && ProgressCatalog.CharmCount(_ => true, 4) == 40, "native charm count treats an incomplete Kingsoul as complete");
+        });
+        test("join audit repairs only missing nonconsumable totals and never refunds ore", () => {
+            var claims = new ResourceClaims();
+            claims.TryClaim("notch:notchShroomOgres", out _);
+            claims.TryClaim("ore:dreamReward3", out _);
+            Require(ResourceReconciliation.NextRepair(claims, 3, 0, 0)?.Id == "notch:notchShroomOgres", "missed arena notch not repaired");
+            Require(ResourceReconciliation.NextRepair(claims, 4, 0, 0) == null, "repeated audit duplicates notch or spent ore");
+            Require(ResourceReconciliation.NextRepair(claims, 11, 16, 9) == null, "full progress was changed");
+            Require(ResourceReconciliation.NextRepair(new ResourceClaims(), 3, 0, 0) == null, "unclaimed reward invented");
+        });
+        test("join audit fragment repair respects conversions and full source union", () => {
+            var claims = new ResourceClaims();
+            foreach (var source in ResourceCatalog.Sources) claims.TryClaim(source.Id, out _);
+            var slots = 3; var masks = 0; var vessels = 0; var repairs = 0;
+            ResourceSource next;
+            while ((next = ResourceReconciliation.NextRepair(claims, slots, masks, vessels)) != null && repairs++ < 40) {
+                if (next.Kind == ResourceKind.CharmNotch) slots++;
+                else if (next.Kind == ResourceKind.MaskShard) masks++;
+                else if (next.Kind == ResourceKind.VesselFragment) vessels++;
+                else throw new Exception("audit issued a consumable repair");
+            }
+            Require(slots == 11 && masks == 16 && vessels == 9 && repairs == 33, "full nonconsumable entitlement mismatch");
+            Require(ResourceReconciliation.NextRepair(claims, 11, 16, 9) == null, "complete totals did not remain stable");
+            Require(ResourceReconciliation.NextRepair(claims, 11, 15, 9)?.Kind == ResourceKind.MaskShard, "converted mask plus partial shard not counted");
+        });
+        test("native pickup history migrates separately from shared ownership and copies safely", () => {
+            var legacy = new DeathStatistics();
+            Require(legacy.Copy().NativePickups == null, "legacy pickup history was marked initialized before vanilla load");
+            legacy.NativePickups = new Dictionary<string, int> { ["hasDash"] = 1, ["fireballLevel"] = 2, ["hasCharm"] = 1,
+                ["hasDoubleJump"] = 0, ["geo"] = 50, ["killedFalseKnight"] = 1 };
+            legacy.SharedProgress["hasDoubleJump"] = 1;
+            var copy = legacy.Copy();
+            Require(copy.NativePickups.Count == 3 && copy.NativePickups["hasCharm"] == 1 && !copy.NativePickups.ContainsKey("hasDoubleJump"), "shared or invalid progress seeded a local interaction");
+            copy.NativePickups["hasDash"] = 0;
+            Require(legacy.NativePickups["hasDash"] == 1 && copy.SharedProgress["hasDoubleJump"] == 1, "pickup history aliases or erased shared ownership");
+        });
+        test("server guest receipt persists without marking the host locally awarded", () => {
+            var old = CoopMod.Statistics;
+            try {
+                CoopMod.Statistics = new DeathStatistics();
+                var server = new CoopServerAddon();
+                var claim = typeof(CoopServerAddon).GetMethod("ClaimHostResource", BindingFlags.Instance | BindingFlags.NonPublic);
+                const string source = "notch:colosseumBronze";
+                Require((bool)claim.Invoke(server, new object[] { source }), "guest offer rejected");
+                Require(CoopMod.Statistics.SharedResources.Contains(source), "authority receipt was not persisted");
+                Require(!CoopMod.Statistics.Resources.Contains(source), "server offer falsely marked host paid");
+                var copy = CoopMod.Statistics.Copy();
+                Require(copy.SharedResources.Contains(source) && !copy.Resources.Contains(source), "save copy conflates authority with local receipt");
+                Require(copy.Resources.TryClaim(source, out _) && !copy.Resources.TryClaim(source, out _), "host cannot receive once after authority claim");
+                Require(!(bool)claim.Invoke(server, new object[] { source }), "replayed offer accepted twice");
+            } finally { CoopMod.Statistics = old; }
+        });
+        test("legacy host receipts seed authority history without aliasing local awards", () => {
+            const string id = "ore:dreamReward3";
+            var old = new DeathStatistics { SharedResources = null };
+            old.Resources.TryClaim(id, out _);
+            var copy = old.Copy();
+            Require(copy.SharedResources.Contains(id), "old receipt absent from authority history");
+            copy.SharedResources.Claimed.Clear();
+            Require(copy.Resources.Contains(id) && old.Resources.Contains(id), "authority migration aliases local receipts");
+        });
+        test("resource catalog covers permanent upgrades, ore and four simple key sources", () => {
             var all = ResourceCatalog.Sources.ToArray();
-            Require(all.Length == 39 && all.Select(s => s.Id).Distinct(StringComparer.Ordinal).Count() == 39, "native source identity collision");
-            foreach (var pair in new[] { (ResourceKind.CharmNotch, 8), (ResourceKind.MaskShard, 16), (ResourceKind.VesselFragment, 9), (ResourceKind.PaleOre, 6) })
+            Require(all.Length == 43 && all.Select(s => s.Id).Distinct(StringComparer.Ordinal).Count() == 43, "native source identity collision");
+            foreach (var pair in new[] { (ResourceKind.CharmNotch, 8), (ResourceKind.MaskShard, 16), (ResourceKind.VesselFragment, 9), (ResourceKind.PaleOre, 6), (ResourceKind.SimpleKey, 4) })
                 Require(all.Count(s => s.Kind == pair.Item1) == pair.Item2, "incorrect source count for " + pair.Item1);
             Require(all.All(s => s.Id.Length <= 128 && s.Scene.Length <= 128), "source exceeds existing message bounds");
         });
@@ -97,6 +247,17 @@ internal static class ResourceClaimsTests {
             restored.Resources.Claimed.Clear();
             Require(original.Resources.Contains("ore:dreamReward3"), "slot copy aliases resource claims");
             Require(new DeathStatistics { Resources = null }.Copy().Resources.Claimed.Count == 0, "legacy slot without resource data is not initialized");
+        });
+        test("host shared progress and resource receipts survive a slot copy without cross-slot aliases", () => {
+            var host = new DeathStatistics();
+            host.SharedProgress["hasDash"] = 1;
+            host.Resources.TryClaim("ore:Mines_34/Shiny Item Stand", out _);
+            var other = host.Copy();
+            Require(other.SharedProgress.TryGetValue("hasDash", out var dash) && dash == 1, "host progress was not persisted");
+            Require(other.Resources.Contains("ore:Mines_34/Shiny Item Stand"), "host source receipt was not persisted");
+            other.SharedProgress["hasDash"] = 0;
+            other.Resources.Claimed.Clear();
+            Require(host.SharedProgress["hasDash"] == 1 && host.Resources.Contains("ore:Mines_34/Shiny Item Stand"), "slot copies share host ledgers");
         });
     }
 }

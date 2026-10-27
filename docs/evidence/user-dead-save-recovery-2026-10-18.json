@@ -1,0 +1,12 @@
+{
+  "version": "0.1.22",
+  "kind": "user-acceptance",
+  "recordedAtUtc": "2026-10-18T04:00:36Z",
+  "scenario": "real dead save recovered with the hidden emergency bench shortcut",
+  "action": "Ctrl+Alt+F12",
+  "result": "PASS",
+  "userConfirmation": "死档通过你的快捷键修好了,我认为可以直接pass了",
+  "observedBehavior": "The affected save returned to the Dirtmouth bench and became usable again.",
+  "scope": "Manual validation on the user's affected save after the 0.1.22 package; this is user acceptance evidence, not an automated disk-write/reload run.",
+  "remainingBoundary": "A controlled duplicate-save write, process exit, and reload has not been performed by the automated suite."
+}

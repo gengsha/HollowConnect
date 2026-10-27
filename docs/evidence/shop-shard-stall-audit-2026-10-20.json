@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "createdAtUtc": "2026-10-20T11:29:15.5435289Z",
+  "request": "确认最近修复是否已覆盖 0.1.27 商店碎片卡住",
+  "status": "confirmed-present-in-release-and-current",
+  "fixed": false,
+  "productionModified": false,
+  "releasePackageSha256": "05F97A2D7762C5276E87E508D18E6A509A291AB8FB329A9B2EA518A18EFE89FC",
+  "validation": {
+    "dualClientRuns": 9,
+    "passed": 6,
+    "confirmedStalls": 3,
+    "localhostUdp": true,
+    "privateSavesModified": false,
+    "fullMatrix": false
+  },
+  "sources": [
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\ResourceShareService.cs",
+      "beforePath": "E:\\projects\\hollowConnect\\.analysis\\shop-shards-audit-20261020\\ResourceShareService.cs",
+      "beforeSha256": "E146F0C487595E154098444FC8A4ED8F9D0DB0329BA2BEA9A0BCE8B0194F762A",
+      "afterSha256": "E146F0C487595E154098444FC8A4ED8F9D0DB0329BA2BEA9A0BCE8B0194F762A"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\src\\HollowConnect\\ResourceNotifications.cs",
+      "beforePath": "E:\\projects\\hollowConnect\\.analysis\\shop-shards-audit-20261020\\ResourceNotifications.cs",
+      "beforeSha256": "99AECD27A142D13900A5501BD62B6C53285B6E1D34E7A62273591210D86230CA",
+      "afterSha256": "99AECD27A142D13900A5501BD62B6C53285B6E1D34E7A62273591210D86230CA"
+    }
+  ],
+  "managed": [
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "size": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "size": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "size": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "size": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "runs": [
+    {
+      "name": "shop-shards-current-20261020-b-queued-mask",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-b-queued-mask",
+      "classification": "passed",
+      "result": {
+        "scenario": "queued-mask",
+        "initial": "threshold",
+        "outcome": "passed",
+        "strictLogs": true,
+        "error": "",
+        "probeSha256": "67036E3AC3F468CFD0D8F8961BBD0E165C62E8913C31F135DD66D03468129A27"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37AD5053AC643FB2DDCCE4A86D448C6DCA3EF07F7679B5EFF9884462BE4BD80A"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "zeroFragmentFleur": false,
+      "controlFailure": ""
+    },
+    {
+      "name": "shop-shards-current-20261020-b-queued-vessel",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-b-queued-vessel",
+      "classification": "passed",
+      "result": {
+        "scenario": "queued-vessel",
+        "initial": "threshold",
+        "outcome": "passed",
+        "strictLogs": true,
+        "error": "",
+        "probeSha256": "67036E3AC3F468CFD0D8F8961BBD0E165C62E8913C31F135DD66D03468129A27"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37AD5053AC643FB2DDCCE4A86D448C6DCA3EF07F7679B5EFF9884462BE4BD80A"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "zeroFragmentFleur": false,
+      "controlFailure": ""
+    },
+    {
+      "name": "shop-shards-current-20261020-b-settled-mask",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-b-settled-mask",
+      "classification": "passed",
+      "result": {
+        "scenario": "settled-mask",
+        "initial": "threshold",
+        "outcome": "passed",
+        "strictLogs": true,
+        "error": "",
+        "probeSha256": "67036E3AC3F468CFD0D8F8961BBD0E165C62E8913C31F135DD66D03468129A27"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37AD5053AC643FB2DDCCE4A86D448C6DCA3EF07F7679B5EFF9884462BE4BD80A"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "zeroFragmentFleur": false,
+      "controlFailure": ""
+    },
+    {
+      "name": "shop-shards-current-20261020-b-settled-vessel",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-b-settled-vessel",
+      "classification": "confirmed-stall",
+      "result": {
+        "scenario": "settled-vessel",
+        "initial": "threshold",
+        "outcome": "needs-inspection",
+        "strictLogs": false,
+        "error": "Probe failed; inspect retained logs.; Probe has a failure marker (including failures after done).",
+        "probeSha256": "67036E3AC3F468CFD0D8F8961BBD0E165C62E8913C31F135DD66D03468129A27"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37AD5053AC643FB2DDCCE4A86D448C6DCA3EF07F7679B5EFF9884462BE4BD80A"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "zeroFragmentFleur": true,
+      "controlFailure": "RESOURCE WAIT hero=(15.6, 6.4, 0.0) input=False relinquished=True pause=True inFlight=1"
+    },
+    {
+      "name": "shop-shards-current-20261020-b-simultaneous-mask",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-b-simultaneous-mask",
+      "classification": "passed",
+      "result": {
+        "scenario": "simultaneous-mask",
+        "initial": "threshold",
+        "outcome": "passed",
+        "strictLogs": true,
+        "error": "",
+        "probeSha256": "67036E3AC3F468CFD0D8F8961BBD0E165C62E8913C31F135DD66D03468129A27"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37AD5053AC643FB2DDCCE4A86D448C6DCA3EF07F7679B5EFF9884462BE4BD80A"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "zeroFragmentFleur": false,
+      "controlFailure": ""
+    },
+    {
+      "name": "shop-shards-current-20261020-b-simultaneous-vessel",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-b-simultaneous-vessel",
+      "classification": "passed",
+      "result": {
+        "scenario": "simultaneous-vessel",
+        "initial": "threshold",
+        "outcome": "passed",
+        "strictLogs": true,
+        "error": "",
+        "probeSha256": "67036E3AC3F468CFD0D8F8961BBD0E165C62E8913C31F135DD66D03468129A27"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37AD5053AC643FB2DDCCE4A86D448C6DCA3EF07F7679B5EFF9884462BE4BD80A"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "zeroFragmentFleur": false,
+      "controlFailure": ""
+    },
+    {
+      "name": "shop-shards-release-027-20261020-c-settled-vessel",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-release-027-20261020-c-settled-vessel",
+      "classification": "confirmed-stall",
+      "result": {
+        "scenario": "settled-vessel",
+        "initial": "threshold",
+        "outcome": "needs-inspection",
+        "strictLogs": false,
+        "error": "Probe failed; inspect retained logs.; Probe has a failure marker (including failures after done).",
+        "probeSha256": "F290F2D9B3A7228287EDB91321ED5F6BE281FAEA5549BA6AEDE53DB15F0D8914"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "zeroFragmentFleur": true,
+      "controlFailure": "RESOURCE WAIT hero=(15.6, 6.4, 0.0) input=False relinquished=True pause=True inFlight=1"
+    },
+    {
+      "name": "shop-shards-release-027-20261020-c-queued-vessel",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-release-027-20261020-c-queued-vessel",
+      "classification": "passed",
+      "result": {
+        "scenario": "queued-vessel",
+        "initial": "threshold",
+        "outcome": "passed",
+        "strictLogs": true,
+        "error": "",
+        "probeSha256": "F290F2D9B3A7228287EDB91321ED5F6BE281FAEA5549BA6AEDE53DB15F0D8914"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "zeroFragmentFleur": false,
+      "controlFailure": ""
+    },
+    {
+      "name": "shop-shards-current-20261020-c-settled-vessel",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-c-settled-vessel",
+      "classification": "confirmed-stall",
+      "result": {
+        "scenario": "settled-vessel",
+        "initial": "threshold",
+        "outcome": "needs-inspection",
+        "strictLogs": false,
+        "error": "Probe failed; inspect retained logs.; Probe has a failure marker (including failures after done).",
+        "probeSha256": "F290F2D9B3A7228287EDB91321ED5F6BE281FAEA5549BA6AEDE53DB15F0D8914"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "37AD5053AC643FB2DDCCE4A86D448C6DCA3EF07F7679B5EFF9884462BE4BD80A"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "zeroFragmentFleur": true,
+      "controlFailure": "RESOURCE WAIT hero=(15.6, 6.4, 0.0) input=False relinquished=True pause=True inFlight=1"
+    }
+  ],
+  "excludedPreparationFailure": {
+    "path": "E:\\projects\\hollowConnect\\.test-results\\shop-shards-current-20261020-a-queued-vessel",
+    "reason": "Missing metSlyShop fixture flag; native intro conversation before any purchase."
+  },
+  "cleanup": {
+    "isolatedGamesStopped": true,
+    "disabledSmoke": [
+      "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HollowConnect.Smoke.dll.disabled-shop-shards-audit-20261020-192915",
+      "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Mods\\HKMP\\HollowConnect.Smoke.dll.disabled-shop-shards-audit-20261020-192915"
+    ]
+  }
+}

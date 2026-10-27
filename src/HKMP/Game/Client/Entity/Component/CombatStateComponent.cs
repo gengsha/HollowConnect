@@ -28,8 +28,23 @@ internal sealed class CombatStateComponent : EntityComponent {
         private UnityEngine.Component[] components;
         private static readonly List<UnityEngine.Component> scratch = new();
         internal Parts(Transform t) { Transform=t; Refresh(); }
+        private void ClearInvalid() {
+            components=Array.Empty<UnityEngine.Component>();
+            Colliders=Array.Empty<Collider2D>(); Renderers=Array.Empty<Renderer>();
+            Damage=Array.Empty<DamageHero>(); Sprites=Array.Empty<tk2dBaseSprite>();
+            Animators=Array.Empty<tk2dSpriteAnimator>(); AnimationTimes=Array.Empty<float>();
+            AnimationClips=Array.Empty<string>(); Particles=Array.Empty<ParticleSystem>();
+            Blocks=Array.Empty<MaterialPropertyBlock>(); Motion=null;
+        }
         internal void Refresh() {
-            Transform.GetComponents(scratch);
+            // Unity keeps a managed Transform wrapper after Destroy. It
+            // compares equal to null, but calling GetComponents on it still
+            // throws and aborts the reliable entity update loop. Keep a
+            // fully empty snapshot until the part is rebuilt or removed.
+            if (Transform == null) { ClearInvalid(); return; }
+            try { Transform.GetComponents(scratch); }
+            catch (MissingReferenceException) { ClearInvalid(); return; }
+            catch (NullReferenceException) { ClearInvalid(); return; }
             var unchanged=components != null && components.Length == scratch.Count;
             if (unchanged) for (var i=0;i<scratch.Count;i++)
                 if (components[i] != scratch[i]) { unchanged=false; break; }
@@ -37,7 +52,7 @@ internal sealed class CombatStateComponent : EntityComponent {
             components=scratch.ToArray();
             Colliders=components.OfType<Collider2D>().ToArray();Renderers=components.OfType<Renderer>().ToArray();
             Damage=components.OfType<DamageHero>().ToArray();Sprites=components.OfType<tk2dBaseSprite>().ToArray();Particles=components.OfType<ParticleSystem>().ToArray();
-            Animators=Sprites.Select(s=>s.GetComponent<tk2dSpriteAnimator>()).ToArray();
+            Animators=Sprites.Select(s=>s == null ? null : s.GetComponent<tk2dSpriteAnimator>()).ToArray();
             AnimationTimes=new float[Sprites.Length];AnimationClips=new string[Sprites.Length];
             Blocks=new MaterialPropertyBlock[Renderers.Length];for(var i=0;i<Blocks.Length;i++)Blocks[i]=new MaterialPropertyBlock();
         }
@@ -73,7 +88,7 @@ internal sealed class CombatStateComponent : EntityComponent {
         // Keep a deleted child's terminal state across hierarchy refreshes.
         // Otherwise a refresh can discard the last "gone" update and leave
         // a roar wave or other effect frozen on the replica.
-        if(old!=null){var live=new HashSet<string>(nodes.Select(n=>n.Path));nodes=nodes.Concat(old.Where(n=>n.Host.Transform==null&&!live.Contains(n.Path))).Take(256).ToArray();}
+        if(old!=null){var live=new HashSet<string>(nodes.Select(n=>n.Path));nodes=nodes.Concat(old.Where(n=>n.Host!=null&&n.Host.Transform==null&&!live.Contains(n.Path))).Take(256).ToArray();}
         lookup.Clear();
         foreach(var n in nodes)lookup[n.Path]=n;
         rebuild=Time.unscaledTime+2;

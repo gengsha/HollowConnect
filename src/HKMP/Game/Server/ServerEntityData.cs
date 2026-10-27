@@ -10,6 +10,7 @@ namespace Hkmp.Game.Server;
 /// Class containing all the relevant data managed by the server about an entity.
 /// </summary>
 internal class ServerEntityData {
+    internal EncounterSummonState EncounterSummon { get; } = new();
     // Non-null only after the scene authority registers a dream platform.
     public HashSet<ushort> DreamPlatformPlayers { get; set; }
     private uint healthRevision;

@@ -49,6 +49,9 @@ internal abstract class FireballBase : DamageAnimationEffect {
         var fireballParent = spellControl.GetFirstAction<SpawnObjectFromGlobalPool>(fireballParentName).gameObject
             .Value;
         var fireballCast = fireballParent.LocateMyFSM("Fireball Cast");
+        // A private-progress peer can cast a spell this player has never used.
+        // Its dormant pool prefab still needs native FSM owners before reading actions.
+        Game.Client.Entity.EntityInitializer.CheckPreProcessFsm(fireballCast);
         var audioAction = fireballCast.GetFirstAction<AudioPlayerOneShotSingle>("Cast Right");
         var audioPlayerObj = audioAction.audioPlayer.Value;
 
@@ -65,7 +68,7 @@ internal abstract class FireballBase : DamageAnimationEffect {
             var position = playerSpells.transform.position
                            + new Vector3(facingRight ? 1.3f : -1.3f, 0, 0);
             // Instantiate it at that position
-            var blast = Object.Instantiate(
+            var blast = RemotePlayerVisuals.Instantiate(
                 blastObject.gameObject.Value,
                 position,
                 Quaternion.identity
@@ -80,7 +83,7 @@ internal abstract class FireballBase : DamageAnimationEffect {
             var position = playerSpells.transform.position
                            + new Vector3(facingRight ? 1f : -1f, 0, 0);
             // Instantiate it at that position
-            var blast = Object.Instantiate(
+            var blast = RemotePlayerVisuals.Instantiate(
                 blastObject,
                 position,
                 Quaternion.identity
@@ -101,7 +104,7 @@ internal abstract class FireballBase : DamageAnimationEffect {
                     .gameObject.Value;
                 // Instantiate the dungFluke object from the prefab obtained above
                 // Also spawn it a bit above the player position, so it doesn't get stuck
-                var dungFluke = Object.Instantiate(
+                var dungFluke = RemotePlayerVisuals.Instantiate(
                     dungFlukeObj,
                     playerSpells.transform.position + new Vector3(0, 0.5f, 0),
                     Quaternion.identity);
@@ -157,7 +160,7 @@ internal abstract class FireballBase : DamageAnimationEffect {
             // Get the prefab and instantiate it
             var fireballObject = fireballCast.GetFirstAction<SpawnObjectFromGlobalPool>("Cast Right")
                 .gameObject.Value;
-            var fireball = Object.Instantiate(
+            var fireball = RemotePlayerVisuals.Instantiate(
                 fireballObject,
                 playerSpells.transform.position +
                 new Vector3(facingRight ? 1.168312f : -1.168312f, -0.5427618f, -0.002f),
@@ -206,7 +209,7 @@ internal abstract class FireballBase : DamageAnimationEffect {
         int damage) {
         // Obtain the prefab and instantiate it for the fluke only variation
         var flukeObject = fireballCast.GetFirstAction<FlingObjectsFromGlobalPool>("Flukes").gameObject.Value;
-        var fluke = Object.Instantiate(
+        var fluke = RemotePlayerVisuals.Instantiate(
             flukeObject,
             playerSpells.transform.position,
             Quaternion.identity
@@ -235,6 +238,7 @@ internal abstract class FireballBase : DamageAnimationEffect {
             playerSpells.transform,
             Vector3.zero
         );
+        foreach (var spawnedFluke in spawnedFlukes) RemotePlayerVisuals.Track(spawnedFluke);
 
         On.SpellFluke.hook_Burst burstDelegate = null;
 
@@ -302,7 +306,7 @@ internal abstract class FireballBase : DamageAnimationEffect {
 
         // Now we get the prefab and spawn the actual explosion cloud
         var dungCloudObject = dungFluke.FindGameObjectInChildren("Knight Dung Cloud");
-        var dungCloud = Object.Instantiate(
+        var dungCloud = RemotePlayerVisuals.Instantiate(
             dungCloudObject,
             dungFluke.transform.position,
             Quaternion.identity

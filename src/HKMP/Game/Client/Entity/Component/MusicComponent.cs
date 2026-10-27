@@ -95,6 +95,7 @@ internal class MusicComponent : EntityComponent {
         HostClientPair<GameObject> gameObject,
         out MusicComponent musicComponent
     ) {
+        if (CoopContext.LocalWorldOnly) { musicComponent = null; return false; }
         if (_instance == null) {
             _instance = new MusicComponent(netClient, entityId, gameObject);
             musicComponent = _instance;

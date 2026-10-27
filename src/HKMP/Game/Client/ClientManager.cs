@@ -356,6 +356,7 @@ internal class ClientManager : IClientManager {
             _saveHooksRegistered = false;
             CleanupSession(_saveManager.DeregisterHooks);
         }
+        CoopContext.LocalWorldOnly = false;
         
     }
     private static void CleanupSession(Action cleanup) {
@@ -637,7 +638,8 @@ internal class ClientManager : IClientManager {
         ServerSettingsChangedEvent?.Invoke(serverInfo.ServerSettingsUpdate.ServerSettings);
 
         // Note whether full synchronisation is enabled
-        _fullSynchronisation = serverInfo.FullSynchronisation;
+        CoopContext.LocalWorldOnly = serverInfo.LocalWorldOnly;
+        _fullSynchronisation = serverInfo.FullSynchronisation && !serverInfo.LocalWorldOnly;
 
         // Register hooks and packet handlers before we load into the game
         RegisterHooks();
@@ -665,7 +667,7 @@ internal class ClientManager : IClientManager {
                     }
 
                     Disconnect();
-                });
+                }, confirmJoin: true);
             }
         }
 
@@ -727,10 +729,9 @@ internal class ClientManager : IClientManager {
             UiManager.InternalChatBox.AddMessage("You are disconnected from the server (server is shutting down)");
         }
         
-        _uiManager.ReturnToMainMenuFromGame();
-
         // Disconnect without sending the server that we disconnect, because the server knows that already
         InternalDisconnect();
+        _uiManager.ReturnToMainMenuFromGame();
     }
 
     /// <summary>
@@ -1353,11 +1354,10 @@ internal class ClientManager : IClientManager {
 
         Logger.Info("Connection to server timed out, moving to main menu");
         
-        _uiManager.ReturnToMainMenuFromGame();
-        
         UiManager.InternalChatBox.AddMessage("You are disconnected from the server (server timed out)");
 
         Disconnect();
+        _uiManager.ReturnToMainMenuFromGame();
     }
 
     /// <summary>

@@ -215,9 +215,11 @@ internal static class ReliabilityProbe {
             packet.TryGetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate, out var raw);
             var update = (ReliableEntityUpdate)((RawPacketDataCollection)raw).DataInstances[0];
             var fsm = update.HostFsmData[0]; fsm.Types.Add(EntityHostFsmData.Type.Floats); fsm.Floats[0] = serial;
+            fsm.Types.Add(EntityHostFsmData.Type.Bools); fsm.Bools[0] = serial == 1;
             if (serial == 1) {
                 // A newer state does not supersede fields it never included.
                 fsm.Floats[1] = 11;
+                fsm.Bools[1] = true;
                 var other = new EntityHostFsmData { CurrentState = 7 }; other.Types.Add(EntityHostFsmData.Type.State);
                 update.HostFsmData[1] = other;
             }
@@ -245,6 +247,8 @@ internal static class ReliabilityProbe {
             } else { Deliver(first); Deliver(second); }
             Check(active && merged.CurrentState == 3 && merged.Floats[0] == 3,
                 "an independently delayed datagram or resend rolled back newer active/FSM fields");
+            Check(!merged.Bools[0] && merged.Bools[1],
+                "a delayed roar start bool replaced its newer exit, or lost an untouched bool");
             Check(merged.Floats[1] == 11 && secondFsm.CurrentState == 7,
                 "rejecting stale snapshots dropped untouched FSM variables or another FSM");
             Check(events.OrderBy(x => x).SequenceEqual(new byte[] { 1, 2, 3 }),

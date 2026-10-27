@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-22",
+  "scope": "Void Heart derived notch-cost repair only; no protocol/lifecycle changes.",
+  "production": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "EE43B6AFB829693C13F050C90E3C0482D3F798A35F3FF8732241EA105BB4DA6C"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "7278A40029C19D7CD1FFFDC7193DB889ABE1E4234C2893DD4F769929E587A930"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+    }
+  ],
+  "probeSha256": "572082833ED32C298C5F06B95DCCFABD9FB3C6D5E7EA46CA003BA1BB5D95C2BC",
+  "core": {
+    "selection": "tests/progress-audit.selection.txt",
+    "passed": 27,
+    "failed": 0,
+    "log": ".analysis/void-heart-20261022/core.log"
+  },
+  "reproduction": {
+    "path": ".test-results/void-heart-original-20261022-host",
+    "outcome": "original bug reproduced, expected failure",
+    "trigger": "Guest equipped Kingsoul (royalCharmState=3, charmCost_36=5, charmSlotsFilled=7, overcharmed=true), then actual UDP progress upgraded state to 4 without clearing cost.",
+    "failedAssertion": "Void Heart costs zero notches including an already-corrupted save"
+  },
+  "cases": [
+    {
+      "case": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\void-heart-fixed-20261022-host",
+      "outcome": "passed",
+      "bothEndpointsDone": true,
+      "strictLogs": true,
+      "productionHashesMatched": true,
+      "probeSha256": "572082833ED32C298C5F06B95DCCFABD9FB3C6D5E7EA46CA003BA1BB5D95C2BC",
+      "startedUtc": "2026-10-22T08:42:16.9702337Z",
+      "endedUtc": "2026-10-22T08:42:58.2474593Z"
+    },
+    {
+      "case": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\void-heart-fixed-20261022-guest",
+      "outcome": "passed",
+      "bothEndpointsDone": true,
+      "strictLogs": true,
+      "productionHashesMatched": true,
+      "probeSha256": "572082833ED32C298C5F06B95DCCFABD9FB3C6D5E7EA46CA003BA1BB5D95C2BC",
+      "startedUtc": "2026-10-22T08:42:58.2731612Z",
+      "endedUtc": "2026-10-22T08:43:38.1817822Z"
+    },
+    {
+      "case": "stale",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\void-heart-fixed-20261022-stale",
+      "outcome": "passed",
+      "bothEndpointsDone": true,
+      "strictLogs": true,
+      "productionHashesMatched": true,
+      "probeSha256": "572082833ED32C298C5F06B95DCCFABD9FB3C6D5E7EA46CA003BA1BB5D95C2BC",
+      "startedUtc": "2026-10-22T08:43:38.2018979Z",
+      "endedUtc": "2026-10-22T08:44:17.7130839Z"
+    },
+    {
+      "case": "halves",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\void-heart-fixed-20261022-halves",
+      "outcome": "passed",
+      "bothEndpointsDone": true,
+      "strictLogs": true,
+      "productionHashesMatched": true,
+      "probeSha256": "572082833ED32C298C5F06B95DCCFABD9FB3C6D5E7EA46CA003BA1BB5D95C2BC",
+      "startedUtc": "2026-10-22T08:44:17.7236536Z",
+      "endedUtc": "2026-10-22T08:44:56.8385104Z"
+    },
+    {
+      "case": "nocharms",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\void-heart-fixed-20261022-nocharms",
+      "outcome": "passed",
+      "bothEndpointsDone": true,
+      "strictLogs": true,
+      "productionHashesMatched": true,
+      "probeSha256": "572082833ED32C298C5F06B95DCCFABD9FB3C6D5E7EA46CA003BA1BB5D95C2BC",
+      "startedUtc": "2026-10-22T08:44:56.8581026Z",
+      "endedUtc": "2026-10-22T08:45:37.9101019Z"
+    }
+  ],
+  "environment": ".analysis/void-heart-20261022/environment.json",
+  "selection": ".analysis/void-heart-20261022/selection.json",
+  "runner": ".analysis/void-heart-20261022/Run-Royal.ps1",
+  "limitations": [
+    "Same-machine UDP in existing isolated game copies.",
+    "In-memory progression/loadout fixtures; no native charm menu or acquisition cutscene acceptance.",
+    "No private save disk roundtrip or complete Pantheon binding test.",
+    "Display version unchanged; local build only, not packaged or installed."
+  ]
+}

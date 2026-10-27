@@ -1,0 +1,341 @@
+{
+  "version": "0.1.29",
+  "action": "package-for-user-playtest",
+  "buildLabel": "",
+  "buildCommit": "49d97def4e1051bc00c2095a1e985d7f201fd034",
+  "workingTreeHasUncommittedChanges": true,
+  "userRequest": "29我还没发布,打包29；持续修复用户报告，更新日志明确呈现测试遇到的真实问题。",
+  "recordedAtUtc": "2026-10-21T02:34:11.1805942Z",
+  "retestOmitted": false,
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "soul-master-story-gates-unresolved"
+  ],
+  "authorizationBasis": "Existing repair and packaging request persists while addressing the newly reported collected-guest interaction bug. Does not imply separate endorsement of each retained finding.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "C8599F4686B04C84194198E27D3428AAE7C1CBC88B267E3FE1E21E61A85772DB",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    }
+  ],
+  "scope": "Four targeted final-hash dual-client runs: No Eyes guest collected, guest defeated-unclaimed, both undefeated with guest-owned/shared lantern, and Xero collected-history control. Earlier delivered 29 results retained separately on their original hashes.",
+  "runtimeValidation": {
+    "version": "0.1.29",
+    "engineVersion": "3.0.0-hc12",
+    "addonNetworkVersion": "0.1.29-l1",
+    "releaseReady": false,
+    "retestOmitted": false,
+    "createdAtUtc": "2026-10-21T02:34:11.0152012Z",
+    "scope": "Four targeted final-hash dual-client runs: No Eyes guest collected, guest defeated-unclaimed, both undefeated with guest-owned/shared lantern, and Xero collected-history control. Earlier delivered 29 results retained separately on their original hashes.",
+    "core": {
+      "passed": 27,
+      "failed": 0,
+      "selectionFiles": [
+        "tests/progress-audit.selection.txt"
+      ],
+      "selectionSha256": "5E48FF51787BFA085BD0806925F61476384F760B2CAFB0707174D8DC3253118F",
+      "buildLog": ".analysis/noeyes-reward-20261021/core-build.log",
+      "buildLogSha256": "0096D22C123592273876D99572384E359D49D97BC9F0E3E59BF529A2D377C6FF",
+      "buildWarnings": 0,
+      "buildErrors": 0
+    },
+    "productionRecompile": {
+      "buildLog": ".analysis/noeyes-reward-20261021/fix2-build.log",
+      "warnings": 1,
+      "errors": 0,
+      "warning": "Existing CS1573 missing XML param documentation for ClientUpdateManager.AddEntityHostFsmData isActive. Final incremental probe and core builds had zero warnings."
+    },
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E",
+        "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "C8599F4686B04C84194198E27D3428AAE7C1CBC88B267E3FE1E21E61A85772DB",
+        "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8",
+        "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+      }
+    ],
+    "runs": [
+      {
+        "name": "noeyes-0129-claimed-final-20261021-guest",
+        "bothPassed": true,
+        "strictLogsPassed": true,
+        "mode": "progress",
+        "scope": "No Eyes: host undefeated, guest already claimed essence; network fight, native host claim, native guest tombstone inspection and unchanged essence.",
+        "guestInitialHistory": 2,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "C8599F4686B04C84194198E27D3428AAE7C1CBC88B267E3FE1E21E61A85772DB"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+          }
+        ],
+        "probeSha256": "F38E95987106DF9E86A90825C2A5FF4BA279F2E96F333693B067871D6C98D7A5",
+        "logs": [
+          {
+            "role": "host",
+            "probeSha256": "D978DBD0763487EEB949E47B6017105A0030913694A20A8E490626B399057D0A",
+            "unitySha256": "F75A5351A74452CD98EAFC2B9AAAF9C921BAB1127D0775D60A2BA13F6CF60D0D",
+            "engineSha256": "6FF495E748D23B767EDEC1E5698483B102822AA7A266636AD0C11C36057AD2FF"
+          },
+          {
+            "role": "guest",
+            "probeSha256": "0717BE5008660B9D106CCD123A2CAFB6ABEF4F35578390586A6BD875E9D9F3FF",
+            "unitySha256": "49E214370B2BAA32E1194792AD308366B9216793138BB28FCD8A095C7776E33E",
+            "engineSha256": "68D62639D6196BED1EBB3567A38B37FBAA117C909A852065C05457F4114C53B3"
+          }
+        ]
+      },
+      {
+        "name": "noeyes-0129-unclaimed-final-20261021-guest",
+        "bothPassed": true,
+        "strictLogsPassed": true,
+        "mode": "progress",
+        "scope": "No Eyes: host undefeated, guest previously defeated but unclaimed; both receive exactly one personal native reward.",
+        "guestInitialHistory": 1,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "C8599F4686B04C84194198E27D3428AAE7C1CBC88B267E3FE1E21E61A85772DB"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+          }
+        ],
+        "probeSha256": "F38E95987106DF9E86A90825C2A5FF4BA279F2E96F333693B067871D6C98D7A5",
+        "logs": [
+          {
+            "role": "host",
+            "probeSha256": "19A99F6CF7F99181661DC5541307694E1242C2CE60C523E7AEE4B385E48D11CF",
+            "unitySha256": "1BA47A05DB1703388D3C05E07E261009D088D6CB58C4BAF1B13EA8F42C0E9B48",
+            "engineSha256": "20BF32821E9A72097DAD5DA49DE86F4D33A9C7B5D704A2562F93FB71E72DB6C1"
+          },
+          {
+            "role": "guest",
+            "probeSha256": "99D8ADD3BDCCE6A524ADB75404B59432D4C5DFD4AFDACA3B02BFF8F7B24A5674",
+            "unitySha256": "0404318347967FC8A64468BBE69B0517E43CF359561D38D33FDEC0F91073516F",
+            "engineSha256": "307FBCD39A45FEC100C49BAEA92D4E4868B864F4F3796FEF643D812F60874972"
+          }
+        ]
+      },
+      {
+        "name": "noeyes-0129-fresh-final-20261021-guest",
+        "bothPassed": true,
+        "strictLogsPassed": true,
+        "mode": "progress",
+        "scope": "No Eyes: both undefeated, guest owns lantern history and summons; real UDP shared lantern reaches host; both native rewards.",
+        "guestInitialHistory": 0,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "C8599F4686B04C84194198E27D3428AAE7C1CBC88B267E3FE1E21E61A85772DB"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+          }
+        ],
+        "probeSha256": "F38E95987106DF9E86A90825C2A5FF4BA279F2E96F333693B067871D6C98D7A5",
+        "logs": [
+          {
+            "role": "host",
+            "probeSha256": "9EBB5C5EFF8FE4FCF8DC8E19E0B166A99F2C5C68F3F0EB56576796CC1F84191E",
+            "unitySha256": "3C599C98535E4E000E947C5DA199E2AF49F3055C1904CF0784DB1A9875F1A541",
+            "engineSha256": "01C36222E3E10498DD154383EA0ABB40B383C23F660CE0EBEE3167E4402FB8AF"
+          },
+          {
+            "role": "guest",
+            "probeSha256": "B70935787224A1E09F0FD90F022C2981F2F158EF367F370A67D4E2FC428F5A83",
+            "unitySha256": "B940E6901C54B5ED9ED03E4DE85AF07FF09DB1A92A59640C77B477EEE4FA99EF",
+            "engineSha256": "F014F58DDFC2D639AA6E254031E935C93BAAAEDCA6620495BE806DD5872FFCA0"
+          }
+        ]
+      },
+      {
+        "name": "xero-0129-claimed-final-20261021-guest",
+        "bothPassed": true,
+        "strictLogsPassed": true,
+        "mode": "progress",
+        "scope": "Xero shared-template control: undefeated host, previously collected guest; guest native tombstone remains readable with no repeated essence.",
+        "guestInitialHistory": 2,
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "9299654248CA2AC35CDD40D2E0A3E8C70F78548C2C2AE5AB6FB2923CABE82D3E"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "C8599F4686B04C84194198E27D3428AAE7C1CBC88B267E3FE1E21E61A85772DB"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+          }
+        ],
+        "probeSha256": "F38E95987106DF9E86A90825C2A5FF4BA279F2E96F333693B067871D6C98D7A5",
+        "logs": [
+          {
+            "role": "host",
+            "probeSha256": "B256856F087ED313DFDFB49EC13AD82E6C4817316E98EB12D3593F4579DA9E24",
+            "unitySha256": "B9F1F6982AC30B51FC3E14436AB75C40AE3C480964E52AFEBDD54E5C4E0BCC15",
+            "engineSha256": "C6861ACDE175EDF5F8A0C7B0D213AC30220989C9DBB0F8EAF07CE81A0A452C5C"
+          },
+          {
+            "role": "guest",
+            "probeSha256": "769455FF8B43762706445790D29E9CB532D175150A2625E55A51ABF0EE928389",
+            "unitySha256": "D479C58EAE59C352BFB2D3F6CFAFF2669C5CC529E2D7F8810D57A559C92B7FCE",
+            "engineSha256": "7E4F55ED43A7A5F2CE2A609523D65F5C0EE9D99A0DCB3C9B9693D6855D1BB7F7"
+          }
+        ]
+      }
+    ],
+    "oldDeliveryReproduction": {
+      "name": "noeyes-0129-claimed-baseline-20261021-guest",
+      "outcome": "reproduced-failed",
+      "strictLogsPassed": false,
+      "guestInitialHistory": 2,
+      "baselinePackage": "Previous merged 0.1.29 delivered before this report",
+      "windowsZipSha256": "E05CB69128CAEFA80AE565D2DEC246F51C25B25AB185CF22394755C52A832AE5",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "9027678C2CEBE532C988D96D117E3E3C0FAC965CFD07A580D68E575467FDED0C"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "C556D0EE1429AFDC4235A41986F36645D82CB30ECF3CE2160D64D3D1D9D55D74"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "guestLogSha256": "2458C94ED40F814A7F244425A3A85C4064E90B9BED35BD67ACCB9F4B1D63FA5C",
+      "observation": "Guest PD2, essence230. Remote Ready bypassed native Init, then global defeat revived Idle/Reappear. Native interaction produced empty dialogue and _SUPER/_MAIN/_SUB placeholders. No guest interaction before the host native claim.",
+      "fixture": "In-memory completed-history fixture loaded before native room Init; no personal saves modified."
+    },
+    "failedAttempt": {
+      "name": "noeyes-0129-claimed-fix-20261021-guest",
+      "outcome": "failed-not-delivered",
+      "cause": "Replacing the EnterState action argument suppresses appearance actions but does not replace ActiveState, which SwitchState assigned before invoking EnterState. Idle still accepted interaction.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "B8CBC0F47070260A124B52E6240349EAFED67EDFA6B5BAC3024E157F11059C67"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "88A8A736F555CBE5063C46FD4D6FF37505831F545AD726BB2D3FAA4C5E562193"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "retainedPayload": ".analysis/noeyes-reward-20261021/attempt1-payload",
+      "retainedSource": ".analysis/noeyes-reward-20261021/attempt1-DreamWarriorSynchronizer.cs"
+    },
+    "productionChange": {
+      "path": "src/HKMP/Game/Client/Entity/DreamWarriorSynchronizer.cs",
+      "beforeSha256": "462A3D3148C88DD00143165C8298AEC0AC777D293F3FD4658335FDA336835811",
+      "afterSha256": "26F734FBABCB6CB461B395FDF08A51A08EDDD786C2A6FFFD82162F60653B2A79",
+      "mechanism": "Remember native previously-collected NPCs, skip forced challenge presentation for them, and route global defeat transitions back through native Inert/Fighting states. Keep battle entities, personal essence and new native claim animations separate. No packet or save schema change."
+    },
+    "preservedFixSources": [
+      {
+        "path": "src/HollowConnect/CoopRuntime.cs",
+        "sha256": "BC12622032BB80205A79B1D1FE62E69EC79C64A2DC953AB2EBC53E2981C7DD83",
+        "changedThisRepair": false
+      },
+      {
+        "path": "src/HollowConnect/ProgressPickupService.cs",
+        "sha256": "13B305EC0BC8A282E30E16407D7BC0F1D0C01C7945C3608E7F3A7B66FE07A98E",
+        "changedThisRepair": false
+      }
+    ],
+    "historicalEvidence": {
+      "source": "docs/evidence/runtime-room-0.1.29-before-claimed-20261021.json",
+      "sha256": "D28D6E691D842F88A76C5BA6FEB9C106BB6D0946FBE32B456A94667558DBC656",
+      "countedAsCurrentHashPass": false
+    },
+    "earlierFixedProbe": {
+      "name": "noeyes-0129-claimed-fix2-20261021-guest",
+      "outcome": "passed",
+      "countedInFourFinalProbeRuns": false,
+      "reason": "Passed same production behavior before strengthening UI text assertion and finalizing probe formatting."
+    },
+    "realTwoMachineFrp": false,
+    "fullBossMatrix": false,
+    "fullPantheonPlayed": false,
+    "threePlayer": false,
+    "installedInPersonalGame": false,
+    "privateSavesModified": false,
+    "notTested": [
+      "All seven warriors on this final build; only No Eyes and Xero",
+      "Full attack and projectile coverage, authority handoff or disconnect during combat, full F8 workaround",
+      "Actual on-disk old-save LoadGame, real two-machine FRP and three players",
+      "Native lantern purchase animation: local receipt and completed history are in-memory fixtures; ability sharing is real UDP",
+      "Menu-new-save resources and smith consumption not rerun on these new DLLs; previous evidence retains its original hashes",
+      "Historical unresolved findings remain open; no full Boss or continuous Pantheon acceptance"
+    ],
+    "cleanup": {
+      "isolatedGamesStopped": true,
+      "disabledSmoke": [
+        {
+          "role": "host",
+          "path": ".test-results/game-host/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.Smoke.dll.disabled-claimed-20261021103410",
+          "sha256": "F38E95987106DF9E86A90825C2A5FF4BA279F2E96F333693B067871D6C98D7A5"
+        },
+        {
+          "role": "guest",
+          "path": ".test-results/game-guest/hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.Smoke.dll.disabled-claimed-20261021103410",
+          "sha256": "F38E95987106DF9E86A90825C2A5FF4BA279F2E96F333693B067871D6C98D7A5"
+        }
+      ],
+      "testedPayloadDirectory": ".analysis/noeyes-reward-20261021/tested-payload",
+      "probeCopy": ".analysis/noeyes-reward-20261021/tested-Smoke.dll"
+    }
+  }
+}

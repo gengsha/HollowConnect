@@ -1,0 +1,469 @@
+{
+  "task": "Massive Moss Charger stuck underground after selected AI authority dies and returns to bench",
+  "generatedAtUtc": "2026-10-26T15:20:07.8384437Z",
+  "version": "0.2.1",
+  "productionAndProbe": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    },
+    {
+      "name": "BouncyCastle.Cryptography.dll",
+      "sha256": "3D7CED058D7264036323F8CFD87D3203761B5FE45DFDDF1EBCE069C1E36B81B8"
+    },
+    {
+      "name": "HollowConnect.Smoke.dll",
+      "sha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F"
+    }
+  ],
+  "core": {
+    "passed": 5,
+    "log": ".analysis/moss-retarget-20261026/core-final3.log",
+    "failed": 0,
+    "selection": ".analysis/moss-retarget-20261026/core.selection.txt"
+  },
+  "dualClient": {
+    "passed": 9,
+    "failed": 0,
+    "cases": [
+      {
+        "name": "fixed-host",
+        "kind": "flex-authority-death",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-fixed-host-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:09:48.3481735Z",
+        "endedAtUtc": "2026-10-26T15:10:55.9335065Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true,
+          "nativeDeathAndRangeReentry": true,
+          "committedVictimThenLivingSurvivor": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "CA83FD21F5AFDC25B6CAF3CBAA3DEE5B07C09C92F1BB9FAC6D218E3549817EAA"
+          },
+          {
+            "role": "guest",
+            "sha256": "F51AEC99727838C8CEF3C6C3CEF735B9BF5963DF69DCAEB7661AAC491220A682"
+          }
+        ]
+      },
+      {
+        "name": "fixed-guest",
+        "kind": "flex-authority-death",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-fixed-guest-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:10:55.9884597Z",
+        "endedAtUtc": "2026-10-26T15:12:11.096837Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true,
+          "nativeDeathAndRangeReentry": true,
+          "committedVictimThenLivingSurvivor": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "66E25BB70B6440DF1264E011D20365357A6D1A15ED7B8EFA887393DCDA67D1C6"
+          },
+          {
+            "role": "guest",
+            "sha256": "184A8C927E453D616F74EA2B8A676815125AE808DA5BE9B9AC2CB28B7030518C"
+          }
+        ]
+      },
+      {
+        "name": "fixed-remote-host",
+        "kind": "flex-remote-death",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-fixed-remote-host-final3",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:08:03.065829Z",
+        "endedAtUtc": "2026-10-26T15:09:21.1672382Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true,
+          "nativeDeathAndRangeReentry": true,
+          "committedVictimThenLivingSurvivor": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "FB158232DB46BF23647F0CE6A77992ECE594701726D206BB07BAC2A6D3B8118F"
+          },
+          {
+            "role": "guest",
+            "sha256": "43504B41DE197264E3339A775C626B7035CA1DF3A07D71DC9A5416BFAE0FCC64"
+          }
+        ]
+      },
+      {
+        "name": "fixed-remote-guest",
+        "kind": "flex-remote-death",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-fixed-remote-guest-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:12:11.1363298Z",
+        "endedAtUtc": "2026-10-26T15:13:25.6873288Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true,
+          "nativeDeathAndRangeReentry": true,
+          "committedVictimThenLivingSurvivor": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "93DEF832F4C511C7D80EE113491F33A7E7936B51DE8A375CF6964507FA851309"
+          },
+          {
+            "role": "guest",
+            "sha256": "DDE37E509E10F705DBE4325BFAF9A80850BE9AEC376557351C2474B10730F507"
+          }
+        ]
+      },
+      {
+        "name": "native-host",
+        "kind": "native-authority-death",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-native-host-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:13:25.7306196Z",
+        "endedAtUtc": "2026-10-26T15:14:39.7029728Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true,
+          "nativeDeathAndRangeReentry": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "66FC723ACE236CB83C07A78F7FBCB8D2DB569E363FEE9FC73A3EA10E64750347"
+          },
+          {
+            "role": "guest",
+            "sha256": "4EF044681E378F29141B798417F9A1D6E1C7ABA65E322D7AEDF70A98A9FBF6C8"
+          }
+        ]
+      },
+      {
+        "name": "native-guest",
+        "kind": "native-authority-death",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-native-guest-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:14:39.7407183Z",
+        "endedAtUtc": "2026-10-26T15:15:54.8240761Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true,
+          "nativeDeathAndRangeReentry": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "A4AF857E52AEDDF3B329E696294DF165DC15E2A77BB81DE1071A58B375B83FCA"
+          },
+          {
+            "role": "guest",
+            "sha256": "CC478F412ECDB105D3DE769F81757D8B40A1CC77139585B4ADAD1B1D5EEAA092"
+          }
+        ]
+      },
+      {
+        "name": "flex-host",
+        "kind": "hornet-flex",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-flex-host-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:15:54.8644857Z",
+        "endedAtUtc": "2026-10-26T15:16:43.4372545Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "DD4C9A81646878ADF32F6A972F3FC7D1288C96E46838EC97CCC3FB4AB251F292"
+          },
+          {
+            "role": "guest",
+            "sha256": "9B0EC9672CC9E82A22464066F31CB533C346D0E055BAB7D5BE37A8CEAE0C168A"
+          }
+        ]
+      },
+      {
+        "name": "flex-guest",
+        "kind": "hornet-flex",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-flex-guest-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:16:43.4733915Z",
+        "endedAtUtc": "2026-10-26T15:17:30.1813339Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "DEACF477E7C2C68953919882A78C7A89944AC8C6953C9C6E455A3A3E85EA1FCF"
+          },
+          {
+            "role": "guest",
+            "sha256": "1663760A53EED259F592A9573DED6FF7A57E5F7E5A21A76E3772DA19BE4AD953"
+          }
+        ]
+      },
+      {
+        "name": "rescue-host",
+        "kind": "hornet-native-rescue",
+        "runPath": "E:\\projects\\hollowConnect\\.test-results\\moss-retarget-20261026-rescue-host-final4",
+        "status": "passed",
+        "startedAtUtc": "2026-10-26T15:17:30.2155987Z",
+        "endedAtUtc": "2026-10-26T15:18:21.7871463Z",
+        "probeSha256": "7E0DCDCCB23E2634A6F640F1EA4C832475BC90BD90FD7E775238B28763ABE49F",
+        "assertions": {
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "productionHashes": true
+        },
+        "binaries": [
+          {
+            "name": "HKMP.dll",
+            "sha256": "627ED7346EF231D3BF07B6C6214B568074A06F2F093A2C081D90961AEC58A270"
+          },
+          {
+            "name": "HollowConnect.dll",
+            "sha256": "63DBE2A8DC1AA6B092B05C7F5535B6D79B7D87E374D016CA01415DCF66F9659D"
+          },
+          {
+            "name": "HollowConnect.Core.dll",
+            "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+          }
+        ],
+        "endpointLogHashes": [
+          {
+            "role": "host",
+            "sha256": "1FA4733881B5821E15F0A9B79451CB953797AC326982038DF555C96545997DAE"
+          },
+          {
+            "role": "guest",
+            "sha256": "FE9B4B4B699515E54DDF143A65DA5BB4166483B23E9C2B600ED1819BD621F9DA"
+          }
+        ]
+      }
+    ]
+  },
+  "beforeFix": {
+    "contrast": "moss-retarget-20261026-baseline-remote-h",
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "972BC86BF44B693DCAF4096E475CD11DE5B1E36CB3C2C05BC564DCC8B48590D7"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "9D24B1F9C55621A56FE3E9227BB4BD89562A976C9C6A060B65D352D0B540A651"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+      }
+    ],
+    "reproductions": [
+      "moss-retarget-20261026-baseline-d",
+      "moss-retarget-20261026-baseline-e"
+    ],
+    "expectedStall": "Hidden only for 16 seconds after takeover; AlertRange component binding null while native GameObject remains alive."
+  },
+  "preservedFailures": [
+    {
+      "run": "baseline-b",
+      "classification": "fixture: expected component binding on passive native object before takeover"
+    },
+    {
+      "run": "baseline-c",
+      "classification": "fixture: assumed selection when players were equally distant"
+    },
+    {
+      "run": "fixed-remote-host-final2",
+      "classification": "fixture: native opening roar restored survivor gravity before geometry check"
+    }
+  ],
+  "developmentOnly": [
+    "fixed-host-g",
+    "fixed-host-final1",
+    "fixed-guest-final1"
+  ],
+  "gameInputs": [
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "size": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "size": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "size": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "size": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "limits": [
+    "Same-machine isolated Unity clients over localhost UDP",
+    "Probe-controlled placement and lethal damage; native scene and AI progression",
+    "Colosseum common cause not confirmed",
+    "Other boss families, boss defeat rewards, reconnect and public network not certified"
+  ],
+  "packaged": false,
+  "installed": false,
+  "cleanup": {
+    "verifiedAtUtc": "2026-10-26T15:21:36.7918954Z",
+    "originalGameAssembliesUnchanged": true,
+    "ownedGamesStopped": true,
+    "testPluginsDisabled": true,
+    "isolatedInstalledDependenciesMatchFrozenHashes": true
+  }
+}

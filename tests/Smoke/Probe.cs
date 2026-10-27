@@ -15,12 +15,18 @@ namespace HollowConnect.Smoke;
 // Never included in the release payload. Exercise two actual Unity clients and
 // the real UDP transport without opening or writing any player save file.
 public sealed class ProbeMod : Mod {
+    private static MonoMod.RuntimeDetour.Hook globalSettingsSaveGuard;
     public override string GetVersion() => "test-only";
     public override void Initialize() {
         if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"))) return;
+        // Native Application.Quit also saves mod preferences independently of
+        // SaveGame. Disposable fixture rules must never become player settings.
+        globalSettingsSaveGuard = new MonoMod.RuntimeDetour.Hook(typeof(Mod).GetMethod("SaveGlobalSettings",
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic), new Action<Action<Mod>, Mod>((orig, mod) => { }));
         ProbeLogGuard.Install(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT"), Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE"));
         ProbeNetworkFaults.Install();
         ProbePresenceTrace.Install();
+        FsmSchemaTrace.Install();
         On.GameManager.SaveGame += (orig, gm) => { };
         On.GameManager.SaveGame_Action1 += (orig, gm, callback) => callback?.Invoke(true);
         On.GameManager.SaveGame_int_Action1 += (orig, gm, slot, callback) => callback?.Invoke(true);
@@ -28,17 +34,33 @@ public sealed class ProbeMod : Mod {
         // respawn routine while yielding the next simulation frame instead.
         On.HeroController.Respawn += (orig, hero) => SimulationFrames(orig(hero));
         On.HeroController.HazardRespawn += (orig, hero) => SimulationFrames(orig(hero));
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_EXIT_CHECK") == "1" ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOSS_RETARGET")) ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_COLLISION_CHECK")) ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS") == "1" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS") == "1" ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_NATIVE_CHECK")) ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENCOUNTER_CASE")) ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_RETURN")))
+            On.HeroController.EnterScene += (orig, hero, gate, delay) => SimulationFrames(orig(hero, gate, delay));
         On.GameManager.LoadFirstScene += (orig, gm) => SimulationFrames(orig(gm));
         var go = new GameObject("HollowConnect smoke probe"); Object.DontDestroyOnLoad(go);
         go.AddComponent<SilentProbe>();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "menu-layout") { go.AddComponent<MenuLayoutProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "damage-preview") { go.AddComponent<DamageRankingPreview>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "progress") { go.AddComponent<ProgressProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "rescue") { go.AddComponent<RescueProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "shade-inspect") { go.AddComponent<ShadeInspectProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "death") { go.AddComponent<DeathProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "p5-motion") { go.AddComponent<P5MotionProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "p5-repro") { go.AddComponent<P5WatchersReproProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "colosseum") { go.AddComponent<ColosseumProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "final-ending") { go.AddComponent<FinalBossEndingProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "ending-hud") { go.AddComponent<EndingHudProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "grimm-motion") { go.AddComponent<GrimmMotionProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-roar") { go.AddComponent<BossRoarProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-camera") { go.AddComponent<BossCameraProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "soul-folly") { go.AddComponent<SoulWarriorProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "pantheon") { go.AddComponent<PantheonProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "join") go.AddComponent<JoinProbe>();
         else if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss") go.AddComponent<BossProbe>();
@@ -75,26 +97,63 @@ public sealed class Probe : MonoBehaviour {
     private IEnumerator Until(Func<bool> ready, string name, float timeout = 45) {
         var end = Time.realtimeSinceStartup + timeout;
         while (!ready() && Time.realtimeSinceStartup < end) yield return null;
-        if (!ready()) { Mark("FAIL timeout " + name); Flag(role + ".failed", name); }
+        if (!ready()) {
+            Mark("FAIL timeout " + name); Flag(role + ".failed", name);
+            if (runtime != null) {
+                var snapshot = typeof(CoopRuntime).GetMethod("BuildDebugSnapshot", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime, null);
+                File.WriteAllText(Path.Combine(root, role + ".failure-state.json"), Newtonsoft.Json.JsonConvert.SerializeObject(snapshot, Newtonsoft.Json.Formatting.Indented));
+            }
+            throw new TimeoutException(name);
+        }
         else Mark("PASS " + name);
     }
     private bool AliveScene(string scene) => HeroController.instance != null && HeroController.instance.isHeroInPosition &&
-        GameManager.instance != null && !GameManager.instance.IsInSceneTransition && GameManager.instance.sceneName == scene;
+        GameManager.instance != null && !GameManager.instance.IsInSceneTransition && GameManager.instance.sceneName == scene &&
+        HeroController.instance.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION;
     private void Freeze() {
         var hero = HeroController.instance;
         hero.transform.position = new Vector3(testOrigin.x, testOrigin.y, hero.transform.position.z);
         hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         hero.GetComponent<Rigidbody2D>().gravityScale = 0;
-        hero.takeNoDamage = true; hero.RelinquishControl();
+        // Keep normal input readiness. Resource/ability grants deliberately
+        // wait while native dialogue, pickup UI or cutscenes own control.
+        hero.takeNoDamage = true;
     }
     private void Die() {
         var hero = HeroController.instance; PlayerData.instance.SetInt("health", 0);
+        Mark("DIE FIXTURE before scene=" + GameManager.instance.sceneName + " pos=" + hero.transform.position +
+            " changing=" + Field<bool>(runtime, "changingScene") + " down=" + runtime.Down + " returning=" + runtime.Returning);
         hero.StartCoroutine((IEnumerator)typeof(HeroController).GetMethod("Die", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hero, null));
+        Mark("DIE FIXTURE after down=" + runtime.Down + " returning=" + runtime.Returning + " anchor=" + runtime.DeathPosition);
     }
     private void Enter(string scene) => GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo {
         SceneName = scene, EntryGateName = "left1", Visualization = GameManager.SceneLoadVisualizations.Default,
         WaitForSceneTransitionCameraFade = true
     });
+    private IEnumerator StandFromBench() {
+        if (!PlayerData.instance.GetBool("atBench")) yield break;
+        var marker = PlayerData.instance.GetString("respawnMarkerName");
+        var bench = Object.FindObjectsOfType<PlayMakerFSM>().SingleOrDefault(f => f.name == marker && f.FsmName == "Bench Control");
+        if (PlayerData.instance.GetInt("respawnType") != 1 || bench == null) {
+            yield return Until(() => HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished &&
+                !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic,
+                "native ground checkpoint wake-up completes without waiting on another bench");
+            yield break;
+        }
+        yield return Until(() => bench.ActiveStateName == "Resting", "native bench ready before get-up");
+        bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
+        yield return Until(() => !PlayerData.instance.GetBool("atBench") && HeroController.instance.acceptingInput &&
+            !HeroController.instance.controlReqlinquished && !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic,
+            "native bench get-up restores input and physics");
+    }
+    private void RestoreWarpInput() {
+        var hero = HeroController.instance;
+        hero.RegainControl(); hero.StartAnimationControl();
+        var canWarp = (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime);
+        Mark("WARP READY " + canWarp + " pos=" + hero.transform.position + " bench=" + PlayerData.instance.GetBool("atBench") +
+            " transition=" + hero.transitionState + " kinematic=" + hero.GetComponent<Rigidbody2D>().isKinematic);
+        if (!canWarp) { Flag(role + ".failed", "warp fixture has no native control"); throw new Exception("Unsafe warp fixture"); }
+    }
 
     private IEnumerator GiveUpFixture(EntityManager manager, ulong enemyId) {
         var checkpointScene = PlayerData.instance.GetString("respawnScene");
@@ -142,6 +201,27 @@ public sealed class Probe : MonoBehaviour {
     private IEnumerator Start() {
         role = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLE");
         root = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROOT"); host = role == "host";
+        using var lifeSendTrace = new MonoMod.RuntimeDetour.Hook(typeof(CoopRuntime).GetMethod("Send", BindingFlags.Instance | BindingFlags.NonPublic),
+            new Action<Action<CoopRuntime, Message>, CoopRuntime, Message>((orig, owner, message) => {
+                if (message.Kind == Kind.Down || message.Kind == Kind.GiveUpRequest || message.Kind == Kind.RescueUnavailable)
+                    Mark("LIFE SEND " + message.Kind + " serial=" + message.Serial + " scene=" + message.Scene + " checkpoint=" + message.Key + "/" + message.Name + "/" + message.Value);
+                orig(owner, message);
+            }));
+        using var lifeServerTrace = new MonoMod.RuntimeDetour.Hook(typeof(CoopServerAddon).GetMethod("Receive", BindingFlags.Instance | BindingFlags.NonPublic),
+            new Action<Action<CoopServerAddon, ushort, Message>, CoopServerAddon, ushort, Message>((orig, addon, id, message) => {
+                var inspect = message.Kind == Kind.Down || message.Kind == Kind.GiveUpRequest || message.Kind == Kind.RescueUnavailable;
+                var party = Field<HollowConnect.Core.Party>(addon, "party");
+                if (inspect) Mark("LIFE SERVER before " + message.Kind + " id=" + id + " round=" + message.Round + "/" + party.Round + " serial=" + message.Serial +
+                    " validCheckpoint=" + HollowConnect.Core.Party.ValidCheckpoint(message.Key, message.Name, message.Value) + " life=" + party.Members[id].Life);
+                orig(addon, id, message);
+                if (inspect) Mark("LIFE SERVER after " + message.Kind + " id=" + id + " life=" + party.Members[id].Life + " serial=" + party.Members[id].DownSerial);
+            }));
+        using var lifeReceiveTrace = new MonoMod.RuntimeDetour.Hook(typeof(CoopRuntime).GetMethod("Receive", BindingFlags.Instance | BindingFlags.NonPublic),
+            new Action<Action<CoopRuntime, Message>, CoopRuntime, Message>((orig, owner, message) => {
+                if (message.Kind == Kind.Down || message.Kind == Kind.Returning || message.Kind == Kind.GiveUpDenied)
+                    Mark("LIFE RECEIVE " + message.Kind + " id=" + message.Id + " serial=" + message.Serial + " reason=" + message.Name + " scene=" + message.Scene);
+                orig(owner, message);
+            }));
         On.CameraController.DoPositionToHero += (orig, camera, direct) => {
             pendingCameraPositions++;
             return WatchCameraPosition(orig(camera, direct));
@@ -151,17 +231,29 @@ public sealed class Probe : MonoBehaviour {
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Menu_Title", "mod and menu ready");
         if (Has(role + ".failed")) yield break;
         runtime = Object.FindObjectOfType<CoopRuntime>();
+        UnityLifetimeChecks.Run(Mark);
+        try { LocalBarrierChecks.Run(Mark); }
+        catch (Exception e) { Mark("FAIL local battle gate policy: " + e); Flag(role + ".failed"); yield break; }
         var mod = ModHooks.GetMod("HKMP"); engine = Field<Hkmp.Game.GameManager>(mod, "_gameManager");
         var settings = Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings");
         settings.AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         CoopMod.Settings.ShareProgress = true; CoopMod.Settings.Rescue = true; CoopMod.Settings.EntryProtection = false;
+        CoopMod.Settings.RescueLimit = 0; CoopMod.Settings.SpectateAfterExhaustion = false;
+        On.PlayerData.SetBool += (orig, owner, key, value) => {
+            orig(owner, key, value);
+            if (key == "hasWalljump" || key == "canWallJump")
+                Mark("CLAW SetBool " + key + "=" + value + " currentData=" + ReferenceEquals(owner, PlayerData.instance));
+        };
         // Menu's fresh default PlayerData, no existing save is loaded.
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench");
         pd.SetInt("respawnType", 1); pd.SetBool("hasWalljump", false); pd.SetBool("canWallJump", false);
+        pd.SetBool("visitedDirtmouth", true);
         GameManager.instance.profileID = 99;
         GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => AliveScene("Town"), "fresh unsaved game entered");
         if (Has(role + ".failed")) yield break;
+        yield return StandFromBench();
+        Mark("CLAW loaded sameData=" + ReferenceEquals(pd, PlayerData.instance) + " heroData=" + ReferenceEquals(pd, HeroController.instance.playerData));
         Freeze();
         foreach (var shade in Resources.FindObjectsOfTypeAll<GameObject>().Where(g => g.name == "Hollow Shade")) {
             var sprite = shade.GetComponent<tk2dSprite>(); var animator = shade.GetComponent<tk2dSpriteAnimator>();
@@ -178,6 +270,7 @@ public sealed class Probe : MonoBehaviour {
         Mark("session=" + runtime.Session + " id=" + runtime.LocalId);
         Flag(role + ".connected");
         yield return Until(() => Has(host ? "guest.connected" : "host.connected"), "both clients connected");
+        yield return UnityLifetimeChecks.SampleRuntime(runtime, Mark);
         if (!host) yield return new WaitForSecondsRealtime(2);
         Enter("Crossroads_01");
         yield return Until(() => AliveScene("Crossroads_01"), "actual enemy scene entered");
@@ -193,12 +286,16 @@ public sealed class Probe : MonoBehaviour {
             var hm = found.Object.Host.GetComponent<HealthManager>(); hm.hp = 40; hm.ApplyExtraDamage(3);
             Flag("enemy.expected", found.Id + "," + hm.hp); Mark("health authority id=" + found.Id + " hp=" + hm.hp);
             pd.SetBool("hasWalljump", true); pd.SetBool("canWallJump", true);
+            Mark("CLAW authority captured=" + pd.GetBool("hasWalljump") + "/" + pd.GetBool("canWallJump") +
+                " current=" + PlayerData.instance.GetBool("hasWalljump") + "/" + PlayerData.instance.GetBool("canWallJump") + " shared=" + runtime.Shared);
         } else {
             yield return Until(() => Has("enemy.expected"), "host enemy damage");
             var expected = File.ReadAllText(Path.Combine(root, "enemy.expected")).Split(',');
             var id = ulong.Parse(expected[0]); var hp = int.Parse(expected[1]);
             yield return Until(() => entities.TryGetValue(id, out var entity) && entity.Object.Client != null &&
                 entity.Object.Client.GetComponent<HealthManager>().hp == hp, "remote absolute enemy health");
+            Mark("CLAW guest sameData=" + ReferenceEquals(pd, PlayerData.instance) + " captured=" + pd.GetBool("hasWalljump") + "/" + pd.GetBool("canWallJump") +
+                " current=" + PlayerData.instance.GetBool("hasWalljump") + "/" + PlayerData.instance.GetBool("canWallJump") + " shared=" + runtime.Shared);
             yield return Until(() => pd.GetBool("hasWalljump") && pd.GetBool("canWallJump"), "networked Mantis Claw grant");
             if (Has(role + ".failed")) yield break;
             Flag("guest.health-progress");
@@ -407,20 +504,34 @@ public sealed class Probe : MonoBehaviour {
         yield return Until(() => Hkmp.CoopContext.Epoch == 1, "single new attempt number");
         yield return Until(() => AliveScene("Town") && !runtime.Resetting && runtime.ReleasedRound == 1, "team checkpoint barrier released", 60);
         if (Has(role + ".failed")) yield break;
-        testOrigin = new Vector2(20, 10); Freeze();
+        yield return StandFromBench();
+        var floor = Physics2D.Raycast(new Vector2(20, 15), Vector2.down, 30, 1 << 8);
+        if (floor.collider == null) throw new Exception("No Town floor for warp fixture");
+        var warpBodyBounds = HeroController.instance.GetComponent<Collider2D>().bounds;
+        var warpBodyOffset = warpBodyBounds.center.y - HeroController.instance.transform.position.y;
+        testOrigin = floor.point + Vector2.up * (warpBodyBounds.extents.y - warpBodyOffset + .1f);
+        Mark("WARP FIXTURE floor=" + floor.point + " bodyOffset=" + warpBodyOffset + " bodySize=" + warpBodyBounds.size + " origin=" + testOrigin);
+        Freeze(); RestoreWarpInput();
+        Flag(role + ".warp-position", testOrigin.x.ToString(System.Globalization.CultureInfo.InvariantCulture) + "," + testOrigin.y.ToString(System.Globalization.CultureInfo.InvariantCulture));
         if (host) {
             var dreamScene = pd.GetString("dreamGateScene"); var dreamX = pd.GetFloat("dreamGateX"); var dreamY = pd.GetFloat("dreamGateY");
             Enter("Crossroads_01"); yield return Until(() => AliveScene("Crossroads_01"), "host departed checkpoint for warp test");
             Freeze();
+            RestoreWarpInput();
             yield return Until(() => runtime.Peers.Values.Any(p => p.State != null && p.State.Scene == "Town" && p.State.IsReady), "live target in another room");
             yield return new WaitForSecondsRealtime(.3f); // let the first post-transition presence reach the server
             var selected = false;
             runtime.KeyPressed = key => key == KeyCode.F7 && !selected && (selected = true);
             yield return Until(() => selected && runtime.Peers.ContainsKey(runtime.Selected), "F7 selects teammate");
             var pressed = false;
+            var targetPosition = File.ReadAllText(Path.Combine(root, "guest.warp-position")).Split(',');
+            var warpTarget = new Vector2(float.Parse(targetPosition[0], System.Globalization.CultureInfo.InvariantCulture), float.Parse(targetPosition[1], System.Globalization.CultureInfo.InvariantCulture));
             runtime.KeyPressed = key => key == KeyCode.F8 && !pressed && (pressed = true);
-            yield return Until(() => pressed && AliveScene("Town") && Vector2.Distance(HeroController.instance.transform.position, new Vector2(20, 10)) < 4,
+            yield return Until(() => pressed && AliveScene("Town") && Vector2.Distance(HeroController.instance.transform.position, warpTarget) < 4,
                 "F8 authorized cross-room teleport arrives beside teammate");
+            yield return Until(() => !Field<bool>(runtime, "changingScene") && Field<Coroutine>(runtime, "teammateWarp") == null &&
+                HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished,
+                "F8 completes native arrival and releases its travel lifecycle");
             runtime.KeyPressed = _ => false;
             if (Has(role + ".failed")) yield break;
             if (dreamScene != pd.GetString("dreamGateScene") || dreamX != pd.GetFloat("dreamGateX") || dreamY != pd.GetFloat("dreamGateY")) {
@@ -431,7 +542,10 @@ public sealed class Probe : MonoBehaviour {
         if (Has(role + ".failed")) yield break;
         Freeze(); Flag(role + ".second-wipe-ready");
         yield return Until(() => Has(host ? "guest.second-wipe-ready" : "host.second-wipe-ready"), "both ready for reverse death order");
-        if (host) { Die(); Flag("host.second-wipe-down"); }
+        if (host) {
+            Die(); yield return Until(() => runtime.Down && !runtime.Returning, "host actually down before reverse wipe");
+            Flag("host.second-wipe-down");
+        }
         else {
             yield return Until(() => Has("host.second-wipe-down") && runtime.Peers.Values.Any(p => p.Life == HollowConnect.Core.Life.Down), "host down first arrived");
             Die();

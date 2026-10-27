@@ -19,7 +19,7 @@ using Object = UnityEngine.Object;
 namespace Hkmp.Ui;
 
 /// <inheritdoc />
-internal class UiManager : IUiManager {
+internal partial class UiManager : IUiManager {
     #region Internal UI manager variables and properties
 
     /// <summary>
@@ -301,13 +301,50 @@ internal class UiManager : IUiManager {
                 }
                 
                 Logger.Debug("  NextSceneType is main menu, transitioning to last save point instead");
-                
+                var cinematic = UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle;
+                var returningPlayerData = PlayerData.instance;
+                var returningSlot = GM.profileID;
                 GameManager.instance.ContinueGame();
+                GM.StartCoroutine(RestoreHudAfterCutscene(cinematic, returningPlayerData, returningSlot));
                 return;
             }
 
             orig(self);
         };
+    }
+
+    // ContinueGame normally starts from a freshly configured title menu.
+    // Returning directly from an ending retains the persistent HUD's OUT
+    // state. Wait for native respawn, then use its own display transition.
+    private IEnumerator RestoreHudAfterCutscene(int origin, PlayerData playerData, int slot) {
+        var gm = GM;
+        var deadline = Time.realtimeSinceStartup + 45f;
+        while (gm != null && gm == GM && PlayerData.instance == playerData && gm.profileID == slot && _netClient.IsConnected &&
+            Time.realtimeSinceStartup < deadline) {
+            var hero = HeroController.instance;
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle != origin && gm.IsGameplayScene() &&
+                !gm.IsInSceneTransition && gm.HasFinishedEnteringScene && hero != null && hero.isHeroInPosition) {
+                var cameras = GameCameras.instance;
+                if (cameras?.hudCanvas != null) {
+                    // Ending scenes disable the persistent HUD camera.  The
+                    // canvas can therefore be active while still being
+                    // invisible after ContinueGame restores the gameplay
+                    // scene.  Re-enable the camera and its FSMs before
+                    // replaying the native HUD IN transition.
+                    if (cameras.hudCamera != null) {
+                        cameras.hudCamera.gameObject.SetActive(true);
+                        cameras.hudCamera.enabled = true;
+                    }
+                    cameras.hudCanvas.SetActive(true);
+                    foreach (var fsm in cameras.hudCanvas.GetComponents<PlayMakerFSM>()) {
+                        fsm.enabled = true;
+                        fsm.SendEvent("IN");
+                    }
+                }
+                yield break;
+            }
+            yield return null;
+        }
     }
     
     /// <summary>
@@ -336,16 +373,48 @@ internal class UiManager : IUiManager {
     /// <summary>
     /// Return to the main menu from in-game. Used whenever the player disconnects from the current server.
     /// </summary>
+    private bool _returningToMenu;
     public void ReturnToMainMenuFromGame() {
-        IH.StopUIInput();
-        
-        UM.StartCoroutine(GM.ReturnToMainMenu(
-            GameManager.ReturnToMainMenuSaveModes.DontSave,
-            _ => {
-                IH.StartUIInput();
-                UM.returnMainMenuPrompt.HighlightDefault();
+        // Connecting from the title/slot menu has no loaded local save. Never
+        // save its temporary PlayerData over a previously selected profile.
+        if (_returningToMenu || GM == null || GM.gameState == GameState.MAIN_MENU || GM.gameState == GameState.INACTIVE) return;
+        _returningToMenu = true;
+        GM.StartCoroutine(ReturnToMenuWithSave());
+    }
+
+    private IEnumerator ReturnToMenuWithSave() {
+        var gm = GM;
+        var pd = PlayerData.instance;
+        var slot = gm.profileID;
+        var deadline = Time.realtimeSinceStartup + 30f;
+        try {
+            // Disconnect cleanup has already restored local boss context and
+            // released rescue locks. Let an accepted native scene load finish
+            // before SaveLevelState samples that scene's persistent objects.
+            while (gm.IsInSceneTransition && Time.realtimeSinceStartup < deadline) yield return null;
+            if (gm != GM || pd != PlayerData.instance || gm.profileID != slot ||
+                !Platform.IsSaveSlotIndexValid(slot) || gm.gameState == GameState.MAIN_MENU ||
+                gm.gameState == GameState.INACTIVE || gm.IsInSceneTransition || HeroController.instance == null) {
+                ExitSaveFailed();
+                yield break;
             }
-        ));
+            IH.StopUIInput();
+            // Native code waits for the asynchronous save callback, including
+            // mod-local settings, and cancels the unload if the write fails.
+            yield return gm.ReturnToMainMenu(GameManager.ReturnToMainMenuSaveModes.SaveAndCancelOnFail, saved => {
+                IH.StartUIInput();
+                if (saved) UM.returnMainMenuPrompt.HighlightDefault();
+                else ExitSaveFailed();
+            });
+        } finally {
+            _returningToMenu = false;
+            IH.StartUIInput();
+        }
+    }
+
+    private static void ExitSaveFailed() {
+        Logger.Warn("Disconnect exit cancelled: saving the loaded profile failed or was unsafe");
+        InternalChatBox?.AddMessage("保存未完成，已取消退出。请在暂停菜单重试“保存并退出”，进度仍保留在当前游戏中。");
     }
 
     /// <summary>
@@ -355,21 +424,18 @@ internal class UiManager : IUiManager {
     /// <param name="callback">The action to execute when save slot selection is finished. The boolean parameter
     /// indicates whether a save slot is selected (true) or the back button was pressed (false). Can be null, in which
     /// case no callback is executed.</param>
-    public void OpenSaveSlotSelection(Action<bool> callback = null) {
-        _saveSlotSelectedAction = SaveSlotSelectedCallback;
+    /// <param name="confirmJoin">Require confirmation before opening any selected join save.</param>
+    public void OpenSaveSlotSelection(Action<bool> callback = null, bool confirmJoin = false) {
+        CloseSaveSlotSelection();
+        _confirmJoinSave = confirmJoin;
+        _saveSlotSelectedAction = callback;
 
         On.GameManager.StartNewGame += OnStartNewGame;
         On.GameManager.ContinueGame += OnContinueGame;
+        On.GameManager.LoadGameFromUI += OnLoadJoinSave;
+        On.UIManager.StartNewGame += OnStartJoinSave;
 
-        UM.StartCoroutine(GoToSaveMenu());
-        return;
-
-        void SaveSlotSelectedCallback(bool saveSelected) {
-            callback?.Invoke(saveSelected);
-
-            On.GameManager.StartNewGame -= OnStartNewGame;
-            On.GameManager.ContinueGame -= OnContinueGame;
-        }
+        _saveMenuTransition = UM.StartCoroutine(GoToSaveMenu());
     }
     
     /// <summary>
@@ -377,8 +443,7 @@ internal class UiManager : IUiManager {
     /// the save menu.
     /// </summary>
     private void OnStartNewGame(On.GameManager.orig_StartNewGame orig, GameManager self, bool permaDeathMode, bool bossRushMode) {
-        orig(self, permaDeathMode, bossRushMode);
-        _saveSlotSelectedAction.Invoke(true);
+        EnterSelectedSave(() => orig(self, permaDeathMode, bossRushMode));
     }
 
     /// <summary>
@@ -386,8 +451,7 @@ internal class UiManager : IUiManager {
     /// the save menu.
     /// </summary>
     private void OnContinueGame(On.GameManager.orig_ContinueGame orig, GameManager self) {
-        orig(self);
-        _saveSlotSelectedAction.Invoke(true);
+        EnterSelectedSave(() => orig(self));
     }
 
     /// <summary>
@@ -526,19 +590,17 @@ internal class UiManager : IUiManager {
         }
 
         var eventTrigger = saveProfilesBackBtn.GetComponent<EventTrigger>();
+        RestoreSaveMenuBackButton();
+        _saveMenuBackTrigger = eventTrigger;
         _originalBackTriggers = eventTrigger.triggers;
 
         eventTrigger.triggers = [];
         ChangeBtnTriggers(eventTrigger, () => {
-            On.GameManager.StartNewGame -= OnStartNewGame;
-            On.GameManager.ContinueGame -= OnContinueGame;
-
-            _saveSlotSelectedAction.Invoke(false);
+            FinishSaveSlotSelection(false);
             
             UM.StartCoroutine(GoToMultiplayerMenu());
-            
-            eventTrigger.triggers = _originalBackTriggers;
         });
+        _saveMenuTransition = null;
     }
 
     /// <summary>
@@ -582,6 +644,9 @@ internal class UiManager : IUiManager {
     /// Callback method for when the client disconnects.
     /// </summary>
     public void OnClientDisconnect() {
+        var selectingJoinSave = _confirmJoinSave;
+        CloseSaveSlotSelection();
+        if (selectingJoinSave) UM.StartCoroutine(ReturnFromInterruptedJoinSelection());
         _connectInterface.OnClientDisconnect();
         _pingInterface.SetEnabled(false);
     }

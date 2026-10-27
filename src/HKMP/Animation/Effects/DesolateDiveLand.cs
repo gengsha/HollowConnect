@@ -48,7 +48,7 @@ internal class DesolateDiveLand : DamageAnimationEffect {
         // Obtain the Q Slam prefab and instantiate it relative to the player object
         // This is the shockwave that happens when you impact the ground
         var qSlamObject = localPlayerSpells.FindGameObjectInChildren("Q Slam");
-        var quakeSlam = Object.Instantiate(
+        var quakeSlam = RemotePlayerVisuals.Instantiate(
             qSlamObject,
             playerSpells.transform
         );
@@ -71,7 +71,7 @@ internal class DesolateDiveLand : DamageAnimationEffect {
         // Obtain the Q1 Pillar prefab and instantiate it relative to the player object
         // This is the curvy pillar that comes from the sky once you impact the ground
         var qPillarObj = localPlayerSpells.FindGameObjectInChildren("Q1 Pillar");
-        var quakePillar = Object.Instantiate(
+        var quakePillar = RemotePlayerVisuals.Instantiate(
             qPillarObj,
             playerSpells.transform
         );

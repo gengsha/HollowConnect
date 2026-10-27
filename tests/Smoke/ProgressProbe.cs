@@ -20,7 +20,14 @@ public sealed partial class ProgressProbe : MonoBehaviour {
     private string root, role;
     private bool host;
     private bool ResourcesCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESOURCE_CHECK") == "1";
+    private bool EmergencyBenchCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_EMERGENCY_BENCH") == "1";
+    private bool DefenderCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEFENDER_CHECK") == "1";
     private bool TeammateDreamCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_TEAMMATE_DREAM") == "1";
+    private bool MapExitCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_EXIT_CHECK") == "1";
+    private bool RemoteFeedbackCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_REMOTE_FEEDBACK") == "1";
+    private bool BankerCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_BANKER_CASE") != null;
+    private bool GrimmFlameCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRIMM_FLAME") != null;
+    private bool ColosseumProgressCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLOSSEUM_PROGRESS") != null;
     private sealed class FileLogger : Hkmp.Logging.ILogger {
         private readonly string path;
         private readonly object sync = new object();
@@ -43,18 +50,27 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         while (!ready() && !Has(role + ".failed") && Time.realtimeSinceStartup < deadline) yield return null;
         if (!ready()) {
             Mark("FAIL " + name); Flag(role + ".failed");
-            if (ResourcesCase) {
+            if(SimpleKeyCase) {
+                Mark("KEY WAIT keys="+PlayerData.instance.GetInt("simpleKeys")+" legacyWaterwaysKey="+PlayerData.instance.GetBool("hasWaterwaysKey"));
+                foreach(var f in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f=>f.gameObject.scene.name==GameManager.instance.sceneName &&
+                    (f.FsmName=="npc_control" || f.FsmName=="Conversation Control"))) {
+                    Mark("KEY WAIT FSM "+f.name+"/"+f.FsmName+" state="+f.ActiveStateName); Dump(f);
+                }
+                Mark("KEY WAIT Dialogue "+Dialogue.ActiveStateName+" requester="+Dialogue.FsmVariables.FindFsmGameObject("Requester")?.Value?.name);
+            }
+            if (ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || SimpleKeyCase || BankerCase) {
                 Mark("RESOURCE WAIT hero=" + HeroController.instance?.transform.position + " input=" + HeroController.instance?.acceptingInput +
                     " relinquished=" + HeroController.instance?.controlReqlinquished + " pause=" + PlayerData.instance?.GetBool("disablePause") +
                     " inFlight=" + (runtime == null ? -1 : ((System.Collections.IDictionary)ResourceService.GetType().GetField("inFlight", ResourcePrivate).GetValue(ResourceService)).Count));
                 foreach (var f in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene.name == GameManager.instance.sceneName &&
                     (f.name.Contains("Shop") || f.name == "UI List" || f.name == "Item List")))
-                    Mark("RESOURCE WAIT FSM " + f.name + "/" + f.FsmName + " active=" + f.gameObject.activeInHierarchy + " state=" + f.ActiveStateName);
+                    { Mark("RESOURCE WAIT FSM " + f.name + "/" + f.FsmName + " active=" + f.gameObject.activeInHierarchy + " state=" + f.ActiveStateName); if(SimpleKeyCase) Dump(f); }
                 throw new TimeoutException("Resource prerequisite: " + name);
             }
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) {
-                Mark("HERO pos=" + HeroController.instance?.transform.position + " control=" + HeroController.instance?.acceptingInput);
+                TraceDreamLoad("timeout " + name);
                 foreach (var f in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.name == "Ghost Warrior NPC")) Dump(f);
+                throw new TimeoutException("Dream probe prerequisite: " + name);
             }
         }
         else Mark("PASS " + name);
@@ -79,6 +95,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         p.PlayerObject.GetComponent<MeshFilter>().sharedMesh.bounds.size.sqrMagnitude > .01f);
     private string Describe(object o) {
         if (o == null) return "null";
+        if (o is FsmBool b) return b.Name + "=" + b.Value;
         if (o is FsmGameObject g) return Describe(g.Value);
         if (o is FsmObject f) return Describe(f.Value);
         if (o is Object u) return u == null ? "destroyed" : u.GetType().Name + ":" + u.name;
@@ -96,12 +113,18 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         }
         foreach (var v in fsm.FsmVariables.StringVariables) Write("VAR " + v.Name + "=" + v.Value);
         foreach (var v in fsm.FsmVariables.IntVariables) Write("VAR " + v.Name + "=" + v.Value);
+        foreach (var v in fsm.FsmVariables.BoolVariables) Write("VAR " + v.Name + "=" + v.Value);
         foreach (var v in fsm.FsmVariables.GameObjectVariables) Write("VAR " + v.Name + "=" + Describe(v.Value));
     }
     private IEnumerator Room(string scene) {
-        if (!host && Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null)
+        if (!host && (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || DefenderCase))
             yield return Until(() => Has("host." + scene), "host enters warrior room first");
-        Enter(scene); yield return Until(() => AliveScene(scene), "entered " + scene); Freeze();
+        Enter(scene); yield return Until(() => AliveScene(scene), "entered " + scene);
+        if (MapExitCase) {
+            var anchor = GameObject.Find(scene == "Crossroads_33" ? "Cornifer" : "Shop Region");
+            if (anchor != null) HeroController.instance.transform.position = anchor.transform.position + new Vector3(-1, 1, 0);
+        }
+        Freeze();
         Flag(role + "." + scene); yield return Until(() => Has((host ? "guest" : "host") + "." + scene), "both in " + scene);
         yield return Until(() => VisiblePeer() && engine.ClientManager.SceneSnapshotReady, "visible peer and committed room snapshot in " + scene);
         yield return new WaitForSecondsRealtime(1);
@@ -173,21 +196,29 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             yield return Until(() => conversation.ActiveStateName == "Send Text" && Dialogue.ActiveStateName == "Ready for Input", "native map purchase prompt");
             if (Has(role + ".failed")) yield break;
             ChooseYes();
-            yield return Until(() => PlayerData.instance.GetBool("mapCrossroads") && conversation.ActiveStateName == "Map Input", "first map actually bought and prompt displayed");
+            yield return Until(() => PlayerData.instance.GetBool("mapCrossroads") && conversation.ActiveStateName != "Send Text" &&
+                (conversation.ActiveStateName == "Map Input" || HeroController.instance.acceptingInput && !PlayerData.instance.GetBool("disablePause")),
+                "native map purchase or first-map prompt completes");
             if (Has(role + ".failed")) yield break;
-            conversation.SendEvent("CONVO END");
-            yield return Until(() => conversation.ActiveStateName == "Iselda Mention", "first map prompt closed");
-            if (Has(role + ".failed")) yield break;
-            conversation.SendEvent("CONVO_FINISH");
+            if (conversation.ActiveStateName == "Map Input") {
+                conversation.SendEvent("CONVO END");
+                yield return Until(() => conversation.ActiveStateName == "Iselda Mention", "first map prompt closed");
+                if (Has(role + ".failed")) yield break;
+                conversation.SendEvent("CONVO_FINISH");
+            }
             yield return Until(() => HeroController.instance.acceptingInput && !PlayerData.instance.GetBool("disablePause"), "native map purchase returns hero control");
             Mark("MAP charge=" + (geo - PlayerData.instance.GetInt("geo")) + " state=" + conversation.ActiveStateName + " npc=" + control.ActiveStateName);
-            if (geo - PlayerData.instance.GetInt("geo") != 30) { Mark("FAIL wrong map charge"); Flag(role + ".failed"); yield break; }
+            var charge = geo - PlayerData.instance.GetInt("geo");
+            if (charge != 30 && !(charge == 0 && Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_BOTH") == "1")) {
+                Mark("FAIL wrong map charge"); Flag(role + ".failed"); yield break;
+            }
         } else {
             yield return Until(() => Has((host ? "guest" : "host") + ".map-bought"), "peer bought map");
-            if (PlayerData.instance.GetBool("mapCrossroads") || PlayerData.instance.GetInt("geo") != geo) {
-                Mark("FAIL map or currency incorrectly shared"); Flag(role + ".failed"); yield break;
+            yield return Until(() => PlayerData.instance.GetBool("mapCrossroads") && PlayerData.instance.GetBool("hasMap"), "purchased map shared");
+            if (PlayerData.instance.GetInt("geo") != geo) {
+                Mark("FAIL map purchase shared currency"); Flag(role + ".failed"); yield break;
             }
-            Mark("PASS map and currency remain personal");
+            Mark("PASS purchased map shared while currency remains personal");
         }
         Flag(role + ".map-bought"); yield return Until(() => Has((host ? "guest" : "host") + ".map-bought"), "both map assertions done");
         yield return Until(VisiblePeer, "peer visible after actual map purchase");
@@ -197,42 +228,237 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         yield return Until(() => GameManager.instance != null && Object.FindObjectOfType<CoopRuntime>() != null && Scenes.GetActiveScene().name == "Menu_Title", "menu ready");
         if (Has(role + ".failed")) yield break;
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
+        if (MapExitCase) VerifyMenuDoesNotSave();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) ObserveDreamLoads();
+        if (EmergencyBenchCase) yield return EmergencyMenuShortcut();
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         Hkmp.Logging.Logger.AddLogger(new FileLogger(Path.Combine(root, role + "-engine.log")));
-        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase)
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase)
             On.GameManager.EnterHero += (orig, gm, additive) => {
                 var gates = Object.FindObjectsOfType<TransitionPoint>();
+                if (MapExitCase && gm.sceneName == "Crossroads_33") {
+                    Mark("MAP ENTRY GATES " + string.Join(",", gates.Select(g => g.name + "=" + g.transform.position + "/" + g.GetGatePosition())));
+                    var alternate = gates.FirstOrDefault(g => g.name == "right1") ?? gates.FirstOrDefault(g => g.name == "top1");
+                    if (alternate != null) gm.entryGateName = alternate.name;
+                }
                 if (!gates.Any(g => g.name == gm.entryGateName) && gates.Length > 0) {
                     gm.entryGateName = gates.OrderBy(g => g.name, StringComparer.Ordinal).First().name;
                     Mark("NATIVE TEST ENTRANCE " + gm.sceneName + "/" + gm.entryGateName);
                 }
                 orig(gm, additive);
             };
-        CoopMod.Settings.ShareProgress = true; CoopMod.Settings.EntryProtection = false;
+        CoopMod.Settings.ShareProgress = !ProgressAuditDisabled; CoopMod.Settings.EntryProtection = false;
+        if (LocalWorldCase) CoopMod.Settings.ShareProgress = !host;
+        if (ProgressAuditCase) CoopMod.Settings.ShareCharms = !ProgressAuditNoCharms;
         if (TeammateDreamCase) CoopMod.Settings.ShareCharms = host
             ? Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHARM_SHARE") != "0"
             : Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHARM_SHARE") == "0";
+        if (!host && MenuResourceCase) {
+            yield return MenuResourceEntry();
+            if (Has(role + ".failed")) yield break;
+        } else {
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1); pd.SetInt("geo", 500);
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
-        if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase) && pd.GetBool("atBench")) {
+        if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
             yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
             yield return Until(() => !pd.GetBool("atBench") && HeroController.instance.acceptingInput &&
                 !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
         }
+        if (StagNestCase) {
+            pd.SetBool("openedStagNest", host);
+            pd.SetBool("openedHiddenStation", false);
+            pd.SetBool("openedTown", host);
+            pd.SetBool("metStag", true);
+            pd.SetInt("stagPosition", host ? 9 : 0);
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) {
             pd.SetBool("hasDreamNail", true);
             pd.SetBool("hasLantern", true);
+            PrepareWarriorHistory();
+            var lanternOwner = Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_LANTERN_OWNER");
+            if (!string.IsNullOrEmpty(lanternOwner)) {
+                // Establish local acquisition history separately from the real
+                // UDP ability union, without changing any defeat/save flags.
+                CoopMod.Statistics.NativePickups["hasDreamNail"] = 1;
+                if (lanternOwner == "both" || lanternOwner == role) CoopMod.Statistics.NativePickups["hasLantern"] = 1;
+                else { pd.SetBool("hasLantern", false); CoopMod.Statistics.NativePickups.Remove("hasLantern"); }
+            }
         }
         HeroController.instance.RegainControl(); HeroController.instance.StartAnimationControl(); Freeze();
-        if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); }
+        if (ProgressAuditCase) PrepareProgressAudit();
+        if (SimpleKeyCase) PrepareSimpleKeys();
+        if (BankerCase) {
+            pd.SetInt("bankerTheft", 1); pd.SetBool("bankerSpaMet", false);
+            pd.SetBool("metBanker", true); pd.SetBool("bankerAccountPurchased", true);
+            pd.SetInt("bankerBalance", 4500);
+        }
+        if (GrimmFlameCase) {
+            pd.SetInt("grimmChildLevel", 1); pd.SetInt("flamesCollected", 0);
+            pd.SetBool("gotCharm_40", true); pd.SetBool("equippedCharm_40", true);
+            pd.scenesFlameCollected.Clear();
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRIMM_FLAME") == "split-flow") {
+                // First-round start after receiving Grimmchild; subsequent
+                // collection, upgrade and reset must all run natively.
+                pd.SetBool("metGrimm", true); pd.SetBool("killedGrimm", false);
+                pd.SetInt("flamesRequired", 3);
+            }
+        }
+        if (ColosseumProgressCase) {
+            pd.SetBool("colosseumBronzeOpened", true); pd.SetBool("colosseumBronzeCompleted", true);
+            pd.SetBool("colosseumSilverOpened", host); pd.SetBool("colosseumSilverCompleted", host);
+            pd.SetBool("colosseumGoldOpened", false); pd.SetBool("colosseumGoldCompleted", false);
+            pd.SetInt("charmSlots", 4); pd.SetInt("ore", 0);
+            CoopMod.Statistics.Resources.TryClaim("notch:colosseumBronze", out _);
+            if (host) CoopMod.Statistics.Resources.TryClaim("ore:colosseumSilver", out _);
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_CATCHUP") != null) PrepareDreamCatchup();
+        if (host && MenuResourceCase) {
+            PlayerData.instance.SetBool("bossRushMode", false);
+            PlayerData.instance.SetFloat("completionPercentage", 112);
+        }
+        if (LocalWorldCase) PrepareLocalWorld();
+        if (host) { engine.ServerManager.Start(29650, LocalWorldCase); Flag("server.started"); }
         else yield return Until(() => Has("server.started"), "server ready");
+        if (SimpleKeyMode == "flow" && !host) yield return Until(() => Has("host.keys.spent"), "late guest waits for native key acquisition and expenditure", 240);
+        if (ProgressAuditCase && !host) yield return Until(() => Has("host.audit.first-ready"), "host audit complete before actual guest joins");
+        if (host && Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_CATCHUP") != null)
+            yield return Until(() => Has("guest.catchup.loaded"), "missing-record guest loads native entrance before source client joins");
         typeof(ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
         typeof(ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "progress" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake");
+        }
+        if (ColosseumProgressCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(ColosseumProgressChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS colosseum completion registration"); Flag(role + ".done"); }
+            yield break;
+        }
+        if (GrimmFlameCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(GrimmFlameChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS Grimm flames"); Flag(role + ".done"); }
+            yield break;
+        }
+        if (BankerCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(BankerChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS banker dialogue " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_BANKER_CASE")); Flag(role + ".done"); }
+            yield break;
+        }
+        if (SimpleKeyCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(SimpleKeyChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS simple key sources and personal doors " + SimpleKeyMode); Flag(role + ".done"); }
+            yield break;
+        }
+        if (RemoteFeedbackCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(RemoteFeedbackChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (!Has(role + ".failed")) { Mark("FINAL PASS remote feedback isolation"); Flag(role + ".done"); }
+            yield break;
+        }
+        if (MapExitCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(MapExitChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (!Has(role + ".failed")) { Mark("FINAL PASS shared map purchase and disconnect save ordering"); Flag(role + ".done"); }
+            yield break;
+        }
+        if (StagNestCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(StagNestChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (Has(role + ".failed")) yield break;
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS stag nest targeted checks"); Flag(role + ".done"); yield break;
+        }
+        if (LocalWorldCase) {
+            var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(LocalWorldChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS local world " + LocalWorldScenario); Flag(role + ".done"); }
+            yield break;
+        }
+        if (ProgressAuditCase) {
+            var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(ProgressAuditChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark(ProgressAuditInspect ? "FINAL PASS pickup scene inspection only" : "FINAL PASS join audit, union and local pickup continuation"); Flag(role + ".done"); }
+            yield break;
+        }
+        if (EmergencyBenchCase) {
+            var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(EmergencyBench());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (!Has(role + ".failed")) yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS emergency bench recovery"); Flag(role + ".done"); }
+            yield break;
+        }
         if (TeammateDreamCase) {
             var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(TeammateDream());
             while (checks.Count > 0) {
@@ -247,8 +473,8 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             if (!Has(role + ".failed")) { Mark("FINAL PASS teammate dream and charm rules"); Flag(role + ".done"); }
             yield break;
         }
-        if (ResourcesCase) {
-            var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(Resources());
+        if (ResourcesCase || DefenderCase) {
+            var checks = new System.Collections.Generic.Stack<IEnumerator>(); checks.Push(DefenderCase ? Defender() : Resources());
             while (checks.Count > 0) {
                 object current = null; bool more;
                 try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
@@ -257,13 +483,34 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 if (current is IEnumerator nested) checks.Push(nested); else yield return current;
             }
             yield return ProbeShutdown.Run(engine, root, role);
-            if (!Has(role + ".failed")) { Mark("FINAL PASS native resources"); Flag(role + ".done"); }
+            if (!Has(role + ".failed")) { Mark(DefenderCase ? (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEFENDER_BARRIER_CHECK")) ?
+                "FINAL PASS defender barrier " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEFENDER_BARRIER_CHECK") :
+                Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEFENDER_ROUTE_INSPECT") == "1" ? "FINAL PASS native route inspection only" : "FINAL PASS defender regression") : "FINAL PASS native resources"); Flag(role + ".done"); }
             yield break;
         }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) {
-            yield return DreamWarriors();
+            var checks = new Stack<IEnumerator>(); checks.Push(Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_CATCHUP") != null ? DreamCatchup() : DreamWarriors());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (Has(role + ".failed")) yield break;
             yield return ProbeShutdown.Run(engine, root, role);
-            if (!Has(role + ".failed")) { Mark("FINAL PASS native dream warriors"); Flag(role + ".done"); }
+            if (!Has(role + ".failed")) { Mark(Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_CATCHUP") != null
+                ? "FINAL PASS shared dream victory catchup and personal essence " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_CATCHUP")
+                : Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_SETTLEMENT") != null
+                ? "FINAL PASS dream settlement " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_SETTLEMENT") + " " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_VARIANT_SCENE")
+                : Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOST_KIN_LIFECYCLE") != null
+                ? "FINAL PASS Lost Kin native death return and personal essence"
+                : Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHAMPION_LIFECYCLE") == "1"
+                ? "FINAL PASS champion native phases personal essence and dream return"
+                : Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_VARIANT_DAMAGE") == "1"
+                ? "FINAL PASS dream variant registration and non-lethal HP convergence only"
+                : Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_VARIANT_SCHEMA") == "1"
+                ? "FINAL PASS dream variant schema observation only" : "FINAL PASS native dream warriors"); Flag(role + ".done"); }
             yield break;
         }
         yield return Room("Crossroads_47");

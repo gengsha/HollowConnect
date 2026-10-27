@@ -10,7 +10,6 @@ using Modding;
 using MonoMod.RuntimeDetour;
 using UnityEngine;
 using Scenes = UnityEngine.SceneManagement.SceneManager;
-using Object = UnityEngine.Object;
 
 namespace HollowConnect;
 
@@ -20,6 +19,7 @@ internal sealed class ResourceShareService : IDisposable {
     private readonly Func<bool> enabled, ready;
     private readonly Func<ResourceClaims> local;
     private readonly Action<string> offer, log;
+    private readonly Action<ResourceSource> feedback;
     private readonly List<Hook> hooks = new List<Hook>();
     private readonly Queue<string> pending = new Queue<string>();
     private readonly HashSet<string> queued = new HashSet<string>(StringComparer.Ordinal);
@@ -29,11 +29,14 @@ internal sealed class ResourceShareService : IDisposable {
     private readonly Queue<string> announcements = new Queue<string>();
     private ResourceSource creating;
     private NativeGrant grant;
-    private bool applying, registered, refresh;
+    private bool applying, registered, refresh, auditBalances;
+    private float retryAfter;
+    private readonly HashSet<string> retryReported = new HashSet<string>(StringComparer.Ordinal);
     private sealed class NativeFlow {
         internal ResourceSource Source;
         internal readonly List<GameObject> RewardUi = new List<GameObject>();
         internal int LastActivityFrame, ReadyFrame = -1;
+        internal bool Duplicate;
     }
     private sealed class NativeGrant {
         internal ResourceSource Source;
@@ -41,9 +44,9 @@ internal sealed class ResourceShareService : IDisposable {
         internal bool Mutated;
     }
     internal ResourceShareService(Func<bool> enabled, Func<bool> ready, Func<ResourceClaims> local,
-        Action<string> offer, Action<string> log) {
+        Action<string> offer, Action<string> log, Action<ResourceSource> feedback = null) {
         this.enabled = enabled; this.ready = ready; this.local = local;
-        this.offer = offer; this.log = log;
+        this.offer = offer; this.log = log; this.feedback = feedback;
     }
     internal void Register() {
         if (registered) return;
@@ -56,6 +59,13 @@ internal sealed class ResourceShareService : IDisposable {
             (Action<Action<SetPlayerDataInt>, SetPlayerDataInt>)((orig, action) => NativeAction(a => orig((SetPlayerDataInt)a), action))));
         hooks.Add(new Hook(typeof(CreateObject).GetMethod("OnEnter"),
             (Action<Action<CreateObject>, CreateObject>)((orig, action) => CreateReward(a => orig((CreateObject)a), action))));
+        hooks.Add(new Hook(typeof(CallMethodProper).GetMethod("OnEnter"),
+            (Action<Action<CallMethodProper>, CallMethodProper>)ShopPayment));
+        hooks.Add(new Hook(typeof(HutongGames.PlayMaker.Actions.SendMessage).GetMethod("OnEnter"),
+            (Action<Action<HutongGames.PlayMaker.Actions.SendMessage>, HutongGames.PlayMaker.Actions.SendMessage>)((orig, action) => {
+                if (DuplicateConversion(action.Fsm, action.functionCall?.FunctionName)) { action.Finish(); return; }
+                orig(action);
+            })));
         // Full-save mode may replay this auth key's older resource balances or
         // pickup markers before this slot's source ledger is imported. The
         // source adapter owns these fields even with permanent sharing off.
@@ -80,14 +90,15 @@ internal sealed class ResourceShareService : IDisposable {
         // Charm ownership belongs to the opt-in, monotonic progress ledger.
         // Full-save/incremental replay must not bypass its room rule.
         if (mapping.PlayerDataIndices.TryGetValue(index, out var name) &&
-            (ResourceCatalog.PreservesPlayerData(name) || ProgressCatalog.IsCharm(name) || name == "charmsOwned")) return;
+            (ResourceCatalog.PreservesPlayerData(name) || ProgressCatalog.IsPickup(name) ||
+             ProgressCatalog.IsMapPurchase(name) || name == "charmsOwned")) return;
         if (mapping.PersistentBoolIndices.TryGetValue(index, out var item) && ResourceCatalog.PreservesPersistent(item.SceneName, item.Id)) return;
         orig(manager, index, value);
     }
     internal void ResetConnection() {
         // Disconnecting must not interrupt an original pickup still releasing
         // control. Its actual receipt belongs to the slot even while offline.
-        pending.Clear(); queued.Clear(); announcements.Clear();
+        pending.Clear(); queued.Clear(); announcements.Clear(); retryReported.Clear(); retryAfter = 0; auditBalances = false;
     }
     internal void ResetSlot() {
         ResetConnection(); inFlight.Clear(); dirtyShop.Clear();
@@ -113,6 +124,7 @@ internal sealed class ResourceShareService : IDisposable {
             case "heartPieces": return ResourceKind.MaskShard;
             case "vesselFragments": return ResourceKind.VesselFragment;
             case "ore": return ResourceKind.PaleOre;
+            case "simpleKeys": return ResourceKind.SimpleKey;
             default: return null;
         }
     }
@@ -122,9 +134,8 @@ internal sealed class ResourceShareService : IDisposable {
     // Run once after the slot is loaded and before advertising initial claims.
     // Saved NPC flags are evidence of prior acquisition only at this boundary;
     // during a conversation they are merely an intention to award later.
-    // For old arena saves, completed without a shiny receipt is ambiguous.
-    // Conservatively regard it as already received, never infer from balances.
-    // This cannot safely compensate an old reward that was actually missed.
+    // A saved completed source is also an entitlement for a join audit. Missing
+    // non-consumable totals are repaired separately after native UI is idle.
     internal bool ImportNativeReceipts() {
         if (!Active || SceneData.instance == null || !NativeIdle || inFlight.Count != 0) return false;
         foreach (var source in ResourceCatalog.Sources) {
@@ -134,10 +145,22 @@ internal sealed class ResourceShareService : IDisposable {
             var savedFlag = source.PlayerFlag != null && PlayerData.instance.GetBool(source.PlayerFlag);
             if (savedPickup || savedFlag) local().TryClaim(source.Id, out _);
         }
+        var pd = PlayerData.instance;
+        var restored = ResourceReconciliation.ImportCompletedCollections(local(), pd.GetInt("charmSlots"),
+            Math.Max(0, pd.GetInt("maxHealthBase") - 5) * 4 + pd.GetInt("heartPieces"),
+            pd.GetInt("MPReserveMax") / 33 * 3 + pd.GetInt("vesselFragments"),
+            pd.GetInt("ore"), pd.GetInt("nailSmithUpgrades"));
+        if (restored > 0) log("Resource audit restored completed collection receipts: " + restored);
+        return true;
+    }
+    internal bool Idle => Active && NativeIdle && inFlight.Count == 0;
+    internal bool Audit() {
+        if (!enabled() || !ready() || !ImportNativeReceipts()) return false;
+        auditBalances = true;
         return true;
     }
     internal void Receive(string sourceId) {
-        if (!Active || !enabled() || !ResourceCatalog.TryGet(sourceId, out _) || !queued.Add(sourceId)) return;
+        if (!Active || !enabled() || !ResourceCatalog.TryGet(sourceId, out _) || local().Contains(sourceId) || !queued.Add(sourceId)) return;
         pending.Enqueue(sourceId);
     }
     // Call from the existing runtime update. No per-frame scene/component scan:
@@ -153,29 +176,111 @@ internal sealed class ResourceShareService : IDisposable {
         }
         // A different source's fragment UI can still hold a cached count and
         // perform rollover later. Serialize all remote grants behind that UI.
-        if (!enabled() || !ready() || !NativeIdle || inFlight.Count != 0) return;
-        var count = pending.Count;
-        while (count-- > 0) {
-            var id = pending.Dequeue();
-            queued.Remove(id);
-            if (!ResourceCatalog.TryGet(id, out var source)) continue;
-            if (!local().Contains(id)) {
-                applying = true;
+        if (!enabled() || !ready() || !NativeIdle || inFlight.Count != 0 || Time.unscaledTime < retryAfter) return;
+        var repairBudget = ResourceCatalog.Sources.Count();
+        for (var i = 0; auditBalances && i < repairBudget; i++) {
+            if (!enabled() || !ready() || !NativeIdle || inFlight.Count != 0) return;
+            var pd = PlayerData.instance;
+            var repair = ResourceReconciliation.NextRepair(local(), pd.GetInt("charmSlots"),
+                Math.Max(0, pd.GetInt("maxHealthBase") - 5) * 4 + pd.GetInt("heartPieces"),
+                pd.GetInt("MPReserveMax") / 33 * 3 + pd.GetInt("vesselFragments"));
+            if (repair != null) {
+                var before = new ResourceBalance(pd, repair);
+                try { applying = true; GrantRemote(repair); }
+                catch (Exception e) {
+                    before.Restore(pd); retryAfter = Time.unscaledTime + 1;
+                    if (retryReported.Add(repair.Id)) log("Resource audit retry queued: " + repair.Id + " (" + e.GetType().Name + ")");
+                    return;
+                } finally { applying = false; }
+                try { PresentRemote(repair, before); feedback?.Invoke(repair); }
+                catch (Exception e) { log("Resource audit presentation: " + repair.Id + " (" + e.GetType().Name + ")"); }
+                continue;
+            }
+            auditBalances = false;
+        }
+        // Settle this finite received batch directly, including fragment
+        // rollover. Never instantiate native collection UI for a remote
+        // receipt: its delayed counters/control callbacks can outlive entry.
+        var batchCount = pending.Count;
+        for (var i = 0; i < batchCount && pending.Count > 0; i++) {
+            if (!enabled() || !ready() || !NativeIdle || inFlight.Count != 0) return;
+            var id = pending.Peek();
+            if (ResourceCatalog.TryGet(id, out var source) && !local().Contains(id)) {
+                var pd = PlayerData.instance;
+                var before = new ResourceBalance(pd, source);
                 try {
+                    applying = true;
                     GrantRemote(source);
                     local().TryClaim(id, out _);
+                } catch (Exception e) {
+                    // Roll back every value touched by the award, using the
+                    // internal setters so another mod's throwing hook cannot
+                    // turn a retry into a second partial grant.
+                    before.Restore(pd);
+                    retryAfter = Time.unscaledTime + 1;
+                    if (retryReported.Add(id)) log("Remote resource retry queued: " + id + " (" + e.GetType().Name + ")");
+                    return;
                 } finally { applying = false; }
+                if (local().Contains(id)) {
+                    retryReported.Remove(id);
+                    // Presentation callbacks cannot roll back a committed
+                    // reward or schedule a duplicate numerical award.
+                    try { PresentRemote(source, before); feedback?.Invoke(source); }
+                    catch (Exception e) { log("Remote resource presentation: " + id + " (" + e.GetType().Name + ")"); }
+                }
             }
-            SetNativeReceipt(source);
-            MarkShopDirty(source);
-            refresh = true;
+            if (local().Contains(id) || !ResourceCatalog.TryGet(id, out _)) { pending.Dequeue(); queued.Remove(id); }
         }
         if (refresh) { refresh = false; RefreshScene(); }
     }
 
+    private void ShopPayment(Action<CallMethodProper> orig, CallMethodProper action) {
+        var fsm = action.Fsm;
+        if (DuplicateConversion(fsm, action.methodName.Value)) { action.Finish(); return; }
+        if (Active && !applying && action.methodName.Value == "TakeGeo" && fsm?.Name == "Confirm Control" &&
+            action.State?.Name == "Deduct Geo and set PD" &&
+            ResourceCatalog.TryPlayerFlag(fsm.Variables.FindFsmString("PD Bool Name")?.Value, out var source) &&
+            (local().Contains(source.Id) || queued.Contains(source.Id))) {
+            // Run the purchase's original animation/receipt path. Only its
+            // payment is skipped when this source was already shared. If it
+            // is queued, the native grant wins and the queue later discards it.
+            action.Finish(); return;
+        }
+        orig(action);
+    }
+    private bool DuplicateConversion(Fsm fsm, string method) {
+        if (!Active || applying || (method != "AddToMaxHealth" && method != "AddToMaxMPReserve")) return false;
+        var kind = method == "AddToMaxHealth" ? ResourceKind.MaskShard : ResourceKind.VesselFragment;
+        var source = Resolve(fsm, kind) ?? (creating?.Kind == kind ? creating : null);
+        return source != null && inFlight.TryGetValue(source.Id, out var flow) && flow.Duplicate;
+    }
+
+    private sealed class ResourceBalance {
+        private static readonly string[] Ints = { "ore", "simpleKeys", "charmSlots", "heartPieces", "vesselFragments",
+            "maxHealthBase", "maxHealth", "health", "prevHealth", "MPReserveMax" };
+        private static readonly string[] Bools = { "heartPieceCollected", "heartPieceMax", "vesselFragmentCollected", "vesselFragmentMax" };
+        private readonly int[] ints;
+        private readonly bool[] bools;
+        private readonly string flag;
+        private readonly bool flagValue;
+        internal readonly int MaxHealthBase, MPReserveMax;
+        internal ResourceBalance(PlayerData pd, ResourceSource source) {
+            ints = Ints.Select(pd.GetIntInternal).ToArray();
+            bools = Bools.Select(pd.GetBoolInternal).ToArray();
+            MaxHealthBase = pd.GetIntInternal("maxHealthBase"); MPReserveMax = pd.GetIntInternal("MPReserveMax");
+            flag = source.PlayerFlag;
+            if (flag != null) flagValue = pd.GetBoolInternal(flag);
+        }
+        internal void Restore(PlayerData pd) {
+            for (var i = 0; i < Ints.Length; i++) pd.SetIntInternal(Ints[i], ints[i]);
+            for (var i = 0; i < Bools.Length; i++) pd.SetBoolInternal(Bools[i], bools[i]);
+            if (flag != null) pd.SetBoolInternal(flag, flagValue);
+        }
+    }
+
     private NativeFlow BeginNativeFlow(ResourceSource source) {
         if (!inFlight.TryGetValue(source.Id, out var flow)) {
-            flow = new NativeFlow { Source = source };
+            flow = new NativeFlow { Source = source, Duplicate = local().Contains(source.Id) };
             inFlight.Add(source.Id, flow);
         }
         flow.LastActivityFrame = Time.frameCount;
@@ -196,8 +301,7 @@ internal sealed class ResourceShareService : IDisposable {
             if (local().Contains(flow.Source.Id)) {
                 // A native SaveState during the animation may have overwritten
                 // an early persistent marker; commit it again after completion.
-                SetNativeReceipt(flow.Source);
-                MarkShopDirty(flow.Source);
+                SetNativeReceipt(flow.Source); MarkShopDirty(flow.Source);
                 refresh = true;
             }
         }
@@ -213,8 +317,8 @@ internal sealed class ResourceShareService : IDisposable {
         var old = PlayerData.instance.GetIntInternal(field);
         var increasing = action is IncrementPlayerDataInt || action is PlayerDataIntAdd add && add.amount.Value > 0 ||
             action is SetPlayerDataInt set && set.value.Value > old;
-        if (!increasing) { orig(action); return; }
         var source = Resolve(action.Fsm, kind.Value) ?? (creating?.Kind == kind ? creating : null);
+        if (!increasing && (source == null || !inFlight.TryGetValue(source.Id, out var existing) || !existing.Duplicate)) { orig(action); return; }
         if (source == null) {
             var key = action.Fsm?.GameObject?.scene.name + "/" + action.Fsm?.GameObject?.name + "/" + action.Fsm?.Name + "/" + action.State?.Name + "/" + field;
             if (unrecognized.Add(key)) log("Resource native endpoint not identified: " + key);
@@ -234,6 +338,7 @@ internal sealed class ResourceShareService : IDisposable {
     private int SetInt(string field, int value) {
         if (!Active || applying || grant == null || grant.Field != field) return value;
         var old = PlayerData.instance.GetIntInternal(field);
+        if (inFlight.TryGetValue(grant.Source.Id, out var flow) && flow.Duplicate) return old;
         if (value <= old) return value; // Native fragment rollover and ore spending remain ordinary writes.
         if (local().Contains(grant.Source.Id)) return old;
         grant.Mutated = true;
@@ -250,9 +355,9 @@ internal sealed class ResourceShareService : IDisposable {
         if (!kind.HasValue) { orig(action); return; }
         var source = isUi ? Resolve(action.Fsm, kind.Value) ?? (creating?.Kind == kind ? creating : null) : ResolveCreated(action.Fsm, kind.Value);
         if (source == null) { orig(action); return; }
-        // The original UI must still be created after its numeric award has
-        // been recorded; only a new instant acquisition may be redundant.
-        if (!isUi && local().Contains(source.Id)) { action.Finish(); return; }
+        // Keep the native instant/UI so its initialized control-release path
+        // still runs. Duplicate UIs skip their counter-dependent display in
+        // EnterState; a zero remainder cannot enter the vessel's 1/2/3 switch.
         var previous = creating; creating = source; var flow = BeginNativeFlow(source);
         try {
             orig(action);
@@ -312,20 +417,25 @@ internal sealed class ResourceShareService : IDisposable {
     }
     private void EnterState(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, Fsm fsm, FsmState state) {
         if (!Active || applying || fsm.GameObject == null) { orig(fsm, state); return; }
-        if (fsm.Name == "Confirm Control" && state.Name == "Deduct Geo and set PD") {
-            var flag = fsm.Variables.FindFsmString("PD Bool Name")?.Value;
-            if (ResourceCatalog.TryPlayerFlag(flag, out var bought) && (local().Contains(bought.Id) || queued.Contains(bought.Id))) {
-                var reset = fsm.States.FirstOrDefault(s => s.Name == "Reset");
-                if (reset != null) { orig(fsm, reset); return; }
+        if (state.Name == "Darken" && (fsm.Name == "Heart Container UI" || fsm.Name == "Vessel Fragment UI")) {
+            var kind = fsm.Name == "Heart Container UI" ? ResourceKind.MaskShard : ResourceKind.VesselFragment;
+            var source = Resolve(fsm, kind) ?? (creating?.Kind == kind ? creating : null);
+            if (source != null && inFlight.TryGetValue(source.Id, out var flow) && flow.Duplicate) {
+                // Init has resolved Hero and the UI's own objects. Finish the
+                // native hero animation and let Destroy Self restore gravity,
+                // invincibility, pause and input. Never fabricate a piece for
+                // the UI or release control before the native pickup is done.
+                var end = fsm.States.FirstOrDefault(s => s.Name == "Hero Anim End");
+                if (end != null) { fsm.SetState(end.Name); return; }
             }
         }
-        // Get is the native control-taking state. Retire an already-awarded
-        // physical pickup before it can relinquish control or play a duplicate UI.
+        // A shared source still runs its native control-taking state. The
+        // numeric PlayerData write is intercepted in NativeAction/SetInt,
+        // while the original animation and control-release path remain intact.
         if (state.Name == "Get" && (fsm.Name == "Heart Container Control" || fsm.Name == "Vessel Fragment Control" || fsm.Name == "Shiny Control")) {
-            foreach (var kind in new[] { ResourceKind.MaskShard, ResourceKind.VesselFragment, ResourceKind.CharmNotch, ResourceKind.PaleOre }) {
+            foreach (var kind in new[] { ResourceKind.MaskShard, ResourceKind.VesselFragment, ResourceKind.CharmNotch, ResourceKind.PaleOre, ResourceKind.SimpleKey }) {
                 var source = Resolve(fsm, kind);
                 if (source == null) continue;
-                if (local().Contains(source.Id)) { fsm.GameObject.SetActive(false); return; }
                 BeginNativeFlow(source); break;
             }
         }
@@ -333,21 +443,22 @@ internal sealed class ResourceShareService : IDisposable {
     }
 
     private void GrantRemote(ResourceSource source) {
-        var pd = PlayerData.instance; var hero = HeroController.instance;
+        var pd = PlayerData.instance;
         switch (source.Kind) {
             case ResourceKind.PaleOre:
                 pd.SetInt("ore", pd.GetInt("ore") + 1); break;
+            case ResourceKind.SimpleKey:
+                pd.SetInt("simpleKeys", pd.GetInt("simpleKeys") + 1); break;
             case ResourceKind.CharmNotch:
                 pd.SetInt("charmSlots", Math.Min(11, pd.GetInt("charmSlots") + 1));
-                GameManager.instance.RefreshOvercharm();
-                PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK"); break;
+                break;
             case ResourceKind.MaskShard:
                 pd.SetBool("heartPieceCollected", true);
                 var masks = (pd.GetInt("maxHealthBase") - 5) * 4 + pd.GetInt("heartPieces");
                 if (masks >= 16) break;
                 var pieces = pd.GetInt("heartPieces") + 1;
                 pd.SetInt("heartPieces", pieces % 4);
-                if (pieces >= 4) { hero.AddToMaxHealth(1); PlayMakerFSM.BroadcastEvent("MAX HP UP"); }
+                if (pieces >= 4) pd.AddToMaxHealth(1);
                 break;
             case ResourceKind.VesselFragment:
                 pd.SetBool("vesselFragmentCollected", true);
@@ -355,7 +466,42 @@ internal sealed class ResourceShareService : IDisposable {
                 if (vessels >= 9) break;
                 var fragments = pd.GetInt("vesselFragments") + 1;
                 pd.SetInt("vesselFragments", fragments % 3);
-                if (fragments >= 3) { hero.AddToMaxMPReserve(33); PlayMakerFSM.BroadcastEvent("NEW SOUL ORB"); }
+                if (fragments >= 3) pd.AddToMaxMPReserve(33);
+                break;
+        }
+        // Arena completion is progression that gates later trials. It is safe
+        // to mirror that flag for a shared completion, while ordinary pickup
+        // flags remain local so the original object/FSM stays available and
+        // its later positive write can still be suppressed by the ledger.
+        if (source.PlayerFlag != null && source.Id.IndexOf(":colosseum", StringComparison.Ordinal) >= 0) {
+            pd.SetBool(source.PlayerFlag, true);
+            RepairColosseumRegistrations(pd);
+        }
+    }
+    internal static void RepairColosseumRegistrations(PlayerData pd) {
+        ColosseumProgress.RepairRegistrations(pd.GetBool, key => {
+            pd.SetBool(key, true);
+            if (Scenes.GetActiveScene().name != "Room_Colosseum_01") return;
+            var trial = key.Substring("colosseum".Length, key.Length - "colosseum".Length - "Opened".Length);
+            // Init Sprite has already run when catchup happens in the lobby.
+            // Use this board's native chain-cut animation to refresh it locally.
+            foreach (var fsm in UnityEngine.Object.FindObjectsOfType<PlayMakerFSM>().Where(f =>
+                f.gameObject.scene.name == "Room_Colosseum_01" && f.name == trial + " Trial Board" && f.FsmName == "Unlock Anim"))
+                fsm.SendEvent("UNLOCK " + trial.ToUpperInvariant());
+        });
+    }
+    private void PresentRemote(ResourceSource source, ResourceBalance before) {
+        switch (source.Kind) {
+            case ResourceKind.CharmNotch:
+                GameManager.instance.RefreshOvercharm();
+                PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK"); break;
+            case ResourceKind.MaskShard:
+                if (PlayerData.instance.GetInt("maxHealthBase") > before.MaxHealthBase)
+                    PlayMakerFSM.BroadcastEvent("MAX HP UP");
+                break;
+            case ResourceKind.VesselFragment:
+                if (PlayerData.instance.GetInt("MPReserveMax") > before.MPReserveMax)
+                    PlayMakerFSM.BroadcastEvent("NEW SOUL ORB");
                 break;
         }
     }
@@ -369,42 +515,11 @@ internal sealed class ResourceShareService : IDisposable {
         } finally { applying = before; }
     }
     private void RefreshScene() {
-        var scene = Scenes.GetActiveScene();
-        foreach (var persistent in Object.FindObjectsOfType<PersistentBoolItem>(true)) {
-            if (persistent.gameObject.scene != scene) continue;
-            var id = persistent.persistentBoolData.id;
-            if (string.IsNullOrEmpty(id)) id = NativeName(persistent.name);
-            foreach (var kind in new[] { ResourceKind.MaskShard, ResourceKind.VesselFragment, ResourceKind.CharmNotch, ResourceKind.PaleOre }) {
-                if (!ResourceCatalog.TryPersistent(scene.name, id, kind, out var source) || !local().Contains(source.Id) || inFlight.ContainsKey(source.Id)) continue;
-                // SaveState reads this FSM field, not just persistentBoolData.
-                // Commit both before OnDisable/unload can overwrite the marker.
-                foreach (var nativeFsm in persistent.GetComponents<PlayMakerFSM>()) {
-                    var activated = nativeFsm.FsmVariables.FindFsmBool("Activated");
-                    if (activated != null) activated.Value = true;
-                }
-                persistent.persistentBoolData.activated = true;
-                persistent.gameObject.SetActive(false);
-            }
-        }
-        // Stagnest's native vessel does not have PersistentBoolItem.
-        if (scene.name == "Cliffs_03" && local().Contains("vessel:vesselFragStagNest")) {
-            var stagVessel = GameObject.Find("Vessel Fragment Stagnest (1)");
-            if (stagVessel != null && stagVessel.scene == scene) stagVessel.SetActive(false);
-        }
-        foreach (var shiny in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene == scene && f.FsmName == "Shiny Control")) {
-            var flag = shiny.FsmVariables.FindFsmString("PD Bool Name")?.Value;
-            if (ResourceCatalog.TryPlayerFlag(flag, out var source) && source.Scene == scene.name &&
-                local().Contains(source.Id) && !inFlight.ContainsKey(source.Id)) shiny.gameObject.SetActive(false);
-        }
-        // A world ore/shard pickup must not rebuild an unrelated open shop.
-        if (dirtyShop.Count == 0) return;
-        foreach (var confirm in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene == scene && f.FsmName == "Confirm Control")) {
-            var flag = confirm.FsmVariables.FindFsmString("PD Bool Name")?.Value;
-            if (ResourceCatalog.TryPlayerFlag(flag, out var source) && dirtyShop.Contains(source.Id) && local().Contains(source.Id) && confirm.gameObject.activeInHierarchy)
-                confirm.SetState("Reset");
-        }
-        foreach (var itemList in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene == scene && f.FsmName == "Item List Control" && f.gameObject.activeInHierarchy))
-            itemList.SendEvent("RESET");
+        // A server claim is a logical receipt for this save slot. It must not
+        // mutate the local SceneData/active hierarchy: the item stays visible
+        // and its original FSM can run later, with the positive resource
+        // write suppressed by NativeAction. Native receipts are still written
+        // by CompleteNativeFlows after an actual local interaction.
         dirtyShop.Clear();
     }
 }

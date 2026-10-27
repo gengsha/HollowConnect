@@ -6,4 +6,6 @@
 - **HkmpPouch**：https://github.com/PrashantMohta/HkmpPouch ，仅检查接口与用途，没有将其作为本版运行依赖或复制其实现。
 - 用户提供的丝之歌联机包仅用于确认模组结构与用户描述的需求，未将其游戏程序集或实现复制到 HollowConnect。
 
-HollowConnect 的自有代码见 `src/HollowConnect`、`src/HollowConnect.Core`、`tests` 和 `scripts`，采用根目录 MIT 许可。上游 HKMP 的修改继续受其原 LGPL 许可约束。
+HollowConnect 的自有代码（包括 `src/HollowConnect`、`src/HollowConnect.Core`、`src/HollowConnect.Installer`、`tests` 和 `scripts`）自本次开源起采用 **GNU General Public License v3.0（GPL-3.0-only）**，完整条款见根目录 [LICENSE](LICENSE)。Copyright (c) 2026 HollowConnect contributors。
+
+上游 HKMP 及其修改继续受原 LGPL-2.1 许可约束，原文见 [HKMP-LICENSE](HKMP-LICENSE)。本项目的 GPL-3.0 许可声明不替代第三方代码、依赖或游戏资源的原有许可。

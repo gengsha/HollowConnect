@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-25",
+  "issue": "Colosseum shared completion leaves its own registration closed",
+  "productionFrozen": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "core": {
+    "failed": 0,
+    "passed": 3,
+    "selection": "E:\\projects\\hollowConnect\\.analysis\\colosseum-progress-20261025\\core-selection.txt",
+    "log": "E:\\projects\\hollowConnect\\.analysis\\colosseum-progress-20261025\\core-final4.log"
+  },
+  "runtime": {
+    "name": "Silver completion catchup, old registration repair, live lobby refresh and native repeat-trial prompt",
+    "run": "colosseum-progress-final4-20261025",
+    "options": {
+      "HOLLOWCONNECT_COLOSSEUM_PROGRESS": "repair"
+    },
+    "status": "passed",
+    "started": "2026-10-25T07:59:28.2790901Z",
+    "runnerPid": 22444,
+    "runPath": "E:\\projects\\hollowConnect\\.test-results\\colosseum-progress-final4-20261025",
+    "error": null,
+    "binaries": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "5B7CADD781FC91EC712D77F885FE2D5475F062BD6F3580411E004FDC527F3F46"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "4B8AD15A8AF916771DED99AE679390D994B1383C8C5BD6C211ED4702206BAC32"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+      }
+    ],
+    "probeHash": "1297B0FF00233E917B830E5347DCF6A26627687C60C90B68E2951F531EF921F3",
+    "dependencies": [
+      {
+        "name": "Assembly-CSharp.dll",
+        "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+        "size": 4064768
+      },
+      {
+        "name": "PlayMaker.dll",
+        "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+        "size": 212480
+      }
+    ],
+    "strictLogs": "passed",
+    "ended": "2026-10-25T08:00:03.7868738Z"
+  },
+  "endpoints": [
+    {
+      "finalPass": true,
+      "role": "host",
+      "log": "E:\\projects\\hollowConnect\\.test-results\\colosseum-progress-final4-20261025\\host.log",
+      "done": true
+    },
+    {
+      "finalPass": true,
+      "role": "guest",
+      "log": "E:\\projects\\hollowConnect\\.test-results\\colosseum-progress-final4-20261025\\guest.log",
+      "done": true
+    }
+  ],
+  "scope": [
+    "Real UDP late join: host completed Silver, guest completed Bronze only",
+    "Shared Silver receipt and registration; one ore, no extra notch/fee",
+    "Old acknowledged completion repaired without refunding spent ore",
+    "Native Silver chain-cut and sprite refresh in already loaded lobby",
+    "Native interaction produces repeat-trial prompt; decline restores control",
+    "Gold remains normally unpaid; no fabricated Gold completion"
+  ],
+  "retainedFailures": [
+    {
+      "run": "colosseum-progress-final-20261025",
+      "classification": "fixture",
+      "reason": "Interaction pressed before landing/range; direct sync checks passed"
+    },
+    {
+      "run": "colosseum-progress-final2-20261025",
+      "classification": "fixture",
+      "reason": "Placed hero within hollow terrain below y=5 floor; fell to lower floor"
+    },
+    {
+      "run": "colosseum-progress-final3-20261025",
+      "classification": "fixture-diagnostic",
+      "reason": "Collider diagnostics confirmed lower-floor placement; production checks passed"
+    }
+  ],
+  "excluded": [
+    "Full trial waves",
+    "Full room matrix",
+    "Three-client runtime",
+    "Packaging",
+    "Installation",
+    "Private save edits"
+  ],
+  "notes": [
+    "Earlier runtime production hashes are development evidence only after live-lobby refresh change",
+    "Smoke rebuilt only after fixture changes; final production hashes verified"
+  ]
+}

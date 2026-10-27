@@ -1,4 +1,4 @@
-﻿using Hkmp.Util;
+using Hkmp.Util;
 using UnityEngine;
 
 namespace Hkmp.Animation.Effects;
@@ -12,7 +12,7 @@ internal class WallJump : AnimationEffect {
         var playerEffects = playerObject.FindGameObjectInChildren("Effects");
 
         var wallPuffPrefab = HeroController.instance.wallPuffPrefab;
-        var wallPuff = Object.Instantiate(
+        var wallPuff = RemotePlayerVisuals.Instantiate(
             wallPuffPrefab,
             playerEffects.transform
         );

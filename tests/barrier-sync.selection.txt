@@ -1,0 +1,4 @@
+avatar room and both participants' visits survive all scene packets
+queued snapshots freeze generic data, FSM dictionaries and scale
+dense boss action batches retain more than 255 ordered updates and following fields
+native boss completion is reliable and retained in room snapshots

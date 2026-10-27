@@ -497,6 +497,10 @@ internal class AnimationManager {
     /// <param name="frame">The frame that the animation should play from.</param>
     /// <param name="effectInfo">A boolean array containing effect info for the animation.</param>
     public void OnPlayerAnimationUpdate(ushort id, int clipId, int frame, bool[] effectInfo) {
+        // Pooled native effects can enable themselves before Track assigns
+        // their marker, just like active prefabs cloned by Instantiate.
+        using var feedbackScope = RemotePlayerFeedback.BeginCreation();
+        using var ownershipScope = AttackOwnership.Creating(id);
         UpdatePlayerAnimation(id, clipId, frame);
 
         var animationClip = (AnimationClip) clipId;

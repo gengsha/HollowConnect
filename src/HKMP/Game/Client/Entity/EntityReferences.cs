@@ -83,6 +83,13 @@ internal static class EntityReferences {
         }
         return null;
     }
+    internal static bool IsReplica(GameObject go) {
+        if (go == null) return false;
+        // Retained bindings also cover replica parts detached by native FSMs.
+        if (PartsByObject.TryGetValue(go.GetInstanceID(), out var part) && part.Client == go) return true;
+        var entity = Owner(go);
+        return entity?.Object.Client != null && go.transform.IsChildOf(entity.Object.Client.transform);
+    }
     internal static string Capture(GameObject go) {
         if (go == null) return "";
         if (!go.scene.IsValid()) return "@local"; // Serialized prefab, retain the local asset reference.

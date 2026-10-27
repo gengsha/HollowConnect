@@ -13,6 +13,7 @@ internal class FsmPatcher {
     /// </summary>
     public void RegisterHooks() {
         On.PlayMakerFSM.OnEnable += OnFsmEnable;
+        On.HutongGames.PlayMaker.Actions.BoolTest.OnEnter += OnRangeTest;
     }
 
     /// <summary>
@@ -20,6 +21,17 @@ internal class FsmPatcher {
     /// </summary>
     public void DeregisterHooks() {
         On.PlayMakerFSM.OnEnable -= OnFsmEnable;
+        On.HutongGames.PlayMaker.Actions.BoolTest.OnEnter -= OnRangeTest;
+    }
+
+    private static void OnRangeTest(On.HutongGames.PlayMaker.Actions.BoolTest.orig_OnEnter orig, BoolTest action) {
+        if (!CoopContext.LocalWorldOnly &&
+            (action.Fsm.Name == "break_floor" && action.State.Name == "Check If Nail" ||
+             action.Fsm.Name == "Switch Control" && (action.State.Name == "Range" || action.State.Name == "Check If Nail")) &&
+            System.Linq.Enumerable.FirstOrDefault(System.Linq.Enumerable.OfType<BoolTest>(action.State.Actions)) == action) {
+            action.Finish(); return;
+        }
+        orig(action);
     }
 
     /// <summary>
@@ -44,25 +56,6 @@ internal class FsmPatcher {
             triggerAction.collideTag.UseVariable = false;
         }
         
-        // Patch the break floor FSM to make sure the Hero Range is not checked so remote players can break the floor
-        if (self.Fsm.Name.Equals("break_floor")) {
-            var boolTestAction = self.GetAction<BoolTest>("Check If Nail", 0);
-            if (boolTestAction != null) {
-                self.RemoveAction("Check If Nail", 0);
-            }
-        }
-
-        // Patch Switch Control FSMs to ignore the range requirements to allow remote players from hitting them
-        if (self.Fsm.Name.Equals("Switch Control")) {
-            if (self.GetState("Range") != null) {
-                self.RemoveFirstAction<BoolTest>("Range");
-            }
-
-            if (self.GetState("Check If Nail") != null) {
-                self.RemoveFirstAction<BoolTest>("Check If Nail");
-            }
-        }
-
         // Patch the Mantis Throne Main to not rely on animation events from the local player in case another
         // player challenges the boss
         if (self.name.Equals("Mantis Lord Throne 2") && self.Fsm.Name.Equals("Mantis Throne Main")) {
@@ -98,6 +91,8 @@ internal class FsmPatcher {
             // Remove the original watch animation action
             self.RemoveFirstAction<Tk2dWatchAnimationEvents>("End Challenge");
         }
+
+        if (CoopContext.LocalWorldOnly) return;
 
         // Patch the Toll Machine FSM to set the 'activated' bool earlier in the FSM so that it synchronises better
         if (self.name.StartsWith("Toll Gate Machine") && self.Fsm.Name.Equals("Toll Machine")) {

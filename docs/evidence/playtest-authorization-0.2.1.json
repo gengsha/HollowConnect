@@ -1,0 +1,53 @@
+{
+  "version": "0.2.1",
+  "action": "package-for-user-playtest",
+  "userRequest": "打包0.2.1",
+  "scope": "Package current workspace fixes as complete 0.2.1 Windows and source archives, retaining the established playtest channel and reported limitations. Incremental build and package integrity checks; no game retest, installation or publishing.",
+  "existingChannelSource": "docs/evidence/playtest-authorization-0.1.39.json",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap"
+  ],
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "972BC86BF44B693DCAF4096E475CD11DE5B1E36CB3C2C05BC564DCC8B48590D7"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "DDEFBF501E177C2D36450ECF711637CBBF687004E342A78C8A77CE97A223268B"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/evidence/development-validation-0.2.1.json",
+      "sha256": "ED0E13DEAF767BC7E363DB5DE5085E9EF6CE7EE11CBD6C85F17F4B63CD16E189"
+    }
+  ],
+  "createdAtUtc": "2026-10-26T07:30:58.2978545Z"
+}

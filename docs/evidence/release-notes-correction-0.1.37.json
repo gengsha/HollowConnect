@@ -1,0 +1,236 @@
+{
+  "version": "0.1.37",
+  "kind": "documentation-correction",
+  "createdAtUtc": "2026-10-24T17:38:32.7065633Z",
+  "productionBinariesChanged": false,
+  "runtimeRetestPerformed": false,
+  "scope": [
+    "Add aerial-rescue placement and support-loss fix to changelog.",
+    "Describe four-source simple-key sharing, personal balances and four personal locks; remove obsolete shared Pleasure House lock wording.",
+    "Describe common encounter death-counter and four-scene summoner scope, separate full runtime cases from registration-only checks.",
+    "Update historical report delivery status without changing their recorded hashes or results."
+  ],
+  "previousDeliveredArchives": [
+    {
+      "Path": "E:\\projects\\hollowConnect\\dist\\HollowConnect-0.1.37-windows.zip",
+      "Hash": "C8063D55B8E9EF9FF26301BE92FF7BB085C18F1D7C5AF058ADF07E2755ABA1B1"
+    },
+    {
+      "Path": "E:\\projects\\hollowConnect\\dist\\HollowConnect-0.1.37-source.zip",
+      "Hash": "DAB4C24452D03EE219917C3E21D06C7531613213B5C66030395BDA2D1AB14AB6"
+    }
+  ],
+  "preservedAt": ".analysis/release-notes-0.1.37-20261025/original",
+  "originalPackagedBinaryChecks": [
+    {
+      "passed": true,
+      "check": "aerial rescue method FindStoryAirRescuePosition"
+    },
+    {
+      "passed": true,
+      "check": "aerial rescue method StoryAirRoute"
+    },
+    {
+      "passed": true,
+      "check": "aerial rescue method StoryAirSpace"
+    },
+    {
+      "passed": true,
+      "check": "ground-first search calls aerial fallback"
+    },
+    {
+      "passed": true,
+      "check": "remote source grant includes personal simpleKeys award"
+    },
+    {
+      "passed": true,
+      "check": "key source key:slySimpleKey"
+    },
+    {
+      "passed": true,
+      "check": "key source Ruins1_17"
+    },
+    {
+      "passed": true,
+      "check": "key source Abyss_20"
+    },
+    {
+      "passed": true,
+      "check": "key source key:gotLurkerKey"
+    },
+    {
+      "passed": true,
+      "check": "personal lock jijiDoorUnlocked"
+    },
+    {
+      "passed": true,
+      "check": "personal lock bathHouseOpened"
+    },
+    {
+      "passed": true,
+      "check": "personal lock openedWaterwaysManhole"
+    },
+    {
+      "passed": true,
+      "check": "personal lock godseekerUnlocked"
+    },
+    {
+      "passed": true,
+      "check": "encounter NativeDeathApplied"
+    },
+    {
+      "passed": true,
+      "check": "encounter NativeWaveAction"
+    },
+    {
+      "passed": true,
+      "check": "encounter summoner network component"
+    }
+  ],
+  "historicalEvidence": [
+    "docs/evidence/simple-key-sharing-2026-10-24.json",
+    "docs/evidence/aerial-rescue-fix-2026-10-24.json",
+    "docs/evidence/encounter-softlock-fix-2026-10-24.json",
+    "docs/evidence/colosseum-entry-gate-fix-2026-10-25.json"
+  ],
+  "finalRuntimeEvidence": "docs/evidence/runtime-room-0.1.37.json",
+  "productionSourceAudit": {
+    "baseline": "dist/HollowConnect-0.1.36-source.zip",
+    "compared": "revision1/HollowConnect-0.1.37-source.zip",
+    "filesCompared": "src/**/*.cs, src/**/*.json, src/**/*.csproj including additions and deletions",
+    "productionChanges": [
+      {
+        "kind": "modified",
+        "releaseNote": "简单钥匙来源、个人门锁、旧档来源核对",
+        "path": "src/HollowConnect.Core/ProgressLedger.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "简单钥匙来源、个人门锁、旧档来源核对",
+        "path": "src/HollowConnect.Core/ResourceClaims.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "简单钥匙来源、个人门锁、旧档来源核对",
+        "path": "src/HollowConnect.Core/ResourceReconciliation.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "版本与网络标识",
+        "path": "src/HollowConnect/CoopMod.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "空战/窄台救援；CoopRuntime 同时移除旧共享开门提示",
+        "path": "src/HollowConnect/CoopRuntime.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "简单钥匙来源结算、领取保护及原版提示",
+        "path": "src/HollowConnect/ResourceNotifications.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "简单钥匙来源结算、领取保护及原版提示",
+        "path": "src/HollowConnect/ResourceShareService.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "空战/窄台救援；CoopRuntime 同时移除旧共享开门提示",
+        "path": "src/HollowConnect/StoryRescuePlacement.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战召唤器与斗兽场入口注册",
+        "path": "src/HKMP/Resource/entity-registry.json"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Server/ServerEntityData.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Server/ServerManager.cs"
+      },
+      {
+        "kind": "added",
+        "releaseNote": "银行家交谈保护",
+        "path": "src/HKMP/Game/Client/Entity/BankerDialogue.cs"
+      },
+      {
+        "kind": "added",
+        "releaseNote": "斗兽场本机入口与迟到入场碰撞",
+        "path": "src/HKMP/Game/Client/Entity/ColosseumEntrance.cs"
+      },
+      {
+        "kind": "added",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/EncounterSummonState.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/Entity.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "银行家交谈保护与遭遇战召唤事件",
+        "path": "src/HKMP/Game/Client/Entity/EntityHooks.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "斗兽场本机入口与迟到入场碰撞",
+        "path": "src/HKMP/Game/Client/Entity/EntityManager.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/EntityType.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "斗兽场本机入口与迟到入场碰撞",
+        "path": "src/HKMP/Game/Client/Entity/LocalBarrierEvents.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/LocalBattleCompletion.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/Component/ComponentFactory.cs"
+      },
+      {
+        "kind": "added",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/Component/EncounterSummonComponent.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/Component/EntityComponent.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/Component/HealthManagerComponent.cs"
+      },
+      {
+        "kind": "modified",
+        "releaseNote": "遭遇战可靠召唤、接管/迟入及早期原生死亡计数",
+        "path": "src/HKMP/Game/Client/Entity/Action/FsmActionHooks.cs"
+      }
+    ],
+    "additionalIndependentFeaturesFound": 0,
+    "additionalDetails": [
+      "Narrow-perch rescue accepts a safe airborne nail approach.",
+      "Legacy simple-key sources are imported from native source markers, never inferred from balances or unlocked-door count.",
+      "Sharing-off acquisitions remain local; shared keys use native resource icon/name notification."
+    ],
+    "notes": "Historical specialty records retain their original binary hashes; this is source/documentation audit, not new runtime testing."
+  }
+}

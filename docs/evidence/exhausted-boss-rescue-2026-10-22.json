@@ -1,0 +1,276 @@
+{
+  "date": "2026-10-22",
+  "settings": {
+    "rescueLimit": 3,
+    "spectateAfterExhaustion": true,
+    "version": "0.1.31"
+  },
+  "change": "Recognize live registered bosses in current room native _boss additive scenes",
+  "baseline": {
+    "classification": "confirmed runtime detection defect",
+    "sourceScene": "Fungus3_23_boss",
+    "runPath": ".test-results/exhausted-20261022-preflight-e",
+    "production": [
+      {
+        "name": "HKMP.dll",
+        "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+      },
+      {
+        "name": "HollowConnect.dll",
+        "sha256": "02C0FA82609ABF4673EC5845144CE95E2D95BC8B4E3482D78A17D3BCBF76E955"
+      },
+      {
+        "name": "HollowConnect.Core.dll",
+        "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+      }
+    ],
+    "activeBoss": "TraitorLord",
+    "inBossEncounter": false
+  },
+  "core": {
+    "selection": ".analysis/exhausted-boss-20261022/core-selection.txt",
+    "passed": 26,
+    "failed": 0,
+    "log": ".analysis/exhausted-boss-20261022/core.log"
+  },
+  "cases": [
+    {
+      "endpoints": [
+        {
+          "logSha256": "CCD71987A443CF42552699DB9579A8391C0607AF6C5B0CF90B0C1D7AB9C826E6",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-host-a\\host.log",
+          "role": "host"
+        },
+        {
+          "logSha256": "9D82A6303D9ECE27CB748791D482DBDC566E2CDE1F976A99C77C1AFE19243C3D",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-host-a\\guest.log",
+          "role": "guest"
+        }
+      ],
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-host-a",
+      "started": "2026-10-22T12:56:44.591593Z",
+      "options": {
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_CHECK": "exhaustion",
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_AUTHORITY": "host"
+      },
+      "ended": "2026-10-22T12:57:57.424993Z",
+      "name": "host",
+      "probeHash": "3C823A5916053A43B7FF6FA5F9FECD421FD5798B06CDF7769F3E7A2FDFAD1FFF",
+      "strictLogs": "passed",
+      "status": "passed",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "89FBA9C55526CE87FFCF2E0EAF1DA77DD98A141EC721EB042E71446412745AD2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+        }
+      ]
+    },
+    {
+      "endpoints": [
+        {
+          "logSha256": "3B32D51ECB05EA2DDDA0F9B5605500A5B49F31616DB3467570D94789FF13797B",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-guest-a\\host.log",
+          "role": "host"
+        },
+        {
+          "logSha256": "C7DCAD7991D0C918401BE9DB309E3F4C24F8281818E3B94385249EC0E26F760A",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-guest-a\\guest.log",
+          "role": "guest"
+        }
+      ],
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-guest-a",
+      "started": "2026-10-22T12:59:27.4465994Z",
+      "options": {
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_AUTHORITY": "guest",
+        "HOLLOWCONNECT_EXHAUSTED_BOSS_CHECK": "exhaustion"
+      },
+      "ended": "2026-10-22T13:00:37.8815533Z",
+      "name": "guest",
+      "probeHash": "3C823A5916053A43B7FF6FA5F9FECD421FD5798B06CDF7769F3E7A2FDFAD1FFF",
+      "strictLogs": "passed",
+      "status": "passed",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "89FBA9C55526CE87FFCF2E0EAF1DA77DD98A141EC721EB042E71446412745AD2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+        }
+      ]
+    },
+    {
+      "endpoints": [
+        {
+          "logSha256": "8A07378214A8FD0AD13B672C4A2BF2D8965F899ABA5350E79622F20E6B418733",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-no-spectate-a\\host.log",
+          "role": "host"
+        },
+        {
+          "logSha256": "2354A9281638D5A0BFEDC7A38CFFB3CB68D7CD5887E45152835AF9FC4847F254",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-no-spectate-a\\guest.log",
+          "role": "guest"
+        }
+      ],
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-no-spectate-a",
+      "started": "2026-10-22T13:00:38.3008787Z",
+      "options": {
+        "HOLLOWCONNECT_RESCUE_RULE_CHECK": "no-spectate"
+      },
+      "ended": "2026-10-22T13:01:17.108308Z",
+      "name": "no-spectate",
+      "probeHash": "3C823A5916053A43B7FF6FA5F9FECD421FD5798B06CDF7769F3E7A2FDFAD1FFF",
+      "strictLogs": "passed",
+      "status": "passed",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "89FBA9C55526CE87FFCF2E0EAF1DA77DD98A141EC721EB042E71446412745AD2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+        }
+      ]
+    },
+    {
+      "endpoints": [
+        {
+          "logSha256": "9661F89C27952DCEE5C55378672D00E0A6F372E1FC5A91B440EACDF72CA7F0CE",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-spectator-wipe-a\\host.log",
+          "role": "host"
+        },
+        {
+          "logSha256": "34B8763CD6C9A6B8A54692020CF1D61CCFBC3CFB836EAFFBB0D6F9AB4B9EDA23",
+          "finalPass": true,
+          "done": true,
+          "log": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-spectator-wipe-a\\guest.log",
+          "role": "guest"
+        }
+      ],
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\exhausted-20261022-spectator-wipe-a",
+      "started": "2026-10-22T13:01:17.5465412Z",
+      "options": {
+        "HOLLOWCONNECT_RESCUE_RULE_CHECK": "spectator-wipe"
+      },
+      "ended": "2026-10-22T13:02:04.0698264Z",
+      "name": "spectator-wipe",
+      "probeHash": "3C823A5916053A43B7FF6FA5F9FECD421FD5798B06CDF7769F3E7A2FDFAD1FFF",
+      "strictLogs": "passed",
+      "status": "passed",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7268B8F05A4947B36384D8A8B0D2472A9BCE9E176CAE0B2C2DF4E13C6CAE2BBB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "89FBA9C55526CE87FFCF2E0EAF1DA77DD98A141EC721EB042E71446412745AD2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+        }
+      ]
+    }
+  ],
+  "gameDependencies": [
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "length": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "length": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+      "length": 1141248,
+      "sha256": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "length": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "length": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+      "length": 1141248,
+      "sha256": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+    }
+  ],
+  "testSources": [
+    {
+      "path": "E:\\projects\\hollowConnect\\tests\\Smoke\\ExhaustedBossChecks.cs",
+      "sha256": "2770EE879C5979CD9F949DB900F081FAEDD2B4318792B6DECD09FC997C00893D"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueProbe.cs",
+      "sha256": "DEC71A4EDE04D8811342423AD3FC31D739C81AB18B2F7DD31848B583C1AA44C5"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueRuleChecks.cs",
+      "sha256": "C0483F4BA31B7D073DC7EDEC3F736CE971D1DE9C9729E788234DEB29F364F32B"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\tests\\Smoke\\Run-Two.ps1",
+      "sha256": "45356DF0556D26704988D3EFFCBC9C9BE750837FE950A83E13848AEF280C3B81"
+    },
+    {
+      "path": "E:\\projects\\hollowConnect\\tests\\Smoke\\Assert-ProbeLogs.ps1",
+      "sha256": "AC2A85B29096DD5588EDAB98377FEBED51C80AE767E2A49CB71F132506DB7C26"
+    }
+  ],
+  "quotaFinding": "Both host and guest consumed exactly three successful rescues per cycle, fourth death spectated, actual bench rest restored three; no independent one-death quota defect reproduced",
+  "limitations": [
+    "isolated game copies and local UDP only",
+    "test-provided position, lethal death and attacks",
+    "not a manual full fight, all-boss audit, three-player, FRP or save disk-reload test"
+  ],
+  "packaged": false,
+  "installed": false
+}

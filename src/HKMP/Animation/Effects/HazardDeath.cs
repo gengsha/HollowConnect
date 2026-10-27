@@ -32,6 +32,7 @@ internal class HazardDeath : AnimationEffect {
             // Spawn the spike death object relative to the player object
             var spikeDeathPrefab = HeroController.instance.spikeDeathPrefab;
             var spikeDeath = spikeDeathPrefab.Spawn(playerObject.transform.position);
+            RemotePlayerVisuals.Track(spikeDeath);
 
             var spikeDeathFsm = spikeDeath.LocateMyFSM("Knight Death Control");
 
@@ -57,7 +58,7 @@ internal class HazardDeath : AnimationEffect {
             var acidDeathPrefab = HeroController.instance.acidDeathPrefab;
 
             // Spawn the acid death object relative to the player object
-            var acidDeath = Object.Instantiate(
+            var acidDeath = RemotePlayerVisuals.Instantiate(
                 acidDeathPrefab,
                 playerObject.transform.position,
                 Quaternion.identity

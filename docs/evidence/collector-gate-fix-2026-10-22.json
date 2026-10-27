@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-22",
+  "issue": "Collector terminal event blocked for local encounter controller and arena gates",
+  "status": "fixed",
+  "report": "docs/COLLECTOR-GATE-FIX-2026-10-22.md",
+  "buildPath": "src/HollowConnect/bin/Release/net472",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "EEB499496214BD40CE07147A2EF93C02B341D42D607377A47C12ECEC137A42DD"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "CDDCDDE598C9A1A20D2D3FE32CCCBFCC5431091D5E24463DA982ABFF46FF5CB9"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+    }
+  ],
+  "smokeSha256": "8FA56E6C42C42F27CCA504A229384B91890F1555E8FEF200E880F7B57B68F287",
+  "core": {
+    "passed": 3,
+    "selection": ".analysis/collector-gate-fix-20261023/core.selection.txt",
+    "failed": 0,
+    "log": ".analysis/collector-gate-fix-20261023/core-final.log"
+  },
+  "runtime": {
+    "shareProgress": false,
+    "run": "E:\\projects\\hollowConnect\\.test-results\\collector-gate-fix-20261023-direct-final-a",
+    "started": "2026-10-22T15:19:36.7841847Z",
+    "scope": [
+      "simultaneous room entrance",
+      "native trigger and death continuation including finishing hits",
+      "both local gates open with blocking colliders disabled",
+      "generic barrier replay isolation",
+      "late local close reconciliation",
+      "new visit discards completion"
+    ],
+    "notCovered": [
+      "other bosses full combat",
+      "real two-machine connection",
+      "disconnect authority transfer",
+      "fresh entrant after completed boss"
+    ],
+    "scene": "Ruins2_11",
+    "mode": "rescue",
+    "status": "passed",
+    "additiveScene": "Ruins2_11_boss",
+    "authority": "guest",
+    "strictLogs": "passed",
+    "ended": "2026-10-22T15:20:44.7149582Z"
+  },
+  "beforeFix": {
+    "replica": "collectorDefeated=true / Start / Close 2 / Close 2",
+    "note": "Authority assertion used wrong open-state name; replica failure is independently visible in native states.",
+    "authority": "End / Open / Open",
+    "run": ".test-results/collector-gate-fix-20261023-direct-repro-b"
+  },
+  "audit": {
+    "assemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+    "report": ".analysis/collector-gate-fix-20261023/native/audit-report.md"
+  },
+  "personalSaveWrites": false,
+  "packaged": false
+}

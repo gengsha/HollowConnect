@@ -1,0 +1,41 @@
+{
+  "version": "0.1.39",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.1.39-l8",
+  "releaseReady": false,
+  "retestOmitted": true,
+  "createdAtUtc": "2026-10-25T13:32:28.8981204Z",
+  "scope": "User-requested 0.1.39 complete Windows and source packaging with the native join-save confirmation menu. Version-only production build and package integrity checks after previously passed targeted game validation; zero new game runs.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "9EEAD0CF355CF7166104DF745748354B8A6BA0D2CAAF62C0F1E4B5F7AF68680A"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "A4E2AB820FD47B313AFBFE2D52134CB067222CF4C5A832BE1CC5EA6988AC0409"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "runs": [],
+  "previousValidationSource": "docs/evidence/join-save-warning-copy-2026-10-25.json",
+  "previousValidationSha256": "DAD98CA5123034D12DF4590AB0F6DE6F82051AA2C1362E9E227E1DC5B4A8A38A",
+  "previousSpecialtyEvidence": [
+    "docs/evidence/join-save-confirmation-2026-10-25.json",
+    "docs/evidence/join-save-warning-copy-2026-10-25.json",
+    "docs/evidence/playtest-authorization-0.1.38-battle-entry-fix.json"
+  ],
+  "build": {
+    "status": "passed",
+    "log": ".analysis/package-0.1.39-20261025/build.log",
+    "sha256": "C74972555E4FB7D4A196A0AA8632FD84D41E51437CA44678FD8400FBA3CF1A42"
+  },
+  "limits": [
+    "Previous game checks remain tied to the recorded 0.1.38 development hashes; they do not certify the new 0.1.39 hashes.",
+    "No new full room matrix, Boss suites, three-client or internet/FRP acceptance.",
+    "Packaging only; no installation or personal-save changes."
+  ]
+}

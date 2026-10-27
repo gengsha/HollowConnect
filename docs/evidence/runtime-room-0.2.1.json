@@ -1,0 +1,42 @@
+{
+  "version": "0.2.1",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.2.1-l8",
+  "releaseReady": false,
+  "retestOmitted": true,
+  "createdAtUtc": "2026-10-26T07:30:58.2396635Z",
+  "scope": "User-requested complete Windows and source packaging of the current fixes as 0.2.1. Incremental production build and package integrity only after the version change; no new game runs.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "972BC86BF44B693DCAF4096E475CD11DE5B1E36CB3C2C05BC564DCC8B48590D7"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "DDEFBF501E177C2D36450ECF711637CBBF687004E342A78C8A77CE97A223268B"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "runs": [],
+  "previousValidationSource": "docs/evidence/development-validation-0.2.1.json",
+  "previousValidationSha256": "ED0E13DEAF767BC7E363DB5DE5085E9EF6CE7EE11CBD6C85F17F4B63CD16E189",
+  "previousSpecialtyEvidence": [
+    "docs/ADDON-SEND-FAILURE-FIX-2026-10-26.md",
+    "docs/FALSE-KNIGHT-GATE-FIX-2026-10-26.md",
+    "docs/A3-COMPLETION-INTENT-FIX-2026-10-26.md",
+    "docs/HORNET-STORY-GATE-COMPARISON-2026-10-26.md"
+  ],
+  "build": {
+    "status": "passed",
+    "log": ".analysis/package-0.2.1-20261026/build.log",
+    "sha256": "B2C47B15CF41C636DC0800E71AD703FCA7F880A7FBC98EAFA87F5EC1D8CAC350"
+  },
+  "limits": [
+    "Development verification is not retrospectively certified for the new HollowConnect.dll hash.",
+    "HKMP.dll and HollowConnect.Core.dll are unchanged from the packaging input.",
+    "No new full room matrix, game suites, installation, publishing or personal-save changes."
+  ]
+}

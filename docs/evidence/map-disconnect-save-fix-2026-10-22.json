@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-22",
+  "version": "0.1.31",
+  "packaged": false,
+  "installed": false,
+  "request": "共享地图购买状态、已拥有地图免重复扣款；修复模组导致的断线退出不保存，限相关短测。",
+  "production": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "01E3FF8BD7EB2177428AC24B41BC8047CD13822D08A4E6005CD9A5C29B7A062C"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "2119C1AFD279C82FE2D9FEED2304B6CEE50C0609E02A5C074BB2A48EB47FDF20"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+    }
+  ],
+  "core": {
+    "status": "passed",
+    "passed": 5,
+    "failed": 0,
+    "selection": ".analysis/map-exit-fix-20261022/core.selection.txt",
+    "log": ".analysis/map-exit-fix-20261022/build-core.log"
+  },
+  "direct": {
+    "status": "passed",
+    "run": ".test-results/map-exit-fix-20261022-direct-f",
+    "started": "2026-10-22T14:59:09.8993304Z",
+    "ended": "2026-10-22T14:59:50.942123Z",
+    "strictLogs": "passed",
+    "probeHash": "27709262D0DF90D0861C23756A98C0079D47130B7F7CCC92B3B463AB5BB7BAB0",
+    "buildLog": ".analysis/map-exit-fix-20261022/build-smoke-f.log",
+    "checks": [
+      "双端菜单掉线不写临时存档",
+      "真实 UDP 共享地图拥有状态，保持吉欧和探索记录个人值",
+      "柯尼法原生首购扣 30、队友旧确认框重复购买扣 0，原生交互恢复控制",
+      "超时和服务器关闭走统一退出保存入口",
+      "清理联机状态后保存相同有效本地槽位及最新地图/吉欧",
+      "异步保存回调前保持场景，重复退出请求去重",
+      "保存返回失败时取消卸载且保留内存进度，允许重试，成功后原生退回标题菜单"
+    ],
+    "diskWrites": "Smoke 拦截所有原生保存重载与全局设置保存；未读写个人存档"
+  },
+  "retainedAttempts": [
+    {
+      "attempt": "a",
+      "classification": "fixture",
+      "reason": "Crossroads_33 的 left1 入场后误触出口"
+    },
+    {
+      "attempt": "b",
+      "classification": "fixture",
+      "reason": "放置角色晚于原生出口触发；改用该房间实际 right1 入口"
+    },
+    {
+      "attempt": "c",
+      "classification": "product",
+      "reason": "确认柯尼法经 Text YN 公共对话框扣款；修复防重复扣费入口"
+    },
+    {
+      "attempt": "d",
+      "classification": "fixture",
+      "reason": "买家可收到本人的地图共享回声，原生 First Map? 分支时序不同；接受两条原生收尾路径"
+    },
+    {
+      "attempt": "e",
+      "classification": "fixture",
+      "reason": "柯尼法双端检查通过；伊塞尔达旧 Sly 夹具商店库存未初始化，保留失败，未扩测该专科"
+    }
+  ],
+  "limits": [
+    "伊塞尔达已实现同购买状态的扣费保护，但本次未取得其原生商店运行通过证据",
+    "踢出、封禁和关服共用同一 OnDisconnect 处理，实机短测使用关服理由",
+    "不包含实际磁盘故障、崩溃恢复和全场景退出矩阵"
+  ],
+  "cleanup": "runner 按路径检查后停止两端隔离进程并禁用 Smoke 插件"
+}

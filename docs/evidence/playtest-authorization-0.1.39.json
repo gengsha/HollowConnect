@@ -1,0 +1,51 @@
+{
+  "version": "0.1.39",
+  "action": "package-for-user-playtest",
+  "userRequest": "打包新版本吧,虽说更新的有点少,不过也代表这个项目已经逐渐成熟了",
+  "scope": "Complete 0.1.39 Windows installer and source archives, retaining the existing playtest channel and inherited issue ledger. Include the native join-save confirmation, corrected conditional copy, 0.1.38 battle-entry fix and earlier fixes. Incremental build and package integrity checks only after the version bump. No installation or publishing.",
+  "existingChannelSource": "docs/evidence/playtest-authorization-0.1.38-battle-entry-fix.json",
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "boss-settlement-disconnect-delivery-race",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved"
+  ],
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "9EEAD0CF355CF7166104DF745748354B8A6BA0D2CAAF62C0F1E4B5F7AF68680A"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "A4E2AB820FD47B313AFBFE2D52134CB067222CF4C5A832BE1CC5EA6988AC0409"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "746C12EF77F5097A57B7416CCA5BE728BE33F3163FEAF527A2804AA6852426F6"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/evidence/join-save-warning-copy-2026-10-25.json",
+      "sha256": "DAD98CA5123034D12DF4590AB0F6DE6F82051AA2C1362E9E227E1DC5B4A8A38A"
+    },
+    {
+      "path": "docs/evidence/playtest-authorization-0.1.38-battle-entry-fix.json",
+      "sha256": "2EDA3D60D546B9497263AB37B0C0AB2CB17FAB403E3B9C81A4DB881AC4C93CFB"
+    }
+  ],
+  "createdAtUtc": "2026-10-25T13:32:28.9386440Z"
+}

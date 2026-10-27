@@ -17,7 +17,7 @@ namespace HollowConnect.Smoke;
 
 // Covers the real menu -> connection -> new save -> opening -> Tutorial path.
 // ProbeMod suppresses every SaveGame overload; no player save is read or written.
-public sealed class JoinProbe : MonoBehaviour {
+public sealed partial class JoinProbe : MonoBehaviour {
     private string role, root;
     private bool host;
     private Hkmp.Game.GameManager engine;
@@ -52,8 +52,16 @@ public sealed class JoinProbe : MonoBehaviour {
         yield return Until(() => runtime.Connected, prefix + " connected from menu");
         if (Has(role + ".failed")) yield break;
         yield return new WaitForSecondsRealtime(2);
+        yield return CheckSaveJoinCancellation(prefix);
+        if (Has(role + ".failed")) yield break;
+        if (!host && prefix == "initial") {
+            yield return CheckDisconnectDuringJoinPrompt();
+            if (Has(role + ".failed")) yield break;
+        }
         GameManager.instance.profileID = 99;
         GameManager.instance.StartNewGame(false, false);
+        yield return AcceptSaveJoin(prefix);
+        if (Has(role + ".failed")) yield break;
         yield return Until(() => Scenes.GetActiveScene().name == "Opening_Sequence", prefix + " opening sequence");
         if (Has(role + ".failed")) yield break;
         yield return new WaitForSecondsRealtime(3);
@@ -78,7 +86,8 @@ public sealed class JoinProbe : MonoBehaviour {
         engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         var settings = Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings");
         settings.AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
-        CoopMod.Settings.ShareProgress = false;
+        var sharedRoom = Environment.GetEnvironmentVariable("HOLLOWCONNECT_JOIN_SHARE") == "1";
+        CoopMod.Settings.ShareProgress = host ? sharedRoom : !sharedRoom;
         Hkmp.Logging.Logger.AddLogger(new FileLogger(Path.Combine(root, role + "-engine.log")));
         CustomHooks.AfterEnterSceneHeroTransformed += () => Mark("HERO POSITION EVENT " + Scope);
         Scenes.activeSceneChanged += (a, b) => Mark("SCENE " + a.name + " -> " + b.name + " " + Scope);
@@ -86,7 +95,7 @@ public sealed class JoinProbe : MonoBehaviour {
         else yield return Until(() => Has("host.initial.room"), "host waiting in Tutorial");
         Connect(); yield return FreshGame("initial");
         if (Has(role + ".failed")) yield break;
-        yield return Until(() => Has(host ? "guest.initial.room" : "host.initial.room"), "both players in Tutorial");
+        yield return Until(() => Has(host ? "guest.initial.room" : "host.initial.room"), "both players in Tutorial", 90);
         yield return Until(VisiblePeer, "initial peer has active visible knight renderer", 15);
         var manager = Field<EntityManager>(engine.ClientManager, "_entityManager");
         yield return Until(() => manager.IsSceneHostDetermined, "initial scene authority initialized", 5);

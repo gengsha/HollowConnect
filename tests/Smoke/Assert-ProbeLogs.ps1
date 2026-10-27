@@ -27,7 +27,7 @@ foreach($taskLog in $taskLogs){
     if($taskText -match '(?im)^\s*(?:Crash!!!|A crash has been intercepted by the crash handler)|caused an Access Violation'){
         throw ('Native crash signature in '+$taskLog.Name)
     }
-    if($taskText -match '(?im)^(?:[0-9TZ:.+-]+ )?(?:(?:ENGINE|UNITY|HKMP) )?(?:FAIL|ERROR) |Spawn expired|^\[ERROR\].*(?:HKMP|HollowConnect)'){
+    if($taskText -match '(?im)^(?:[0-9TZ:.+-]+ )?(?:(?:ENGINE|UNITY|HKMP) )?(?:FAIL|ERROR) |Spawn expired|unknown state index|^\[ERROR\].*(?:HKMP|HollowConnect)'){
         throw ('Strict log gate rejected '+$taskLog.Name)
     }
     # Unity prints exception and stack on separate lines. Limit a stack block

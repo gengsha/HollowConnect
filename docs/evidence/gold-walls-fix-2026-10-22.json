@@ -1,0 +1,632 @@
+{
+  "date": "2026-10-22",
+  "status": "fixed-and-verified",
+  "problem": "Gold trial moving walls absent/noncolliding on non-authority",
+  "changes": [
+    "Enable ColosseumWall root and paired Wall child in existing registry",
+    "Remove moving walls from personal gate classification; existing shared entity snapshots carry activation/FSM/position",
+    "In LocalWorldOnly mode wall entries still follow ordinary native-only policy, like the ColosseumManager"
+  ],
+  "productionScope": [
+    "src/HKMP/Game/Client/Entity/EntityRegistry.cs",
+    "src/HKMP/Resource/entity-registry.json"
+  ],
+  "core": {
+    "passed": 11,
+    "failed": 0,
+    "selection": ".analysis/gold-walls-fix-20261022/core.selection.txt",
+    "log": ".analysis/gold-walls-fix-20261022/build-core.log"
+  },
+  "build": {
+    "coreBuildWarnings": "One existing CS1573 XML comment warning in ClientUpdateManager.cs:311",
+    "errors": 0,
+    "smokeWarnings": 0,
+    "smokeBuildLog": ".analysis/gold-walls-fix-20261022/build-smoke-final.log"
+  },
+  "testedInputs": [
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HKMP.dll",
+      "sha256": "FB904FE085216FB946E22C9801ADD9E3D874CB7E49352B65B7216446B3AA8935"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.dll",
+      "sha256": "ABEF41449F103108396AC92C66D0840F8A2DAD81BA116475A9D3F1D462A26D92"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.Core.dll",
+      "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+    },
+    {
+      "path": "tests/Smoke/bin/Release/net472/HollowConnect.Smoke.dll",
+      "sha256": "238ACC546C396A40BCDD60E590EF390CBD568E10D51C0AADBFFD308CC49407A7"
+    },
+    {
+      "path": "src/HKMP/Game/Client/Entity/EntityRegistry.cs",
+      "sha256": "6D841499642D759445CA899C43A013DEAD5ECE32E921460481AE8F42963E7D5C"
+    },
+    {
+      "path": "src/HKMP/Resource/entity-registry.json",
+      "sha256": "90D334A0BDE810CD6137C53DDA9695C30FDCCEE2BBFBEB8A78F75110BDF66675"
+    },
+    {
+      "path": "tests/Smoke/ColosseumWallChecks.cs",
+      "sha256": "11C159F235C73D5244EC2C8A25CECBA97A848E68D329F6283BDD50C81AC5932E"
+    },
+    {
+      "path": "tests/Smoke/ColosseumProbe.cs",
+      "sha256": "55A27F7CCBBCBC1D7BD3C6405390ACB3E62D0E5FFDBF00BED87F2D0DFA13D448"
+    },
+    {
+      "path": "tests/Smoke/LocalBarrierChecks.cs",
+      "sha256": "29AAC6BED62F9C049EBD01A25C756DCA06B713362A2C8DB3B164FF93EF4BAED4"
+    },
+    {
+      "path": "tests/Smoke/LocalBarrierEventChecks.cs",
+      "sha256": "2E1E777EEB571CF2A0C946F6C9C571182732FD7C1749309BEABA9E4BC02A37A4"
+    },
+    {
+      "path": ".analysis/gold-walls-fix-20261022/Run-Fix.ps1",
+      "sha256": "DEEBF250A3DAE730C8157DAF901D1FB29A2AAA259AE1301683326C0E8B669239"
+    }
+  ],
+  "gameDependencies": [
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight.exe",
+      "bytes": 653824,
+      "sha256": "4D3D0F55AFBB249170241D0DC6FAF9A5DCF3E1ED427A282AE990BB6E4E3A6913"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "bytes": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "bytes": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\MMHOOK_Assembly-CSharp.dll",
+      "bytes": 9128960,
+      "sha256": "8F88E808F31E6CF05C17B0D34FBECF33EEE14A2C977A33239A86BE61F9408222"
+    },
+    {
+      "role": "host",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+      "bytes": 1141248,
+      "sha256": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight.exe",
+      "bytes": 653824,
+      "sha256": "4D3D0F55AFBB249170241D0DC6FAF9A5DCF3E1ED427A282AE990BB6E4E3A6913"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "bytes": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "bytes": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\MMHOOK_Assembly-CSharp.dll",
+      "bytes": 9128960,
+      "sha256": "8F88E808F31E6CF05C17B0D34FBECF33EEE14A2C977A33239A86BE61F9408222"
+    },
+    {
+      "role": "guest",
+      "path": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\UnityEngine.CoreModule.dll",
+      "bytes": 1141248,
+      "sha256": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14"
+    }
+  ],
+  "cases": [
+    {
+      "run": "gold-walls-fix-20261022-r1-host",
+      "scenario": "walls",
+      "first": "host",
+      "status": "passed",
+      "startedUtc": "2026-10-22T10:30:42.5820895Z",
+      "endedUtc": "2026-10-22T10:33:38.0953683Z",
+      "strictLogs": true,
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FB904FE085216FB946E22C9801ADD9E3D874CB7E49352B65B7216446B3AA8935"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "ABEF41449F103108396AC92C66D0840F8A2DAD81BA116475A9D3F1D462A26D92"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+        }
+      ],
+      "smokeSha256": "238ACC546C396A40BCDD60E590EF390CBD568E10D51C0AADBFFD308CC49407A7",
+      "endpoints": [
+        {
+          "role": "host",
+          "authority": true,
+          "done": true,
+          "nativeState": "Wave 30",
+          "localWallRoots": 2,
+          "activeEnabledRenderers": 210,
+          "solidColliders": 2,
+          "walls": [
+            {
+              "path": "Colosseum Manager/Walls/Colosseum Wall L",
+              "fsm": "Idle",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager/Walls/Colosseum Wall L/Wall",
+                  "solid": true,
+                  "x": 92.7727661,
+                  "y": 15.650631,
+                  "width": 1.96707153,
+                  "height": 28.0428238
+                }
+              ]
+            },
+            {
+              "path": "Colosseum Manager/Walls/Colosseum Wall R",
+              "fsm": "Idle",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager/Walls/Colosseum Wall R/Wall",
+                  "solid": true,
+                  "x": 111.869408,
+                  "y": 15.5961294,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            }
+          ],
+          "rays": [
+            {
+              "x": 92.7727661,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager/Walls/Colosseum Wall L/Wall"
+              ]
+            },
+            {
+              "x": 111.869408,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager/Walls/Colosseum Wall R/Wall"
+              ]
+            }
+          ],
+          "personalGateEventAndActionBoundaries": true,
+          "observation": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r1-host\\host-walls-contracted.json",
+            "sha256": "7F3DD9B3CD2969A93CE0B384A93958E0CD641D84F97D51643BCF89FF7DD9355D"
+          },
+          "physics": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r1-host\\host-wall-rays.json",
+            "sha256": "003C5D2542D3B9B5EAC2A183679A01A7F5FF68DAD0A3387394BB8F33470A2880"
+          }
+        },
+        {
+          "role": "guest",
+          "authority": false,
+          "done": true,
+          "nativeState": "Wave 30",
+          "localWallRoots": 2,
+          "activeEnabledRenderers": 210,
+          "solidColliders": 2,
+          "walls": [
+            {
+              "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)",
+              "fsm": "",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)/Wall",
+                  "solid": true,
+                  "x": 111.845749,
+                  "y": 15.6280813,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            },
+            {
+              "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)",
+              "fsm": "",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)/Wall",
+                  "solid": true,
+                  "x": 92.8306351,
+                  "y": 15.66092,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            }
+          ],
+          "rays": [
+            {
+              "x": 92.7727661,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)/Wall"
+              ]
+            },
+            {
+              "x": 111.869408,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)/Wall"
+              ]
+            }
+          ],
+          "personalGateEventAndActionBoundaries": true,
+          "observation": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r1-host\\guest-walls-contracted.json",
+            "sha256": "E2B99D30D39A31251658DD8E00E89BFC8D8638CBFD29E6220DF6254DFD6E38D9"
+          },
+          "physics": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r1-host\\guest-wall-rays.json",
+            "sha256": "A49BD6B169CBDD5574A9ED6196650DA747BC6503154F918CCEEC05F014DE5912"
+          }
+        }
+      ]
+    },
+    {
+      "run": "gold-walls-fix-20261022-r2-guest",
+      "scenario": "walls",
+      "first": "guest",
+      "status": "passed",
+      "startedUtc": "2026-10-22T10:35:03.0525838Z",
+      "endedUtc": "2026-10-22T10:37:47.6959401Z",
+      "strictLogs": true,
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FB904FE085216FB946E22C9801ADD9E3D874CB7E49352B65B7216446B3AA8935"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "ABEF41449F103108396AC92C66D0840F8A2DAD81BA116475A9D3F1D462A26D92"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+        }
+      ],
+      "smokeSha256": "238ACC546C396A40BCDD60E590EF390CBD568E10D51C0AADBFFD308CC49407A7",
+      "endpoints": [
+        {
+          "role": "host",
+          "authority": false,
+          "done": true,
+          "nativeState": "Wave 30",
+          "localWallRoots": 2,
+          "activeEnabledRenderers": 210,
+          "solidColliders": 2,
+          "walls": [
+            {
+              "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)",
+              "fsm": "",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)/Wall",
+                  "solid": true,
+                  "x": 111.95784,
+                  "y": 15.5582237,
+                  "width": 1.96707153,
+                  "height": 28.0428238
+                }
+              ]
+            },
+            {
+              "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)",
+              "fsm": "",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)/Wall",
+                  "solid": true,
+                  "x": 92.71006,
+                  "y": 15.7290659,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            }
+          ],
+          "rays": [
+            {
+              "x": 92.71533,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)/Wall"
+              ]
+            },
+            {
+              "x": 111.918839,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)/Wall"
+              ]
+            }
+          ],
+          "personalGateEventAndActionBoundaries": true,
+          "observation": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-guest\\host-walls-contracted.json",
+            "sha256": "69E8DE3F85C88CE9FE7FA3694AABB0872ECBF2C32F34C73ECD056FD7463159C8"
+          },
+          "physics": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-guest\\host-wall-rays.json",
+            "sha256": "D466C0DF1D4C37EF5836A82235F59AAA854B045ACEB3C08B2E8B1C02FECB7DEE"
+          }
+        },
+        {
+          "role": "guest",
+          "authority": true,
+          "done": true,
+          "nativeState": "Wave 30",
+          "localWallRoots": 2,
+          "activeEnabledRenderers": 210,
+          "solidColliders": 2,
+          "walls": [
+            {
+              "path": "Colosseum Manager/Walls/Colosseum Wall L",
+              "fsm": "Idle",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager/Walls/Colosseum Wall L/Wall",
+                  "solid": true,
+                  "x": 92.71533,
+                  "y": 15.6704731,
+                  "width": 1.96707153,
+                  "height": 28.0428238
+                }
+              ]
+            },
+            {
+              "path": "Colosseum Manager/Walls/Colosseum Wall R",
+              "fsm": "Idle",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager/Walls/Colosseum Wall R/Wall",
+                  "solid": true,
+                  "x": 111.918839,
+                  "y": 15.6292276,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            }
+          ],
+          "rays": [
+            {
+              "x": 92.71533,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager/Walls/Colosseum Wall L/Wall"
+              ]
+            },
+            {
+              "x": 111.918839,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager/Walls/Colosseum Wall R/Wall"
+              ]
+            }
+          ],
+          "personalGateEventAndActionBoundaries": true,
+          "observation": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-guest\\guest-walls-contracted.json",
+            "sha256": "E84B0C02C2DE3FE9D665E72E431FA1FAD2D8B0491CA8009D8EFCD911C48E4126"
+          },
+          "physics": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-guest\\guest-wall-rays.json",
+            "sha256": "40CA506803408C562EC192FAB895A916651F0C9495B567FAA821D2363349B146"
+          }
+        }
+      ]
+    },
+    {
+      "run": "gold-walls-fix-20261022-r2-late",
+      "scenario": "walls-late",
+      "first": "host",
+      "status": "passed",
+      "startedUtc": "2026-10-22T10:37:47.715114Z",
+      "endedUtc": "2026-10-22T10:40:39.0523208Z",
+      "strictLogs": true,
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FB904FE085216FB946E22C9801ADD9E3D874CB7E49352B65B7216446B3AA8935"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "ABEF41449F103108396AC92C66D0840F8A2DAD81BA116475A9D3F1D462A26D92"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "655F32E4E128A3A7FBC8996CC153A27514E795AB38E5BA4A888668133EFECB33"
+        }
+      ],
+      "smokeSha256": "238ACC546C396A40BCDD60E590EF390CBD568E10D51C0AADBFFD308CC49407A7",
+      "endpoints": [
+        {
+          "role": "host",
+          "authority": true,
+          "done": true,
+          "nativeState": "Wave 30",
+          "localWallRoots": 2,
+          "activeEnabledRenderers": 210,
+          "solidColliders": 2,
+          "walls": [
+            {
+              "path": "Colosseum Manager/Walls/Colosseum Wall L",
+              "fsm": "Idle",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager/Walls/Colosseum Wall L/Wall",
+                  "solid": true,
+                  "x": 92.75597,
+                  "y": 15.61214,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            },
+            {
+              "path": "Colosseum Manager/Walls/Colosseum Wall R",
+              "fsm": "Idle",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager/Walls/Colosseum Wall R/Wall",
+                  "solid": true,
+                  "x": 111.928017,
+                  "y": 15.6215925,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            }
+          ],
+          "rays": [
+            {
+              "x": 92.75597,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager/Walls/Colosseum Wall L/Wall"
+              ]
+            },
+            {
+              "x": 111.928017,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager/Walls/Colosseum Wall R/Wall"
+              ]
+            }
+          ],
+          "personalGateEventAndActionBoundaries": true,
+          "observation": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-late\\host-walls-contracted.json",
+            "sha256": "533ED4A2D86717F109D9E7A9E2D50B2FBD737F37F21A1B2F511C63E3CC83E380"
+          },
+          "physics": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-late\\host-wall-rays.json",
+            "sha256": "D1040C188F5D5A2F08E4177AC127D2A2D4A286F373B66F7CC12506D6E04EBF0C"
+          }
+        },
+        {
+          "role": "guest",
+          "authority": false,
+          "done": true,
+          "nativeState": "Wave 30",
+          "localWallRoots": 2,
+          "activeEnabledRenderers": 210,
+          "solidColliders": 2,
+          "walls": [
+            {
+              "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)",
+              "fsm": "",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)/Wall",
+                  "solid": true,
+                  "x": 111.928017,
+                  "y": 15.6215925,
+                  "width": 1.96707153,
+                  "height": 28.0428219
+                }
+              ]
+            },
+            {
+              "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)",
+              "fsm": "",
+              "distance": 12.0,
+              "colliders": [
+                {
+                  "path": "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)/Wall",
+                  "solid": true,
+                  "x": 92.73009,
+                  "y": 15.5837917,
+                  "width": 1.96707153,
+                  "height": 28.0428238
+                }
+              ]
+            }
+          ],
+          "rays": [
+            {
+              "x": 92.75597,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager(Clone)/Walls/Colosseum Wall L(Clone)/Wall"
+              ]
+            },
+            {
+              "x": 111.928017,
+              "y": 14.0,
+              "solidWallHits": 1,
+              "hits": [
+                "Colosseum Manager(Clone)/Walls/Colosseum Wall R(Clone)/Wall"
+              ]
+            }
+          ],
+          "personalGateEventAndActionBoundaries": true,
+          "observation": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-late\\guest-walls-contracted.json",
+            "sha256": "F4C6232EC7679DBE3FF161FE689315CEE35F9405B719E097653D3CBE46F62BBE"
+          },
+          "physics": {
+            "path": "E:\\projects\\hollowConnect\\.test-results\\gold-walls-fix-20261022-r2-late\\guest-wall-rays.json",
+            "sha256": "E1502F75F734AFEC43A6021BB7DED923D2845F0E92FEFFF0EF9A1C1EA5C44D8D"
+          }
+        }
+      ]
+    }
+  ],
+  "baseline": "docs/evidence/gold-walls-2026-10-22.json",
+  "isolation": "Same-machine localhost UDP; existing isolated game copies; sequential; in-memory unsaved characters; save and preference writes blocked.",
+  "limitations": [
+    "Diagnostic observers invulnerable/floating/repositioned; native enemy damage callbacks advance waves. No forced wave/counter/wall states or movement.",
+    "No manual full Gold clear or mid-contraction authority handoff/disconnect; no cross-machine/FRP validation.",
+    "LocalWorldOnly exclusion checked by core and embedded registry fixtures, not a full private Gold run.",
+    "Active renderers plus collider/raycast proof; dark batch camera captures are auxiliary, not manual visual certification."
+  ],
+  "packaging": "No version change, package, installation, publishing or personal-save edits.",
+  "report": "docs/GOLD-WALLS-FIX-2026-10-22.md"
+}

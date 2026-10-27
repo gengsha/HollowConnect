@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-22",
+  "status": "fixed",
+  "issue": "local encounter binding lost by early health snapshot and deferred death receipts",
+  "report": "docs/ENCOUNTER-GATE-FIX-2026-10-22.md",
+  "buildPath": "src/HollowConnect/bin/Release/net472",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "7075C1055E890380D6C9C7355862ADF51EBB549C07FF4BFE9BD95D993154B6AF"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "8B1C2A9381C383992C7F8A6EDFF2230DCFE4B22B68595186D11B48BB8E2A7085"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+    }
+  ],
+  "core": {
+    "selection": "tests/local-world.selection.txt",
+    "passed": 6,
+    "failed": 0,
+    "log": ".analysis/encounter-gate-fix-20261022/core.log"
+  },
+  "cases": [
+    {
+      "name": "boundary",
+      "attempt": "fix-a",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "host",
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "boundary"
+      },
+      "status": "passed",
+      "started": "2026-10-22T15:32:26.5693288Z",
+      "runnerPid": 13824,
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\encounter-gate-fix-20261022-boundary-fix-a",
+      "error": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7075C1055E890380D6C9C7355862ADF51EBB549C07FF4BFE9BD95D993154B6AF"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8B1C2A9381C383992C7F8A6EDFF2230DCFE4B22B68595186D11B48BB8E2A7085"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "AC634FB7D9A6829E2254F4FAE7633ADFC76D73EA15176E208E5D81ABEEF8B157",
+      "strictLogs": "passed",
+      "ended": "2026-10-22T15:33:10.9361507Z"
+    },
+    {
+      "name": "late-host",
+      "attempt": "final-a",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "host",
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "late"
+      },
+      "status": "passed",
+      "started": "2026-10-22T15:33:54.1655922Z",
+      "runnerPid": 28892,
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\encounter-gate-fix-20261022-late-host-final-a",
+      "error": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7075C1055E890380D6C9C7355862ADF51EBB549C07FF4BFE9BD95D993154B6AF"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8B1C2A9381C383992C7F8A6EDFF2230DCFE4B22B68595186D11B48BB8E2A7085"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "AC634FB7D9A6829E2254F4FAE7633ADFC76D73EA15176E208E5D81ABEEF8B157",
+      "strictLogs": "passed",
+      "ended": "2026-10-22T15:34:36.1245019Z"
+    },
+    {
+      "name": "outside-guest",
+      "attempt": "final-a",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "guest",
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "outside"
+      },
+      "status": "passed",
+      "started": "2026-10-22T15:34:36.4998955Z",
+      "runnerPid": 28892,
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\encounter-gate-fix-20261022-outside-guest-final-a",
+      "error": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7075C1055E890380D6C9C7355862ADF51EBB549C07FF4BFE9BD95D993154B6AF"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8B1C2A9381C383992C7F8A6EDFF2230DCFE4B22B68595186D11B48BB8E2A7085"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "AC634FB7D9A6829E2254F4FAE7633ADFC76D73EA15176E208E5D81ABEEF8B157",
+      "strictLogs": "passed",
+      "ended": "2026-10-22T15:35:18.3598785Z"
+    },
+    {
+      "name": "partial-guest",
+      "attempt": "final-a",
+      "mode": "rescue",
+      "options": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "guest",
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "partial"
+      },
+      "status": "passed",
+      "started": "2026-10-22T15:35:18.7115242Z",
+      "runnerPid": 28892,
+      "runPath": "E:\\projects\\hollowConnect\\.test-results\\encounter-gate-fix-20261022-partial-guest-final-a",
+      "error": null,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "7075C1055E890380D6C9C7355862ADF51EBB549C07FF4BFE9BD95D993154B6AF"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "8B1C2A9381C383992C7F8A6EDFF2230DCFE4B22B68595186D11B48BB8E2A7085"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "CBDC1379286EB1389237654B56F6D61D2AFE79547AC53548A528CF004E1E970E"
+        }
+      ],
+      "probeHash": "AC634FB7D9A6829E2254F4FAE7633ADFC76D73EA15176E208E5D81ABEEF8B157",
+      "strictLogs": "passed",
+      "ended": "2026-10-22T15:36:00.3100035Z"
+    }
+  ],
+  "beforeFix": {
+    "normalLateEntryBaseline": "passed: .test-results/encounter-gate-fix-20261022-late-host-baseline-a",
+    "receiverReproduction": "failed: .test-results/encounter-gate-fix-20261022-boundary-before-a",
+    "confidence": "confirmed receiver boundary; not a claim that an unspecified reported map was reproduced",
+    "failure": "unbound early authority Health snapshot cleared native local battle association"
+  },
+  "audit": {
+    "assemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+    "reused": ".analysis/collector-gate-fix-20261023/native/audit-report.md",
+    "playMakerSha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+  },
+  "coverage": [
+    "Fungus2_05 native collision entry, complete encounters, native reward and actual walking through both exits",
+    "early empty authority binding and native receipt preservation",
+    "deferred binding before and after counter initialization",
+    "duplicate binding/death and reset ordering",
+    "between-wave early death receipt"
+  ],
+  "notCovered": [
+    "all encounter maps",
+    "mother and Colosseum full wave suites",
+    "real two-machine connection",
+    "disconnect authority matrix"
+  ],
+  "personalSaveWrites": false,
+  "packaged": false
+}

@@ -1,0 +1,1256 @@
+{
+  "date": "2026-10-21",
+  "timezone": "Asia/Shanghai",
+  "version": "0.1.29",
+  "addonNetworkVersion": "0.1.29-l2",
+  "delivery": "source_only_no_new_package",
+  "production": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+    }
+  ],
+  "currentProductionFiles": [
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HKMP.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HKMP.dll",
+      "bytes": 1792000,
+      "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.dll",
+      "bytes": 158720,
+      "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.Core.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\src\\HollowConnect\\bin\\Release\\net472\\HollowConnect.Core.dll",
+      "bytes": 35840,
+      "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+    }
+  ],
+  "scenario": "An authoritative native boss keeps reading the hidden frozen local Hero after actual rescue death while a living same-room teammate remains.",
+  "rootCause": "ShadeView is a visual/nail receiver; the authoritative native FSM retains HeroController. Temporary target resolution is limited to registered authoritative boss entities and inherited combat spawns.",
+  "candidateRule": "Use an active HKMP avatar in the death room with fresh Alive or Loading presence. Loading may reflect a temporary input lock. Exclude Down, Spectating, Returning, Resetting, other rooms and stale or absent avatars.",
+  "coreTests": {
+    "passed": 21,
+    "failed": 0,
+    "selection": {
+      "path": ".test-results/shade-target-core-20261021.selection.txt",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-core-20261021.selection.txt",
+      "bytes": 1433,
+      "sha256": "D81684825BE8F5902FF7E4F8765AD5FEF7AA22FC9B5EA4684A3AE53E7BC29E73"
+    },
+    "log": {
+      "path": ".test-results/shade-target-core-20261021.log",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-core-20261021.log",
+      "bytes": 2050,
+      "sha256": "50F11A006618D39316AA115726BC7357544F930535419CA9957EA0EB39F61189"
+    }
+  },
+  "finalRuns": [
+    "shade-target-facing-20261021-host",
+    "shade-target-facing-20261021-guest",
+    "shade-target-rescue-geometry-20261021"
+  ],
+  "runs": [
+    {
+      "run": "shade-target-baseline-20261021a",
+      "outcome": "probe_timeout",
+      "interpretation": "GetPosition observation did not sample a player target; not a demonstrated product failure.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "465575C9DC12FC775ACE815F1EDF6F178A41E3C7ABE22696CF8A4D22226766CB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "FEC60EE4A8010DD47DD2564F2E3CADCB9CC9D40E7C34E890D94B732593CAF33F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": null,
+      "probeHashRecorded": false,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": true,
+        "guestFailed": true,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-baseline-20261021a/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021a\\host.log",
+          "bytes": 2689,
+          "sha256": "930507CF5ACE8B4EDA3D0EA4D87BEB70E98EAA9EE23BC0A7C6C7287E75FE6B8C"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021a/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021a\\guest.log",
+          "bytes": 2878,
+          "sha256": "0D0B6A8D0E0F33B733FF8FADDF499A48E15ED051A8964ADCF063808BAFF5F48F"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021a/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021a\\host-unity.log",
+          "bytes": 114187,
+          "sha256": "A2083E10766A58E1F21E6A945C0659E031516DA17380102AE931980E7138BD62"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021a/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021a\\guest-unity.log",
+          "bytes": 114119,
+          "sha256": "AE0D064D4392CF0666F026115CFB4289132DAA03FA29FEA6E2967A8791A2AF76"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021a/host.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021a\\host.failed",
+          "bytes": 415,
+          "sha256": "892F70DE111AF82FBA8102A6C588EB23B7804C91F0F7734DC7DB6A75B090C4F9"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021a/guest.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021a\\guest.failed",
+          "bytes": 406,
+          "sha256": "8F112C4E8E316ACDB05ACB044E100EEADDAB9CEEAEED9513937ADAEEE8F6ACB3"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021a/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021a\\binaries.json",
+          "bytes": 382,
+          "sha256": "3E5450675B75F48C8AEEF4A722CAA9DE5F664D5B536B6DCA21E9227A936F6776"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-baseline-20261021b",
+      "outcome": "probe_timeout",
+      "interpretation": "GetPosition observation did not sample a player target; not a demonstrated product failure.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "465575C9DC12FC775ACE815F1EDF6F178A41E3C7ABE22696CF8A4D22226766CB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "FEC60EE4A8010DD47DD2564F2E3CADCB9CC9D40E7C34E890D94B732593CAF33F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": null,
+      "probeHashRecorded": false,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": true,
+        "guestFailed": true,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-baseline-20261021b/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021b\\host.log",
+          "bytes": 14126,
+          "sha256": "A096FD344D455648D94111D1C30ED9E108BAAEA07E1BA559B492CA37AE45FCB1"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021b/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021b\\guest.log",
+          "bytes": 14316,
+          "sha256": "61929848F3ABB5F610BF74B625682BA8D0FE3103F72F69D94DC7F20CC7BD7632"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021b/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021b\\host-unity.log",
+          "bytes": 106524,
+          "sha256": "755BB89676DB755944403D3103E55385B8361196F2D8B4046D3A192BFDF8186C"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021b/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021b\\guest-unity.log",
+          "bytes": 104939,
+          "sha256": "6E0C5B20D39AA2BC50A4CB54F36792E6891C9DEC21C3EB5C27728C894933557A"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021b/host.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021b\\host.failed",
+          "bytes": 415,
+          "sha256": "1E988E9E1B5898FA29B4FCFD6E1C64A898F0F7BD981C1A9040B61A6A2096C83D"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021b/guest.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021b\\guest.failed",
+          "bytes": 406,
+          "sha256": "95C53D475A0E0659A780B1250FB985E4A4179249D87338B13DB251367EFE177D"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021b/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021b\\binaries.json",
+          "bytes": 382,
+          "sha256": "3E5450675B75F48C8AEEF4A722CAA9DE5F664D5B536B6DCA21E9227A936F6776"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-baseline-20261021c",
+      "outcome": "probe_timeout",
+      "interpretation": "GetPosition observation did not sample a player target; not a demonstrated product failure.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "465575C9DC12FC775ACE815F1EDF6F178A41E3C7ABE22696CF8A4D22226766CB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "FEC60EE4A8010DD47DD2564F2E3CADCB9CC9D40E7C34E890D94B732593CAF33F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": null,
+      "probeHashRecorded": false,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": true,
+        "guestFailed": true,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-baseline-20261021c/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021c\\host.log",
+          "bytes": 16003,
+          "sha256": "B6ADDAA6ED97F45F029A9B971C2FC464FBCD8923BD3468191C8995EBDED44BB9"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021c/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021c\\guest.log",
+          "bytes": 14316,
+          "sha256": "2DB75F8B49B54B59EC6E55236FCCF27D78DE435D51E6D816905DD677CBEE2530"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021c/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021c\\host-unity.log",
+          "bytes": 105406,
+          "sha256": "C0E780AEFE34E150BF00327997339563AD0383FD8298B586F36178E8C783FAB3"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021c/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021c\\guest-unity.log",
+          "bytes": 101017,
+          "sha256": "51642EDD7C33E6201CE33F49682CE199C05B886E41CE076D417EC92D5BDEC0D8"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021c/host.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021c\\host.failed",
+          "bytes": 415,
+          "sha256": "6A0E1F0A708CB27573C766CD3F97A054368D3120A069B53D343DA3608CDF63A1"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021c/guest.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021c\\guest.failed",
+          "bytes": 406,
+          "sha256": "55B38C7370D9431C847D333D80C4E21077A120C176CE0BE384E4AB36A950E132"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021c/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021c\\binaries.json",
+          "bytes": 382,
+          "sha256": "3E5450675B75F48C8AEEF4A722CAA9DE5F664D5B536B6DCA21E9227A936F6776"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-baseline-20261021d",
+      "outcome": "confirmed_product_failure",
+      "interpretation": "Native Throw Antic aimed at the hidden dead Hero: 180.5136 degrees, living target expected -5.26642 degrees.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "465575C9DC12FC775ACE815F1EDF6F178A41E3C7ABE22696CF8A4D22226766CB"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "FEC60EE4A8010DD47DD2564F2E3CADCB9CC9D40E7C34E890D94B732593CAF33F"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "6B5C1ACEA67C03A3E7DF091D69FCFE27775A9D0C4FA113A9DB72786631B1D322",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": true,
+        "guestFailed": true,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\host.log",
+          "bytes": 2522,
+          "sha256": "3C73CCEB81834322A567C9DBBF81A59FABDD7CC5DE046D636816D2D7482E414B"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\guest.log",
+          "bytes": 1680,
+          "sha256": "27F7621B9D617B35900CED28F47C02FF4A1D3A270346763EA1A82BC9B6E591AC"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\host-unity.log",
+          "bytes": 104286,
+          "sha256": "8935F4B102580EFCD88062BB0FE048C6F296826B5F495BBCFCEB0867259F90F9"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\guest-unity.log",
+          "bytes": 105195,
+          "sha256": "B1F4454E2B7558562288BB453DD7E684A69A8E6EF99C04CDF5B7A788EBED0612"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/host.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\host.failed",
+          "bytes": 447,
+          "sha256": "BCC1C57AB80919822CF71D8355FD541659E2E047E66259514CCF4C8EDBAD4FC2"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/guest.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\guest.failed",
+          "bytes": 413,
+          "sha256": "CE821E3AA929A3B6B9C76F5B94A52E7B3F9850CD6E8B58F0C1712E240E73176D"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\binaries.json",
+          "bytes": 382,
+          "sha256": "3E5450675B75F48C8AEEF4A722CAA9DE5F664D5B536B6DCA21E9227A936F6776"
+        },
+        {
+          "path": ".test-results/shade-target-baseline-20261021d/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-20261021d\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "87C5A4E0D5BB3580DAE2E1BD1B5108707D0C022B7203D2E1A67ADD3D858A398F"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-fixed-20261021a-host",
+      "outcome": "candidate_product_failure",
+      "interpretation": "Candidate retained one incorrect attack angle; peer Life was not recorded at that instant, so its immediate cause is not proven.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "6FE32EAB8A7471CBEB22D152F6B45A4C93E846A49489D4F91A48CA7A262AAD13"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "07DEA81D4A8621F99E710A5A414B5F32D8826D7AFD91D666409915BEA10483CB"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "988A2B1EED309FC83F259FB6EB368DE6E2913690C8EE3F9F9A5E2129EB99246C",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": true,
+        "guestFailed": false,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-fixed-20261021a-host/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021a-host\\host.log",
+          "bytes": 3417,
+          "sha256": "CA124C5C9D809A05D5B68810495FA60CA9E0B5C03BC476D0CCC5036C0C99D68E"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021a-host/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021a-host\\guest.log",
+          "bytes": 949,
+          "sha256": "2701049BFC049D5EEE063C208D26251A5401A7DA01476F4751C871B6AADB0D2B"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021a-host/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021a-host\\host-unity.log",
+          "bytes": 105406,
+          "sha256": "1051924809FAF2B5855B02A0F760313EEE310FCFA3B3174E191BE52DF4791354"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021a-host/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021a-host\\guest-unity.log",
+          "bytes": 106445,
+          "sha256": "805F021CCE507CA93720FA0D75504CA46525C3E43A66D887D21AB38208B584DC"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021a-host/host.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021a-host\\host.failed",
+          "bytes": 447,
+          "sha256": "B71F4C5DA24A0718F254093187B1E5D86B6CFB1B5BAEE2520CC44BAC02A268AE"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021a-host/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021a-host\\binaries.json",
+          "bytes": 382,
+          "sha256": "1DC992174E91E9A64EA7777FD7A7D5B267C02F8D84CA0F6D13442D210B298893"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021a-host/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021a-host\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "BC757DD2CAF52EB0993B3887F20373F3D2A9793DA97607620516F2FD1427CEA0"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-fixed-20261021b-host",
+      "outcome": "probe_sampling_timeout",
+      "interpretation": "Two correct angle samples; native random attacks did not supply three within 35 seconds.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "6FE32EAB8A7471CBEB22D152F6B45A4C93E846A49489D4F91A48CA7A262AAD13"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "52B85A16C600A6825FBF5CE05DD37F2DA301A114DA56D61C0520554C7B71DA27"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "66257E1D3789CD0CB1E8C1B5F9715F09CED50A88082A7B3C94469ED6F7D7C5E4",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": true,
+        "guestFailed": false,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-fixed-20261021b-host/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021b-host\\host.log",
+          "bytes": 3580,
+          "sha256": "F1B6371BED7EA63BEA5FEA95BADCE8E2E7A7B4578F0E41CDF4C6FA40F050A64B"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021b-host/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021b-host\\guest.log",
+          "bytes": 949,
+          "sha256": "141A100A3EBF2D022926A329907A183923902B6F4D6CA306FD8A639555FBFBA8"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021b-host/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021b-host\\host-unity.log",
+          "bytes": 101226,
+          "sha256": "20AB5A17C6FC04C58C523CBD72A9B0BCF85A712D349C4451BEDD18C80D94B72B"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021b-host/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021b-host\\guest-unity.log",
+          "bytes": 103035,
+          "sha256": "BD0EBD7A1BDD4C770A5DA5BBC6DDF1C840B51825D922F1A78DCF1636FFD8604D"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021b-host/host.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021b-host\\host.failed",
+          "bytes": 423,
+          "sha256": "2B1125044F2F4C1F1D8D0F3B38890A2F67EEC0BF511A106B372B3E9464CC9956"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021b-host/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021b-host\\binaries.json",
+          "bytes": 382,
+          "sha256": "66CA879DC79E363675EF29EC341942A8AC878872E47524CE6A070730EFEB7304"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021b-host/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021b-host\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "51F12D300FE175821900696D1BDECD2AA5E0129C9FDD13FE7E9DD511C030958D"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-fixed-20261021c-host",
+      "outcome": "pass_with_strict_runtime_logs",
+      "interpretation": "Host authority down, natural targeting, movement and network revival passed.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "87F9742F43305011695DA36EA80E76EAFE5C9C48A9ED9EA9549ED5DC5ABB36B2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "F59C679F70E2BAA51084C11291864F5014FC570C823E345850CE435EECDD07BE",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": true,
+        "guestDone": true,
+        "hostFailed": false,
+        "guestFailed": false,
+        "strictPass": true
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\host.log",
+          "bytes": 4288,
+          "sha256": "A6C5480D59B66BC00BD148B9EB1EB19DFE33CEDE584B7E0F278A5D57ED2E887C"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\guest.log",
+          "bytes": 1473,
+          "sha256": "063A92FDBF02767EE53489E14BDE98CE31409796CF834368E64E05E06746250C"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\host-unity.log",
+          "bytes": 111126,
+          "sha256": "312EFCD80410631A7C9C68FEE1B9DEC5A8FF7CB22E5C9C257D93F4BEE043A6D2"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\guest-unity.log",
+          "bytes": 109979,
+          "sha256": "4DF9370E1F03B4DBBD22802C65FA274FC4C40ADDB0A3A048757D979E1587C441"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/host.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\host.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/guest.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\guest.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\binaries.json",
+          "bytes": 382,
+          "sha256": "F23DB511E2B7B2107AA44B8A15F943A74A43C484C3E9AFCE9A6120CAF46A066C"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "9BB9D58E7E9E9A70CC4992CED1D258D62D73337CC4252463FE73A9F13A36BF6C"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-host/strict-pass.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-host\\strict-pass.txt",
+          "bytes": 47,
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-fixed-20261021c-guest",
+      "outcome": "pass_with_strict_runtime_logs",
+      "interpretation": "Guest authority down, natural targeting, movement and network revival passed.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "87F9742F43305011695DA36EA80E76EAFE5C9C48A9ED9EA9549ED5DC5ABB36B2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "F59C679F70E2BAA51084C11291864F5014FC570C823E345850CE435EECDD07BE",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": true,
+        "guestDone": true,
+        "hostFailed": false,
+        "guestFailed": false,
+        "strictPass": true
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\host.log",
+          "bytes": 1426,
+          "sha256": "04FBE262BAC555C909C3325F87B73FB4D7212A39C1CD2F2FCB8EDA86FC2705BF"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\guest.log",
+          "bytes": 4340,
+          "sha256": "9CB8DAFCA3C3FB4302E75C089C35C2953794B27D791BFC44EFEF5C940CE5DA34"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\host-unity.log",
+          "bytes": 108532,
+          "sha256": "A0D8FB85BD6A50D28B424F98065ECC6E56AD007F9C4381C854A7716F031D0C4A"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\guest-unity.log",
+          "bytes": 109333,
+          "sha256": "FB6A67F5E13950A7D99C6733E85AB49280936775B0ADC57B68970EDD1AB2E247"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/host.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\host.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/guest.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\guest.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\binaries.json",
+          "bytes": 382,
+          "sha256": "F23DB511E2B7B2107AA44B8A15F943A74A43C484C3E9AFCE9A6120CAF46A066C"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "9BB9D58E7E9E9A70CC4992CED1D258D62D73337CC4252463FE73A9F13A36BF6C"
+        },
+        {
+          "path": ".test-results/shade-target-fixed-20261021c-guest/strict-pass.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-fixed-20261021c-guest\\strict-pass.txt",
+          "bytes": 47,
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-final-20261021-host",
+      "outcome": "pass_with_strict_runtime_logs",
+      "interpretation": "Host authority; additional FSM isolation and persistent-reference assertions passed.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "05923CA98B132AAC594F5E45E9690C6B48AB43913C0E84235032BE52EEBAEEA5",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": true,
+        "guestDone": true,
+        "hostFailed": false,
+        "guestFailed": false,
+        "strictPass": true
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-final-20261021-host/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\host.log",
+          "bytes": 4474,
+          "sha256": "F7A6581675446162FC75ADA7E7F419987EF57B01371C31CACD94C17A85653BEF"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\guest.log",
+          "bytes": 1473,
+          "sha256": "E87CE062575A913ACFC5646DD3BC17C74F29CFEAFF1214F5B4B4E307A33FB9D3"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\host-unity.log",
+          "bytes": 105765,
+          "sha256": "652C701FC651A8B55A633E2FBA4E16DB2EDD52A5765DD034A9240DD789917B51"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\guest-unity.log",
+          "bytes": 99975,
+          "sha256": "1C7FB460B5BF991C1274CF5F7455D486236EE7AB8650BEF60F4A3960198E2111"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/host.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\host.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/guest.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\guest.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\binaries.json",
+          "bytes": 382,
+          "sha256": "AE597B92D67ABF93D20F015D600566132829E1E8C3F4C8BDC8D71A1F3CD7E4E7"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "DA3EE4A73B402BF0B34BE96E4B4C954684800A026CAE37CD4144EE8980AC0928"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-host/strict-pass.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-host\\strict-pass.txt",
+          "bytes": 47,
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-final-20261021-guest",
+      "outcome": "probe_sampling_timeout",
+      "interpretation": "Did not collect enough random attack angles within 60 seconds; no new incorrect angle recorded.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "05923CA98B132AAC594F5E45E9690C6B48AB43913C0E84235032BE52EEBAEEA5",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": false,
+        "guestFailed": true,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-final-20261021-guest/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-guest\\host.log",
+          "bytes": 902,
+          "sha256": "A21623D2B5BC67BA2EFF1E3A166C7C7133A2DEFBF0A2ADCABFDB8C507CAE9674"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-guest/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-guest\\guest.log",
+          "bytes": 3379,
+          "sha256": "B8F9C7A7B605D70AC3C7CC294AF7E4E70FBB881247DEA73B27A568EB2D3B6072"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-guest/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-guest\\host-unity.log",
+          "bytes": 110551,
+          "sha256": "46F929517F695A6E02F1039D0AEB2062668B71F0BBD00E340233DC2F0D3ACED8"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-guest/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-guest\\guest-unity.log",
+          "bytes": 109655,
+          "sha256": "8163D87A0D47DB5B444363F712CFA33BDB6425B8E084564E0A48243FE53C4267"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-guest/guest.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-guest\\guest.failed",
+          "bytes": 423,
+          "sha256": "722B8B713B643F93D2B6E7A725541C84210190C3CF66858B7B75EBBF540EDF94"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-guest/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-guest\\binaries.json",
+          "bytes": 382,
+          "sha256": "AE597B92D67ABF93D20F015D600566132829E1E8C3F4C8BDC8D71A1F3CD7E4E7"
+        },
+        {
+          "path": ".test-results/shade-target-final-20261021-guest/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-final-20261021-guest\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "DA3EE4A73B402BF0B34BE96E4B4C954684800A026CAE37CD4144EE8980AC0928"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-facing-20261021-host",
+      "outcome": "final_pass_with_strict_runtime_logs",
+      "interpretation": "Host authority: natural facing plus actual attack angles after the teammate crosses the arena, network revival, native target restoration and eligibility boundaries.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "E20B76EA7AB6180ECAB13A991B9BBA0B4B55687FEC1E155F8BB040C3D344D447",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": true,
+        "guestDone": true,
+        "hostFailed": false,
+        "guestFailed": false,
+        "strictPass": true
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\host.log",
+          "bytes": 3654,
+          "sha256": "32037002EC5092555381C1996A1F995CFC3696DAF5A3B084FC747ADC72905581"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\guest.log",
+          "bytes": 1473,
+          "sha256": "BA1D8B42DD9CE4F35FD24EAA95E4E3E147E4EAE571BD0D238B6E21E8F0741F9B"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\host-unity.log",
+          "bytes": 105766,
+          "sha256": "339BB7B6518AD58090397A3083AA2A655DCAC409BCF8E43783DE134D01F9FEB8"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\guest-unity.log",
+          "bytes": 106597,
+          "sha256": "6E5513E24DB48A21BFB4136264BCF57DD0A648DD53A28FC5F708D8EA3195A468"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/host.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\host.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/guest.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\guest.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\binaries.json",
+          "bytes": 382,
+          "sha256": "AE597B92D67ABF93D20F015D600566132829E1E8C3F4C8BDC8D71A1F3CD7E4E7"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "4E9909B2B21D23EA233AB316348FDDDCEEB1255FA7FB773B521466FE1183BD07"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-host/strict-pass.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-host\\strict-pass.txt",
+          "bytes": 47,
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-facing-20261021-guest",
+      "outcome": "final_pass_with_strict_runtime_logs",
+      "interpretation": "Guest authority: natural facing plus actual attack angles after the teammate crosses the arena, network revival, native target restoration and eligibility boundaries.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "E20B76EA7AB6180ECAB13A991B9BBA0B4B55687FEC1E155F8BB040C3D344D447",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": true,
+        "guestDone": true,
+        "hostFailed": false,
+        "guestFailed": false,
+        "strictPass": true
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\host.log",
+          "bytes": 1426,
+          "sha256": "35B944A42C9C6FC05942DF0CC63AE6129E66EB2D609ED8E36B36166C9140298D"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\guest.log",
+          "bytes": 3701,
+          "sha256": "87047217C464B4C999CB1C755760BD569B12F3DBE44FFC7E327C35F05E43CD96"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\host-unity.log",
+          "bytes": 108931,
+          "sha256": "C896149CEFFDD4CFB02BE95625F10693AEA9A7F6DE0F8AECB7C98B98400BFFB0"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\guest-unity.log",
+          "bytes": 107751,
+          "sha256": "379D8D08BB4CE16C8BB1215B0691E98264AE20933670699BF4409362876088E0"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/host.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\host.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/guest.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\guest.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\binaries.json",
+          "bytes": 382,
+          "sha256": "AE597B92D67ABF93D20F015D600566132829E1E8C3F4C8BDC8D71A1F3CD7E4E7"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "4E9909B2B21D23EA233AB316348FDDDCEEB1255FA7FB773B521466FE1183BD07"
+        },
+        {
+          "path": ".test-results/shade-target-facing-20261021-guest/strict-pass.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-facing-20261021-guest\\strict-pass.txt",
+          "bytes": 47,
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-rescue-final-20261021",
+      "outcome": "unresolved_collision_timeout",
+      "interpretation": "First nail rescue passed, second emitted no shade hit and victim timed out. Geometry or timing was not established as the cause.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "E20B76EA7AB6180ECAB13A991B9BBA0B4B55687FEC1E155F8BB040C3D344D447",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": false,
+        "guestDone": false,
+        "hostFailed": true,
+        "guestFailed": false,
+        "strictPass": false
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-rescue-final-20261021/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-final-20261021\\host.log",
+          "bytes": 4687,
+          "sha256": "DA031C23019085BCA147861F46DA909D009E4A344F2828827DF7E1DA6FEFF4FB"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-final-20261021/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-final-20261021\\guest.log",
+          "bytes": 3188,
+          "sha256": "85224635EAC312B4C1FE8272E1C95B2E1F8FB060BC32CA2E972058E78DA70B68"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-final-20261021/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-final-20261021\\host-unity.log",
+          "bytes": 113714,
+          "sha256": "9B53EE5E55F27A95F504EDB656FB55904394CD11256616C2E5C36CA8AE579CC2"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-final-20261021/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-final-20261021\\guest-unity.log",
+          "bytes": 109290,
+          "sha256": "CA555DBA4A8A454BFDBDB26CB1E0B412375407F10AD89CD01E6462479E01BBB8"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-final-20261021/host.failed",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-final-20261021\\host.failed",
+          "bytes": 402,
+          "sha256": "F5DF2B42A2B3DBE85A48BBB925DECA16EBD15B82C83E3C017519ABDC1C4D4207"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-final-20261021/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-final-20261021\\binaries.json",
+          "bytes": 382,
+          "sha256": "AE597B92D67ABF93D20F015D600566132829E1E8C3F4C8BDC8D71A1F3CD7E4E7"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-final-20261021/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-final-20261021\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "4E9909B2B21D23EA233AB316348FDDDCEEB1255FA7FB773B521466FE1183BD07"
+        }
+      ]
+    },
+    {
+      "run": "shade-target-rescue-geometry-20261021",
+      "outcome": "final_pass_with_strict_runtime_logs",
+      "interpretation": "Four alternating real nail rescues passed. Probe waits for the prior swing, checks clear terrain and disables gravity while swinging. All four first candidates were clear; earlier intermittent miss remains unexplained.",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3F7495F42420DEEB3A88CFE227BFD68A5A54A7361631968CA7A6E0440FF1F69E"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D85EE07CABC1B6422CDD5E677C77A4A8D3AE2E6DB4C7D8542F2B44EF92AC4674"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+        }
+      ],
+      "probeSha256": "F4FE8AD53609FBF94754D393107EB6510A24FEBD2EAFFB78CD2BB1D296206AF2",
+      "probeHashRecorded": true,
+      "endpointMarkers": {
+        "hostDone": true,
+        "guestDone": true,
+        "hostFailed": false,
+        "guestFailed": false,
+        "strictPass": true
+      },
+      "files": [
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/host.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\host.log",
+          "bytes": 8097,
+          "sha256": "D05D9F797635C8BC0C3B143B01D933596AE1DAD3492D786A28BC30518A895DC9"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/guest.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\guest.log",
+          "bytes": 6937,
+          "sha256": "A8B2DBF64FD9C5C397DA4EF73CD8C9D5AC47D2718172A540B10D9DB46D4D9215"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/host-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\host-unity.log",
+          "bytes": 110036,
+          "sha256": "4B4CF2282DCA496827BCA5DD2616C5A2452D6D817BF8BA68CBD3F7A8C496F245"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/guest-unity.log",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\guest-unity.log",
+          "bytes": 104578,
+          "sha256": "CDC96FF22AA2EAF4D3AF913FC9BD9682FDB799274C2D7FF0E2F05D41900F66B8"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/host.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\host.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/guest.done",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\guest.done",
+          "bytes": 2,
+          "sha256": "2689367B205C16CE32ED4200942B8B8B1E262DFC70D9BC9FBC77C49699A4F1DF"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/binaries.json",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\binaries.json",
+          "bytes": 382,
+          "sha256": "AE597B92D67ABF93D20F015D600566132829E1E8C3F4C8BDC8D71A1F3CD7E4E7"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/probe-sha256.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\probe-sha256.txt",
+          "bytes": 66,
+          "sha256": "E8D697AF4E2240C9022365C93DA75266C60224FE76A7339D6D95D82AC41FD2B2"
+        },
+        {
+          "path": ".test-results/shade-target-rescue-geometry-20261021/strict-pass.txt",
+          "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-rescue-geometry-20261021\\strict-pass.txt",
+          "bytes": 47,
+          "sha256": "48F9F2A9399E7A89B7191D2B7C4FCECF03ED21A87A584BB7EBF7196E89038608"
+        }
+      ]
+    }
+  ],
+  "baselinePayload": [
+    {
+      "path": ".test-results/shade-target-baseline-payload-20261021/HKMP.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-payload-20261021\\HKMP.dll",
+      "bytes": 1788928,
+      "sha256": "465575C9DC12FC775ACE815F1EDF6F178A41E3C7ABE22696CF8A4D22226766CB"
+    },
+    {
+      "path": ".test-results/shade-target-baseline-payload-20261021/HollowConnect.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-payload-20261021\\HollowConnect.dll",
+      "bytes": 157696,
+      "sha256": "FEC60EE4A8010DD47DD2564F2E3CADCB9CC9D40E7C34E890D94B732593CAF33F"
+    },
+    {
+      "path": ".test-results/shade-target-baseline-payload-20261021/HollowConnect.Core.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-payload-20261021\\HollowConnect.Core.dll",
+      "bytes": 35840,
+      "sha256": "23F3A6E3DCC200D528AD0BB7C65E2853445476C201DC4B3059AEAFEE0816CF8E"
+    },
+    {
+      "path": ".test-results/shade-target-baseline-payload-20261021/BouncyCastle.Cryptography.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-baseline-payload-20261021\\BouncyCastle.Cryptography.dll",
+      "bytes": 4657816,
+      "sha256": "3D7CED058D7264036323F8CFD87D3203761B5FE45DFDDF1EBCE069C1E36B81B8"
+    }
+  ],
+  "gameAssemblies": [
+    {
+      "path": ".test-results/game-host/hollow_knight_Data/Managed/Assembly-CSharp.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "bytes": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": ".test-results/game-host/hollow_knight_Data/Managed/PlayMaker.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\game-host\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "bytes": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    },
+    {
+      "path": ".test-results/game-guest/hollow_knight_Data/Managed/Assembly-CSharp.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\Assembly-CSharp.dll",
+      "bytes": 4064768,
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": ".test-results/game-guest/hollow_knight_Data/Managed/PlayMaker.dll",
+      "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\game-guest\\hollow_knight_Data\\Managed\\PlayMaker.dll",
+      "bytes": 212480,
+      "sha256": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A"
+    }
+  ],
+  "staticAudit": {
+    "path": ".test-results/shade-target-audit-20261021",
+    "files": [
+      {
+        "path": ".test-results/shade-target-audit-20261021/audit-report.md",
+        "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-audit-20261021\\audit-report.md",
+        "bytes": 55134,
+        "sha256": "7E9B84BF2372662098AAE457EAD5EA5D62403EEF3E4C70C46B480A8548267DFF"
+      },
+      {
+        "path": ".test-results/shade-target-audit-20261021/audit.json",
+        "absolutePath": "E:\\projects\\hollowConnect\\.test-results\\shade-target-audit-20261021\\audit.json",
+        "bytes": 2342781,
+        "sha256": "2FD4C5F69779E84AEA603F4DD78EA235BDC3522A5E6D70638447657B748A554B"
+      }
+    ],
+    "classification": "Hidden Hero target risk confirmed by the Hornet runtime baseline. Other hooked native methods were statically checked; each boss prefab and move still needs runtime verification."
+  },
+  "finalProbeSources": [
+    {
+      "path": "tests/Smoke/BossTargetChecks.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\tests\\Smoke\\BossTargetChecks.cs",
+      "bytes": 11204,
+      "sha256": "DB22F089DBD1B0C2D199EFC22D53BE65FC6F5CDB48B3158323C4AF524153F5CE"
+    },
+    {
+      "path": "tests/Smoke/RescueProbe.cs",
+      "absolutePath": "E:\\projects\\hollowConnect\\tests\\Smoke\\RescueProbe.cs",
+      "bytes": 26340,
+      "sha256": "BE87F4B40C38CB85738F8AAA52C2A46C70BAD4E6A336C3D78BDAAC8F160187F6"
+    },
+    {
+      "path": "tests/Smoke/Run-Boss-Targets.ps1",
+      "absolutePath": "E:\\projects\\hollowConnect\\tests\\Smoke\\Run-Boss-Targets.ps1",
+      "bytes": 2705,
+      "sha256": "0715CE732B6D550F724730F3C27990C639CB1E3CC86F8912EB0283CA00E1CB0A"
+    }
+  ],
+  "verificationScope": [
+    "Two existing isolated game copies, save interception and real localhost UDP.",
+    "Hornet host and guest independently act as native room authority; actual HeroController death, living avatar crosses arena, native facing and attack angle observations, actual network revival.",
+    "Four ordinary alternating nail collision rescues with soul caps, reward replay protection, one-health revival, personal geo/shade preservation and native feedback cleanup.",
+    "Target eligibility and replica/unowned/non-player exclusion include explicit fixture boundary checks; not every exclusion is a separate network gameplay scenario."
+  ],
+  "limitations": [
+    "No new package generated; prior ZIPs and hashes remain historical.",
+    "Not every boss move or prefab, dynamic-child authority handoff, combat disconnect, three-player or two-machine FRP tested.",
+    "Native GameManager.SetupHeroRefs startup exceptions remain in Unity logs. Strict mod log pass does not mean all Unity output is exception-free.",
+    "Earlier ordinary rescue collision timeout is preserved and its immediate cause remains unconfirmed.",
+    "Missing historical probe hash files are represented by null; hashes are not reconstructed from later builds."
+  ]
+}

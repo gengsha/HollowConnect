@@ -57,7 +57,7 @@ internal class ServerAddonNetworkSender<TPacketId> :
     /// <inheritdoc/>
     public void SendSingleData(TPacketId packetId, IPacketData packetData, ushort playerId) {
         if (!_netServer.IsStarted) {
-            throw new InvalidOperationException(ServerNotStartedExceptionMsg);
+            throw new AddonConnectionUnavailableException(playerId, ServerNotStartedExceptionMsg);
         }
 
         if (!PacketIdLookup.TryGetValue(packetId, out var idValue)) {
@@ -67,7 +67,7 @@ internal class ServerAddonNetworkSender<TPacketId> :
 
         var updateManager = _netServer.GetUpdateManagerForClient(playerId);
         if (updateManager == null) {
-            throw new InvalidOperationException($"Player with ID '{playerId}' is not connected");
+            throw new AddonConnectionUnavailableException(playerId, $"Player with ID '{playerId}' is not connected");
         }
 
         if (!_serverAddon.Id.HasValue) {
@@ -121,7 +121,7 @@ internal class ServerAddonNetworkSender<TPacketId> :
         ushort playerId
     ) where TPacketData : IPacketData, new() {
         if (!_netServer.IsStarted) {
-            throw new InvalidOperationException(ServerNotStartedExceptionMsg);
+            throw new AddonConnectionUnavailableException(playerId, ServerNotStartedExceptionMsg);
         }
 
         if (!PacketIdLookup.TryGetValue(packetId, out var idValue)) {
@@ -131,7 +131,7 @@ internal class ServerAddonNetworkSender<TPacketId> :
 
         var updateManager = _netServer.GetUpdateManagerForClient(playerId);
         if (updateManager == null) {
-            throw new InvalidOperationException($"Player with ID '{playerId}' is not connected");
+            throw new AddonConnectionUnavailableException(playerId, $"Player with ID '{playerId}' is not connected");
         }
 
         if (!_serverAddon.Id.HasValue) {

@@ -13,7 +13,7 @@ using Object = UnityEngine.Object;
 namespace HollowConnect.Smoke;
 
 // Disposable in-memory characters only; ProbeMod intercepts all SaveGame overloads.
-public sealed class ColosseumProbe : MonoBehaviour {
+public sealed partial class ColosseumProbe : MonoBehaviour {
     private string root, role;
     private bool host;
     private CoopRuntime runtime;
@@ -101,7 +101,14 @@ public sealed class ColosseumProbe : MonoBehaviour {
         trial = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLOSSEUM_TRIAL") ?? "Bronze";
         testCase = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLOSSEUM_CASE") ?? "inspect";
         first = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLOSSEUM_FIRST") ?? "host";
-        if (testCase == "reward-continuation") {
+        if (WallCase || testCase.StartsWith("entrance-")) {
+            // Diagnostic only: keep combat/hazards from interrupting the two
+            // observers while original enemy deaths advance the native waves.
+            rewardProtection = (orig, self, source, side, damage, hazard) => {
+                if (testCase == "air-rescue" && (source == null || airRescueLive && hazard != 1)) orig(self, source, side, damage, hazard);
+            };
+            On.HeroController.TakeDamage += rewardProtection;
+        } else if (testCase == "reward-continuation") {
             // This explicit reward-only fixture leaves Wave 1 held, so its
             // active enemies must not interrupt the real pickup animation.
             // Protect at the damage boundary because native control actions
@@ -181,6 +188,8 @@ public sealed class ColosseumProbe : MonoBehaviour {
         flow?.Capture("before native registration", true);
         if (testCase != "inspect") yield return NormalEntry();
         if (FlowCase) yield return ArenaFlow();
+        if (testCase == "air-rescue") yield return ColosseumAirRescue();
+        else if (WallCase) yield return ObserveColosseumWalls();
         if (testCase == "lifecycle") yield return CheckpointLifecycle();
         if (testCase != "native") yield return ProbeShutdown.Run(engine, root, role);
         Log("FINAL PASS colosseum " + testCase); Flag(role + ".done");
@@ -214,7 +223,10 @@ public sealed class ColosseumProbe : MonoBehaviour {
         Require(gate.targetScene == "Room_Colosseum_" + trial, "board configured actual trial entrance");
         if (role != first) {
             yield return Until(() => Has(first + "." + readyMarker), "first player trial entrance complete");
-            if (FlowCase) yield return Until(() => Has(first + ".native-wave"), "first player's native Wave 1 before late entry");
+            if (FlowCase || WallCase) yield return Until(() => Has(first + ".native-wave"), "first player's native Wave 1 before late entry");
+            if (testCase == "entrance-late") yield return Until(() => Has(first + ".native-wave"), "first entrant closes native arena gate before late entry");
+            if (testCase == "walls-late")
+                yield return Until(() => Has(first + ".walls-late-ready"), "native wall contraction before late entry", 360);
             yield return new WaitForSecondsRealtime(testCase == "late" ? 12 : 3);
         }
         hero.transform.position = new Vector3(56, 9.5f, 0); hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
@@ -230,20 +242,25 @@ public sealed class ColosseumProbe : MonoBehaviour {
         Log("CHECKPOINT BEFORE DEATH " + PlayerData.instance.GetString("respawnScene") + "/" + PlayerData.instance.GetString("respawnMarkerName") + " type=" + PlayerData.instance.GetInt("respawnType"));
         RequireCheckpoint();
         Dump("trial"); Flag(role + "." + readyMarker);
-        if (FlowCase) {
-            flow.Capture("trial entrant snapshot ready", true);
-            flow.CaptureAuthority(ArenaManager);
+        if (testCase.StartsWith("entrance-")) {
+            yield return ColosseumEntranceChecks();
+            yield break;
+        }
+        if (FlowCase || WallCase) {
+            flow?.Capture("trial entrant snapshot ready", true);
+            flow?.CaptureAuthority(ArenaManager);
             if (role == first) {
                 yield return WalkIntoArena();
                 // In batch mode the arena has no combatants to decrement the
                 // native Battle Enemies counter, so PlayMaker can run through
                 // all wave states in one frame.  The trigger event and its
                 // native transition log are the reliable entry observation.
-                flow.Capture("first native wave"); flow.CaptureAuthority(ArenaManager);
+                flow?.Capture("first native wave"); flow?.CaptureAuthority(ArenaManager);
                 Flag(role + ".native-wave");
             }
         }
-        yield return Until(() => Has((host ? "guest" : "host") + "." + readyMarker), "both players trial observations recorded");
+        if (testCase != "walls-late" || role != first)
+            yield return Until(() => Has((host ? "guest" : "host") + "." + readyMarker), "both players trial observations recorded");
         if (testCase is "return" or "wipe") yield return PersonalReturns(testCase == "wipe");
     }
     private Hkmp.Game.Client.Entity.EntityManager ArenaManager => Field<Hkmp.Game.Client.Entity.EntityManager>(engine.ClientManager, "_entityManager");
@@ -312,6 +329,7 @@ public sealed class ColosseumProbe : MonoBehaviour {
         return control == null ? null : control.GetComponentsInChildren<AudioSource>(true).FirstOrDefault(a => a.clip != null && a.isPlaying);
     }
     private IEnumerator ArenaFlow() {
+        Require(!Hkmp.Game.Client.Entity.LocalBattleCompletion.IsLocal(LocalArena), "network-owned trial control is excluded from local battle accounting");
         Require(trial == "Bronze", "reward flow is explicitly scoped to the first Bronze notch");
         // The first entrant already triggered the native manager in NormalEntry;
         // a late entrant must only observe its local replica and never send

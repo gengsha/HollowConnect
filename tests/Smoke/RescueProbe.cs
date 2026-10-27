@@ -24,6 +24,15 @@ public sealed partial class RescueProbe : MonoBehaviour {
     private bool Has(string n) => File.Exists(Path.Combine(root, n));
     private void Flag(string n) => File.WriteAllText(Path.Combine(root, n), "ok");
     private void Check(bool b, string s) { if (!b) throw new Exception(s); Log("PASS " + s); }
+    // takeNoDamage does not suppress native contact recoil. These lifecycle
+    // fixtures retain deliberate source-null TakeDamage calls while excluding
+    // unrelated enemy contact; real acid collision has its own route fixture.
+    private static MonoMod.RuntimeDetour.Hook IgnoreExternalCombatDamage(bool allowHazards = false) =>
+        new MonoMod.RuntimeDetour.Hook(typeof(HeroController).GetMethod("TakeDamage"),
+            new Action<Action<HeroController, GameObject, GlobalEnums.CollisionSide, int, int>, HeroController, GameObject, GlobalEnums.CollisionSide, int, int>(
+                (orig, self, source, side, damage, hazard) => {
+                    if (source == null || allowHazards && (hazard == 2 || hazard == 3 || hazard == 5)) orig(self, source, side, damage, hazard);
+                }));
     private IEnumerator Until(Func<bool> test, string s, float seconds = 45) {
         var end = Time.realtimeSinceStartup + seconds;
         while (!test() && Time.realtimeSinceStartup < end) yield return null;
@@ -34,8 +43,14 @@ public sealed partial class RescueProbe : MonoBehaviour {
                 " transition=" + hero.transitionState + " down=" + runtime.Down + " returning=" + runtime.Returning +
                 " health=" + PlayerData.instance.health + " invulnerable=" + hero.cState.invulnerable + " recoil=" + hero.cState.recoiling +
                 " hazard=" + hero.cState.hazardDeath + "/" + hero.cState.hazardRespawning);
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_RESCUE_CASE")))
+                Log("TIMEOUT STORY PHYSICS simulated=" + body.simulated + " type=" + body.bodyType + " constraints=" + body.constraints +
+                    " scale=" + Time.timeScale + " move=" + hero.move_input + " state=" + hero.hero_state + " attacking=" + hero.cState.attacking);
             foreach (var fsm in Object.FindObjectsOfType<PlayMakerFSM>().Where(f => f.name == "White Palace Lift"))
                 Log("TIMEOUT LIFT " + fsm.name + "/" + fsm.FsmName + "=" + fsm.ActiveStateName + " pos=" + fsm.transform.position);
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_RULE_CHECK")))
+                foreach (var fsm in Object.FindObjectsOfType<PlayMakerFSM>().Where(f => f.FsmName == "Bench Control"))
+                    Log("TIMEOUT BENCH " + fsm.name + "=" + fsm.ActiveStateName + " bools=" + string.Join(",", fsm.FsmVariables.BoolVariables.Select(v => v.Name + "=" + v.Value)));
         }
         Check(test(), s);
     }
@@ -47,7 +62,9 @@ public sealed partial class RescueProbe : MonoBehaviour {
         var h = HeroController.instance; h.RegainControl(); h.StartAnimationControl(); h.takeNoDamage = true;
         h.cState.dead = h.cState.recoiling = h.cState.invulnerable = false; h.cState.recoilingLeft = h.cState.recoilingRight = false;
         HeroBox.inactive = false; h.GetComponent<Rigidbody2D>().gravityScale = 0; h.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        h.transform.position = new Vector3(host ? 20 : 22, 12, h.transform.position.z);
+        h.transform.position = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Crossroads_01"
+            ? StoryFloor(new Vector3(20, 12, h.transform.position.z), "Crossroads_01") + Vector3.right * (host ? 0 : 2)
+            : new Vector3(host ? 20 : 22, 12, h.transform.position.z);
     }
     private void Die() {
         var h = HeroController.instance; PlayerData.instance.SetInt("health", 0);
@@ -70,16 +87,215 @@ public sealed partial class RescueProbe : MonoBehaviour {
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Menu_Title", "menu ready");
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
-        CoopMod.Settings.Rescue = true; CoopMod.Settings.ShareProgress = false; CoopMod.Settings.EntryProtection = false;
+        CoopMod.Settings.Rescue = true;
+        CoopMod.Settings.RescueLimit = 0;
+        CoopMod.Settings.SpectateAfterExhaustion = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_SPECTATOR") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK")))
+            CoopMod.Settings.SpectateAfterExhaustion = true;
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_RULE_CHECK"))) ConfigureRescueRuleCheck();
+        CoopMod.Settings.ShareProgress = VinePlatformCheck || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENCOUNTER_CASE")) || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_BATTLE_CHECK")) ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK"));
+        if (SoulMasterCheck) CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SOUL_SHARED") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FK_GATE_CHECK")))
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_FK_SHARED") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_HORNET_STORY"))) {
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_HORNET_SHARED") == "1";
+            CoopMod.Settings.BossHealthScaling = false;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_DISCONNECT"))) {
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_SHARED") == "1";
+            CoopMod.Settings.BossDamageRanking = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_DISCONNECT") == "damage";
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_COMPLETION_INTENT"))) CoopMod.Settings.ShareProgress = true;
+        CoopMod.Settings.EntryProtection = false;
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_TARGET_AUTHORITY")))
+            CoopMod.Settings.BossTargetingMode = 0;
+        if (MossRetargetCheck) {
+            CoopMod.Settings.BossTargetingMode = Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOSS_NATIVE") == "1" ? 0 : 1;
+            CoopMod.Settings.Rescue = false;
+            CoopMod.Settings.SpectateAfterExhaustion = false;
+            CoopMod.Settings.BossHealthScaling = false;
+            CoopMod.Settings.ShareProgress = false;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_NOSK_STALL_CHECK") == "1") {
+            CoopMod.Settings.ShareProgress = true;
+            CoopMod.Settings.BossTargetingMode = 1;
+        }
+        if (PostBossDamageCheck) {
+            CoopMod.Settings.BossHealthScaling = true;
+            CoopMod.Settings.BossExtraHealthPerPlayer = .6f;
+            CoopMod.Settings.BossExtraHealthDecay = .6f;
+            postBossPlayerDamage = PlayerDamageSignature();
+        }
+        CoopMod.Settings.BossVictoryRescue = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_VICTORY_DISABLED") != "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXHAUSTED_BOSS_CHECK"))) {
+            CoopMod.Settings.RescueLimit = 3;
+            CoopMod.Settings.SpectateAfterExhaustion = true;
+            CoopMod.Settings.BossTargetingMode = 0;
+        }
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
+        pd.SetBool("visitedDirtmouth", true);
+        Log("fixture: Dirtmouth visited; native first-visit title is outside rescue scope");
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition, "fresh unsaved Town entered");
+        yield return RuleBenchUp();
+        if (FlexibleTargetCheck || MenuPointerCheck) ConfigureFlexibleTargetChecks();
+        if (MenuPointerCheck) CheckMenuPointerMenus();
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); } else yield return Until(() => Has("server.started"), "server ready");
         yield return new WaitForSecondsRealtime(1);
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (MossRetargetCheck) {
+            yield return MossRetargetChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS Moss retarget " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOSS_RETARGET"));
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_COLLISION_CHECK"))) {
+            yield return WarpCollisionChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS warp collision " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_COLLISION_CHECK"));
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_HORNET_STORY"))) {
+            yield return HornetStoryGateChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL OBSERVATION COMPLETE Hornet story " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_HORNET_STORY"));
+            Flag(role + ".done"); yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_COMPLETION_INTENT") == "1") {
+            yield return BossCompletionIntentChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL COMPLETE A3 boundary execution; product assertions recorded separately");
+            Flag(role + ".done"); yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_COMPLETION_INTENT") == "native-context" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_COMPLETION_INTENT") == "native-entity") {
+            yield return BossCompletionNativeChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS native boss completion " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_COMPLETION_INTENT"));
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_DISCONNECT"))) {
+            yield return SettlementDisconnectChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS targeted settlement disconnect " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_DISCONNECT"));
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FK_GATE_CHECK"))) {
+            yield return FalseKnightGateChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FK_GATE_CHECK") == "schema"
+                ? "FINAL PASS False Knight schema and armour preflight only"
+                : "FINAL PASS False Knight native gates and walking"); Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_REPORTED_BOSS_CHECK"))) {
+            yield return ReportedBossChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS reported boss checks"); Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK"))) {
+            yield return PathOfPainChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK") == "schema"
+                ? "FINAL PASS Path of Pain schema preflight only"
+                : "FINAL PASS Path of Pain native completion and abandoned shade return");
+            Flag(role + ".done"); yield break;
+        }
+        if (MenuPointerCheck) {
+            yield return MenuPointerLockChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            yield return FlexibleMenuUnlockChecks();
+            Log("FINAL PASS scoped mouse navigation, native menu callbacks and room locks");
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLECTOR_GATE_CHECK"))) {
+            yield return CollectorGateChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS collector gate checks"); Flag(role + ".done"); yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_NOSK_STALL_CHECK") == "1") {
+            yield return NoskStallChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS nosk targeted checks"); Flag(role + ".done"); yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_RELATED_BOSS_SCENE_CHECK") == "1") {
+            yield return RelatedBossSceneChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS additive boss settlement and warp collision checks");
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXHAUSTED_BOSS_CHECK"))) {
+            yield return ExhaustedBossChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS exhausted story boss " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXHAUSTED_BOSS_CHECK"));
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_RESCUE_CASE"))) {
+            yield return StoryRescuePlacementChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS story rescue placement " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_RESCUE_CASE"));
+            Flag(role + ".done"); yield break;
+        }
+        if (FlexibleTargetCheck) {
+            yield return FlexibleTargetChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            yield return FlexibleMenuUnlockChecks();
+            Log("FINAL PASS flexible targets, snapshots, authority handoff and locked room settings");
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_TARGET_AUTHORITY"))) {
+            yield return BossTargetChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS boss targets living teammate across down, movement and revival");
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_RULE_CHECK"))) {
+            yield return RescueRuleChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS rescue rules " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_RULE_CHECK"));
+            Flag(role + ".done"); yield break;
+        }
+        if (SoulMasterCheck) {
+            yield return SoulMasterChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS Soul Master targeted " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_SOUL_MASTER_CHECK"));
+            Flag(role + ".done");
+            yield break;
+        }
+        if (VinePlatformCheck) {
+            yield return LocalVinePlatformChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS native vine platforms only respond to each local player's nail"); Flag(role + ".done");
+            yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENCOUNTER_CASE"))) {
+            yield return EncounterWaveChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS native encounter " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENCOUNTER_CASE"));
+            Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_BATTLE_CHECK"))) {
+            yield return LocalBattleChecks();
+            if (PostBossDamageCheck) yield return PostBossRoomCleanupChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (PostBossDamageCheck) {
+                Check(runtime.CurrentBossHealthMultiplier() == 1, "disconnect disables boss damage multiplier");
+                Check(PlayerDamageSignature() == postBossPlayerDamage, "disconnect leaves player damage properties unchanged");
+            }
+            Log(Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_BATTLE_CHECK") == "mother"
+                ? "FINAL PASS native Gruz mother and child waves, local gates"
+                : "FINAL PASS local arena battle completion, barriers and personal reward"); Flag(role + ".done");
+            yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_VICTORY_CHECK") == "1") {
+            yield return BossVictoryChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS boss victory shadow recovery and native control"); Flag(role + ".done");
+            yield break;
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_PLAYER_MOTION_CHECK") == "1") {
             yield return CoveragePlayerMotionChecks.Run(Log);
             Flag(role + ".motion");
@@ -112,6 +328,7 @@ public sealed partial class RescueProbe : MonoBehaviour {
             Log("FINAL PASS hazard rescue at native safe point"); Flag(role + ".done");
             yield break;
         }
+        using var rewardFixtureDamage = IgnoreExternalCombatDamage();
         GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo { SceneName = "Crossroads_01", EntryGateName = "left1",
             Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true });
         yield return Until(() => runtime.Playable && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Crossroads_01" &&
@@ -123,6 +340,27 @@ public sealed partial class RescueProbe : MonoBehaviour {
         // Isolate the rescue's AddMPCharge reward from native enemies that
         // can wander into either swing beside the new grounded anchors.
         ModHooks.SoulGainHook += amount => { Log("native combat soul excluded from reward fixture: " + amount); return 0; };
+        using var shadeTrace = new MonoMod.RuntimeDetour.Hook(typeof(ShadeView).GetMethod("Hit"),
+            new Action<Action<ShadeView, HitInstance>, ShadeView, HitInstance>((orig, view, hit) => {
+                Log("TRACE shade collision serial=" + view.Serial + " source=" + hit.Source?.name + " type=" + hit.AttackType + " damage=" + hit.DamageDealt);
+                orig(view, hit);
+            }));
+        using var requestTrace = new MonoMod.RuntimeDetour.Hook(typeof(CoopRuntime).GetMethod("RequestShadeHit", BindingFlags.Instance | BindingFlags.NonPublic),
+            new Func<Func<CoopRuntime, ushort, uint, bool>, CoopRuntime, ushort, uint, bool>((orig, owner, target, serial) => {
+                var accepted = orig(owner, target, serial);
+                Log("TRACE shade request target=" + target + " serial=" + serial + " sent=" + accepted + " hero=" + HeroController.instance.transform.position);
+                return accepted;
+            }));
+        using var serverTrace = new MonoMod.RuntimeDetour.Hook(typeof(CoopServerAddon).GetMethod("Receive", BindingFlags.Instance | BindingFlags.NonPublic),
+            new Action<Action<CoopServerAddon, ushort, Message>, CoopServerAddon, ushort, Message>((orig, addon, id, message) => {
+                if (message.Kind == Kind.ShadeHit) {
+                    var party = Field<Party>(addon, "party");
+                    party.Members.TryGetValue(id, out var rescuer); party.Members.TryGetValue(message.Target, out var target);
+                    Log("TRACE server shade request serial=" + message.Serial + " rescuer=" + rescuer?.Life + "/" + rescuer?.X + "/" + rescuer?.Y +
+                        " target=" + target?.Life + "/" + target?.X + "/" + target?.Y + " quota=" + target?.RescuesUsed + "/" + party.RescueLimit);
+                }
+                orig(addon, id, message);
+            }));
         for (var i = 0; i < 4; i++) yield return Trial(i);
         yield return ProbeShutdown.Run(engine,root,role);
         Log("FINAL PASS rescue soul and native feedback"); Flag(role + ".done");
@@ -200,8 +438,26 @@ public sealed partial class RescueProbe : MonoBehaviour {
             Log(prefix + " missed swing state=" + runtime.Peers[target].Life + " soul=" + pd.GetInt("MPCharge") + "/" + before +
                 " reserve=" + pd.GetInt("MPReserve") + "/" + beforeReserve + " hero=" + h.transform.position + " shade=" + pos);
             Check(runtime.Peers[target].Life == Life.Down && pd.GetInt("MPCharge") == before && pd.GetInt("MPReserve") == beforeReserve, prefix + " rejected request and missed swing grant no reward");
-            h.transform.position = pos + Vector3.left * 2; h.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            h.FaceRight(); h.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
+            yield return Until(() => !h.cState.attacking, prefix + " missed nail swing fully finished");
+            var heroBox = h.GetComponent<Collider2D>();
+            var offset = heroBox.bounds.center - h.transform.position;
+            var strike = Vector3.zero; var clearStrike = false;
+            foreach (var distance in new[] { 2f, 1.4f, 1f }) {
+                foreach (var side in new[] { -1, 1 }) {
+                    var candidate = pos + Vector3.right * (side * distance);
+                    var blocked = Physics2D.OverlapBoxAll(candidate + offset, heroBox.bounds.size * .9f, 0, 1 << 8).Any(c => !c.isTrigger);
+                    Log(prefix + " strike geometry candidate=" + candidate + " blocked=" + blocked);
+                    if (blocked) continue;
+                    strike = candidate; clearStrike = true; break;
+                }
+                if (clearStrike) break;
+            }
+            Check(clearStrike, prefix + " actual nail strike has a clear hero position beside native anchor");
+            h.transform.position = strike; h.AffectedByGravity(false); h.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            if (strike.x < pos.x) h.FaceRight(); else h.FaceLeft();
+            h.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
+            Log(prefix + " strike physics=" + h.GetComponent<Rigidbody2D>().bodyType + " input=" + h.acceptingInput + "/" + h.controlReqlinquished +
+                " attack=" + h.cState.attacking + " atBench=" + pd.GetBool("atBench") + " hero=" + h.transform.position + " shade=" + service.Get(target).transform.position);
             yield return Until(() => runtime.Peers[target].Life == Life.Alive, prefix + " actual nail rescue accepted");
             Log(prefix + " accepted rescue soul=" + pd.GetInt("MPCharge") + " reserve=" + pd.GetInt("MPReserve"));
             Check(pd.GetInt("MPCharge") == (i == 1 || i == 2 ? 99 : 33) && pd.GetInt("MPReserve") == (i == 1 ? 24 : i == 2 ? 33 : 0), prefix + " rescuer soul and reserve match native cap");

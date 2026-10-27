@@ -10,6 +10,7 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class RescueProbe {
     private IEnumerator NativeRescueChecks() {
+        using var fixtureDamage = IgnoreExternalCombatDamage();
         var hero = HeroController.instance;
         var pd = PlayerData.instance;
         var body = hero.GetComponent<Rigidbody2D>();
@@ -38,7 +39,9 @@ public sealed partial class RescueProbe {
             yield return Until(() => runtime.Playable && GameManager.instance.sceneName == scene && hero.acceptingInput &&
                 !hero.cState.transitioning && engine.ClientManager.SceneSnapshotReady, "native rescue room ready " + scene);
             hero.takeNoDamage = true;
-            var entry = hero.FindGroundPoint(pd.GetVector3("hazardRespawnLocation"), true);
+            var entry = runtime.IsGodhomeRescueScene()
+                ? hero.FindGroundPoint(pd.GetVector3("hazardRespawnLocation"), true)
+                : StoryFloor(hero.transform.position + Vector3.right * 8, scene);
             hero.transform.position = entry + Vector3.up * .1f;
             hero.AffectedByGravity(true); Physics2D.SyncTransforms();
             yield return Until(() => hero.cState.onGround, "native entry support " + scene);
@@ -57,7 +60,7 @@ public sealed partial class RescueProbe {
                 yield return Together(step + ".ready");
                 if (victim) {
                     // Ordinary lethal hit in the air, independent of hazard type.
-                    hero.transform.position = entry + new Vector3(4, 3, 0); Physics2D.SyncTransforms();
+                    hero.transform.position = entry + new Vector3(runtime.IsGodhomeRescueScene() ? 4 : 2, 3, 0); Physics2D.SyncTransforms();
                     var origin = hero.transform.position;
                     var zone = GameManager.instance.GetCurrentMapZone();
                     var marker = GameObject.FindGameObjectsWithTag("Shade Marker").Where(g => g.scene.name == scene)
@@ -79,20 +82,12 @@ public sealed partial class RescueProbe {
                     Log("NATIVE ANCHOR " + step + " position=" + runtime.DeathPosition);
                     if (!protectionBaseline) {
                         Check(Vector2.Distance(runtime.DeathPosition, origin) > 1, "ordinary rescue leaves airborne death point " + step);
-                        if (scene == "Crossroads_01") {
-                            Check(marker != null, "story room has real native shade marker " + step);
-                            // A shade can float over a ledge; the knight's full
-                            // body may need the existing landing search's 3-unit
-                            // clearance. Require this marker's area plus actual
-                            // supported standing below, rather than exact art X.
-                            Check(Math.Abs(runtime.DeathPosition.x - marker.transform.position.x) <= 3.05f,
-                                "story rescue uses nearest native marker supported area " + step);
+                        if (!runtime.IsGodhomeRescueScene()) {
+                            Check(Math.Abs(runtime.DeathPosition.x - origin.x) <= 6f && runtime.DeathPosition.y < origin.y - 1,
+                                "story and dream rescue keep supported death-side area instead of old marker priority " + step);
                         } else {
                             Check(zone == "GODS_GLORY" || zone == "DREAM_WORLD", "real special map-zone branch " + step);
-                            if (missingCheckpoint)
-                                Check(Math.Abs(runtime.DeathPosition.x - origin.x) < .2f && runtime.DeathPosition.y < origin.y - 1,
-                                    "missing dream checkpoint falls back to supported death location " + step);
-                            else Check(Vector2.Distance(runtime.DeathPosition, entry) < .2f, "dream rescue uses native local checkpoint " + step);
+                            Check(Vector2.Distance(runtime.DeathPosition, entry) < .2f, "Godhome retains native local checkpoint " + step);
                         }
                     }
                     yield return Until(() => !runtime.Down && pd.health == 1, "one-health native rescue " + step);
@@ -128,14 +123,25 @@ public sealed partial class RescueProbe {
                     var peer = runtime.Peers.Single(); var service = Field<ShadeService>(runtime, "shades");
                     yield return Until(() => service.Get(peer.Key) != null, "native rescue shade visible " + step);
                     var shade = service.Get(peer.Key).transform.position;
-                    var stand = new[] { shade + Vector3.right * 2, shade + Vector3.left * 2 }.First(p => {
+                    var heroBox = hero.GetComponent<Collider2D>();
+                    var offset = heroBox.bounds.center - hero.transform.position;
+                    var stand = new[] { 2f, 1.4f, 1f }.SelectMany(distance => new[] { shade + Vector3.right * distance, shade + Vector3.left * distance }).First(p => {
                         var support = Physics2D.Raycast(p, Vector2.down, 8, 1 << 8);
-                        return support.collider != null && support.normal.y > .5f && !support.collider.isTrigger;
+                        return support.collider != null && support.normal.y > .5f && !support.collider.isTrigger &&
+                            !Physics2D.OverlapBoxAll(p + offset, heroBox.bounds.size * .9f, 0, 1 << 8).Any(c => !c.isTrigger);
                     });
                     Log("RESCUER SUPPORT " + step + " position=" + stand);
-                    hero.transform.position = stand; body.velocity = Vector2.zero;
+                    hero.transform.position = stand; body.velocity = Vector2.zero; hero.AffectedByGravity(false);
+                    Physics2D.SyncTransforms();
+                    yield return Until(() => hero.acceptingInput && !hero.controlReqlinquished && !hero.cState.attacking && !hero.cState.recoiling,
+                        "native rescuer can swing " + step);
                     if (stand.x > shade.x) hero.FaceLeft(); else hero.FaceRight();
+                    yield return new WaitForFixedUpdate();
                     hero.Attack(GlobalEnums.AttackDirection.normal); Physics2D.SyncTransforms();
+                    Log("NATIVE STRIKE " + step + " attack=" + hero.cState.attacking + " hero=" + hero.transform.position + " target=" + shade);
+                    yield return new WaitForSecondsRealtime(.05f);
+                    Log("NATIVE SLASH " + step + " scale=" + hero.transform.localScale + " colliders=" + string.Join(";",
+                        hero.GetComponentsInChildren<Collider2D>().Where(c => c.name.Contains("Slash")).Select(c => c.name + ":" + c.enabled + ":" + c.bounds)));
                     yield return Until(() => runtime.Peers[peer.Key].Life == Life.Alive, "actual nail rescues ordinary death " + step);
                     var avatar = runtime.PlayerObject(peer.Key);
                     yield return Until(() => avatar != null && avatar.GetComponent<InvulnerablePulse>() != null &&

@@ -74,7 +74,7 @@ internal abstract class DashBase : DamageAnimationEffect {
 
             // Instantiate the dash effect relative to the player position
             var dashEffectPrefab = HeroController.instance.shadowdashBurstPrefab;
-            var dashEffect = Object.Instantiate(dashEffectPrefab);
+            var dashEffect = RemotePlayerVisuals.Instantiate(dashEffectPrefab);
             Transform dashEffectTransform = dashEffect.transform;
             dashEffectTransform.position = playerTransform.position + spawnPosition;
             dashEffectTransform.rotation = playerTransform.rotation;
@@ -96,7 +96,7 @@ internal abstract class DashBase : DamageAnimationEffect {
             // Find the shadow dash particles in player effects, or create them
             // These are the dark blobs that show in a trail behind the dash of the knight
             var dashParticlesPrefab = HeroController.instance.shadowdashParticlesPrefab;
-            var dashParticles = Object.Instantiate(
+            var dashParticles = RemotePlayerVisuals.Instantiate(
                 dashParticlesPrefab,
                 playerEffects.transform
             );
@@ -114,7 +114,7 @@ internal abstract class DashBase : DamageAnimationEffect {
 
             // Spawn a shadow ring
             // This is the circle that quickly expands from the starting location of the dash 
-            HeroController.instance.shadowRingPrefab.Spawn(playerEffects.transform);
+            RemotePlayerVisuals.Track(HeroController.instance.shadowRingPrefab.Spawn(playerEffects.transform));
 
             // Start a coroutine with the recharge animation, since we need to wait in it
             MonoBehaviourUtil.Instance.StartCoroutine(PlayRechargeAnimation(playerObject, playerEffects));
@@ -130,7 +130,7 @@ internal abstract class DashBase : DamageAnimationEffect {
 
                 var sharpShadowPrefab = localPlayerAttacks.FindGameObjectInChildren("Sharp Shadow");
 
-                var sharpShadowObject = Object.Instantiate(
+                var sharpShadowObject = RemotePlayerVisuals.Instantiate(
                     sharpShadowPrefab,
                     playerAttacks.transform
                 );
@@ -160,7 +160,7 @@ internal abstract class DashBase : DamageAnimationEffect {
         } else {
             // Instantiate the dash burst relative to the player effects
             var dashBurstObject = HeroController.instance.dashBurst.gameObject;
-            var dashBurst = Object.Instantiate(
+            var dashBurst = RemotePlayerVisuals.Instantiate(
                 dashBurstObject,
                 playerEffects.transform
             );
@@ -193,7 +193,7 @@ internal abstract class DashBase : DamageAnimationEffect {
 
             // Find already existing dash particles object, or create a new one
             var dashParticlesPrefab = HeroController.instance.dashParticlesPrefab;
-            var dashParticles = Object.Instantiate(
+            var dashParticles = RemotePlayerVisuals.Instantiate(
                 dashParticlesPrefab,
                 playerEffects.transform
             );
@@ -215,6 +215,7 @@ internal abstract class DashBase : DamageAnimationEffect {
                 var backDashEffect = HeroController.instance.backDashPrefab.Spawn(
                     playerObject.transform.position
                 );
+                RemotePlayerVisuals.Track(backDashEffect);
                 backDashEffect.transform.localScale = new Vector3(
                     playerScale.x * -1f,
                     playerScale.y,
@@ -246,7 +247,7 @@ internal abstract class DashBase : DamageAnimationEffect {
         rechargeAudioSource.clip = rechargeAudioClip;
         rechargeAudioSource.Play();
 
-        var rechargeObject = Object.Instantiate(
+        var rechargeObject = RemotePlayerVisuals.Instantiate(
             shadowRechargePrefab,
             playerEffects.transform
         );

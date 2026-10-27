@@ -1,0 +1,6 @@
+world-mode handshake preserves save, settings, roster and following packet fields
+incompatible addon rejection retains the old wire format
+local worlds retain boss roots while ordinary enemies and mechanisms stay native
+trusted boss spawns can share ordinary summon types but never local barriers
+explicit scene boss support stays shared without sharing generic hazards
+shared worlds preserve ordinary entity policy and local barrier exceptions

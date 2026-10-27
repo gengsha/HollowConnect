@@ -22,7 +22,7 @@ internal class CrystalDashHitWall : AnimationEffect {
         }
 
         // Instantiate the wall hit effect and make sure to destroy it once the FSM is done
-        var wallHitEffect = Object.Instantiate(
+        var wallHitEffect = RemotePlayerVisuals.Instantiate(
             heroEffects.FindGameObjectInChildren("Wall Hit Effect"),
             playerEffects.transform
         );

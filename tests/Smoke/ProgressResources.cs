@@ -28,9 +28,9 @@ public sealed partial class ProgressProbe {
         if (!ok) throw new Exception("Resource: " + label);
         Mark("PASS resource " + label);
     }
-    private IEnumerator ResourceBarrier(string stage) {
+    private IEnumerator ResourceBarrier(string stage, float seconds = 12) {
         Flag(role + ".resource." + stage);
-        yield return Until(() => Has(ResourceOther + ".resource." + stage), "resource both " + stage, 12);
+        yield return Until(() => Has(ResourceOther + ".resource." + stage), "resource both " + stage, seconds);
         if (Has(role + ".failed")) throw new Exception("Resource barrier failed: " + stage);
     }
     private IEnumerator ResourceIdle(string label, float seconds = 12) {
@@ -64,6 +64,9 @@ public sealed partial class ProgressProbe {
     }
 
     private IEnumerator Resources() {
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SHOP_SHARD_CASE"))) {
+            yield return ShopShardRaceChecks(); yield break;
+        }
         var pd = PlayerData.instance;
         // Only fixture setup sets initial counters; all measured grants use
         // original pickup/upgrade FSM actions or the production UDP receiver.
@@ -114,6 +117,14 @@ public sealed partial class ProgressProbe {
                 inbound.Invoke(manager, new object[] { index, Hkmp.Util.EncodeUtil.EncodeSaveDataValue(before + 10) });
                 ResourceCheck(PlayerData.instance.GetInt(key) == before, "full-save replay preserves this slot's resource/nail value " + key);
             }
+            foreach (var key in new[] { "hasDash", "hasDoubleJump", "gotCharm_6" }) {
+                var before = PlayerData.instance.GetBool(key);
+                inbound.Invoke(manager, new object[] { mapping.PlayerDataIndices[key], Hkmp.Util.EncodeUtil.EncodeSaveDataValue(!before) });
+                ResourceCheck(PlayerData.instance.GetBool(key) == before, "full-save replay cannot bypass pickup ownership adapter " + key);
+            }
+            var spell = PlayerData.instance.GetInt("fireballLevel");
+            inbound.Invoke(manager, new object[] { mapping.PlayerDataIndices["fireballLevel"], Hkmp.Util.EncodeUtil.EncodeSaveDataValue(spell + 1) });
+            ResourceCheck(PlayerData.instance.GetInt("fireballLevel") == spell, "full-save replay cannot bypass native spell level adapter");
             var vessel = new Hkmp.Game.Client.Save.PersistentItemKey { SceneName = "Deepnest_38", Id = "Vessel Fragment" };
             ResourceCheck(mapping.PersistentBoolVarProperties[vessel].SyncType == Hkmp.Game.Client.Save.SaveDataMapping.SyncType.Player,
                 "Deepnest vessel has personal native save classification");
@@ -300,6 +311,8 @@ public sealed partial class ProgressProbe {
         clone.transform.position = HeroController.instance.transform.position;
         clone.SetActive(true); clone.transform.SetParent(null, true); Object.Destroy(staging);
         Mark("RESOURCE FIXTURE native " + prefabName + " tagged " + id);
+        yield return null; yield return null;
+        foreach (var fsm in clone == null ? Array.Empty<PlayMakerFSM>() : clone.GetComponents<PlayMakerFSM>()) Dump(fsm);
         yield return Until(() => LocalResourceClaims.Contains(id), "tagged original instant grant " + id, 6);
         yield return ResourceIdle("tagged instant " + id);
     }
@@ -309,18 +322,30 @@ public sealed partial class ProgressProbe {
         yield return ResourceTaggedInstant("mask:slyShellFrag1", "Heart Piece Instant");
         yield return ResourceTaggedInstant("mask:slyShellFrag2", "Heart Piece Instant");
         ResourceCheck(PlayerData.instance.GetInt("heartPieces") == 3, "three original shards before remote rollover");
+        yield return ResourceTaggedInstant("mask:slyShellFrag1", "Heart Piece Instant");
+        ResourceCheck(PlayerData.instance.GetInt("heartPieces") == 3 && PlayerData.instance.GetInt("maxHealthBase") == 5,
+            "repeated native mask animation cannot reset fragments or award another complete mask: pieces=" + PlayerData.instance.GetInt("heartPieces") + " max=" + PlayerData.instance.GetInt("maxHealthBase"));
         yield return ResourceBarrier("mask-at-three");
+        if (!host) {
+            Enter("Town"); yield return Until(() => AliveScene("Town"), "recipient enters another room before direct shared mask settlement"); Freeze();
+            Flag("guest.resource.remote-mask-room");
+        } else yield return Until(() => Has("guest.resource.remote-mask-room"), "recipient is in another room for shared mask");
         if (host) yield return ResourceTaggedInstant("mask:slyShellFrag3", "Heart Piece Instant");
         yield return ResourceExpect("mask:slyShellFrag3", 6, 0, 0, 0, 0, 4, "mask 3 to 4 conversion");
         yield return ResourceIdle("mask conversion");
+        if (!host) ResourceCheck(!PlayerData.instance.GetBool("slyShellFrag3"), "direct remote settlement leaves the local shop item available");
         ResourceSend("mask:slyShellFrag3");
         // A remote numerical rollover completes before the buyer's original
         // UI. Keep the next source family from changing the other counters
         // while that buyer still verifies the current family.
         yield return ResourceBarrier("mask-complete");
+        yield return Room("Room_Charm_Shop");
         yield return ResourceTaggedInstant("vessel:slyVesselFrag1", "Vessel Fragment Instant");
         yield return ResourceTaggedInstant("vessel:slyVesselFrag2", "Vessel Fragment Instant");
         ResourceCheck(PlayerData.instance.GetInt("vesselFragments") == 2, "two original vessel fragments before remote rollover");
+        yield return ResourceTaggedInstant("vessel:slyVesselFrag1", "Vessel Fragment Instant");
+        ResourceCheck(PlayerData.instance.GetInt("vesselFragments") == 2 && PlayerData.instance.GetInt("MPReserveMax") == 0,
+            "repeated native vessel animation cannot reset fragments or award another soul vessel");
         yield return ResourceBarrier("vessel-at-two");
         if (host) yield return ResourceTaggedInstant("vessel:dreamReward5", "Vessel Fragment Instant");
         yield return ResourceExpect("vessel:dreamReward5", 6, 0, 33, 0, 0, 4, "vessel 2 to 3 conversion");
@@ -396,7 +421,7 @@ public sealed partial class ProgressProbe {
         // writing the disposable character or a user's profile to disk.
         var json = JsonConvert.SerializeObject(CoopMod.Statistics);
         var restored = JsonConvert.DeserializeObject<DeathStatistics>(json).Copy();
-        var property = typeof(DeathStatistics).GetFields().Single(f => f.FieldType == typeof(ResourceClaims));
+        var property = typeof(DeathStatistics).GetField(nameof(DeathStatistics.Resources));
         var roundtrip = (ResourceClaims)property.GetValue(restored);
         ResourceCheck(claims.Claimed.SetEquals(roundtrip.Claimed), "existing slot-local JSON roundtrip retains validated source receipts");
         var count = claims.Claimed.Count;

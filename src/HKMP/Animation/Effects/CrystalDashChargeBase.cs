@@ -61,7 +61,7 @@ internal abstract class CrystalDashChargeBase : AnimationEffect {
 
         // Find the charge effect, which is the circular vortex motion around the knight when he charges
         var chargeEffectObject = superDashFsm.GetAction<SetMeshRenderer>(chargeStateName, chargeEffectIndex);
-        var chargeEffect = Object.Instantiate(
+        var chargeEffect = RemotePlayerVisuals.Instantiate(
             chargeEffectObject.gameObject.GameObject.Value,
             playerEffects.transform
         );
@@ -82,7 +82,7 @@ internal abstract class CrystalDashChargeBase : AnimationEffect {
 
         // Find the bling effect in the FSM and instantiate it
         var blingEffectObject = superDashFsm.GetFirstAction<ActivateGameObject>("Ground Charged");
-        var blingEffect = Object.Instantiate(
+        var blingEffect = RemotePlayerVisuals.Instantiate(
             blingEffectObject.gameObject.GameObject.Value,
             playerEffects.transform
         );

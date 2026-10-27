@@ -45,7 +45,19 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        GrimmFlameTests.Register(Test);
+        LocalWorldIsolationTests.Register(Test);
+        EncounterSummonTests.Register(Test);
+        BossHealthScaleTests.Register(Test);
+        DamageRankingTests.Register(Test);
+        BossTargetCommitmentTests.Register(Test);
         ResourceClaimsTests.Register(Test);
+        DebugDiagnosticsTests.Register(Test);
+        BossVictoryRecoveryTests.Register(Test);
+        SettlementDeliveryTests.Register(Test);
+        RescueRulesTests.Register(Test);
+        RescueAnchorTests.Register(Test);
+        UdpSendContentionTests.Register(Test);
         foreach (var interval in new[] { .017f, .05f, .1f }) Test("player position history smooths jittered cadence " + interval, () => {
             var h = new Hkmp.Fsm.PositionHistory(); h.Add(UnityEngine.Vector3.zero, 0);
             var jitter = new[] { .75f, 1.25f, 1f, .9f, 1.1f };
@@ -472,21 +484,61 @@ internal static class Program {
         });
         Test("charm sharing defaults to existing behavior", () => {
             Check(new Settings().ShareCharms);
+            Check(ProgressCatalog.CanShare("hasCharm", true, true));
             for (var i = 1; i <= 40; i++) Check(ProgressCatalog.CanShare("gotCharm_" + i, true, true));
         });
         Test("charm sharing toggle leaves other permanent progress available", () => {
             foreach (var key in ProgressCatalog.Limits.Keys) {
-                Check(ProgressCatalog.CanShare(key, true, false) == !ProgressCatalog.IsCharm(key), key);
+                Check(ProgressCatalog.CanShare(key, true, false) == !ProgressCatalog.IsCharmProgress(key), key);
                 Check(!ProgressCatalog.CanShare(key, false, true), key);
             }
             foreach (var key in new[] { "gotCharm_0", "gotCharm_41", "gotCharm_01", "equippedCharm_1", "charmsOwned", null })
                 Check(!ProgressCatalog.IsCharm(key) && !ProgressCatalog.CanShare(key, true, true));
         });
         Test("abilities never regress", () => { var l = new ProgressLedger(); l.Merge("hasDash", 1); Check(!l.Merge("hasDash", 0)); Check(l.Get("hasDash") == 1); });
+        Test("dung defender encounter flags are shared and monotonic", () => {
+            var ledger = new ProgressLedger();
+            Check(ProgressCatalog.CanShare("defeatedDungDefender", true, true));
+            Check(ProgressCatalog.CanShare("dungDefenderEncounterReady", true, true));
+            Check(ledger.Merge("defeatedDungDefender", 1));
+            Check(ledger.Merge("dungDefenderEncounterReady", 1));
+            Check(!ledger.Merge("defeatedDungDefender", 0));
+            Check(!ledger.Merge("dungDefenderEncounterReady", 0));
+            Check(ledger.Get("defeatedDungDefender") == 1 && ledger.Get("dungDefenderEncounterReady") == 1);
+        });
         Test("spells take maximum, not sum", () => { var l = new ProgressLedger(); l.Merge("fireballLevel", 2); Check(!l.Merge("fireballLevel", 1)); Check(l.Get("fireballLevel") == 2); });
+        Test("one-time dream victories repair missing progress without sharing personal rewards", () => {
+            var ledger = new ProgressLedger();
+            foreach (var key in new[] { "falseKnightDreamDefeated", "infectedKnightDreamDefeated", "mageLordDreamDefeated" }) {
+                Check(ProgressCatalog.CanShare(key, true, false) && !ProgressCatalog.CanShare(key, false, true), key);
+                Check(ledger.Merge(key, 1) && !ledger.Merge(key, 1) && !ledger.Merge(key, 0), key);
+                Check(ledger.Copy().Get(key) == 1, key);
+            }
+            foreach (var key in new[] { "dreamOrbs", "falseKnightOrbsCollected", "infectedKnightOrbsCollected", "mageLordOrbsCollected",
+                "whiteDefenderDefeated", "whiteDefenderOrbsCollected", "whiteDefenderDefeats", "greyPrinceDefeated", "greyPrinceOrbsCollected", "greyPrinceDefeats" })
+                Check(!ProgressCatalog.CanShare(key, true, true) && !ledger.Merge(key, 1), key);
+        });
         Test("invalid progress is rejected", () => { var l = new ProgressLedger(); Check(!l.Merge("hasWalljump", -1)); Check(!l.Merge("fireballLevel", 99)); Check(!l.Merge(null, 1)); });
-        Test("maps, currency, health and equipment are private", () => {
-            var l = new ProgressLedger(); foreach (var key in new[] { "mapCrossroads", "hasMap", "health", "geo", "simpleKeys", "equippedCharm_2", "respawnScene" }) Check(!l.Merge(key, 1), key);
+        Test("map purchases share without sharing exploration or currency", () => {
+            var ledger = new ProgressLedger();
+            foreach (var key in new[] { "hasMap", "hasQuill", "mapCrossroads", "mapGreenpath", "mapFogCanyon", "mapRoyalGardens",
+                "mapFungalWastes", "mapCity", "mapWaterways", "mapMines", "mapDeepnest", "mapCliffs", "mapOutskirts", "mapRestingGrounds", "mapAbyss" }) {
+                Check(ProgressCatalog.IsMapPurchase(key) && !ProgressCatalog.IsPickup(key), key);
+                Check(ProgressCatalog.CanShare(key, true, false) && !ProgressCatalog.CanShare(key, false, true), key);
+                Check(ledger.Merge(key, 1) && !ledger.Merge(key, 1) && !ledger.Merge(key, 0) && ledger.Get(key) == 1, key);
+            }
+        });
+        Test("simple key doors and balances stay personal across progress import", () => {
+            var ledger = new ProgressLedger();
+            foreach (var key in new[] { "bathHouseOpened", "jijiDoorUnlocked", "openedWaterwaysManhole", "godseekerUnlocked", "simpleKeys" }) {
+                Check(!ProgressCatalog.CanShare(key, true, true) && !ledger.Merge(key, 1), key);
+                ledger.Import(new Dictionary<string, int> { [key] = 1 });
+                Check(ledger.Get(key) == 0 && ResourceCatalog.PreservesPlayerData(key), key);
+            }
+            Check(ProgressCatalog.CanShare("openedTownBuilding", true, true), "unrelated town station entrance remains shared");
+        });
+        Test("map exploration, currency, health and equipment are private", () => {
+            var l = new ProgressLedger(); foreach (var key in new[] { "mapAllRooms", "scenesVisited", "scenesMapped", "health", "geo", "simpleKeys", "equippedCharm_2", "respawnScene" }) Check(!l.Merge(key, 1), key);
         });
         Test("all progression keys exist in this game build", () => {
             foreach (var pair in ProgressCatalog.Limits) {
@@ -643,9 +695,11 @@ internal static class Program {
             var p = Two(); p.Presence(2, 0, 3, "New", 10, 20, true, true, 3, 4, 101);
             Check(!p.Presence(2, 0, 2, "Old", 0, 0, true, true, 0, 0, 102)); Check(p.Members[2].Scene == "New");
         });
-        Test("invalid and unavailable map coordinates never display", () => {
-            var p = Two(); p.Presence(2, 0, 2, "Boss", 2, 0, false, true, 0, 0, 101); Check(!p.Members[2].HasMap);
+        Test("map coordinates remain available while teleport input is unavailable", () => {
+            var p = Two(); p.Presence(2, 0, 2, "Boss", 2, 0, false, true, 0, 0, 101); Check(p.Members[2].HasMap);
+            Check(p.Members[2].Life == Life.Loading, "map coordinates cannot authorize a player without native control");
             p.Presence(2, 0, 3, "Boss", 2, 0, true, true, float.NaN, 0, 102); Check(!p.Members[2].HasMap);
+            Check(p.Members[2].Life == Life.Alive, "a ready dream room does not require a map projection");
         });
         Test("map center and edges use actual room geometry", () => {
             Check(Geometry.TryProject(10, 20, 4, 6, 100, 200, 0, 0, 50, 100, out var x, out var y)); Near(x, 10); Near(y, 20);

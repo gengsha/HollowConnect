@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-20",
+  "timezone": "Asia/Shanghai",
+  "version": "0.1.27",
+  "status": "source-fixed-tested-not-packaged",
+  "issue": "Fresh story guest receives charms and abilities but no notches or ore from a full Godseeker host without story source receipts",
+  "readOnlyObserved": {
+    "fullSave": {
+      "charmSlots": 11,
+      "nailSmithUpgrades": 4,
+      "maxHealthBase": 9,
+      "bossRushMode": true,
+      "MPReserveMax": 99,
+      "ore": 0,
+      "resourceReceiptCount": 0
+    },
+    "freshSave": {
+      "charmSlots": 3,
+      "nailSmithUpgrades": 0,
+      "maxHealthBase": 5,
+      "MPReserveMax": 0,
+      "ore": 0,
+      "resourceReceiptCount": 0
+    }
+  },
+  "coreTests": {
+    "buildErrors": 0,
+    "passed": 27,
+    "failed": 0,
+    "command": "scripts/Build.ps1 -Target Smoke -TestSelection tests/progress-audit.selection.txt -NoRestore",
+    "buildWarnings": 0
+  },
+  "runs": [
+    {
+      "name": "legacy-resource-full-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "92BE365A1A761D88A99E227FE1AE53B2C4254CCE64ED107AEE431CCA5519B21E"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "6D8BF9CB3F49532ECE0ADC1BDF56D30EE10F22F6014614E9B1819BD7497E39F8"
+    },
+    {
+      "name": "legacy-resource-off-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "92BE365A1A761D88A99E227FE1AE53B2C4254CCE64ED107AEE431CCA5519B21E"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "6D8BF9CB3F49532ECE0ADC1BDF56D30EE10F22F6014614E9B1819BD7497E39F8"
+    },
+    {
+      "name": "legacy-resource-regression-20261020-a",
+      "bothPassed": true,
+      "strictLogsPassed": true,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "92BE365A1A761D88A99E227FE1AE53B2C4254CCE64ED107AEE431CCA5519B21E"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "5E1CB8E0FBA13550BADF07FE638D0AD58D8B4524570BD90B96E5C676EB9D2BC8"
+        }
+      ],
+      "smokeSha256": "6D8BF9CB3F49532ECE0ADC1BDF56D30EE10F22F6014614E9B1819BD7497E39F8"
+    }
+  ],
+  "personalSavesModified": false,
+  "packaged": false,
+  "installed": false,
+  "limitations": [
+    "Partial collections without flags or receipts are not assigned guessed source IDs",
+    "New legacy scenario uses in-memory ore expenditure; regression scenario includes native Nailsmith upgrades",
+    "No all-boss matrix or two-machine FRP test"
+  ]
+}

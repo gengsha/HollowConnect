@@ -1,0 +1,404 @@
+{
+  "version": "0.1.27",
+  "engineVersion": "3.0.0-hc12",
+  "addonNetworkVersion": "0.1.27-l1",
+  "releaseReady": false,
+  "retestOmitted": false,
+  "createdAtUtc": "2026-10-20T04:54:47.5173159Z",
+  "scope": "One scoped round on final production binaries: full join progress/resource union and original pickups, local world isolation and mode switching, different personal boss progress, six Hornet needle reconnect cycles, four elite late-entry/late-trigger cases.",
+  "core": {
+    "passed": 38,
+    "failed": 0,
+    "selectionFiles": [
+      "tests/progress-audit.selection.txt",
+      "tests/local-world.selection.txt",
+      "tests/barrier-sync.selection.txt",
+      "tests/boss-balance.selection.txt"
+    ],
+    "selectionSha256": "C26FF4B12F14059CE76F715C716B3378057595DA483DB7B24CE56904DDFE182D",
+    "tests": [
+      "join audit repairs only missing nonconsumable totals and never refunds ore",
+      "royal charm halves union in either order and void heart never regresses",
+      "join audit fragment repair respects conversions and full source union",
+      "native pickup history migrates separately from shared ownership and copies safely",
+      "server guest receipt persists without marking the host locally awarded",
+      "legacy host receipts seed authority history without aliasing local awards",
+      "resource catalog covers 8 notches, 16 mask shards, 9 vessel fragments and 6 ore sources",
+      "resource union gives each save one award for simultaneous claims from the same place",
+      "distinct resource sources survive reordered grants and fragment conversion",
+      "saved ore receipts prevent reconnect from refunding personally spent ore",
+      "late entrant receives missing sources while imported native receipts remain spent",
+      "source receipts reject aggregate balances and malformed persisted claims",
+      "native reward lookup keeps unrelated scene pickups separate",
+      "resource adapter preserves only local source receipts and resource nail values",
+      "slot settings copy sanitizes resource receipts without sharing mutable collections",
+      "host shared progress and resource receipts survive a slot copy without cross-slot aliases",
+      "charm sharing defaults to existing behavior",
+      "charm sharing toggle leaves other permanent progress available",
+      "abilities never regress",
+      "spells take maximum, not sum",
+      "invalid progress is rejected",
+      "maps, currency, health and equipment are private",
+      "all progression keys exist in this game build",
+      "progress union survives duplicates and random ordering",
+      "world-mode handshake preserves save, settings, roster and following packet fields",
+      "incompatible addon rejection retains the old wire format",
+      "local worlds retain boss roots while ordinary enemies and mechanisms stay native",
+      "trusted boss spawns can share ordinary summon types but never local barriers",
+      "explicit scene boss support stays shared without sharing generic hazards",
+      "shared worlds preserve ordinary entity policy and local barrier exceptions",
+      "avatar room and both participants' visits survive all scene packets",
+      "queued snapshots freeze generic data, FSM dictionaries and scale",
+      "dense boss action batches retain more than 255 ordered updates and following fields",
+      "native boss completion is reliable and retained in room snapshots",
+      "boss balance default curve and bounded invalid configuration",
+      "boss balance fractional poison and armor hits cannot round to permanent immunity",
+      "boss balance count changes never create negative damage or accumulate a second multiplier",
+      "boss balance host configuration uses existing reliable welcome layout"
+    ],
+    "buildLogSha256": "961F2D3C8AB8A5C101816B5510EDD96C58B130B8C4A80F2ADDEFD72DAF6CF0D4",
+    "buildWarnings": 0,
+    "buildErrors": 0
+  },
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787",
+      "productVersion": "1.0.0+49d97def4e1051bc00c2095a1e985d7f201fd034"
+    }
+  ],
+  "runs": [
+    {
+      "name": "release-0127-20261020-progress",
+      "bothPassed": true,
+      "mode": "progress",
+      "environment": {
+        "HOLLOWCONNECT_PROGRESS_AUDIT": "full"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "9B5752D4F96642435E953CB545C4515262F6E32A5549A3BB71B0D9A5B34DD886",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "BF147BAAABC6DA908717CBBED183CCE6CCC10BE4968A0D54A6354CBFB970B13A",
+          "finalPassed": true
+        }
+      ]
+    },
+    {
+      "name": "release-0127-20261020-world",
+      "bothPassed": true,
+      "mode": "progress",
+      "environment": {
+        "HOLLOWCONNECT_LOCAL_WORLD": "world",
+        "HOLLOWCONNECT_LOCAL_FIRST": "host",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "259803A808C534043FE274248ABA72049EA78D2E71791D7C95D1C239684A5B38",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "819893E95C95C209EB3195388C2F02F7A096BA37EEB2063AB9B6FEDCD8FFABE9",
+          "finalPassed": true
+        }
+      ]
+    },
+    {
+      "name": "release-0127-20261020-different",
+      "bothPassed": true,
+      "mode": "progress",
+      "environment": {
+        "HOLLOWCONNECT_LOCAL_WORLD": "different-host",
+        "HOLLOWCONNECT_LOCAL_FIRST": "host",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "7B1B2B67A3142B6697BE7AE0E51E6376373D8DA51D7585EEEC648419B78DD939",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "D411B0E8158F2BE23400F73D0374701AA62011D9A6FBD5E200C11B66D5F6372C",
+          "finalPassed": true
+        }
+      ]
+    },
+    {
+      "name": "release-0127-20261020-needle",
+      "bothPassed": true,
+      "mode": "pantheon",
+      "environment": {
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "E1BB8DBAF54814964821557ABE9CFD57C5EA48AD2014F2F3CA94C46C241FF170",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "110FDCD3A7BE4295585E9DD32111DDB6044209F5C2342214CB8D8E11FFB7C228",
+          "finalPassed": true
+        }
+      ]
+    },
+    {
+      "name": "release-0127-20261020-arena-late-host",
+      "bothPassed": true,
+      "mode": "rescue",
+      "environment": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "late",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "host",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "B87793C8BE1831E905F5AD834C3EA88D1EDF6B9049D96114A1DBF8E83FA50C8E",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "906D2BAE6BC826AD6CEECF0F01ABB2475BB8D0B08C9BC444881F286EE1A2493F",
+          "finalPassed": true
+        }
+      ]
+    },
+    {
+      "name": "release-0127-20261020-arena-late-guest",
+      "bothPassed": true,
+      "mode": "rescue",
+      "environment": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "late",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "guest",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "860F7D766E3180AB95698C9279233F8CF37B967A9ADA4D2BAB90E464FF8439F1",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "FB0C2E42B22A8CD82DD52EFBF502D9181A837BF4607EF787CBA565DC522C21C2",
+          "finalPassed": true
+        }
+      ]
+    },
+    {
+      "name": "release-0127-20261020-arena-outside-host",
+      "bothPassed": true,
+      "mode": "rescue",
+      "environment": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "outside",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "host",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "FD768B7998F29C76A2BD390E5217D20609DF19E5C3FA43D0DD114DB27851DAB1",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "0C656317BA60FD0D23C2084826D228FF83FCFCDE05CD73CA843998BD16C84396",
+          "finalPassed": true
+        }
+      ]
+    },
+    {
+      "name": "release-0127-20261020-arena-outside-guest",
+      "bothPassed": true,
+      "mode": "rescue",
+      "environment": {
+        "HOLLOWCONNECT_LOCAL_BATTLE_CHECK": "outside",
+        "HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY": "guest",
+        "HOLLOWCONNECT_NETWORK_FAULTS": "0"
+      },
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "CCDDF40DE5052E83CAFE0EA99C7853CE26BCC62516E920AD818E2D05C5FABB25"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "28BB9DC70EFFA16F20E899C9D3AE0559EDD230B3408DB184C0DB8A5C1BD4E75C"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "64661526E34F5EE64BD33C343E10AFE823DCC056671564582585D9E8C0A82787"
+        }
+      ],
+      "smokeSha256": "2D5201A2DD65DEC1DF948430C03B5FC5592A71D161DB9523B52C2C60E700B9EE",
+      "logs": [
+        {
+          "role": "host",
+          "sha256": "B079A69F2DE5197EB47A946A79CE523F79427E3FCFF7AA56B331465C9FA29F2A",
+          "finalPassed": true
+        },
+        {
+          "role": "guest",
+          "sha256": "95B5C15F025088DA1877FE7938BA3A89E24F9FEC46E1465B39A269FF782FB091",
+          "finalPassed": true
+        }
+      ]
+    }
+  ],
+  "eliteRoom": {
+    "scene": "Fungus2_05",
+    "sharingEnabled": true,
+    "cases": 4,
+    "endpoints": 8,
+    "casesCovered": [
+      "late-host",
+      "late-guest",
+      "outside-host",
+      "outside-guest"
+    ],
+    "bothGateCrossingsPerEndpoint": 2,
+    "nativeNotchPickupAndControlPassed": true,
+    "oneNotchPerSourcePassed": true,
+    "oldMissingNotchJoinRepairCoveredBy": "release-0127-20261020-progress",
+    "damageInjectedViaNativeHealthManager": true
+  },
+  "knownIssueLedger": "docs/evidence/runtime-blockers-0.1.27.json",
+  "realTwoMachineFrp": false,
+  "fullBossMatrix": false,
+  "installedInPersonalGame": false,
+  "notTested": [
+    "All bosses and map rooms",
+    "Three remaining different-progress first-entry combinations on final version",
+    "Real two-machine FRP/UDP",
+    "Historical unresolved findings are not closed by this scoped round"
+  ]
+}
