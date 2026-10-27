@@ -72,6 +72,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 - **同一局域网**：填写房主的局域网 IP 和开房端口。
 - **ZeroTier / Tailscale 等虚拟局域网**：加入同一虚拟网络，填写房主在该网络中的 IP 和开房端口。
 - **公网端口映射或 FRP**：将公网 UDP 端口转发到房主的开房端口，队友填写公网地址和映射后的端口。[FRP 配置示例](docs/frpc.example.toml)
+- **[用樱花内透网联机示例](https://www.bilibili.com/video/BV1pRn36oEGB/?buvid=XX649BA63488E83DC4FE64A800695885D6CEC&is_story_h5=false&mid=DqgU2LpeiSC2Uo0%2Btgw82g%3D%3D&plat_id=240&share_from=ugc&share_medium=android&share_plat=android&share_source=QQ&share_tag=s_i&spmid=dt.space-dt.0.0&timestamp=1793097243&unique_k=maFZjhZ&up_id=501517129)
 
 请确保防火墙允许游戏和所用 UDP 端口，内网穿透服务支持 **UDP 转发**。房主在游戏内开房即可。
 
