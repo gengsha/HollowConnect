@@ -58,6 +58,7 @@ $installerOutput = Join-Path $root 'src\HollowConnect.Installer\bin\Release\net4
 foreach ($name in '一键安装.exe','一键安装.exe.config') { Copy-Item -LiteralPath (Join-Path $installerOutput $name) -Destination $package -Force }
 foreach ($name in 'README.md','HKMP-LICENSE','LICENSE','THIRD-PARTY.md') { Copy-Item -LiteralPath (Join-Path $root $name) -Destination $package -Force }
 foreach ($taskDoc in Get-ChildItem -LiteralPath (Join-Path $root 'docs') -File -Recurse | Where-Object { $_.Name -notlike '*.draft' }) {
+    if ($taskDoc.Name -in 'AGENTS.md','AGENT.md','PROJECT-HANDOFF.md') { continue }
     $taskDocTarget = Join-Path $package $taskDoc.FullName.Substring($root.Length + 1)
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $taskDocTarget) | Out-Null
     Copy-Item -LiteralPath $taskDoc.FullName -Destination $taskDocTarget -Force

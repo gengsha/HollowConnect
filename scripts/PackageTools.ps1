@@ -10,7 +10,7 @@ function Get-HollowSourceFiles {
     while ($taskFolders.Count) {
         $taskFolder=$taskFolders.Pop()
         foreach ($taskFile in $taskFolder.EnumerateFiles()) {
-            if ($taskFile.Name -notlike '*.draft') { $taskFile }
+            if ($taskFile.Name -notlike '*.draft' -and $taskFile.Name -notin 'AGENTS.md','AGENT.md','PROJECT-HANDOFF.md') { $taskFile }
         }
         foreach ($taskChild in $taskFolder.EnumerateDirectories()) {
             if ($taskChild.Name -notin 'bin','obj' -and !($taskChild.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
