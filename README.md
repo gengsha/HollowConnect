@@ -96,4 +96,5 @@ HollowConnect 自有代码采用 [GNU GPL v3.0（GPL-3.0-only）](LICENSE)。基
 
 如果您觉得本mod不错的话来支持一下我吧
 <img width="784" height="1050" alt="1793097568621" src="https://github.com/user-attachments/assets/a10d5594-88cb-4692-b04f-371d32bada35" />
+
 你们的支持将是我做丝之歌联机mod甚至更富有想象力的mod的动力
