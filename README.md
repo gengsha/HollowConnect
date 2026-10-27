@@ -88,7 +88,12 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 ## 开发与许可
 
+<details>
+<summary>开发者资料（点击展开）</summary>
+
 欢迎参与开发。源码包含修改后的 HKMP 引擎、协作模块、核心模型、测试和构建脚本。构建需要 .NET SDK 9 或更新版本，准备自己的游戏后运行 `scripts/Build.ps1`；详细步骤见[开发指南](docs/DEVELOPMENT.md)，架构见[设计说明](docs/DESIGN.md)，测试记录见[验证文档](docs/VERIFICATION.md)。
+
+</details>
 
 HollowConnect 自有代码采用 [GNU GPL v3.0（GPL-3.0-only）](LICENSE)。基于 [HKMP](https://github.com/Extremelyd1/HKMP) 的修改部分延续 [LGPL-2.1](HKMP-LICENSE)，其他依赖保留各自许可，详见[第三方来源与许可](THIRD-PARTY.md)。《空洞骑士》及游戏资源的权利属于 Team Cherry。
 

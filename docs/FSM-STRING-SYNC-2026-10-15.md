@@ -40,4 +40,4 @@
 
 HKMP ProductVersion 为 `1.0.0+1544a05dcd4e3f6c14b6afd60c4e00acd967a308`。本轮只读核对的游戏程序集来自 `E:\SteamLibrary\steamapps\common\Hollow Knight\hollow_knight_Data\Managed`：Assembly-CSharp.dll 4,064,768 字节 / `5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D`；PlayMaker.dll 212,480 字节 / `0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A`。
 
-本轮没有重新验收平台/城内流量降幅或完整战斗矩阵；旧构建的相应结果见 [平台与城内专项](PLATFORM-CITY-PERFORMANCE-2026-10-15.md)。地图购买后持续不可见、实际攻击剩余同步开销、历史接管问题及完整发布矩阵仍按 [项目交接](PROJECT-HANDOFF.md) 保留，`releaseReady=false`。当前已交付 0.1.15 包不含本轮和此前未打包修复。
+本轮没有重新验收平台/城内流量降幅或完整战斗矩阵；旧构建的相应结果见 [平台与城内专项](PLATFORM-CITY-PERFORMANCE-2026-10-15.md)。地图购买后持续不可见、实际攻击剩余同步开销、历史接管问题及完整发布矩阵的边界见 [0.1.15 问题账本](evidence/runtime-blockers-0.1.15.json)，`releaseReady=false`。当前已交付 0.1.15 包不含本轮和此前未打包修复。

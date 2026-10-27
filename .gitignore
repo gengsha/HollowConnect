@@ -14,3 +14,8 @@ dist/
 *.pem
 *.key
 *.pfx
+
+# Local agent instructions and working notes.
+/AGENTS.md
+/AGENT.md
+/docs/PROJECT-HANDOFF.md
