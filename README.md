@@ -72,7 +72,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 - **同一局域网**：填写房主的局域网 IP 和开房端口。
 - **ZeroTier / Tailscale 等虚拟局域网**：加入同一虚拟网络，填写房主在该网络中的 IP 和开房端口。
 - **公网端口映射或 FRP**：将公网 UDP 端口转发到房主的开房端口，队友填写公网地址和映射后的端口。[FRP 配置示例](docs/frpc.example.toml)
-- **[用樱花内透网联机示例](https://www.bilibili.com/video/BV1pRn36oEGB/?buvid=XX649BA63488E83DC4FE64A800695885D6CEC&is_story_h5=false&mid=DqgU2LpeiSC2Uo0%2Btgw82g%3D%3D&plat_id=240&share_from=ugc&share_medium=android&share_plat=android&share_source=QQ&share_tag=s_i&spmid=dt.space-dt.0.0&timestamp=1793097243&unique_k=maFZjhZ&up_id=501517129)
+- [用樱花内透网联机示例](https://www.bilibili.com/video/BV1pRn36oEGB/?buvid=XX649BA63488E83DC4FE64A800695885D6CEC&is_story_h5=false&mid=DqgU2LpeiSC2Uo0%2Btgw82g%3D%3D&plat_id=240&share_from=ugc&share_medium=android&share_plat=android&share_source=QQ&share_tag=s_i&spmid=dt.space-dt.0.0&timestamp=1793097243&unique_k=maFZjhZ&up_id=501517129)
 
 请确保防火墙允许游戏和所用 UDP 端口，内网穿透服务支持 **UDP 转发**。房主在游戏内开房即可。
 
@@ -91,3 +91,9 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 欢迎参与开发。源码包含修改后的 HKMP 引擎、协作模块、核心模型、测试和构建脚本。构建需要 .NET SDK 9 或更新版本，准备自己的游戏后运行 `scripts/Build.ps1`；详细步骤见[开发指南](docs/DEVELOPMENT.md)，架构见[设计说明](docs/DESIGN.md)，测试记录见[验证文档](docs/VERIFICATION.md)。
 
 HollowConnect 自有代码采用 [GNU GPL v3.0（GPL-3.0-only）](LICENSE)。基于 [HKMP](https://github.com/Extremelyd1/HKMP) 的修改部分延续 [LGPL-2.1](HKMP-LICENSE)，其他依赖保留各自许可，详见[第三方来源与许可](THIRD-PARTY.md)。《空洞骑士》及游戏资源的权利属于 Team Cherry。
+
+## 对作者的支持
+
+如果您觉得本mod不错的话来支持一下我吧
+<img width="784" height="1050" alt="1793097568621" src="https://github.com/user-attachments/assets/a10d5594-88cb-4692-b04f-371d32bada35" />
+你们的支持将是我做丝之歌联机mod甚至更富有想象力的mod的动力
