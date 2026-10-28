@@ -20,6 +20,10 @@ public sealed partial class ProgressProbe : MonoBehaviour {
     private string root, role;
     private bool host;
     private bool ResourcesCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESOURCE_CHECK") == "1";
+    private bool SkinCompatibilityCase => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SKIN_CASE"));
+    private bool LinkedHealthCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_CASE") != null;
+    private string LinkedSpecial => string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_SPECIAL")) ? null :
+        Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_SPECIAL");
     private bool EmergencyBenchCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_EMERGENCY_BENCH") == "1";
     private bool DefenderCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_DEFENDER_CHECK") == "1";
     private bool TeammateDreamCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_TEAMMATE_DREAM") == "1";
@@ -50,6 +54,8 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         while (!ready() && !Has(role + ".failed") && Time.realtimeSinceStartup < deadline) yield return null;
         if (!ready()) {
             Mark("FAIL " + name); Flag(role + ".failed");
+            if (SkinCompatibilityCase) throw new TimeoutException("Skin compatibility prerequisite: " + name);
+            if (LinkedHealthCase) throw new TimeoutException("Linked health prerequisite: " + name);
             if(SimpleKeyCase) {
                 Mark("KEY WAIT keys="+PlayerData.instance.GetInt("simpleKeys")+" legacyWaterwaysKey="+PlayerData.instance.GetBool("hasWaterwaysKey"));
                 foreach(var f in Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f=>f.gameObject.scene.name==GameManager.instance.sceneName &&
@@ -248,6 +254,13 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 orig(gm, additive);
             };
         CoopMod.Settings.ShareProgress = !ProgressAuditDisabled; CoopMod.Settings.EntryProtection = false;
+        if (LinkedHealthCase) {
+            CoopMod.Settings.LinkedHealth = Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_CASE") != "off";
+            CoopMod.Settings.LinkedHealthBonusMasks = int.Parse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_BONUS") ?? "2");
+            CoopMod.Settings.ShareCharms = Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_CASE") != "no-charms";
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_CASE") != "no-progress";
+            CoopMod.Settings.Rescue = CoopMod.Settings.SpectateAfterExhaustion = true;
+        }
         if (LocalWorldCase) CoopMod.Settings.ShareProgress = !host;
         if (ProgressAuditCase) CoopMod.Settings.ShareCharms = !ProgressAuditNoCharms;
         if (TeammateDreamCase) CoopMod.Settings.ShareCharms = host
@@ -261,12 +274,17 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
-        if ((KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
+        if ((SkinCompatibilityCase || LinkedHealthCase || KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
             yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
             yield return Until(() => !pd.GetBool("atBench") && HeroController.instance.acceptingInput &&
                 !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
+        }
+        if (SkinCompatibilityCase) {
+            pd.SetBool("openedTown", true); pd.SetBool("openedCrossroads", true); pd.SetBool("metStag", true);
+            pd.SetInt("stagPosition", 0);
+            yield return PrepareCompatibilitySkin();
         }
         if (StagNestCase) {
             pd.SetBool("openedStagNest", host);
@@ -298,6 +316,21 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             }
         }
         HeroController.instance.RegainControl(); HeroController.instance.StartAnimationControl(); Freeze();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_REST") == "on") {
+            foreach (var id in new[] { 1, 8, 29 }) { pd.SetBool("equippedCharm_" + id, true); pd.EquipCharm(id); }
+            pd.CalculateNotchesUsed(); pd.overcharmed = true; HeroController.instance.CharmUpdate();
+            pd.healthBlue += 3; // Three cocoon masks above the two charm masks.
+        }
+        if (LinkedSpecial == "save-off") {
+            foreach (var id in new[] { 1, 8, 23, 29 }) { pd.SetBool("equippedCharm_" + id, true); pd.EquipCharm(id); }
+            pd.CalculateNotchesUsed(); HeroController.instance.CharmUpdate();
+        }
+        if (LinkedSpecial?.StartsWith("steel", StringComparison.Ordinal) == true || LinkedSpecial == "mismatch-steel" && host || LinkedSpecial == "mismatch-normal" && !host)
+            pd.SetInt("permadeathMode", 1);
+        if (LinkedSpecial == "host-first") {
+            pd.SetInt("maxHealthBase", host ? 7 : 5); pd.SetInt("maxHealth", host ? 7 : 5);
+            pd.SetInt("health", host ? 4 : 1); pd.SetInt("heartPieces", host ? 3 : 0);
+        }
         if (ProgressAuditCase) PrepareProgressAudit();
         if (SimpleKeyCase) PrepareSimpleKeys();
         if (KeyEssenceCase) PrepareKeyEssence();
@@ -333,13 +366,46 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         if (LocalWorldCase) PrepareLocalWorld();
         if (host) { engine.ServerManager.Start(29650, LocalWorldCase); Flag("server.started"); }
         else yield return Until(() => Has("server.started"), "server ready");
+        if (host && LinkedSpecial == "host-first") { Flag("host.linked.join-ready"); yield return Until(() => Has("guest.special.connected"), "guest connects before host"); }
+        if (LinkedHealthCase && !host) yield return Until(() => Has("host.linked.join-ready"), "late linked guest waits for live host damage");
         if (SimpleKeyMode == "flow" && !host) yield return Until(() => Has("host.keys.spent"), "late guest waits for native key acquisition and expenditure", 240);
         if (ProgressAuditCase && !host) yield return Until(() => Has("host.audit.first-ready"), "host audit complete before actual guest joins");
         if (host && Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_CATCHUP") != null)
             yield return Until(() => Has("guest.catchup.loaded"), "missing-record guest loads native entrance before source client joins");
         typeof(ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
+        if (LinkedSpecial?.StartsWith("mismatch-", StringComparison.Ordinal) == true && !host)
+            engine.ClientManager.ConnectEvent += () => Flag("guest.special.connected");
         typeof(ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "progress" + role });
-        yield return Until(() => runtime.Connected, "real UDP handshake");
+        if (LinkedSpecial?.StartsWith("mismatch-", StringComparison.Ordinal) == true && !host)
+            yield return Until(() => Has("guest.special.connected"), "real mismatched transport connected before rule rejection");
+        else yield return Until(() => runtime.Connected, "real UDP handshake");
+        if (!host && LinkedSpecial == "host-first") Flag("guest.special.connected");
+        }
+        if (SkinCompatibilityCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(SkinCompatibilityChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (Has(role + ".failed")) yield break;
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS skin compatibility " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_SKIN_CASE")); Flag(role + ".done"); yield break;
+        }
+        if (LinkedHealthCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(LinkedHealthChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS linked health " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_CASE")); Flag(role + ".done"); }
+            yield break;
         }
         if (KeyEssenceCase) {
             var checks = new Stack<IEnumerator>(); checks.Push(KeyEssenceChecks());
@@ -415,6 +481,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 if (!more) { checks.Pop(); continue; }
                 if (current is IEnumerator nested) checks.Push(nested); else yield return current;
             }
+            if (!Has(role + ".failed")) yield return ProbeShutdown.Run(engine, root, role);
             if (!Has(role + ".failed")) { Mark("FINAL PASS remote feedback isolation"); Flag(role + ".done"); }
             yield break;
         }

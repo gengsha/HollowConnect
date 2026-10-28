@@ -1,0 +1,26 @@
+{
+  "version": "0.2.3",
+  "createdAtUtc": "2026-10-28T13:47:23.408144+00:00",
+  "scope": "Development validation in separate stages before version-only packaging; original hashes retained without combining stages into a final-hash claim.",
+  "sources": [
+    {
+      "path": "docs/evidence/linked-health-development-0.2.3.json",
+      "sha256": "7AC4BA0F16C728318480400465935EDCE5C7FAD64658FDFE86A3C3AE2043D5F2"
+    },
+    {
+      "path": "docs/evidence/skin-compatibility-development-0.2.3.json",
+      "sha256": "FC687DB5B5E2607A56E1D51AB6BD91B0C2FADDE09C6F63390F994F220F4EEC43"
+    }
+  ],
+  "linkedHealth": {
+    "corePassed": 316,
+    "finalRelatedCorePassed": 17,
+    "bothClientCasesPassed": 28
+  },
+  "skinCompatibility": {
+    "relatedCorePassed": 6,
+    "bothClientCasesPassed": 5,
+    "videoPlays": 48
+  },
+  "certifiesNewVersionHashes": false
+}

@@ -32,6 +32,7 @@ public sealed partial class CoopMod {
         foreach (var option in screen.GetComponentsInChildren<MenuOptionHorizontal>(true)) {
             var entry = entries.FirstOrDefault(e => e.Name == option.gameObject.name);
             if (entry.Name == BossHealthParameterRow.OptionName) option.gameObject.AddComponent<BossHealthParameterRow>().Initialize(option, screen);
+            else if (entry.Name == LinkedHealthBonusRow.OptionName) option.gameObject.AddComponent<LinkedHealthBonusRow>().Initialize(option, screen);
             else if (entry.Loader != null && IsRoomSetting(entry.Name)) option.gameObject.AddComponent<CoopMenuLockRow>().Initialize(option, entry);
         }
         screen.gameObject.AddComponent<CoopMenuHelpPanel>().Initialize(screen);

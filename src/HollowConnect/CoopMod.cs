@@ -11,6 +11,8 @@ namespace HollowConnect;
 public sealed class Settings {
     public bool ShareProgress = true;
     public bool ShareCharms = true;
+    public bool LinkedHealth = false;
+    public int LinkedHealthBonusMasks = 2;
     public bool OffscreenNames = true;
     public float OtherPlayerOpacity = 1f;
     public bool ColoredPlayerNames = true;
@@ -34,9 +36,9 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
     public static DeathStatistics Statistics = new DeathStatistics();
-    public const string Version = "0.2.2";
+    public const string Version = "0.2.3";
     // Key source receipts and personal locks must not mix with older shared-door clients.
-    public const string NetworkVersion = Version + "-l8";
+    public const string NetworkVersion = Version + "-l11";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override List<(string, string)> GetPreloadNames() => new List<(string, string)> {
@@ -65,6 +67,8 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
     public List<IMenuMod.MenuEntry> GetMenuData(IMenuMod.MenuEntry? toggle) => GuardRoomSettings(new List<IMenuMod.MenuEntry> {
         new IMenuMod.MenuEntry("共享永久进度（房主）", new[]{"关闭", "开启"}, "默认开启，开房前设置。关闭后普通怪、机关、奖励与剧情各自推进，只保留同房 Boss 合作及队友位置；传送、救援按各自开关。开启时能力和列出的资源、世界标记共享，骨钉升级及矿石消费各自计算。", i=>Settings.ShareProgress=i==1, ()=>Settings.ShareProgress?1:0),
         new IMenuMod.MenuEntry("共享护符（房主）", new[]{"关闭", "开启"}, "开房前设置，仅在共享永久进度开启时生效。共享护符获得状态；护符槽仍按原规则共享，装备各自独立。", i=>Settings.ShareCharms=i==1, ()=>Settings.ShareCharms?1:0),
+        new IMenuMod.MenuEntry("链在一起血条（房主）", new[]{"关闭", "开启"}, "默认关闭。必须同时开启共享永久进度和共享护符才生效；全队共用正常血量，蓝血各自独立。开启后暗影救援和观战无效。面具碎片按唯一 ID 计数，每 4 个增加团队 1 格上限。", i=>Settings.LinkedHealth=i==1, ()=>Settings.LinkedHealth?1:0),
+        new IMenuMod.MenuEntry(LinkedHealthBonusRow.OptionName, new[]{LinkedHealthBonusRow.Format(Settings.LinkedHealthBonusMasks)}, "链在一起模式的额外正常面具数，默认 2，范围 0–10。它只增加团队上限，不计入面具碎片收集，也不写入个人存档。", _=>{}, ()=>0),
         new IMenuMod.MenuEntry("屏外队友方位", new[]{"关闭", "开启"}, "显示屏外队友名字和箭头；其他房间显示房间名。", i=>Settings.OffscreenNames=i==1, ()=>Settings.OffscreenNames?1:0),
         OpacityMenuEntry(),
         new IMenuMod.MenuEntry("队友名字配色（本机）", new[]{"关闭", "开启"}, "默认开启。队友头顶名字与地图/方位颜色一致，自己保持白色；关闭后名字为白色。仅影响本机，立即生效。", i=>{ Settings.ColoredPlayerNames=i==1; Hkmp.CoopContext.RefreshPlayerVisuals(); }, ()=>Settings.ColoredPlayerNames?1:0),

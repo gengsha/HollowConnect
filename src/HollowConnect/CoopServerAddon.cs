@@ -30,6 +30,17 @@ public sealed partial class CoopServerAddon : ServerAddon {
     private readonly Dictionary<ushort, double> lastWarp = new Dictionary<ushort, double>();
     private readonly Dictionary<ushort, Message> destinations = new Dictionary<ushort, Message>();
     private bool wasStarted, shared, charms, rescue, warp, entryProtection, bossVictoryRescue;
+    private bool linkedHealth;
+    private int linkedHealthBonusMasks;
+    private int linkedSaveMode;
+    private bool linkedSteelEnded;
+    private PlayerData linkedHostData;
+    private int linkedHostProfile;
+    private LinkedHealthPool linkedPool = new LinkedHealthPool();
+    private readonly LinkedRestGroup linkedRest = new LinkedRestGroup();
+    private LinkedRestCount linkedRestCount;
+    private string linkedRestStatus = "";
+    private readonly HashSet<string> linkedMaskReceipts = new HashSet<string>(StringComparer.Ordinal);
     private bool bossHealthScaling;
     private bool flexibleBossTargeting;
     private float bossExtraHealth, bossHealthDecay;
@@ -58,6 +69,12 @@ public sealed partial class CoopServerAddon : ServerAddon {
             generation = currentGeneration;
             wasStarted = true; party = new Party(); progress = new ProgressLedger(); resources = new ResourceClaims();
             bossVictories = new BossVictoryRecovery(); bossSettlements.Clear(); lastBossReport.Clear(); progressAuditSerial = 0;
+            linkedPool = new LinkedHealthPool();
+            linkedRest.Clear(); linkedRestCount = default;
+            linkedRestStatus = "";
+            linkedSteelEnded = false;
+            linkedHostData = null;
+            linkedMaskReceipts.Clear();
             // The local server is hosted by the game that owns the save slot.
             // Seed both ledgers from that slot before accepting clients; a
             // server generation is a transport lifecycle, not a new save.
@@ -65,12 +82,14 @@ public sealed partial class CoopServerAddon : ServerAddon {
             resources = HostResourceHistory();
             hostStatistics = CoopMod.Statistics;
             lastWarp.Clear(); destinations.Clear(); nextRoster = nextLedgerSync = 0;
-            shared = !((ServerManager)api.ServerManager).LocalWorldOnly; rescue = CoopMod.Settings.Rescue; warp = CoopMod.Settings.AllowTeleport;
+            shared = !((ServerManager)api.ServerManager).LocalWorldOnly; charms = CoopMod.Settings.ShareCharms;
+            linkedHealth = CoopMod.Settings.LinkedHealth && shared && charms;
+            linkedHealthBonusMasks = LinkedHealthBonusRow.Normalize(CoopMod.Settings.LinkedHealthBonusMasks);
+            rescue = linkedHealth ? false : CoopMod.Settings.Rescue; warp = CoopMod.Settings.AllowTeleport;
             bossVictoryRescue = CoopMod.Settings.BossVictoryRescue;
             party.RescueEnabled = rescue;
             party.RescueLimit = Math.Max(0, Math.Min(999, CoopMod.Settings.RescueLimit));
-            party.SpectateAfterExhaustion = CoopMod.Settings.SpectateAfterExhaustion;
-            charms = CoopMod.Settings.ShareCharms;
+            party.SpectateAfterExhaustion = linkedHealth ? false : CoopMod.Settings.SpectateAfterExhaustion;
             entryProtection = CoopMod.Settings.EntryProtection;
             bossHealthScaling = CoopMod.Settings.BossHealthScaling;
             damageRankingEnabled = CoopMod.Settings.BossDamageRanking;
@@ -88,31 +107,40 @@ public sealed partial class CoopServerAddon : ServerAddon {
         // Loading a different save slot replaces CoopMod.Statistics while a
         // local server can still be alive. Rebind the authority ledgers before
         // accepting offers so one slot's receipts cannot bleed into another.
-        if (!ReferenceEquals(hostStatistics, CoopMod.Statistics)) {
+        if (!ReferenceEquals(hostStatistics, CoopMod.Statistics) || linkedHealth && linkedPool.Initialized &&
+            (!ReferenceEquals(linkedHostData, PlayerData.instance) || GameManager.instance.profileID != linkedHostProfile)) {
+            if (linkedHealth && linkedPool.Initialized) {
+                Logger.Info("HollowConnect: host changed save; closing linked-health room");
+                ((ServerManager)api.ServerManager).Stop(); return;
+            }
             ResetDamageRankings();
             hostStatistics = CoopMod.Statistics;
             progress = new ProgressLedger();
             progress.Import(CoopMod.Statistics?.SharedProgress);
             resources = HostResourceHistory();
+            if (linkedHealth) linkedMaskReceipts.Clear();
             nextLedgerSync = 0;
         }
         // Native host pickups can be observed by the client a frame before
         // their ResourceOffer reaches this addon. Merge them into the host
         // ledger here so a reconnect/late join never misses a source.
         if (Now >= nextLedgerSync) { nextLedgerSync = Now + .25; SyncHostLedgers(); }
+        InitializeLinkedHost();
         for (var i = 0; i < 2048 && pending.TryDequeue(out var action); i++) {
             if (action.Generation != generation) continue;
             try { action.Action(); } catch (Exception e) { Logger.Error("HollowConnect server: " + e); }
         }
         Guard("damage rankings", TickDamageRankings);
+        Guard("linked rest", TickLinkedRest);
         Guard("boss settlement", FlushBossSettlements);
         Guard("wipe", () => {
-            if (!(rescue || party.SpectateAfterExhaustion) || !party.BeginWipe()) return;
+            if (linkedSteelEnded || !(linkedHealth || rescue || party.SpectateAfterExhaustion) || !party.BeginWipe()) return;
             CoopContext.Epoch = party.Round; CoopContext.Resetting = true;
             ((ServerManager)api.ServerManager).ResetCoopEntities();
             Broadcast(new Message { Kind = Kind.Wipe });
         });
         Guard("boss rooms", () => {
+            if (linkedHealth) return; // Shared zero belongs to the whole-party barrier.
             foreach (var failed in party.FailBossRooms((id, scene) => ((ServerManager)api.ServerManager).TryGetCoopSceneScope(id, scene, out _, out _)))
                 SendReturning(failed, "boss-failed");
         });
@@ -120,6 +148,7 @@ public sealed partial class CoopServerAddon : ServerAddon {
             if (!party.TryRelease()) return;
             CoopContext.Resetting = false;
             Broadcast(new Message { Kind = Kind.Release });
+            if (linkedHealth) { linkedPool.Refill(); BroadcastLinkedHealth(); }
         });
         Guard("roster", () => {
             var now = Now;
@@ -182,8 +211,10 @@ public sealed partial class CoopServerAddon : ServerAddon {
             party.Join(id, player.Username);
             Send(id, new Message { Kind = Kind.Welcome, Id = id, Name = player.Username, X = bossExtraHealth, Y = bossHealthDecay,
                 Aux = (uint)party.RescueLimit,
-                Value = (shared ? 1 : 0) | (rescue ? 2 : 0) | (warp ? 4 : 0) | (entryProtection ? 8 : 0) | (charms ? 0 : 16) | (bossVictoryRescue ? 0 : 32) | (bossHealthScaling ? 64 : 0) | (party.SpectateAfterExhaustion ? 128 : 0) | (flexibleBossTargeting ? 256 : 0) | (damageRankingEnabled ? 512 : 0) });
+                Value = (shared ? 1 : 0) | (rescue ? 2 : 0) | (warp ? 4 : 0) | (entryProtection ? 8 : 0) | (charms ? 0 : 16) | (bossVictoryRescue ? 0 : 32) | (bossHealthScaling ? 64 : 0) | (party.SpectateAfterExhaustion ? 128 : 0) | (flexibleBossTargeting ? 256 : 0) | (damageRankingEnabled ? 512 : 0) | (linkedHealth ? 1024 : 0) | (linkedSteelEnded ? 2048 : 0),
+                LinkedBonusMasks = linkedHealthBonusMasks, LinkedHealth = linkedPool.Health, LinkedMaxHealth = linkedPool.MaxHealth, LinkedRevision = linkedPool.Revision });
             SendRescueStatus(party.Members[id]);
+            if (linkedHealth) { linkedPool.Join(id); linkedRest.Join(id); SendLinkedHealth(id); }
             foreach (var pair in progress.Values)
                 if (ProgressCatalog.CanShare(pair.Key, shared, charms)) Send(id, new Message { Kind = Kind.ProgressGrant, Key = pair.Key, Value = pair.Value });
             if (shared) foreach (var source in resources.Claimed) Send(id, new Message { Kind = Kind.ResourceGrant, Key = source });
@@ -214,6 +245,15 @@ public sealed partial class CoopServerAddon : ServerAddon {
             ReceiveDamageRanking(id, m); return;
         }
         switch (m.Kind) {
+            case Kind.LinkedHealthInit:
+                ReceiveLinkedHealthInit(id, m); break;
+            case Kind.LinkedHealthDelta:
+                ReceiveLinkedHealthDelta(id, m); break;
+            case Kind.LinkedHealthEnd:
+                if (linkedHealth && linkedSaveMode == 1 && linkedPool.Initialized && linkedPool.Health == 0 && !linkedSteelEnded) {
+                    linkedSteelEnded = true; Broadcast(new Message { Kind = Kind.LinkedHealthEnd });
+                }
+                break;
             case Kind.BossDefeated:
                 if (!(rescue && bossVictoryRescue || party.SpectateAfterExhaustion) || party.Resetting || m.Serial == 0 ||
                     lastBossReport.TryGetValue(id, out var report) && m.Serial <= report ||
@@ -268,15 +308,21 @@ public sealed partial class CoopServerAddon : ServerAddon {
                         member.CheckpointRespawnType = m.Value;
                     }
                     destinations[id] = m;
+                    if (linkedHealth) {
+                        var rest = (LinkedRestKind)((m.Aux >> 1) & 3);
+                        if (party.Resetting || member.Life != Life.Alive && member.Life != Life.Loading ||
+                            !((ServerManager)api.ServerManager).TryGetCoopSceneScope(id, m.Scene, out _, out _)) rest = LinkedRestKind.None;
+                        linkedRest.Report(id, rest, Now, m.LinkedRestEpoch);
+                    }
                 }
                 break;
             case Kind.Down:
-                if ((rescue || party.SpectateAfterExhaustion) && Party.ValidCheckpoint(m.Key, m.Name, m.Value) && party.Down(id, m.Round, m.Serial, m.Scene, m.X, m.Y, Now, m.IsReady)) {
+                if ((linkedHealth && linkedPool.Health == 0 || rescue || party.SpectateAfterExhaustion) && Party.ValidCheckpoint(m.Key, m.Name, m.Value) && party.Down(id, m.Round, m.Serial, m.Scene, m.X, m.Y, Now, m.IsReady)) {
                     member.CheckpointScene = m.Key; member.CheckpointMarker = m.Name; member.CheckpointRespawnType = m.Value;
                     Broadcast(new Message { Kind = Kind.Down, Id = id, Serial = m.Serial, Aux = member.LifeVersion,
                         Name = member.Name, Scene = member.Scene, X = member.X, Y = member.Y, Value = (int)member.Life });
                     SendRescueStatus(member);
-                    if (party.ReturnWithoutRescue(id)) SendReturning(member, "exhausted");
+                    if (!linkedHealth && party.ReturnWithoutRescue(id)) SendReturning(member, "exhausted");
                 }
                 break;
             case Kind.ShadeHit:
@@ -349,12 +395,56 @@ public sealed partial class CoopServerAddon : ServerAddon {
     private void SendRescueStatus(Member member) => Send(member.Id, new Message {
         Kind = Kind.RescueStatus, Id = member.Id, Value = member.RescuesUsed, Serial = member.DownSerial, Aux = member.RestSerial
     });
+    private int LinkedMaskPieces() {
+        if (resources?.Claimed != null) foreach (var id in resources.Claimed)
+            if (ResourceCatalog.TryGet(id, out var source) && source.Kind == ResourceKind.MaskShard) linkedMaskReceipts.Add(id);
+        return LinkedHealthRules.MaskPieces(linkedMaskReceipts);
+    }
+    private void RefreshLinkedHealthCapacity() {
+        if (linkedHealth && linkedPool.UpdatePieces(LinkedMaskPieces())) BroadcastLinkedHealth();
+    }
+    private void ReceiveLinkedHealthInit(ushort id, Message message) {
+        if (!linkedHealth || party.Resetting) return;
+        linkedPool.Join(id);
+        InitializeLinkedHost(); SendLinkedHealth(id);
+    }
+    private void InitializeLinkedHost() {
+        if (!linkedHealth || linkedPool.Initialized || party.Resetting) return;
+        var host = CoopRuntime.Current;
+        if (host == null || !host.Playable || !host.LinkedHostReady) return;
+        var pd = PlayerData.instance;
+        linkedHostData = pd; linkedHostProfile = GameManager.instance.profileID;
+        linkedSaveMode = pd.GetIntInternal("permadeathMode");
+        linkedPool.Initialize(host.LinkedHostHealth, pd.GetIntInternal("maxHealthBase"), LinkedMaskPieces(),
+            linkedHealthBonusMasks, pd.GetIntInternal("heartPieces"), LinkedHealthRules.MaskPieces(CoopMod.Statistics.Resources.Claimed));
+        BroadcastLinkedHealth();
+    }
+    private void ReceiveLinkedHealthDelta(ushort id, Message message) {
+        if (!linkedHealth || party.Resetting) return;
+        if (linkedPool.Report(id, message.Serial, message.Value, message.LinkedRestEpoch, out var damaged, out var damageEpoch) && damaged)
+            linkedRest.Interrupt(id, damageEpoch, Now);
+        BroadcastLinkedHealth();
+    }
+    private void SendLinkedHealth(ushort id) {
+        if (!linkedHealth || !linkedPool.Initialized) return;
+        Send(id, new Message { Kind = Kind.LinkedHealthState, Id = id, Serial = linkedPool.Ack(id),
+            Value = linkedRestCount.Total, X = linkedRestCount.Benches, Y = linkedRestCount.Springs,
+            LinkedHealth = linkedPool.Health, LinkedMaxHealth = linkedPool.MaxHealth,
+            LinkedSaveMode = linkedSaveMode, LinkedRestStatus = linkedRestStatus,
+            LinkedMaskPieces = LinkedMaskPieces(), LinkedBonusMasks = linkedHealthBonusMasks, LinkedRevision = linkedPool.Revision });
+    }
+    private void BroadcastLinkedHealth() {
+        if (!linkedHealth || !linkedPool.Initialized) return;
+        foreach (var id in party.Members.Keys.ToArray()) SendLinkedHealth(id);
+    }
     private void SendReturning(Member member, string reason) => Broadcast(new Message {
         Kind = Kind.Returning, Id = member.Id, Serial = member.DownSerial, Aux = member.LifeVersion,
         Scene = member.ReturnScene, Key = member.ReturnMarker, Value = member.ReturnRespawnType, Name = reason
     });
 
     private void Leave(ushort id) {
+        linkedPool.Leave(id);
+        linkedRest.Leave(id);
         foreach (var board in damageBoards) board.Leave(id);
         foreach (var scope in damageVisits.Keys.Where(scope => scope.Player == id).ToArray()) damageVisits.Remove(scope);
         foreach (var attempt in damageAttempts.Keys.Where(attempt => attempt.Player == id).ToArray()) damageAttempts.Remove(attempt);
@@ -374,6 +464,7 @@ public sealed partial class CoopServerAddon : ServerAddon {
             if (CoopMod.Statistics.SharedResources == null) CoopMod.Statistics.SharedResources = new ResourceClaims();
             CoopMod.Statistics.SharedResources.TryClaim(sourceId, out _);
         }
+        RefreshLinkedHealthCapacity();
         return true;
     }
     private static ResourceClaims HostResourceHistory() {

@@ -1,0 +1,54 @@
+{
+  "version": "0.2.3",
+  "action": "package-release",
+  "releaseChannel": "release",
+  "userRequest": "打包0.2.3,传github,上release",
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "178ECAC0ACEC2807A7454D3D12514EEA1E4645D745BD7A7885B47CF7C53E0FCD"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+    }
+  ],
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced"
+  ],
+  "blockerLedgerSha256": "3F209601D78573BF21A0AD7DBA5873352624DE6F6FEC63446B08D5C33B663B6B",
+  "evidence": [
+    {
+      "path": "docs/evidence/development-validation-0.2.3.json",
+      "sha256": "6F0761CEE8BFB06A17126B7FA99D874672D12DE8CF25C45C26FD1B973D4BDD6C"
+    }
+  ],
+  "createdAtUtc": "2026-10-28T13:47:23.408144+00:00"
+}

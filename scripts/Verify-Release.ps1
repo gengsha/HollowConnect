@@ -1,7 +1,7 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$UserRequestedRelease)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
-$version='0.2.2'
+$version='0.2.3'
 if($UserRequestedRelease -and $Playtest){throw 'Choose one release channel.'}
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})

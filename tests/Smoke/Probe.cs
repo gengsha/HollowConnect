@@ -581,6 +581,10 @@ public sealed class Probe : MonoBehaviour {
         Flag(role + ".shade-cleanup-done");
         yield return Until(() => Has(host ? "guest.shade-cleanup-done" : "host.shade-cleanup-done"), "both finished shade cleanup");
         if (host) {
+            // Reuse this already-loaded disposable profile. Disconnect clears
+            // auto-connect; without restoring it the test opens save menus
+            // against the in-game UI instead of exercising reconnection.
+            typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
             typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager,
                 new object[] { "127.0.0.1", 29650, "host" });
             yield return Until(() => runtime.Connected && runtime.Peers.Count == 1, "reconnect before transition cancellation");

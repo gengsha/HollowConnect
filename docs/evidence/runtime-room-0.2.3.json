@@ -1,0 +1,47 @@
+{
+  "version": "0.2.3",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.2.3-l11",
+  "releaseChannel": "release",
+  "releaseReady": false,
+  "fullRuntimeAcceptance": false,
+  "retestOmitted": true,
+  "createdAtUtc": "2026-10-28T13:47:23.408144+00:00",
+  "scope": "User-requested 0.2.3 Windows/source package and standard GitHub Release. Incremental production/installer builds and package integrity checks; no new game runs after the version bump.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "178ECAC0ACEC2807A7454D3D12514EEA1E4645D745BD7A7885B47CF7C53E0FCD"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+    }
+  ],
+  "runs": [],
+  "previousValidationSource": "docs/evidence/development-validation-0.2.3.json",
+  "previousValidationSha256": "6F0761CEE8BFB06A17126B7FA99D874672D12DE8CF25C45C26FD1B973D4BDD6C",
+  "build": {
+    "status": "passed",
+    "path": ".analysis/release-0.2.3-20261028/build.log",
+    "sha256": "4AF7E272B08911BF00418F99C041782CB9E040CD321841FFCFA1EE1D28412180"
+  },
+  "installerBuild": {
+    "status": "passed",
+    "path": ".analysis/release-0.2.3-20261028/installer-build.log",
+    "sha256": "2930390104D96062D4429FCCB0A838FE82A334640CB735F7F44A30F29599139F"
+  },
+  "unchangedFromSkinSpecialtyBinaries": [
+    "HKMP.dll",
+    "HollowConnect.Core.dll"
+  ],
+  "limits": [
+    "Prior linked-health and skin-specialty results retain their original production hashes; they are not new-hash full acceptance.",
+    "releaseReady records the existing full-runtime gate, separate from the explicitly requested standard GitHub Release channel.",
+    "No personal game/save changes and no skin or test-plugin redistribution."
+  ]
+}

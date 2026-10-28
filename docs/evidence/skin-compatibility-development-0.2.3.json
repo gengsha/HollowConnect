@@ -1,0 +1,229 @@
+{
+  "version": "0.2.3",
+  "stage": "skin-compatibility-before-version-bump",
+  "originalBinaryHashesOnly": true,
+  "certifiesReleaseHashes": false,
+  "coreChecks": {
+    "path": ".analysis/skin-compat/core-results.log",
+    "sha256": "4D6D297D537CA974379891984329B01C76F7AD035CAE176F9543738BAEF32770",
+    "passed": 6,
+    "failed": 0
+  },
+  "bothClientCasesPassed": 5,
+  "videoDecodesAndArrivals": 48,
+  "customVideoPlays": 24,
+  "nativeVideoPlays": 24,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "97B46662AFC4FA772080D2B88D9AEF0A2AFAB710A50795B4275D76F5E0D07878"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+    }
+  ],
+  "runs": [
+    {
+      "name": "skin-fixed-host-1028-a",
+      "status": "passed",
+      "strictLogsAfterExit": true,
+      "bothDone": true,
+      "videoPlays": 12,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "97B46662AFC4FA772080D2B88D9AEF0A2AFAB710A50795B4275D76F5E0D07878"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+        }
+      ],
+      "probeSha256": "BB6F08237E3EA884586410A46C69178081E570532243B52FD7F81056C9CD8552",
+      "resultDirectory": ".test-results/skin-fixed-host-1028-a"
+    },
+    {
+      "name": "skin-fixed-guest-1028-a",
+      "status": "passed",
+      "strictLogsAfterExit": true,
+      "bothDone": true,
+      "videoPlays": 12,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "97B46662AFC4FA772080D2B88D9AEF0A2AFAB710A50795B4275D76F5E0D07878"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+        }
+      ],
+      "probeSha256": "BB6F08237E3EA884586410A46C69178081E570532243B52FD7F81056C9CD8552",
+      "resultDirectory": ".test-results/skin-fixed-guest-1028-a"
+    },
+    {
+      "name": "skin-fixed-both-1028-a",
+      "status": "passed",
+      "strictLogsAfterExit": true,
+      "bothDone": true,
+      "videoPlays": 12,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "97B46662AFC4FA772080D2B88D9AEF0A2AFAB710A50795B4275D76F5E0D07878"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+        }
+      ],
+      "probeSha256": "BB6F08237E3EA884586410A46C69178081E570532243B52FD7F81056C9CD8552",
+      "resultDirectory": ".test-results/skin-fixed-both-1028-a"
+    },
+    {
+      "name": "skin-fixed-vanilla-1028-a",
+      "status": "passed",
+      "strictLogsAfterExit": true,
+      "bothDone": true,
+      "videoPlays": 12,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "97B46662AFC4FA772080D2B88D9AEF0A2AFAB710A50795B4275D76F5E0D07878"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+        }
+      ],
+      "probeSha256": "BB6F08237E3EA884586410A46C69178081E570532243B52FD7F81056C9CD8552",
+      "resultDirectory": ".test-results/skin-fixed-vanilla-1028-a"
+    },
+    {
+      "name": "skin-fixed-feedback-1028-c",
+      "status": "passed",
+      "strictLogsAfterExit": true,
+      "bothDone": true,
+      "videoPlays": 0,
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "97B46662AFC4FA772080D2B88D9AEF0A2AFAB710A50795B4275D76F5E0D07878"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+        }
+      ],
+      "probeSha256": "D6468C3BC229FBC27219EB7A7268A5912F3FF70836745738A6210A6F9ADB15B8",
+      "resultDirectory": ".test-results/skin-fixed-feedback-1028-c"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HKMP.dll",
+      "sha256": "3018561BCC1AFDFDDE3088ACF58CED31AD062D090D2D873DC0392F0E66FD212F"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.dll",
+      "sha256": "97B46662AFC4FA772080D2B88D9AEF0A2AFAB710A50795B4275D76F5E0D07878"
+    },
+    {
+      "path": "src/HollowConnect/bin/Release/net472/HollowConnect.Core.dll",
+      "sha256": "43575E3165E51A5857EE227EC27DA9C7C0FD929328805E1FD0ED7342F726DA5E"
+    },
+    {
+      "path": "tests/Smoke/bin/Release/net472/HollowConnect.Smoke.dll",
+      "sha256": "BB6F08237E3EA884586410A46C69178081E570532243B52FD7F81056C9CD8552"
+    },
+    {
+      "path": ".test-results/game-host/hollow_knight.exe",
+      "sha256": "4D3D0F55AFBB249170241D0DC6FAF9A5DCF3E1ED427A282AE990BB6E4E3A6913"
+    },
+    {
+      "path": ".test-results/game-host/UnityPlayer.dll",
+      "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+    },
+    {
+      "path": ".test-results/game-host/hollow_knight_Data/Managed/Assembly-CSharp.dll",
+      "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "path": ".test-results/game-host/hollow_knight_Data/Managed/UnityEngine.VideoModule.dll",
+      "sha256": "2F789AF8197D96C147FC0F32C1236BE9AB09D3E63E30ACCC95EB1F7A94E69DDD"
+    },
+    {
+      "path": ".analysis/skin-compat/customknight/CustomKnight.dll",
+      "sha256": "E23D2360F844099093AD84FF3687176C84DC6B4DF6F2FCC2CA5FB15CF13098DA"
+    },
+    {
+      "path": ".analysis/skin-compat/satchel/Satchel.dll",
+      "sha256": "9468CEE21DF28819167BD0861D73BEEB59ACD70B30813ADA577EF536C4B4C6E1"
+    }
+  ],
+  "correctedFixtureInputs": [
+    {
+      "path": "tests/Smoke/bin/Release/net472/HollowConnect.Smoke.dll",
+      "sha256": "D6468C3BC229FBC27219EB7A7268A5912F3FF70836745738A6210A6F9ADB15B8"
+    },
+    {
+      "path": "tests/Smoke/ProgressProbe.cs",
+      "sha256": "57E2DD6D7259066EB8DBA6887EF61E7DDBA8F25CE45926D131542193FCBE1087"
+    },
+    {
+      "path": "tests/Smoke/SkinCompatibilityChecks.cs",
+      "sha256": "60448502B82D06171A64C93512DAA1BDA27E5E38ABF394F8125779F90BAB1A27"
+    }
+  ],
+  "skinArchive": {
+    "name": "Lost_Kin_by_teh_ches_noddle.zip",
+    "sha256": "167510567A7B59D19751EE3C9ECB5C22DAE35C9A1155F517B3A74D1DC87239E5",
+    "redistributed": false
+  },
+  "localEvidence": [
+    {
+      "path": ".analysis/skin-compat/accepted-results.json",
+      "sha256": "D0E249A1FD1CBB50279E27C7190239D44D8286B18D34DCAA8F3A2DBB306BEB4D"
+    },
+    {
+      "path": ".analysis/skin-compat/final-summary.md",
+      "sha256": "4A17C7A99688A0B08A1D5DF8ACFC62BE2111E390396655ACA71580C6A7F3A929"
+    },
+    {
+      "path": ".analysis/skin-compat/fixture-correction.md",
+      "sha256": "D2149C2B55769F20225758FD44CF8B42AA63168039086ED618633BC9D28243F2"
+    }
+  ],
+  "limits": [
+    "Original engine animation hook IndexOutOfRangeException reproduced with the old DLL; fixed build passes the same checks.",
+    "Reported process-level crash was not reproduced, including 12 old-build baseline video plays; root cause remains unconfirmed.",
+    "Video preparation adapter addresses the confirmed duplicate Prepare/source-change sequence; it does not establish the reported crash root cause.",
+    "Feedback fixture failures retained but excluded; corrected case c passes after orderly shutdown and strict logs. Production hashes did not change.",
+    "Prior linked-health results retain different engine/addon hashes and do not certify this stage as a full room regression."
+  ]
+}

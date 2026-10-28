@@ -49,6 +49,7 @@ internal static class Program {
         LocalWorldIsolationTests.Register(Test);
         EncounterSummonTests.Register(Test);
         BossHealthScaleTests.Register(Test);
+        LinkedHealthTests.Register(Test);
         DamageRankingTests.Register(Test);
         BossTargetCommitmentTests.Register(Test);
         ResourceClaimsTests.Register(Test);

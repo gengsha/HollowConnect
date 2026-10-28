@@ -8,7 +8,8 @@ public enum Channel { Presence, Event }
 public enum Kind : byte { Hello, Welcome, Presence, Roster, Down, ShadeHit, Revived, Wipe, Ready, Release, ProgressOffer, ProgressGrant, WarpRequest, Warp, Left,
     GiveUpRequest, Returning, BenchReady, Returned, GiveUpDenied, DeathCount, DeathHistory, ResourceOffer, ResourceGrant,
     BossDefeated, BossVictory, BossRecoveryRequest, BossRevived, RescueStatus, BenchRest, RescueAnchorRequest, RescueAnchor, RescueUnavailable,
-    SpectateRequest, Spectating, BossSettlementReady, DamageBegin, DamageHit, DamageEnd, DamageSnapshot }
+    SpectateRequest, Spectating, BossSettlementReady, DamageBegin, DamageHit, DamageEnd, DamageSnapshot,
+    LinkedHealthInit, LinkedHealthDelta, LinkedHealthState, LinkedHealthEnd }
 
 public static class Wire {
     // Reliable server-to-client audit request in the existing progress envelope.
@@ -28,6 +29,13 @@ public sealed class Message : IPacketData {
     public int BossLevel = -1;
     public string BossPlan = "";
     public string BossStatueKey = "", BossReturnGate = "", BossReturnScene = "";
+    // Linked-health fields are populated only by the three linked-health
+    // messages. Keeping them separate from the older room fields makes the
+    // mode an additive protocol feature and keeps older logic untouched.
+    public int LinkedHealth, LinkedMaxHealth, LinkedMaskPieces, LinkedBonusMasks;
+    public uint LinkedRevision, LinkedRestEpoch;
+    public int LinkedSaveMode;
+    public string LinkedRestStatus = "";
     public float X, Y, MapX, MapY;
     public int Value;
     public bool HasMap, IsReady;
@@ -40,6 +48,11 @@ public sealed class Message : IPacketData {
         p.Write(BossSequence); p.Write(BossDoor); p.Write(BossIndex); p.Write(BossBindings);
         p.Write(BossLevel); p.Write(BossPlan);
         p.Write(BossStatueKey); p.Write(BossReturnGate); p.Write(BossReturnScene);
+        if (Kind == Kind.Welcome || Kind == Kind.LinkedHealthInit || Kind == Kind.LinkedHealthState) {
+            p.Write(LinkedHealth); p.Write(LinkedMaxHealth); p.Write(LinkedMaskPieces); p.Write(LinkedBonusMasks); p.Write(LinkedRevision);
+            p.Write(LinkedSaveMode); p.Write(LinkedRestStatus);
+        }
+        if (Kind == Kind.Presence || Kind == Kind.LinkedHealthDelta) p.Write(LinkedRestEpoch);
     }
     public void ReadData(IPacket p) {
         Kind = (Kind)p.ReadByte(); Id = p.ReadUShort(); Target = p.ReadUShort(); Round = p.ReadUInt(); Serial = p.ReadUInt(); Aux = p.ReadUInt();
@@ -48,8 +61,14 @@ public sealed class Message : IPacketData {
         BossSequence = p.ReadString(); BossDoor = p.ReadString(); BossIndex = p.ReadInt(); BossBindings = p.ReadInt();
         BossLevel = p.ReadInt(); BossPlan = p.ReadString();
         BossStatueKey = p.ReadString(); BossReturnGate = p.ReadString(); BossReturnScene = p.ReadString();
+        if (Kind == Kind.Welcome || Kind == Kind.LinkedHealthInit || Kind == Kind.LinkedHealthState) {
+            LinkedHealth = p.ReadInt(); LinkedMaxHealth = p.ReadInt(); LinkedMaskPieces = p.ReadInt(); LinkedBonusMasks = p.ReadInt(); LinkedRevision = p.ReadUInt();
+            LinkedSaveMode = p.ReadInt(); LinkedRestStatus = p.ReadString();
+        }
+        if (Kind == Kind.Presence || Kind == Kind.LinkedHealthDelta) LinkedRestEpoch = p.ReadUInt();
         if (!Enum.IsDefined(typeof(Kind), Kind) || Session.Length > 64 || Scene.Length > 128 || Name.Length > 128 || Key.Length > 128 ||
-            BossSequence.Length > 128 || BossDoor.Length > 128 || BossIndex < 0 || BossIndex > 256 || BossBindings < 0 || BossBindings > 15 || BossLevel < -1 || BossLevel > 2 || BossPlan.Length > 24576 || BossStatueKey.Length > 128 || BossReturnGate.Length > 128 || BossReturnScene.Length > 128)
+            BossSequence.Length > 128 || BossDoor.Length > 128 || BossIndex < 0 || BossIndex > 256 || BossBindings < 0 || BossBindings > 15 || BossLevel < -1 || BossLevel > 2 || BossPlan.Length > 24576 || BossStatueKey.Length > 128 || BossReturnGate.Length > 128 || BossReturnScene.Length > 128 ||
+            LinkedHealth < -100 || LinkedHealth > 100 || LinkedMaxHealth < 0 || LinkedMaxHealth > 64 || LinkedMaskPieces < 0 || LinkedMaskPieces > 16 || LinkedBonusMasks < 0 || LinkedBonusMasks > 10 || LinkedSaveMode < 0 || LinkedSaveMode > 2 || LinkedRestStatus.Length > 8192)
             throw new FormatException("Invalid HollowConnect message");
     }
 }

@@ -66,6 +66,7 @@ internal class HkmpMod : Mod, IGlobalSettings<ModSettings>, ILocalSettings<ModSa
         var gameObject = new GameObject("HKMP Persistent GameObject");
         Object.DontDestroyOnLoad(gameObject);
         gameObject.AddComponent<MonoBehaviourUtil>();
+        Animation.SkinCinematicCompatibility.Initialize();
 
         _gameManager = new Game.GameManager(_modSettings);
 

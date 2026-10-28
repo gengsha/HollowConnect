@@ -593,8 +593,12 @@ public sealed partial class PantheonProbe : MonoBehaviour {
                 throw new Exception("Living boss invisible "+key+" id="+e.Id+" type="+e.Type);
         }
         var players=Field<Dictionary<ushort,Hkmp.Game.Client.ClientPlayerData>>(engine.ClientManager,"_playerData");
-        if(!players.Values.Any(p=>p.IsInLocalScene&&p.PlayerObject!=null&&p.PlayerObject.activeInHierarchy&&p.PlayerObject.GetComponentsInChildren<Renderer>(true).Any(r=>r.enabled&&!r.forceRenderingOff&&r.gameObject.activeInHierarchy)))
-            throw new Exception("Remote knight invisible "+key);
+        // Room/entity snapshots can commit before the native entrance reveals
+        // the remote hero. Require the actual visible avatar with a bounded
+        // wait instead of sampling one arbitrary frame of its entrance.
+        yield return Until(()=>players.Values.Any(p=>p.IsInLocalScene&&p.PlayerObject!=null&&p.PlayerObject.activeInHierarchy&&
+            p.PlayerObject.GetComponentsInChildren<Renderer>(true).Any(r=>r.enabled&&!r.forceRenderingOff&&r.gameObject.activeInHierarchy)),
+            "remote knight visible "+key, 8);
         yield return RequireRecoveredCamera(key);
         Mark("PASS visible bosses/knight and unfrozen camera "+key);
         if(!manager.IsSceneHost) {

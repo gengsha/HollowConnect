@@ -4,9 +4,9 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.2.2** · 支持 Windows 10 / 11 · 适配游戏版本 **1.5.78.11833**
+**当前版本：0.2.3** · 支持 Windows 10 / 11 · 适配游戏版本 **1.5.78.11833**
 
-0.2.2 新增可输入的 Boss 血量参数、幼虫／钥匙／梦境 Boss 精华共享及左下角提示，并修复五门休息房进度、鹿角虫巢穴解锁和重连伤害榜。详见[更新日志](docs/UPDATE-0.2.2.md)。
+0.2.3 新增默认关闭的“链在一起”玩法：共用普通血量、全员休息回血、可调临时面具；同时修复动画帧越界，并为 Custom Knight 皮肤的钟道兽过场视频加入兼容处理。详见[更新日志](docs/UPDATE-0.2.3.md)。
 
 ## 可以一起做什么
 
@@ -21,7 +21,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-**游玩请使用 [HollowConnect-0.2.2-windows.zip](https://github.com/gengsha/HollowConnect/releases/download/v0.2.2/HollowConnect-0.2.2-windows.zip) 完整安装包。** GitHub 的 “Code → Download ZIP” 提供的是源码。
+**游玩请使用 [HollowConnect-0.2.3-windows.zip](https://github.com/gengsha/HollowConnect/releases/download/v0.2.3/HollowConnect-0.2.3-windows.zip) 完整安装包。** GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
@@ -41,6 +41,8 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 |---|---|---|
 | 共享永久进度 | 开启 | 共享指定能力、资源和永久进度；关闭后各自探索，保留匹配的同房 Boss 合作及队友位置。 |
 | 共享护符 | 开启 | 在共享永久进度开启时，共享护符获得状态，装备搭配各自决定。 |
+| 链在一起血条 | 关闭 | 需同时开启进度和护符共享。全房间共用普通生命，蓝血各自独立；暗影救援和观战无效。[玩法说明](docs/LINKED-HEALTH.md) |
+| 链在一起额外面具 | 2 | 可设为 0–10 格临时普通生命，与永久面具碎片进度分开。 |
 | 暗影救援 | 开启 | 队友用骨钉击破暗影即可救起。救援次数默认不限，可设置为每人 1／2／3／5／10 次，坐椅子恢复次数。 |
 | Boss击败后解除暗影 | 开启 | 本场 Boss 被击败后，在存活参战队友处复活本场暗影玩家，不消耗救援次数。 |
 | 入场免伤 | 开启 | 进入房间并恢复操作后，提供 1.5 秒反应时间。 |
@@ -87,7 +89,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见[更新日志](docs/UPDATE-0.2.2.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见[更新日志](docs/UPDATE-0.2.3.md)。
 
 ## 开发与许可
 

@@ -582,7 +582,7 @@ internal class AnimationManager {
         // Logger.Info($"Animation event with name: {clip.name}");
 
         // If we are not connected, there is nothing to send to
-        if (!_netClient.IsConnected) {
+        if (!_netClient.IsConnected || string.IsNullOrEmpty(clip?.name)) {
             return;
         }
 
@@ -815,6 +815,8 @@ internal class AnimationManager {
     ) {
         orig(self, clip, time);
 
+        if (!_netClient.IsConnected) return;
+
         var localPlayer = HeroController.instance;
         if (!localPlayer) {
             return;
@@ -825,9 +827,15 @@ internal class AnimationManager {
             return;
         }
 
+        // Skin frame events can replace the clip while the native call runs.
+        // Observe only the clip that is still active, using tk2d's own modulo.
+        var frames = clip?.frames;
+        if (self.CurrentClip != clip || frames == null || frames.Length == 0) return;
         var clipTime = ReflectionHelper.GetField<tk2dSpriteAnimator, float>(self, "clipTime");
-        var index = (int) clipTime & clip.frames.Length;
-        var frame = clip.frames[index];
+        if (float.IsNaN(clipTime) || float.IsInfinity(clipTime) || clipTime < 0 || clipTime >= int.MaxValue) return;
+        var index = (int) clipTime % frames.Length;
+        var frame = frames[index];
+        if (frame == null) return;
 
         if (index == 0 || frame.triggerEvent || AllowedLoopAnimations.Contains(clip.name)) {
             OnAnimationEvent(clip);
@@ -850,7 +858,10 @@ internal class AnimationManager {
         int last,
         int direction
     ) {
+        var clip = self.CurrentClip;
         orig(self, start, last, direction);
+
+        if (!_netClient.IsConnected) return;
 
         var localPlayer = HeroController.instance;
         if (!localPlayer) {
@@ -862,21 +873,25 @@ internal class AnimationManager {
             return;
         }
 
-        if (start == last) {
-            return;
-        }
-
+        // The original method can return without processing an invalid range,
+        // or a native/skin callback can switch to a shorter clip. Neither case
+        // grants this observer a valid range in the new clip.
+        var frames = clip?.frames;
+        if (self.CurrentClip != clip || frames == null || frames.Length == 0 ||
+            (direction != 1 && direction != -1) || start == last ||
+            direction == 1 && start > last || direction == -1 && start < last) return;
+        var first = (long) start + direction;
+        if (first < 0 || first >= frames.Length || last < 0 || last >= frames.Length) return;
         var num = last + direction;
-        var frames = self.CurrentClip.frames;
 
         var ignoreClipNames = new[] { "Quake Land 2" };
 
-        for (var i = start + direction; i != num; i += direction) {
-            if (i != 0 && !frames[i].triggerEvent || ignoreClipNames.Contains(self.CurrentClip.name)) {
+        for (var i = (int) first; i != num; i += direction) {
+            if (frames[i] == null || i != 0 && !frames[i].triggerEvent || ignoreClipNames.Contains(clip.name)) {
                 continue;
             }
 
-            OnAnimationEvent(self.CurrentClip);
+            OnAnimationEvent(clip);
         }
     }
 

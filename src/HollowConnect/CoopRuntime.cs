@@ -237,6 +237,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     public void Initialize(IClientApi clientApi, CoopClientAddon addon) {
+        Current = this;
         api = clientApi;
         sender = api.NetClient.GetNetworkSender<Channel>(addon);
         var receiver = api.NetClient.GetNetworkReceiver<Channel>(addon, Wire.CreateCollection);
@@ -310,6 +311,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
 
     private void OnConnect() {
         CoopMod.RoomRuleRevision++;
+        ResetLinkedHealth();
         flexibleBossTargeting = false;
         DebugEvent("connect-start", DebugEventSeverity.Info);
         BossTravel.RestoreTransientContext();
@@ -327,6 +329,8 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         Send(new Message { Kind = Kind.Hello });
     }
     private void OnDisconnect() {
+        var linkedDeath = linkedHealthMode ? personalDeath ?? CaptureLinkedDisconnectDeath() : null;
+        ResetLinkedHealth();
         ResetDamageRanking();
         CoopMod.RoomRuleRevision++;
         flexibleBossTargeting = false;
@@ -349,6 +353,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         // The original hero owns an accepted formal death; disconnect only
         // abandons our wait and must not cancel its animation/save/return.
         personalDeath = null; entryProtection.Clear(); protectionSession = "";
+        if (linkedDeath != null && !linkedDeath.Started) linkedDeath.Start();
         debugSignature = "";
     }
     private void Send(Message message) {
@@ -374,6 +379,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             SpectateAfterExhaustion = (m.Value & 128) != 0;
             flexibleBossTargeting = (m.Value & 256) != 0;
             damageRankingEnabled = (m.Value & 512) != 0;
+            ApplyLinkedWelcome(m);
             RescueLimit = (int)Math.Min(999u, m.Aux);
             bossExtraHealth = m.X; bossHealthDecay = m.Y;
             CoopMod.RoomRuleRevision++;
@@ -402,11 +408,14 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             }
             return;
         }
+        if (m.Kind == Kind.LinkedHealthState) { ReceiveLinkedHealthState(m); return; }
+        if (m.Kind == Kind.LinkedHealthEnd) { EndLinkedSteel(); return; }
         if (m.Kind == Kind.Wipe) {
             // Welcome may carry the current round to a late joiner who has
             // never released it. Completed rounds, however, cannot reopen.
             if (m.Round <= ReleasedRound || m.Round <= CoopContext.Epoch && Resetting || m.Round < CoopContext.Epoch) return;
             CoopContext.Epoch = m.Round; CoopContext.Resetting = true;
+            if (LinkedHealthRuleEnabled) { linkedPending.Clear(); linkedDeathRequested = true; }
             CancelBenchReturn();
             CancelTransitions();
             StopSpectating();
@@ -561,6 +570,11 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                 if (!Resetting) break;
                 ReleasedRound = m.Round;
                 Resetting = false; CoopContext.Resetting = false; readySent = false; Unlock(); personalDeath = null;
+                if (LinkedHealthRuleEnabled) {
+                    linkedHealthDeltaSerial = 0;
+                    linkedPersonalHealth = LinkedPersonalCapacity(PlayerData.instance);
+                    if (linkedHealthCurrent > 0) ApplyLinkedHealthState();
+                }
                 Notice("全队加载完成，重新出发"); break;
             case Kind.ProgressGrant:
                 if (ProgressCatalog.CanShare(m.Key, Shared, ShareCharms) && granted.Merge(m.Key, m.Value)) {
@@ -593,6 +607,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         if (KeyPressed(KeyCode.F9)) ToggleDebugPanel();
         SampleDebugState();
         if (resourceSlot != CoopMod.Statistics || resourcePlayerData != PlayerData.instance) {
+            if (resourceSlot != null || resourcePlayerData != null) ResetLinkedHealth(true);
             resourceSlot = CoopMod.Statistics; resourcePlayerData = PlayerData.instance;
             resourceImported = false; resourceNotifications.Clear();
             resources.ResetSlot(); offeredResources.Clear();
@@ -611,6 +626,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             DebugEvent("progress-join-audit", DebugEventSeverity.Info);
         }
         resources.Tick();
+        TickLinkedHealth();
         resourceNotifications.Tick(Connected && Shared && Playable && !Down && !Resetting && !Returning &&
             !GameManager.instance.isPaused && Time.timeScale > 0 &&
             HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished);
@@ -633,7 +649,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         }
         if (!Playable || Resetting || changingScene || Returning) return;
         RefreshPantheonRestProgress();
-        if (Down && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
+        if (Down && !LinkedHealthRuleEnabled && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
             RequestGiveUp();
         }
         if (Shared && Time.unscaledTime >= nextProgress) { nextProgress = Time.unscaledTime + .5f; CheckProgress(); }
@@ -742,11 +758,13 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         var hasMap = Playable && !changingScene && !Returning && map.TryLocation(out location);
         var pd = PlayerData.instance;
         var message = new Message { Kind = Kind.Presence, Serial = ++sequence, Scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
-            Aux = InBossEncounter() ? 1u : 0u,
+            Aux = (InBossEncounter() ? 1u : 0u) | (LinkedHealthRuleEnabled ? (uint)LocalLinkedRest() << 1 : 0u),
+            LinkedRestEpoch = linkedRestEpoch,
             X = pos.x, Y = pos.y, HasMap = hasMap, MapX = hasMap ? location.x : 0, MapY = hasMap ? location.y : 0,
             IsReady = CanStartWarp, Key = pd.GetString("respawnScene") ?? "",
             Name = pd.GetString("respawnMarkerName") ?? "", Value = pd.GetInt("respawnType") };
         if (!BossTravel.Capture(message)) message.IsReady = false;
+        if (LinkedHealthRuleEnabled && (!Playable || changingScene || SceneUtil.IsNonGameplayScene(message.Scene))) message.Aux |= 8;
         Send(message);
     }
 
@@ -754,6 +772,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         if (emergencyBenchActive) yield break;
         if (Connected && !Down && !Resetting && !Returning)
             Send(new Message { Kind = Kind.DeathCount, Serial = CoopMod.Statistics.Increment(localName) });
+        if (LinkedHealthRuleEnabled) { BeginLinkedDeath(orig, self); yield break; }
         if (!Connected || !(RescueEnabled || SpectateAfterExhaustion && InBossEncounter()) || PlayerData.instance.permadeathMode != 0) { yield return orig(self); yield break; }
         if (Down || Resetting || Returning) yield break;
         personalDeath = new PersonalDeath(self, () => orig(self));
@@ -948,8 +967,16 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         return true;
     }
 
-    private bool OnSetBool(string key, bool value) => Connected && ProgressCatalog.CanShare(key, Shared, ShareCharms) && granted.Get(key) == 1 || value;
+    private bool OnSetBool(string key, bool value) {
+        if (LinkedHealthRuleEnabled && LinkedBannedCharmKey(key)) {
+            if (value) LinkedCharmDenied(); else ForgetLinkedCharm(key);
+            return false;
+        }
+        return Connected && ProgressCatalog.CanShare(key, Shared, ShareCharms) && granted.Get(key) == 1 || value;
+    }
     private int OnSetInt(string key, int value) {
+        var linked = LinkedHealthWrite(key, value);
+        if (linked.HasValue) value = linked.Value;
         if (Shared && Connected && Playable && key == "guardiansDefeated") {
             var pd = PlayerData.instance;
             // Native personal absorption increments after setting its defeat
@@ -1366,8 +1393,11 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         style.normal.textColor = Color.white;
         if ((Connected || emergencyNotice) && Time.unscaledTime < statusUntil) GUI.Label(new Rect(0, 70, Screen.width, 36), status, style);
         if (Connected) {
+            if (LinkedHealthActive && Playable) GUI.Label(new Rect(0, 12, Screen.width, 32),
+                "链在一起 · 团队生命 " + PlayerData.instance.GetInt("health") + " / " + linkedHealthMax, style);
             if (Down || Resetting || Returning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 70),
                 Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点" :
+                LinkedHealthRuleEnabled ? "团队生命耗尽 · 等待全队返回各自复活点" :
                 Spectating ? "正在观战 · 等待本场结束\n按 " + CoopMod.Settings.GiveUpKey + " 返回自己的复活点" :
                 "暗影形态 · 等待队友击破暗影，一血复活\n按 " + CoopMod.Settings.GiveUpKey +
                 (SpectateAfterExhaustion ? " 放弃救援并转入观战" : " 放弃救援并返回自己的复活点"), style);
@@ -1424,6 +1454,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     private void OnDestroy() {
+        ResetLinkedHealth();
         On.GameManager.BeginSceneTransitionRoutine -= TrackNativeTransition;
         GameManager.SceneTransitionBegan -= TrackNativeLoader;
         teammateDream?.Dispose();
