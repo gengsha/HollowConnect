@@ -245,14 +245,15 @@ public sealed partial class RescueProbe {
                 var reward = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.name == "Ghost False Knight NPC" && f.FsmName == "Conversation Control");
                 var npc = reward.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "npc_control");
                 var beforeOrbs = pd.GetInt("dreamOrbs");
+                var expectedOrbs = beforeOrbs + (HollowConnect.CoopMod.Statistics.Resources.Contains("essence:falseKnightOrbsCollected") ? 0 : 300);
                 hero.transform.position = reward.transform.position + Vector3.right;
                 body.velocity = Vector2.zero; Physics2D.SyncTransforms();
                 yield return Until(() => npc.ActiveStateName == "In Range", "personal native reward interaction range");
                 yield return RulePress(InputHandler.Instance.inputActions.up);
                 yield return Until(() => reward.ActiveStateName == "Defeated", "native spirit conversation after real interact input");
                 reward.SendEvent("CONVO_FINISH"); // Dialogue-close boundary; native actions grant the personal reward.
-                yield return Until(() => pd.GetBool("falseKnightOrbsCollected") && pd.GetInt("dreamOrbs") == beforeOrbs + 300,
-                    "each revived dream participant claims own 300 essence");
+                yield return Until(() => pd.GetBool("falseKnightOrbsCollected") && pd.GetInt("dreamOrbs") == expectedOrbs,
+                    "revived dream participants receive the same source once across both native conversations");
                 yield return Until(() => hero.acceptingInput && !hero.controlReqlinquished && !pd.GetBool("disablePause"),
                     "native reward conversation restores control");
             }

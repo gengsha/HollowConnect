@@ -4,13 +4,16 @@ namespace Hkmp.Game.Client.Entity;
 
 // Pure arithmetic shared by the runtime and focused boundary checks.
 internal static class BossHealthScale {
-    internal static double Multiplier(int players, double extra, double decay) {
-        if (double.IsNaN(extra) || double.IsInfinity(extra) || double.IsNaN(decay) || double.IsInfinity(decay)) return 1;
-        extra = System.Math.Round(System.Math.Max(0, System.Math.Min(4, extra)), 6);
-        decay = System.Math.Round(System.Math.Max(0, System.Math.Min(1, decay)), 6);
-        var total = 1d;
-        for (var i = 1; i < System.Math.Min(256, players); i++) { total += extra; extra *= decay; }
-        return System.Math.Min(10, total);
+    internal static double Multiplier(int players, double parameter) {
+        if (double.IsNaN(parameter) || double.IsInfinity(parameter)) return 1;
+        parameter = System.Math.Round(System.Math.Max(0, System.Math.Min(4, parameter)), 6);
+        var total = 1d; var term = parameter;
+        for (var i = 1; i < System.Math.Min(256, players); i++) {
+            total += term;
+            if (total >= 10) return 10;
+            term *= parameter;
+        }
+        return total;
     }
 }
 

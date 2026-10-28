@@ -8,6 +8,7 @@ public sealed partial class CoopRuntime {
             case "共享永久进度（房主）": return Toggle(Shared);
             case "共享护符（房主）": return Toggle(ShareCharms);
             case "动态 Boss 血量（房主）": return Toggle(bossHealthScaling);
+            case BossHealthParameterRow.OptionName: return BossHealthParameterRow.Format(bossExtraHealth);
             case "Boss 伤害占比榜（房主）": return Toggle(damageRankingEnabled);
             case "Boss 索敌模式（房主）": return flexibleBossTargeting ? "灵活" : "原版";
             case "暗影救援（房主）": return Toggle(RescueEnabled);

@@ -129,7 +129,7 @@ public sealed partial class BossProbe : MonoBehaviour {
         if (DisplayMenuCheck) ConfigureDisplayMenuChecks();
         if (BalanceCheck) {
             CoopMod.Settings.BossHealthScaling = host;
-            CoopMod.Settings.BossExtraHealthPerPlayer = host ? .6f : 3;
+            CoopMod.Settings.BossExtraHealthPerPlayer = host ? BalanceParameter : 3;
             CoopMod.Settings.OtherPlayerOpacity = host ? .45f : .7f;
         }
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
@@ -176,7 +176,7 @@ public sealed partial class BossProbe : MonoBehaviour {
             yield return Until(() => control.ActiveStateName == "Idle", "arena trigger starts native boss AI", 20);
             if (BalanceCheck) {
                 if (!LateGuest) yield return Until(() => runtime.CurrentBossHealthMultiplier() > 1.5, "same arena roster ready for boss balance");
-                yield return BalanceDamageChecks(hm, LateGuest ? 1 : 1.6);
+                yield return BalanceDamageChecks(hm, LateGuest ? 1 : 1 + BalanceParameter);
                 if (Has(role + ".failed")) yield break;
             }
             hm.ApplyExtraDamage(hm.hp);
@@ -330,7 +330,7 @@ public sealed partial class BossProbe : MonoBehaviour {
             Flag("guest.continued"); yield return Until(() => Has("host.returned"), "returning client sees continued boss");
             if (BalanceCheck) {
                 yield return Until(() => runtime.CurrentBossHealthMultiplier() > 1.5, "returning player restores two-player difficulty");
-                yield return BalanceDamageChecks(hm, 1.6);
+                yield return BalanceDamageChecks(hm, 1 + BalanceParameter);
                 Flag("balance.damage-complete");
             }
         }

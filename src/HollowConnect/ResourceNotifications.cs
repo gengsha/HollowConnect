@@ -14,8 +14,9 @@ internal sealed class ResourceNotifications {
     private static GameObject template;
     private static readonly Dictionary<ResourceKind, Sprite> icons = new Dictionary<ResourceKind, Sprite>();
     private static readonly Dictionary<ResourceKind, string> names = new Dictionary<ResourceKind, string>();
-    private readonly Queue<ResourceKind> order = new Queue<ResourceKind>();
-    private readonly Dictionary<ResourceKind, int> pending = new Dictionary<ResourceKind, int>();
+    private readonly Queue<string> order = new Queue<string>();
+    private readonly Dictionary<string, int> pending = new Dictionary<string, int>();
+    private readonly Dictionary<string, ResourceSource> sources = new Dictionary<string, ResourceSource>();
     private GameObject active;
 
     internal static void Preload(Dictionary<string, Dictionary<string, GameObject>> objects) {
@@ -57,12 +58,13 @@ internal sealed class ResourceNotifications {
 
     internal void Enqueue(ResourceSource source) {
         if (source == null) return;
-        if (!pending.ContainsKey(source.Kind)) { pending[source.Kind] = 0; order.Enqueue(source.Kind); }
-        pending[source.Kind]++;
+        var key = source.Kind == ResourceKind.UniqueKey ? source.Id : source.Kind.ToString();
+        if (!pending.ContainsKey(key)) { pending[key] = 0; sources[key] = source; order.Enqueue(key); }
+        pending[key] += source.Kind == ResourceKind.DreamEssence ? source.Amount : 1;
     }
 
     internal void Clear() {
-        order.Clear(); pending.Clear();
+        order.Clear(); pending.Clear(); sources.Clear();
         if (active != null) Object.Destroy(active);
         active = null;
     }
@@ -74,15 +76,19 @@ internal sealed class ResourceNotifications {
         if (active != null) Object.Destroy(active);
         active = null;
         if (!ready || template == null || order.Count == 0) return;
-        var kind = order.Dequeue();
-        var count = pending[kind]; pending.Remove(kind);
+        var key = order.Dequeue(); var source = sources[key]; var kind = source.Kind;
+        var count = pending[key]; pending.Remove(key); sources.Remove(key);
         active = Object.Instantiate(template);
         active.name = PopupName;
         Object.DontDestroyOnLoad(active);
-        var text = Language.Language.Get(names[kind], "UI");
+        var text = kind == ResourceKind.Grub ? "共享幼虫" : kind == ResourceKind.DreamEssence ? "共享梦境精华" :
+            kind == ResourceKind.UniqueKey ? KeyName(source.InventoryFlag) : Language.Language.Get(names[kind], "UI");
         active.transform.Find("Text").GetComponent<TMPro.TextMeshPro>().text = text + (count > 1 ? " ×" + count : "");
         var icon = active.transform.Find("Icon").GetComponent<SpriteRenderer>();
-        icon.sprite = icons[kind]; icon.sortingOrder = 1;
+        icon.enabled = icons.TryGetValue(kind, out var sprite);
+        icon.sprite = sprite; icon.sortingOrder = 1;
         active.SetActive(true);
     }
+    private static string KeyName(string flag) => flag == "hasCityKey" ? "共享城市纹章" : flag == "hasWhiteKey" ? "共享典雅的钥匙" :
+        flag == "hasLoveKey" ? "共享爱之钥" : "共享店主的钥匙";
 }

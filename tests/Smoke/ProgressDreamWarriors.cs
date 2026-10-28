@@ -195,7 +195,8 @@ public sealed partial class ProgressProbe {
             var orbs = pd.GetInt("dreamOrbs");
             if (!summoner) {
                 yield return Until(() => Has("summoner.reward." + scene), "summoner claims first while staying in room");
-                yield return Until(() => pd.GetInt(key) == 1 && pd.GetInt("dreamOrbs") == orbs, "teammate collection preserves personal unclaimed reward");
+                yield return Until(() => pd.GetInt(key) == 1 && pd.GetInt("dreamOrbs") == orbs + reward,
+                    "teammate essence shares while local native conversation remains unclaimed");
             }
             HeroController.instance.transform.position = npc.transform.position + new Vector3(1, 0, 0);
             Freeze();

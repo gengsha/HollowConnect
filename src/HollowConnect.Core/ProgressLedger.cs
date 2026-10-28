@@ -35,7 +35,7 @@ public static class ProgressCatalog {
             "killedDungDefender", "defeatedDungDefender", "dungDefenderEncounterReady",
             "killedInfectedKnight", "killedBlackKnight", "killedHiveKnight", "watcherChandelier",
             "killedTraitorLord", "killedFlukeMother", "collectorDefeated", "lurienDefeated", "monomonDefeated",
-            "hegemolDefeated", "openedCityGate", "openedRuins1", "openedRuins2", "openedDeepnest",
+            "hegemolDefeated", "openedRuins1", "openedRuins2", "openedDeepnest",
             "openedRoyalGardens", "openedRestingGrounds", "openedGreenpath", "openedFungalWastes",
             "openedPalaceGrounds", "openedCrossroads", "openedTown", "openedStagNest", "openedHiddenStation",
             "openedTownBuilding",
@@ -46,7 +46,7 @@ public static class ProgressCatalog {
             "infectedKnightDreamDefeated", "mageLordDreamDefeated",
             "defeatedMantisLords", "mageLordDefeated", "megaMossChargerDefeated", "flukeMotherDefeated",
             "maskBrokenLurien", "maskBrokenMonomon", "maskBrokenHegemol", "openedBlackEggDoor",
-            "openedMageDoor", "openedLoveDoor", "openedTramLower", "openedTramRestingGrounds"
+            "openedTramLower", "openedTramRestingGrounds"
         }) result[key] = 1;
         foreach (var key in mapPurchases) result[key] = 1;
         for (var i = 1; i <= 40; i++) result["gotCharm_" + i] = 1;

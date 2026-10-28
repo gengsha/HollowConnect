@@ -228,6 +228,10 @@ internal static class BossTravel {
             typeof(BossSceneController).GetField("restoreBindingsOnDestroy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(BossSceneController.Instance, false);
         var data = (BossSequenceController.BossSequenceData)Data.GetValue(null);
         var changed = !BossSequenceController.IsInSequence || data == null || data.bossSequenceName != m.BossSequence || (int)data.bindings != m.BossBindings || data.playerData != m.BossDoor;
+        // Every Pantheon rest stop reuses GG_Spa. Its existing authority can
+        // still be waiting at an earlier stop when a teammate finishes the
+        // next section. Never let that authority's old heartbeat rewind it.
+        if (sameRoom && m.Scene == "GG_Spa" && !changed && m.BossIndex < (int)Index.GetValue(null)) return true;
         plan = incoming; planSequence = m.BossSequence;
         if (hasReturn) {
             PlayerData.instance.SetString("dreamReturnScene", m.BossReturnScene);

@@ -7,6 +7,18 @@ using Hkmp.Networking.Packet;
 internal static class DamageRankingTests {
     private static void Check(bool value) { if (!value) throw new Exception("damage ranking invariant failed"); }
     internal static void Register(Action<string, Action> test) {
+        test("damage ranking reconnect merges names and retires old transport reports", () => {
+            var board = new DamageRanking(1, "BossSequenceTier5");
+            board.Join(1, "host", 1); board.Join(2, "guest", 2);
+            Check(board.Add(1, 1, 2, 40, 0)); board.Leave(2);
+            board.Join(3, "GUEST", 3);
+            Check(board.Add(1, 2, 3, 60, 1)); Check(!board.Add(1, 3, 2, 20, 1));
+            Check(board.Snapshot().Players.Length == 2 && board.Snapshot().Total == 100);
+            Check(board.Snapshot().Players.Single(p => p.Id == 3).Damage == 100);
+            board.Leave(1); board.Join(1, "new player", 4);
+            Check(board.Add(1, 1, 1, 5, 1));
+            Check(board.Snapshot().Players.Length == 3 && board.Snapshot().Total == 105);
+        });
         test("damage ranking attributes accepted reports once across authority handoff", () => {
             var board = new DamageRanking(1, ""); board.Join(1, "host", 10); board.Join(2, "guest", 20);
             Check(board.Add(1, 1, 2, 25, 0)); Check(!board.Add(1, 1, 2, 25, 0));

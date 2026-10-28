@@ -5,17 +5,20 @@ internal static class BossHealthScaleTests {
     internal static void Register(Action<string, Action> test) {
         test("boss balance default curve and bounded invalid configuration", () => {
             void Equal(double a, double b) { if (Math.Abs(a - b) > 1e-6) throw new Exception(a + " != " + b); }
-            Equal(BossHealthScale.Multiplier(1, .6, .6), 1);
-            Equal(BossHealthScale.Multiplier(2, .6, .6), 1.6);
-            Equal(BossHealthScale.Multiplier(3, .6, .6), 1.96);
-            Equal(BossHealthScale.Multiplier(4, .6, .6), 2.176);
-            Equal(BossHealthScale.Multiplier(256, .6, .6), 2.5);
-            Equal(BossHealthScale.Multiplier(4, .5, 1), 2.5);
-            Equal(BossHealthScale.Multiplier(3, .5, 0), 1.5);
-            Equal(BossHealthScale.Multiplier(0, .6, .6), 1);
-            Equal(BossHealthScale.Multiplier(3, double.NaN, .6), 1);
-            Equal(BossHealthScale.Multiplier(3, .6, double.PositiveInfinity), 1);
-            Equal(BossHealthScale.Multiplier(int.MaxValue, 100, 100), 10);
+            Equal(BossHealthScale.Multiplier(1, .6), 1);
+            Equal(BossHealthScale.Multiplier(2, .6), 1.6);
+            Equal(BossHealthScale.Multiplier(3, .6), 1.96);
+            Equal(BossHealthScale.Multiplier(4, .6), 2.176);
+            Equal(BossHealthScale.Multiplier(256, .6), 2.5);
+            Equal(BossHealthScale.Multiplier(3, .8), 2.44);
+            Equal(BossHealthScale.Multiplier(4, .5), 1.875);
+            Equal(BossHealthScale.Multiplier(4, 1), 4);
+            Equal(BossHealthScale.Multiplier(3, 2), 7);
+            Equal(BossHealthScale.Multiplier(3, 0), 1);
+            Equal(BossHealthScale.Multiplier(0, .6), 1);
+            Equal(BossHealthScale.Multiplier(3, double.NaN), 1);
+            Equal(BossHealthScale.Multiplier(3, double.PositiveInfinity), 1);
+            Equal(BossHealthScale.Multiplier(int.MaxValue, 100), 10);
         });
         test("boss balance fractional poison and armor hits cannot round to permanent immunity", () => {
             foreach (var multiplier in new[] { 1.6, 1.96, 2.176, 10d }) {

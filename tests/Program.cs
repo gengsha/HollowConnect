@@ -542,6 +542,7 @@ internal static class Program {
         });
         Test("all progression keys exist in this game build", () => {
             foreach (var pair in ProgressCatalog.Limits) {
+                if (GrimmFlames.IsKey(pair.Key)) continue; // Validated source masks, not native PlayerData fields.
                 var field = typeof(PlayerData).GetField(pair.Key);
                 Check(field != null, "missing " + pair.Key);
                 Check(field.FieldType == (pair.Value == 1 ? typeof(bool) : typeof(int)), "wrong type " + pair.Key);

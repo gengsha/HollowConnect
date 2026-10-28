@@ -76,7 +76,7 @@ public sealed partial class ProgressProbe {
         ResourceCheck(PlayerData.instance.GetInt("simpleKeys") == before + (fresh ? 1 : 0), "native key source awards at most once " + id);
         Mark("PASS KEY SOURCE " + id + " balance=" + PlayerData.instance.GetInt("simpleKeys"));
     }
-    private IEnumerator KeyShop(bool fresh = true) {
+    private IEnumerator KeyShop(bool fresh = true, string keyFlag = "slySimpleKey") {
         yield return KeyRoom("Room_shop");
         var before = PlayerData.instance.GetInt("simpleKeys"); var geo = PlayerData.instance.GetInt("geo");
         var region=ResourceFsm("Shop Region","Shop Region");
@@ -93,7 +93,7 @@ public sealed partial class ProgressProbe {
             ResourceFsm("Item List","Item List Control").ActiveStateName=="Idle" &&
             ResourceFsm("Item List","ui_list_getinput").ActiveStateName=="Idle", "native Sly shop open",12);
         var list = ResourceFsm("Item List", "Item List Control"); var stock = list.GetComponent<ShopMenuStock>();
-        var index = Array.FindIndex(stock.stockInv, g => g != null && g.GetComponent<ShopItemStats>().playerDataBoolName == "slySimpleKey");
+        var index = Array.FindIndex(stock.stockInv, g => g != null && g.GetComponent<ShopItemStats>().playerDataBoolName == keyFlag);
         ResourceCheck(index >= 0 && stock.CanBuy(index), "native Sly key stock available");
         var cost=stock.GetCost(index);
         list.FsmVariables.GetFsmInt("Current Item").Value=index; list.SetState("Get Details");
@@ -102,9 +102,11 @@ public sealed partial class ProgressProbe {
         yield return Until(() => confirm.gameObject.activeInHierarchy && confirm.ActiveStateName=="Listen", "native Sly key confirmation");
         var selection=ResourceFsm("UI List","ui_list"); selection.FsmVariables.GetFsmInt("Current Item").Value=1;
         confirm.SendEvent("UI SELECTION MADE");
-        yield return Until(() => LocalResourceClaims.Contains("key:slySimpleKey"), "native Sly key purchase", 15);
+        yield return Until(() => LocalResourceClaims.Contains("key:" + keyFlag), "native Sly key purchase", 15);
         yield return ResourceCloseSalubra(); yield return ResourceIdle("Sly key");
-        ResourceCheck(PlayerData.instance.GetInt("simpleKeys")==before+(fresh?1:0) && PlayerData.instance.GetInt("geo")==geo-(fresh?cost:0),
+        Mark("KEY SHOP grant=" + keyFlag + " geoBefore=" + geo + " geoAfter=" + PlayerData.instance.GetInt("geo") + " cost=" + cost +
+            " inventory=" + PlayerData.instance.GetBool(keyFlag));
+        ResourceCheck((keyFlag == "slySimpleKey" ? PlayerData.instance.GetInt("simpleKeys")==before+(fresh?1:0) : PlayerData.instance.GetBool(keyFlag)) && PlayerData.instance.GetInt("geo")==geo-(fresh?cost:0),
             "Sly key awards and charges only an unreceived source");
     }
     private IEnumerator KeyOpenDoor(string scene, string field) {

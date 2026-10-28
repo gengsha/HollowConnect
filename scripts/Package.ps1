@@ -1,8 +1,9 @@
-﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums)
+﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums, [switch]$UserRequestedRelease)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'PackageTools.ps1')
-$version = '0.2.1'
+$version = '0.2.2'
+if($UserRequestedRelease -and $Playtest){throw 'Choose one release channel.'}
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
 $taskEvidencePath=Join-Path $root "docs/evidence/runtime-room-$version.json"
@@ -10,22 +11,31 @@ $taskEvidence=Get-Content -LiteralPath $taskEvidencePath -Raw | ConvertFrom-Json
 $taskBlockers=Get-Content -LiteralPath (Join-Path $root "docs/evidence/runtime-blockers-$version.json") -Raw | ConvertFrom-Json
 if($taskBlockers.version -ne $version){throw 'Wrong blocker ledger version.'}
 $taskUnresolved=@($taskBlockers.findings | Where-Object {$_.resolved -ne $true})
-if($taskUnresolved.Count -and !$Playtest){throw 'Unresolved runtime blocker; no release package created.'}
+if($taskUnresolved.Count -and !$Playtest -and !$UserRequestedRelease){throw 'Unresolved runtime blocker; no release package created.'}
 $taskAuthorizationRelative="docs/evidence/playtest-authorization-$version"+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})+'.json'
 $taskAuthorizationPath=Join-Path $root $taskAuthorizationRelative
+if($UserRequestedRelease){
+    $taskAuthorizationRelative="docs/evidence/release-authorization-$version.json"
+    $taskAuthorizationPath=Join-Path $root $taskAuthorizationRelative
+    $taskAuthorization=Get-Content -LiteralPath $taskAuthorizationPath -Raw | ConvertFrom-Json
+    if($taskAuthorization.version -ne $version -or $taskAuthorization.action -ne 'package-release' -or $taskAuthorization.releaseChannel -ne 'release' -or !$taskAuthorization.userRequest -or $taskAuthorization.retestOmitted -ne $true -or @($taskUnresolved | Where-Object {$_.id -notin $taskAuthorization.retainedUnresolvedFindings}).Count){throw 'Release request does not match the version, channel or retained findings.'}
+    if((Get-FileHash -LiteralPath (Join-Path $root "docs/evidence/runtime-blockers-$version.json")).Hash -ne $taskAuthorization.blockerLedgerSha256){throw 'Release findings differ from the recorded scope.'}
+}
 if($Playtest){
     $taskAuthorization=Get-Content -LiteralPath $taskAuthorizationPath -Raw | ConvertFrom-Json
     if($taskAuthorization.version -ne $version -or $taskAuthorization.action -ne 'package-for-user-playtest' -or @($taskUnresolved | Where-Object {$_.id -notin $taskAuthorization.acceptedUnresolvedFindings}).Count){throw 'Playtest request does not cover current unresolved findings.'}
     if($PlaytestBuild -and $taskAuthorization.buildLabel -ne $PlaytestBuild){throw 'Playtest build label differs from the request record.'}
+}
+if($Playtest -or $UserRequestedRelease){
     foreach($taskRequired in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll'){
         $taskHash=(Get-FileHash -LiteralPath (Join-Path $root ('src/HollowConnect/bin/Release/net472/'+$taskRequired)) -Algorithm SHA256).Hash
-        if(@($taskAuthorization.binaries | Where-Object {$_.name -eq $taskRequired -and $_.sha256 -eq $taskHash}).Count -ne 1){throw 'Playtest production DLL differs from the authorized package build.'}
+        if(@($taskAuthorization.binaries | Where-Object {$_.name -eq $taskRequired -and $_.sha256 -eq $taskHash}).Count -ne 1){throw 'Production DLL differs from the requested package build.'}
     }
 }
 $taskScopedPlaytest=$Playtest -and $taskAuthorization.runtimeValidation
 $taskRuntime=if($taskScopedPlaytest){$taskAuthorization.runtimeValidation}else{$taskEvidence}
 # A user-requested package may retain earlier validation without claiming the new hashes were tested.
-$taskSkipRetest=$Playtest -and $taskAuthorization.retestOmitted -eq $true
+$taskSkipRetest=($Playtest -or $UserRequestedRelease) -and $taskAuthorization.retestOmitted -eq $true
 if($taskSkipRetest){
     if(!$taskAuthorization.userRequest -or !$taskEvidence.retestOmitted -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc13' -or $taskEvidence.releaseReady -ne $false -or @($taskEvidence.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
     if(!$taskEvidence.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $root $taskEvidence.previousValidationSource) -Algorithm SHA256).Hash -ne $taskEvidence.previousValidationSha256){throw 'Previous validation reference differs.'}
@@ -66,6 +76,9 @@ foreach ($taskDoc in Get-ChildItem -LiteralPath (Join-Path $root 'docs') -File -
 $manifest = [ordered]@{
     version = $version
     releaseChannel = if($Playtest){'playtest'}else{'release'}
+    userRequestedRelease = [bool]$UserRequestedRelease
+    releaseAuthorizationSource = if($UserRequestedRelease){$taskAuthorizationRelative}else{$null}
+    releaseAuthorizationSha256 = if($UserRequestedRelease){(Get-FileHash -LiteralPath $taskAuthorizationPath).Hash}else{$null}
     releaseReady = if($Playtest){$false}else{$taskEvidence.releaseReady}
     retestOmitted = [bool]$taskSkipRetest
     buildLabel = $PlaytestBuild

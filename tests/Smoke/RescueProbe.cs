@@ -124,7 +124,6 @@ public sealed partial class RescueProbe : MonoBehaviour {
         if (PostBossDamageCheck) {
             CoopMod.Settings.BossHealthScaling = true;
             CoopMod.Settings.BossExtraHealthPerPlayer = .6f;
-            CoopMod.Settings.BossExtraHealthDecay = .6f;
             postBossPlayerDamage = PlayerDamageSignature();
         }
         CoopMod.Settings.BossVictoryRescue = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_VICTORY_DISABLED") != "1";

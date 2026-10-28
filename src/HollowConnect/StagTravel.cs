@@ -1,10 +1,15 @@
 using Hkmp;
+using HollowConnect.Core;
 using UnityEngine;
 
 namespace HollowConnect;
 
 public sealed partial class CoopRuntime {
     private void RefreshStagNest() {
+        if (!Shared) return;
+        var pd = PlayerData.instance;
+        var stations = StagStations.Count(pd.GetBool);
+        if (pd.GetInt("stationsOpened") < stations) pd.SetInt("stationsOpened", stations);
         if (!Shared || CoopContext.LocalScene != "Cliffs_03" || !PlayerData.instance.GetBool("openedStagNest")) return;
         // The Nest has no bell. A teammate warp bypasses native Stag travel,
         // leaving this player's Stag away and its interaction collider off.

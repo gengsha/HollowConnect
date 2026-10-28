@@ -81,6 +81,29 @@ public sealed partial class PantheonProbe {
         Mark("NATIVE ORNAMENT " + string.Join(",", canvas.GetComponentsInChildren<Image>().Where(i => i.sprite != null).Select(i => i.sprite.name)));
         Mark("NATIVE FONTS " + string.Join(",", Resources.FindObjectsOfTypeAll<Font>().Select(f => f.name)));
         yield return Both("damage.checked");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DAMAGE_RECONNECT") == "1") {
+            var originalBoard = runtime.damageRanking.Board;
+            if (!host) {
+                var oldId = runtime.LocalId;
+                engine.ClientManager.Disconnect(); yield return Until(() => !runtime.Connected, "ranking guest disconnects");
+                yield return new WaitForSecondsRealtime(1);
+                ConnectLocal("pantheonguest"); yield return Until(() => runtime.Connected, "ranking guest rejoins with same name");
+                Mark("DAMAGE RECONNECT id " + oldId + " -> " + runtime.LocalId);
+            }
+            yield return Until(() => runtime.damageRanking?.Board == originalBoard && runtime.damageRanking.Players.Length == 2 &&
+                runtime.damageRanking.Players.Single(p => p.Name == "pantheonguest").Damage == 30 && runtime.Peers.Count == 1,
+                "rejoined ranking merges old damage into one row", 20);
+            yield return Both("damage.reconnected");
+            if (host) {
+                yield return Until(() => runtime.PlayerObject(runtime.Peers.Keys.Single()) != null, "rejoined damage source ready");
+                health.Hit(new HitInstance { Source = runtime.PlayerObject(runtime.Peers.Keys.Single()), AttackType = AttackTypes.Nail,
+                    DamageDealt = 20, Multiplier = 1, IgnoreInvulnerable = true });
+            }
+            yield return Until(() => runtime.damageRanking.Total == 81, "new damage accumulates on merged standing", 15);
+            DamageCheck(runtime.damageRanking.Players.Length == 2 && runtime.damageRanking.Players.Single(p => p.Name == "pantheonguest").Damage == 50,
+                "same-name reconnect preserves total and one standing");
+            Mark("FINAL PASS damage ranking reconnect merged"); yield return Finish(); yield break;
+        }
         var board = runtime.damageRanking.Board;
         var roomLimit = int.TryParse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_DAMAGE_CHECK_ROOMS"), out var requestedRooms)
             ? Math.Max(2, Math.Min(sequence.Count, requestedRooms)) : sequence.Count;

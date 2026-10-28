@@ -1,18 +1,31 @@
-﻿param([switch]$Playtest, [string]$PlaytestBuild='')
+﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$UserRequestedRelease)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
-$version='0.2.1'
+$version='0.2.2'
+if($UserRequestedRelease -and $Playtest){throw 'Choose one release channel.'}
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package=Join-Path $root ('dist\'+$taskPackageName)
 $taskBlockers=Get-Content -LiteralPath (Join-Path $root "docs/evidence/runtime-blockers-$version.json") -Raw | ConvertFrom-Json
 if($taskBlockers.version -ne $version){throw 'Wrong blocker ledger version.'}
 $taskUnresolved=@($taskBlockers.findings | Where-Object {$_.resolved -ne $true})
-if($taskUnresolved.Count -and !$Playtest){throw 'Unresolved runtime blocker; release cannot be verified.'}
+if($taskUnresolved.Count -and !$Playtest -and !$UserRequestedRelease){throw 'Unresolved runtime blocker; release cannot be verified.'}
 $manifest=Get-Content -LiteralPath (Join-Path $package 'manifest.json') -Raw | ConvertFrom-Json
 if ($manifest.version -ne $version) { throw 'Wrong version.' }
 if($manifest.releaseChannel -ne $(if($Playtest){'playtest'}else{'release'})){throw 'Wrong release channel.'}
+if([bool]$manifest.userRequestedRelease -ne [bool]$UserRequestedRelease){throw 'Release request mode differs.'}
 if($manifest.buildLabel -ne $PlaytestBuild){throw 'Wrong playtest build label.'}
+if($UserRequestedRelease){
+    $taskAuthorizationRelative="docs/evidence/release-authorization-$version.json"
+    $taskAuthorization=Get-Content -LiteralPath (Join-Path $root $taskAuthorizationRelative) -Raw | ConvertFrom-Json
+    if($taskAuthorization.version -ne $version -or $taskAuthorization.action -ne 'package-release' -or $taskAuthorization.releaseChannel -ne 'release' -or !$taskAuthorization.userRequest -or $taskAuthorization.retestOmitted -ne $true -or @($taskUnresolved | Where-Object {$_.id -notin $taskAuthorization.retainedUnresolvedFindings}).Count){throw 'Release request does not match the version, channel or retained findings.'}
+    if($manifest.releaseReady -ne $false -or $manifest.releaseAuthorizationSource -ne $taskAuthorizationRelative){throw 'Release validation scope differs.'}
+    if($manifest.releaseAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $root $taskAuthorizationRelative)).Hash -or $manifest.releaseAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $package $taskAuthorizationRelative)).Hash){throw 'Release request hash differs.'}
+    foreach($taskBase in $root,$package){
+        if((Get-FileHash -LiteralPath (Join-Path $taskBase "docs/evidence/runtime-blockers-$version.json")).Hash -ne $taskAuthorization.blockerLedgerSha256){throw 'Release findings differ from the recorded scope.'}
+    }
+    if(@(Compare-Object -ReferenceObject $taskUnresolved -DifferenceObject @($manifest.knownIssues) -Property id,resolved).Count){throw 'Release known issues differ from retained findings.'}
+}
 if($Playtest){
     $taskAuthorizationRelative="docs/evidence/playtest-authorization-$version"+$(if($PlaytestBuild){'-'+$PlaytestBuild}else{''})+'.json'
     $taskAuthorization=Get-Content -LiteralPath (Join-Path $root $taskAuthorizationRelative) -Raw | ConvertFrom-Json
@@ -22,7 +35,7 @@ if($Playtest){
     if($manifest.playtestAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $package $taskAuthorizationRelative) -Algorithm SHA256).Hash -or $manifest.playtestAuthorizationSha256 -ne (Get-FileHash -LiteralPath (Join-Path $root $taskAuthorizationRelative) -Algorithm SHA256).Hash){throw 'Playtest authorization hash differs.'}
     if(@(Compare-Object -ReferenceObject $taskUnresolved -DifferenceObject @($manifest.knownIssues) -Property id,resolved).Count){throw 'Playtest known issues differ from unresolved ledger.'}
 }
-$taskSkipRetest=$Playtest -and $taskAuthorization.retestOmitted -eq $true
+$taskSkipRetest=($Playtest -or $UserRequestedRelease) -and $taskAuthorization.retestOmitted -eq $true
 if([bool]$manifest.retestOmitted -ne [bool]$taskSkipRetest){throw 'Retest status differs from request.'}
 if (@($manifest.files).Count -ne 7) { throw 'Incomplete payload manifest.' }
 foreach ($entry in $manifest.files) {
@@ -33,7 +46,7 @@ foreach ($entry in $manifest.files) {
         throw "Payload differs from native test build: $($entry.name)"
     }
 }
-if($Playtest){
+if($Playtest -or $UserRequestedRelease){
     foreach($binary in $taskAuthorization.binaries){
         if(@($manifest.files | Where-Object {$_.name -eq $binary.name -and $_.sha256 -eq $binary.sha256}).Count -ne 1){throw 'Payload differs from authorized package build.'}
     }

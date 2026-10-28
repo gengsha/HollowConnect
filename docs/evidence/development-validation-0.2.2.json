@@ -1,0 +1,19 @@
+{
+  "version": "0.2.2",
+  "scope": "Development validation before the version-only packaging build; original binary hashes retained.",
+  "sources": [
+    {
+      "path": "docs/evidence/coop-feedback-runtime-2026-10-28.json",
+      "sha256": "FF80F12DD11E96F968FDC3AF63988DB0D636DF875EAFD1AC546B46BD0D176466"
+    },
+    {
+      "path": "docs/evidence/health-essence-keys-runtime-2026-10-28.json",
+      "sha256": "9F68C4CF30CA1719196018F833D8FDB4D84F850ACE6CC8ECD979A32B2DB98604"
+    }
+  ],
+  "corePassed": 38,
+  "latestSpecialtyCasesPassed": 13,
+  "earlierFeedbackCasesPassed": 5,
+  "certifiesNewVersionHashes": false,
+  "createdAtUtc": "2026-10-28T05:05:39.737016+00:00"
+}

@@ -21,6 +21,7 @@ public sealed class DamageRankingSnapshot {
 
 public sealed class DamageRanking {
     private readonly Dictionary<ushort, DamageStanding> players = new();
+    private readonly Dictionary<string, DamageStanding> standings = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<ushort, uint> reports = new();
     public readonly HashSet<ushort> Participants = new();
     public readonly Dictionary<ushort, uint> Visits = new();
@@ -34,7 +35,16 @@ public sealed class DamageRanking {
     public void Join(ushort id, string name, uint visit) {
         Participants.Add(id); Visits[id] = visit;
         if (players.ContainsKey(id)) return;
-        players[id] = new DamageStanding { Id = id, Name = name ?? "" }; Revision++;
+        name ??= "";
+        // The server reserves names case-insensitively. A reconnect gets a
+        // fresh transport ID, but keeps its standing and accumulated damage.
+        if (!standings.TryGetValue(name, out var standing))
+            standings[name] = standing = new DamageStanding();
+        standing.Id = id; standing.Name = name;
+        players[id] = standing; Revision++;
+    }
+    public void Leave(ushort id) {
+        Participants.Remove(id); Visits.Remove(id); reports.Remove(id); players.Remove(id);
     }
     public bool Add(ushort reporter, uint serial, ushort source, int amount, int index) {
         if (Finished || amount <= 0 || serial == 0 || !Participants.Contains(reporter) ||
@@ -48,7 +58,7 @@ public sealed class DamageRanking {
     }
     public DamageRankingSnapshot Snapshot() => new() {
         Board = Id, Revision = Revision, Sequence = Sequence, Finished = Finished, Completed = Completed,
-        Players = players.Values.OrderByDescending(p => p.Damage).ThenBy(p => p.Id)
+        Players = standings.Values.OrderByDescending(p => p.Damage).ThenBy(p => p.Id)
             .Select(p => new DamageStanding { Id = p.Id, Name = p.Name, Damage = p.Damage }).ToArray()
     };
 }

@@ -695,6 +695,7 @@ public sealed partial class PantheonProbe : MonoBehaviour {
         if(host){engine.ServerManager.Start(29650,false);Flag("server.started");}else yield return Until(()=>Has("server.started"),"server ready");
         ConnectLocal("pantheon"+role);
         yield return Until(()=>runtime.Connected,"handshake");yield return Both("connected");
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_REST_PROGRESS"))) { yield return PantheonRestChecks(); yield break; }
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_RETURN"))) {
             yield return EndingReturnChecks(); yield break;
         }

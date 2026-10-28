@@ -20,6 +20,11 @@ public sealed partial class RescueProbe {
         var entries = CoopMod.Instance.GetMenuData(null);
         foreach (var option in flexibleMenu.GetComponentsInChildren<MenuOptionHorizontal>(true)) {
             var entry = entries.Single(e => e.Name == option.name);
+            if (option.name == HollowConnect.BossHealthParameterRow.OptionName) {
+                var input = option.GetComponentInChildren<InputField>(true);
+                Check(input != null && !input.readOnly, "typed health parameter has editable native input before opening a room");
+                continue;
+            }
             CheckPointerRow(option, entry.Loader, "HollowConnect " + option.name);
         }
         flexibleMenu.gameObject.SetActive(false);

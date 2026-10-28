@@ -8,6 +8,51 @@ using System.Reflection;
 internal static class ResourceClaimsTests {
     private static void Require(bool ok, string reason) { if (!ok) throw new Exception(reason); }
     internal static void Register(Action<string, Action> test) {
+        test("unique keys preserve consumed ownership separately from shared source receipts", () => {
+            var keys = ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.UniqueKey).ToArray();
+            Require(keys.Length == 4 && keys.Select(s => s.InventoryFlag).Distinct().Count() == 4, "missing unique key");
+            var local = new ResourceClaims();
+            foreach (var key in keys) {
+                Require(!string.IsNullOrEmpty(key.SpentFlag) && ResourceCatalog.PreservesPlayerData(key.InventoryFlag), "key can replay through old saves");
+                Require(local.TryClaim(key.Id, out _) && !local.TryClaim(key.Id, out _), "consumed key can be reissued");
+                Require(key.PersistentId == null || ResourceCatalog.PreservesPersistent(key.Scene, key.PersistentId),
+                    "full-save replay can erase an unclaimed native key pickup");
+            }
+            foreach (var door in new[] { "openedCityGate", "openedMageDoor", "openedLoveDoor" })
+                Require(!ProgressCatalog.Limits.ContainsKey(door) && ResourceCatalog.IsPersonalKeyDoor(door), "unique-key door bypasses personal use");
+            Require(ProgressCatalog.IsPickup("hasTramPass") && ProgressCatalog.IsPickup("hasKingsBrand"), "permanent passes lost existing sharing");
+        });
+        test("dream boss essence has twelve independent receipts without tree or aggregate currency claims", () => {
+            var rewards = ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.DreamEssence).ToArray();
+            Require(rewards.Length == 12 && rewards.Sum(s => s.Amount) == 2700, "dream reward catalog incomplete");
+            Require(rewards.Count(s => s.ClaimInt != null) == 7 && rewards.Count(s => s.PlayerFlag != null) == 5, "native acquisition proofs missing");
+            var claims = new ResourceClaims(); var essence = 0;
+            foreach (var reward in rewards.Concat(rewards.Reverse())) if (claims.TryClaim(reward.Id, out _)) essence += reward.Amount;
+            Require(essence == 2700 && !claims.TryClaim("essence:dreamPlant", out _) && !claims.TryClaim("dreamOrbs", out _), "tree or replay grants essence");
+            Require(ResourceCatalog.PreservesPlayerData("dreamOrbs"), "legacy save replay can share trees");
+            Require(rewards.All(s => ResourceCatalog.PreservesPlayerData(s.ClaimInt ?? s.PlayerFlag)),
+                "legacy full-save can invent a boss reward receipt from another player's claim history");
+        });
+        test("stag station union reconstructs native conversation count without requiring optional destinations", () => {
+            var opened = new HashSet<string>(StagStations.Original.Take(4));
+            Require(StagStations.Count(opened.Contains) == 4, "partial route unlocked Nest conversation");
+            foreach (var key in StagStations.Original.Skip(4)) opened.Add(key);
+            Require(StagStations.Count(opened.Contains) == 9, "split station unlocks did not combine");
+            opened.Add("openedStagNest"); opened.Add("openedHiddenStation");
+            Require(StagStations.Count(opened.Contains) == 9, "optional destinations inflated original station count");
+        });
+        test("grub receipts distinguish collector bottles and survive reordered reconnect grants", () => {
+            var grubs = ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.Grub).ToArray();
+            Require(grubs.Length == 46 && grubs.Count(s => s.Scene == "Ruins2_11") == 3, "missing independent grub IDs");
+            var claims = new ResourceClaims(); var count = 0;
+            foreach (var id in grubs.Select(s => s.Id).Concat(grubs.Reverse().Select(s => s.Id)))
+                if (claims.TryClaim(id, out _)) count++;
+            var reopened = new DeathStatistics { Resources = claims }.Copy().Resources;
+            foreach (var grub in grubs) if (reopened.TryClaim(grub.Id, out _)) count++;
+            Require(count == 46 && reopened.Claimed.Count == 46, "duplicate grub award after reconnect");
+            Require(ResourceCatalog.PreservesPlayerData("grubsCollected") && ResourceCatalog.PreservesPlayerData("scenesGrubRescued") &&
+                ResourceCatalog.PreservesPersistent("Ruins2_11", "Grub Bottle"), "old full-save replay bypasses grub receipts");
+        });
         test("colosseum shared completion restores its own registration without unlocking unpaid trials", () => {
             var flags = new HashSet<string> { "colosseumBronzeCompleted", "colosseumBronzeOpened", "colosseumSilverCompleted" };
             Require(ColosseumProgress.RepairRegistrations(flags.Contains, key => flags.Add(key)) == 1, "missing silver registration not repaired");
@@ -158,8 +203,8 @@ internal static class ResourceClaimsTests {
         });
         test("resource catalog covers permanent upgrades, ore and four simple key sources", () => {
             var all = ResourceCatalog.Sources.ToArray();
-            Require(all.Length == 43 && all.Select(s => s.Id).Distinct(StringComparer.Ordinal).Count() == 43, "native source identity collision");
-            foreach (var pair in new[] { (ResourceKind.CharmNotch, 8), (ResourceKind.MaskShard, 16), (ResourceKind.VesselFragment, 9), (ResourceKind.PaleOre, 6), (ResourceKind.SimpleKey, 4) })
+            Require(all.Length == 105 && all.Select(s => s.Id).Distinct(StringComparer.Ordinal).Count() == 105, "native source identity collision");
+            foreach (var pair in new[] { (ResourceKind.CharmNotch, 8), (ResourceKind.MaskShard, 16), (ResourceKind.VesselFragment, 9), (ResourceKind.PaleOre, 6), (ResourceKind.SimpleKey, 4), (ResourceKind.Grub, 46), (ResourceKind.UniqueKey, 4), (ResourceKind.DreamEssence, 12) })
                 Require(all.Count(s => s.Kind == pair.Item1) == pair.Item2, "incorrect source count for " + pair.Item1);
             Require(all.All(s => s.Id.Length <= 128 && s.Scene.Length <= 128), "source exceeds existing message bounds");
         });

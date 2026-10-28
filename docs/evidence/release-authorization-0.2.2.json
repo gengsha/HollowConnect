@@ -1,0 +1,54 @@
+{
+  "version": "0.2.2",
+  "action": "package-release",
+  "releaseChannel": "release",
+  "userRequest": "打包0.2.2并更新github并提交release",
+  "channelRequest": "不用测试渠道直接大大方方release",
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "660B6D57DE577A9A735E7A750EC0E896CE9B567104D22FF93FDEA799DEF48539"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "25BB98FADBED6EE1F1DA2366725F081A0BDCFB64E0534950137821EFF43B1140"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "2C0D67E2FCC4306DC291355C588A17E9A395AB954A478E43956F0B0BD45AE498"
+    }
+  ],
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap"
+  ],
+  "blockerLedgerSha256": "822ECDA7CEDE2D292EFA4F8F60DA32084F2A7AE916110B67A6170AA5FE518011",
+  "evidence": [
+    {
+      "path": "docs/evidence/development-validation-0.2.2.json",
+      "sha256": "B53823430E4A3BA62A2B029CAA4062C5A5B790C33986E30278D0CC6F43DEDFFE"
+    }
+  ],
+  "createdAtUtc": "2026-10-28T05:05:39.737016+00:00"
+}

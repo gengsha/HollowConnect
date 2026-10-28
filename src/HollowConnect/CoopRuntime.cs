@@ -66,7 +66,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         foreach (var peer in Peers.Values)
             if (peer.State != null && peer.State.Scene == CoopContext.LocalScene && now - peer.Seen < 2 &&
                 peer.Life != Life.Returning) count++;
-        return BossHealthScale.Multiplier(count, bossExtraHealth, bossHealthDecay);
+        return BossHealthScale.Multiplier(count, bossExtraHealth);
     }
     private bool takingDamage, nativeHitPlayed;
     private int damageHazard;
@@ -632,6 +632,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             Lock(true); readySent = true; Send(new Message { Kind = Kind.Ready, Scene = retryScene });
         }
         if (!Playable || Resetting || changingScene || Returning) return;
+        RefreshPantheonRestProgress();
         if (Down && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
             RequestGiveUp();
         }

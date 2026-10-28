@@ -1,5 +1,7 @@
 # 共享永久进度白名单
 
+0.2.2（2026-10-28）：幼虫按 46 个来源共享；城市纹章、典雅的钥匙、爱之钥和店主的钥匙各按一个来源共享、各自消费；七位梦战士与五位梦境 Boss 的首次精华奖励按 12 个来源共享。接收新增来源时均有左下角提示，重复领取／重连不重复奖励或提示。梦之树精华和精华总余额不进入共享，钥匙使用后的门锁与任务交付各自处理。`openedCityGate`、`openedLoveDoor`、`openedMageDoor` 因此移出永久进度并集；已有旧门状态保留。详见[追加修改与验证](HEALTH-ESSENCE-KEYS-2026-10-28.md)。下文带旧日期、版本号的记录保留各历史构建规则；精华及特殊钥匙的当前规则以本段为准。
+
 0.1.37 当前规则：简单钥匙按四个固定来源共享，每个存档每来源领取一次；个人消费不影响其他人，后加入者按来源补齐，重连不退回自己已花掉的钥匙。吉吉、欢乐之屋、皇家水道入口和寻神者棺材各自解锁、各自扣一把。旧存档同步不能覆盖本机钥匙余额、来源和门锁。已打开的旧门保留，不自动关门或退钥匙。
 
 布尔字段按 OR 合并；`fireballLevel`、`quakeLevel`、`screamLevel` 上限 2，按最大值合并。能力已有时不再次增加等级。字段均已与本机游戏 API 反射校验。
@@ -137,13 +139,10 @@ Dung Defender 的 `defeatedDungDefender` 与 `dungDefenderEncounterReady` 和 `k
 - `megaMossChargerDefeated`
 - `monomonDefeated`
 - `openedBlackEggDoor`
-- `openedCityGate`
 - `openedCrossroads`
 - `openedDeepnest`
 - `openedFungalWastes`
 - `openedGreenpath`
-- `openedLoveDoor`
-- `openedMageDoor`
 - `openedPalaceGrounds`
 - `openedRestingGrounds`
 - `openedRoyalGardens`

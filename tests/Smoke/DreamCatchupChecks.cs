@@ -53,8 +53,10 @@ public sealed partial class ProgressProbe {
         yield return Until(() => pd.GetBool(CatchupDefeat) && runtime.Peers.Count == 1, "missing dream completion repaired through actual UDP join");
         yield return new WaitForSecondsRealtime(2);
         TraceCatchup("after union");
-        if (pd.GetBool(CatchupCollected) != claimed || pd.GetInt("dreamOrbs") != before)
-            throw new Exception("Shared completion changed personal essence history");
+        var sharedAmount = !host && !claimed && runtime.Shared ? CatchupKin ? 400 : 300 : 0;
+        yield return Until(() => pd.GetInt("dreamOrbs") == before + sharedAmount, "late join receives the missing boss essence source", 12);
+        if (pd.GetBool(CatchupCollected) != claimed)
+            throw new Exception("Shared essence changed the local native conversation history");
         var fsms = CatchupFsms();
         var entrance = fsms.Single(f => f.FsmName == "Control" && f.FsmStates.SelectMany(s => s.Actions)
             .OfType<PlayerDataBoolTest>().Any(a => a.boolName.Value == CatchupDefeat));

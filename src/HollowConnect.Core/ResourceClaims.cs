@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HollowConnect.Core;
 
-public enum ResourceKind { CharmNotch, MaskShard, VesselFragment, PaleOre, SimpleKey }
+public enum ResourceKind { CharmNotch, MaskShard, VesselFragment, PaleOre, SimpleKey, Grub, UniqueKey, DreamEssence }
 
 // Identification only. A native flag can be set before the pickup animation
 // actually grants a resource; adapters must observe the native grant endpoint.
@@ -13,8 +13,14 @@ public sealed class ResourceSource {
     public string Scene { get; }
     public string PersistentId { get; }
     public string PlayerFlag { get; }
-    internal ResourceSource(string id, ResourceKind kind, string scene, string persistentId, string playerFlag) {
+    public string InventoryFlag { get; }
+    public string SpentFlag { get; }
+    public string ClaimInt { get; }
+    public int Amount { get; }
+    internal ResourceSource(string id, ResourceKind kind, string scene, string persistentId, string playerFlag,
+        string inventoryFlag = null, string spentFlag = null, string claimInt = null, int amount = 1) {
         Id = id; Kind = kind; Scene = scene; PersistentId = persistentId; PlayerFlag = playerFlag;
+        InventoryFlag = inventoryFlag; SpentFlag = spentFlag; ClaimInt = claimInt; Amount = amount;
     }
 }
 
@@ -25,14 +31,21 @@ public static class ResourceCatalog {
     private static readonly HashSet<string> personalFields = new HashSet<string>(StringComparer.Ordinal) {
         "ore", "charmSlots", "heartPieces", "maxHealth", "maxHealthBase", "heartPieceCollected", "heartPieceMax",
         "vesselFragments", "MPReserveMax", "vesselFragmentCollected", "vesselFragmentMax",
-        "nailSmithUpgrades", "nailDamage", "honedNail", "simpleKeys"
+        "nailSmithUpgrades", "nailDamage", "honedNail", "simpleKeys", "grubsCollected", "scenesGrubRescued", "dreamOrbs",
+        "hasCityKey", "hasWhiteKey", "hasLoveKey", "hasSlykey", "gaveSlykey", "usedWhiteKey"
     };
     public static bool IsPersonalKeyDoor(string field) => field == "jijiDoorUnlocked" || field == "bathHouseOpened" ||
-        field == "openedWaterwaysManhole" || field == "godseekerUnlocked";
+        field == "openedWaterwaysManhole" || field == "godseekerUnlocked" || field == "openedCityGate" ||
+        field == "openedMageDoor" || field == "openedMageDoor_v2" || field == "openedLoveDoor";
     public static IEnumerable<ResourceSource> Sources => sources.Values;
     public static bool PreservesPlayerData(string field) => field != null &&
-        (personalFields.Contains(field) || IsPersonalKeyDoor(field) || TryPlayerFlag(field, out _));
+        (personalFields.Contains(field) || IsPersonalKeyDoor(field) || TryPlayerFlag(field, out _) || IsEssenceClaim(field));
+    private static bool IsEssenceClaim(string field) {
+        foreach (var source in sources.Values) if (source.ClaimInt == field) return true;
+        return false;
+    }
     public static bool PreservesPersistent(string scene, string id) {
+        if (scene == "Ruins2_11" && id == "Grub Bottle") return true;
         foreach (var source in sources.Values)
             if (source.PersistentId != null && source.Scene == scene && source.PersistentId == id) return true;
         return false;
@@ -51,7 +64,7 @@ public static class ResourceCatalog {
     }
     public static bool TryPlayerFlag(string flag, out ResourceSource source) {
         if (!string.IsNullOrEmpty(flag)) foreach (var candidate in sources.Values) {
-            if (candidate.PlayerFlag == flag) { source = candidate; return true; }
+            if (candidate.PlayerFlag == flag || candidate.InventoryFlag == flag) { source = candidate; return true; }
         }
         source = null; return false;
     }
@@ -87,6 +100,35 @@ public static class ResourceCatalog {
         Pickup("key", ResourceKind.SimpleKey, "Ruins1_17", "Shiny Item");
         Pickup("key", ResourceKind.SimpleKey, "Abyss_20", "Shiny Item Stand");
         Add("key:gotLurkerKey", ResourceKind.SimpleKey, "GG_Lurker", playerFlag: "gotLurkerKey");
+        foreach (var pair in new[] { ("hasCityKey", "openedCityGate", "Crossroads_10"), ("hasWhiteKey", "usedWhiteKey", "Room_shop"),
+            ("hasLoveKey", "openedLoveDoor", "Fungus3_39"), ("hasSlykey", "gaveSlykey", "Mines_11") })
+            result.Add("key:" + pair.Item1, new ResourceSource("key:" + pair.Item1, ResourceKind.UniqueKey, pair.Item3,
+                pair.Item1 == "hasWhiteKey" ? null : pair.Item1 == "hasCityKey" ? "Shiny Item" : "Shiny Item Stand", null,
+                inventoryFlag: pair.Item1, spentFlag: pair.Item2));
+        foreach (var reward in new[] {
+            ("RestingGrounds_02", "xeroDefeated", 100), ("Cliffs_02", "aladarSlugDefeated", 100),
+            ("Fungus2_32", "elderHuDefeated", 100), ("Fungus3_40", "mumCaterpillarDefeated", 150),
+            ("Fungus1_35", "noEyesDefeated", 200), ("Deepnest_40", "galienDefeated", 200),
+            ("Deepnest_East_10", "markothDefeated", 250) })
+            result.Add("essence:" + reward.Item2, new ResourceSource("essence:" + reward.Item2, ResourceKind.DreamEssence,
+                reward.Item1, null, null, claimInt: reward.Item2, amount: reward.Item3));
+        foreach (var reward in new[] {
+            ("Crossroads_10", "falseKnightOrbsCollected", 300), ("Ruins1_24", "mageLordOrbsCollected", 300),
+            ("Abyss_19", "infectedKnightOrbsCollected", 400), ("Waterways_15", "whiteDefenderOrbsCollected", 300),
+            ("Room_Bretta_Basement", "greyPrinceOrbsCollected", 300) })
+            result.Add("essence:" + reward.Item2, new ResourceSource("essence:" + reward.Item2, ResourceKind.DreamEssence,
+                reward.Item1, null, reward.Item2, amount: reward.Item3));
+        foreach (var scene in new[] { "Crossroads_03", "Fungus1_21", "Crossroads_31", "Crossroads_48", "Crossroads_05",
+            "Ruins1_32", "Mines_04", "Mines_03", "Mines_19", "Mines_31", "Mines_35", "Crossroads_35", "Waterways_04",
+            "Waterways_13", "Fungus3_47", "Ruins2_03", "Fungus2_18", "Fungus2_20", "Deepnest_03", "Deepnest_39",
+            "Deepnest_Spider_Town", "Fungus1_07", "Fungus1_06", "Abyss_19", "Mines_16", "RestingGrounds_10", "Ruins2_07",
+            "Deepnest_East_14", "Deepnest_East_11", "Fungus1_28", "Deepnest_31", "Fungus3_10", "Fungus3_48", "Abyss_17",
+            "Fungus3_22", "Fungus1_13", "Ruins_House_01", "Hive_03", "Hive_04", "Mines_24", "Waterways_14", "Deepnest_36" })
+            Pickup("grub", ResourceKind.Grub, scene, "Grub Bottle");
+        Pickup("grub", ResourceKind.Grub, "Ruins1_05", "Grub Bottle (1)");
+        // All three Collector bottles share vanilla's persistent ID. Give
+        // each a stable left-to-right receipt instead of collapsing them.
+        for (var i = 0; i < 3; i++) Add("grub:Ruins2_11/" + i, ResourceKind.Grub, "Ruins2_11");
         return result;
     }
 }

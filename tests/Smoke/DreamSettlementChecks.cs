@@ -46,6 +46,8 @@ public sealed partial class ProgressProbe {
     private IEnumerator DreamSettlement(string scene) {
         var pd = PlayerData.instance;
         var initialOrbs = pd.GetInt("dreamOrbs");
+        var sharing = Environment.GetEnvironmentVariable("HOLLOWCONNECT_ESSENCE_SETTLEMENT") == "1";
+        if (sharing) On.HutongGames.PlayMaker.Fsm.EnterState += SourceNotice;
         var alreadyClaimed = pd.GetBool(DreamCollectedKey(scene));
         var counter = scene == "Dream_04_White_Defender" ? "whiteDefenderDefeats" : scene == "Dream_Mighty_Zote" ? "greyPrinceDefeats" : null;
         var initialWins = counter == null ? 0 : pd.GetInt(counter);
@@ -130,5 +132,15 @@ public sealed partial class ProgressProbe {
         if (pd.GetInt("dreamOrbs") != expected || counter != null && pd.GetInt(counter) != initialWins + 1)
             throw new Exception("Personal dream reward or win count changed after teammate settlement");
         Mark("PASS dream settlement reward stable " + scene + " orbs=" + expected + " wins=" + (counter == null ? 0 : pd.GetInt(counter)));
+        if (sharing) {
+            yield return Until(() => LocalResourceClaims.Contains("essence:" + DreamCollectedKey(scene)), "native dream corpse reward creates source receipt", 10);
+            // Simultaneous native settlements produce one award on each client;
+            // a controlled third receipt replay covers catchup notices separately.
+            var sourceId = "essence:" + DreamCollectedKey(scene);
+            ResourceSend(sourceId); ResourceSend(sourceId);
+            yield return new WaitForSecondsRealtime(2);
+            if (pd.GetInt("dreamOrbs") != expected) throw new Exception("Dream corpse receipt replay duplicated essence");
+            On.HutongGames.PlayMaker.Fsm.EnterState -= SourceNotice;
+        }
     }
 }

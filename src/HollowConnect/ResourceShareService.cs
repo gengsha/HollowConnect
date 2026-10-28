@@ -57,6 +57,8 @@ internal sealed class ResourceShareService : IDisposable {
             (Action<Action<PlayerDataIntAdd>, PlayerDataIntAdd>)((orig, action) => NativeAction(a => orig((PlayerDataIntAdd)a), action))));
         hooks.Add(new Hook(typeof(SetPlayerDataInt).GetMethod("OnEnter"),
             (Action<Action<SetPlayerDataInt>, SetPlayerDataInt>)((orig, action) => NativeAction(a => orig((SetPlayerDataInt)a), action))));
+        hooks.Add(new Hook(typeof(SetPlayerDataBool).GetMethod("OnEnter"),
+            (Action<Action<SetPlayerDataBool>, SetPlayerDataBool>)NativeKey));
         hooks.Add(new Hook(typeof(CreateObject).GetMethod("OnEnter"),
             (Action<Action<CreateObject>, CreateObject>)((orig, action) => CreateReward(a => orig((CreateObject)a), action))));
         hooks.Add(new Hook(typeof(CallMethodProper).GetMethod("OnEnter"),
@@ -73,6 +75,7 @@ internal sealed class ResourceShareService : IDisposable {
             null, new[] { typeof(ushort), typeof(byte[]) }, null),
             (Action<Action<SaveManager, ushort, byte[]>, SaveManager, ushort, byte[]>)PreserveLocalResource));
         ModHooks.SetPlayerIntHook += SetInt;
+        ModHooks.SetPlayerBoolHook += SetBool;
         On.HutongGames.PlayMaker.Fsm.EnterState += EnterState;
         Scenes.activeSceneChanged += SceneChanged;
     }
@@ -80,6 +83,7 @@ internal sealed class ResourceShareService : IDisposable {
         if (!registered) return;
         registered = false;
         ModHooks.SetPlayerIntHook -= SetInt;
+        ModHooks.SetPlayerBoolHook -= SetBool;
         On.HutongGames.PlayMaker.Fsm.EnterState -= EnterState;
         Scenes.activeSceneChanged -= SceneChanged;
         foreach (var hook in hooks) hook.Dispose();
@@ -125,6 +129,8 @@ internal sealed class ResourceShareService : IDisposable {
             case "vesselFragments": return ResourceKind.VesselFragment;
             case "ore": return ResourceKind.PaleOre;
             case "simpleKeys": return ResourceKind.SimpleKey;
+            case "grubsCollected": return ResourceKind.Grub;
+            case "dreamOrbs": return ResourceKind.DreamEssence;
             default: return null;
         }
     }
@@ -144,6 +150,11 @@ internal sealed class ResourceShareService : IDisposable {
             })?.activated == true;
             var savedFlag = source.PlayerFlag != null && PlayerData.instance.GetBool(source.PlayerFlag);
             if (savedPickup || savedFlag) local().TryClaim(source.Id, out _);
+            if (source.InventoryFlag != null && (PlayerData.instance.GetBool(source.InventoryFlag) ||
+                PlayerData.instance.GetBool(source.SpentFlag))) local().TryClaim(source.Id, out _);
+            if (source.ClaimInt != null && PlayerData.instance.GetInt(source.ClaimInt) >= 2) local().TryClaim(source.Id, out _);
+            if (source.Kind == ResourceKind.Grub && PlayerData.instance.scenesGrubRescued.Contains(source.Scene))
+                local().TryClaim(source.Id, out _);
         }
         var pd = PlayerData.instance;
         var restored = ResourceReconciliation.ImportCompletedCollections(local(), pd.GetInt("charmSlots"),
@@ -240,10 +251,13 @@ internal sealed class ResourceShareService : IDisposable {
         if (Active && !applying && action.methodName.Value == "TakeGeo" && fsm?.Name == "Confirm Control" &&
             action.State?.Name == "Deduct Geo and set PD" &&
             ResourceCatalog.TryPlayerFlag(fsm.Variables.FindFsmString("PD Bool Name")?.Value, out var source) &&
-            (local().Contains(source.Id) || queued.Contains(source.Id))) {
+            (queued.Contains(source.Id) || local().Contains(source.Id) &&
+             (!inFlight.TryGetValue(source.Id, out var flow) || flow.Duplicate))) {
             // Run the purchase's original animation/receipt path. Only its
             // payment is skipped when this source was already shared. If it
             // is queued, the native grant wins and the queue later discards it.
+            // Unique-key shops set the inventory bool before TakeGeo. A new
+            // receipt in this very native purchase must still pay its price.
             action.Finish(); return;
         }
         orig(action);
@@ -257,8 +271,9 @@ internal sealed class ResourceShareService : IDisposable {
 
     private sealed class ResourceBalance {
         private static readonly string[] Ints = { "ore", "simpleKeys", "charmSlots", "heartPieces", "vesselFragments",
-            "maxHealthBase", "maxHealth", "health", "prevHealth", "MPReserveMax" };
-        private static readonly string[] Bools = { "heartPieceCollected", "heartPieceMax", "vesselFragmentCollected", "vesselFragmentMax" };
+            "maxHealthBase", "maxHealth", "health", "prevHealth", "MPReserveMax", "grubsCollected", "dreamOrbs" };
+        private static readonly string[] Bools = { "heartPieceCollected", "heartPieceMax", "vesselFragmentCollected", "vesselFragmentMax",
+            "hasCityKey", "hasWhiteKey", "hasLoveKey", "hasSlykey" };
         private readonly int[] ints;
         private readonly bool[] bools;
         private readonly string flag;
@@ -302,6 +317,7 @@ internal sealed class ResourceShareService : IDisposable {
                 // A native SaveState during the animation may have overwritten
                 // an early persistent marker; commit it again after completion.
                 SetNativeReceipt(flow.Source); MarkShopDirty(flow.Source);
+                if (flow.Source.Kind == ResourceKind.Grub) RefreshGrubMap(flow.Source);
                 refresh = true;
             }
         }
@@ -320,6 +336,8 @@ internal sealed class ResourceShareService : IDisposable {
         var source = Resolve(action.Fsm, kind.Value) ?? (creating?.Kind == kind ? creating : null);
         if (!increasing && (source == null || !inFlight.TryGetValue(source.Id, out var existing) || !existing.Duplicate)) { orig(action); return; }
         if (source == null) {
+            // Dream trees, ambient spirits and ordinary enemy drops remain personal.
+            if (kind == ResourceKind.DreamEssence) { orig(action); return; }
             var key = action.Fsm?.GameObject?.scene.name + "/" + action.Fsm?.GameObject?.name + "/" + action.Fsm?.Name + "/" + action.State?.Name + "/" + field;
             if (unrecognized.Add(key)) log("Resource native endpoint not identified: " + key);
             orig(action); return;
@@ -334,6 +352,22 @@ internal sealed class ResourceShareService : IDisposable {
             // Keep inFlight through native UI completion. The source receipt
             // is immediate, but no object/control cleanup happens here.
         }
+    }
+    private void NativeKey(Action<SetPlayerDataBool> orig, SetPlayerDataBool action) {
+        if (!Active || applying || !action.value.Value || !ResourceCatalog.TryPlayerFlag(action.boolName.Value, out var source) ||
+            source.InventoryFlag == null || action.Fsm?.GameObject == null ||
+            (action.Fsm.Name != "Shiny Control" && action.Fsm.Name != "Confirm Control")) { orig(action); return; }
+        var before = grant;
+        var current = new NativeGrant { Source = source, Field = source.InventoryFlag };
+        BeginNativeFlow(source); grant = current;
+        try { orig(action); } finally { grant = before; }
+        if (current.Mutated && local().TryClaim(source.Id, out _)) announcements.Enqueue(source.Id);
+    }
+    private bool SetBool(string field, bool value) {
+        if (!Active || applying || grant == null || grant.Field != field || !value) return value;
+        if (local().Contains(grant.Source.Id)) return PlayerData.instance.GetBoolInternal(field);
+        grant.Mutated = true;
+        return value;
     }
     private int SetInt(string field, int value) {
         if (!Active || applying || grant == null || grant.Field != field) return value;
@@ -393,6 +427,24 @@ internal sealed class ResourceShareService : IDisposable {
         if (tag != null && ResourceCatalog.TryGet(tag.SourceId, out var tagged) && tagged.Kind == kind) return tagged;
         if (fsm.Name == "Confirm Control") return ShopSource(fsm, kind);
         var scene = owner.scene.name;
+        if (kind == ResourceKind.DreamEssence) {
+            var actions = owner.GetComponents<PlayMakerFSM>().SelectMany(f => f.FsmStates).SelectMany(s => s.Actions).ToArray();
+            return ResourceCatalog.Sources.FirstOrDefault(s => s.Kind == kind &&
+                (s.ClaimInt != null && fsm.Variables.FindFsmString("PD Int Name")?.Value == s.ClaimInt ||
+                 s.PlayerFlag != null && actions.OfType<SetPlayerDataBool>().Any(a => a.boolName.Value == s.PlayerFlag && a.value.Value)));
+        }
+        if (kind == ResourceKind.Grub && scene == "Ruins2_11" && fsm.Name == "Bottle Control") {
+            var bottles = UnityEngine.Object.FindObjectsOfType<PlayMakerFSM>(true)
+                .Where(f => f.gameObject.scene.name == scene && f.FsmName == "Bottle Control" &&
+                    f.FsmStates.Any(s => s.Actions.OfType<IncrementPlayerDataInt>().Any(a => a.intName.Value == "grubsCollected")))
+                .OrderBy(f => f.transform.position.x).ThenBy(f => f.transform.position.y).ToArray();
+            if (bottles.Length != 3) return null;
+            for (var i = 0; i < bottles.Length; i++) {
+                var receipt = bottles[i].GetComponent<ResourceSourceTag>() ?? bottles[i].gameObject.AddComponent<ResourceSourceTag>();
+                receipt.SourceId = "grub:Ruins2_11/" + i;
+            }
+            return ResourceCatalog.TryGet(owner.GetComponent<ResourceSourceTag>().SourceId, out var grub) ? grub : null;
+        }
         // Some configured native shinies have a PD flag but no persistent
         // component. Match both source scene and resource kind; the generic
         // Shiny Control contains grant branches for unrelated item types.
@@ -445,6 +497,12 @@ internal sealed class ResourceShareService : IDisposable {
     private void GrantRemote(ResourceSource source) {
         var pd = PlayerData.instance;
         switch (source.Kind) {
+            case ResourceKind.UniqueKey:
+                pd.SetBool(source.InventoryFlag, true); break;
+            case ResourceKind.DreamEssence:
+                pd.SetInt("dreamOrbs", pd.GetInt("dreamOrbs") + source.Amount); break;
+            case ResourceKind.Grub:
+                pd.SetInt("grubsCollected", Math.Min(46, pd.GetInt("grubsCollected") + 1)); break;
             case ResourceKind.PaleOre:
                 pd.SetInt("ore", pd.GetInt("ore") + 1); break;
             case ResourceKind.SimpleKey:
@@ -491,7 +549,10 @@ internal sealed class ResourceShareService : IDisposable {
         });
     }
     private void PresentRemote(ResourceSource source, ResourceBalance before) {
+        if (source.Kind == ResourceKind.Grub) RefreshGrubMap(source);
         switch (source.Kind) {
+            case ResourceKind.DreamEssence:
+                PlayMakerFSM.BroadcastEvent("DREAM ORB COLLECT"); break;
             case ResourceKind.CharmNotch:
                 GameManager.instance.RefreshOvercharm();
                 PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK"); break;
@@ -503,6 +564,14 @@ internal sealed class ResourceShareService : IDisposable {
                 if (PlayerData.instance.GetInt("MPReserveMax") > before.MPReserveMax)
                     PlayMakerFSM.BroadcastEvent("NEW SOUL ORB");
                 break;
+        }
+    }
+    private void RefreshGrubMap(ResourceSource source) {
+        if (ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.Grub && s.Scene == source.Scene)
+            .All(s => s.Id == source.Id || local().Contains(s.Id))) {
+            var pd = PlayerData.instance;
+            if (!pd.scenesGrubRescued.Contains(source.Scene)) pd.scenesGrubRescued.Add(source.Scene);
+            GameManager.instance.gameMap?.GetComponent<GameMap>()?.SetupMap();
         }
     }
     private void SetNativeReceipt(ResourceSource source) {

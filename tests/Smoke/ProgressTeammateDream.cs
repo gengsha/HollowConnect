@@ -135,7 +135,7 @@ public sealed partial class ProgressProbe {
             yield return Until(() => box.activeInHierarchy, "native input charges and activates dream hitbox", 5);
             var target = runtime.PlayerObject(runtime.Peers.Keys.Single());
             Mark("DREAM BOUNDS hero=" + hero.transform.position + " box=" + box.GetComponent<Collider2D>().bounds +
-                " peer=" + target.transform.position + " targetBounds=" + target.GetComponent<Collider2D>().bounds +
+                " peer=" + target?.transform.position + " targetBounds=" + target?.GetComponent<Collider2D>()?.bounds +
                 " layersIgnored=" + Physics2D.GetIgnoreLayerCollision(17, 9));
             yield return new WaitForSecondsRealtime(.1f);
         }

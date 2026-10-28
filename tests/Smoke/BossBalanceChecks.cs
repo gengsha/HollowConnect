@@ -17,6 +17,7 @@ using Object = UnityEngine.Object;
 namespace HollowConnect.Smoke;
 
 public sealed partial class BossProbe {
+    private float BalanceParameter => Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_PARAMETER") == "80" ? .8f : .6f;
     private bool BalanceCheck => Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_BALANCE_CHECK") == "1";
     private IEnumerator BalanceVisualChecks() {
         yield return Until(() => runtime.Peers.Count == 1, "balance roster ready");
@@ -96,16 +97,16 @@ public sealed partial class BossProbe {
         });
         // Exercise the accepted native hit path after its own multipliers.
         Hit(AttackTypes.Nail, 16);
-        Check(health.hp == before - (multiplier > 1 ? 10 : 16), "native nail damage scaled exactly once");
+        Check(health.hp == before - (int)Math.Floor(16 / multiplier + 1e-6), "native nail damage scaled exactly once");
         before = health.hp;
         Hit(AttackTypes.Spell, 8, 2);
-        Check(health.hp == before - (multiplier > 1 ? 10 : 16), "native spell multiplier precedes boss scaling");
+        Check(health.hp == before - ((int)Math.Floor(32 / multiplier + 1e-6) - (int)Math.Floor(16 / multiplier + 1e-6)), "native spell multiplier precedes boss scaling");
         var extra = health.GetComponent<ExtraDamageable>();
         Check(extra != null, "native boss has extra-damage receiver");
         before = health.hp;
         var applyExtra = typeof(ExtraDamageable).GetMethod("ApplyExtraDamageToHealthManager", BindingFlags.Instance | BindingFlags.NonPublic);
         applyExtra.Invoke(extra, new object[] { 8 });
-        Check(health.hp == before - (multiplier > 1 ? 5 : 8), "native player extra damage shares boss scaling");
+        Check(health.hp == before - ((int)Math.Floor(40 / multiplier + 1e-6) - (int)Math.Floor(32 / multiplier + 1e-6)), "native player extra damage shares boss scaling");
         before = health.hp; health.ApplyExtraDamage(1);
         Check(health.hp == before - 1, "direct scripted extra damage remains native");
         if (multiplier > 1) {
@@ -115,12 +116,12 @@ public sealed partial class BossProbe {
             Check(runtime.CurrentBossHealthMultiplier() == 1 && health.hp == before - 1, "leaving room restores solo difficulty without healing");
             other.Value.State.Scene = previousScene;
             var oldLife = other.Value.Life; other.Value.Life = Life.Down;
-            Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - 1.6) < .00001, "downed teammate still counts in encounter");
+            Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - multiplier) < .00001, "downed teammate still counts in encounter");
             other.Value.Life = Life.Loading;
-            Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - 1.6) < .00001, "native cutscene and transition readiness cannot lower boss difficulty");
+            Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - multiplier) < .00001, "native cutscene and transition readiness cannot lower boss difficulty");
             other.Value.Life = oldLife;
             runtime.Peers[65000] = new Peer { State = new Message { Scene = Hkmp.CoopContext.LocalScene }, Seen = CoopRuntime.Now, Life = Life.Alive };
-            Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - 1.96) < .00001, "third participant roster gives 196 percent");
+            Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - (1 + BalanceParameter + BalanceParameter * BalanceParameter)) < .00001, "third participant follows the single parameter power series");
             runtime.Peers.Remove(65000);
         }
         yield return null;

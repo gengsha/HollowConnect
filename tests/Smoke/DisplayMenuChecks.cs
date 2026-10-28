@@ -8,6 +8,7 @@ using Modding;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HollowConnect.Smoke;
 
@@ -30,6 +31,15 @@ public sealed partial class BossProbe {
         var boss = DisplayOption("动态 Boss 血量（房主）");
         Check(opacity.Loader() == 0 && names.Loader() == 1 && boss.Loader() == 0,
             "all three visible controls expose requested defaults");
+        Check(BossHealthParameterRow.TrySave("80") && Math.Abs(CoopMod.Settings.BossExtraHealthPerPlayer - .8f) < .00001,
+            "typed 80 percent saves one health parameter");
+        foreach (var invalid in new[] { "-1", "401", "NaN", "Infinity", "abc" })
+            Check(!BossHealthParameterRow.TrySave(invalid) && Math.Abs(CoopMod.Settings.BossExtraHealthPerPlayer - .8f) < .00001,
+                "invalid health input preserves current value " + invalid);
+        Check(BossHealthParameterRow.TrySave("0") && BossHealthParameterRow.TrySave("400"), "health parameter input supports both limits");
+        BossHealthParameterRow.TrySave(host ? "80" : "200");
+        var roundtrip = JsonConvert.DeserializeObject<Settings>(JsonConvert.SerializeObject(CoopMod.Instance.OnSaveGlobal()));
+        Check(Math.Abs(roundtrip.BossExtraHealthPerPlayer - (host ? .8f : 2)) < .00001, "single health parameter survives JSON roundtrip");
         boss.Saver(host ? 1 : 0);
     }
 
@@ -49,8 +59,18 @@ public sealed partial class BossProbe {
         Check(!remote.GetComponent<Hkmp.Animation.RemoteVisualOpacity>().enabled,
             "disabled opacity has no per-frame tint updates");
         yield return Until(() => runtime.CurrentBossHealthMultiplier() > 1.5, "host enabled boss rule reaches both clients");
-        Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - 1.6) < .00001,
+        Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - 1.8) < .00001,
             "host menu rule overrides guest disabled setting");
+        var parameterMenu = CoopMod.Instance.GetMenuScreen(null, null);
+        parameterMenu.gameObject.SetActive(true);
+        yield return null;
+        var input = parameterMenu.GetComponentInChildren<BossHealthParameterRow>(true).GetComponentInChildren<InputField>(true);
+        Check(input.readOnly && input.text == "80", "connected menu displays host parameter read-only on both clients");
+        var savedParameter = CoopMod.Settings.BossExtraHealthPerPlayer;
+        input.onEndEdit.Invoke("25");
+        Check(input.text == "80" && CoopMod.Settings.BossExtraHealthPerPlayer == savedParameter,
+            "connected input callback cannot edit local or server health parameter");
+        UnityEngine.Object.Destroy(parameterMenu.gameObject);
         Flag(role + ".display-initial");
         yield return Until(() => Has((host ? "guest" : "host") + ".display-initial"), "both display defaults observed");
         var opacity = DisplayOption("队友透明度（本机）");
@@ -72,7 +92,7 @@ public sealed partial class BossProbe {
         yield return new WaitForSecondsRealtime(.15f);
         Check(Math.Abs(observation.Alpha - (host ? .5f : .25f)) < .001f && text.color == Color.white,
             "live menu changes existing remote body and name locally");
-        Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - 1.6) < .00001,
+        Check(Math.Abs(runtime.CurrentBossHealthMultiplier() - 1.8) < .00001,
             "menu edits cannot silently change active room difficulty");
         Check(Math.Abs(heroSprite.color.a - 1) < .001f && ownName != null && ownName.color == Color.white,
             "local hero and own white name stay unchanged");

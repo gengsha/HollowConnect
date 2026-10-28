@@ -47,6 +47,32 @@ public sealed partial class ProgressProbe {
         pd.SetString("dreamReturnScene", "Town");
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_SETTLEMENT") != null)
             PrepareDreamSettlement(scene);
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_ESSENCE_SETTLEMENT") == "1") {
+            foreach (var key in collected) pd.SetBool(key, false);
+            // Authoritative scene load is a fixture; actual battle, lethal damage,
+            // corpse outro, dream return and essence use their native flow.
+            HollowConnect.CoopMod.Statistics.Resources.Claimed.Remove("essence:" + DreamCollectedKey(scene));
+            if (!host) {
+                // A real remote observer stays in Town while the host runs
+                // native combat/outro/return, proving cross-room source grants.
+                var before = pd.GetInt("dreamOrbs");
+                On.HutongGames.PlayMaker.Fsm.EnterState += SourceNotice;
+                try {
+                    Flag("guest.variant-observed"); Flag("guest.settlement-battle");
+                    yield return Until(() => LocalResourceClaims.Contains("essence:" + DreamCollectedKey(scene)) && pd.GetInt("dreamOrbs") == before + 300,
+                        "remote native dream corpse grants exactly one essence source", 180);
+                    yield return Until(() => sourceNotices.Contains("共享梦境精华 ×300"), "remote dream corpse lower-left essence notice", 12);
+                    ResourceCheck(!pd.GetBool(DreamCollectedKey(scene)) && GameManager.instance.sceneName == "Town",
+                        "shared dream corpse essence preserves observer native claim and room");
+                    Flag("guest.settlement-claimed");
+                    yield return Until(() => Has("host.settlement-claimed"), "host native dream settlement complete", 45);
+                    yield return new WaitForSecondsRealtime(3);
+                    ResourceCheck(pd.GetInt("dreamOrbs") == before + 300 && sourceNotices.Count == 1,
+                        "duplicate dream corpse source cannot replay essence or notice");
+                } finally { On.HutongGames.PlayMaker.Fsm.EnterState -= SourceNotice; }
+                yield break;
+            }
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOST_KIN_LIFECYCLE") != null) {
             var claimedKin = !host && Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOST_KIN_LIFECYCLE") == "claimed";
             pd.SetBool("infectedKnightDreamDefeated", claimedKin);
@@ -73,7 +99,8 @@ public sealed partial class ProgressProbe {
         yield return Until(() => Scenes.GetSceneByName(scene).isLoaded && Hkmp.CoopContext.LocalScene == scene && engine.ClientManager.SceneSnapshotReady,
             "dream schema asset and room snapshot committed", 35);
         Flag(role + ".variant-entered");
-        yield return Until(() => Has((host ? "guest" : "host") + ".variant-entered"), "both loaded dream schema scene");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_ESSENCE_SETTLEMENT") != "1")
+            yield return Until(() => Has((host ? "guest" : "host") + ".variant-entered"), "both loaded dream schema scene");
         yield return new WaitForSecondsRealtime(4);
         TraceDreamLoad("schema observation");
         Mark("DREAM VARIANT " + scene + " PD=" + string.Join(",", defeated.Concat(collected).Select(k => k + "=" + pd.GetBool(k))) +

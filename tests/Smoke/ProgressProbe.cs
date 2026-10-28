@@ -233,7 +233,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         if (EmergencyBenchCase) yield return EmergencyMenuShortcut();
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         Hkmp.Logging.Logger.AddLogger(new FileLogger(Path.Combine(root, role + "-engine.log")));
-        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase)
+        if (KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase)
             On.GameManager.EnterHero += (orig, gm, additive) => {
                 var gates = Object.FindObjectsOfType<TransitionPoint>();
                 if (MapExitCase && gm.sceneName == "Crossroads_33") {
@@ -261,7 +261,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
-        if ((Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
+        if ((KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
             yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
@@ -274,6 +274,15 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             pd.SetBool("openedTown", host);
             pd.SetBool("metStag", true);
             pd.SetInt("stagPosition", host ? 9 : 0);
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_STAG_SPLIT") == "1") {
+                for (var i = 0; i < HollowConnect.Core.StagStations.Original.Length; i++)
+                    pd.SetBool(HollowConnect.Core.StagStations.Original[i], host ? i < 5 : i >= 5);
+                pd.SetInt("stationsOpened", host ? 5 : 4); pd.SetBool("openedStagNest", false);
+                pd.SetBool("stagRemember1", true); pd.SetBool("stagRemember2", true);
+            }
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_GRUB_CHECK") == "1") {
+                pd.SetInt("grubsCollected", 0); pd.scenesGrubRescued.Clear();
+            }
         }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null) {
             pd.SetBool("hasDreamNail", true);
@@ -291,6 +300,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         HeroController.instance.RegainControl(); HeroController.instance.StartAnimationControl(); Freeze();
         if (ProgressAuditCase) PrepareProgressAudit();
         if (SimpleKeyCase) PrepareSimpleKeys();
+        if (KeyEssenceCase) PrepareKeyEssence();
         if (BankerCase) {
             pd.SetInt("bankerTheft", 1); pd.SetBool("bankerSpaMet", false);
             pd.SetBool("metBanker", true); pd.SetBool("bankerAccountPurchased", true);
@@ -330,6 +340,19 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         typeof(ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
         typeof(ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "progress" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake");
+        }
+        if (KeyEssenceCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(KeyEssenceChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (Has(role + ".failed")) yield break;
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS keys and essence " + KeyEssenceMode); Flag(role + ".done"); yield break;
         }
         if (ColosseumProgressCase) {
             var checks = new Stack<IEnumerator>(); checks.Push(ColosseumProgressChecks());

@@ -76,8 +76,8 @@ public sealed partial class CoopServerAddon : ServerAddon {
             damageRankingEnabled = CoopMod.Settings.BossDamageRanking;
             ResetDamageRankings();
             flexibleBossTargeting = CoopMod.Settings.BossTargetingMode == 1;
-            bossExtraHealth = CoopMod.Settings.BossExtraHealthPerPlayer;
-            bossHealthDecay = CoopMod.Settings.BossExtraHealthDecay;
+            bossExtraHealth = BossHealthParameterRow.Normalize(CoopMod.Settings.BossExtraHealthPerPlayer);
+            bossHealthDecay = bossExtraHealth;
             CoopContext.Epoch = 0; CoopContext.Resetting = false;
             var manager = (ServerManager)api.ServerManager;
             manager.InternalServerSettings.IsPvpEnabled = false;
@@ -126,10 +126,25 @@ public sealed partial class CoopServerAddon : ServerAddon {
             if (now < nextRoster) return;
             nextRoster = now + .1;
             foreach (var m in party.Members.Values.ToArray()) {
-                Broadcast(new Message { Kind = Kind.Roster, Id = m.Id, Serial = m.Sequence, Aux = m.LifeVersion, Name = m.Name,
+                var roster = new Message { Kind = Kind.Roster, Id = m.Id, Serial = m.Sequence, Aux = m.LifeVersion, Name = m.Name,
                     Key = m.DownSerial.ToString(), Scene = m.Scene, X = m.X, Y = m.Y, HasMap = m.HasMap && now - m.Seen < 2,
                     MapX = m.MapX, MapY = m.MapY, Value = (int)m.Life, Target = (ushort)Math.Min(65535, m.DownSerial),
-                    IsReady = now - m.Seen < 2 && (m.Life == Life.Alive || m.Life == Life.Down) });
+                    IsReady = now - m.Seen < 2 && (m.Life == Life.Alive || m.Life == Life.Down) };
+                // Rest stops have no boss death to carry the advancing peer's
+                // context. Publish it even when that peer is not scene host.
+                if (m.Scene == "GG_Spa" && m.Life == Life.Alive && roster.IsReady &&
+                    destinations.TryGetValue(m.Id, out var destination) && destination.IsReady && destination.Scene == m.Scene &&
+                    ((ServerManager)api.ServerManager).TryGetCoopSceneScope(m.Id, m.Scene, out _, out _) &&
+                    party.Members.Values.Any(peer => peer.Id != m.Id && peer.Scene == m.Scene &&
+                        (peer.Life == Life.Alive || peer.Life == Life.Loading) && now - peer.Seen < 2 &&
+                        ((ServerManager)api.ServerManager).TryGetCoopSceneScope(peer.Id, peer.Scene, out _, out _) &&
+                        destinations.TryGetValue(peer.Id, out var older) && older.Scene == m.Scene && older.BossSequence == destination.BossSequence &&
+                        older.BossDoor == destination.BossDoor && older.BossBindings == destination.BossBindings && older.BossIndex < destination.BossIndex)) {
+                    roster.BossSequence = destination.BossSequence; roster.BossIndex = destination.BossIndex;
+                    roster.BossBindings = destination.BossBindings; roster.BossDoor = destination.BossDoor;
+                    roster.BossPlan = destination.BossPlan;
+                }
+                Broadcast(roster);
             }
         });
     }
@@ -340,6 +355,9 @@ public sealed partial class CoopServerAddon : ServerAddon {
     });
 
     private void Leave(ushort id) {
+        foreach (var board in damageBoards) board.Leave(id);
+        foreach (var scope in damageVisits.Keys.Where(scope => scope.Player == id).ToArray()) damageVisits.Remove(scope);
+        foreach (var attempt in damageAttempts.Keys.Where(attempt => attempt.Player == id).ToArray()) damageAttempts.Remove(attempt);
         party.Leave(id); lastWarp.Remove(id); destinations.Remove(id); lastBossReport.Remove(id);
         // A settlement must not keep a departed participant: otherwise the
         // final flush keeps targeting an id that no transport can deliver to.
