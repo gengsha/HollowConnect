@@ -163,6 +163,18 @@ public sealed partial class BossProbe : MonoBehaviour {
         var entities = Field<Dictionary<ulong, Entity>>(manager, "_entities");
         var boss = entities.Values.Single(e => e.Type == EntityType.FalseKnight);
         var head = entities.Values.Single(e => e.Type == EntityType.FalseKnightHead);
+        if (!host) {
+            // Local battle controllers are intentionally independent. Replica
+            // boss snapshots do not prove that our own arena trigger ran.
+            var localBattle = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f =>
+                f.FsmName == "Battle Control" && f.gameObject.scene.name == "Crossroads_10_boss");
+            var localTrigger = localBattle.GetComponent<Collider2D>();
+            if (!Check(localTrigger != null && localTrigger.enabled && localTrigger.gameObject.activeInHierarchy,
+                "replica participant has native arena entry trigger")) yield break;
+            HeroController.instance.transform.position = localTrigger.bounds.center;
+            Physics2D.SyncTransforms();
+            yield return new WaitForSecondsRealtime(1);
+        }
         Flag(role + ".room");
         if (!host || !LateGuest) yield return Until(() => Has(host ? "guest.room" : "host.room"), "both in arena");
         if (host) {
@@ -294,15 +306,23 @@ public sealed partial class BossProbe : MonoBehaviour {
             if (!Check(control.ActiveStateName == "Opened" && headHealth.hp == expectedHeadHealth && headHealth.hp>0 && hm.hp == 65 && !hm.isDead &&
                 boss.Object.Host.activeInHierarchy && head.Object.Host.activeInHierarchy, "handoff preserves live exposed phase and both health values")) yield break;
             var localBattleControl = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.FsmName == "Battle Control");
+            yield return Until(() => localBattleControl.ActiveStateName == "Start" &&
+                localBattleControl.FsmVariables.GetFsmInt("Battle Enemies").Value == 1,
+                "native local battle initialized with one living boss before head phase", 10);
+            if (Has(role + ".failed")) yield break;
             var localBattleCountBeforeHead = localBattleControl.FsmVariables.GetFsmInt("Battle Enemies").Value;
             var localBattleStateBeforeHead = localBattleControl.ActiveStateName;
+            Mark("HEAD BATTLE BEFORE count=" + localBattleCountBeforeHead + " state=" + localBattleStateBeforeHead +
+                " hp=" + headHealth.hp + " special=" + headHealth.hasSpecialDeath + " reset=" + headHealth.deathReset);
             headHealth.ApplyExtraDamage(headHealth.hp);
             yield return Until(() => control.FsmVariables.GetFsmInt("Stunned Amount").Value == 1 && control.FsmVariables.GetFsmInt("Rages").Value == 1 &&
                 control.ActiveStateName != "Opened" && control.ActiveStateName != "Open Uuup", "native head defeat advances phase after transfer", 20);
             ArenaPose(boss, "AFTER HEAD PHASE", true);
             if (!Check(localBattleControl.FsmVariables.GetFsmInt("Battle Enemies").Value == localBattleCountBeforeHead &&
                 localBattleControl.ActiveStateName == localBattleStateBeforeHead,
-                "native head phase after takeover preserves this player's local battle counter and state")) yield break;
+                "native head phase after takeover preserves this player's local battle counter and state; before=" +
+                localBattleCountBeforeHead + "/" + localBattleStateBeforeHead + " after=" +
+                localBattleControl.FsmVariables.GetFsmInt("Battle Enemies").Value + "/" + localBattleControl.ActiveStateName)) yield break;
             if (!Check(!Object.FindObjectsOfType<Collider2D>().Any(c => c.name == "FK Terrain Block" && c.enabled),
                 "native head recovery removes detached terrain without replica collider residue")) yield break;
             var pos = boss.Object.Host.transform.position;

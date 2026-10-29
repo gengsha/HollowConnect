@@ -12,6 +12,7 @@ namespace HollowConnect;
 
 public sealed partial class CoopMod {
     internal const string RoomSettingLockHint = "联机中已锁定。请先断开联机；房主还需停止开房，再返回本模组配置修改。";
+    internal const string SharedHealthOptionName = "共享血量（房主）";
     internal static bool RoomSettingsLocked => CoopContext.RoomSettingsLocked?.Invoke() == true;
     internal static Func<string, string> ActiveRoomSettingLabel;
     internal static int RoomRuleRevision;
@@ -36,7 +37,31 @@ public sealed partial class CoopMod {
             else if (entry.Loader != null && IsRoomSetting(entry.Name)) option.gameObject.AddComponent<CoopMenuLockRow>().Initialize(option, entry);
         }
         screen.gameObject.AddComponent<CoopMenuHelpPanel>().Initialize(screen);
+        GroupSharedHealth(screen);
         return screen;
+    }
+
+    private static void GroupSharedHealth(MenuScreen screen) {
+        var options = screen.GetComponentsInChildren<MenuOptionHorizontal>(true);
+        var mode = (RectTransform)options.Single(o => o.name == SharedHealthOptionName).transform;
+        var bonus = (RectTransform)options.Single(o => o.name == LinkedHealthBonusRow.OptionName).transform;
+        const float gap = 52;
+        var scroll = screen.GetComponentInChildren<ScrollRect>(true);
+        scroll.content.sizeDelta += new Vector2(0, gap);
+        mode.anchoredPosition -= new Vector2(0, gap);
+        bonus.anchoredPosition -= new Vector2(0, gap);
+        var line = new GameObject("Shared health divider", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        line.transform.SetParent(mode.parent, false);
+        var rect = (RectTransform)line.transform;
+        rect.anchorMin = mode.anchorMin; rect.anchorMax = mode.anchorMax; rect.pivot = mode.pivot;
+        rect.anchoredPosition = mode.anchoredPosition + new Vector2(0, 82);
+        rect.sizeDelta = new Vector2(mode.sizeDelta.x, 1.5f);
+        var image = line.GetComponent<Image>(); image.color = new Color(.8f, .8f, .8f, .35f); image.raycastTarget = false;
+        // Indent the child setting without changing its identity, navigation,
+        // lock handling or the common value column.
+        var label = bonus.Find("Label").GetComponent<Text>();
+        label.rectTransform.offsetMin = new Vector2(64, 0);
+        label.fontSize = 36; label.resizeTextMaxSize = 36;
     }
 }
 

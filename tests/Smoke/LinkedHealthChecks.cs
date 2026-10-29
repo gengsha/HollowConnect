@@ -10,6 +10,7 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class ProgressProbe {
     private IEnumerator LinkedHealthChecks() {
+        if (SharedHealthUiCase) { yield return SharedHealthUiChecks(); yield break; }
         if (LinkedSpecial != null) { if (host) Flag("host.linked.join-ready"); yield return LinkedIsolationChecks(); yield break; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_REST") == "inspect") {
             if (host) Flag("host.linked.join-ready");
@@ -105,6 +106,10 @@ public sealed partial class ProgressProbe {
             "four unique receipts add one current and maximum mask while personal progression rolls over");
         yield return ResourceBarrier("pieces");
         yield return ResourceIdle("linked native fourth shard");
+        Mark("HUD AFTER UPGRADE " + string.Join(";", WhiteMasks.Select(f => f.name + "=" + f.ActiveStateName +
+            " cachedMax=" + f.FsmVariables.FindFsmInt("Max HP").Value + " full=" + f.transform.Find("Idle").GetComponent<Renderer>().enabled)));
+        yield return Until(() => MasksMatch(6 + extra, 3 + extra), "native HUD follows the real permanent mask upgrade", 25);
+        CaptureSharedUi("native-mask-upgrade");
         if (host) ResourceSend("mask:slyShellFrag1");
         yield return new WaitForSecondsRealtime(.5f);
         ResourceCheck(pd.GetInt("maxHealthBase") == 6 && pd.GetInt("maxHealth") == 6 + extra && pd.GetInt("health") == 3 + extra,

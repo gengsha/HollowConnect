@@ -1393,8 +1393,6 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         style.normal.textColor = Color.white;
         if ((Connected || emergencyNotice) && Time.unscaledTime < statusUntil) GUI.Label(new Rect(0, 70, Screen.width, 36), status, style);
         if (Connected) {
-            if (LinkedHealthActive && Playable) GUI.Label(new Rect(0, 12, Screen.width, 32),
-                "链在一起 · 团队生命 " + PlayerData.instance.GetInt("health") + " / " + linkedHealthMax, style);
             if (Down || Resetting || Returning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 70),
                 Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点" :
                 LinkedHealthRuleEnabled ? "团队生命耗尽 · 等待全队返回各自复活点" :

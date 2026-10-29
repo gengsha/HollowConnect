@@ -331,6 +331,10 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             pd.SetInt("maxHealthBase", host ? 7 : 5); pd.SetInt("maxHealth", host ? 7 : 5);
             pd.SetInt("health", host ? 4 : 1); pd.SetInt("heartPieces", host ? 3 : 0);
         }
+        if (SharedHealthUiCase) {
+            pd.SetInt("maxHealthBase", host ? 9 : 5); pd.SetInt("maxHealth", host ? 9 : 5);
+            pd.SetInt("health", host ? 9 : 5); pd.SetInt("healthBlue", 0);
+        }
         if (ProgressAuditCase) PrepareProgressAudit();
         if (SimpleKeyCase) PrepareSimpleKeys();
         if (KeyEssenceCase) PrepareKeyEssence();

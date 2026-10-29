@@ -1,0 +1,36 @@
+{
+  "version": "0.2.4",
+  "createdAtUtc": "2026-10-29T03:20:35.888553+00:00",
+  "scope": "Three development stages retain their original binary hashes. No final-version game retest or merged final-hash full-acceptance claim.",
+  "sources": [
+    {
+      "path": "docs/evidence/shared-health-ui-development-0.2.4.json",
+      "sha256": "F58B0CD24E390562D2FA9583143D0C2001D21B46BDCF473CB646ED5CCFAD7A1B"
+    },
+    {
+      "path": "docs/evidence/boss-reentry-2026-10-29.json",
+      "sha256": "F1B856FFA14D376B10779B0C0C607AD78E5E5D52134C726EE19DDDEC5DF38318"
+    },
+    {
+      "path": "docs/evidence/boss-two-anomalies-2026-10-29.json",
+      "sha256": "A2AE88AA5C8F9799AB98CEC6866CFB9398BE7EB49FFBC51B28906D63504A04E3"
+    }
+  ],
+  "sharedHealthUi": {
+    "relatedCorePassed": 17,
+    "bothClientCasesPassed": 7
+  },
+  "bossPersistence": {
+    "relatedCorePassed": 10,
+    "selectedBothClientCasesPassed": 19,
+    "includedRoomMatrixCases": 12,
+    "retainedAnomaly": "Original False Knight local-counter failure was unclassified; private-world reward was not covered by its passing persistence-only case."
+  },
+  "twoAnomalyFollowup": {
+    "relatedCorePassed": 3,
+    "bothClientCasesPassed": 4,
+    "scope": "Both private Mawlek authority orders and ordinary/late False Knight takeover.",
+    "limits": "Mawlek native reward is corrected; False Knight fixture preconditions corrected, original failure exact cause remains unknown."
+  },
+  "certifiesNewVersionHashes": false
+}

@@ -9,6 +9,7 @@ namespace HollowConnect;
 internal sealed class LinkedRestView : IDisposable {
     private readonly GameObject root;
     private readonly Text label;
+    private readonly LinkedRestMotion motion;
     internal LinkedRestView(Transform parent) {
         root = new GameObject("HollowConnect Rest Progress", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(CanvasGroup));
         root.transform.SetParent(parent, false);
@@ -20,17 +21,38 @@ internal sealed class LinkedRestView : IDisposable {
         obj.transform.SetParent(root.transform, false);
         label = obj.GetComponent<Text>();
         label.font = Resources.FindObjectsOfTypeAll<Font>().FirstOrDefault(f => f.name == "NotoSerifCJKsc-Regular") ?? Modding.Menu.MenuResources.Perpetua;
-        label.fontSize = 32; label.color = new Color(.91f, .90f, .85f, .96f); label.alignment = TextAnchor.MiddleCenter;
+        label.fontSize = 32; label.color = new Color(.91f, .90f, .85f, .96f); label.alignment = TextAnchor.MiddleLeft;
         label.raycastTarget = false; label.supportRichText = false;
-        var rect = label.rectTransform; rect.anchorMin = rect.anchorMax = new Vector2(.5f, 0);
-        rect.pivot = new Vector2(.5f, 0); rect.anchoredPosition = new Vector2(0, 145); rect.sizeDelta = new Vector2(1000, 180);
-        label.resizeTextForBestFit = true; label.resizeTextMinSize = 18; label.resizeTextMaxSize = 32;
+        var rect = label.rectTransform; rect.anchorMin = rect.anchorMax = new Vector2(0, .60f);
+        rect.pivot = new Vector2(0, .5f); rect.sizeDelta = new Vector2(600, 180);
+        label.resizeTextForBestFit = true; label.resizeTextMinSize = 24; label.resizeTextMaxSize = 32;
+        label.horizontalOverflow = HorizontalWrapMode.Wrap;
         var shadow = obj.GetComponent<Shadow>(); shadow.effectColor = new Color(0, 0, 0, .75f); shadow.effectDistance = new Vector2(1, -2);
+        motion = root.AddComponent<LinkedRestMotion>(); motion.Initialize(rect);
+        root.SetActive(false);
     }
     internal void Show(LinkedRestCount count, string missing) {
         label.text = count.Label + " " + count.Resting + "/" + count.Total + (string.IsNullOrEmpty(missing) ? "" : "\n等待：" + missing);
-        root.SetActive(true);
+        motion.Visible = true; root.SetActive(true);
     }
-    internal void Hide() => root.SetActive(false);
+    internal void Hide() => motion.Visible = false;
     public void Dispose() { if (root != null) UnityEngine.Object.Destroy(root); }
+}
+
+// Show/Hide are called every frame. Animate a target so repeated calls and a
+// new rest report during exit never restart or snap the notification.
+internal sealed class LinkedRestMotion : MonoBehaviour {
+    private RectTransform label;
+    private float progress;
+    internal bool Visible;
+    internal void Initialize(RectTransform value) { label = value; Position(); }
+    private void Update() {
+        progress = Mathf.MoveTowards(progress, Visible ? 1 : 0, Time.unscaledDeltaTime / .35f);
+        Position();
+        if (!Visible && progress == 0) gameObject.SetActive(false);
+    }
+    private void Position() {
+        var eased = progress * progress * (3 - 2 * progress);
+        label.anchoredPosition = new Vector2(Mathf.Lerp(-label.rect.width - 24, 64, eased), 0);
+    }
 }

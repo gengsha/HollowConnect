@@ -236,6 +236,7 @@ internal class Entity {
             staging.SetActive(false);
             var clone = UnityEngine.Object.Instantiate(hostObject, staging.transform, true);
             clone.SetActive(false);
+            EntityPersistence.BindReplica(hostObject, clone);
             // iTween is a runtime controller, not prefab state. Its private
             // arguments live in a global table keyed to the ORIGINAL target.
             // A copied component's first Awake cannot retrieve arguments for
@@ -260,6 +261,7 @@ internal class Entity {
 
             _hasParent = false;
         } else {
+            EntityPersistence.BindItems(hostObject, clientObject);
             Object = new HostClientPair<GameObject> {
                 Host = hostObject,
                 Client = clientObject

@@ -106,6 +106,7 @@ internal class HealthManagerComponent : EntityComponent {
             phase.Packet.Write((byte)attackType); phase.Packet.Write(ignoreEvasion); SendData(phase); return;
         }
         if (_dead) return;
+        EntityPersistence.SaveTerminalDeath(self);
         LocalBattleCompletion.NativeDeathApplied(_bossId, self, earlyBattle);
         _dead = true; _hp = 0; _known = true;
         if (!_bossVictorySignaled) { _bossVictorySignaled = true; BossDefeatSignals.HealthDeath(_entityType, _bossId); }
@@ -211,6 +212,7 @@ internal class HealthManagerComponent : EntityComponent {
             _receivedRevision = revision; _dead = true; _hp = 0; _known = true;
             if (_healthManager.Host != null) {
                 _healthManager.Host.hp = 0; _healthManager.Host.isDead = true;
+                EntityPersistence.SaveTerminalDeath(_healthManager.Host);
                 _healthManager.Host.SendDeathEvent();
                 _healthManager.Host.gameObject.SetActive(false);
             }

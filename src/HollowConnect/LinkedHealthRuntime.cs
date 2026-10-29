@@ -24,6 +24,7 @@ public sealed partial class CoopRuntime {
     private PlayerData linkedHealthPlayerData;
     private Hook linkedCurrentMaxHook;
     private Hook linkedMaskUiUpdateHook;
+    private LinkedHealthHud linkedHealthHud;
     private readonly Dictionary<Fsm, int> linkedMaskUiHealth = new Dictionary<Fsm, int>();
     private readonly SortedDictionary<uint, int> linkedPending = new SortedDictionary<uint, int>();
     private static readonly MethodInfo ClonePlayerData = typeof(object).GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -64,6 +65,7 @@ public sealed partial class CoopRuntime {
         linkedPersonalCaptured = false;
         linkedSteelEnded = false;
         linkedMaskUiHealth.Clear();
+        if (linkedHealthHud != null) { linkedHealthHud.Restore(); linkedHealthHud = null; }
         if (keepRule && linkedHealthMode) RegisterLinkedHealth();
     }
     private void RegisterLinkedHealth() {
@@ -95,15 +97,15 @@ public sealed partial class CoopRuntime {
         if (!linkedHealthStateReceived || !Playable || Down || Resetting || Returning) return true;
         var pd = PlayerData.instance;
         var reason = pd.GetIntInternal("permadeathMode") != linkedSaveMode ?
-            (linkedSaveMode == 1 ? "链在一起：钢魂房间需要使用钢魂存档" : "链在一起：普通房间需要使用普通存档") :
-            BossSequenceController.BoundShell ? "链在一起：请先结束带生命绑定的挑战再加入" : null;
+            (linkedSaveMode == 1 ? "共享血量：钢魂房间需要使用钢魂存档" : "共享血量：普通房间需要使用普通存档") :
+            BossSequenceController.BoundShell ? "共享血量：请先结束带生命绑定的挑战再加入" : null;
         if (reason == null) return true;
         api.ClientManager.Disconnect(); Notice(reason); return false;
     }
     private void LinkedSequence(On.BossSequenceController.orig_SetupNewSequence orig, BossSequence sequence,
         BossSequenceController.ChallengeBindings bindings, string playerData) {
         if ((bindings & BossSequenceController.ChallengeBindings.Shell) != 0) {
-            Notice("链在一起：不能开启生命绑定"); return;
+            Notice("共享血量：不能开启生命绑定"); return;
         }
         orig(sequence, bindings, playerData);
     }
@@ -166,7 +168,7 @@ public sealed partial class CoopRuntime {
         data.playerData.prevHealth = data.playerData.health;
     }
     internal void ApplyLinkedWelcome(Message message) {
-        if ((message.Value & 2048) != 0) { api.ClientManager.Disconnect(); Notice("链在一起：钢魂挑战已结束，请重新建房"); return; }
+        if ((message.Value & 2048) != 0) { api.ClientManager.Disconnect(); Notice("共享血量：钢魂挑战已结束，请重新建房"); return; }
         linkedHealthBonusMasks = LinkedHealthRules.NormalizeBonus(message.LinkedBonusMasks);
         if ((message.Value & 1024) == 0 || !Shared || !ShareCharms) { ResetLinkedHealth(); return; }
         if (linkedHealthMode) return; // duplicate Hello must not restart report identities
@@ -189,6 +191,7 @@ public sealed partial class CoopRuntime {
             if (linkedHealthStateReceived) ApplyLinkedHealthState();
         }
         if (!LinkedHealthActive || Resetting || Returning || changingScene || Down) return;
+        SyncLinkedHealthHud();
         if (linkedHealthCurrent == 0 && !linkedDeathRequested && Playable) {
             linkedDeathRequested = true; StartCoroutine(DieForLinkedHealth());
         }
@@ -223,11 +226,22 @@ public sealed partial class CoopRuntime {
         // from committing a predicted lethal hit before concurrent heals land.
         var health = linkedHealthCurrent == 0 ? 0 : Math.Max(1, PredictedLinkedHealth());
         pd.SetIntInternal("prevHealth", previous); pd.SetIntInternal("health", health);
+        SyncLinkedHealthHud();
         if (previous != health) {
             linkedHealthApplying = true;
             try { RefreshLinkedHealthHud(health > previous); }
             finally { linkedHealthApplying = false; }
         }
+    }
+    private void SyncLinkedHealthHud() {
+        var canvas = GameCameras.instance?.hudCanvas;
+        if (canvas == null) return;
+        if (linkedHealthHud == null) {
+            var mask = canvas.GetComponentsInChildren<PlayMakerFSM>(true).FirstOrDefault(f => f.FsmName == "health_display");
+            if (mask == null) return;
+            linkedHealthHud = mask.transform.parent.gameObject.AddComponent<LinkedHealthHud>();
+        }
+        linkedHealthHud.SetCapacity(linkedHealthMax);
     }
     private static void RefreshLinkedHealthHud(bool healed) {
         // Native HERO DAMAGED has gameplay consumers on the Knight and world.
@@ -289,6 +303,6 @@ public sealed partial class CoopRuntime {
         var until = Time.realtimeSinceStartup + 40;
         while (Connected && Session == session && UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle == origin && Time.realtimeSinceStartup < until)
             yield return null;
-        if (Connected && Session == session) { api.ClientManager.Disconnect(); Notice("链在一起：钢魂挑战结束"); }
+        if (Connected && Session == session) { api.ClientManager.Disconnect(); Notice("共享血量：钢魂挑战结束"); }
     }
 }

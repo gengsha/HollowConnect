@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace HollowConnect;
 
 internal sealed class LinkedHealthBonusRow : MonoBehaviour {
-    internal const string OptionName = "链在一起额外面具（房主）";
+    internal const string OptionName = "额外面具（房主）";
     private InputField input;
     private Text description, label;
     private string help;

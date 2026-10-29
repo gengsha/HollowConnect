@@ -45,7 +45,7 @@ public sealed partial class CoopRuntime {
         linkedCharmDirty = true;
         if (Now < linkedCharmNotice) return;
         linkedCharmNotice = Now + 3;
-        Notice("链在一起：禁用生命血护符、心脏、乔尼的祝福和蜂巢之血");
+        Notice("共享血量：禁用生命血护符、心脏、乔尼的祝福和蜂巢之血");
     }
     private void SanitizeLinkedCharms(PlayerData pd) {
         if (!LinkedHealthRuleEnabled || pd == null) return;
@@ -79,7 +79,7 @@ public sealed partial class CoopRuntime {
         finally { linkedHealBlockScope--; pd.healthBlue = worldBlue; }
         if (changed && Now >= linkedCharmNotice) {
             linkedCharmNotice = Now + 3;
-            Notice("链在一起：已暂时卸下禁用护符");
+            Notice("共享血量：已暂时卸下禁用护符");
         }
     }
     private void LinkedCharmUpdate(On.HeroController.orig_CharmUpdate orig, HeroController hero) {

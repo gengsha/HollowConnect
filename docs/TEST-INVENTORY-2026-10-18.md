@@ -610,3 +610,7 @@
 具体运行、哈希及未覆盖边界见 [平台修复记录](RADIANCE-PLATFORM-FIX-2026-10-18.md) 和 [机器证据](evidence/radiance-platform-runtime-2026-10-18.json)。不把上次辐光包的三组通过扩写为本轮平台专项通过。
 
 0.1.24 追加的十组实际渲染检查已通过，覆盖宣战前三座平台和全部二阶段／爬升平台；每一座均以真实重力逐项检查承重。测试实现另见 [RadianceEntryVisualChecks.cs](../tests/Smoke/RadianceEntryVisualChecks.cs)，最终构建结果见 [0.1.24 机器证据](evidence/radiance-render-runtime-2026-10-18.json)。旧六组证据继续保留，不能替代本轮结果。
+
+## 2026-10-29 Boss 重入死亡存档专项
+
+[Run-Boss-Reentry.ps1](../tests/Smoke/Run-Boss-Reentry.ps1) 支持 `host`、`guest`、`private`、`no-effects` 四组，使用 `boss-reentry` 模式和现有双端隔离副本。覆盖毛里克原生入场、死亡、碎片碰撞领奖、原远端先重入；当前 `private` 也验证双方各自领奖，且对方拾取不会代领自己的碎片。首轮旧 `private` 结果仅覆盖死亡存档与重入，后续完整领奖结果另行绑定新构建哈希。边界断言另检查显式/隐式存档标识、同名子对象、附加场景标识、阶段零血、重复/旧血量包、明确生命重置和原生半永久重置。修复与分轮验收范围见 [本轮说明](BOSS-REENTRY-FIX-2026-10-29.md)。

@@ -1,0 +1,161 @@
+{
+  "generatedUtc": "2026-10-29T02:56:39.2302641Z",
+  "scope": "Minimal follow-up only: private Mawlek native reward start, and False Knight fixture entry/counter preconditions. No full matrix, package or installation.",
+  "production": {
+    "HollowConnect.dll": "CFA0F612DDD8F71810255A939CE70A669C1CF595BFEEE99331D614C3D5725D96",
+    "HollowConnect.Core.dll": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750",
+    "HKMP.dll": "4A67C40D48AFD297641ABEC690BD5B2DFEF817A2F962F6A5616AEC8E0ECCFEAA"
+  },
+  "smoke": "7545479761840BF6DECCC83EB520503FF3E9E1ADB713EF7C7F5FA21397279206",
+  "environment": {
+    "isolation": "Existing game-host/game-guest; ProbeMod blocks disk saves and settings writes",
+    "dependencies": {
+      "guest": {
+        "Managed/PlayMaker.dll": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+        "globalgamemanagers": "47C9A39F469E16C4FC6264C88BB026F32928E571E3650E5040EAE68B19F29E45",
+        "Managed/Assembly-CSharp.dll": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      "host": {
+        "Managed/PlayMaker.dll": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+        "globalgamemanagers": "47C9A39F469E16C4FC6264C88BB026F32928E571E3650E5040EAE68B19F29E45",
+        "Managed/Assembly-CSharp.dll": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      }
+    },
+    "inputs": {
+      "tests/Smoke/Assert-ProbeLogs.ps1": "AC2A85B29096DD5588EDAB98377FEBED51C80AE767E2A49CB71F132506DB7C26",
+      "tests/Smoke/BossProbe.cs": "418885BA708C296AD840CB0495CD92B57301CF067E3D5DE2D8E7983A20F26F9A",
+      "tests/Smoke/BossReentryProbe.cs": "0A3924FD4190714BB9EC9A516929A88B819935EE2181E64D658A8ED4F39538F6",
+      ".analysis/boss-two-anomalies-20261029/Invoke-Cases.ps1": "638A4B5781D77A81FC9E10F95E2E1EB029BE8484613DBD662D634F21DAE552FB",
+      "tests/Smoke/Run-Two.ps1": "0132227B8C7E196EADAA80DFADE495870FB0030B69D56F81349131F292CB0ADD"
+    }
+  },
+  "coreChecks": {
+    "selection": ".analysis/boss-two-anomalies-20261029/core-selection.txt",
+    "failed": 0,
+    "passed": 3,
+    "log": ".analysis/boss-two-anomalies-20261029/build-core.log"
+  },
+  "cases": [
+    {
+      "name": "mawlek-private-host",
+      "run": "boss-two-anomalies-20261029-mawlek-private-host-a",
+      "case": {
+        "name": "mawlek-private-host",
+        "mode": "boss-reentry",
+        "env": {
+          "HOLLOWCONNECT_REENTRY_PRIVATE": "1",
+          "HOLLOWCONNECT_MAWLEK_AUTHORITY": "host"
+        },
+        "reason": "Both native local controllers start, personal pickups stay independent, reversed-authority reentry stays dead"
+      },
+      "status": "passed",
+      "started": "2026-10-29T02:51:08.8634756Z",
+      "runner": 10604,
+      "production": {
+        "HollowConnect.dll": "CFA0F612DDD8F71810255A939CE70A669C1CF595BFEEE99331D614C3D5725D96",
+        "HollowConnect.Core.dll": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750",
+        "HKMP.dll": "4A67C40D48AFD297641ABEC690BD5B2DFEF817A2F962F6A5616AEC8E0ECCFEAA"
+      },
+      "smoke": "7545479761840BF6DECCC83EB520503FF3E9E1ADB713EF7C7F5FA21397279206",
+      "pids": {
+        "guest": "23928",
+        "host": "7936"
+      },
+      "bothDone": true,
+      "strictLogs": "passed",
+      "ended": "2026-10-29T02:52:29.9726977Z"
+    },
+    {
+      "name": "mawlek-private-guest",
+      "run": "boss-two-anomalies-20261029-mawlek-private-guest-a",
+      "case": {
+        "name": "mawlek-private-guest",
+        "mode": "boss-reentry",
+        "env": {
+          "HOLLOWCONNECT_REENTRY_PRIVATE": "1",
+          "HOLLOWCONNECT_MAWLEK_AUTHORITY": "guest"
+        },
+        "reason": "Verify the same replay source exception when the guest owns the boss"
+      },
+      "status": "passed",
+      "started": "2026-10-29T02:52:42.2453609Z",
+      "runner": 23732,
+      "production": {
+        "HollowConnect.Core.dll": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750",
+        "HKMP.dll": "4A67C40D48AFD297641ABEC690BD5B2DFEF817A2F962F6A5616AEC8E0ECCFEAA",
+        "HollowConnect.dll": "CFA0F612DDD8F71810255A939CE70A669C1CF595BFEEE99331D614C3D5725D96"
+      },
+      "smoke": "7545479761840BF6DECCC83EB520503FF3E9E1ADB713EF7C7F5FA21397279206",
+      "pids": {
+        "host": "10424",
+        "guest": "25196"
+      },
+      "bothDone": true,
+      "strictLogs": "passed",
+      "ended": "2026-10-29T02:53:51.2213479Z"
+    },
+    {
+      "name": "false-knight",
+      "run": "boss-two-anomalies-20261029-false-knight-a",
+      "case": {
+        "name": "false-knight",
+        "mode": "boss",
+        "env": {},
+        "reason": "Native local arena entry and initialized battle count before takeover head-phase assertion"
+      },
+      "status": "passed",
+      "started": "2026-10-29T02:53:51.5004408Z",
+      "runner": 23732,
+      "production": {
+        "HollowConnect.Core.dll": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750",
+        "HKMP.dll": "4A67C40D48AFD297641ABEC690BD5B2DFEF817A2F962F6A5616AEC8E0ECCFEAA",
+        "HollowConnect.dll": "CFA0F612DDD8F71810255A939CE70A669C1CF595BFEEE99331D614C3D5725D96"
+      },
+      "smoke": "7545479761840BF6DECCC83EB520503FF3E9E1ADB713EF7C7F5FA21397279206",
+      "pids": {
+        "host": "3308",
+        "guest": "6644"
+      },
+      "bothDone": true,
+      "strictLogs": "passed",
+      "ended": "2026-10-29T02:54:35.844374Z"
+    },
+    {
+      "name": "false-knight-late",
+      "run": "boss-two-anomalies-20261029-false-knight-late-a",
+      "case": {
+        "name": "false-knight-late",
+        "mode": "boss",
+        "env": {
+          "HOLLOWCONNECT_SMOKE_BOSS_LATE": "1",
+          "HOLLOWCONNECT_SMOKE_HANDOFF_DELAY": "2.5"
+        },
+        "reason": "Validate the changed fixture under late join and delayed takeover"
+      },
+      "status": "passed",
+      "started": "2026-10-29T02:54:36.1329818Z",
+      "runner": 23732,
+      "production": {
+        "HollowConnect.Core.dll": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750",
+        "HKMP.dll": "4A67C40D48AFD297641ABEC690BD5B2DFEF817A2F962F6A5616AEC8E0ECCFEAA",
+        "HollowConnect.dll": "CFA0F612DDD8F71810255A939CE70A669C1CF595BFEEE99331D614C3D5725D96"
+      },
+      "smoke": "7545479761840BF6DECCC83EB520503FF3E9E1ADB713EF7C7F5FA21397279206",
+      "pids": {
+        "host": "5948",
+        "guest": "4748"
+      },
+      "bothDone": true,
+      "strictLogs": "passed",
+      "ended": "2026-10-29T02:55:29.5537239Z"
+    }
+  ],
+  "findings": {
+    "falseKnight": "Ordinary and late/delayed takeover pass after native local entry and initialized-count preconditions; head phase preserves 1/Start. This fixes the fixture gap, not a proven False Knight product defect.",
+    "mawlek": "Both authority orders pass independent native pickup, exactly one fragment/receipt per player, and no revival after reversed-authority reentry."
+  },
+  "limitations": [
+    "The original False Knight failure did not record before/after counter values; its exact cause cannot be established retrospectively.",
+    "Earlier full-matrix evidence belongs to its original hashes and is not recertified for these binaries."
+  ]
+}

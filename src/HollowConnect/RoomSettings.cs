@@ -7,7 +7,7 @@ public sealed partial class CoopRuntime {
         switch (name) {
             case "共享永久进度（房主）": return Toggle(Shared);
             case "共享护符（房主）": return Toggle(ShareCharms);
-            case "链在一起血条（房主）": return Toggle(linkedHealthMode);
+            case CoopMod.SharedHealthOptionName: return Toggle(linkedHealthMode);
             case LinkedHealthBonusRow.OptionName: return LinkedHealthBonusRow.Format(linkedHealthBonusMasks);
             case "动态 Boss 血量（房主）": return Toggle(bossHealthScaling);
             case BossHealthParameterRow.OptionName: return BossHealthParameterRow.Format(bossExtraHealth);

@@ -1,0 +1,87 @@
+{
+  "binaries": {
+    "HKMP.dll": "13E0B5CB2280EEE20EDEF6ADAFB2BD22BD1CE22BEEF2172AED7F42A9088FD67B",
+    "HollowConnect.dll": "AE80380862C10A3E4EC6281BD277625A6CD4972784F755E886454F622098593B",
+    "HollowConnect.Core.dll": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750"
+  },
+  "cases": [
+    {
+      "case": "ui11-e",
+      "scope": "11 格白面具、30 格蓝血、受伤/回血、坐椅提示、退房",
+      "status": "passed",
+      "productionMatches": true,
+      "bothDone": true,
+      "strictLogs": "passed",
+      "evidence": ".test-results/shared-ui-20261028-ui11-e"
+    },
+    {
+      "case": "ui19-b",
+      "scope": "19 格白面具、原生克隆动画/间距、屏外蓝血、退房",
+      "status": "passed",
+      "productionMatches": true,
+      "bothDone": true,
+      "strictLogs": "passed",
+      "evidence": ".test-results/shared-ui-20261028-ui19-b"
+    },
+    {
+      "case": "ui9-a",
+      "scope": "0 额外面具 / 9 格白面具",
+      "status": "passed",
+      "productionMatches": true,
+      "bothDone": true,
+      "strictLogs": "passed",
+      "evidence": ".test-results/shared-ui-20261028-ui9-a"
+    },
+    {
+      "case": "menu-a",
+      "scope": "底部分组、分隔线、从属缩进、锁定/输入/文字完整性",
+      "status": "passed",
+      "productionMatches": true,
+      "bothDone": true,
+      "strictLogs": "passed",
+      "evidence": ".test-results/shared-ui-20261028-menu-a"
+    },
+    {
+      "case": "health-d",
+      "scope": "共享血量原有流程与真实永久面具升级后的可见格数",
+      "status": "passed",
+      "productionMatches": true,
+      "bothDone": true,
+      "strictLogs": "passed",
+      "evidence": ".test-results/shared-ui-20261028-health-d"
+    },
+    {
+      "case": "rest-c",
+      "scope": "原生椅子/温泉/混合休息、护符/蓝血、保存和退房",
+      "status": "passed",
+      "productionMatches": true,
+      "bothDone": true,
+      "strictLogs": "passed",
+      "evidence": ".test-results/shared-ui-20261028-rest-c"
+    },
+    {
+      "case": "ui11-visual",
+      "scope": "最终提示字体、位置、动画反向和截图",
+      "status": "passed",
+      "productionMatches": true,
+      "bothDone": true,
+      "strictLogs": "passed",
+      "evidence": ".test-results/shared-ui-20261028-ui11-visual"
+    }
+  ],
+  "allPassed": true,
+  "version": "0.2.4",
+  "stage": "shared-health-ui-before-boss-fix-and-version-bump",
+  "originalBinaryHashesOnly": true,
+  "certifiesReleaseHashes": false,
+  "coreChecks": {
+    "passed": 17,
+    "failed": 0,
+    "path": ".analysis/shared-health-ui-20261028/build-final-candidate.log",
+    "sha256": "19BF593683C2AB7383F8699AF45241C127F12FD100EEEFBE8D999255FBD30EA9"
+  },
+  "localReport": {
+    "path": ".analysis/shared-health-ui-20261028/REPORT.md",
+    "sha256": "BE34B748EAC177A50DBEBEE799C3D62A3E2F0A4EC109476168C49E6588C52037"
+  }
+}

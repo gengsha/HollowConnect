@@ -53,6 +53,17 @@ public sealed class MenuLayoutProbe : MonoBehaviour {
         Check(UIManager.instance.currentDynamicMenu == menu && UIManager.instance.mainMenuScreen.alpha <= .01f,
             "native dynamic menu navigation completes before capture");
         var options = menu.GetComponentsInChildren<MenuOptionHorizontal>(true);
+        Check(options[options.Length - 2].name == CoopMod.SharedHealthOptionName && options.Last().name == LinkedHealthBonusRow.OptionName,
+            "shared health and its child are the final settings");
+        var modeRect = (RectTransform)options[options.Length - 2].transform;
+        var bonusRect = (RectTransform)options.Last().transform;
+        var divider = scroll.content.Find("Shared health divider");
+        Check(divider != null && divider.GetComponent<Selectable>() == null && !divider.GetComponent<Image>().raycastTarget,
+            "independent shared health group has a non-interactive divider");
+        Check(((RectTransform)divider).anchoredPosition.y > modeRect.anchoredPosition.y &&
+            modeRect.anchoredPosition.y > bonusRect.anchoredPosition.y &&
+            options.Last().transform.Find("Label").GetComponent<RectTransform>().offsetMin.x >= 60,
+            "divider precedes shared health and extra masks are indented beneath it");
         try {
             foreach (var locked in new[] { false, true }) {
                 CoopContext.RoomSettingsLocked = () => locked;
@@ -75,9 +86,11 @@ public sealed class MenuLayoutProbe : MonoBehaviour {
                     if (parameterInput != null) {
                         Check(parameterInput.readOnly == locked, "typed health field follows room lock");
                         if (!locked) {
-                            parameterInput.text = "80"; parameterInput.onEndEdit.Invoke("80");
-                            Check(parameterInput.text == "80" && Math.Abs(CoopMod.Settings.BossExtraHealthPerPlayer - .8f) < .00001,
-                                "native input saves typed health percent");
+                            var bonus = option.name == LinkedHealthBonusRow.OptionName;
+                            var typed = bonus ? "10" : "80";
+                            parameterInput.text = typed; parameterInput.onEndEdit.Invoke(typed);
+                            Check(parameterInput.text == typed && (bonus ? CoopMod.Settings.LinkedHealthBonusMasks == 10 :
+                                Math.Abs(CoopMod.Settings.BossExtraHealthPerPlayer - .8f) < .00001), "native input saves " + option.name);
                         }
                     }
                     if (locked && CoopMod.IsRoomSetting(option.name))
@@ -100,6 +113,12 @@ public sealed class MenuLayoutProbe : MonoBehaviour {
             EventSystem.current.SetSelectedGameObject(parameterRow.GetComponentInChildren<InputField>(true).gameObject);
             panel.Refresh(); Canvas.ForceUpdateCanvases(); yield return null;
             Capture();
+            CoopContext.RoomSettingsLocked = () => false;
+            foreach (var row in menu.GetComponentsInChildren<CoopMenuLockRow>(true)) row.Refresh();
+            EventSystem.current.SetSelectedGameObject(options.Last().GetComponentInChildren<InputField>(true).gameObject);
+            scroll.verticalNormalizedPosition = 0; panel.Refresh(); Canvas.ForceUpdateCanvases();
+            yield return new WaitForSecondsRealtime(.2f);
+            Capture("shared-health-menu");
             Check(menu.GetComponentsInChildren<MenuOptionHorizontal>(true).All(o => !o.transform.Find("Description").GetComponent<Text>().enabled),
                 "all native inline descriptions remain hidden after rapid navigation");
             menu.gameObject.SetActive(false); Check(panel.Help.text == "", "closing menu clears help");
@@ -120,7 +139,7 @@ public sealed class MenuLayoutProbe : MonoBehaviour {
         var generator = new TextGenerator(); generator.Populate(text.text, settings);
         Check(generator.characterCountVisible >= text.text.Length, label + " fits without truncation (" + generator.characterCountVisible + "/" + text.text.Length + ")");
     }
-    private void Capture() {
+    private void Capture(string name = "menu-layout") {
         var target = new RenderTexture(1920, 1080, 24);
         var pixels = new Texture2D(1920, 1080, TextureFormat.RGB24, false);
         var prior = RenderTexture.active;
@@ -131,7 +150,7 @@ public sealed class MenuLayoutProbe : MonoBehaviour {
                 finally { camera.targetTexture = original; camera.rect = rect; camera.projectionMatrix = projection; }
             }
             RenderTexture.active = target; pixels.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0); pixels.Apply();
-            File.WriteAllBytes(Path.Combine(root, role + "-menu-layout.png"), pixels.EncodeToPNG());
+            File.WriteAllBytes(Path.Combine(root, role + "-" + name + ".png"), pixels.EncodeToPNG());
         } finally { RenderTexture.active = prior; Object.Destroy(pixels); Object.Destroy(target); }
     }
 }

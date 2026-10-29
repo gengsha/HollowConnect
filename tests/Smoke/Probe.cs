@@ -34,6 +34,8 @@ public sealed class ProbeMod : Mod {
         // respawn routine while yielding the next simulation frame instead.
         On.HeroController.Respawn += (orig, hero) => SimulationFrames(orig(hero));
         On.HeroController.HazardRespawn += (orig, hero) => SimulationFrames(orig(hero));
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-reentry")
+            On.HeroController.EnterScene += (orig, hero, gate, delay) => SimulationFrames(orig(hero, gate, delay));
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_EXIT_CHECK") == "1" ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOSS_RETARGET")) ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_COLLISION_CHECK")) ||
@@ -46,6 +48,7 @@ public sealed class ProbeMod : Mod {
         On.GameManager.LoadFirstScene += (orig, gm) => SimulationFrames(orig(gm));
         var go = new GameObject("HollowConnect smoke probe"); Object.DontDestroyOnLoad(go);
         go.AddComponent<SilentProbe>();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-reentry") { go.AddComponent<BossReentryProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "menu-layout") { go.AddComponent<MenuLayoutProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "damage-preview") { go.AddComponent<DamageRankingPreview>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "progress") { go.AddComponent<ProgressProbe>(); return; }
@@ -239,6 +242,10 @@ public sealed class Probe : MonoBehaviour {
         settings.AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         CoopMod.Settings.ShareProgress = true; CoopMod.Settings.Rescue = true; CoopMod.Settings.EntryProtection = false;
         CoopMod.Settings.RescueLimit = 0; CoopMod.Settings.SpectateAfterExhaustion = false;
+        // This suite exercises individual death/rescue/F6, regardless of the
+        // user's saved room preferences. Shared health has its own fixtures.
+        CoopMod.Settings.LinkedHealth = false;
+        CoopMod.Settings.GiveUpKey = KeyCode.F6;
         On.PlayerData.SetBool += (orig, owner, key, value) => {
             orig(owner, key, value);
             if (key == "hasWalljump" || key == "canWallJump")
@@ -266,6 +273,8 @@ public sealed class Probe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(engine.ClientManager, true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "smoke" + role });
         yield return Until(() => runtime.Connected, "real UDP addon handshake");
+        if (Field<bool>(runtime, "linkedHealthMode")) throw new Exception("Full-flow fixture unexpectedly negotiated shared health");
+        Mark("PASS full-flow room explicitly uses individual health and F6 personal return");
         if (Has(role + ".failed")) yield break;
         Mark("session=" + runtime.Session + " id=" + runtime.LocalId);
         Flag(role + ".connected");
