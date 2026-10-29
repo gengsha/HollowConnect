@@ -142,14 +142,28 @@ public sealed partial class ProgressProbe {
         if (!host) yield return RestSpring();
         yield return Until(() => RestCount.Ready && RestCount.Benches == 1 && RestCount.Springs == 1 && pd.GetInt("health") == 7,
             "distant mixed bench and spring refill once");
+        if (!host) {
+            hero.SetMPCharge(0); pd.SetInt("MPReserve", 0);
+            yield return Until(() => pd.GetInt("MPCharge") > 0, "mixed ready party permits native spring soul recovery");
+        }
         ResourceCheck(RestCount.Label == "休息", "mixed native progress label");
         yield return ResourceBarrier("rest-mixed");
         if (host) yield return RestStand();
         yield return Until(() => RestCount.Resting == 1, "standing up breaks rest immediately");
         if (host) pd.TakeHealth(2);
         yield return Until(() => pd.GetInt("health") == 5, "hit after standing up reaches team");
+        if (!host) { hero.SetMPCharge(0); pd.SetInt("MPReserve", 0); }
         yield return new WaitForSecondsRealtime(2);
         ResourceCheck(pd.GetInt("health") == 5, "one remaining spring cannot heal");
+        if (!host) {
+            ResourceCheck(pd.GetInt("MPCharge") == 0 && pd.GetInt("MPReserve") == 0,
+                "one remaining spring cannot restore soul while peer is not resting");
+            hero.AddMPCharge(11);
+            ResourceCheck(pd.GetInt("MPCharge") == 11, "ordinary soul gain remains available while spring recovery is blocked");
+            hero.SetMPCharge(99); pd.SetInt("MPReserveMax", 33);
+            yield return new WaitForSecondsRealtime(2);
+            ResourceCheck(pd.GetInt("MPReserve") == 0, "unready spring cannot fill reserve soul through a full main vessel");
+        }
         yield return ResourceBarrier("rest-left");
         // A second healing chair in the bathhouse counts independently of Town.
         if (!host) {
@@ -165,10 +179,12 @@ public sealed partial class ProgressProbe {
         yield return RestEnter(host ? "Ruins_Bathhouse" : "GG_Spa");
         if (host) pd.TakeHealth(3);
         yield return Until(() => pd.GetInt("health") == 4, "all-spring damage setup");
+        hero.SetMPCharge(0); pd.SetInt("MPReserve", 0);
         yield return RestSpring();
         yield return Until(() => RestCount.Ready && RestCount.Springs == 2, "different springs count together");
         yield return Until(() => pd.GetInt("health") >= 5, "all springs heal team");
         ResourceCheck(pd.GetInt("health") <= 6, "spring healing is paced rather than duplicated");
+        yield return Until(() => pd.GetInt("MPCharge") > 0, "all players in distant springs regain their own soul");
         yield return ResourceBarrier("rest-springs");
         yield return Until(() => pd.GetInt("health") == 7, "spring heals to team maximum");
         hero.transform.position += new Vector3(15, 10, 0); Physics2D.SyncTransforms();
@@ -204,6 +220,12 @@ public sealed partial class ProgressProbe {
                 pd.equippedCharm_29 && pd.GetInt("maxHealth") == 5, "disconnect restores original loadout and removes mode hooks");
             hero.CharmUpdate();
             ResourceCheck(pd.healthBlue == 2 && pd.health == 5, "native charm healing works again after mode exit");
+            yield return RestEnter("GG_Spa");
+            hero.SetMPCharge(0); pd.SetInt("MPReserve", 0);
+            var spring = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.FsmName == "Spa Region").GetComponent<Collider2D>();
+            hero.transform.position = spring.bounds.center;
+            Physics2D.SyncTransforms();
+            yield return Until(() => pd.GetInt("MPCharge") > 0, "mode exit restores solo native spring soul recovery");
             Flag("guest.rest-disconnected");
         } else {
             yield return Until(() => Has("guest.rest-disconnected"), "guest verified mode exit");

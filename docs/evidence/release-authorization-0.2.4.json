@@ -2,20 +2,20 @@
   "version": "0.2.4",
   "action": "package-release",
   "releaseChannel": "release",
-  "userRequest": "打包0.2.4吧,github,release",
+  "userRequest": "重新打包0.2.4覆盖原包,github,release",
   "retestOmitted": true,
   "binaries": [
     {
       "name": "HKMP.dll",
-      "sha256": "4A67C40D48AFD297641ABEC690BD5B2DFEF817A2F962F6A5616AEC8E0ECCFEAA"
+      "sha256": "D9DCA97E46A946F528C6CC365CFE5E78CD754341638898FB54E62180435C6338"
     },
     {
       "name": "HollowConnect.dll",
-      "sha256": "FDAF9A624A7370962ECA3785CC9F7F024E82CD5989897A6F9EDD977921A6A00C"
+      "sha256": "C72726D140FADD4FF864EF569C5B6F7E3D4ECE38FA6598891D60F7A42849AC89"
     },
     {
       "name": "HollowConnect.Core.dll",
-      "sha256": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750"
+      "sha256": "42E08FC2467B02C685D5F2A7700299D784894018EEB3C66663FFC0E3148B2F81"
     }
   ],
   "retainedUnresolvedFindings": [
@@ -48,8 +48,19 @@
   "evidence": [
     {
       "path": "docs/evidence/development-validation-0.2.4.json",
-      "sha256": "086300D7D64102E81B132F20EFB8AB3DDDBB656BD079E800F9A24133DA2C9323"
+      "sha256": "40BE673DD3048AA59F172239A0A0769FBDE647AC295F74BB0CA832909AD2739E"
+    },
+    {
+      "path": "docs/evidence/linked-spring-soul-2026-10-29.json",
+      "sha256": "6A0C152B401FBF3A0DBBAD81588ACD91E79002CC4F91CE0155C25786700F19B3"
     }
   ],
-  "createdAtUtc": "2026-10-29T03:20:35.888553+00:00"
+  "createdAtUtc": "2026-10-29T03:20:35.888553+00:00",
+  "updatedAtUtc": "2026-10-29T04:16:46.059764+00:00",
+  "replacement": {
+    "releaseId": 427430374,
+    "tag": "v0.2.4",
+    "previousSourceCommit": "a2dc6f282744484e4cb5283f4805d25fe37ab30f",
+    "scope": "Overwrite current 0.2.4 Windows/source/checksum assets and update tag/source/release notes."
+  }
 }

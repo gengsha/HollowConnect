@@ -16,6 +16,10 @@ public sealed partial class CoopRuntime {
     private PlayMakerFSM[] linkedBenches = Array.Empty<PlayMakerFSM>(), linkedSprings = Array.Empty<PlayMakerFSM>();
     private LinkedRestKind linkedLastRest;
     private bool BlockLinkedRestHeal => linkedHealBlockScope > 0 || PlayerData.instance?.GetBool("atBench") == true;
+    private bool LinkedSpringSoul(On.HeroController.orig_TryAddMPChargeSpa orig, HeroController self, int amount) {
+        if (LinkedHealthRuleEnabled && (!linkedRestCount.Ready || LocalLinkedRest() != LinkedRestKind.Spring)) return false;
+        return orig(self, amount);
+    }
     private bool BeginLinkedRestFsm(Fsm fsm) {
         if (!LinkedHealthRuleEnabled || fsm == null) return false;
         if (fsm.Name != "Bench Control" && fsm.Name != "Hive Health Regen" && !(fsm.GameObject != null && fsm.GameObject.name.StartsWith("Spa Region", StringComparison.Ordinal) &&

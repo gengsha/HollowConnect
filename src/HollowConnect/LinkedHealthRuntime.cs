@@ -46,6 +46,7 @@ public sealed partial class CoopRuntime {
             On.PlayerData.EquipCharm -= LinkedEquipCharm;
             On.PlayerData.UnequipCharm -= LinkedUnequipCharm;
             On.HeroController.CharmUpdate -= LinkedCharmUpdate;
+            On.HeroController.TryAddMPChargeSpa -= LinkedSpringSoul;
             On.BossSequenceController.SetupNewSequence -= LinkedSequence;
             linkedHealthHooks = false;
         }
@@ -75,6 +76,7 @@ public sealed partial class CoopRuntime {
         On.PlayerData.EquipCharm += LinkedEquipCharm;
         On.PlayerData.UnequipCharm += LinkedUnequipCharm;
         On.HeroController.CharmUpdate += LinkedCharmUpdate;
+        On.HeroController.TryAddMPChargeSpa += LinkedSpringSoul;
         On.BossSequenceController.SetupNewSequence += LinkedSequence;
         ModHooks.BeforeSavegameSaveHook += SaveLinkedHealth;
         On.PlayerData.AddToMaxHealth += LinkedMaskUpgrade;

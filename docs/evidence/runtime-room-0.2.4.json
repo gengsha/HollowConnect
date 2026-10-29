@@ -7,41 +7,69 @@
   "fullRuntimeAcceptance": false,
   "retestOmitted": true,
   "createdAtUtc": "2026-10-29T03:20:35.888553+00:00",
-  "scope": "User-requested Windows/source packaging and standard GitHub Release. Production/installer builds and archive integrity verification; no new game runs after version bump.",
+  "scope": "User-requested replacement of existing 0.2.4 Windows/source archives, tag and standard GitHub Release. Incremental production/installer builds and archive verification; no additional game runs during repackaging.",
   "binaries": [
     {
       "name": "HKMP.dll",
-      "sha256": "4A67C40D48AFD297641ABEC690BD5B2DFEF817A2F962F6A5616AEC8E0ECCFEAA"
+      "sha256": "D9DCA97E46A946F528C6CC365CFE5E78CD754341638898FB54E62180435C6338"
     },
     {
       "name": "HollowConnect.dll",
-      "sha256": "FDAF9A624A7370962ECA3785CC9F7F024E82CD5989897A6F9EDD977921A6A00C"
+      "sha256": "C72726D140FADD4FF864EF569C5B6F7E3D4ECE38FA6598891D60F7A42849AC89"
     },
     {
       "name": "HollowConnect.Core.dll",
-      "sha256": "8C2593BF79A182463D8BB738DF4EAF5A9F1C1ECD0324871E885D6C76E9399750"
+      "sha256": "42E08FC2467B02C685D5F2A7700299D784894018EEB3C66663FFC0E3148B2F81"
     }
   ],
   "runs": [],
   "previousValidationSource": "docs/evidence/development-validation-0.2.4.json",
-  "previousValidationSha256": "086300D7D64102E81B132F20EFB8AB3DDDBB656BD079E800F9A24133DA2C9323",
+  "previousValidationSha256": "40BE673DD3048AA59F172239A0A0769FBDE647AC295F74BB0CA832909AD2739E",
   "build": {
     "status": "passed",
-    "path": ".analysis/release-0.2.4-20261029/build.log",
-    "sha256": "D48D56FDFE06DFD156FEC745156F58E6AEE109C43D160B3494CE823B3250C19A"
+    "path": ".analysis/repack-0.2.4-spring-soul-20261029/build.log",
+    "sha256": "CE4DDBCC0BF239A1ADB1E01BF6CC1CECC147DF0E480D28C70A0C3AE9DA50CF44"
   },
   "installerBuild": {
     "status": "passed",
-    "path": ".analysis/release-0.2.4-20261029/installer-build.log",
-    "sha256": "E67B5E793F979AEDFB2F1783A77FF70F87CBBF62840617EB898DDA30C21472BE"
+    "path": ".analysis/repack-0.2.4-spring-soul-20261029/installer-build.log",
+    "sha256": "AA02FC621491375EA9813AE8D2E28CBAEC12E1A89623B3188714EF7BFAFDC8EC"
   },
-  "unchangedFromLastTargetedValidationBinaries": [
-    "HKMP.dll",
-    "HollowConnect.Core.dll"
-  ],
   "limits": [
-    "Original-hash development results do not certify final-version binaries as a full matrix.",
-    "releaseReady records the full-runtime gate separately from the explicitly requested standard Release channel.",
-    "No private-save changes, test-plugin distribution or skin redistribution."
-  ]
+    "The current replacement payload matches the targeted spring-soul native test, not a full final-hash room matrix.",
+    "Previous UI/boss stages retain their own hashes and scope.",
+    "No new game runs during this packaging request; no private-save changes or test-plugin redistribution."
+  ],
+  "updatedAtUtc": "2026-10-29T04:16:46.059764+00:00",
+  "targetedRuntimeValidation": {
+    "path": "docs/evidence/linked-spring-soul-2026-10-29.json",
+    "sha256": "6A0C152B401FBF3A0DBBAD81588ACD91E79002CC4F91CE0155C25786700F19B3",
+    "matchesAllThreePackageBinaries": true,
+    "corePassed": 4,
+    "bothClientCasesPassed": 1
+  },
+  "supersedes": {
+    "sourceCommit": "a2dc6f282744484e4cb5283f4805d25fe37ab30f",
+    "releaseId": 427430374,
+    "originalRuntimeEvidenceSha256": "BF3E70ABAD5B1318A1F7426423A1EA9A40358D510D12C1B266FBD8491C1FBF29",
+    "originalAuthorizationSha256": "A064D30F1C1D234A14B5C650A1D56A6E00C3ADDEE2CAB67C379BC9EF95712232",
+    "originalArtifacts": [
+      {
+        "name": "HollowConnect-0.2.4-source.zip",
+        "sha256": "4EAAEBC8CF843115B8CB0FD255968AB2F5756988AC6F07273F6B16A17C6B4961",
+        "bytes": 4255143
+      },
+      {
+        "name": "HollowConnect-0.2.4-windows.zip",
+        "sha256": "ECE462878B8B59A1F8B307C3E51E022A270AAF2659E10113ADF6A9FB1167558D",
+        "bytes": 12733570
+      },
+      {
+        "name": "SHA256SUMS-0.2.4.txt",
+        "sha256": "58B3DBAD1FE624F4EEC7649DE5656AADF1AF48E04A215E4416E65435AB23BF25",
+        "bytes": 197
+      }
+    ],
+    "localBackup": ".analysis/repack-0.2.4-spring-soul-20261029/previous"
+  }
 }

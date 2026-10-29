@@ -1,0 +1,88 @@
+{
+  "generatedUtc": "2026-10-29T03:50:08.0180166Z",
+  "scope": "Shared-health spring soul recovery requires the existing all-member rest readiness and local spring eligibility. Ordinary soul sources are unchanged; hooks detach on mode exit.",
+  "production": {
+    "HollowConnect.Core.dll": "42E08FC2467B02C685D5F2A7700299D784894018EEB3C66663FFC0E3148B2F81",
+    "HollowConnect.dll": "C72726D140FADD4FF864EF569C5B6F7E3D4ECE38FA6598891D60F7A42849AC89",
+    "HKMP.dll": "D9DCA97E46A946F528C6CC365CFE5E78CD754341638898FB54E62180435C6338"
+  },
+  "smoke": "4B455A7CDAAF972B1196C0E2501E11CCC183E8B8A87C3CF4B05024B463732AA8",
+  "environment": {
+    "isolation": "Existing game-host/game-guest; test profile 99; disk saves/settings writes blocked by Smoke",
+    "dependencies": {
+      "host": {
+        "Managed/PlayMaker.dll": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+        "globalgamemanagers": "47C9A39F469E16C4FC6264C88BB026F32928E571E3650E5040EAE68B19F29E45",
+        "Managed/Assembly-CSharp.dll": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      },
+      "guest": {
+        "Managed/PlayMaker.dll": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+        "globalgamemanagers": "47C9A39F469E16C4FC6264C88BB026F32928E571E3650E5040EAE68B19F29E45",
+        "Managed/Assembly-CSharp.dll": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+      }
+    },
+    "inputs": {
+      "tests/Smoke/LinkedRestChecks.cs": "CF24E351753D9A201361BDEBBA18D00D57A4EAD48828BE3900C4D99A4A09DCD1",
+      "tests/Smoke/Assert-ProbeLogs.ps1": "AC2A85B29096DD5588EDAB98377FEBED51C80AE767E2A49CB71F132506DB7C26",
+      "tests/Smoke/Run-Two.ps1": "0132227B8C7E196EADAA80DFADE495870FB0030B69D56F81349131F292CB0ADD",
+      "src/HollowConnect/LinkedHealthRuntime.cs": "A2DACBB8B43B8E317913E0676B4D90D2EA5CE0ED485CC750B6AAA3DA99133899",
+      "src/HollowConnect/LinkedRestRuntime.cs": "B60FDC5C0769F20F8E613404B120F85D80CE0DB5FA9D119E5CA254780EEC0030"
+    }
+  },
+  "coreChecks": {
+    "log": ".analysis/linked-spring-soul-20261029/build-core.log",
+    "passed": 4,
+    "failed": 0,
+    "selection": ".analysis/linked-spring-soul-20261029/core-selection.txt"
+  },
+  "cases": [
+    {
+      "name": "native-rest",
+      "run": "linked-spring-soul-20261029-native-rest-a",
+      "case": {
+        "name": "native-rest",
+        "mode": "progress",
+        "env": {
+          "HOLLOWCONNECT_LINKED_CASE": "on",
+          "HOLLOWCONNECT_LINKED_BONUS": "2",
+          "HOLLOWCONNECT_LINKED_REST": "on"
+        },
+        "reason": "One native two-client rest case: mixed/all-spring readiness permits soul, standing up blocks main/reserve, ordinary soul gain remains available, disconnect restores solo native spring recovery. Existing rest/health/charm checks retained."
+      },
+      "status": "passed",
+      "started": "2026-10-29T03:47:58.7097858Z",
+      "runner": 27268,
+      "production": {
+        "HollowConnect.Core.dll": "42E08FC2467B02C685D5F2A7700299D784894018EEB3C66663FFC0E3148B2F81",
+        "HollowConnect.dll": "C72726D140FADD4FF864EF569C5B6F7E3D4ECE38FA6598891D60F7A42849AC89",
+        "HKMP.dll": "D9DCA97E46A946F528C6CC365CFE5E78CD754341638898FB54E62180435C6338"
+      },
+      "smoke": "4B455A7CDAAF972B1196C0E2501E11CCC183E8B8A87C3CF4B05024B463732AA8",
+      "pids": {
+        "guest": "27960",
+        "host": "2076"
+      },
+      "bothDone": true,
+      "strictLogs": "passed",
+      "ended": "2026-10-29T03:49:16.8314408Z"
+    }
+  ],
+  "nativeSoulAssertions": {
+    "host": [
+      "all players in distant springs regain their own soul"
+    ],
+    "guest": [
+      "all players in distant springs regain their own soul",
+      "mixed ready party permits native spring soul recovery",
+      "one remaining spring cannot restore soul while peer is not resting",
+      "ordinary soul gain remains available while spring recovery is blocked",
+      "unready spring cannot fill reserve soul through a full main vessel",
+      "mode exit restores solo native spring soul recovery"
+    ]
+  },
+  "seconds": 78.0,
+  "limitations": [
+    "Same-machine isolated two-client native test; personal game saves and settings writes blocked.",
+    "No version bump, new package or GitHub publication in this change."
+  ]
+}
