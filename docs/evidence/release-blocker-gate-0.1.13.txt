@@ -1,3 +1,0 @@
-PASS scripts/Package.ps1 rejected unresolved blocker before build/package/install
-PASS scripts/Verify-Release.ps1 rejected unresolved blocker before build/package/install
-PASS scripts/Install-VerifiedRelease.ps1 rejected unresolved blocker before build/package/install

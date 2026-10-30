@@ -19,3 +19,7 @@ dist/
 /AGENTS.md
 /AGENT.md
 /docs/PROJECT-HANDOFF.md
+
+# Raw debugging output belongs in .analysis/; publish compact summaries explicitly.
+/docs/evidence/*.log
+/docs/evidence/*.txt

@@ -74,6 +74,10 @@
 
 ## 打包与文件
 
+公开文档入口是 [docs/README.md](README.md)。文档清单集中在 `scripts/Documentation.psd1`：源码包保留公开开发指南，Windows 包只带玩家文档、许可和必要发布记录；指向未附带开发文档的链接自动转到 GitHub。重复打包前会把旧的解压目录文档另行保留，避免旧报告残留到新包。
+
+逐轮日志、失败尝试与临时分析放在 `.analysis/<任务>/` 或 `.test-results/<运行>/`，不继续往 `docs/` 追加过程记录。公开变更合并进对应指南和本版更新；发布摘要记录版本、哈希、覆盖范围和限制。历史文档与日志保留在 Git 固定提交和本地归档，参见 [历史版本](CHANGELOG.md)。不要改写既有证据或删除失败来精简目录。
+
 正式发布渠道和实机验收范围分别记录。用户明确要求正式 Release、此次仅升版打包时，可用 `scripts/Package.ps1 -UserRequestedRelease`，并以同版本的 `docs/evidence/release-authorization-<版本>.json` 绑定原始请求、当前三份生产 DLL 哈希及保留问题账本的哈希；使用 `scripts/Verify-Release.ps1 -UserRequestedRelease` 校验相同记录和包内文件。此路径保留 `retestOmitted` 和原始验证证据，不将旧实机结果追认为新哈希的完整验收。未使用该参数时沿用既有运行记录门槛。
 
 `Package.ps1` 继续独立执行并保留已有证据门槛。压缩改为直接写 ZIP，源码枚举从入口跳过 `bin/obj` 和草稿；新包写完后才替换目标 ZIP。`SHA256SUMS.txt` 保留历史项，只计算本次新包及缺失记录的哈希。需要核验历史 ZIP 是否被外部更改时显式用 `-RebuildChecksums`；单包 `Verify-Release.ps1` 仍检查当前包的内容和校验和。

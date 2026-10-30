@@ -32,4 +32,4 @@
 
 升版前的当前工作构建通过 **71 项相关核心检查、26 组真实 UDP 双端实机检查**，范围包括 9 组主动观战、2 组原生大黄蜂权威与结算、12 项房间矩阵和 3 项既有专项。版本号升到 0.2.5 后没有把旧二进制哈希追认为新版本实机验证；本次 Release 按用户明确请求沿用这些开发验证记录完成构建和包完整性校验。
 
-完整证据见 [主动观战说明](VOLUNTARY-OBSERVATION-2026-10-30.md)、[开发验证记录](evidence/development-validation-0.2.5.json)、[版本交付记录](evidence/runtime-room-0.2.5.json) 和 [问题账本](evidence/runtime-blockers-0.2.5.json)。真实跨机器网络、三人目标轮换、所有 Boss 全招式和完整剧情长流程仍不在本轮覆盖内。
+使用说明见 [主动观战](OBSERVATION.md)，验证摘要见 [开发验证记录](evidence/development-validation-0.2.5.json)、[版本交付记录](evidence/runtime-room-0.2.5.json) 和 [问题账本](evidence/runtime-blockers-0.2.5.json)。真实跨机器网络、三人目标轮换、所有 Boss 全招式和完整剧情长流程仍不在本轮覆盖内。

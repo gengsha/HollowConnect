@@ -2,6 +2,7 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'PackageTools.ps1')
+. (Join-Path $PSScriptRoot 'PackageDocumentation.ps1')
 $version = '0.2.5'
 if($UserRequestedRelease -and $Playtest){throw 'Choose one release channel.'}
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
@@ -67,12 +68,9 @@ foreach ($name in 'Install.ps1','Uninstall.ps1','GamePath.ps1','安装说明.txt
 $installerOutput = Join-Path $root 'src\HollowConnect.Installer\bin\Release\net472'
 foreach ($name in '一键安装.exe','一键安装.exe.config') { Copy-Item -LiteralPath (Join-Path $installerOutput $name) -Destination $package -Force }
 foreach ($name in 'README.md','HKMP-LICENSE','LICENSE','THIRD-PARTY.md') { Copy-Item -LiteralPath (Join-Path $root $name) -Destination $package -Force }
-foreach ($taskDoc in Get-ChildItem -LiteralPath (Join-Path $root 'docs') -File -Recurse | Where-Object { $_.Name -notlike '*.draft' }) {
-    if ($taskDoc.Name -in 'AGENTS.md','AGENT.md','PROJECT-HANDOFF.md') { continue }
-    $taskDocTarget = Join-Path $package $taskDoc.FullName.Substring($root.Length + 1)
-    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $taskDocTarget) | Out-Null
-    Copy-Item -LiteralPath $taskDoc.FullName -Destination $taskDocTarget -Force
-}
+$taskDocumentationAuthorization=if ($Playtest -or $UserRequestedRelease) { $taskAuthorizationRelative } else { '' }
+Copy-HollowPackageDocumentation -Root $root -Destination $package -Version $version -AuthorizationPath $taskDocumentationAuthorization
+Update-HollowPackageMarkdownLinks -Root $root -Package $package
 $manifest = [ordered]@{
     version = $version
     releaseChannel = if($Playtest){'playtest'}else{'release'}
@@ -87,6 +85,7 @@ $manifest = [ordered]@{
     playtestScope = if($Playtest){$taskAuthorization.scope}else{$null}
     playtestAuthorizationSha256 = if($Playtest){(Get-FileHash -LiteralPath $taskAuthorizationPath -Algorithm SHA256).Hash}else{$null}
     installerRevision = 3
+    documentationVersion = 1
     buildInformation = @('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll') | ForEach-Object { @{name=$_;productVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $output $_)).ProductVersion} }
     gameVersion = '1.5.78.11833 Windows / Unity 2020.2.2f1'
     vanillaAssemblySha256 = 'FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0'
@@ -97,7 +96,7 @@ $manifest = [ordered]@{
 $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $package 'manifest.json') -Encoding UTF8
 $taskWindowsZip=Join-Path $root ('dist\'+$taskPackageName+'-windows.zip')
 Write-HollowArchive -Destination $taskWindowsZip -BasePath $package -Files @(Get-HollowSourceFiles -Path $package)
-$sources = 'src','tests','scripts','docs','README.md','LICENSE','HKMP-LICENSE','THIRD-PARTY.md','Directory.Build.props','.gitignore'
+$sources = 'src','tests','scripts','README.md','LICENSE','HKMP-LICENSE','THIRD-PARTY.md','Directory.Build.props','.gitignore'
 # Exclude build output and the user's game assemblies from the corresponding source archive.
 $sourceZip = Join-Path $root ('dist\'+$taskPackageName+'-source.zip')
 $taskSourceFiles=@(
@@ -105,6 +104,7 @@ $taskSourceFiles=@(
         $path = Join-Path $root $name
         Get-HollowSourceFiles -Path $path
     }
+    Get-HollowDocumentationFiles -Root $root -Version $version -Audience Repository
 )
 Write-HollowArchive -Destination $sourceZip -BasePath $root -Files $taskSourceFiles
 Update-HollowChecksums -Directory (Join-Path $root 'dist') -ChangedArchives ([IO.Path]::GetFileName($taskWindowsZip)),([IO.Path]::GetFileName($sourceZip)) -Rebuild:$RebuildChecksums

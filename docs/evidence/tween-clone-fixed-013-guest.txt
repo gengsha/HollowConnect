@@ -1,6 +1,0 @@
-2026-10-13T14:40:35.5620296Z PASS menu
-2026-10-13T14:40:39.9320042Z PASS unsaved character
-2026-10-13T14:40:39.9827572Z TWEEN CLONE before activation copied=0 native=2
-2026-10-13T14:40:40.5963866Z PASS runtime tween cloning: replica activation clean, native arguments intact, fresh replica tween moves
-2026-10-13T14:40:40.6388167Z PASS both tween-clone-checked
-2026-10-13T14:40:40.6388167Z FINAL PASS runtime tween clone lifecycle; muted audio

@@ -2,9 +2,9 @@
 
 本目录只整理当前源码与已有证据，没有启动任何测试。模式、套件、参数、单项断言是不同层级，互有重叠，不能把数量相加当作独立实机测试总数。0.1.22 按用户要求直接升版打包，未追加运行测试。
 
-2026-10-19 新增关门精英战专项：`Run-Local-Battle-Suite.ps1`，覆盖真菌荒地双蘑菇巨怪的两端先入、部分／全部击杀后进入，以及同房间延后触发；每种交换房间权威。复现、修复与本轮证据单独记录在 [关门战结算](LOCAL-BATTLE-COMPLETION-2026-10-19.md)，以下历史结果保持原口径。
+2026-10-19 新增关门精英战专项：`Run-Local-Battle-Suite.ps1`，覆盖真菌荒地双蘑菇巨怪的两端先入、部分／全部击杀后进入，以及同房间延后触发；每种交换房间权威。复现、修复与本轮证据单独记录在 [关门战结算](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/LOCAL-BATTLE-COMPLETION-2026-10-19.md)，以下历史结果保持原口径。
 
-2026-10-20 剧情灵魂大师定向核实：同场景门外队友、永久进度共享开/关，两组均复现房主完成后队友不开门；共享开启能补上下砸，不能解除该挡板。诊断完成不算功能验收通过，见 [灵魂大师核实](SOUL-MASTER-VERIFICATION-2026-10-20.md)。
+2026-10-20 剧情灵魂大师定向核实：同场景门外队友、永久进度共享开/关，两组均复现房主完成后队友不开门；共享开启能补上下砸，不能解除该挡板。诊断完成不算功能验收通过，见 [灵魂大师核实](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/SOUL-MASTER-VERIFICATION-2026-10-20.md)。
 
 ## 当前结果口径
 
@@ -17,7 +17,7 @@
 | 0.1.22 新 DLL | 升版编译和打包 | 未追加核心/游戏/安装器运行 |
 | 帧性能 | 四 Boss × 两端 × 30 秒已有记录 | 白色防御者客机有一次约 100.84 ms 未归因峰值；不宣称所有卡顿消失 |
 
-证据：[稳定性修复记录](STABILITY-FIX-VERIFICATION-2026-10-17.md)、[回椅专项](evidence/emergency-bench-2026-10-17.json)、[0.1.22 打包记录](evidence/runtime-room-0.1.22.json)。
+证据：[稳定性修复记录](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/STABILITY-FIX-VERIFICATION-2026-10-17.md)、[回椅专项](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/evidence/emergency-bench-2026-10-17.json)、[0.1.22 打包记录](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/evidence/runtime-room-0.1.22.json)。
 
 ## 核心回归内容
 
@@ -553,7 +553,7 @@
 - [tests/Smoke/CoveragePerformanceChecks.cs](../tests/Smoke/CoveragePerformanceChecks.cs)
 - [tests/Smoke/CoveragePlayerMotionChecks.cs](../tests/Smoke/CoveragePlayerMotionChecks.cs)
 - [tests/Smoke/CoverageProbe.cs](../tests/Smoke/CoverageProbe.cs)
-- [tests/Smoke/CoverageRadianceChecks.cs](../tests/Smoke/CoverageRadianceChecks.cs)：`HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS` / `HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS`，原生阶段、双端坠落复位和跨房迟入；实际结果见 [辐光修复记录](RADIANCE-BOSS-FIX-2026-10-18.md)。
+- [tests/Smoke/CoverageRadianceChecks.cs](../tests/Smoke/CoverageRadianceChecks.cs)：`HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS` / `HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS`，原生阶段、双端坠落复位和跨房迟入；实际结果见 [辐光修复记录](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/RADIANCE-BOSS-FIX-2026-10-18.md)。
 - [tests/Smoke/CoverageSceneGeometry.cs](../tests/Smoke/CoverageSceneGeometry.cs)
 - [tests/Smoke/CoverageWarpChecks.cs](../tests/Smoke/CoverageWarpChecks.cs)
 - [tests/Smoke/CoverageWarpTravelChecks.cs](../tests/Smoke/CoverageWarpTravelChecks.cs)
@@ -591,30 +591,30 @@
 
 ## 2026-10-19 本地关门战风险补测
 
-2026-10-19 本地关门战修复另有 [11 组双端风险补测](LOCAL-BATTLE-RISKS-2026-10-19.md)，覆盖重置接收边界、离房重入、断线接管、假骑士阶段、格鲁兹之母及青铜竞技场原版 28 波；每组均通过严格日志并记录相同生产 DLL 哈希。它补充本轮修改的相关覆盖，不改变下面全游戏／真实双机等范围限制。
+2026-10-19 本地关门战修复另有 [11 组双端风险补测](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/LOCAL-BATTLE-RISKS-2026-10-19.md)，覆盖重置接收边界、离房重入、断线接管、假骑士阶段、格鲁兹之母及青铜竞技场原版 28 波；每组均通过严格日志并记录相同生产 DLL 哈希。它补充本轮修改的相关覆盖，不改变下面全游戏／真实双机等范围限制。
 
 ## 当前仍不在已验证覆盖内
 
-- 真实保存后退出／重读仍待自动化验证；回椅专项拦截磁盘写入。用户已确认快捷键救回真实坏档，此项为 [用户实档 PASS](evidence/user-dead-save-recovery-2026-10-18.json)。
+- 真实保存后退出／重读仍待自动化验证；回椅专项拦截磁盘写入。用户已确认快捷键救回真实坏档，此项为 [用户实档 PASS](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/evidence/user-dead-save-recovery-2026-10-18.json)。
 - 真实两台机器、用户 FRP 网络及目标分辨率/144 FPS 长时间压力。
 - 游戏全部 Boss 全招式、三档竞技场逐波通关、完整五门和完整剧情长流程。
 - 尚未逐项运行的资源来源/参数组合；没有自动最近 100 项选择器。
-- 原因未知的历史问题不会因后续通过自动关闭，见 [当前账本](evidence/runtime-blockers-0.1.22.json)。
+- 原因未知的历史问题不会因后续通过自动关闭，见 [当前账本](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/evidence/runtime-blockers-0.1.22.json)。
 
 ## 辐光平台补充专项
 
-**用户在 0.1.23 仍复现缺平台。** 以下旧六组未实际渲染镜头，也未覆盖宣战前迟入，不能证明该问题已解决。0.1.24 起套件默认执行实际镜头渲染和逐平台承重检查，增加 `-ArrivalStage before-challenge` 的四组普通辐光入场检查。原因及失败证据见 [渲染回调复查](RADIANCE-RENDER-CALLBACK-AUDIT-2026-10-18.md)，新结果见 [0.1.24 更新说明](UPDATE-0.1.24.md)。
+**用户在 0.1.23 仍复现缺平台。** 以下旧六组未实际渲染镜头，也未覆盖宣战前迟入，不能证明该问题已解决。0.1.24 起套件默认执行实际镜头渲染和逐平台承重检查，增加 `-ArrivalStage before-challenge` 的四组普通辐光入场检查。原因及失败证据见 [渲染回调复查](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/RADIANCE-RENDER-CALLBACK-AUDIT-2026-10-18.md)，新结果见 [0.1.24 更新说明](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/UPDATE-0.1.24.md)。
 
 [Run-Radiance-Arena-Suite.ps1](../tests/Smoke/Run-Radiance-Arena-Suite.ps1) 运行雕像／五门无上辐光和普通剧情辐光各两种迟入方式，含双方先入顺序及一组固定种子网络故障。
 [CoverageRadianceArenaChecks.cs](../tests/Smoke/CoverageRadianceArenaChecks.cs) 对照完整平台集合、阶段锁区、爬升台阶激活时间，并验证低／中／高台阶承重、控制和 viewport。相关核心回归新增本轮记录为 30 passed / 0 failed。
-具体运行、哈希及未覆盖边界见 [平台修复记录](RADIANCE-PLATFORM-FIX-2026-10-18.md) 和 [机器证据](evidence/radiance-platform-runtime-2026-10-18.json)。不把上次辐光包的三组通过扩写为本轮平台专项通过。
+具体运行、哈希及未覆盖边界见 [平台修复记录](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/RADIANCE-PLATFORM-FIX-2026-10-18.md) 和 [机器证据](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/evidence/radiance-platform-runtime-2026-10-18.json)。不把上次辐光包的三组通过扩写为本轮平台专项通过。
 
-0.1.24 追加的十组实际渲染检查已通过，覆盖宣战前三座平台和全部二阶段／爬升平台；每一座均以真实重力逐项检查承重。测试实现另见 [RadianceEntryVisualChecks.cs](../tests/Smoke/RadianceEntryVisualChecks.cs)，最终构建结果见 [0.1.24 机器证据](evidence/radiance-render-runtime-2026-10-18.json)。旧六组证据继续保留，不能替代本轮结果。
+0.1.24 追加的十组实际渲染检查已通过，覆盖宣战前三座平台和全部二阶段／爬升平台；每一座均以真实重力逐项检查承重。测试实现另见 [RadianceEntryVisualChecks.cs](../tests/Smoke/RadianceEntryVisualChecks.cs)，最终构建结果见 [0.1.24 机器证据](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/evidence/radiance-render-runtime-2026-10-18.json)。旧六组证据继续保留，不能替代本轮结果。
 
 ## 2026-10-29 Boss 重入死亡存档专项
 
-[Run-Boss-Reentry.ps1](../tests/Smoke/Run-Boss-Reentry.ps1) 支持 `host`、`guest`、`private`、`no-effects` 四组，使用 `boss-reentry` 模式和现有双端隔离副本。覆盖毛里克原生入场、死亡、碎片碰撞领奖、原远端先重入；当前 `private` 也验证双方各自领奖，且对方拾取不会代领自己的碎片。首轮旧 `private` 结果仅覆盖死亡存档与重入，后续完整领奖结果另行绑定新构建哈希。边界断言另检查显式/隐式存档标识、同名子对象、附加场景标识、阶段零血、重复/旧血量包、明确生命重置和原生半永久重置。修复与分轮验收范围见 [本轮说明](BOSS-REENTRY-FIX-2026-10-29.md)。
+[Run-Boss-Reentry.ps1](../tests/Smoke/Run-Boss-Reentry.ps1) 支持 `host`、`guest`、`private`、`no-effects` 四组，使用 `boss-reentry` 模式和现有双端隔离副本。覆盖毛里克原生入场、死亡、碎片碰撞领奖、原远端先重入；当前 `private` 也验证双方各自领奖，且对方拾取不会代领自己的碎片。首轮旧 `private` 结果仅覆盖死亡存档与重入，后续完整领奖结果另行绑定新构建哈希。边界断言另检查显式/隐式存档标识、同名子对象、附加场景标识、阶段零血、重复/旧血量包、明确生命重置和原生半永久重置。修复与分轮验收范围见 [本轮说明](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/BOSS-REENTRY-FIX-2026-10-29.md)。
 
 ## 2026-10-29 共享血量温泉补魂
 
-[LinkedRestChecks.cs](../tests/Smoke/LinkedRestChecks.cs) 的原生休息流程新增补魂验证：椅子／温泉混合与不同温泉全员就位后可补魂；有人起身后，温泉不能恢复主槽或备用灵魂，普通灵魂获取仍有效；退房移除模式钩子后可单人泡泉补魂。4 项相关核心检查和 1 组隔离双端专项通过，生产哈希与范围见 [专项证据](evidence/linked-spring-soul-2026-10-29.json)。
+[LinkedRestChecks.cs](../tests/Smoke/LinkedRestChecks.cs) 的原生休息流程新增补魂验证：椅子／温泉混合与不同温泉全员就位后可补魂；有人起身后，温泉不能恢复主槽或备用灵魂，普通灵魂获取仍有效；退房移除模式钩子后可单人泡泉补魂。4 项相关核心检查和 1 组隔离双端专项通过，生产哈希与范围见 [专项证据](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/evidence/linked-spring-soul-2026-10-29.json)。

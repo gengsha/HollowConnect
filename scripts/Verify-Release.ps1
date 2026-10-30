@@ -1,6 +1,7 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$UserRequestedRelease)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'PackageDocumentation.ps1')
 $version='0.2.5'
 if($UserRequestedRelease -and $Playtest){throw 'Choose one release channel.'}
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
@@ -92,6 +93,14 @@ foreach ($kind in 'windows','source') {
         $files=@($archive.Entries | Where-Object { $_.Name.Length -gt 0 })
         $counts[$kind]=$files.Count
         if ($files.Count -eq 0) { throw "Empty $kind archive." }
+        if ($manifest.documentationVersion -eq 1) {
+            $taskAudience=if ($kind -eq 'windows') { 'Player' } else { 'Repository' }
+            $taskDocAuthorization=if ($kind -eq 'windows' -and ($Playtest -or $UserRequestedRelease)) { $taskAuthorizationRelative } else { '' }
+            $taskExpectedDocs=@(Get-HollowDocumentationFiles -Root $root -Version $version -Audience $taskAudience -AuthorizationPath $taskDocAuthorization |
+                ForEach-Object { $_.FullName.Substring($root.Length+1).Replace('\','/') })
+            $taskActualDocs=@($files | ForEach-Object { $_.FullName.Replace('\','/') } | Where-Object { $_.StartsWith('docs/') })
+            if (@(Compare-Object $taskExpectedDocs $taskActualDocs).Count) { throw "Unexpected or missing documentation in $kind archive." }
+        }
         foreach ($entry in $files) {
             $relative=$entry.FullName.Replace('\','/')
             if ($relative -match '(^|/)(\.test-results|vendor|bin|obj)/|HollowConnect\.Smoke\.dll$|user\d+.*\.dat$|(?:unity|engine)\.log$|\.draft$') { throw "Private/build/draft file in $kind : $relative" }
@@ -127,7 +136,8 @@ foreach ($file in $markdown) {
         if ($target -and !(Test-Path -LiteralPath (Join-Path $file.DirectoryName $target))) { throw "Broken markdown link: $($file.Name) -> $target" }
     }
 }
-$ledger=Get-Content -LiteralPath (Join-Path $package 'docs\AUDIT-REMEDIATION-0.1.7.md') -Raw
+$taskAuditPath=if ($manifest.documentationVersion -eq 1) { 'docs/evidence/audit-remediation-0.1.7.md' } else { 'docs/AUDIT-REMEDIATION-0.1.7.md' }
+$ledger=Get-Content -LiteralPath (Join-Path $package $taskAuditPath) -Raw
 $ids=@([regex]::Matches($ledger,'(?m)^\| (S[1-5]-\d{2}) \|') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
 if ($ids.Count -ne 49) { throw "Unexpected audit ledger count: $($ids.Count)" }
 foreach ($kind in 'windows','source') {

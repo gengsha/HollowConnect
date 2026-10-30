@@ -1,8 +1,0 @@
-2026-10-13T15:00:12.2247836Z PASS menu ready
-2026-10-13T15:00:16.3470141Z PASS unsaved character ready
-2026-10-13T15:00:17.2655110Z FIXTURE PROFILE MENU scene=Town stack=  at System.Environment.get_StackTrace () [0x00000] in <9577ac7a62ef43179789031239ba8798>:0
-  at Hkmp.Ui.UiManager+<GoToSaveMenu>d__45.MoveNext () [0x00000] in <6f5ad4ccc9de424c8fdb27951a140178>:0
-2026-10-13T15:00:17.2832180Z PASS connected
-2026-10-13T15:00:17.3164347Z PASS both connected
-2026-10-13T15:00:17.3174374Z PASS baseline selects profile menu after unsaved character was already loaded
-2026-10-13T15:00:17.3185152Z FAIL System.Exception: Invalid in-memory fixture opened a second profile menu
