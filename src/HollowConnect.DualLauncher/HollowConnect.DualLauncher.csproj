@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>HollowConnect双开</AssemblyName>
+    <ApplicationManifest>../HollowConnect.Installer/app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <InternalsVisibleTo Include="HollowConnect.DualLauncher.Tests" />
+  </ItemGroup>
+</Project>

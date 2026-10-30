@@ -36,7 +36,9 @@ public sealed class ProbeMod : Mod {
         On.HeroController.HazardRespawn += (orig, hero) => SimulationFrames(orig(hero));
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-reentry")
             On.HeroController.EnterScene += (orig, hero, gate, delay) => SimulationFrames(orig(hero, gate, delay));
-        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_EXIT_CHECK") == "1" ||
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_TRANSITION_CONTACT") == "1" ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_GATE_CHECK")) ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_EXIT_CHECK") == "1" ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOSS_RETARGET")) ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_COLLISION_CHECK")) ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS") == "1" ||

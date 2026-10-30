@@ -1,0 +1,40 @@
+{
+  "version": "0.2.5",
+  "createdAtUtc": "2026-10-30T09:26:01.2033295Z",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.2.5-l12",
+  "certifiesNewVersionHashes": false,
+  "releaseReady": false,
+  "retestOmitted": true,
+  "scope": "Version bump and release packaging after the completed 0.2.4-l12 development validation. No new Unity game runs were performed after changing only CoopMod.Version and the release metadata.",
+  "priorValidation": {
+    "productionVersion": "0.2.4",
+    "networkCompatibility": "0.2.4-l12",
+    "corePassed": 71,
+    "path": ".analysis/observation-bench-20261030/final-results.json",
+    "production": {
+      "HKMP": "69E42D567D9711E75E23DB9426AD2C707011102CF0AB318F9AD15EFBF27EC1E9",
+      "HollowConnect": "0229E36F9AF386A46A2A4A2A97F7701566B3CA48C8F9C29473AED7BDA191AC56",
+      "Core": "DB007F5D089094E54D8F34420F441DF8CD570BB12FBF378BE847B1F72E9F200D"
+    },
+    "groups": {
+      "roomMatrix": 12,
+      "nativeHornet": 2,
+      "existingSpecialties": 3,
+      "observation": 9
+    },
+    "dualClientPassed": 26
+  },
+  "productionSourceChange": "CoopMod.Version 0.2.4 -> 0.2.5; NetworkVersion derives 0.2.5-l12. Runtime implementation and protocol revision remain unchanged.",
+  "currentProduction": {
+    "HollowConnect": "BDB34D1F03127BFAAC6C763C6C4D15A6864ED1656CBEF9BF84ECFC15EBBBF862",
+    "HKMP": "69E42D567D9711E75E23DB9426AD2C707011102CF0AB318F9AD15EFBF27EC1E9",
+    "Core": "DB007F5D089094E54D8F34420F441DF8CD570BB12FBF378BE847B1F72E9F200D"
+  },
+  "limits": [
+    "The 71 core and 26 dual-client results retain their original 0.2.4-l12 hashes.",
+    "The 0.2.5 version bump was compiled and package/installer integrity is checked separately.",
+    "No claim of new-version game certification, three-player target cycling, all-boss coverage, or cross-machine latency coverage.",
+    "Historical unresolved findings remain in the inherited blocker ledger."
+  ]
+}

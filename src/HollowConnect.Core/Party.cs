@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HollowConnect.Core;
 
-public enum Life { Loading, Alive, Down, Resetting, Returning, Spectating }
+public enum Life { Loading, Alive, Down, Resetting, Returning, Spectating, Observing, ObservationReturning }
 public sealed class Member {
     public ushort Id;
     public string Name = "", Scene = "", CheckpointScene = "", CheckpointMarker = "";
@@ -17,6 +17,7 @@ public sealed class Member {
     public bool InBossBattle;
     public int RescuesUsed;
     public uint RestSerial;
+    public uint ObservationSerial;
     public double Seen;
 }
 
@@ -46,7 +47,7 @@ public sealed partial class Party {
         m.Sequence = sequence; m.Seen = now;
         // Down's reliable coordinates are the death anchor. A heartbeat sent
         // just before death may arrive later, even from the preceding room.
-        if (!Defeated(m.Life)) { m.Scene = scene; m.X = x; m.Y = y; m.InBossBattle = inBossBattle; }
+        if (!Defeated(m.Life) && !Observer(m.Life)) { m.Scene = scene; m.X = x; m.Y = y; m.InBossBattle = inBossBattle; }
         if (!Defeated(m.Life) || scene == m.Scene && x == m.X && y == m.Y) {
             // Map projection and teleport readiness are independent. Native
             // shops, benches and cutscenes can temporarily relinquish input
@@ -55,15 +56,15 @@ public sealed partial class Party {
             m.HasMap = hasMap && Finite(mx) && Finite(my);
             m.MapX = mx; m.MapY = my;
         }
-        if (m.Life == Life.Returning || m.Life == Life.Spectating) m.HasMap = false;
+        if (m.Life == Life.Returning || m.Life == Life.Spectating || Observer(m.Life)) m.HasMap = false;
         // A delayed Alive heartbeat cannot resurrect a downed player.
-        if (!Resetting && !Defeated(m.Life) && m.Life != Life.Returning)
+        if (!Resetting && !Defeated(m.Life) && m.Life != Life.Returning && !Observer(m.Life))
             m.Life = ready ? Life.Alive : Life.Loading;
         return true;
     }
     public bool Down(ushort id, uint round, uint serial, string scene, float x, float y, double now, bool inBossBattle = false) {
         if (Resetting || round != Round || !Members.TryGetValue(id, out var m) || serial <= m.DownSerial ||
-            Defeated(m.Life) || m.Life == Life.Returning || string.IsNullOrEmpty(scene) || scene.Length > 128 || !Finite(x) || !Finite(y)) return false;
+            Defeated(m.Life) || Observer(m.Life) || m.Life == Life.Returning || string.IsNullOrEmpty(scene) || scene.Length > 128 || !Finite(x) || !Finite(y)) return false;
         if (m.Scene != scene) { m.HasMap = false; m.InBossBattle = false; }
         m.Scene = scene; m.X = x; m.Y = y; m.Seen = now;
         m.InBossBattle = inBossBattle || m.InBossBattle;
@@ -113,11 +114,12 @@ public sealed partial class Party {
         return true;
     }
     public bool BeginWipe() {
-        if (Resetting || Members.Count == 0 || Members.Values.Any(m => !Defeated(m.Life))) return false;
+        if (Resetting || !Members.Values.Any(m => Defeated(m.Life)) || Members.Values.Any(m => !Defeated(m.Life) && !Observer(m.Life))) return false;
         Round++; Resetting = true;
         foreach (var m in Members.Values) {
-            m.ReturnScene = m.CheckpointScene; m.ReturnMarker = m.CheckpointMarker;
-            m.ReturnRespawnType = m.CheckpointRespawnType;
+            m.ReturnScene = Observer(m.Life) ? "Town" : m.CheckpointScene;
+            m.ReturnMarker = Observer(m.Life) ? "RestBench" : m.CheckpointMarker;
+            m.ReturnRespawnType = Observer(m.Life) ? 1 : m.CheckpointRespawnType;
             m.Life = Life.Resetting; m.ResetReady = false; m.HasMap = false;
         }
         return true;

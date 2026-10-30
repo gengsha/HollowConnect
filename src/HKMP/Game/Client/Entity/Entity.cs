@@ -92,6 +92,7 @@ internal class Entity {
     internal bool IsNativeAuthority => !destroyed && _isSceneHostDetermined && !_isControlled;
     internal BossRoarLock RoarLock { get; private set; }
     private BossIntroCamera introCamera;
+    private LocalBattleSignals battleSignals;
 
     /// <summary>
     /// Host-client pair for the game objects.
@@ -330,6 +331,7 @@ internal class Entity {
             Client = Object.Client.GetComponents<PlayMakerFSM>().OrderBy(f => f.FsmName, StringComparer.Ordinal).ToList()
         };
         PrepareArenaMusic();
+        battleSignals = new LocalBattleSignals(this, _fsms.Host, _fsms.Client, PublishFsmBool);
         if (Type == EntityType.Grimm || Type == EntityType.TheCollector)
             RoarLock = new BossRoarLock(this, _fsms.Host, _fsms.Client, PublishFsmBool);
         if (Type == EntityType.FalseKnight && SourceScene == "GG_Failed_Champion")
@@ -342,6 +344,7 @@ internal class Entity {
         foreach (var fsm in _fsms.Host) {
             ProcessHostFsm(fsm);
         }
+        BossGateCompletion.Track(Id, Type, Object.Host.scene, _fsms.Host);
 
         // Remove all components that (re-)activate FSMs
         foreach (var fsmActivator in Object.Client.GetComponents<FSMActivator>()) {
@@ -371,6 +374,10 @@ internal class Entity {
         foreach (var body in Object.Client.GetComponentsInChildren<Rigidbody2D>(true)) {
             body.velocity = UnityEngine.Vector2.zero; body.angularVelocity = 0; body.gravityScale = 0;
             body.bodyType = RigidbodyType2D.Kinematic; body.useFullKinematicContacts = true;
+        }
+        if (Type == EntityType.ColosseumWall) {
+            ColosseumBoundary.Prepare(Object.Host, _netClient);
+            ColosseumBoundary.Prepare(Object.Client, _netClient);
         }
         if (Type == EntityType.DynamicHazard) {
             // Unknown native projectile controllers must not integrate motion
@@ -528,6 +535,7 @@ internal class Entity {
         RoarLock?.StateEntered(state);
         introCamera?.StateEntered(state);
         BossDefeatSignals.State(Type, Id, state);
+        ChallengePromptComponent.ObserveThrone(this, state);
         var index = _fsms.Host.FindIndex(f => f != null && ReferenceEquals(f.Fsm, state.Fsm));
         if (index < 0 || index >= byte.MaxValue) return;
         // State entry precedes native OnEnter side effects (including activating
@@ -784,6 +792,7 @@ internal class Entity {
         if (_isControlled || IsArenaMusicBroadcast(self)) {
             return;
         }
+        battleSignals?.ActionEntered(self);
 
         if (!_hookedActions.TryGetValue(self, out var hookedEntityAction)) {
             // PlayMaker/Godhome can rebuild action instances after our scene
@@ -830,6 +839,7 @@ internal class Entity {
     private void OnUpdate() {
         RoarLock?.Tick();
         introCamera?.Tick();
+        battleSignals?.Tick();
         if (!_isControlled && _isSceneHostDetermined && entranceEvents.Count!=0) ReplayEntranceEvents();
         if (!_isControlled && Object.Host == null && (Id & 0x8000000000000000UL) != 0) {
             LifetimeEnded?.Invoke(this); return;
@@ -1697,6 +1707,7 @@ internal class Entity {
                     BossDefeatSignals.ApplyLocalDefeatRecord(Type, SourceScene, states[data.CurrentState]);
                     BossDefeatSignals.ApplyFinalCinematicRecord(Type, SourceScene, states[data.CurrentState]);
                     BossGateCompletion.Observe(Type, SourceScene, states[data.CurrentState]);
+                    ChallengePromptComponent.ObserveThrone(this, states[data.CurrentState]);
                     LocalBattleCompletion.ObserveScriptedCompletion(this, states[data.CurrentState]);
                 }
             }
@@ -1797,6 +1808,7 @@ internal class Entity {
         ApplyArenaMusic();
         RoarLock?.Tick();
         introCamera?.Tick();
+        battleSignals?.Tick();
     }
 
     private void PublishFsmBool(int fsmIndex, FsmBool value) {

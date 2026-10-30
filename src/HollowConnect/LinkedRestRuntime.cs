@@ -30,7 +30,7 @@ public sealed partial class CoopRuntime {
         (a.GetType().GetField("methodName")?.GetValue(a) as FsmString)?.Value == "MaxHealth"));
     private LinkedRestKind LocalLinkedRest() {
         var hero = HeroController.instance;
-        if (!LinkedHealthRuleEnabled || !Playable || Down || Resetting || Returning || changingScene || hero == null ||
+        if (!LinkedHealthRuleEnabled || !Playable || Down || Observing || Resetting || Returning || changingScene || hero == null ||
             hero.cState.dead || hero.cState.hazardDeath || hero.cState.hazardRespawning || hero.cState.transitioning ||
             GameManager.instance.isPaused || Time.timeScale <= 0) return LinkedRestKind.None;
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;

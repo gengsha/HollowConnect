@@ -61,11 +61,11 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     private float bossExtraHealth, bossHealthDecay;
     internal double CurrentBossHealthMultiplier() {
         if (!Connected || !bossHealthScaling || Resetting || Returning) return 1;
-        var count = 1;
+        var count = Observing ? 0 : 1;
         var now = Now;
         foreach (var peer in Peers.Values)
             if (peer.State != null && peer.State.Scene == CoopContext.LocalScene && now - peer.Seen < 2 &&
-                peer.Life != Life.Returning) count++;
+                peer.Life != Life.Returning && !Party.Observer(peer.Life)) count++;
         return BossHealthScale.Multiplier(count, bossExtraHealth);
     }
     private bool takingDamage, nativeHitPlayed;
@@ -113,7 +113,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     internal bool Playable => HeroController.instance != null && GameManager.instance != null &&
         !GameManager.instance.IsInSceneTransition && HeroController.instance.isHeroInPosition;
     private bool CanStartWarp => Playable && !SceneUtil.IsNonGameplayScene(UnitySceneManager.GetActiveScene().name) &&
-        !Down && !Resetting && !Returning && !changingScene &&
+        !Down && !Resetting && !Returning && !changingScene && !Observing &&
         HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished &&
         !HeroController.instance.cState.dead && !HeroController.instance.cState.hazardDeath &&
         !HeroController.instance.cState.hazardRespawning && !HeroController.instance.cState.transitioning &&
@@ -162,6 +162,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             Down = Down,
             Resetting = Resetting,
             Returning = Returning,
+            VoluntaryObservation = Observing,
             HasNativeDeath = personalDeath != null,
             HasBossContextGuard = BossTravel.HasTransientContext,
             HasCheckpointReload = checkpointReload != null,
@@ -192,7 +193,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             snapshot.HeroAcceptingInput, snapshot.HeroControlRelinquished, snapshot.HeroBoxInactive, snapshot.BodySimulated,
             snapshot.HeroInPosition, snapshot.HeroTransitioning, snapshot.TransitionState,
             snapshot.ChangingScene, snapshot.Down, snapshot.Resetting, snapshot.Returning, snapshot.WarpScene,
-            snapshot.HasCheckpointReload, snapshot.HasTeammateWarp);
+            snapshot.HasCheckpointReload, snapshot.HasTeammateWarp, snapshot.VoluntaryObservation);
         if (signature == debugSignature) return;
         debugSignature = signature;
         var risks = snapshot.RiskCodes();
@@ -223,6 +224,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     // finish; the White Defender repair is scoped to its known stale entry.
     internal void RecoverTransientState() {
         DebugEvent("recovery-requested", DebugEventSeverity.Warning);
+        if (Observing) { RequestObservationReturn(); return; }
         if (checkpointReload != null) StopCoroutine(checkpointReload);
         if (teammateWarp != null) StopCoroutine(teammateWarp);
         checkpointReload = teammateWarp = null;
@@ -269,7 +271,9 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopContext.RestoreBossContext = BossTravel.RestoreTransientContext;
         CoopContext.BossTransitionReady = () => Playable && !Down && !Resetting && !Returning && !changingScene && !BossSettlementPending;
         CoopContext.AwaitBossSettlement = AwaitBossSettlement;
-        CoopContext.LocalRescueDown = () => Connected && Down;
+        CoopContext.LocalRescueDown = () => Connected && (Down || Observing);
+        CoopContext.NonCombatAttack = NonCombatAttack;
+        CoopContext.LocalObservation = () => Observing;
         CoopContext.LivingBossTarget = LivingBossTarget;
         CoopContext.FlexibleBossTargetingOn = () => Connected && flexibleBossTargeting;
         CoopContext.BossTargetSession = () => Session;
@@ -289,6 +293,11 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         map.Register();
         On.HeroController.Die += OnDie;
         On.HeroController.TakeDamage += TakeDamage;
+        On.HeroController.RelinquishControl += ObservationRelinquishControl;
+        On.HeroController.RegainControl += ObservationRegainControl;
+        On.HeroController.IgnoreInput += ObservationIgnoreInput;
+        On.HeroController.RelinquishControlNotVelocity += ObservationRelinquishNotVelocity;
+        On.HeroController.Pause += ObservationPause;
         On.HeroAudioController.PlaySound += TrackHitSound;
         ModHooks.AfterTakeDamageHook += AfterTakeDamage;
         On.CameraController.LateUpdate += CameraUpdate;
@@ -310,6 +319,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     private void OnConnect() {
+        if (Observing) { api.ClientManager.Disconnect(); return; }
         CoopMod.RoomRuleRevision++;
         ResetLinkedHealth();
         flexibleBossTargeting = false;
@@ -329,7 +339,9 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         Send(new Message { Kind = Kind.Hello });
     }
     private void OnDisconnect() {
-        var linkedDeath = linkedHealthMode ? personalDeath ?? CaptureLinkedDisconnectDeath() : null;
+        var wasObserving = Observing;
+        if (wasObserving) observationOffline = true;
+        var linkedDeath = linkedHealthMode && !wasObserving ? personalDeath ?? CaptureLinkedDisconnectDeath() : null;
         ResetLinkedHealth();
         ResetDamageRanking();
         CoopMod.RoomRuleRevision++;
@@ -355,6 +367,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         personalDeath = null; entryProtection.Clear(); protectionSession = "";
         if (linkedDeath != null && !linkedDeath.Started) linkedDeath.Start();
         debugSignature = "";
+        if (wasObserving) { if (!ObservationReturning) RequestObservationReturn(); else if (observationReturn == null) BeginObservationReturn(); }
     }
     private void Send(Message message) {
         if (!api.NetClient.IsConnected) return;
@@ -414,6 +427,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             // Welcome may carry the current round to a late joiner who has
             // never released it. Completed rounds, however, cannot reopen.
             if (m.Round <= ReleasedRound || m.Round <= CoopContext.Epoch && Resetting || m.Round < CoopContext.Epoch) return;
+            var observerWipe = Observing;
             CoopContext.Epoch = m.Round; CoopContext.Resetting = true;
             if (LinkedHealthRuleEnabled) { linkedPending.Clear(); linkedDeathRequested = true; }
             CancelBenchReturn();
@@ -422,10 +436,20 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             RestoreSpectatorPeers();
             shades.Clear();
             Resetting = true; Down = false; readySent = false; Peers.Clear();
-            checkpointReload = StartCoroutine(ReloadCheckpoint(Session, m.Round)); return;
+            if (observerWipe) {
+                if (ObservationReturning && observationReturn == null && ObservationAtBench) { retryScene = "Town"; Lock(true); }
+                else { changingScene = true; BeginObservationReturn(); }
+            }
+            else checkpointReload = StartCoroutine(ReloadCheckpoint(Session, m.Round));
+            return;
         }
         if (m.Round != CoopContext.Epoch) return;
         switch (m.Kind) {
+            case Kind.ObservationStarted:
+            case Kind.ObservationDenied:
+            case Kind.ObservationReturn:
+            case Kind.ObservationReturned:
+                ReceiveObservation(m); break;
             case Kind.RescueStatus:
                 ReceiveRescueStatus(m); break;
             case Kind.BossVictory:
@@ -568,6 +592,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                 break;
             case Kind.Release:
                 if (!Resetting) break;
+                if (Observing) StopObservation();
                 ReleasedRound = m.Round;
                 Resetting = false; CoopContext.Resetting = false; readySent = false; Unlock(); personalDeath = null;
                 if (LinkedHealthRuleEnabled) {
@@ -604,6 +629,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     private void Update() {
         if (EmergencyShortcutPressed()) RequestEmergencyDirtmouthBench();
         if (emergencyBenchActive) return;
+        TickObservation();
         if (KeyPressed(KeyCode.F9)) ToggleDebugPanel();
         SampleDebugState();
         if (resourceSlot != CoopMod.Statistics || resourcePlayerData != PlayerData.instance) {
@@ -649,10 +675,11 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         }
         if (!Playable || Resetting || changingScene || Returning) return;
         RefreshPantheonRestProgress();
+        if (Shared && Time.unscaledTime >= nextProgress) { nextProgress = Time.unscaledTime + .5f; CheckProgress(); }
+        if (ObservationInput()) return;
         if (Down && !LinkedHealthRuleEnabled && !giveUpRequested && KeyPressed(CoopMod.Settings.GiveUpKey)) {
             RequestGiveUp();
         }
-        if (Shared && Time.unscaledTime >= nextProgress) { nextProgress = Time.unscaledTime + .5f; CheckProgress(); }
         if (KeyPressed(CoopMod.Settings.SelectTeammateKey)) {
             var ids = Peers.Where(p => p.Value.State != null).Select(p => p.Key).OrderBy(i => i).ToArray();
             if (ids.Length > 0) {
@@ -769,6 +796,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     private IEnumerator OnDie(On.HeroController.orig_Die orig, HeroController self) {
+        if (Observing) yield break;
         if (emergencyBenchActive) yield break;
         if (Connected && !Down && !Resetting && !Returning)
             Send(new Message { Kind = Kind.DeathCount, Serial = CoopMod.Statistics.Increment(localName) });
@@ -881,7 +909,9 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         }
         var hero = HeroController.instance;
         var camera = GameCameras.instance?.cameraController;
-        var ready = Playable && !changingScene && !Down && !Resetting && !Returning && hero.acceptingInput &&
+        // Observation has its own noncombat protection. Keep the ordinary
+        // entry grace independent so it is not restarted by our input lock.
+        var ready = Playable && !changingScene && !Down && !Resetting && !Returning && (hero.acceptingInput || Observing) &&
             !hero.cState.dead && !hero.cState.transitioning && hero.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION &&
             Time.timeScale > 0 && camera != null && camera.mode != CameraController.CameraMode.FROZEN &&
             api.ClientManager is Hkmp.Game.Client.ClientManager manager && manager.SceneSnapshotReady;
@@ -889,6 +919,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
     private void TakeDamage(On.HeroController.orig_TakeDamage orig, HeroController self, GameObject source,
         GlobalEnums.CollisionSide side, int damage, int hazard) {
+        if (Observing) return;
         if (emergencyBenchActive) return;
         if (Connected && (Down || Resetting || Returning)) return;
         if (EntryProtected && hazard == 1) return;
@@ -935,6 +966,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     private void CameraUpdate(On.CameraController.orig_LateUpdate orig, CameraController self) {
+        if (ObservationCameraUpdate(orig, self)) return;
         if (Down && self == deathCamera) self.SetMode(CameraController.CameraMode.FROZEN);
         orig(self);
         if (Down && self == deathCamera) {
@@ -950,7 +982,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
     internal GameObject PlayerObject(ushort id) => api.ClientManager.GetPlayer(id)?.PlayerObject;
     internal bool CanDreamNail(ushort id) {
-        if (id == LocalId || !Connected || !Playable || Down || Resetting || Returning ||
+        if (id == LocalId || !Connected || !Playable || Down || Resetting || Returning || Observing ||
             changingScene || GameManager.instance.isPaused || !PlayerData.instance.GetBool("hasDreamNail") ||
             HeroController.instance.cState.dead || HeroController.instance.cState.hazardDeath || HeroController.instance.cState.hazardRespawning) return false;
         var target = PlayerObject(id);
@@ -1393,6 +1425,9 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         style.normal.textColor = Color.white;
         if ((Connected || emergencyNotice) && Time.unscaledTime < statusUntil) GUI.Label(new Rect(0, 70, Screen.width, 36), status, style);
         if (Connected) {
+            if (Observing && !ObservationReturning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 78),
+                "正在观战：" + ObservationName + "\n" + CoopMod.Settings.ObserveKey + " 退出 · " + CoopMod.Settings.SelectTeammateKey +
+                " 切换队友\n退出回德特茅斯长椅 · 暂停可打开菜单", style);
             if (Down || Resetting || Returning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 70),
                 Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点" :
                 LinkedHealthRuleEnabled ? "团队生命耗尽 · 等待全队返回各自复活点" :
@@ -1427,7 +1462,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         GUILayout.Label("场景 " + snapshot.SceneName + " / GM " + snapshot.GameManagerScene + " / 入口 " + snapshot.EntryGateName, style);
         GUILayout.Label("转换 " + snapshot.IsInSceneTransition + " · Finished " + snapshot.HasFinishedEnteringScene + " · Hero位置 " + snapshot.HeroInPosition, style);
         GUILayout.Label("输入 " + snapshot.HeroAcceptingInput + " · 控制锁 " + snapshot.HeroControlRelinquished + " · HeroBox禁用 " + snapshot.HeroBoxInactive + " · 刚体 " + snapshot.BodySimulated, style);
-        GUILayout.Label("流程 changing=" + snapshot.ChangingScene + " down=" + snapshot.Down + " reset=" + snapshot.Resetting + " returning=" + snapshot.Returning, style);
+        GUILayout.Label("流程 changing=" + snapshot.ChangingScene + " down=" + snapshot.Down + " reset=" + snapshot.Resetting + " returning=" + snapshot.Returning + " observing=" + snapshot.VoluntaryObservation, style);
         GUILayout.Label("warp=" + snapshot.WarpScene + " entry=" + snapshot.WarpEntry + " retry=" + snapshot.RetryScene, style);
         GUILayout.Label("复活点=" + snapshot.RespawnScene + " / " + snapshot.RespawnMarkerName + " type=" + snapshot.RespawnType, style);
         GUILayout.Label("Boss sequence=" + snapshot.BossSequenceName + " in=" + snapshot.InBossSequence + " guard=" + snapshot.HasBossContextGuard + " gate=" + snapshot.BossReturnEntryGate, style);
@@ -1443,7 +1478,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         if (!debugRecoveryArmed) {
             if (GUILayout.Button("准备恢复临时状态")) debugRecoveryArmed = true;
         } else {
-            if (GUILayout.Button("确认恢复（不改存档）")) { RecoverTransientState(); debugRecoveryArmed = false; }
+            if (GUILayout.Button(Observing ? "退出观战并回椅" : "确认恢复（不改存档）")) { RecoverTransientState(); debugRecoveryArmed = false; }
         }
         if (GUILayout.Button("关闭")) { debugPanel = false; debugRecoveryArmed = false; }
         GUILayout.EndHorizontal();
@@ -1452,6 +1487,12 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     private void OnDestroy() {
+        StopObservation();
+        On.HeroController.RelinquishControl -= ObservationRelinquishControl;
+        On.HeroController.RegainControl -= ObservationRegainControl;
+        On.HeroController.IgnoreInput -= ObservationIgnoreInput;
+        On.HeroController.RelinquishControlNotVelocity -= ObservationRelinquishNotVelocity;
+        On.HeroController.Pause -= ObservationPause;
         ResetLinkedHealth();
         On.GameManager.BeginSceneTransitionRoutine -= TrackNativeTransition;
         GameManager.SceneTransitionBegan -= TrackNativeLoader;
@@ -1464,7 +1505,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopContext.BossTargetSession = null;
         CoopContext.ChooseBossTarget = null;
         CoopContext.BossTargetObject = null;
-        CoopContext.AttackSourcePlayer = null;
+        CoopContext.AttackSourcePlayer = null; CoopContext.NonCombatAttack = null; CoopContext.LocalObservation = null;
         CoopMod.ActiveRoomSettingLabel = null;
         CoopMod.RoomRuleRevision++;
         CoopContext.RemotePlayerOpacity = null; CoopContext.PlayerNameColor = null; CoopContext.BossHealthMultiplier = null;

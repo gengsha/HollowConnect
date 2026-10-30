@@ -102,6 +102,7 @@ public sealed class SaveSafetySnapshot {
     public bool Down;
     public bool Resetting;
     public bool Returning;
+    public bool VoluntaryObservation;
     public bool HasNativeDeath;
     public bool HasBossContextGuard;
     public bool HasCheckpointReload;
@@ -109,22 +110,25 @@ public sealed class SaveSafetySnapshot {
 
     public bool HasTransientLockRisk =>
         !IsInSceneTransition && (ChangingScene || HasCheckpointReload || HasTeammateWarp) ||
-        !IsInSceneTransition && !HeroDead && HeroControlRelinquished && !HeroAcceptingInput ||
+        HasUnexpectedControlLock ||
         HasBossContextGuard && !Connected || HasUnfinishedHeroExit;
 
     private bool HasUnfinishedHeroExit => !IsInSceneTransition && HasFinishedEnteringScene &&
         !HeroDead && !HeroHazardDeath && !HeroHazardRespawning && !Down && !Resetting && !Returning &&
         !HeroInPosition && !HeroAcceptingInput && HeroTransitioning && TransitionState == "EXITING_SCENE";
 
+    private bool HasUnexpectedControlLock => !IsInSceneTransition && !HeroDead &&
+        HeroControlRelinquished && !HeroAcceptingInput && !(Connected && VoluntaryObservation);
+
     public List<string> RiskCodes() {
         var result = new List<string>();
         if (!IsInSceneTransition && (ChangingScene || HasCheckpointReload || HasTeammateWarp))
             result.Add("transient-transition-without-native-load");
-        if (!IsInSceneTransition && !HeroDead && HeroControlRelinquished && !HeroAcceptingInput)
+        if (HasUnexpectedControlLock)
             result.Add("hero-control-lock");
-        if (HeroBoxInactive && !Down && !Resetting && !Returning && !IsInSceneTransition)
+        if (HeroBoxInactive && !(Connected && VoluntaryObservation) && !Down && !Resetting && !Returning && !IsInSceneTransition)
             result.Add("hero-box-left-inactive");
-        if (BodySimulated == false && !Down && !Resetting && !Returning && !IsInSceneTransition)
+        if (BodySimulated == false && !(Connected && VoluntaryObservation) && !Down && !Resetting && !Returning && !IsInSceneTransition)
             result.Add("hero-rigidbody-disabled");
         if (HasBossContextGuard && !Connected) result.Add("boss-context-pending-offline");
         if (HasUnfinishedHeroExit) result.Add("hero-exit-without-native-load");
@@ -146,6 +150,7 @@ public static class SafeDiagnosticsFormatter {
         Number(b, "respawnType", snapshot.RespawnType); Number(b, "peerCount", snapshot.PeerCount);
         Number(b, "resourceReceiptCount", snapshot.ResourceReceiptCount); Number(b, "sharedProgressCount", snapshot.SharedProgressCount);
         Bool(b, "connected", snapshot.Connected); Bool(b, "sessionPresent", snapshot.SessionPresent);
+        Bool(b, "voluntaryObservation", snapshot.VoluntaryObservation);
         Bool(b, "isInSceneTransition", snapshot.IsInSceneTransition); Bool(b, "hasFinishedEnteringScene", snapshot.HasFinishedEnteringScene);
         Bool(b, "heroInPosition", snapshot.HeroInPosition); Bool(b, "heroAcceptingInput", snapshot.HeroAcceptingInput);
         Bool(b, "heroControlRelinquished", snapshot.HeroControlRelinquished); Bool(b, "heroDead", snapshot.HeroDead);

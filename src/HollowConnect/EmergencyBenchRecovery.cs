@@ -31,11 +31,12 @@ public sealed partial class CoopRuntime {
     private IEnumerator TrackNativeTransition(On.GameManager.orig_BeginSceneTransitionRoutine orig,
         GameManager gm, GameManager.SceneLoadInfo info) {
         if (emergencyBenchActive && !emergencyAllowsNativeLoad) return IgnoreEmergencyTransition();
+        if (Observing && !ObservationReturning) RequestObservationReturn();
         var routine = orig(gm, info);
         if (NativeSceneLoad.GetValue(gm) == null) trackedTransition = routine;
         return routine;
     }
-    private void TrackNativeLoader(SceneLoad loader) => trackedLoader = loader;
+    private void TrackNativeLoader(SceneLoad loader) { if (Observing && !ObservationReturning) RequestObservationReturn(); trackedLoader = loader; }
     private IEnumerator IgnoreEmergencyTransition() {
         DebugEvent("emergency-bench-obsolete-transition-suppressed", DebugEventSeverity.Warning);
         yield break;
@@ -48,6 +49,8 @@ public sealed partial class CoopRuntime {
         // Never operate on it after that slot has been closed.
         if (gm == null || gm.profileID <= 0 || gm.gameState == GameState.MAIN_MENU ||
             gm.gameState == GameState.INACTIVE) return;
+        if (observationReturn != null) StopCoroutine(observationReturn);
+        observationReturn = null; StopObservation();
         emergencyBenchActive = true;
         emergencyStatusVisible = true;
         EmergencyNotice("紧急脱离：正在返回德特茅斯长椅…");

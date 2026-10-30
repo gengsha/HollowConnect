@@ -32,21 +32,25 @@ internal static class LocalWorldInteractions {
         On.HutongGames.PlayMaker.Fsm.OnTriggerExit2D -= Exit;
     }
     private static void Damage(On.DamageEnemies.orig_DoDamage orig, DamageEnemies self, GameObject target) {
-        if (!LocalWorldIsolation.Blocks(target, self.gameObject)) orig(self, target);
+        if (!ObserverEffect(self.gameObject) && !LocalWorldIsolation.Blocks(target, self.gameObject)) orig(self, target);
     }
     private static void Hit(On.HealthManager.orig_Hit orig, HealthManager self, HitInstance hit) {
-        if (!LocalWorldIsolation.Blocks(self.gameObject, hit.Source)) orig(self, hit);
+        if (!(hit.AttackType != AttackTypes.Generic && ObserverEffect(hit.Source)) && !LocalWorldIsolation.Blocks(self.gameObject, hit.Source)) orig(self, hit);
     }
     private static void TakeDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hit) {
-        if (!LocalWorldIsolation.Blocks(self.gameObject, hit.Source)) orig(self, hit);
+        if (!(hit.AttackType != AttackTypes.Generic && ObserverEffect(hit.Source)) && !LocalWorldIsolation.Blocks(self.gameObject, hit.Source)) orig(self, hit);
     }
     private static void ExtraContact(On.DamageEffectTicker.orig_OnTriggerEnter2D orig, DamageEffectTicker self, Collider2D collider) {
-        if (!LocalWorldIsolation.Blocks(collider == null ? null : collider.gameObject, self.gameObject)) orig(self, collider);
+        if (!ObserverEffect(self.gameObject) && !LocalWorldIsolation.Blocks(collider == null ? null : collider.gameObject, self.gameObject)) orig(self, collider);
     }
     private static void ExtraAction(On.SendExtraDamage.orig_OnEnter orig, SendExtraDamage action) {
-        if (LocalWorldIsolation.Blocks(action.Fsm.GetOwnerDefaultTarget(action.target), action.Owner)) action.Finish();
+        if (ObserverEffect(action.Owner) || LocalWorldIsolation.Blocks(action.Fsm.GetOwnerDefaultTarget(action.target), action.Owner)) action.Finish();
         else orig(action);
     }
+    // Detached spells/pets need no hero parent or DamageEnemies component.
+    // Known remote effects retain their actual owner's participation state.
+    private static bool ObserverEffect(GameObject source) => CoopContext.NonCombatAttack?.Invoke(source) == true ||
+        CoopContext.LocalObservation?.Invoke() == true && !LocalWorldIsolation.IsRemote(source);
     private static void BreakableHit(On.Breakable.orig_Hit orig, Breakable self, HitInstance hit) {
         if (!LocalWorldIsolation.Blocks(self.gameObject, hit.Source)) orig(self, hit);
     }

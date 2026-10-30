@@ -1,0 +1,64 @@
+{
+  "version": "0.2.5",
+  "action": "package-release",
+  "releaseChannel": "release",
+  "userRequest": "打包新版0.2.5,github,release",
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "69E42D567D9711E75E23DB9426AD2C707011102CF0AB318F9AD15EFBF27EC1E9"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "BDB34D1F03127BFAAC6C763C6C4D15A6864ED1656CBEF9BF84ECFC15EBBBF862"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "DB007F5D089094E54D8F34420F441DF8CD570BB12FBF378BE847B1F72E9F200D"
+    }
+  ],
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified"
+  ],
+  "blockerLedgerSha256": "264B85F920603F0B7EA5F9F3A20C080F587FE55061BE377D263BBEBC48EEE0AB",
+  "evidence": [
+    {
+      "path": "docs/evidence/development-validation-0.2.5.json",
+      "sha256": "1D63260C217B0C568417A2E867692DA2A77B0FB7718C55FAED7767341E59DB01"
+    },
+    {
+      "path": "docs/evidence/runtime-room-0.2.5.json",
+      "sha256": "5F96119DB16C0CCB735D46F184EE369A1D03CB54D4D1BCF536D78F0F7E8DC0BD"
+    },
+    {
+      "path": ".analysis/observation-bench-20261030/final-results.json",
+      "sha256": "0A379185B5B996513CDB77113D330C74DF8D0801659DA1CDA301638DC9259238"
+    }
+  ],
+  "scope": "Create and publish the 0.2.5 Windows/source archives, SHA-256 checksums, tag v0.2.5 and standard GitHub Release. Retain historical unresolved findings and disclose that new-version runtime re-test is omitted.",
+  "createdAtUtc": "2026-10-30T09:26:01.2764242Z"
+}

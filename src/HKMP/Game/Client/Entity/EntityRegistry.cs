@@ -46,6 +46,8 @@ internal static class EntityRegistry {
     private static List<EntityRegistryEntry> Entries { get; }
     private static EntityRegistryEntry[] SpawnEntries { get; }
     private static EntityRegistryEntry[] LocalBarrierEntries { get; }
+    private static HashSet<EntityType> BossSupportTypes { get; }
+    internal static bool IsBossSupport(EntityType type) => BossSupportTypes.Contains(type);
 
     static EntityRegistry() {
         Entries = FileUtil.LoadObjectFromEmbeddedJson<List<EntityRegistryEntry>>(EntityRegistryFilePath);
@@ -53,6 +55,7 @@ internal static class EntityRegistry {
             Logger.Warn("Could not load entity registry");
         }
         SpawnEntries = Entries?.SelectMany(Flatten).ToArray() ?? System.Array.Empty<EntityRegistryEntry>();
+        BossSupportTypes = new HashSet<EntityType>(SpawnEntries.Where(e => e.BossSupport).Select(e => e.Type));
         // Root entries identify their whole local subtree.
         LocalBarrierEntries = Entries?.Where(e => IsLocalOnlyBarrier(e.Type)).ToArray() ?? System.Array.Empty<EntityRegistryEntry>();
     }

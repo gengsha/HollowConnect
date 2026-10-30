@@ -40,7 +40,7 @@ internal class HealthManagerComponent : EntityComponent {
     private bool _bossVictorySignaled;
     private int _hp = -1, _direction = -1;
     private bool _invincible;
-    private uint _revision, _receivedRevision;
+    private uint _revision, _receivedRevision, _lifeRevision;
     private uint _receivedPhaseRevision, _receivedExtraRevision;
     private float _nextSnapshot;
     private float _nextDamageEncounter;
@@ -95,10 +95,17 @@ internal class HealthManagerComponent : EntityComponent {
         }
         if (IsControlled || CoopContext.Resetting) return;
         var earlyBattle = LocalBattleCompletion.BeforeNativeDeath(self);
-        orig(self, attackDirection, attackType, ignoreEvasion);
+        // Native pooled deaths clear isDead again inside EnemyDeathEffects
+        // before Die returns. The native death callback still distinguishes
+        // that completed path from a ZERO HP special-death phase transition.
+        var nativeDeath = false;
+        void Completed() => nativeDeath = true;
+        self.OnDeath += Completed;
+        try { orig(self, attackDirection, attackType, ignoreEvasion); }
+        finally { self.OnDeath -= Completed; }
         // hasSpecialDeath/deathReset are phase transitions (False Knight,
         // Soul Master, etc.), not tombstones.
-        if (!self.isDead || self.hasSpecialDeath || self.deathReset) {
+        if ((!self.isDead && !nativeDeath) || self.hasSpecialDeath || self.deathReset) {
             // A ZERO HP special-death event is a phase event, not a tombstone.
             var phase = new EntityNetworkData { Type = EntityComponentType.SpecialDeath };
             phase.Packet.Write(++_revision); phase.Packet.Write(attackDirection.HasValue);
@@ -189,9 +196,23 @@ internal class HealthManagerComponent : EntityComponent {
             var invincible = data.Packet.ReadBool(); var direction = data.Packet.ReadInt();
             var flags = data.Packet.ReadByte(); var stun = data.Packet.ReadString(); var battle = data.Packet.ReadString();
             if (stun.Length > 256 || battle.Length > 2048) return;
-            if ((_dead && data.Type != EntityComponentType.HealthReset) || revision <= _receivedRevision) return;
+            if (_dead && data.Type != EntityComponentType.HealthReset) {
+                // A terminal event can overtake the final pre-death health
+                // metadata. Preserve the tombstone, but let its deferred local
+                // battle receipt bind once. Metadata from an earlier life
+                // cannot acknowledge this death after a positive reset.
+                if (revision > _lifeRevision) {
+                    var localBattle = EntityReferences.Resolve(battle, false);
+                    foreach (var hm in new[] { _healthManager.Host, _healthManager.Client })
+                        if (hm != null && localBattle != null && localBattle.scene == hm.gameObject.scene)
+                            LocalBattleCompletion.Bound(hm, localBattle);
+                }
+                return;
+            }
+            if (revision <= _receivedRevision) return;
             if (data.Type == EntityComponentType.HealthReset && hp > 0) {
                 _dead = false;
+                _lifeRevision = revision;
                 LocalBattleCompletion.ResetDeath(_bossId);
                 foreach (var hm in new[] { _healthManager.Host, _healthManager.Client })
                     if (hm != null) Notified.SetValue(hm, false);

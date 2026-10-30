@@ -87,7 +87,7 @@ internal static class BossDefeatSignals {
         }
         return false;
     }
-    private static bool DefeatKey(string key) => key != null &&
+    internal static bool DefeatKey(string key) => key != null &&
         (key.StartsWith("killed", System.StringComparison.Ordinal) || key.StartsWith("defeated", System.StringComparison.OrdinalIgnoreCase) || key.EndsWith("Defeated", System.StringComparison.Ordinal));
     internal static IEnumerable<string> LocalDefeatFlags(EntityType type, string fsm, string state, FsmStateAction[] actions) =>
         IsDefeatRecord(type, fsm, state, actions) ? actions.OfType<SetPlayerDataBool>()
@@ -95,6 +95,9 @@ internal static class BossDefeatSignals {
                 (type != EntityType.LostKinCorpse || a.boolName.Value == "infectedKnightDreamDefeated"))
             .Select(a => a.boolName.Value).Distinct() : Enumerable.Empty<string>();
     internal static void ApplyLocalDefeatRecord(EntityType type, string scene, FsmState state) {
+        ApplyLocalDefeatRecord(type, scene, LocalDefeatFlags(type, state.Fsm.Name, state.Name, state.Actions));
+    }
+    internal static void ApplyLocalDefeatRecord(EntityType type, string scene, IEnumerable<string> flags) {
         // Active story participants need the boss's own defeat metadata even
         // with permanent progress sharing disabled. Collected rewards, essence,
         // counters, arbitrary story flags and Godhome records stay personal.
@@ -103,7 +106,7 @@ internal static class BossDefeatSignals {
             type == EntityType.LostKinCorpse && (scene != "Dream_03_Infected_Knight" || scene != CoopContext.LocalScene) ||
             CoopContext.LocalScene.StartsWith("GG_", System.StringComparison.Ordinal) ||
             scene != CoopContext.LocalScene && !scene.StartsWith(CoopContext.LocalScene + "_boss", System.StringComparison.Ordinal)) return;
-        foreach (var key in LocalDefeatFlags(type, state.Fsm.Name, state.Name, state.Actions))
+        foreach (var key in flags)
             if (!PlayerData.instance.GetBool(key)) PlayerData.instance.SetBool(key, true);
     }
     internal static void State(EntityType type, ulong id, FsmState state) {

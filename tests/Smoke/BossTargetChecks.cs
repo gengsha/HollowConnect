@@ -15,6 +15,7 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class RescueProbe {
     private IEnumerator BossTargetChecks() {
+        using var observationContact = Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_BOSS") == "1" ? IgnoreExternalCombatDamage() : null;
         const string scene = "GG_Hornet_1";
         var authority = role == Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_TARGET_AUTHORITY");
         var other = host ? "guest" : "host";
@@ -22,6 +23,11 @@ public sealed partial class RescueProbe {
         var entities = Field<Dictionary<ulong, Entity>>(manager, "_entities");
         if (!authority) yield return Until(() => Has("target.first"), "target first entrant");
         BossSequenceController.Reset(); PlayerData.instance.SetInt("bossStatueTargetLevel", 0);
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_BOSS") == "1") {
+            BossSceneController.SetupEvent = c => c.BossLevel = 0;
+            PlayerData.instance.SetString("dreamReturnScene", "Town");
+            PlayerData.instance.SetString("bossReturnEntryGate", "left1");
+        }
         HeroController.instance.takeNoDamage = true;
         GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo { SceneName = scene, EntryGateName = "door_dreamEnter",
             Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true });
@@ -38,8 +44,14 @@ public sealed partial class RescueProbe {
         if (authority) Flag("target.first");
         Flag(role + ".target-ready"); yield return Until(() => Has(other + ".target-ready") && runtime.Peers.Values.Single().Life == Life.Alive, "two living native entrants");
         var boss = entities.Values.Single(e => e.Type == EntityType.Hornet);
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_BOSS") == "1") {
+            var controller = BossSceneController.Instance;
+            var health = boss.Object.Host.GetComponent<HealthManager>();
+            Check(controller != null && controller.gameObject.scene.name == scene && controller.bosses.Contains(health) &&
+                Field<int>(controller, "bossesLeft") > 0, "native Hornet Setup owns real boss death subscription");
+        }
         var stage = 0; var reads = 0; var matching = 0; var wrong = 0;
-        Vector3 Expected() => runtime.Down ? runtime.PlayerObject(runtime.Peers.Single().Key).transform.position : hero.transform.position;
+        Vector3 Expected() => runtime.Down || runtime.Observing ? runtime.PlayerObject(runtime.Peers.Single().Key).transform.position : hero.transform.position;
         using var trace = new Hook(typeof(GetAngleToTarget2D).GetMethod("DoGetAngle", BindingFlags.Instance | BindingFlags.NonPublic),
             new Action<Action<GetAngleToTarget2D>, GetAngleToTarget2D>((orig, action) => {
                 var relevant = authority && stage != 0 && action.target.Value == hero.gameObject && EntityReferences.Owner(action.Fsm.GameObject) == boss;
@@ -71,6 +83,47 @@ public sealed partial class RescueProbe {
             Check(wrong == 0 && faceWrong == 0, "living authority keeps native hero target");
         }
         Flag(role + ".target-alive"); yield return Until(() => Has(other + ".target-alive"), "alive target samples complete", 90);
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_BOSS") == "1") {
+            if (authority) {
+                hero.AffectedByGravity(true); CoopMod.Settings.VoluntaryObservation = true;
+                yield return ObservationBegin("native Hornet authority observation");
+                yield return Until(() => Field<bool>(runtime, "observationAccepted"), "server accepts boss authority observation");
+            }
+            yield return Until(() => authority ? runtime.Observing : runtime.Peers.Values.Single().Life == Life.Observing, "both see actual observing authority");
+            reads = matching = wrong = faceReads = faceWrong = 0; stage = 2;
+            if (authority) {
+                yield return Until(() => reads >= 1 && faceReads >= 3, "native Hornet reads living teammate while authority observes", 120);
+                Check(wrong == 0 && faceWrong == 0 && !body.simulated && !runtime.Down,
+                    "real boss redirects to fighter without observer physics or fake death");
+                var hm = boss.Object.Host.GetComponent<HealthManager>();
+                var attackSource = runtime.PlayerObject(runtime.Peers.Single().Key);
+                Log("OBSERVATION ATTACK source=" + attackSource.name + " blocked=" + CoopContext.NonCombatAttack?.Invoke(attackSource) +
+                    " remote=" + (attackSource.GetComponentInParent<Hkmp.Animation.RemoteVisualOpacity>() != null) +
+                    " hp=" + hm.hp + " invincible=" + hm.IsInvincible + " damageOverride=" + hm.damageOverride);
+                Check(CoopContext.NonCombatAttack?.Invoke(attackSource) != true, "living fighter attack ownership remains eligible");
+                // Observe native vulnerability/evasion; IgnoreInvulnerable on
+                // HitInstance does not bypass HealthManager.Hit's block test.
+                yield return Until(() => !hm.IsInvincible && Field<float>(hm, "evasionByHitRemaining") <= 0,
+                    "native Hornet vulnerability window for fighter hit", 60);
+                var damageDeadline = Time.realtimeSinceStartup + 90;
+                while (hm != null && !hm.isDead && hm.hp > 0 && Time.realtimeSinceStartup < damageDeadline) {
+                    if (!hm.IsInvincible && Field<float>(hm, "evasionByHitRemaining") <= 0) {
+                        var before = hm.hp;
+                        hm.Hit(new HitInstance { Source = attackSource, DamageDealt = 9999,
+                            AttackType = AttackTypes.Nail, Multiplier = 1, IgnoreInvulnerable = true });
+                        Log("OBSERVATION NATIVE HIT hp=" + before + "->" + hm.hp + " dead=" + hm.isDead + " override=" + hm.damageOverride);
+                        Check(hm.isDead || hm.hp < before, "eligible fighter hit debits native boss health while authority observes");
+                    }
+                    yield return new WaitForSecondsRealtime(.25f);
+                }
+                Check(hm == null || hm.isDead || hm.hp <= 0, "fighter-owned native lethal hit defeats boss despite observing authority");
+                yield return Until(() => Field<uint>(runtime, "lastBossVictory") != 0 && Field<double>(runtime, "settlementUntil") == 0,
+                    "observing authority receives actual reliable boss settlement without blocking fighter", 20);
+                if (runtime.Observing && !runtime.ObservationReturning) yield return ObservationKey(CoopMod.Settings.ObserveKey);
+                yield return ObservationBenchArrival(); Flag("observation.boss-finished");
+            } else yield return Until(() => Has("observation.boss-finished"), "observing authority completes native boss settlement and bench return", 180);
+            stage = 0; yield break;
+        }
         if (authority) { Die(); yield return Until(() => runtime.Down, "authority becomes actual rescue shadow"); }
         yield return Until(() => authority ? runtime.Down : runtime.Peers.Values.Single().Life == Life.Down, "both see downed authority");
         if (authority) BossTargetBoundaryChecks(boss, hero);

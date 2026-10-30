@@ -12,6 +12,6 @@ internal static class LocalWorldIsolation {
         (!CoopContext.LocalWorldOnly || bossSpawn || entry.BossSupport || BossDefeatSignals.IsBoss(entry.Type));
 
     internal static bool IsRemote(GameObject source) => source != null && source.GetComponentInParent<RemoteVisualOpacity>() != null;
-    internal static bool Blocks(GameObject target, GameObject source) => CoopContext.LocalWorldOnly && IsRemote(source) &&
-        EntityReferences.Owner(target) == null;
+    internal static bool Blocks(GameObject target, GameObject source) => CoopContext.NonCombatAttack?.Invoke(source) == true ||
+        CoopContext.LocalWorldOnly && IsRemote(source) && EntityReferences.Owner(target) == null;
 }

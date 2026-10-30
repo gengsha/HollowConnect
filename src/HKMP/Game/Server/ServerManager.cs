@@ -1082,6 +1082,17 @@ internal abstract class ServerManager : IServerManager {
                 UpdateDreamWarrior(id, playerData, data);
 
         if (!playerData.IsSceneHost) {
+            // Mantis challenge is an existing peer request, not an entity
+            // update from the authority. Relay only its exact payload to the
+            // current authority in the same story arena; never cache it.
+            if (playerData.CurrentScene == "Fungus2_15" && entityUpdate.Id != 0 &&
+                entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data) &&
+                _entityData.TryGetValue(new ServerEntityKey(playerData.CurrentScene, entityUpdate.Id), out var challenged) && !challenged.Retired) {
+                var requests = entityUpdate.GenericData.Where(ChallengePromptComponent.IsRequest).ToList();
+                if (requests.Count != 0) foreach (var peer in _playerData)
+                    if (peer.Value.IsSceneHost && peer.Value.CurrentScene == playerData.CurrentScene)
+                        _netServer.GetUpdateManagerForClient(peer.Key)?.AddEntityData(entityUpdate.Id, requests);
+            }
             var platformKey = new ServerEntityKey(playerData.CurrentScene, entityUpdate.Id);
             if (_entityData.TryGetValue(platformKey, out var platform) && platform.DreamPlatformPlayers != null && entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data))
                 foreach (var data in entityUpdate.GenericData.Where(d => d.Type == EntityComponentType.DreamPlatform))

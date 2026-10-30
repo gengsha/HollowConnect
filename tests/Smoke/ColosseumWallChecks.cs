@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 namespace HollowConnect.Smoke;
 
 public sealed partial class ColosseumProbe {
-    private bool WallCase => testCase == "walls" || testCase == "walls-entry" || testCase == "walls-late" || testCase == "air-rescue";
+    private bool WallCase => testCase == "walls" || testCase == "walls-entry" || testCase == "walls-late" || testCase == "air-rescue" || testCase == "ceiling-motion" || testCase == "ceiling-gap" || testCase == "side-gap";
     private int wallWave = 1;
     private readonly HashSet<int> wallApproached = new();
     private static string WallPath(Transform t) {

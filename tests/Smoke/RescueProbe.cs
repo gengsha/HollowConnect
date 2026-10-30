@@ -96,18 +96,33 @@ public sealed partial class RescueProbe : MonoBehaviour {
         CoopMod.Settings.ShareProgress = VinePlatformCheck || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENCOUNTER_CASE")) || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_BATTLE_CHECK")) ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK"));
         if (SoulMasterCheck) CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SOUL_SHARED") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_GATE_CHECK")))
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_GATE_SHARED") != "0";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_FLOW_CHECK")))
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_FLOW_SHARED") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_SPOT")))
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_SPOT_SHARED") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXTRA_ENCOUNTER")))
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXTRA_SHARED") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOTHER_SHARED")))
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOTHER_SHARED") == "1";
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLECTOR_SHARED")))
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLECTOR_SHARED") == "1";
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FK_GATE_CHECK")))
             CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_FK_SHARED") == "1";
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_HORNET_STORY"))) {
             CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_HORNET_SHARED") == "1";
             CoopMod.Settings.BossHealthScaling = false;
         }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_TRANSITION_CONTACT") == "1")
+            CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_TRANSITION_SHARED") == "1";
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_DISCONNECT"))) {
             CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_SHARED") == "1";
             CoopMod.Settings.BossDamageRanking = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_DISCONNECT") == "damage";
         }
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_COMPLETION_INTENT"))) CoopMod.Settings.ShareProgress = true;
         CoopMod.Settings.EntryProtection = false;
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_PROTECTION") == "1") CoopMod.Settings.EntryProtection = true;
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_TARGET_AUTHORITY")))
             CoopMod.Settings.BossTargetingMode = 0;
         if (MossRetargetCheck) {
@@ -132,6 +147,9 @@ public sealed partial class RescueProbe : MonoBehaviour {
             CoopMod.Settings.SpectateAfterExhaustion = true;
             CoopMod.Settings.BossTargetingMode = 0;
         }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_LINKED") == "1") {
+            CoopMod.Settings.ShareProgress = CoopMod.Settings.ShareCharms = CoopMod.Settings.LinkedHealth = true;
+        }
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         pd.SetBool("visitedDirtmouth", true);
         Log("fixture: Dirtmouth visited; native first-visit title is outside rescue scope");
@@ -146,6 +164,37 @@ public sealed partial class RescueProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_CHECK") == "1") {
+            yield return VoluntaryObservationChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS noncombat observation, pause and native Dirtmouth bench return"); Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXTRA_ENCOUNTER"))) {
+            yield return ExtraEncounterChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS extra encounter checks"); Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_SPOT"))) {
+            yield return BossSpotChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS boss spot checks"); Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_FLOW_CHECK"))) {
+            yield return BossFlowChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS boss flow checks"); Flag(role + ".done"); yield break;
+        }
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_GATE_CHECK"))) {
+            yield return StoryBossGateChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS story boss gate checks"); Flag(role + ".done"); yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_TRANSITION_CONTACT") == "1") {
+            yield return SceneTransitionContactChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS native scene transition contact isolation");
+            Flag(role + ".done"); yield break;
+        }
         if (MossRetargetCheck) {
             yield return MossRetargetChecks();
             yield return ProbeShutdown.Run(engine, root, role);

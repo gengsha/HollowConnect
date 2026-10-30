@@ -40,7 +40,9 @@ internal class GamePatcher {
     /// </summary>
     public void RegisterHooks() {
         Animation.RemotePlayerFeedback.Register();
-        if (CoopContext.LocalWorldOnly) Entity.LocalWorldInteractions.Register();
+        // World isolation remains conditional inside the guards. Observer
+        // attack suppression is required in shared worlds as well.
+        Entity.LocalWorldInteractions.Register();
         // Register IL hook for changing the behaviour of tink effects
         IL.TinkEffect.OnTriggerEnter2D += TinkEffectOnTriggerEnter2D;
         

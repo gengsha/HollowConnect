@@ -1,0 +1,40 @@
+{
+  "version": "0.2.5",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.2.5-l12",
+  "releaseChannel": "release",
+  "releaseReady": false,
+  "fullRuntimeAcceptance": false,
+  "retestOmitted": true,
+  "createdAtUtc": "2026-10-30T09:26:01.2349559Z",
+  "scope": "User-requested 0.2.5 Windows/source package and standard GitHub Release. Version-only production bump after completed 0.2.4-l12 development validation; incremental production/installer builds and archive verification; no additional game runs after the version bump.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "69E42D567D9711E75E23DB9426AD2C707011102CF0AB318F9AD15EFBF27EC1E9"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "BDB34D1F03127BFAAC6C763C6C4D15A6864ED1656CBEF9BF84ECFC15EBBBF862"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "DB007F5D089094E54D8F34420F441DF8CD570BB12FBF378BE847B1F72E9F200D"
+    }
+  ],
+  "runs": [],
+  "previousValidationSource": "docs/evidence/development-validation-0.2.5.json",
+  "previousValidationSha256": "1D63260C217B0C568417A2E867692DA2A77B0FB7718C55FAED7767341E59DB01",
+  "productionSourceChange": "Only CoopMod.Version changed from 0.2.4 to 0.2.5 after the final development validation; NetworkVersion derives 0.2.5-l12.",
+  "buildPlan": [
+    "scripts/Build.ps1 -Target Mod passed after version bump.",
+    "scripts/Package.ps1 -UserRequestedRelease will build the installer and create Windows/source archives.",
+    "scripts/Verify-Release.ps1 -UserRequestedRelease will verify payload, evidence, archive content, links and checksums."
+  ],
+  "limits": [
+    "The 71 core and 26 dual-client results retain their original 0.2.4-l12 hashes.",
+    "The 0.2.5 version bump was compiled and package/installer integrity is checked separately.",
+    "No claim of new-version game certification, three-player target cycling, all-boss coverage, or cross-machine latency coverage.",
+    "Historical unresolved findings remain in the inherited blocker ledger."
+  ]
+}

@@ -9,7 +9,8 @@ public enum Kind : byte { Hello, Welcome, Presence, Roster, Down, ShadeHit, Revi
     GiveUpRequest, Returning, BenchReady, Returned, GiveUpDenied, DeathCount, DeathHistory, ResourceOffer, ResourceGrant,
     BossDefeated, BossVictory, BossRecoveryRequest, BossRevived, RescueStatus, BenchRest, RescueAnchorRequest, RescueAnchor, RescueUnavailable,
     SpectateRequest, Spectating, BossSettlementReady, DamageBegin, DamageHit, DamageEnd, DamageSnapshot,
-    LinkedHealthInit, LinkedHealthDelta, LinkedHealthState, LinkedHealthEnd }
+    LinkedHealthInit, LinkedHealthDelta, LinkedHealthState, LinkedHealthEnd,
+    ObservationRequest, ObservationStarted, ObservationReturnRequest, ObservationReturn, ObservationReady, ObservationReturned, ObservationDenied }
 
 public static class Wire {
     // Reliable server-to-client audit request in the existing progress envelope.

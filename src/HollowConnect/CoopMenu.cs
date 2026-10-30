@@ -12,7 +12,8 @@ namespace HollowConnect;
 
 public sealed partial class CoopMod {
     internal const string RoomSettingLockHint = "联机中已锁定。请先断开联机；房主还需停止开房，再返回本模组配置修改。";
-    internal const string SharedHealthOptionName = "共享血量（房主）";
+    internal const string SharedHealthOptionName = "共享血量（Beta，房主）";
+    internal const string ObservationOptionName = "主动观战（Beta，本机）";
     internal static bool RoomSettingsLocked => CoopContext.RoomSettingsLocked?.Invoke() == true;
     internal static Func<string, string> ActiveRoomSettingLabel;
     internal static int RoomRuleRevision;

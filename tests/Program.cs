@@ -45,6 +45,7 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        ObservationTests.Register(Test);
         GrimmFlameTests.Register(Test);
         LocalWorldIsolationTests.Register(Test);
         EncounterSummonTests.Register(Test);

@@ -15,27 +15,33 @@ internal static class LocalBarrierEvents {
     private static int replayDepth;
     private static int privateWorldDepth;
     private static Entity replaySource;
+    private static FsmState replayState;
     internal static bool PrivateTarget(GameObject receiver) => EntityRegistry.IsLocalOnlyBarrier(receiver) ||
         CoopContext.LocalWorldOnly && receiver != null && EntityReferences.Owner(receiver) == null;
-    internal static bool Ignore(HutongGames.PlayMaker.Fsm receiver, string signal) => replayDepth != 0 && !AllowsPresentation(receiver, signal) && !AllowsMawlekBattleStart(receiver, signal) && !BossGateCompletion.Allows(receiver, signal) &&
+    internal static bool Ignore(HutongGames.PlayMaker.Fsm receiver, string signal) => replayDepth != 0 && !AllowsPresentation(receiver, signal) && !AllowsBattleStart(receiver, signal) && !AllowsBattleCompletion(receiver, signal) && !BossGateCompletion.Allows(receiver, signal) &&
         (EntityRegistry.IsLocalOnlyBarrier(receiver.GameObject) || privateWorldDepth != 0 && PrivateTarget(receiver.GameObject));
 
-    private static bool AllowsMawlekBattleStart(HutongGames.PlayMaker.Fsm receiver, string signal) {
-        // This native boss wakes the local reward controller, even in a
-        // private world. Keep every other mechanism/entrance event isolated.
-        return signal == "START" && replaySource?.Type == EntityType.BroodingMawlek &&
-            replaySource.SourceScene == "Crossroads_09" && CoopContext.LocalScene == "Crossroads_09" &&
-            receiver.GameObject != null && receiver.GameObject.scene.name == replaySource.SourceScene &&
-            receiver.GameObject.name == "Battle Scene" && receiver.Name == "Battle Control" &&
-            EntityReferences.Owner(receiver.GameObject) == null && receiver.ActiveState != null &&
-            receiver.ActiveState.Transitions.Any(t => t.EventName == signal && receiver.States.Any(s => s.Name == t.ToState &&
-                s.Actions.OfType<SetIntValue>().Any(a => a.Enabled && a.intVariable.Name == "Battle Enemies" && a.intValue.Value == 1) &&
-                s.Actions.OfType<SendEventByName>().Any(a => a.Enabled && a.sendEvent.Value == "BATTLE START")));
+    internal static bool StartsNativeBattle(HutongGames.PlayMaker.Fsm receiver, string signal) =>
+        replayDepth != 0 && (AllowsBattleStart(receiver, signal) || AllowsBattleCompletion(receiver, signal));
+    internal static void ContinueNativeBattle(System.Action continuation) {
+        var previousDepth = replayDepth; var previousPrivate = privateWorldDepth; var previousSource = replaySource;
+        replayDepth = privateWorldDepth = 0; replaySource = null;
+        // This verified local controller now owns its original continuation,
+        // including Music/FINISHED, BATTLE START and its own BG CLOSE. The
+        // surrounding remote broadcast remains isolated for other recipients.
+        try { continuation(); }
+        finally { replayDepth = previousDepth; privateWorldDepth = previousPrivate; replaySource = previousSource; }
     }
+
+    private static bool AllowsBattleStart(HutongGames.PlayMaker.Fsm receiver, string signal) =>
+        LocalBattleSignals.Allows(receiver, signal, replaySource, replayState);
+    private static bool AllowsBattleCompletion(HutongGames.PlayMaker.Fsm receiver, string signal) =>
+        LocalBattleSignals.AllowsCompletion(receiver, signal, replaySource, replayState);
 
     private static bool AllowsPresentation(HutongGames.PlayMaker.Fsm receiver, string signal) {
         var go = receiver.GameObject;
         if (go == null || EntityReferences.Owner(go) != null) return false;
+        if (Component.ChallengePromptComponent.AllowsLocalCage(receiver, signal, replaySource)) return true;
         if (ColosseumEntrance.AllowsOpen(receiver, signal)) return true;
         if (signal == "ZOTE ROAR START" && go.name == "Grey Prince Title") return true;
         // The replicated boss starts combat, so each player's native intro
@@ -51,24 +57,27 @@ internal static class LocalBarrierEvents {
         var owner = sender.GameObject;
         if (owner == null) return;
         var visit = CoopContext.LocalVisit;
+        var epoch = CoopContext.Epoch;
         var scene = owner.scene;
         if (delay < .001f) Send();
         else MonoBehaviourUtil.Instance.StartCoroutine(Delayed());
 
         void Send() {
-            if (owner == null || CoopContext.LocalVisit != visit || !scene.IsValid() || !scene.isLoaded) return;
+            if (owner == null || CoopContext.LocalVisit != visit || CoopContext.Epoch != epoch || !scene.IsValid() || !scene.isLoaded) return;
             replayDepth++;
             var privateWorld = CoopContext.LocalWorldOnly && EntityReferences.Owner(owner) != null;
             if (privateWorld) privateWorldDepth++;
             var previousSource = replaySource;
+            var previousState = replayState;
             replaySource = EntityReferences.Owner(owner);
+            replayState = state;
             try {
                 var entity = EntityReferences.Owner(owner);
                 if (entity != null && BossGateCompletion.IsTerminal(entity.Type, state, name))
                     BossGateCompletion.Replay(scene.name, name, () => sender.Event(target, name));
                 else sender.Event(target, name);
             }
-            finally { replaySource = previousSource; if (privateWorld) privateWorldDepth--; replayDepth--; }
+            finally { replaySource = previousSource; replayState = previousState; if (privateWorld) privateWorldDepth--; replayDepth--; }
         }
         IEnumerator Delayed() {
             yield return new WaitForSeconds(delay);

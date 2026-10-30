@@ -26,6 +26,8 @@ public sealed class Settings {
     public bool BossVictoryRescue = true;
     public bool EntryProtection = true;
     public bool AllowTeleport = true;
+    public bool VoluntaryObservation = false;
+    public KeyCode ObserveKey = KeyCode.F4;
     public KeyCode SelectTeammateKey = KeyCode.F7;
     public KeyCode TeleportKey = KeyCode.F8;
     public KeyCode GiveUpKey = KeyCode.F6;
@@ -36,9 +38,9 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
     public static DeathStatistics Statistics = new DeathStatistics();
-    public const string Version = "0.2.4";
+    public const string Version = "0.2.5";
     // Key source receipts and personal locks must not mix with older shared-door clients.
-    public const string NetworkVersion = Version + "-l11";
+    public const string NetworkVersion = Version + "-l12";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override List<(string, string)> GetPreloadNames() => new List<(string, string)> {
@@ -68,6 +70,7 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
         new IMenuMod.MenuEntry("共享永久进度（房主）", new[]{"关闭", "开启"}, "默认开启，开房前设置。关闭后普通怪、机关、奖励与剧情各自推进，只保留同房 Boss 合作及队友位置；传送、救援按各自开关。开启时能力和列出的资源、世界标记共享，骨钉升级及矿石消费各自计算。", i=>Settings.ShareProgress=i==1, ()=>Settings.ShareProgress?1:0),
         new IMenuMod.MenuEntry("共享护符（房主）", new[]{"关闭", "开启"}, "开房前设置，仅在共享永久进度开启时生效。共享护符获得状态；护符槽仍按原规则共享，装备各自独立。", i=>Settings.ShareCharms=i==1, ()=>Settings.ShareCharms?1:0),
         new IMenuMod.MenuEntry("屏外队友方位", new[]{"关闭", "开启"}, "显示屏外队友名字和箭头；其他房间显示房间名。", i=>Settings.OffscreenNames=i==1, ()=>Settings.OffscreenNames?1:0),
+        new IMenuMod.MenuEntry(ObservationOptionName, new[]{"关闭", "开启"}, "Beta 功能，默认关闭。开启后落地按 " + Settings.ObserveKey + " 观看同房存活队友，再按返回德特茅斯长椅并保持联机；" + Settings.SelectTeammateKey + " 切换观战队友。观战本体退出战斗，不受伤、不碰撞；无同房存活队友时自动回椅。暂停只打开菜单。", i=>Settings.VoluntaryObservation=i==1, ()=>Settings.VoluntaryObservation?1:0),
         OpacityMenuEntry(),
         new IMenuMod.MenuEntry("队友名字配色（本机）", new[]{"关闭", "开启"}, "默认开启。队友头顶名字与地图/方位颜色一致，自己保持白色；关闭后名字为白色。仅影响本机，立即生效。", i=>{ Settings.ColoredPlayerNames=i==1; Hkmp.CoopContext.RefreshPlayerVisuals(); }, ()=>Settings.ColoredPlayerNames?1:0),
         new IMenuMod.MenuEntry("动态 Boss 血量（房主）", new[]{"关闭", "开启"}, "默认关闭，房主开房前设置。使用下方增血参数 p，N 人等效血量为 1+p+p²+…+p^(N-1)，最高十倍；60% 时两人160%、三人196%。队友设置不影响房间。", i=>Settings.BossHealthScaling=i==1, ()=>Settings.BossHealthScaling?1:0),
@@ -79,7 +82,7 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
         new IMenuMod.MenuEntry("救援耗尽后观战（Beta，房主）", new[]{"关闭", "开启"}, "默认关闭。开启时主动放弃救援直接观战；Boss战救援耗尽或关闭暗影救援时，死亡直接观战。Boss胜利后在本场存活队友处一血复活，不扣次数；房内无人能战斗时返回自己的复活点。观战时按 " + Settings.GiveUpKey + " 可提前返回。开房前设置。", i=>Settings.SpectateAfterExhaustion=i==1, ()=>Settings.SpectateAfterExhaustion?1:0),
         new IMenuMod.MenuEntry("Boss击败后解除暗影（房主）", new[]{"关闭", "开启"}, "默认开启。Boss真正击败时，本场暗影玩家在存活队友处一血复活，不消耗救援次数，参与本地结算。需开启暗影救援；观战者的结算复活由观战开关控制。开房前设置。", i=>Settings.BossVictoryRescue=i==1, ()=>Settings.BossVictoryRescue?1:0),
         new IMenuMod.MenuEntry("入场免伤（房主）", new[]{"关闭", "开启"}, "场景、战斗同步和镜头就绪并恢复操作后，再保留 1.5 秒反应时间。", i=>Settings.EntryProtection=i==1, ()=>Settings.EntryProtection?1:0),
-        new IMenuMod.MenuEntry(SharedHealthOptionName, new[]{"关闭", "开启"}, "默认关闭。必须同时开启共享永久进度和共享护符才生效；全队共用正常血量，蓝血各自独立。开启后暗影救援和观战无效。面具碎片按唯一 ID 计数，每 4 个增加团队 1 格上限。", i=>Settings.LinkedHealth=i==1, ()=>Settings.LinkedHealth?1:0),
+        new IMenuMod.MenuEntry(SharedHealthOptionName, new[]{"关闭", "开启"}, "默认关闭。必须同时开启共享永久进度和共享护符才生效；全队共用正常血量，蓝血各自独立。开启后暗影救援和死亡观战无效；主动观战仍可使用。面具碎片按唯一 ID 计数，每 4 个增加团队 1 格上限。", i=>Settings.LinkedHealth=i==1, ()=>Settings.LinkedHealth?1:0),
         new IMenuMod.MenuEntry(LinkedHealthBonusRow.OptionName, new[]{LinkedHealthBonusRow.Format(Settings.LinkedHealthBonusMasks)}, "共享血量模式的额外正常面具数，默认 2，范围 0–10。它只增加团队上限，不计入面具碎片收集，也不写入个人存档。", _=>{}, ()=>0)
     });
 

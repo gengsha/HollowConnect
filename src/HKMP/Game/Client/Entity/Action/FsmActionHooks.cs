@@ -96,6 +96,7 @@ internal static class FsmActionHooks {
         CurrentAction=self;
         try { if (!LocalBattleCompletion.EnterScriptedCounter(self)) orig(self); } finally { CurrentAction=previous; }
         LocalBattleCompletion.NativeWaveAction(self);
+        BossGateCompletion.NativeAftermathAction(self);
         
         if (!TypeEvents.TryGetValue(self.GetType(), out var fsmActionHook)) {
             Logger.Warn("Hook was fired but no associated hook class was found");

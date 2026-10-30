@@ -349,6 +349,8 @@ internal class EntityManager {
         }
         if (_retiredIds.Contains(entityUpdate.Id)) return true;
         if (!_entities.TryGetValue(entityUpdate.Id, out var entity) || !IsSceneHostDetermined) {
+            if (alreadyInSceneUpdate && !IsSceneHost && entityUpdate.UpdateTypes.Contains(EntityUpdateType.HostFsm))
+                BossGateCompletion.ObserveMissingSnapshot(entityUpdate.Id, entityUpdate.HostFsmData);
             if (IsSceneHostDetermined) {
                 Logger.Debug($"Could not find entity ({entityUpdate.Id}) to apply update for; storing update for now");
             } else {

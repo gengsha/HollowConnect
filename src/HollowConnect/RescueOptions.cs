@@ -56,15 +56,15 @@ public sealed partial class CoopRuntime {
         var occupied = PlayerData.instance != null && PlayerData.instance.GetBool("atBench");
         // Observe this edge even during native respawn: returning to a bench
         // alone must not refill the rescue budget.
-        if (occupied && !benchOccupied && Playable && !Down && !Returning && !Resetting && !changingScene && personalDeath == null)
+        if (occupied && !benchOccupied && Playable && !Down && !Observing && !Returning && !Resetting && !changingScene && personalDeath == null)
             Send(new Message { Kind = Kind.BenchRest, Serial = ++restSerial, Scene = CoopContext.LocalScene });
         benchOccupied = occupied;
         if (Spectating && Down) HideSpectator();
         foreach (var id in spectatorPeers.Keys.ToArray())
-            if (!Peers.TryGetValue(id, out var peer) || peer.Life != Life.Spectating || peer.State?.Scene != CoopContext.LocalScene)
+            if (!Peers.TryGetValue(id, out var peer) || (peer.Life != Life.Spectating && !Party.Observer(peer.Life)) || peer.State?.Scene != CoopContext.LocalScene)
                 RestoreSpectatorPeer(id);
         foreach (var pair in Peers) {
-            if (pair.Value.Life != Life.Spectating || pair.Value.State?.Scene != CoopContext.LocalScene) continue;
+            if ((pair.Value.Life != Life.Spectating && !Party.Observer(pair.Value.Life)) || pair.Value.State?.Scene != CoopContext.LocalScene) continue;
             // Username is a sibling of PlayerObject under PlayerContainer.
             var avatar = api.ClientManager.GetPlayer(pair.Key)?.PlayerContainer;
             if (avatar == null) {

@@ -192,7 +192,7 @@ public sealed partial class CoopRuntime {
                 LinkedMaxHealth = pd.GetIntInternal("maxHealthBase") });
             if (linkedHealthStateReceived) ApplyLinkedHealthState();
         }
-        if (!LinkedHealthActive || Resetting || Returning || changingScene || Down) return;
+        if (!LinkedHealthActive || Resetting || Returning || changingScene || Down || Observing) return;
         SyncLinkedHealthHud();
         if (linkedHealthCurrent == 0 && !linkedDeathRequested && Playable) {
             linkedDeathRequested = true; StartCoroutine(DieForLinkedHealth());
@@ -221,7 +221,7 @@ public sealed partial class CoopRuntime {
         return health;
     }
     private void ApplyLinkedHealthState() {
-        if (!LinkedHealthActive || Resetting || Down || Returning) return;
+        if (!LinkedHealthActive || Resetting || Down || Returning || Observing) return;
         var pd = PlayerData.instance;
         var previous = pd.GetIntInternal("health");
         // Only an authoritative zero starts death. Keep native TakeDamage
@@ -254,14 +254,14 @@ public sealed partial class CoopRuntime {
         PlayMakerFSM.BroadcastEvent("FURY REFRESH");
     }
     private IEnumerator DieForLinkedHealth() {
-        if (!LinkedHealthActive || linkedHealthCurrent != 0 || Down || Resetting || !Playable) { linkedDeathRequested = false; yield break; }
+        if (!LinkedHealthActive || linkedHealthCurrent != 0 || Down || Resetting || Observing || !Playable) { linkedDeathRequested = false; yield break; }
         var hero = HeroController.instance;
         var method = typeof(HeroController).GetMethod("Die", BindingFlags.Instance | BindingFlags.NonPublic);
         hero.StartCoroutine((IEnumerator)method.Invoke(hero, null));
     }
     private int? LinkedHealthWrite(string key, int value) {
         if (!LinkedHealthActive || linkedHealthApplying || key != "health") return null;
-        if (Resetting || Down || Returning || linkedNativeScope > 0) return null;
+        if (Resetting || Down || Returning || Observing || linkedNativeScope > 0) return null;
         if (linkedHealthCurrent == 0) return 0;
         var pd = PlayerData.instance;
         if (value > pd.GetIntInternal("health") && BlockLinkedRestHeal) return pd.GetIntInternal("health");

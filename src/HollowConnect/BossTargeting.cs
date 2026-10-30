@@ -25,7 +25,7 @@ public sealed partial class CoopRuntime {
         if (!Connected || Resetting || Returning || changingScene || !Playable || id < 0 || id > ushort.MaxValue) return null;
         if (id == LocalId) {
             var hero = HeroController.instance;
-            return !Down && !hero.cState.dead && !hero.cState.hazardDeath && !hero.cState.hazardRespawning ? hero.gameObject : null;
+            return !Down && !Observing && !hero.cState.dead && !hero.cState.hazardDeath && !hero.cState.hazardRespawning ? hero.gameObject : null;
         }
         if (!Peers.TryGetValue((ushort)id, out var peer) || peer.State == null ||
             (peer.Life != Life.Alive && peer.Life != Life.Loading) || peer.State.Scene != CoopContext.LocalScene ||
@@ -59,14 +59,15 @@ public sealed partial class CoopRuntime {
     // AI reads use the actual remote avatar, including HKMP interpolation.
     // Never move the hidden local hero, camera, or the rescue anchor to aim.
     private GameObject LivingBossTarget() {
-        if (!Connected || !Down || Resetting || Returning || changingScene || !Playable ||
-            CoopContext.LocalScene != deathScene) { bossTargetId = null; return null; }
+        var targetScene = Observing ? observationScene : deathScene;
+        if (!Connected || !(Down || Observing) || Resetting || Returning || changingScene || !Playable ||
+            CoopContext.LocalScene != targetScene) { bossTargetId = null; return null; }
         var now = Now;
         GameObject Candidate(ushort id, Peer peer) {
             // Loading also covers temporary input locks (recoil, dialogue,
             // pause); warp readiness is deliberately stricter than AI life.
             // HKMP removes/deactivates the avatar on actual room departure.
-            if ((peer.Life != Life.Alive && peer.Life != Life.Loading) || peer.State == null || peer.State.Scene != deathScene ||
+            if ((peer.Life != Life.Alive && peer.Life != Life.Loading) || peer.State == null || peer.State.Scene != targetScene ||
                 now - peer.Seen >= 2 || now < peer.Seen) return null;
             var avatar = PlayerObject(id);
             return avatar != null && avatar.activeInHierarchy ? avatar : null;

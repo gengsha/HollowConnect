@@ -105,7 +105,12 @@ internal static class EntityHooks {
     }
     private static void ProcessEvent(On.HutongGames.PlayMaker.Fsm.orig_ProcessEvent orig, HutongGames.PlayMaker.Fsm self,
         HutongGames.PlayMaker.FsmEvent ev, HutongGames.PlayMaker.FsmEventData data) {
-        if (BankerDialogue.Ignore(self, ev?.Name) || LocalBarrierEvents.Ignore(self, ev?.Name)) return;
+        if (BankerDialogue.Ignore(self, ev?.Name)) return;
+        if (LocalBarrierEvents.StartsNativeBattle(self, ev?.Name)) {
+            LocalBarrierEvents.ContinueNativeBattle(() => orig(self, ev, data));
+            return;
+        }
+        if (LocalBarrierEvents.Ignore(self, ev?.Name)) return;
         var entity = EntityReferences.Owner(self.GameObject);
         if (entity?.EncounterSummonEvent(self, ev?.Name) == true) return;
         if (IsDisabledReplicaFsm(self)) return;

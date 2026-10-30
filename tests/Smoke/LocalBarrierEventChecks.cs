@@ -91,6 +91,13 @@ internal static class LocalBarrierEventChecks {
                     yield return new WaitForSecondsRealtime(.25f);
                     check(observer.ActiveStateName == "Open", "old scene visit cancels delayed broadcast V2=" + v2);
                 } finally { Hkmp.CoopContext.LocalVisit = visit; }
+                Replay(close, .1f);
+                var epoch = Hkmp.CoopContext.Epoch;
+                try {
+                    Hkmp.CoopContext.Epoch++;
+                    yield return new WaitForSecondsRealtime(.25f);
+                    check(observer.ActiveStateName == "Open", "old attempt cancels delayed broadcast V2=" + v2);
+                } finally { Hkmp.CoopContext.Epoch = epoch; }
             }
             foreach (var barrier in barriers) {
                 var owner = new FsmOwnerDefault { OwnerOption = OwnerDefaultOption.SpecifyGameObject, GameObject = barrier.gameObject };

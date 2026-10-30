@@ -11,6 +11,8 @@ namespace HollowConnect.Smoke;
 public sealed partial class RescueProbe {
     private IEnumerator CollectorGateChecks() {
         using var noContact = IgnoreExternalCombatDamage();
+        var reconnect = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLECTOR_GATE_CHECK") == "reconnect";
+        var authorityRole = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLLECTOR_AUTHORITY");
         yield return LocalBarrierEventChecks.Run(Check);
         var other = host ? "guest" : "host";
         On.HutongGames.PlayMaker.Fsm.hook_ProcessEvent trace = (orig, fsm, ev, data) => {
@@ -22,9 +24,15 @@ public sealed partial class RescueProbe {
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += trace;
         try {
             Flag(role + ".collector-entry"); yield return Until(() => Has(other + ".collector-entry"), "both simultaneous entrants");
+            if (authorityRole != null && role != authorityRole)
+                yield return Until(() => Has("collector.first-registered"), "selected Collector authority enters first");
             yield return RuleEnter("Ruins2_11", "right1");
             yield return Until(() => EntityReferences.Entities.Values.Any(e => e.Type == EntityType.TheCollector), "story Collector registered");
             var entity = EntityReferences.Entities.Values.Single(e => e.Type == EntityType.TheCollector);
+            if (authorityRole != null) {
+                Check(entity.IsNativeAuthority == (role == authorityRole), "selected Collector authority established");
+                if (role == authorityRole) Flag("collector.first-registered");
+            }
             var nativeDeath = entity.Object.Host.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Death");
             var terminal = nativeDeath.FsmStates.Single(s => s.Name == "Send Event");
             Check(BossGateCompletion.IsTerminal(entity.Type, terminal, "BATTLE END"), "native final signal follows verified defeat record");
@@ -47,8 +55,38 @@ public sealed partial class RescueProbe {
             var authority = entity.IsNativeAuthority;
             var gates = fsms.Where(f => f.FsmName == "BG Control").ToArray();
             yield return Until(() => gates.Length == 2 && gates.All(g => g.ActiveStateName == "Close 2"), "both native arena gates closed");
-            for (var i = 0; i < 65; i++) {
-                if (entity.IsNativeAuthority && i > 5 && entity.Object.Host != null) {
+            var deathIndex = (byte)entity.GetClientFsms().FindIndex(f => f.FsmName == "Death");
+            var wounded = new Hkmp.Networking.Packet.Data.EntityHostFsmData {
+                CurrentState = (byte)Array.FindIndex(nativeDeath.FsmStates, s => s.Name == "Death Wound")
+            };
+            wounded.Types.Add(Hkmp.Networking.Packet.Data.EntityHostFsmData.Type.State);
+            BossGateCompletion.ObserveMissingSnapshot(entity.Id,
+                new System.Collections.Generic.Dictionary<byte, Hkmp.Networking.Packet.Data.EntityHostFsmData> { [deathIndex] = wounded });
+            Check(gates.All(g => g.ActiveStateName == "Close 2"), "wounded snapshot cannot reconstruct final completion");
+            if (reconnect) {
+                Flag(role + ".collector-closed");
+                yield return Until(() => Has(other + ".collector-closed"), "both native doors close before disconnect");
+                if (!authority) {
+                    engine.ClientManager.Disconnect(); Flag("collector.peer-offline");
+                    yield return Until(() => Has("collector.native-completed"), "native authority completes during peer disconnect", 90);
+                    // Reuse the disposable profile already in the arena, as
+                    // the existing reconnect fixtures do, without opening the
+                    // normal save selection menu over an active game.
+                    typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                        .SetValue(engine.ClientManager, true);
+                    typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                        .Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
+                    yield return Until(() => runtime.Connected && engine.ClientManager.SceneSnapshotReady,
+                        "same-room reconnect receives completed Collector snapshot");
+                    Check(GameManager.instance.sceneName == "Ruins2_11" && hero.acceptingInput,
+                        "reconnected observer remains playable in the original arena");
+                    Log("COLLECTOR RECONNECT registered=" + EntityReferences.Entities.Values.Count(e => e.Type == EntityType.TheCollector) +
+                        " defeated=" + PlayerData.instance.GetBool("collectorDefeated") + " battle=" + battle.ActiveStateName +
+                        " gates=" + string.Join(",", gates.Select(g => g.ActiveStateName)));
+                } else yield return Until(() => Has("collector.peer-offline"), "peer is offline before native final damage");
+            }
+            for (var i = 0; i < (reconnect && !authority ? 12 : 65); i++) {
+                if (authority && entity.IsNativeAuthority && i > 5 && entity.Object.Host != null) {
                     var health = entity.Object.Host.GetComponent<HealthManager>();
                     var death = entity.Object.Host.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Death");
                     if (death.ActiveStateName == "Death Wound") {
@@ -64,6 +102,7 @@ public sealed partial class RescueProbe {
                     " states=" + string.Join(",", fsms.Where(f => f != null && (f.name.Contains("Battle") || f.name.Contains("Collector") || f.FsmName.Contains("Battle"))).Select(f => f.name + "/" + f.FsmName + ":" + f.ActiveStateName)));
                 yield return new WaitForSecondsRealtime(1);
             }
+            if (reconnect && authority && gates.All(g => g.ActiveStateName == "Open")) Flag("collector.native-completed");
             Log("COLLECTOR RESULT authority=" + authority + " defeated=" + PlayerData.instance.GetBool("collectorDefeated") + " battle=" + battle.ActiveStateName + " gates=" + string.Join(",", gates.Select(g => g.ActiveStateName)));
             Check(PlayerData.instance.GetBool("collectorDefeated"), "native Collector death continuation completed");
             Check(battle.ActiveStateName == "End" && gates.All(g => g.ActiveStateName == "Open"), "both players' native arena gates open after Collector completion");

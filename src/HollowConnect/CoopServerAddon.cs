@@ -144,6 +144,10 @@ public sealed partial class CoopServerAddon : ServerAddon {
             foreach (var failed in party.FailBossRooms((id, scene) => ((ServerManager)api.ServerManager).TryGetCoopSceneScope(id, scene, out _, out _)))
                 SendReturning(failed, "boss-failed");
         });
+        Guard("observers", () => {
+            foreach (var observer in party.Members.Values.Where(m => m.Life == Life.Observing && !party.ObservationHasFighter(m, Now)).ToArray())
+                if (party.ReturnObservation(observer.Id, party.Round, observer.ObservationSerial)) SendObservationReturn(observer);
+        });
         Guard("release", () => {
             if (!party.TryRelease()) return;
             CoopContext.Resetting = false;
@@ -187,7 +191,7 @@ public sealed partial class CoopServerAddon : ServerAddon {
         foreach (var settlement in bossSettlements.ToArray()) {
             var scope = settlement.Value;
             if (Now < scope.Expires && scope.Visits.Any(p => !bossVictories.IsSettled(settlement.Key, p.Key) &&
-                party.Members.TryGetValue(p.Key, out var occupant) && occupant.Life != Life.Returning && occupant.Life != Life.Resetting &&
+                party.Members.TryGetValue(p.Key, out var occupant) && !Party.Observer(occupant.Life) && occupant.Life != Life.Returning && occupant.Life != Life.Resetting &&
                 ((ServerManager)api.ServerManager).TryGetCoopSceneScope(p.Key, scope.Scene, out var visit, out _) && visit == p.Value)) continue;
             // Remove before sending: a retired recipient must never leave this
             // entry behind to be retried every frame.
@@ -245,6 +249,21 @@ public sealed partial class CoopServerAddon : ServerAddon {
             ReceiveDamageRanking(id, m); return;
         }
         switch (m.Kind) {
+            case Kind.ObservationRequest:
+                if (((ServerManager)api.ServerManager).TryGetCoopSceneScope(id, m.Scene, out _, out _) &&
+                    ((ServerManager)api.ServerManager).TryGetCoopSceneScope(m.Target, m.Scene, out _, out _) &&
+                    party.Observe(id, m.Target, m.Round, m.Serial, m.Scene, Now))
+                    Send(id, new Message { Kind = Kind.ObservationStarted, Id = id, Serial = m.Serial, Aux = member.LifeVersion });
+                else Send(id, new Message { Kind = Kind.ObservationDenied, Id = id, Serial = m.Serial });
+                break;
+            case Kind.ObservationReturnRequest:
+                if (party.ReturnObservation(id, m.Round, m.Serial)) SendObservationReturn(member);
+                break;
+            case Kind.ObservationReady:
+                if (((ServerManager)api.ServerManager).TryGetCoopSceneScope(id, "Town", out _, out _) &&
+                    party.FinishObservation(id, m.Round, m.Serial, m.Aux, m.Scene, m.X, m.Y, Now))
+                    Send(id, new Message { Kind = Kind.ObservationReturned, Id = id, Serial = m.Serial, Aux = member.LifeVersion });
+                break;
             case Kind.LinkedHealthInit:
                 ReceiveLinkedHealthInit(id, m); break;
             case Kind.LinkedHealthDelta:
@@ -303,7 +322,7 @@ public sealed partial class CoopServerAddon : ServerAddon {
             case Kind.Presence:
                 if (party.Presence(id, m.Round, m.Serial, m.Scene, m.X, m.Y, m.IsReady,
                     m.HasMap, m.MapX, m.MapY, Now, (m.Aux & 1) != 0)) {
-                    if (member.Life != Life.Down && member.Life != Life.Spectating && member.Life != Life.Returning && !party.Resetting && Party.ValidCheckpoint(m.Key, m.Name, m.Value)) {
+                    if (!Party.Observer(member.Life) && member.Life != Life.Down && member.Life != Life.Spectating && member.Life != Life.Returning && !party.Resetting && Party.ValidCheckpoint(m.Key, m.Name, m.Value)) {
                         member.CheckpointScene = m.Key; member.CheckpointMarker = m.Name;
                         member.CheckpointRespawnType = m.Value;
                     }
@@ -394,6 +413,9 @@ public sealed partial class CoopServerAddon : ServerAddon {
 
     private void SendRescueStatus(Member member) => Send(member.Id, new Message {
         Kind = Kind.RescueStatus, Id = member.Id, Value = member.RescuesUsed, Serial = member.DownSerial, Aux = member.RestSerial
+    });
+    private void SendObservationReturn(Member member) => Send(member.Id, new Message {
+        Kind = Kind.ObservationReturn, Id = member.Id, Serial = member.ObservationSerial, Aux = member.LifeVersion, Scene = "Town"
     });
     private int LinkedMaskPieces() {
         if (resources?.Claimed != null) foreach (var id in resources.Claimed)

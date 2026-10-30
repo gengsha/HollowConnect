@@ -27,6 +27,8 @@ public static class CoopContext {
     public static Func<UnityEngine.GameObject, int, bool, int> ChooseBossTarget;
     public static Func<int, UnityEngine.GameObject> BossTargetObject;
     public static Func<UnityEngine.GameObject, int> AttackSourcePlayer;
+    public static Func<UnityEngine.GameObject, bool> NonCombatAttack;
+    public static Func<bool> LocalObservation;
     public static Func<float> RemotePlayerOpacity;
     public static Func<ushort, UnityEngine.Color> PlayerNameColor;
     public static event Action PlayerVisualSettingsChanged;

@@ -150,6 +150,13 @@ internal class PauseManager : IPauseManager {
         TransitionPoint self,
         Collider2D obj
     ) {
+        // Native entry overlaps the destination's outgoing trigger. A local
+        // cutscene or unpause can restore PLAYING before that entry finishes;
+        // TransitionPoint checks only PLAYING and would send us straight back.
+        // Reject before unpausing or running the gate's fade/transition effects.
+        if (_netClient.IsConnected && (global::GameManager.instance.IsInSceneTransition ||
+            HeroController.instance == null || !HeroController.instance.isHeroInPosition)) return;
+
         // Skip this if the transition point is a door, since it isn't a enter-and-teleport transition,
         // but requires input to transition, so it can't happen in the pause menu
         if (!self.isADoor) {

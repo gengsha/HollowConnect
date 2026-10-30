@@ -189,6 +189,8 @@ public sealed partial class ColosseumProbe : MonoBehaviour {
         if (testCase != "inspect") yield return NormalEntry();
         if (FlowCase) yield return ArenaFlow();
         if (testCase == "air-rescue") yield return ColosseumAirRescue();
+        else if (testCase.StartsWith("ceiling-")) yield return ColosseumCeilingChecks();
+        else if (testCase == "side-gap") yield return ColosseumSideBoundaryChecks();
         else if (WallCase) yield return ObserveColosseumWalls();
         if (testCase == "lifecycle") yield return CheckpointLifecycle();
         if (testCase != "native") yield return ProbeShutdown.Run(engine, root, role);

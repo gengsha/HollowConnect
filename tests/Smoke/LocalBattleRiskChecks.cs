@@ -15,10 +15,25 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class RescueProbe {
     private IEnumerator LocalGruzBattleChecks() {
+        On.HutongGames.PlayMaker.Fsm.hook_ProcessEvent trace = (orig, fsm, ev, data) => {
+            if (ev?.Name == "START" && fsm.GameObject != null && fsm.GameObject.scene.name == "Crossroads_04") {
+                var source = typeof(LocalBarrierEvents).GetField("replaySource", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null) as Entity;
+                Log("MOTHER START receiver=" + fsm.GameObject.name + "/" + fsm.Name + ":" + fsm.ActiveStateName +
+                    " source=" + source?.Type + ":" + source?.SourceScene + " ignored=" + LocalBarrierEvents.Ignore(fsm, ev.Name));
+            }
+            orig(fsm, ev, data);
+        };
+        On.HutongGames.PlayMaker.Fsm.ProcessEvent += trace;
+        try { yield return LocalGruzBattleChecksInner(); }
+        finally { On.HutongGames.PlayMaker.Fsm.ProcessEvent -= trace; }
+    }
+    private IEnumerator LocalGruzBattleChecksInner() {
         const string scene = "Crossroads_04";
-        Check(runtime.Shared, "permanent progress sharing negotiated before connection");
-        LocalBarrierChecks.Run(Log);
+        Check(runtime.Shared == (Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOTHER_SHARED") != "0"),
+            "expected permanent progress sharing negotiated before connection");
+        if (runtime.Shared) LocalBarrierChecks.Run(Log);
         var authority = role == (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_BATTLE_AUTHORITY") ?? "host");
+        var lateWake = Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOTHER_ENTRY") == "woken";
         var other = host ? "guest" : "host";
         var hero = HeroController.instance;
         if (PlayerData.instance.GetBool("atBench")) {
@@ -27,7 +42,7 @@ public sealed partial class RescueProbe {
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<ListenForJump>().Single().wasPressed);
             yield return Until(() => !PlayerData.instance.GetBool("atBench") && hero.acceptingInput, "native bench get-up");
         }
-        if (!authority) yield return Until(() => Has("mother.first"), "first entrant in native mother room");
+        if (!authority) yield return Until(() => Has(lateWake ? "mother.woken" : "mother.first"), "first entrant or native mother wake before later entry");
         GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo { SceneName = scene, EntryGateName = "left1",
             Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true });
         var manager = Field<EntityManager>(engine.ClientManager, "_entityManager");
@@ -37,12 +52,14 @@ public sealed partial class RescueProbe {
             "native Gruz arena and scene snapshot ready");
         hero.takeNoDamage = true;
         var battle = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.gameObject.scene.name == scene && f.FsmName == "Battle Control");
+        EncounterSchema(battle);
         var gates = Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene.name == scene && f.FsmName == "BG Control").ToArray();
         foreach (var state in battle.FsmStates)
             Log("MOTHER SCHEMA " + state.Name + " -> " + string.Join(",", state.Transitions.Select(t => t.EventName + ":" + t.ToState)) +
                 " actions=" + string.Join(",", state.Actions.Select(a => a.GetType().Name)));
         Check(LocalBattleCompletion.IsLocal(battle.gameObject), "native Gruz Battle Control stays local");
         Check(gates.Length > 0, "native Gruz gates exist");
+        if (!lateWake) Check(battle.ActiveStateName == "Detect", "sleeping Mother snapshot does not start local battle early");
         if (authority) Flag("mother.first");
         var nativeMother = entities.Values.Single(e => e.Type == EntityType.GruzMother);
         var childArenaMinY = nativeMother.Object.Host.transform.position.y - 5;
@@ -51,7 +68,7 @@ public sealed partial class RescueProbe {
         yield return new WaitForSecondsRealtime(1);
         Flag(role + ".mother.entered");
         if (authority) {
-            yield return Until(() => Has(other + ".mother.entered"), "both players are present before native wake damage");
+            if (!lateWake) yield return Until(() => Has(other + ".mother.entered"), "both players are present before native wake damage");
             yield return Until(() => entities.Values.Any(e => e.Type == EntityType.GruzMother && e.Object.Host != null && e.Object.Host.activeInHierarchy),
                 "native mother registered and active");
             var mother = nativeMother.Object.Host.GetComponent<HealthManager>();
@@ -78,13 +95,24 @@ public sealed partial class RescueProbe {
                 "native nonfatal nail damage wakes mother and starts local battle");
             Flag("mother.woken");
             yield return Until(() => Has(other + ".mother.started"), "replica wake starts teammate's native local battle");
+            yield return Until(() => gates.All(g => g.GetComponentsInChildren<Collider2D>(true).Any(c =>
+                c.enabled && !c.isTrigger && c.gameObject.activeInHierarchy)), "native Mother entry closes both solid arena gates");
+            Flag(role + ".mother.closed");
+            yield return Until(() => Has(other + ".mother.closed"), "both players have closed local gates before Mother dies");
             if (PostBossDamageCheck) CheckNativeBossDamage(mother);
             mother.ApplyExtraDamage(mother.hp); Flag("mother.defeated");
         } else {
             yield return Until(() => Has("mother.woken") && battle.ActiveStateName == "Start",
                 "native replicated wake starts local battle without a fabricated entry collider");
             Flag(role + ".mother.started");
+            yield return Until(() => gates.All(g => g.GetComponentsInChildren<Collider2D>(true).Any(c =>
+                c.enabled && !c.isTrigger && c.gameObject.activeInHierarchy)), "native Mother entry closes both solid arena gates");
+            Flag(role + ".mother.closed");
         }
+        var gateBounds = gates.Select(g => g.GetComponentsInChildren<Collider2D>(true)
+            .First(c => c.enabled && !c.isTrigger && c.gameObject.activeInHierarchy).bounds).ToArray();
+        var gateCenters = gateBounds.Select(b => b.center).ToArray();
+        Log("MOTHER GATE CENTERS " + string.Join(",", gates.Select((g, i) => g.name + ":" + gateCenters[i])));
         yield return Until(() => Has("mother.defeated") && Has(other + ".mother.entered"), "both present after actual mother defeat");
         var observedChildren = false;
         var checkedPostBossDamage = false;
@@ -95,8 +123,10 @@ public sealed partial class RescueProbe {
                 previous = battle.ActiveStateName;
                 Log("MOTHER STATE " + previous + " counter=" + battle.FsmVariables.GetFsmInt("Battle Enemies").Value);
             }
-            var liveChildren = entities.Values.Where(e => e.Type != EntityType.GruzMother).Select(e => authority ? e.Object.Host : e.Object.Client)
-                .Where(o => o != null && o.activeInHierarchy && o.transform.position.y > childArenaMinY)
+            var childObjects = runtime.Shared
+                ? entities.Values.Where(e => e.Type != EntityType.GruzMother).Select(e => authority ? e.Object.Host : e.Object.Client)
+                : Object.FindObjectsOfType<HealthManager>().Where(h => h.gameObject.scene.name == scene).Select(h => h.gameObject);
+            var liveChildren = childObjects.Where(o => o != null && o.activeInHierarchy && o.transform.position.y > childArenaMinY)
                 .Select(o => o.GetComponent<HealthManager>()).Where(h => h != null && !h.isDead && h.hp > 0 &&
                     typeof(HealthManager).GetField("battleScene", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(h) as GameObject == battle.gameObject).ToArray();
             if (liveChildren.Length > 0) {
@@ -104,13 +134,16 @@ public sealed partial class RescueProbe {
                     observedChildren = true; Flag(role + ".mother.children");
                     Log("MOTHER ACTUAL CHILDREN " + string.Join(",", liveChildren.Select(h => h.name + "@" + h.transform.position)));
                     Check(battle.ActiveStateName != "End", "native child wave prevents premature local completion");
+                    Check(gates.All(g => g.GetComponentsInChildren<Collider2D>(true).Any(c =>
+                        c.enabled && !c.isTrigger && c.gameObject.activeInHierarchy)), "Mother gates remain solid during living child wave");
                 }
                 if (authority) yield return Until(() => Has(other + ".mother.children"), "both observe actual native child wave before final kills");
                 if (PostBossDamageCheck && !checkedPostBossDamage) {
                     yield return PostBossOrdinaryDamageChecks(liveChildren, entities, authority);
                     checkedPostBossDamage = true;
                 }
-                if (authority) foreach (var child in liveChildren) child.ApplyExtraDamage(child.hp);
+                foreach (var child in liveChildren)
+                    if (authority || !runtime.Shared && EntityReferences.Owner(child.gameObject) == null) child.ApplyExtraDamage(child.hp);
             }
             yield return new WaitForSecondsRealtime(.2f);
         }
@@ -121,6 +154,33 @@ public sealed partial class RescueProbe {
             "native mother and child waves settle on both endpoints");
         yield return Until(() => gates.All(f => !f.GetComponents<Collider2D>().Any(c => c.enabled && !c.isTrigger)), "native Gruz gates open after both waves");
         hero.RegainControl(); hero.AffectedByGravity(true);
+        // Door sprites span walls and ledges. Locate an unobstructed passage
+        // within the closed door's actual bounds before testing native input.
+        hero.AffectedByGravity(false);
+        var traversed = 0;
+        for (var i = 0; i < gateCenters.Length; i++) {
+            var center = gateCenters[i]; var direction = center.x < gateCenters.Average(c => c.x) ? -1 : 1;
+            var x = center.x - direction * 1.5f;
+            var bodyBounds = hero.GetComponent<Collider2D>().bounds;
+            var candidates = Enumerable.Range(0, Math.Max(1, (int)(gateBounds[i].size.y * 4)))
+                .Select(n => gateBounds[i].min.y + n * .25f)
+                .OrderBy(y => Math.Abs(y - (childArenaMinY + 5)))
+                .Where(y => new[] { x, x + direction * 3 }.All(px =>
+                    !Physics2D.OverlapBoxAll(new Vector2(px, y), bodyBounds.size, 0, 1 << 8).Any(c => !c.isTrigger)) &&
+                    !Physics2D.BoxCastAll(new Vector2(x, y), bodyBounds.size, 0,
+                    Vector2.right * direction, 3, 1 << 8).Any(h => !h.collider.isTrigger)).ToArray();
+            Log("MOTHER EXIT GEOMETRY " + i + " closed=" + gateBounds[i] + " body=" + bodyBounds.size + " passages=" + string.Join(",", candidates));
+            if (candidates.Length == 0) continue;
+            hero.transform.position = new Vector3(x, candidates[0] - (bodyBounds.center.y - hero.transform.position.y), 0);
+            hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero; Physics2D.SyncTransforms();
+            using (new MonoMod.RuntimeDetour.Hook(typeof(HeroController).GetMethod("LookForInput", BindingFlags.Instance | BindingFlags.NonPublic),
+                new Action<Action<HeroController>, HeroController>((orig, self) => { orig(self); if (self.acceptingInput) self.move_input = direction; })))
+                yield return Until(() => direction * (hero.transform.position.x - center.x) > 1,
+                    "actual native movement crosses open Mother gate " + i, 5);
+            traversed++;
+        }
+        Check(traversed > 0, "each player physically exits through an open native Mother doorway");
+        hero.move_input = 0; hero.AffectedByGravity(true);
         Flag(role + ".mother.checked"); yield return Until(() => Has(other + ".mother.checked"), "both finish native multi-wave encounter");
     }
 
@@ -211,6 +271,25 @@ public sealed partial class RescueProbe {
             hp.SetBattleScene(null); Receive(EntityComponentType.Death, 16);
             Receive(EntityComponentType.HealthReset, 17); hp.SetBattleScene(arena);
             Check(counter.Value == 2 && LocalBattlePending(battle) == 0, "life reset cancels an unbound death before later binding");
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCAL_BATTLE_LATE_BINDING") == "1") {
+                Receive(EntityComponentType.HealthReset, 18); counter.Value = 2; hp.SetBattleScene(null);
+                Receive(EntityComponentType.Death, 20);
+                // Separate reliable streams can deliver the terminal receipt
+                // before the final pre-death health/battle association.
+                Receive(EntityComponentType.Health, 19);
+                Check(hp.hp == 0 && hp.isDead && (bool)notified.GetValue(hp) && counter.Value == 1,
+                    "late pre-death battle metadata completes its local counter without reviving the enemy");
+                Receive(EntityComponentType.Health, 19); Receive(EntityComponentType.Health, 21);
+                Check(counter.Value == 1 && hp.hp == 0 && hp.isDead,
+                    "duplicate and newer terminal metadata cannot decrement twice or revive health");
+                Receive(EntityComponentType.HealthReset, 22); counter.Value = 2; hp.SetBattleScene(null);
+                Receive(EntityComponentType.Death, 24); Receive(EntityComponentType.Health, 21);
+                Check(counter.Value == 2 && !(bool)notified.GetValue(hp),
+                    "previous-life health metadata cannot bind the new terminal receipt");
+                Receive(EntityComponentType.Health, 23);
+                Check(counter.Value == 1 && hp.hp == 0 && hp.isDead,
+                    "current-life metadata still binds after a stale previous-life packet");
+            }
             Log("BOUNDARY FIXTURE ONLY receiver ordering and native SetIntValue hook; no full-wave combat claim");
         } finally {
             component?.Destroy(); LocalBattleCompletion.ResetDeath(id);

@@ -25,6 +25,20 @@ internal static class DebugDiagnosticsTests {
             if (!snapshot.RiskCodes().Contains("boss-context-pending-offline") || !snapshot.HasTransientLockRisk)
                 throw new Exception("offline boss context guard was not diagnosed");
         });
+        test("noncombat observation explains online body locks and exports its state", () => {
+            var snapshot = new SaveSafetySnapshot { Connected = true, VoluntaryObservation = true,
+                HeroControlRelinquished = true, HeroAcceptingInput = false, BodySimulated = true };
+            if (snapshot.HasTransientLockRisk || snapshot.RiskCodes().Contains("hero-control-lock"))
+                throw new Exception("intentional observation input lock was diagnosed as stale");
+            snapshot.HeroBoxInactive = true; snapshot.BodySimulated = false;
+            if (snapshot.RiskCodes().Contains("hero-box-left-inactive") || snapshot.RiskCodes().Contains("hero-rigidbody-disabled"))
+                throw new Exception("intentional noncombat body was diagnosed as stale");
+            snapshot.Connected = false;
+            if (!snapshot.HasTransientLockRisk || !snapshot.RiskCodes().Contains("hero-control-lock"))
+                throw new Exception("offline observation lock was not diagnosed");
+            if (!SafeDiagnosticsFormatter.Format(snapshot, null, "now").Contains("\"voluntaryObservation\":true"))
+                throw new Exception("observation missing from diagnostics");
+        });
         test("finished native load cannot hide a hero still exiting without input", () => {
             var snapshot = new SaveSafetySnapshot { HasFinishedEnteringScene = true, HeroTransitioning = true,
                 TransitionState = "EXITING_SCENE", BodySimulated = true };
