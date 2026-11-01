@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using HollowConnect;
@@ -35,16 +36,6 @@ public sealed partial class ColosseumProbe {
                 SaveWallActors("air-stalled"); throw new TimeoutException("Native aerial fixture stalled at " + state);
             }
             ApproachCurrentWallWave(); DamageCurrentWallWave();
-            // This native Wave 33 spawn has no network entity registration.
-            // Advance it through its real HealthManager death callback too;
-            // never alter the battle counter or force the next wave state.
-            if (ArenaManager.IsSceneHost)
-                foreach (var mawlek in Object.FindObjectsOfType<HealthManager>().Where(h => h.gameObject.scene.name == ActiveScene &&
-                    h.name == "Mawlek Col(Clone)" && h.gameObject.activeInHierarchy && !h.isDead && h.hp > 0 && !h.IsInvincible &&
-                    h.GetComponents<Collider2D>().Any(c => c.enabled))) {
-                    Log("AIR NATIVE DAMAGE " + mawlek.name + " hp=" + mawlek.hp);
-                    mawlek.ApplyExtraDamage(mawlek.hp);
-                }
             yield return new WaitForSecondsRealtime(.15f);
         }
         yield return new WaitForSecondsRealtime(3);
@@ -91,6 +82,16 @@ public sealed partial class ColosseumProbe {
             var landing = new object[] { hero, (Vector2)hero.transform.position, 20f, true, null, null };
             var ground = (bool)typeof(CoopRuntime).GetMethod("TryStoryLanding", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime, landing);
             Log("AIR LANDING preflight supported=" + ground + " point=" + landing[4] + " support=" + landing[5]);
+            Log("AIR PREFLIGHT walljump=" + pd.GetBool("hasWalljump") + " rescue=" + runtime.RescueEnabled +
+                " linked=" + CoopMod.Settings.LinkedHealth + " limit=" + CoopMod.Settings.RescueLimit +
+                " available=" + runtime.RescueAvailable + " quota=" + runtime.RescuesUsed +
+                " godhome=" + runtime.IsGodhomeRescueScene() + " hero=" + hero.transform.position);
+            Require(runtime.RescueEnabled && runtime.RescueAvailable && !CoopMod.Settings.LinkedHealth,
+                "independent-health rescue rules active before aerial lethal hit");
+            Log("AIR PREFLIGHT peers=" + string.Join(";", runtime.Peers.Values.Select(p => p.Life + ":" + p.State?.X + "," + p.State?.Y)));
+            File.WriteAllText(System.IO.Path.Combine(root, role + ".air-preflight-" + scenario + ".json"),
+                Newtonsoft.Json.JsonConvert.SerializeObject(Object.FindObjectsOfType<Collider2D>().Where(c => c.gameObject.scene.name == ActiveScene && c.enabled && c.bounds.SqrDistance(stand) < 144)
+                    .Select(c => new { path = WallPath(c.transform), c.isTrigger, c.gameObject.layer, bounds = c.bounds.ToString(), damage = c.GetComponentInParent<DamageHero>()?.name }), Newtonsoft.Json.Formatting.Indented));
             Require(ground == (injectedSupport != null), "native air phase or explicit injected support matches preflight " + scenario);
             yield return AirTogether(scenario + ".ready");
             var serial = runtime.DeathSerial; var quota = runtime.RescuesUsed;
@@ -129,13 +130,18 @@ public sealed partial class ColosseumProbe {
                 var peer = runtime.Peers.Single(); var start = hero.transform.position;
                 hero.AffectedByGravity(true);
                 if (scenario == "accepted-loss") {
-                    var target = peer.Value.State.X - .8f;
+                    // Walk across to the far side of the shade before attacking.
+                    // Native collision resolution can shift the rescuer during
+                    // setup; the old left-side target could already be within
+                    // its completion tolerance without taking a walking step.
+                    var target = peer.Value.State.X + .8f;
+                    Require(Math.Abs(start.x - target) > .5f, "supported walk starts outside target tolerance");
                     using (new MonoMod.RuntimeDetour.Hook(typeof(HeroController).GetMethod("LookForInput", BindingFlags.Instance | BindingFlags.NonPublic),
                         new Action<Action<HeroController>, HeroController>((orig, self) => {
                             orig(self); if (self.acceptingInput) self.move_input = Math.Abs(self.transform.position.x - target) < .1f ? 0 : Math.Sign(target - self.transform.position.x);
                         })))
                         yield return Until(() => Math.Abs(hero.transform.position.x - target) < .15f, "native supported walk before acceptance-only support loss", 4);
-                    hero.move_input = 0; hero.FaceRight(); hero.Attack(GlobalEnums.AttackDirection.normal);
+                    hero.move_input = 0; hero.FaceLeft(); hero.Attack(GlobalEnums.AttackDirection.normal);
                     yield return Until(() => peer.Value.Life == Life.Alive, "real supported nail accepted before injected support loss", 5);
                 } else {
                 using (new MonoMod.RuntimeDetour.Hook(typeof(InControl.OneAxisInputControl).GetProperty("IsPressed").GetGetMethod(),
@@ -159,6 +165,7 @@ public sealed partial class ColosseumProbe {
                     Require(peer.Value.Life == Life.Alive, "actual aerial nail collision rescues teammate");
                 }
                 }
+                Log("AIR RESCUER MOVEMENT " + scenario + " start=" + start + " end=" + hero.transform.position);
                 Require(Vector2.Distance(start, hero.transform.position) > .3f, "rescuer really moved after Down " + scenario);
                 hero.move_input = 0;
             } else {

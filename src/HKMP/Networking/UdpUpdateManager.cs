@@ -109,6 +109,14 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
     /// Moving average of round trip time (RTT) between sending and receiving a packet.
     /// </summary>
     public int AverageRtt => (int) System.Math.Round(_udpCongestionManager.AverageRtt);
+    internal int PendingSentCount => _udpCongestionManager.PendingCount;
+    private long lastReceived;
+    internal long ReceivedAgeMilliseconds {
+        get {
+            var ticks = System.Threading.Interlocked.Read(ref lastReceived);
+            return ticks == 0 ? -1 : (System.Diagnostics.Stopwatch.GetTimestamp() - ticks) * 1000 / System.Diagnostics.Stopwatch.Frequency;
+        }
+    }
 
     /// <summary>
     /// Event that is called when the client times out.
@@ -161,6 +169,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
                 _consumedOrigins.Clear(); _hasRemoteSequence = false;
                 _entitySnapshots.Clear();
                 _messageId = 0; _sendFailureLogged = false;
+                System.Threading.Interlocked.Exchange(ref lastReceived, 0);
                 CurrentUpdatePacket = new TOutgoing();
                 _isUpdating = true;
             }
@@ -208,6 +217,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
             // ACKs describe received datagrams. Payload de-duplication separately
             // remembers original batches, including those delivered by resends.
             packet.FilterReceivedData(_consumedOrigins, _entitySnapshots);
+            System.Threading.Interlocked.Exchange(ref lastReceived, System.Diagnostics.Stopwatch.GetTimestamp());
             var sequence = packet.Sequence;
             _receivedQueue.Enqueue(sequence);
 

@@ -1,0 +1,38 @@
+{
+  "version": "0.2.6",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.2.6-l12",
+  "releaseChannel": "release",
+  "releaseReady": false,
+  "fullRuntimeAcceptance": false,
+  "retestOmitted": true,
+  "createdAtUtc": "2026-11-01T08:05:19.8321853Z",
+  "scope": "User-requested 0.2.6 Windows/source package and standard GitHub Release; incremental production/installer builds and archive verification, no game rerun after version-only bump.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "D31564DE5E8A4E20392B0FF7774471D855F2A260EE92FE8BBA6B0B4B05AB8F54"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "DABB9987FFA8D7748D35311BEC998337377E5757C2C26C877C3130BA8EAD6CE9"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "A94D2EC875648D1C0945E29518D672689CD0EA2E5B108B7DEC7B6CD42888046C"
+    }
+  ],
+  "runs": [],
+  "previousValidationSource": "docs/evidence/development-validation-0.2.6.json",
+  "previousValidationSha256": "1713139FDF26E0CE3AD836DFFB10133CF2580FD6EB3E852E92E1934FA2E473C9",
+  "productionSourceChange": "After final development validation only CoopMod.Version changed from 0.2.5 to 0.2.6; derived network identifier becomes 0.2.6-l12. No additional runtime behavior or wire-format change during packaging.",
+  "limits": [
+    "Stage results retain their original hashes; earlier dialogue/endings runs are not final-arena-hash certification.",
+    "Permanent bilateral Colosseum freeze and reported Shade Soul/landing spell duplicate damage remain unreproduced.",
+    "One packet-loss spell attempt sent once but received zero times; retained failure and one unchanged passing retry do not establish a weak-network attack-delivery fix.",
+    "Colosseum native waves 1-34 accelerated through HealthManager damage; no full weapon clear, later waves or final settlement.",
+    "Spell effects sample landing only, fixed target and direction, 60/20 FPS; no full casting input, falling contact, all charms or simultaneous casts.",
+    "Performance spikes remain; differing authority and same-machine load do not establish general FPS improvement.",
+    "Existing isolated localhost dual-client copies only; no Internet/FRP, full three-player, all-boss or complete continuous Pantheon certification."
+  ]
+}

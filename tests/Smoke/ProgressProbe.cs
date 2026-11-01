@@ -64,7 +64,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 }
                 Mark("KEY WAIT Dialogue "+Dialogue.ActiveStateName+" requester="+Dialogue.FsmVariables.FindFsmGameObject("Requester")?.Value?.name);
             }
-            if (ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || SimpleKeyCase || BankerCase) {
+            if (ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase) {
                 Mark("RESOURCE WAIT hero=" + HeroController.instance?.transform.position + " input=" + HeroController.instance?.acceptingInput +
                     " relinquished=" + HeroController.instance?.controlReqlinquished + " pause=" + PlayerData.instance?.GetBool("disablePause") +
                     " inFlight=" + (runtime == null ? -1 : ((System.Collections.IDictionary)ResourceService.GetType().GetField("inFlight", ResourcePrivate).GetValue(ResourceService)).Count));
@@ -239,7 +239,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         if (EmergencyBenchCase) yield return EmergencyMenuShortcut();
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         Hkmp.Logging.Logger.AddLogger(new FileLogger(Path.Combine(root, role + "-engine.log")));
-        if (KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase)
+        if (KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase || GrimmFlameCase || ColosseumProgressCase)
             On.GameManager.EnterHero += (orig, gm, additive) => {
                 var gates = Object.FindObjectsOfType<TransitionPoint>();
                 if (MapExitCase && gm.sceneName == "Crossroads_33") {
@@ -274,7 +274,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
-        if ((SkinCompatibilityCase || LinkedHealthCase || KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
+        if ((SkinCompatibilityCase || LinkedHealthCase || KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
             yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
@@ -338,6 +338,8 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         if (ProgressAuditCase) PrepareProgressAudit();
         if (SimpleKeyCase) PrepareSimpleKeys();
         if (KeyEssenceCase) PrepareKeyEssence();
+        if (DreamDialogueCase) { pd.SetBool("hasDreamNail", true); pd.SetBool("hasLantern", true); }
+        if (MidwifeCase) pd.SetBool("hasLantern", true);
         if (BankerCase) {
             pd.SetInt("bankerTheft", 1); pd.SetBool("bankerSpaMet", false);
             pd.SetBool("metBanker", true); pd.SetBool("bankerAccountPurchased", true);
@@ -448,6 +450,32 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             }
             yield return ProbeShutdown.Run(engine, root, role);
             if (!Has(role + ".failed")) { Mark("FINAL PASS Grimm flames"); Flag(role + ".done"); }
+            yield break;
+        }
+        if (DreamDialogueCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(DreamDialogueChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS NPC dream dialogue " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_DIALOGUE_CASE")); Flag(role + ".done"); }
+            yield break;
+        }
+        if (MidwifeCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(MidwifeChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            yield return ProbeShutdown.Run(engine, root, role);
+            if (!Has(role + ".failed")) { Mark("FINAL PASS Midwife dialogue " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_MIDWIFE_CASE")); Flag(role + ".done"); }
             yield break;
         }
         if (BankerCase) {

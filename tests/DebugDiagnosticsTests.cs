@@ -57,5 +57,11 @@ internal static class DebugDiagnosticsTests {
             if (!json.Contains("\"scene\":\"Boss\"") || json.Contains("Alice") || json.Contains("192.168.1.42") ||
                 json.Contains("PlayerData") || json.Contains("token=123456")) throw new Exception("diagnostic leaked private data");
         });
+        test("network stall diagnostics export bounded scalar state", () => {
+            var snapshot = new SaveSafetySnapshot { NetworkState = "authority=True/False; entities=340; callbacks=7; sent=2; receiveAgeMs=81; rttMs=4" };
+            var json = SafeDiagnosticsFormatter.Format(snapshot, null, "now");
+            if (!json.Contains("\"networkState\":\"" + snapshot.NetworkState + "\""))
+                throw new Exception("network queue and authority diagnostics missing");
+        });
     }
 }

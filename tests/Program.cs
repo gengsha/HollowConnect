@@ -165,6 +165,18 @@ internal static class Program {
         }
         Test("periodic loss delivers at congested send rate", () => SelectiveAckProbe.PeriodicDelivery(0, 90, 50));
         Test("reliable loss retains its timeout fallback without newer ACK evidence", SelectiveAckProbe.TimeoutFallback);
+        Test("lost carriers retire after reliable handoff through wrap and delayed originals", SelectiveAckProbe.RetiredCarriers);
+        Test("combat hierarchy refreshes spread without catchup or changing maximum interval", () => {
+            var slots = new HashSet<int>();
+            for (ulong id = 1; id <= 340; id++) {
+                var at = CombatSampling.Next(3, id, 2);
+                Check(at > 3 && at <= 5.00001f);
+                slots.Add((int)((at - 3) * 1000));
+                var delayed = CombatSampling.Next(5.7f, id, 2);
+                Check(delayed > 5.7f && delayed <= 7.70001f, "late frame tried to catch up missed samples");
+            }
+            Check(slots.Count >= 40, "combat sampling collapsed into the same phase");
+        });
         foreach (var sequence in new ushort[] { 22, 1 })
             Test("nested reliable retransmissions retain origin across sequence " + sequence, () => ReliabilityProbe.NestedResends(sequence));
         Test("nested addon retransmissions retain origin across sequence wrap", ReliabilityProbe.NestedAddonResends);

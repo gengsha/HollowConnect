@@ -75,6 +75,10 @@ internal class ClientManager : IClientManager {
     /// The entity manager instance.
     /// </summary>
     private readonly EntityManager _entityManager;
+    internal string NetworkDiagnosticState() =>
+        $"authority={_entityManager.IsSceneHostDetermined}/{_entityManager.IsSceneHost}; entities={_entityManager.EntityCount}; " +
+        $"callbacks={ThreadUtil.PendingActions}; sent={_netClient.UpdateManager.PendingSentCount}; " +
+        $"receiveAgeMs={_netClient.UpdateManager.ReceivedAgeMilliseconds}; rttMs={_netClient.UpdateManager.AverageRtt}";
 
     /// <summary>
     /// The pause manager instance.

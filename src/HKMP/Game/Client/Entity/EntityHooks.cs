@@ -105,7 +105,7 @@ internal static class EntityHooks {
     }
     private static void ProcessEvent(On.HutongGames.PlayMaker.Fsm.orig_ProcessEvent orig, HutongGames.PlayMaker.Fsm self,
         HutongGames.PlayMaker.FsmEvent ev, HutongGames.PlayMaker.FsmEventData data) {
-        if (BankerDialogue.Ignore(self, ev?.Name)) return;
+        if (NpcDialogue.Ignore(self, ev?.Name)) return;
         if (LocalBarrierEvents.StartsNativeBattle(self, ev?.Name)) {
             LocalBarrierEvents.ContinueNativeBattle(() => orig(self, ev, data));
             return;

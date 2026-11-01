@@ -91,7 +91,9 @@ internal sealed class CombatStateComponent : EntityComponent {
         if(old!=null){var live=new HashSet<string>(nodes.Select(n=>n.Path));nodes=nodes.Concat(old.Where(n=>n.Host!=null&&n.Host.Transform==null&&!live.Contains(n.Path))).Take(256).ToArray();}
         lookup.Clear();
         foreach(var n in nodes)lookup[n.Path]=n;
-        rebuild=Time.unscaledTime+2;
+        // Keep initial discovery immediate, then spread the more expensive
+        // hierarchy refreshes over their existing two-second period.
+        rebuild=CombatSampling.Next(Time.unscaledTime,id,2);
     }
     // Pure presentation leaves have no shared gameplay state. Their local
     // renderer/particle playback follows the enclosing object's activation.

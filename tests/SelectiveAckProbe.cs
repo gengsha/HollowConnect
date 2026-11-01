@@ -167,4 +167,37 @@ internal static class SelectiveAckProbe {
         Age(queue[9].Stopwatch, 201); congestion.OnSendPacket(11, new ServerUpdatePacket());
         Check(manager.Resends == 1, "loss without newer ACK evidence lost the existing timeout fallback");
     }
+
+    internal static void RetiredCarriers() {
+        var manager = new ClientUpdateManager();
+        var type = typeof(UdpUpdateManager<ServerUpdatePacket, ServerUpdatePacketId>);
+        type.GetField("_localSequence", Private).SetValue(manager, (ushort)65530);
+        var congestion = (UdpCongestionManager<ServerUpdatePacket, ServerUpdatePacketId>)type.GetField("_udpCongestionManager", Private).GetValue(manager);
+        congestion.OnReceivePackets<ClientUpdatePacket, ClientUpdatePacketId>(new ClientUpdatePacket());
+        var queue = (ConcurrentDictionary<ushort, SentPacket<ServerUpdatePacket, ServerUpdatePacketId>>)congestion.GetType().GetField("_sentQueue", Private).GetValue(congestion);
+        var pending = (ServerUpdatePacket)type.GetField("CurrentUpdatePacket", Private).GetValue(manager);
+        pending.SetSendingPacketData(ServerUpdatePacketId.PlayerEnterScene,
+            new ServerPlayerEnterScene { NewSceneName = "retention-probe", Position = Hkmp.Math.Vector2.Zero });
+        ServerUpdatePacket Decode(Packet bytes) {
+            var p = new ServerUpdatePacket();
+            Check(p.ReadPacket(PacketManager.ReadDatagram(bytes.ToArray())), "retired carrier failed to decode");
+            return p;
+        }
+        var original = Decode(manager.BuildUpdatePacket());
+        var latest = original;
+        // Consecutive lost carriers cross sequence wrap. Only the most recent
+        // still-unacknowledged carrier should own this original reliable event.
+        for (var i = 0; i < 2000; i++) {
+            foreach (var p in queue.Values) Age(p.Stopwatch, 1001);
+            manager.BuildUpdatePacket(); // detects timeout and transfers origins
+            latest = Decode(manager.BuildUpdatePacket()); // publishes that transfer
+            Check(queue.Count <= 2, "lost carrier payloads accumulated: " + queue.Count);
+            // Retire the empty carrier too, without an ACK for the lost origin.
+        }
+        var consumed = new SequenceWindow(); var snapshots = new EntitySnapshotHistory();
+        latest.FilterReceivedData(consumed, snapshots);
+        Check(latest.GetPacketData().ContainsKey(ServerUpdatePacketId.PlayerEnterScene), "retiring lost history discarded reliable origin");
+        original.FilterReceivedData(consumed, snapshots);
+        Check(original.GetPacketData().Count == 0, "late original replayed an already delivered reliable origin");
+    }
 }

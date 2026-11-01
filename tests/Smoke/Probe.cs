@@ -45,7 +45,9 @@ public sealed class ProbeMod : Mod {
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS") == "1" ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_NATIVE_CHECK")) ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENCOUNTER_CASE")) ||
-            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_RETURN")))
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_RETURN")) ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_ROOM_CASE") == "travel" ||
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_BOSS_RUSH") == "1")
             On.HeroController.EnterScene += (orig, hero, gate, delay) => SimulationFrames(orig(hero, gate, delay));
         On.GameManager.LoadFirstScene += (orig, gm) => SimulationFrames(orig(gm));
         var go = new GameObject("HollowConnect smoke probe"); Object.DontDestroyOnLoad(go);

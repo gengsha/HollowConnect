@@ -38,7 +38,7 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
     public static DeathStatistics Statistics = new DeathStatistics();
-    public const string Version = "0.2.5";
+    public const string Version = "0.2.6";
     // Key source receipts and personal locks must not mix with older shared-door clients.
     public const string NetworkVersion = Version + "-l12";
     public CoopMod() : base("HollowConnect") { Instance = this; }

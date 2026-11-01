@@ -79,6 +79,7 @@ public sealed class SaveSafetySnapshot {
     public string RespawnMarkerName = "";
     public string BossReturnEntryGate = "";
     public string BossSequenceName = "";
+    public string NetworkState = "";
     public int RespawnType;
     public int PeerCount;
     public int ResourceReceiptCount;
@@ -147,6 +148,7 @@ public static class SafeDiagnosticsFormatter {
         Field(b, "warpEntry", snapshot.WarpEntry); Field(b, "retryScene", snapshot.RetryScene);
         Field(b, "respawnScene", snapshot.RespawnScene); Field(b, "respawnMarker", snapshot.RespawnMarkerName);
         Field(b, "bossReturnEntryGate", snapshot.BossReturnEntryGate); Field(b, "bossSequence", snapshot.BossSequenceName);
+        Field(b, "networkState", snapshot.NetworkState);
         Number(b, "respawnType", snapshot.RespawnType); Number(b, "peerCount", snapshot.PeerCount);
         Number(b, "resourceReceiptCount", snapshot.ResourceReceiptCount); Number(b, "sharedProgressCount", snapshot.SharedProgressCount);
         Bool(b, "connected", snapshot.Connected); Bool(b, "sessionPresent", snapshot.SessionPresent);

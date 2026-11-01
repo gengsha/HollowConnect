@@ -175,6 +175,8 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             ResourceReceiptCount = CoopMod.Statistics?.Resources?.Claimed?.Count ?? 0,
             SharedProgressCount = CoopMod.Statistics?.SharedProgress?.Count ?? 0
         };
+        if (api?.ClientManager is Hkmp.Game.Client.ClientManager client)
+            snapshot.NetworkState = client.NetworkDiagnosticState();
         if (pd != null) {
             snapshot.RespawnScene = pd.GetString("respawnScene") ?? "";
             snapshot.RespawnMarkerName = pd.GetString("respawnMarkerName") ?? "";
@@ -189,6 +191,10 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         nextDebugSample = Time.unscaledTime + .5f;
         var snapshot = BuildDebugSnapshot();
         sampledDebugState = snapshot;
+        if (Connected && Time.unscaledTime >= nextNetworkDebugSample) {
+            nextNetworkDebugSample = Time.unscaledTime + 5;
+            DebugEvent("network-sample", DebugEventSeverity.Info, snapshot.NetworkState);
+        }
         var signature = string.Join("|", snapshot.SceneName, snapshot.IsInSceneTransition, snapshot.HasFinishedEnteringScene,
             snapshot.HeroAcceptingInput, snapshot.HeroControlRelinquished, snapshot.HeroBoxInactive, snapshot.BodySimulated,
             snapshot.HeroInPosition, snapshot.HeroTransitioning, snapshot.TransitionState,
@@ -200,6 +206,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         if (risks.Count > 0) DebugEvent("state-risk", DebugEventSeverity.Warning, string.Join(",", risks));
     }
     private float nextDebugSample;
+    private float nextNetworkDebugSample;
 
     internal string ExportDebugReport() {
         try {

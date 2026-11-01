@@ -1,5 +1,5 @@
-HollowConnect 0.2.5 / HKMP 3.0.0-hc13
-网络标识：0.2.5-l12；所有玩家安装同一完整包，更新后重新开房。
+HollowConnect 0.2.6 / HKMP 3.0.0-hc13
+网络标识：0.2.6-l12；所有玩家安装同一完整包，更新后重新开房。
 
 安装
 1. 关闭《空洞骑士》，把 ZIP 完整解压。
@@ -27,6 +27,6 @@ HollowConnect 0.2.5 / HKMP 3.0.0-hc13
 F9 打开诊断面板。反馈请附双方版本、人数、场景、步骤和诊断信息。
 Ctrl+Alt+F12 可断开本机联机、回德特茅斯长椅并自动保存；无法接收按键的冻结进程不适用。
 本次发布构建与包完整性已核对，升版后的新哈希未重新运行完整实机验收。
-历史未解报告和测试观察继续保留，见 docs\KNOWN-ISSUES.md；本版范围见 docs\UPDATE-0.2.5.md。
+历史未解报告和测试观察继续保留，见 docs\KNOWN-ISSUES.md；本版范围见 docs\UPDATE-0.2.6.md。
 安装日志：%LOCALAPPDATA%\HollowConnect\Installer。
 远程连接和 UDP 转发说明见 README.md。

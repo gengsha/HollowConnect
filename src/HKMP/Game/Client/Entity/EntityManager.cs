@@ -40,6 +40,7 @@ internal class EntityManager {
     /// Whether the client user is the scene host.
     /// </summary>
     public bool IsSceneHost { get; private set; }
+    internal int EntityCount => _entities.Count;
 
     /// <summary>
     /// Queue of entity updates that have not been applied yet because of a missing entity.

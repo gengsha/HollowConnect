@@ -37,6 +37,13 @@ internal class GreatSlash : ParryableEffect {
             playerAttacks.transform
         );
         greatSlash.layer = 17;
+        // The local nail-art object has no LimitSendEvents component. Its
+        // remote clone remains in contact independently of the local hero's
+        // attack lifecycle, so TriggerStay can hit again after enemy recoil
+        // protection expires. Use the native per-collider hit list, reset by
+        // each collider activation, rather than a target-wide cooldown.
+        var hitLimit = greatSlash.GetComponent<LimitSendEvents>() ?? greatSlash.AddComponent<LimitSendEvents>();
+        hitLimit.monitorCollider = greatSlash.GetComponent<Collider2D>();
         
         // Check which direction the knight is facing for the damages_enemy FSM
         var facingRight = playerObject.transform.localScale.x > 0;

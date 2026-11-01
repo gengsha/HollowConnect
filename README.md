@@ -4,9 +4,9 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.2.5** · 支持 Windows 10 / 11 · 适配游戏版本 **1.5.78.11833**
+**当前版本：0.2.6** · 支持 Windows 10 / 11 · 适配游戏版本 **1.5.78.11833**
 
-0.2.5 汇总联网 Boss 战场门禁与重入恢复、竞技场边界、共享血量和主动观战修复。主动观战默认关闭，标记为 Beta；F4 返回德特茅斯长椅并保持联机。共享血量也保持默认关闭并标记为 Beta。详见[更新日志](docs/UPDATE-0.2.5.md)。
+0.2.6 修复队友攻击造成的对话／梦语卡住、调整结局退房与关房流程，并补齐竞技场毛里克同步、修复巨型斩／冲刺斩重复伤害，回收丢包发送历史并错开战斗结构刷新。详见[更新日志](docs/UPDATE-0.2.6.md)。
 
 ## 可以一起做什么
 
@@ -21,7 +21,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-**游玩请使用 [HollowConnect-0.2.5-windows.zip](https://github.com/gengsha/HollowConnect/releases/download/v0.2.5/HollowConnect-0.2.5-windows.zip) 完整安装包。** GitHub 的 “Code → Download ZIP” 提供的是源码。
+**游玩请使用 [HollowConnect-0.2.6-windows.zip](https://github.com/gengsha/HollowConnect/releases/download/v0.2.6/HollowConnect-0.2.6-windows.zip) 完整安装包。** GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
@@ -91,7 +91,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见[更新日志](docs/UPDATE-0.2.5.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见[更新日志](docs/UPDATE-0.2.6.md)。
 
 ## 开发与许可
 
@@ -102,10 +102,9 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 </details>
 
-HollowConnect 自有代码采用 [GNU GPL v3.0（GPL-3.0-only）](LICENSE)。基于 [HKMP](https://github.com/Extremelyd1/HKMP) 的修改部分延续 [LGPL-2.1](HKMP-LICENSE)，其他依赖保留各自许可，详见[第三方来源与许可](THIRD-PARTY.md)。《空洞骑士》及游戏资源的权利属于 Team Cherry。
+HollowConnect 自有代码采用 [GNU GPL v3.0（GPL-3.0-only）](LICENSE)。基于 [HKMP](https://github.com/Extremelyd1/HKMP) 的修改部分延续 [LGPL-2.1-or-later](HKMP-LICENSE)，其他依赖保留各自许可，详见[第三方来源与许可](THIRD-PARTY.md)。《空洞骑士》及游戏资源的权利属于 Team Cherry。
 
 ## 对作者的支持
 
 如果您觉得本mod不错的话来支持一下我吧
 <img width="784" height="1050" alt="1793097568621" src="https://github.com/user-attachments/assets/a10d5594-88cb-4692-b04f-371d32bada35" />
-

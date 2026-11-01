@@ -147,9 +147,10 @@ internal partial class UiManager : IUiManager {
 
     #endregion
 
-    public UiManager(ModSettings modSettings, NetClient netClient) {
+    public UiManager(ModSettings modSettings, NetClient netClient, Func<bool> isHosting) {
         _modSettings = modSettings;
         _netClient = netClient;
+        _isHosting = isHosting;
     }
     
     /// <summary>
@@ -268,85 +269,9 @@ internal partial class UiManager : IUiManager {
             return orig(self);
         };
 
-        // Hook to make sure that after game completion cutscenes we do not head to the main menu, but stay hosting/
-        // connected to the server. Otherwise, if the host would go to the main menu, every other player would be
-        // disconnected
-        On.CutsceneHelper.DoSceneLoad += (orig, self) => {
-            if (!_netClient.IsConnected) {
-                orig(self);
-                return;
-            }
-
-            var sceneName = self.gameObject.scene.name;
-            
-            Logger.Debug($"DoSceneLoad of CutsceneHelper for next scene type: {self.nextSceneType}, scene name: {sceneName}");
-
-            var toMainMenu = self.nextSceneType.Equals(CutsceneHelper.NextScene.MainMenu) 
-                             || self.nextSceneType.Equals(CutsceneHelper.NextScene.MainMenuNoSave);
-            if (self.nextSceneType.Equals(CutsceneHelper.NextScene.PermaDeathUnlock)) {
-                toMainMenu |= GM.GetStatusRecordInt("RecPermadeathMode") != 0;
-            }
-
-            if (toMainMenu) {
-                if (PlayerData.instance.GetInt("permadeathMode") != 0) {
-                    // We are running Steel Soul mode, so we disconnect and go to main menu instead of reloading to
-                    // the last save point
-                    Logger.Debug("  NextSceneType is main menu, disconnecting because of Steel Soul");
-                    
-                    RequestClientDisconnectEvent?.Invoke();
-                    RequestServerStopHostEvent?.Invoke();
-                    
-                    orig(self);
-                    return;
-                }
-                
-                Logger.Debug("  NextSceneType is main menu, transitioning to last save point instead");
-                var cinematic = UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle;
-                var returningPlayerData = PlayerData.instance;
-                var returningSlot = GM.profileID;
-                GameManager.instance.ContinueGame();
-                GM.StartCoroutine(RestoreHudAfterCutscene(cinematic, returningPlayerData, returningSlot));
-                return;
-            }
-
-            orig(self);
-        };
+        InitializeEndings();
     }
 
-    // ContinueGame normally starts from a freshly configured title menu.
-    // Returning directly from an ending retains the persistent HUD's OUT
-    // state. Wait for native respawn, then use its own display transition.
-    private IEnumerator RestoreHudAfterCutscene(int origin, PlayerData playerData, int slot) {
-        var gm = GM;
-        var deadline = Time.realtimeSinceStartup + 45f;
-        while (gm != null && gm == GM && PlayerData.instance == playerData && gm.profileID == slot && _netClient.IsConnected &&
-            Time.realtimeSinceStartup < deadline) {
-            var hero = HeroController.instance;
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle != origin && gm.IsGameplayScene() &&
-                !gm.IsInSceneTransition && gm.HasFinishedEnteringScene && hero != null && hero.isHeroInPosition) {
-                var cameras = GameCameras.instance;
-                if (cameras?.hudCanvas != null) {
-                    // Ending scenes disable the persistent HUD camera.  The
-                    // canvas can therefore be active while still being
-                    // invisible after ContinueGame restores the gameplay
-                    // scene.  Re-enable the camera and its FSMs before
-                    // replaying the native HUD IN transition.
-                    if (cameras.hudCamera != null) {
-                        cameras.hudCamera.gameObject.SetActive(true);
-                        cameras.hudCamera.enabled = true;
-                    }
-                    cameras.hudCanvas.SetActive(true);
-                    foreach (var fsm in cameras.hudCanvas.GetComponents<PlayMakerFSM>()) {
-                        fsm.enabled = true;
-                        fsm.SendEvent("IN");
-                    }
-                }
-                yield break;
-            }
-            yield return null;
-        }
-    }
-    
     /// <summary>
     /// Enter the game with the current PlayerData from the multiplayer menu. This assumes that the PlayerData
     /// instance is populated with values already.
@@ -375,6 +300,8 @@ internal partial class UiManager : IUiManager {
     /// </summary>
     private bool _returningToMenu;
     public void ReturnToMainMenuFromGame() {
+        // A server shutdown must leave the local ending/credits in control.
+        if (GM != null && (SceneUtil.IsEndingScene(GM.sceneName) || SceneUtil.IsEndingScene(SceneUtil.GetCurrentSceneName()))) return;
         // Connecting from the title/slot menu has no loaded local save. Never
         // save its temporary PlayerData over a previously selected profile.
         if (_returningToMenu || GM == null || GM.gameState == GameState.MAIN_MENU || GM.gameState == GameState.INACTIVE) return;

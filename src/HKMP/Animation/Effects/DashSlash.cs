@@ -36,6 +36,8 @@ internal class DashSlash : ParryableEffect {
             playerObject.transform.parent
         );
         dashSlash.layer = 17;
+        var hitLimit = dashSlash.GetComponent<LimitSendEvents>() ?? dashSlash.AddComponent<LimitSendEvents>();
+        hitLimit.monitorCollider = dashSlash.GetComponent<Collider2D>();
 
         // Since we anchor the dash slash on the player container instead of the player object
         // (to prevent it from flipping when the knight turns around) we need to adjust the scale based

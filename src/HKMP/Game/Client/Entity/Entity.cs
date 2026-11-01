@@ -1,3 +1,7 @@
+// Modified for HollowConnect (2026-10-11 .. 2026-10-30).
+// Original: HKMP (https://github.com/Extremelyd1/HKMP), LGPL-2.1-or-later.
+// This file remains under LGPL-2.1-or-later; see THIRD-PARTY.md.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

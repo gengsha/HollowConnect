@@ -2,6 +2,12 @@
 
 此项目不进入运行安装包，不能放在日常游戏的 Mods 目录中。
 
+## 结局退房与 UI 返回专项
+
+构建一次 Smoke，以 `Run-Two.ps1 -Mode ending-hud -NoBuild -RunName <新目录>` 运行。`HOLLOWCONNECT_ENDING_ROOM_CASE=A|B|C|D|E|travel` 选择原生结局或鹿角虫普通过场，`HOLLOWCONNECT_ENDING_FIRST=host|guest` 选择先进入动画的一端；`HOLLOWCONNECT_ENDING_STEEL=1` 检查钢魂返回分支。`HOLLOWCONNECT_ENDING_BOSS_RUSH=1` 用于 D/E 的神居模式原生结算分支。
+
+探针从隔离副本的内存角色直接进入真实动画场景，验证客机退房后视频继续、房主在视频结束时关房，以及另一端的动画不受关房影响。调用原生跳过协程触发真实 `FinishVideo`，沿加载场景提供的字幕／通关统计／解锁 helper 返回标题，再走原生 ContinueGame，检查 HUD 相机、画布、FSM 位置与坐椅起身后的操作。神居分支检查真实结果 UI 和原生返回；`travel` 检查普通过场保持连接。存档和成就写入均被禁止，返回标题后重新准备内存角色，因此不证明存档跨标题持久化，也不代表完整击杀最终 Boss。本次固定生产哈希的选择和记录在 `.analysis/ending-room-close-20261101/`。
+
 灵魂战士 Folly 专项使用 `Run-Two.ps1 -Mode soul-folly -NoBuild -RunName <新目录>`，设置 `HOLLOWCONNECT_FOLLY_SCENE=p5|Ruins1_31b`、`HOLLOWCONNECT_FOLLY_CASE=normal|late|handoff|cleanup|diagnostic`、`HOLLOWCONNECT_FOLLY_FIRST=host|guest`、`HOLLOWCONNECT_FOLLY_SHARED=0|1`。已验证的组合见[专项记录](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/SOUL-WARRIOR-FOLLY-FIX-2026-10-23.md)。正式分支检查原生池配对、移动、主客机实际骨钉碰撞击杀；迟入等原生召唤后再入场，接管由权威原生离场触发。`cleanup` 对 Boss 注入致命健康伤害检查原生小怪清理，并等真实结算完成后退出；不等于完整人工 Boss 战斗。`diagnostic` 仅导出原生 FSM 和观察，不算功能验收。
 
 战吼控制专项使用 `Run-Two.ps1 -Mode boss-roar -NoBuild -RunName <新目录>`，设置 `HOLLOWCONNECT_ROAR_SCENE=GG_Grimm|GG_Collector_V`、`HOLLOWCONNECT_ROAR_FIRST=host|guest` 和 `HOLLOWCONNECT_ROAR_CASE=normal|delayed-start|missing-exit|late|handoff`。收藏家使用原生五门序列索引 26 的上下文，格林实际在敬礼时受到骨钉伤害；后两项针对收藏家。延迟开始用例隔离可靠动作迟到，并以原生 `No Roar` 标记模拟权威跳过锁定的结果，不等于自动执行原版卡菜单技巧。两端必须实际经历预期锁定、恢复控制、等待正常入场保护结束并接受原生伤害；副本还验证旧结束事件不会解除另一段原生战吼。仅 `diagnostic` 模式的 FINAL PASS 表示记录完成。详见 [战吼修复记录](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/BOSS-ROAR-LOCK-FIX-2026-10-23.md)。
@@ -260,6 +266,22 @@ Boss倒地索敌专项：构建一次Smoke，再运行 `Run-Boss-Targets.ps1 -Pr
 巨型苔藓冲锋者回椅专项：rescue 模式加 `HOLLOWCONNECT_MOSS_RETARGET=fixed`，`HOLLOWCONNECT_MOSS_AUTHORITY=host` / `guest` 选择初始 AI 权威；默认让该玩家真实死亡回 Town，队友接管后观察自然攻击，并验证实际范围离开/重入。`HOLLOWCONNECT_MOSS_VICTIM=remote` 改为远端已选目标死亡、原权威留场；`HOLLOWCONNECT_MOSS_NATIVE=1` 使用原版索敌，其余默认灵活。`schema` 只预检原生 GG 场景结构；`baseline` 只记录旧 DLL 观测，不把停滞当作通过的产品行为。正式用例进入 `Fungus1_29`，不强制 Boss 状态。证据与固定名单见[修复报告](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/MOSS-RETARGET-FIX-2026-10-26.md)。
 
 流程暗影路线专项：构建一次 Smoke，再运行 `Run-Story-Rescue.ps1 -Prefix <全新前缀> -NoBuild`。默认双向房间权威，双方交换倒地；`-Only mother,knight,tyrant,kin,defender,ogres,acid,moving,vanishing,retry,rejected,timeout,blocked,revive-loss` 可跑完整专项。死亡前允许位置准备和致命伤害注入；死亡后救援者仅用原生移动输入和实际骨钉碰撞，不传送至暗影、不注入命中、不拆门。为隔离路线，屏蔽额外战斗接触伤害；酸水分支保留真实原生致命碰撞。移动／消失支撑及网络故障明确为注入。`timeout`、`blocked`、`revive-loss` 检查返回兜底，只让客机倒地并交换房间权威；其余用例均交换倒地者。旧 `HOLLOWCONNECT_HAZARD_RESCUE_CHECK=1` 仅保留神居原检查点规则，流程酸水由新路线专项覆盖。测试范围与局限见[整改报告](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/STORY-RESCUE-FIX-2026-10-21.md)。
+
+## 竞技场网络专项
+
+构建 Smoke，以 `colosseum` 模式和 `HOLLOWCONNECT_COLOSSEUM_TRIAL=Gold`、`HOLLOWCONNECT_COLOSSEUM_CASE=network`、`HOLLOWCONNECT_COLOSSEUM_SHARE=1` 运行；`HOLLOWCONNECT_COLOSSEUM_FIRST=host|guest` 选择先入者/场景权威，`HOLLOWCONNECT_GOLD_AUDIT_LOSS=1` 注入双向独立 1% DTLS 应用分片丢失。通过原生波次 1–34，检查竞技场毛里克的根/手臂/头部归属、绝对血量、死亡次数和下一波推进，记录发送队列、主线程回调、同步更新及分片指标。伤害加速原生波次，不代表完整战斗通关或真实公网性能。
+
+`HOLLOWCONNECT_GOLD_AUDIT_FOLLOWUP=1` 先做非权威玩家单次原生动画和真实远端碰撞的攻击检查：巨型斩、冲刺斩、暗影之魂，在60/20 FPS下分别连续两次。`HOLLOWCONNECT_GOLD_AUDIT_ATTACK_ONLY=1` 仅运行攻击部分。攻击目标保持动态刚体、禁止睡眠但冻结运动，避免运动学目标/睡眠影响刀光接触；必须记录远端来源的实际一次命中和预期血量差才能通过，场内敌人的误伤不能充当通过条件。该夹具不代表完整按键蓄力流程或所有法术多段场景。运行名单、失败尝试及固定 DLL 哈希记录在 `.analysis/colo-gold-fix-20261101/`。
+
+再加 `HOLLOWCONNECT_GOLD_AUDIT_SPELLS=1` 改测黑波和白/黑下砸落地阶段，主客互换及60/20 FPS各连续两次，记录各阶段真实碰撞来源和HP差。黑下砸保留冲击和延迟爆发两段，不强行按整次施法限为一击。`HOLLOWCONNECT_GOLD_AUDIT_LOSS=1` 在此分支的攻击前即启用双向1%应用分片丢失；`HOLLOWCONNECT_GOLD_AUDIT_SPELL_PREFLIGHT=1` 只预检一次60FPS黑下砸，先启用骑士自身原生落地对象作为参考。组合专项使用独立预检确立的阶段值，不反复启用本机参考对象，以免原生FSM/碰撞历史影响下次参考。统计按远端对象标记识别来源，避免协程后续子对象的标记编号未设置而漏计。该对照仍是原生阶段对象/动画播放，未覆盖完整输入施法、下落接触伤害或所有移动目标/护符组合。
+
+## 梦钉文字及受击专项
+
+构建 Smoke 后使用 `progress` 模式与 `HOLLOWCONNECT_DREAM_DIALOGUE_CASE=inspect|samples|enemy|hit|simultaneous|grub|grub-hit`。`inspect` 只预检原生梦钉、读心请求者、碰撞体和 UI；`samples` 让主客双方分别对长者、`Deepnest_41` 的虫子尸体和助产士真实蓄力挥梦钉，检查非空可见文字、原生输入关闭及控制/暂停恢复，另一端保持独立。`simultaneous` 让双方同时对这些对象读心，检查各自文本和关闭互不干扰。`enemy` 检查普通敌人的真实梦钉命中、回魂、无伤害和输入恢复；仅在蓄力期间调整测试角色位置跟随移动敌人，保留敌人原生 AI。`hit` 用 `HOLLOWCONNECT_DREAM_DIALOGUE_CASTER=host|guest` 选择助产士读心者，由队友在原生出场后实际挥骨钉，检查读心对象及文字继续有效、正常关闭、关闭后仍可打退助产士。`grub` 检查原生毛虫罐梦语（主客双方），梦钉不碎罐、非空文字和正常关闭；`grub-hit` 用同一 CASTER 开关选择读心者，队友真实骨钉碎罐，检查本地读心请求者保留、共享计数一次、原生关闭后读心者仍可正常碎罐。输入注入保留按下直到原生 FSM 接受，兼容 FixedUpdate 轮询，不直接置梦钉状态。沿用现有隔离副本并禁止保存。0.2.5 原包对照、失败分类、最终名单与实际 DLL 哈希记录在 `.analysis/dream-dialogue-20261101/`。
+
+## 助产士对话受击专项
+
+先构建 Smoke，使用 `progress` 模式与 `HOLLOWCONNECT_MIDWIFE_CASE=dialogue`；`HOLLOWCONNECT_MIDWIFE_TALKER=host` 或 `guest` 选择交谈者。`inspect` 只检查原生对象、FSM 和碰撞体。使用现有隔离副本及禁止保存的内存角色，实际进入 `Deepnest_41`，通过原生交谈范围、向上输入和真实 UDP 刀光检查 `Meet`、`Convo1`、`Repeat` 三条对话。各次交谈后原生翻页关闭，确认输入和暂停恢复、助产士自然开始攻击，再真实挥刀确认正常退场；各轮通过原生场景重入恢复 NPC，保留自然取得的对话进度。共享事件保护同时回归下述银行家主客两组。复现、名单、二进制哈希与逐项结果保存在 `.analysis/midwife-dialogue-20261101/`。
 
 ## 银行家藏匿地对话专项
 

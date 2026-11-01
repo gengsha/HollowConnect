@@ -1,6 +1,6 @@
 # 实体支持注册表
 
-在上游 HKMP 注册表基础上增加神居格林的 Firebat Pillar，以及 0.1.8 的 Needle 与 Jellyfish Spawner；258 条目、239 种类型，包括敌人、Boss、弹幕、门与机关。这是实现注册清单，不是实战逐项通过清单。
+在上游 HKMP 注册表基础上增加神居格林的 Firebat Pillar、Needle、Jellyfish Spawner，以及 0.2.6 的竞技场毛里克根、双臂和头部；272 条目、242 种类型，包括敌人、Boss、弹幕、门与机关。这是实现注册清单，不是实战逐项通过清单。
 
 0.1.7 另提供实际动态生成物描述器、独立子体生成匹配和 `DynamicHazard` 通用危险物类型，后者不计入下面的具名 JSON 表。它覆盖已注册来源实际生成的带 DamageHero 物件；纯视觉特效不因此成为同步战斗实体。逐 Boss 实战范围见 VERIFICATION.md。
 
@@ -46,6 +46,10 @@
 | BroodingMawlekArm | Mawlek Arm R | Mawlek Arm Control |
 | BroodingMawlekHead | Mawlek Head | Mawlek Head |
 | BroodingMawlekDummy | Dummy |  |
+| ColosseumMawlek | Mawlek Col | Mawlek Control |
+| ColosseumMawlekArm | Mawlek Arm L | Mawlek Arm Control |
+| ColosseumMawlekArm | Mawlek Arm R | Mawlek Arm Control |
+| ColosseumMawlekHead | Mawlek Head | Mawlek Head |
 | Mosscreep | Moss Walker | Moss Walker |
 | Mossfly | Moss Flyer | Moss Flyer |
 | Mosskin | Mossman_Runner | Zombie Swipe |

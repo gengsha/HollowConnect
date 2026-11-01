@@ -41,9 +41,13 @@ public sealed partial class EndingHudProbe : MonoBehaviour {
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         var pd = PlayerData.instance;
+        // The room captures save mode at host start; prepare Steel Soul
+        // before connecting instead of mutating an active room's character.
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_STEEL") == "1") pd.SetInt("permadeathMode", 1);
         pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => runtime.Playable && GameManager.instance.HasFinishedEnteringScene && GameManager.instance.sceneName == "Town", "unsaved native bench entry");
+        yield return EndingBenchGetUp();
         if (role == "host") { engine.ServerManager.Start(29650, false); Flag("server.started"); }
         else yield return Until(() => Has("server.started"), "server started");
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
@@ -56,40 +60,8 @@ public sealed partial class EndingHudProbe : MonoBehaviour {
             Mark("FINAL PASS Radiance ending HUD " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_ENDING_HUD"));
             Flag(role + ".done"); yield break;
         }
-        foreach (var actor in new[] { "host", "guest" }) {
-            var canvas = GameCameras.instance.hudCanvas;
-            var controls = canvas.GetComponents<PlayMakerFSM>();
-            foreach (var f in controls) Mark("HUD SCHEMA " + f.FsmName + " state=" + f.ActiveStateName + " events=" + string.Join(",", f.Fsm.GlobalTransitions.Select(t => t.EventName + "->" + t.ToState)));
-            var initialPosition = canvas.transform.localPosition;
-            if (role == actor) {
-                foreach (var f in controls) f.SendEvent("OUT");
-                yield return new WaitForSecondsRealtime(1);
-                var hidden = canvas.transform.localPosition;
-                Check(Vector3.Distance(initialPosition, hidden) > .1f, "native OUT actually hides HUD before return");
-                var origin = UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle;
-                // Isolate the existing hooked exit and native ContinueGame.
-                // The source helper is inactive so its Start never fades or
-                // schedules another scene load while this boundary is tested.
-                var source = new GameObject("Ending HUD return boundary"); source.SetActive(false);
-                var helper = source.AddComponent<CutsceneHelper>();
-                helper.nextSceneType = actor == "host" ? CutsceneHelper.NextScene.MainMenu : CutsceneHelper.NextScene.MainMenuNoSave;
-                helper.LoadNextScene();
-                yield return Until(() => UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle != origin &&
-                    runtime.Playable && GameManager.instance.HasFinishedEnteringScene && GameManager.instance.sceneName == "Town", "ending exit returns to native checkpoint");
-                yield return Until(() => GameCameras.instance.hudCanvas.activeInHierarchy && GameCameras.instance.hudCamera.gameObject.activeInHierarchy &&
-                    Vector3.Distance(GameCameras.instance.hudCanvas.transform.localPosition, initialPosition) < .05f,
-                    "health and soul HUD returns to native visible position", 8);
-                Check(runtime.Connected && PlayerData.instance == pd && pd.GetString("respawnScene") == "Town", "return retains connection and personal checkpoint");
-                Flag(actor + ".returned");
-            } else {
-                yield return Until(() => Has(actor + ".returned"), "teammate returned without closing room");
-                Check(runtime.Connected && GameManager.instance.sceneName == "Town" &&
-                    Vector3.Distance(canvas.transform.localPosition, initialPosition) < .05f, "uninvolved teammate stays connected with unchanged HUD");
-            }
-            Flag(role + ".checked." + actor);
-            yield return Until(() => Has((role == "host" ? "guest" : "host") + ".checked." + actor), "both confirm return " + actor);
-        }
+        yield return EndingRoomChecks();
         yield return ProbeShutdown.Run(engine, root, role);
-        Mark("FINAL PASS ending HUD returns and room remains connected"); Flag(role + ".done");
+        Mark("FINAL PASS native ending disconnect, host close and HUD return"); Flag(role + ".done");
     }
 }

@@ -245,4 +245,7 @@ internal enum EntityType {
     DynamicHazard,
     CombatSpawner,
     EncounterSummoner,
+    ColosseumMawlek,
+    ColosseumMawlekArm,
+    ColosseumMawlekHead,
 }

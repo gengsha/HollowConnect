@@ -68,6 +68,7 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
     /// to check the RTT of sent packets and to resend packets that contain reliable data if they time out.
     /// </summary>
     private readonly ConcurrentDictionary<ushort, SentPacket<TOutgoing, TPacketId>> _sentQueue;
+    internal int PendingCount => _sentQueue.Count;
 
     /// <summary>
     /// Whether we have received our first packet from the server.
@@ -174,7 +175,7 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
         foreach (var pair in _sentQueue) {
             if (!pair.Value.Lost && pair.Value.Packet.ContainsReliableData
                 && HasAcknowledgedSuccessors<TIncoming, TOtherPacketId>(pair.Key, packet)) {
-                MarkLost(pair.Value);
+                MarkLost(pair.Key, pair.Value);
             }
         }
     }
@@ -193,9 +194,14 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
         return false;
     }
 
-    private void MarkLost(SentPacket<TOutgoing, TPacketId> sentPacket) {
-        sentPacket.Lost = true;
+    private void MarkLost(ushort sequence, SentPacket<TOutgoing, TPacketId> sentPacket) {
+        // Transfer reliable origins before retiring their carrier. If enqueueing
+        // fails, leave the original available for a later attempt. The new
+        // carrier owns retries until acknowledged; retaining every lost carrier
+        // here otherwise grows both payload memory and the lock-held scans.
         if (sentPacket.Packet.ContainsReliableData) _udpUpdateManager.ResendReliableData(sentPacket.Packet);
+        sentPacket.Lost = true;
+        _sentQueue.TryRemove(sequence, out _);
     }
 
     /// <summary>
@@ -322,7 +328,7 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
             // If the packet was not marked as lost already and the stopwatch has elapsed the maximum expected
             // round trip time, we resend the reliable data
             if (!sentPacket.Lost && sentPacket.Stopwatch.ElapsedMilliseconds > MaximumExpectedRtt) {
-                MarkLost(sentPacket);
+                MarkLost(seqSentPacketPair.Key, sentPacket);
             }
         }
 

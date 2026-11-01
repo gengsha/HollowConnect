@@ -243,6 +243,17 @@
         ]
     },
     {
+        "base_object_name": "Mawlek Col",
+        "type": "ColosseumMawlek",
+        "fsm_name": "Mawlek Control",
+        "components": [ "ZPosition", "GravityScale" ],
+        "children": [
+            { "base_object_name": "Mawlek Arm L", "type": "ColosseumMawlekArm", "fsm_name": "Mawlek Arm Control" },
+            { "base_object_name": "Mawlek Arm R", "type": "ColosseumMawlekArm", "fsm_name": "Mawlek Arm Control" },
+            { "base_object_name": "Mawlek Head", "type": "ColosseumMawlekHead", "fsm_name": "Mawlek Head" }
+        ]
+    },
+    {
         "base_object_name": "Moss Walker",
         "type": "Mosscreep",
         "fsm_name": "Moss Walker",

@@ -52,7 +52,8 @@ internal class GameManager {
 
         var uiManager = new UiManager(
             modSettings,
-            NetClient
+            NetClient,
+            () => netServer.IsStarted
         );
         uiManager.Initialize();
 

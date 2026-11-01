@@ -39,6 +39,7 @@ internal class ThreadUtil : MonoBehaviour {
         }
     }
 
+    internal static int PendingActions { get { lock (Lock) return ActionsToRun.Count; } }
     public void Update() => RunPendingActions();
 
     internal static void RunPendingActions() {

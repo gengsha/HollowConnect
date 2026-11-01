@@ -133,9 +133,16 @@ public sealed partial class ColosseumProbe : MonoBehaviour {
         };
         yield return Until(() => GameManager.instance != null && Object.FindObjectOfType<CoopRuntime>() != null && ActiveScene == "Menu_Title", "menu ready");
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
+        if (testCase == "network") gameObject.AddComponent<ColosseumNetworkMetrics>().Initialize(engine, root, role);
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLOSSEUM_SHARE") != "0";
         CoopMod.Settings.Rescue = true; CoopMod.Settings.EntryProtection = true;
+        if (testCase == "air-rescue") {
+            // The native rescue fixture requires individual health. A player's
+            // persisted linked-health preference intentionally disables rescue.
+            CoopMod.Settings.LinkedHealth = false; CoopMod.Settings.RescueLimit = 0;
+            CoopMod.Settings.SpectateAfterExhaustion = false; CoopMod.Settings.VoluntaryObservation = false;
+        }
         var pd = PlayerData.instance; var initialBench = host ? "Town" : "Crossroads_47";
         pd.SetString("respawnScene", initialBench); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         pd.SetInt("geo", 10000); pd.SetBool("hasWalljump", true); pd.SetBool("hasDoubleJump", true);
@@ -188,7 +195,8 @@ public sealed partial class ColosseumProbe : MonoBehaviour {
         flow?.Capture("before native registration", true);
         if (testCase != "inspect") yield return NormalEntry();
         if (FlowCase) yield return ArenaFlow();
-        if (testCase == "air-rescue") yield return ColosseumAirRescue();
+        if (testCase == "network") yield return ColosseumNetworkChecks();
+        else if (testCase == "air-rescue") yield return ColosseumAirRescue();
         else if (testCase.StartsWith("ceiling-")) yield return ColosseumCeilingChecks();
         else if (testCase == "side-gap") yield return ColosseumSideBoundaryChecks();
         else if (WallCase) yield return ObserveColosseumWalls();

@@ -46,6 +46,13 @@ internal static class SceneUtil {
         return NonGameplayScenes.Contains(sceneName);
     }
 
+    internal static bool IsEndingCinematic(string sceneName) => sceneName is
+        "Cinematic_Ending_A" or "Cinematic_Ending_B" or "Cinematic_Ending_C" or
+        "Cinematic_Ending_D" or "Cinematic_Ending_E" or "Cinematic_MrMushroom";
+
+    internal static bool IsEndingScene(string sceneName) => IsEndingCinematic(sceneName) || sceneName is
+        "End_Credits" or "End_Game_Completion" or "PermaDeath_Unlock";
+
     /// <summary>
     /// Get the name of the currently active scene.
     /// </summary>

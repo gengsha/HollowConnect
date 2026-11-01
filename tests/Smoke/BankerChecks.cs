@@ -51,7 +51,10 @@ public sealed partial class ProgressProbe {
         try {
             hero.transform.position = banker.transform.position + new Vector3(talker ? 2.5f : -1.8f, 1, 0);
             hero.AffectedByGravity(true); Physics2D.SyncTransforms();
-            yield return Until(() => hero.cState.onGround, "native floor at banker", 8);
+            // onGround still describes the old position until physics has
+            // advanced. Do not press up mid-fall and have CanTalk reject it.
+            yield return new WaitForSecondsRealtime(.2f);
+            yield return Until(() => hero.cState.onGround && hero.CanTalk(), "native floor and CanTalk at banker", 8);
             Mark("BANKER HERO " + hero.transform.position + " control=" + control.ActiveStateName);
             for (var round = 0; round < 2; round++) {
             if (talker) {
