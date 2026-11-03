@@ -111,18 +111,19 @@ internal class NetServer : INetServer {
         );
     }
 
-    /// <summary>
-    /// Starts the server on the given port.
-    /// </summary>
+    internal int BoundPort => _dtlsServer.BoundPort;
+    /// <summary>Starts the server on all local interfaces at the given port.</summary>
     /// <param name="port">The networking port.</param>
-    public void Start(int port) {
+    public void Start(int port) => Start(port, IPAddress.Any);
+
+    internal void Start(int port, IPAddress bindAddress) {
         lock (_lifecycleGate) {
             if (IsStarted) {
                 Stop();
             }
 
             Logger.Info($"Starting NetServer on port {port}");
-            _dtlsServer.Start(port);
+            _dtlsServer.Start(port, bindAddress);
             Interlocked.Increment(ref _generation);
             IsStarted = true;
 

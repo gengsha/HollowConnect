@@ -1,9 +1,16 @@
-﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums, [switch]$UserRequestedRelease)
+﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums, [switch]$UserRequestedRelease,
+    [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate, [switch]$SteamModule)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'PackageTools.ps1')
 . (Join-Path $PSScriptRoot 'PackageDocumentation.ps1')
-$version = '0.2.6'
+$version = '0.2.7'
+if($ReleaseCandidate){
+    if($Playtest -or $PlaytestBuild -or $UserRequestedRelease){throw 'Choose one release channel.'}
+    $Playtest=$true; $PlaytestBuild=$ReleaseCandidate
+}
+$taskProductionNames=@('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll')
+if($SteamModule){$taskProductionNames+=@('HollowConnect.Steam.dll')}
 if($UserRequestedRelease -and $Playtest){throw 'Choose one release channel.'}
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
 $env:MSBuildEnableWorkloadResolver = 'false'
@@ -28,8 +35,9 @@ if($Playtest){
     if($PlaytestBuild -and $taskAuthorization.buildLabel -ne $PlaytestBuild){throw 'Playtest build label differs from the request record.'}
 }
 if($Playtest -or $UserRequestedRelease){
-    foreach($taskRequired in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll'){
-        $taskHash=(Get-FileHash -LiteralPath (Join-Path $root ('src/HollowConnect/bin/Release/net472/'+$taskRequired)) -Algorithm SHA256).Hash
+    foreach($taskRequired in $taskProductionNames){
+        $taskBinaryOutput=if($taskRequired -eq 'HollowConnect.Steam.dll'){'src/HollowConnect.Steam/bin/Release/net472/'}else{'src/HollowConnect/bin/Release/net472/'}
+        $taskHash=(Get-FileHash -LiteralPath (Join-Path $root ($taskBinaryOutput+$taskRequired)) -Algorithm SHA256).Hash
         if(@($taskAuthorization.binaries | Where-Object {$_.name -eq $taskRequired -and $_.sha256 -eq $taskHash}).Count -ne 1){throw 'Production DLL differs from the requested package build.'}
     }
 }
@@ -38,8 +46,8 @@ $taskRuntime=if($taskScopedPlaytest){$taskAuthorization.runtimeValidation}else{$
 # A user-requested package may retain earlier validation without claiming the new hashes were tested.
 $taskSkipRetest=($Playtest -or $UserRequestedRelease) -and $taskAuthorization.retestOmitted -eq $true
 if($taskSkipRetest){
-    if(!$taskAuthorization.userRequest -or !$taskEvidence.retestOmitted -or $taskEvidence.version -ne $version -or $taskEvidence.engineVersion -ne '3.0.0-hc13' -or $taskEvidence.releaseReady -ne $false -or @($taskEvidence.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
-    if(!$taskEvidence.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $root $taskEvidence.previousValidationSource) -Algorithm SHA256).Hash -ne $taskEvidence.previousValidationSha256){throw 'Previous validation reference differs.'}
+    if(!$taskAuthorization.userRequest -or !$taskRuntime.retestOmitted -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc13' -or $taskRuntime.releaseReady -ne $false -or @($taskRuntime.runs).Count -ne 0){throw 'Invalid no-retest packaging record.'}
+    if(!$taskRuntime.previousValidationSource -or (Get-FileHash -LiteralPath (Join-Path $root $taskRuntime.previousValidationSource) -Algorithm SHA256).Hash -ne $taskRuntime.previousValidationSha256){throw 'Previous validation reference differs.'}
 }else{
 if((!$Playtest -and $taskEvidence.releaseReady -ne $true) -or $taskRuntime.version -ne $version -or $taskRuntime.engineVersion -ne '3.0.0-hc13' -or @($taskRuntime.runs).Count -lt 1 -or (!$taskScopedPlaytest -and @($taskRuntime.runs).Count -ne 12)){throw 'Runtime acceptance is incomplete or blocked; no package created.'}
 foreach($taskRun in $taskRuntime.runs){
@@ -54,15 +62,20 @@ foreach($taskRun in $taskRuntime.runs){
     }
 }
 }
-& dotnet build (Join-Path $root 'src\HollowConnect.Installer\HollowConnect.Installer.csproj') -c Release --nologo
-if ($LASTEXITCODE -ne 0) { throw 'Installer build failed.' }
-$taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
+& (Join-Path $PSScriptRoot 'Build.ps1') -Target Installer
+$taskPackageName="HollowConnect-$version"+$(if($ReleaseCandidate){'-'+$ReleaseCandidate}elseif($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package = Join-Path $root ('dist\'+$taskPackageName)
 $payload = Join-Path $package 'payload\HKMP'
 New-Item -ItemType Directory -Force -Path $payload,(Join-Path $package 'dependencies') | Out-Null
 $output = Join-Path $root 'src\HollowConnect\bin\Release\net472'
 $files = 'HKMP.dll','HKMP.pdb','BouncyCastle.Cryptography.dll','HollowConnect.dll','HollowConnect.pdb','HollowConnect.Core.dll','HollowConnect.Core.pdb'
 foreach ($name in $files) { Copy-Item -LiteralPath (Join-Path $output $name) -Destination (Join-Path $payload $name) -Force }
+if($SteamModule){
+    foreach($name in 'HollowConnect.Steam.dll','HollowConnect.Steam.pdb'){
+        Copy-Item -LiteralPath (Join-Path $root ('src/HollowConnect.Steam/bin/Release/net472/'+$name)) -Destination (Join-Path $payload $name) -Force
+        $files+=@($name)
+    }
+}
 Copy-Item -LiteralPath (Join-Path $root 'vendor\moddingapi.v77.windows.zip') -Destination (Join-Path $package 'dependencies') -Force
 foreach ($name in 'Install.ps1','Uninstall.ps1','GamePath.ps1','安装说明.txt') { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $package -Force }
 $installerOutput = Join-Path $root 'src\HollowConnect.Installer\bin\Release\net472'
@@ -73,6 +86,9 @@ Copy-HollowPackageDocumentation -Root $root -Destination $package -Version $vers
 Update-HollowPackageMarkdownLinks -Root $root -Package $package
 $manifest = [ordered]@{
     version = $version
+    displayVersion = $version+$(if($ReleaseCandidate){'-'+$ReleaseCandidate}else{''})
+    releaseCandidate = $ReleaseCandidate
+    optionalModules = @(if($SteamModule){'Steam'})
     releaseChannel = if($Playtest){'playtest'}else{'release'}
     userRequestedRelease = [bool]$UserRequestedRelease
     releaseAuthorizationSource = if($UserRequestedRelease){$taskAuthorizationRelative}else{$null}
@@ -86,7 +102,7 @@ $manifest = [ordered]@{
     playtestAuthorizationSha256 = if($Playtest){(Get-FileHash -LiteralPath $taskAuthorizationPath -Algorithm SHA256).Hash}else{$null}
     installerRevision = 3
     documentationVersion = 1
-    buildInformation = @('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll') | ForEach-Object { @{name=$_;productVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $output $_)).ProductVersion} }
+    buildInformation = $taskProductionNames | ForEach-Object { @{name=$_;productVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $payload $_)).ProductVersion} }
     gameVersion = '1.5.78.11833 Windows / Unity 2020.2.2f1'
     vanillaAssemblySha256 = 'FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0'
     apiAssemblySha256 = '5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D'

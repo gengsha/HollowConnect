@@ -547,7 +547,9 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                     personalDeath = null;
                     PlayerData.instance.SetInt("healthBlue", 0); Heal(1);
                     Notice(bossRecovery ? "Boss已击败，已在存活队友身边复活 · 不消耗救援次数" : "队友击破了你的暗影，一血复活");
-                    rescued.StartCoroutine("Invulnerable", rescued.INVUL_TIME);
+                    // Match native StartRecoil, including Stalwart Shell's longer immunity.
+                    rescued.StartCoroutine("Invulnerable", PlayerData.instance.GetBool("equippedCharm_4")
+                        ? rescued.INVUL_TIME_STAL : rescued.INVUL_TIME);
                     PlayRescueFeedback(m);
                 }
                 // Roster is unreliable and can already report Alive before the

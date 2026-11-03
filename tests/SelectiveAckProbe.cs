@@ -168,6 +168,30 @@ internal static class SelectiveAckProbe {
         Check(manager.Resends == 1, "loss without newer ACK evidence lost the existing timeout fallback");
     }
 
+    internal static void LargeSnapshotAssembly() {
+        var large=new ServerUpdatePacket{Sequence=9};
+        var update=new ReliableEntityUpdate{Id=1,SceneName="Arena",Visit=1,Epoch=1};update.UpdateTypes.Add(EntityUpdateType.Data);
+        for(var i=0;i<5;i++){var data=new EntityNetworkData{Type=Hkmp.Game.Client.Entity.Component.EntityComponentType.Fsm};data.Packet.Write(new byte[50000]);update.GenericData.Add(data);}
+        var collection=new PacketDataCollection<ReliableEntityUpdate>();collection.DataInstances.Add(update);
+        large.SetSendingPacketData(ServerUpdatePacketId.ReliableEntityUpdate,collection);large.CreatePacket(new Packet());
+        Check(large.EncodedLength>250000,"fixture includes a fragmented room-sized reliable payload");
+        var small=new ServerUpdatePacket{Sequence=10};small.SetSendingPacketData(ServerUpdatePacketId.PlayerEnterScene,new ServerPlayerEnterScene{NewSceneName="probe",Position=Hkmp.Math.Vector2.Zero});small.CreatePacket(new Packet());
+        var manager=new Capture();var congestion=new UdpCongestionManager<ServerUpdatePacket,ServerUpdatePacketId>(manager);
+        congestion.OnSendPacket(9,large);congestion.OnSendPacket(10,small);
+        var queue=(ConcurrentDictionary<ushort,SentPacket<ServerUpdatePacket,ServerUpdatePacketId>>)congestion.GetType().GetField("_sentQueue",Private).GetValue(congestion);
+        Age(queue[9].Stopwatch,100);
+        var ack=new ClientUpdatePacket{Ack=13};ack.AckField[0]=ack.AckField[1]=true;
+        congestion.OnReceivePackets<ClientUpdatePacket,ClientUpdatePacketId>(ack);
+        Check(manager.Resends==1&&queue.ContainsKey(9)&&!queue.ContainsKey(10),"small control loss recovers while large snapshot is allowed to assemble");
+        Age(queue[9].Stopwatch,201);congestion.OnSendPacket(14,new ServerUpdatePacket());
+        Check(manager.Resends==1&&queue.ContainsKey(9),"small-heartbeat RTT cannot prematurely duplicate a large room transfer");
+        Age(queue[9].Stopwatch,2100);congestion.OnSendPacket(15,new ServerUpdatePacket());
+        Check(manager.Resends==2&&!queue.ContainsKey(9),"large transfer retains bounded timeout recovery after its assembly interval");
+        manager=new Capture();congestion=new UdpCongestionManager<ServerUpdatePacket,ServerUpdatePacketId>(manager);
+        congestion.OnSendPacket(9,large);congestion.OnReceivePackets<ClientUpdatePacket,ClientUpdatePacketId>(new ClientUpdatePacket{Ack=9});
+        Check(congestion.PendingCount==0&&manager.Resends==0,"fast LAN delivery ACK retires a large snapshot without waiting for its assembly interval");
+    }
+
     internal static void RetiredCarriers() {
         var manager = new ClientUpdateManager();
         var type = typeof(UdpUpdateManager<ServerUpdatePacket, ServerUpdatePacketId>);
@@ -178,11 +202,6 @@ internal static class SelectiveAckProbe {
         var pending = (ServerUpdatePacket)type.GetField("CurrentUpdatePacket", Private).GetValue(manager);
         pending.SetSendingPacketData(ServerUpdatePacketId.PlayerEnterScene,
             new ServerPlayerEnterScene { NewSceneName = "retention-probe", Position = Hkmp.Math.Vector2.Zero });
-        ServerUpdatePacket Decode(Packet bytes) {
-            var p = new ServerUpdatePacket();
-            Check(p.ReadPacket(PacketManager.ReadDatagram(bytes.ToArray())), "retired carrier failed to decode");
-            return p;
-        }
         var original = Decode(manager.BuildUpdatePacket());
         var latest = original;
         // Consecutive lost carriers cross sequence wrap. Only the most recent
@@ -194,10 +213,50 @@ internal static class SelectiveAckProbe {
             Check(queue.Count <= 2, "lost carrier payloads accumulated: " + queue.Count);
             // Retire the empty carrier too, without an ACK for the lost origin.
         }
+        // A paced send can be an empty heartbeat. Allow one complete retry
+        // cycle, and require the original event to actually leave the sender.
+        for (var i = 0; i < 4 && !latest.GetPacketData().ContainsKey(ServerUpdatePacketId.PlayerEnterScene); i++) {
+            foreach (var p in queue.Values) Age(p.Stopwatch, 1001);
+            latest = Decode(manager.BuildUpdatePacket());
+        }
         var consumed = new SequenceWindow(); var snapshots = new EntitySnapshotHistory();
         latest.FilterReceivedData(consumed, snapshots);
         Check(latest.GetPacketData().ContainsKey(ServerUpdatePacketId.PlayerEnterScene), "retiring lost history discarded reliable origin");
         original.FilterReceivedData(consumed, snapshots);
         Check(original.GetPacketData().Count == 0, "late original replayed an already delivered reliable origin");
+    }
+
+    private static ServerUpdatePacket Decode(Packet bytes) {
+        var packet = new ServerUpdatePacket();
+        Check(packet.ReadPacket(PacketManager.ReadDatagram(bytes.ToArray())), "retired carrier failed to decode");
+        return packet;
+    }
+
+    internal static void LateCarrierAcknowledgement() {
+        foreach (var acknowledgeCarrier in new[] { false, true }) {
+            var manager = new ClientUpdateManager();
+            var type = typeof(UdpUpdateManager<ServerUpdatePacket, ServerUpdatePacketId>);
+            type.GetField("_localSequence", Private).SetValue(manager, (ushort)65534);
+            var congestion = (UdpCongestionManager<ServerUpdatePacket, ServerUpdatePacketId>)type.GetField("_udpCongestionManager", Private).GetValue(manager);
+            congestion.OnReceivePackets<ClientUpdatePacket, ClientUpdatePacketId>(new ClientUpdatePacket());
+            var queue = (ConcurrentDictionary<ushort, SentPacket<ServerUpdatePacket, ServerUpdatePacketId>>)congestion.GetType().GetField("_sentQueue", Private).GetValue(congestion);
+            var pending = (ServerUpdatePacket)type.GetField("CurrentUpdatePacket", Private).GetValue(manager);
+            pending.SetSendingPacketData(ServerUpdatePacketId.PlayerEnterScene, new ServerPlayerEnterScene { NewSceneName = "old-room", Position = Hkmp.Math.Vector2.Zero });
+            manager.BuildUpdatePacket();
+            Age(queue[65534].Stopwatch, 201); manager.BuildUpdatePacket();
+            ServerUpdatePacket carrier = null;
+            for (var i = 0; i < 3; i++) {
+                var candidate = Decode(manager.BuildUpdatePacket());
+                if (candidate.GetPacketData().ContainsKey(ServerUpdatePacketId.PlayerEnterScene)) { carrier = candidate; break; }
+            }
+            Check(carrier != null, "precondition: original event actually published in a retry carrier");
+            Age(queue[carrier.Sequence].Stopwatch, 201); manager.BuildUpdatePacket();
+            Check(!queue.ContainsKey(carrier.Sequence) && !queue.ContainsKey(65534), "precondition: large carrier payloads retired");
+            congestion.OnReceivePackets<ClientUpdatePacket, ClientUpdatePacketId>(new ClientUpdatePacket { Ack = acknowledgeCarrier ? carrier.Sequence : (ushort)65534 });
+            for (var i = 0; i < 6; i++) {
+                var incoming = Decode(manager.BuildUpdatePacket());
+                Check(!incoming.GetPacketData().ContainsKey(ServerUpdatePacketId.PlayerEnterScene), "late ACK of retired carrier did not stop original resend: carrier=" + acknowledgeCarrier);
+            }
+        }
     }
 }

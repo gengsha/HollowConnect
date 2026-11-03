@@ -64,6 +64,7 @@ internal class NetClient : INetClient {
     private DtlsClient _dtlsClient;
     private readonly object _connectionGate = new object();
     private int _session;
+    internal int SessionVersion => System.Threading.Volatile.Read(ref _session);
     private Action _timeoutHandler;
 
     /// <summary>

@@ -9,7 +9,9 @@
     <Reference Include="UnityEngine.AudioModule"><HintPath>../../vendor/references/UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MMHOOK_PlayMaker"><HintPath>../../vendor/references/MMHOOK_PlayMaker.dll</HintPath><Private>false</Private></Reference>
     <ProjectReference Include="../../src/HollowConnect/HollowConnect.csproj" />
+    <ProjectReference Include="../../src/HollowConnect.Steam/HollowConnect.Steam.csproj" />
     <Reference Include="Assembly-CSharp"><HintPath>../../vendor/references/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp-firstpass"><HintPath>../../vendor/references/Assembly-CSharp-firstpass.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MMHOOK_Assembly-CSharp"><HintPath>../../vendor/references/MMHOOK_Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine"><HintPath>../../vendor/references/UnityEngine.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>../../vendor/references/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>

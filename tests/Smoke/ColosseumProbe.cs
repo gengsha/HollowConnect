@@ -133,6 +133,7 @@ public sealed partial class ColosseumProbe : MonoBehaviour {
         };
         yield return Until(() => GameManager.instance != null && Object.FindObjectOfType<CoopRuntime>() != null && ActiveScene == "Menu_Title", "menu ready");
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
+        ProbeRelayProfile.ConfigureHost(engine, runtime, role);
         if (testCase == "network") gameObject.AddComponent<ColosseumNetworkMetrics>().Initialize(engine, root, role);
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         CoopMod.Settings.ShareProgress = Environment.GetEnvironmentVariable("HOLLOWCONNECT_COLOSSEUM_SHARE") != "0";
@@ -195,7 +196,15 @@ public sealed partial class ColosseumProbe : MonoBehaviour {
         flow?.Capture("before native registration", true);
         if (testCase != "inspect") yield return NormalEntry();
         if (FlowCase) yield return ArenaFlow();
-        if (testCase == "network") yield return ColosseumNetworkChecks();
+        if (testCase == "network") {
+            yield return ColosseumNetworkChecks();
+            // This bounded fixture ends at the selected native wave. Stop its
+            // scene simulation before network teardown can resume the dormant
+            // trial and spawn later, unobserved waves during launcher cleanup.
+            foreach (var fsm in Object.FindObjectsOfType<PlayMakerFSM>(true))
+                if (fsm.gameObject.scene.name == ActiveScene) fsm.Fsm.ManualUpdate = true;
+            Log("NETWORK FIXTURE scene simulation held after final observations for shutdown");
+        }
         else if (testCase == "air-rescue") yield return ColosseumAirRescue();
         else if (testCase.StartsWith("ceiling-")) yield return ColosseumCeilingChecks();
         else if (testCase == "side-gap") yield return ColosseumSideBoundaryChecks();

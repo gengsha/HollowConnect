@@ -1,4 +1,4 @@
-﻿param([switch]$List)
+param([switch]$List)
 
 function Test-HollowKnightDirectory {
     param([string]$Path)
@@ -76,11 +76,33 @@ function Resolve-HollowKnightDirectory {
 
 function Assert-HollowKnightStopped {
     param([string]$Path)
-    $executable = Join-Path $Path 'hollow_knight.exe'
-    foreach ($process in @(Get-Process -Name hollow_knight -ErrorAction SilentlyContinue)) {
+    $executable = [IO.Path]::GetFullPath((Join-Path $Path 'hollow_knight.exe'))
+    $hasThreadCount = $true
+    try { $candidates = @(Get-CimInstance -ClassName Win32_Process -Filter "Name='hollow_knight.exe'" -ErrorAction Stop) }
+    catch {
+        $hasThreadCount = $false
+        $candidates = @(Get-Process -Name hollow_knight -ErrorAction SilentlyContinue)
+    }
+    foreach ($process in $candidates) {
+        # Windows can retain an exited process object while another program holds
+        # its handle. CIM still lists its name, but zero threads cannot run game
+        # code. A missing thread count or unreadable path does not prove exit.
+        if ($hasThreadCount -and $null -ne $process.ThreadCount -and $process.ThreadCount -eq 0) { continue }
+        $processId = if ($hasThreadCount) { $process.ProcessId } else { $process.Id }
+        if (!$hasThreadCount) {
+            try { if ($process.HasExited -eq $true) { continue } } catch { }
+        }
         $runningPath = $null
-        try { $runningPath = $process.Path } catch { }
-        if (!$runningPath -or $runningPath -ieq $executable) { throw 'Close Hollow Knight in the selected directory before installing or restoring.' }
+        if ($hasThreadCount) { $runningPath = $process.ExecutablePath }
+        if (!$runningPath) {
+            try { $runningPath = (Get-Process -Id $processId -ErrorAction Stop).Path } catch { }
+        }
+        if ($runningPath -and [IO.Path]::GetFullPath($runningPath) -ieq $executable) {
+            throw "Close Hollow Knight in the selected directory before installing or restoring. PID: $processId; executable: $runningPath"
+        }
+        if (!$runningPath) {
+            throw "Cannot verify whether Hollow Knight process PID $processId belongs to the selected directory. Check this PID in Task Manager; if it is still running, close it. If access is denied, run the installer as administrator. Selected executable: $executable"
+        }
     }
 }
 

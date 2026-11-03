@@ -125,7 +125,13 @@
         "datagram-frame-final-seeded-guest-retry-20261014"
       ],
       "releaseRequirement": "The latest targeted runs passed, but do not uniquely explain or resolve the earlier failures. Capture reliable updates and activation across takeover before classifying the finding as resolved.",
-      "latestScopedValidation": "Story-placement pressure run story-rescue-full-20261021-final-lifecycle-host-013 timed out in Thrown; same-hash retry passed. Latest settlement pre-bump room matrix passed both authority orders. These do not resolve the historical intermittent root cause."
+      "latestScopedValidation": "Story-placement pressure run story-rescue-full-20261021-final-lifecycle-host-013 timed out in Thrown; same-hash retry passed. Latest settlement pre-bump room matrix passed both authority orders. These do not resolve the historical intermittent root cause.",
+      "arenaFixValidation20261103": {
+        "run": "arena-matrix-20261102-lifecycle-guest-005945244",
+        "result": "failed",
+        "observation": "First needle-phase transfer left Hornet in Thrown with inactive Needle and no active native needle Control state; Throw Recover timed out after 20 seconds. Host-first stress passed eight transfers on the same frozen build.",
+        "classification": "Matching unresolved historical symptom; cause and current change impact on trigger frequency remain unconfirmed. Failure retained without unchanged retries."
+      }
     },
     {
       "id": "false-knight-repeat-head-unresolved",

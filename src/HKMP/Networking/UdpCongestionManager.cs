@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Hkmp.Logging;
 using Hkmp.Networking.Packet;
@@ -68,7 +69,14 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
     /// to check the RTT of sent packets and to resend packets that contain reliable data if they time out.
     /// </summary>
     private readonly ConcurrentDictionary<ushort, SentPacket<TOutgoing, TPacketId>> _sentQueue;
+    // Lost carriers release their large payloads, but a late ACK still proves
+    // delivery of every original batch they carried. Keep only bounded receipt
+    // identities so that proof can cancel a retry already queued elsewhere.
+    private readonly Dictionary<ushort, ushort[]> _retiredOrigins = new();
+    private readonly Queue<ushort> _retiredOrder = new();
+    private readonly SequenceWindow _acknowledgedOrigins = new();
     internal int PendingCount => _sentQueue.Count;
+    internal void PruneAcknowledgedResends(TOutgoing packet) => packet.RemoveAcknowledgedResends(_acknowledgedOrigins.Contains);
 
     /// <summary>
     /// Whether we have received our first packet from the server.
@@ -174,11 +182,19 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
         // window even while later packets and their ACKs continue to arrive.
         foreach (var pair in _sentQueue) {
             if (!pair.Value.Lost && pair.Value.Packet.ContainsReliableData
+                && pair.Value.Stopwatch.ElapsedMilliseconds >= AssemblyInterval(pair.Value)
                 && HasAcknowledgedSuccessors<TIncoming, TOtherPacketId>(pair.Key, packet)) {
                 MarkLost(pair.Key, pair.Value);
             }
         }
     }
+
+    // Small heartbeats can arrive while a fragmented room snapshot is still
+    // assembling. Their ACKs do not prove loss of the large transfer. Allow
+    // its uncompressed size at least a 128 KiB/s serialization interval;
+    // compressed wire data has extra margin. A real ACK still retires it now.
+    private static long AssemblyInterval(SentPacket<TOutgoing, TPacketId> sent) =>
+        System.Math.Min(5000L, (long)sent.Packet.EncodedLength * 1000 / (128 * 1024));
 
     private static bool HasAcknowledgedSuccessors<TIncoming, TOtherPacketId>(ushort sequence, TIncoming packet)
         where TIncoming : UpdatePacket<TOtherPacketId>
@@ -200,6 +216,11 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
         // carrier owns retries until acknowledged; retaining every lost carrier
         // here otherwise grows both payload memory and the lock-held scans.
         if (sentPacket.Packet.ContainsReliableData) _udpUpdateManager.ResendReliableData(sentPacket.Packet);
+        if (sentPacket.Packet.ContainsReliableData) {
+            _retiredOrigins[sequence] = sentPacket.Packet.ReliableOrigins();
+            _retiredOrder.Enqueue(sequence);
+            while (_retiredOrder.Count > 4096) _retiredOrigins.Remove(_retiredOrder.Dequeue());
+        }
         sentPacket.Lost = true;
         _sentQueue.TryRemove(sequence, out _);
     }
@@ -210,11 +231,18 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
     /// </summary>
     /// <param name="sequence">The acknowledged sequence number.</param>
     private void CheckCongestion(ushort sequence) {
+        if (_retiredOrigins.TryGetValue(sequence, out var origins)) {
+            foreach (var origin in origins) _acknowledgedOrigins.TryAdd(origin);
+            _retiredOrigins.Remove(sequence);
+        }
         if (!_sentQueue.TryGetValue(sequence, out var sentPacket)) {
             return;
         }
 
         _sentQueue.TryRemove(sequence, out _);
+        _acknowledgedOrigins.TryAdd(sequence);
+        if (sentPacket.Packet.ContainsReliableData)
+            foreach (var origin in sentPacket.Packet.ReliableOrigins()) _acknowledgedOrigins.TryAdd(origin);
 
         var stopwatch = sentPacket.Stopwatch;
 
@@ -327,7 +355,7 @@ internal class UdpCongestionManager<TOutgoing, TPacketId>
 
             // If the packet was not marked as lost already and the stopwatch has elapsed the maximum expected
             // round trip time, we resend the reliable data
-            if (!sentPacket.Lost && sentPacket.Stopwatch.ElapsedMilliseconds > MaximumExpectedRtt) {
+            if (!sentPacket.Lost && sentPacket.Stopwatch.ElapsedMilliseconds > System.Math.Max(MaximumExpectedRtt, AssemblyInterval(sentPacket))) {
                 MarkLost(seqSentPacketPair.Key, sentPacket);
             }
         }

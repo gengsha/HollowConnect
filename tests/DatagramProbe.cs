@@ -86,4 +86,23 @@ internal static class DatagramProbe {
         var valid = DatagramFraming.Fragment(Message(30, 4), 2).Single();
         Check(reader.Accept(valid, valid.Length, out var got) && PacketManager.ReadDatagram(got) != null);
     }
+
+    public static void CompressedMessages() {
+        var original = Message(170000, 7);
+        var frames = DatagramFraming.Fragment(original, 9, compress: true).ToArray();
+        Check(frames.Length < 10 && DatagramFraming.IsCompressed(frames[0]));
+        var reader = new DatagramReassembler(); byte[] got = null;
+        foreach (var frame in frames.Reverse()) if (reader.Accept(frame, frame.Length, out var data)) got = data;
+        Check(got != null && got.SequenceEqual(original));
+        var random = Message(20000, 3); new Random(731).NextBytes(random);
+        Buffer.BlockCopy(BitConverter.GetBytes(random.Length - 4), 0, random, 0, 4);
+        var incompressible = DatagramFraming.Fragment(random, 10, compress: true).ToArray();
+        Check(!DatagramFraming.IsCompressed(incompressible[0]));
+        got = null;
+        foreach (var frame in incompressible) if (reader.Accept(frame, frame.Length, out var data)) got = data;
+        Check(got != null && got.SequenceEqual(random));
+        Check(!DatagramFraming.TryExpand(new byte[] { 255, 255, 255, 127, 0 }, out _));
+        Check(!DatagramFraming.TryExpand(new byte[] { 10, 0, 0, 0, 0 }, out _));
+        Check(HollowConnect.CoopMod.NetworkVersion.Length <= Hkmp.Api.Addon.Addon.MaxVersionLength);
+    }
 }

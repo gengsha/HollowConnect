@@ -15,6 +15,7 @@ internal class ServerEntityData {
     public HashSet<ushort> DreamPlatformPlayers { get; set; }
     private uint healthRevision;
     private bool dead;
+    internal readonly Hkmp.Game.Client.Entity.Component.PresentationOrder PresentationOrder = new();
     public EntitySpawn Spawn { get; set; }
     public bool Retired { get; set; }
     public bool AcceptHealth(Hkmp.Game.Client.Entity.Component.EntityComponentType type, uint revision) {

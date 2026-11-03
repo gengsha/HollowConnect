@@ -45,6 +45,8 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        PresentationTests.Register(Test);
+        SteamBridgeTests.Register(Test);
         ObservationTests.Register(Test);
         GrimmFlameTests.Register(Test);
         LocalWorldIsolationTests.Register(Test);
@@ -155,6 +157,9 @@ internal static class Program {
         Test("scalar packet encoding preserves BitConverter wire bytes and floating-point bits", PacketEncodingProbe.WireFormat);
         Test("reused scratch snapshots do not change published packets", PacketEncodingProbe.ScratchOwnership);
         Test("compressed combat updates preserve independent full snapshots and reject invalid lengths", PacketEncodingProbe.CompleteCombatPayload);
+        Test("combat resend backlog keeps latest full state and all original actions", CombatResendProbe.LargeLossBacklog);
+        Test("combat resend compaction preserves distinct scene visits", CombatResendProbe.Identity);
+        Test("reliable retry carriers stay bounded and drain all original actions", CombatResendProbe.BoundedRetryCarriers);
         foreach (var sequence in new ushort[] { 0, 65523 }) {
             foreach (var step in new[] { 12, 13, 90, 91 })
                 Test($"periodic loss delivers both enter directions once: start={sequence} lostStep={step}",
@@ -165,7 +170,9 @@ internal static class Program {
         }
         Test("periodic loss delivers at congested send rate", () => SelectiveAckProbe.PeriodicDelivery(0, 90, 50));
         Test("reliable loss retains its timeout fallback without newer ACK evidence", SelectiveAckProbe.TimeoutFallback);
+        Test("fragmented room snapshot assembles without premature retry while small control loss recovers", SelectiveAckProbe.LargeSnapshotAssembly);
         Test("lost carriers retire after reliable handoff through wrap and delayed originals", SelectiveAckProbe.RetiredCarriers);
+        Test("late ACK of retired original or carrier cancels queued retries across wrap", SelectiveAckProbe.LateCarrierAcknowledgement);
         Test("combat hierarchy refreshes spread without catchup or changing maximum interval", () => {
             var slots = new HashSet<int>();
             for (ulong id = 1; id <= 340; id++) {
@@ -805,6 +812,7 @@ internal static class Program {
         Test("DTLS close retires a peer after its final snapshot without waiting for heartbeat timeout", NetworkLifecycleProbe.ClosedTransport);
         Test("failed bind can be stopped safely and retried on the same port", NetworkLifecycleProbe.FailedBind);
         Test("maximum-size fragmented datagram survives reverse order and duplicates", DatagramProbe.Reorder);
+        Test("large compressed datagrams preserve bytes and reject invalid expansion lengths", DatagramProbe.CompressedMessages);
         Test("boss action packets larger than 64 KiB survive framing and live update decoding", DatagramProbe.LargeBossBatch);
         Test("lost fragment does not consume a later heartbeat", DatagramProbe.MissingFragment);
         Test("five simultaneous fragmented peers with equal message IDs remain isolated", DatagramProbe.PeerIsolation);

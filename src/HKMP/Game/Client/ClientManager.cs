@@ -289,6 +289,7 @@ internal class ClientManager : IClientManager {
         _uiManager.RequestServerStartHostEvent += _ => {
             _saveManager.IsHostingServer = true;
         };
+        _uiManager.RequestLoopbackHostEvent += () => _saveManager.IsHostingServer = true;
         _uiManager.RequestServerStopHostEvent += () => {
             _saveManager.IsHostingServer = false;
         };

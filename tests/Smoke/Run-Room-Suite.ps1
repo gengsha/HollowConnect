@@ -1,4 +1,4 @@
-param([switch]$ReuseNativeHost,[switch]$NoBuild,[string]$StartAt,[string[]]$Only,
+param([switch]$ReuseNativeHost,[switch]$NoBuild,[switch]$SteamModule,[string]$StartAt,[string[]]$Only,
     [ValidatePattern('^[a-z0-9][a-z0-9-]{0,50}$')][string]$RunPrefix)
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -36,7 +36,7 @@ foreach($taskCase in $taskCases){
             [Environment]::SetEnvironmentVariable($taskEnv.Name,$null,'Process')
         }
         foreach($taskKey in $taskCase.Env.Keys){[Environment]::SetEnvironmentVariable($taskKey,$taskCase.Env[$taskKey],'Process')}
-        & (Join-Path $PSScriptRoot 'Run-Two.ps1') -RunName $taskRunName -Mode $taskCase.Mode -NoBuild *> (Join-Path $taskRoot ('.test-results/'+$taskRunName+'.launch.log'))
+        & (Join-Path $PSScriptRoot 'Run-Two.ps1') -RunName $taskRunName -Mode $taskCase.Mode -NoBuild -SteamModule:$SteamModule *> (Join-Path $taskRoot ('.test-results/'+$taskRunName+'.launch.log'))
         (Get-FileHash -LiteralPath (Join-Path $PSScriptRoot 'bin/Release/net472/HollowConnect.Smoke.dll')).Hash |
             Set-Content -LiteralPath (Join-Path $taskRoot ('.test-results/'+$taskRunName+'/probe-sha256.txt'))
     }
@@ -57,6 +57,7 @@ foreach($taskCase in $taskCases){
     }
     foreach($taskBinary in (Get-Content -LiteralPath (Join-Path $taskDir 'binaries.json') -Raw | ConvertFrom-Json)){
         $taskProduction=Join-Path $taskRoot ('src/HollowConnect/bin/Release/net472/'+$taskBinary.name)
+        if($taskBinary.name -eq 'HollowConnect.Steam.dll'){$taskProduction=Join-Path $taskRoot 'src/HollowConnect.Steam/bin/Release/net472/HollowConnect.Steam.dll'}
         if((Get-FileHash -LiteralPath $taskProduction -Algorithm SHA256).Hash -ne $taskBinary.sha256){throw ('Wrong runtime DLL '+$taskCase.Name+' '+$taskBinary.name)}
     }
     Write-Output ('PASS BOTH '+$taskCase.Name+'; final production hashes verified')

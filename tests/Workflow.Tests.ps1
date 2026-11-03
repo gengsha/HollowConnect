@@ -99,6 +99,15 @@ Assert-Workflow ('playtest-authorization-0.2.5-demo.json' -in $taskPlaytestDocs.
     'release-authorization-0.2.5.json' -in $taskSourceDocs.Name -and
     'playtest-authorization-0.2.5-demo.json' -in $taskSourceDocs.Name -and
     'release-authorization-0.2.4.json' -notin $taskSourceDocs.Name) 'release and labeled playtest modes retain their own required request records without older versions'
+$taskCandidateRequest=Join-Path $taskDocRoot 'docs/evidence/playtest-authorization-0.2.5-rc2.json'
+[IO.File]::WriteAllText((Join-Path $taskDocRoot 'docs/evidence/candidate-summary.json'),'{}')
+[IO.File]::WriteAllText($taskCandidateRequest,'{"additionalDocuments":["docs/evidence/candidate-summary.json","docs/evidence/candidate-summary.json"]}')
+$taskCandidateDocs=@(Get-HollowDocumentationFiles -Root $taskDocRoot -Version '0.2.5' -Audience Player -AuthorizationPath 'docs/evidence/playtest-authorization-0.2.5-rc2.json')
+Assert-Workflow (@($taskCandidateDocs | Where-Object {$_.Name -eq 'candidate-summary.json'}).Count -eq 1 -and 'playtest-authorization-0.2.5-demo.json' -notin $taskCandidateDocs.Name) 'candidate package carries its selected validation summary once without unrelated request records'
+[IO.File]::WriteAllText($taskCandidateRequest,'{"additionalDocuments":["README.md"]}')
+$taskRejected=$false
+try { Copy-HollowPackageDocumentation -Root $taskDocRoot -Destination $taskDocPackage -Version '0.2.5' -AuthorizationPath 'docs/evidence/playtest-authorization-0.2.5-rc2.json' } catch { $taskRejected=$true }
+Assert-Workflow ($taskRejected -and [IO.File]::ReadAllText((Join-Path $taskDocPackage 'README.md')) -eq $taskDocReadme) 'candidate documentation escaping docs is rejected before changing the existing package'
 $taskRejected=$false
 try { Copy-HollowPackageDocumentation -Root $taskDocRoot -Destination $taskDocRoot -Version '0.2.5' } catch { $taskRejected=$true }
 Assert-Workflow ($taskRejected -and (Test-Path -LiteralPath (Join-Path $taskDocRoot 'docs/DEVELOPMENT.md'))) 'package documentation cannot replace repository source docs'

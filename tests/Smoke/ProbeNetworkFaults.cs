@@ -28,6 +28,7 @@ internal static class ProbeNetworkFaults {
     private static bool _periodic;
 
     internal static void Install() {
+        ProbeRelayProfile.Install();
         var mode = Environment.GetEnvironmentVariable("HOLLOWCONNECT_NETWORK_FAULTS");
         if (mode != "1" && mode != "periodic") return;
         _periodic = mode == "periodic";
@@ -109,6 +110,7 @@ internal static class ProbeNetworkFaults {
     }
 
     internal static void Verify(string root, string role) {
+        ProbeRelayProfile.Report(root, role);
         if (Hooks.Count == 0) return;
         int sent = 0, dropped = 0, reordered = 0, duplicated = 0;
         Peer[] peers;

@@ -44,6 +44,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
     private UdpCongestionManager<TOutgoing, TPacketId> _udpCongestionManager;
     private readonly object _sendGate = new object();
     private uint _messageId;
+    private int _retryTick;
     private bool _sendFailureLogged;
 
     /// <summary>
@@ -169,6 +170,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
                 _consumedOrigins.Clear(); _hasRemoteSequence = false;
                 _entitySnapshots.Clear();
                 _messageId = 0; _sendFailureLogged = false;
+                _retryTick = 0;
                 System.Threading.Interlocked.Exchange(ref lastReceived, 0);
                 CurrentUpdatePacket = new TOutgoing();
                 _isUpdating = true;
@@ -243,7 +245,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
 
         var packet = BuildUpdatePacket();
         if (packet == null) return;
-        foreach (var frame in DatagramFraming.Fragment(packet.ToArray(), _messageId++))
+        foreach (var frame in DatagramFraming.Fragment(packet.ToArray(), _messageId++, compress: true))
             DtlsTransport?.Send(frame, 0, frame.Length);
     }
 
@@ -261,6 +263,7 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
         lock (Lock) {
             CurrentUpdatePacket.Sequence = _localSequence;
             CurrentUpdatePacket.Ack = _remoteSequence;
+            _udpCongestionManager.PruneAcknowledgedResends(CurrentUpdatePacket);
 
             // Fill the ack field according to which packets have been acknowledged
             var receivedQueue = _receivedQueue.GetCopy();
@@ -276,6 +279,11 @@ internal abstract class UdpUpdateManager<TOutgoing, TPacketId> : UdpUpdateManage
             // but keep the original instance for reliability data re-sending
             updatePacket = CurrentUpdatePacket;
             CurrentUpdatePacket = new TOutgoing();
+            // Reserve retry bandwidth instead of filling every heartbeat with
+            // the oldest loss backlog. Small successful heartbeats otherwise
+            // keep RTT low while repeated large carriers saturate the link.
+            updatePacket.DeferExcessResends(CurrentUpdatePacket, _retryTick == 0 ? 8192 : 0);
+            _retryTick = (_retryTick + 1) % 3;
 
             // Increase (and potentially wrap) the current local sequence number
             _localSequence++;

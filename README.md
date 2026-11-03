@@ -4,9 +4,9 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.2.6** · 支持 Windows 10 / 11 · 适配游戏版本 **1.5.78.11833**
+**当前版本：0.2.7** · 支持 Windows 10 / 11 · 适配游戏版本 **1.5.78.11833**
 
-0.2.6 修复队友攻击造成的对话／梦语卡住、调整结局退房与关房流程，并补齐竞技场毛里克同步、修复巨型斩／冲刺斩重复伤害，回收丢包发送历史并错开战斗结构刷新。详见[更新日志](docs/UPDATE-0.2.6.md)。
+0.2.7 加入 Steam 好友联机预览与独立的原生联机菜单，修复竞技场弱网重发堆积、部分剑技重复命中特效，并补齐地刺和 Boss 动作的可恢复显示同步。Steam 与原有 IP 连接共用 HKMP 游戏逻辑。大黄蜂重连掷针问题仍保留，详见 [0.2.7 更新说明](docs/UPDATE-0.2.7.md)。
 
 ## 可以一起做什么
 
@@ -21,15 +21,17 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-**游玩请使用 [HollowConnect-0.2.6-windows.zip](https://github.com/gengsha/HollowConnect/releases/download/v0.2.6/HollowConnect-0.2.6-windows.zip) 完整安装包。** GitHub 的 “Code → Download ZIP” 提供的是源码。
+下载 [0.2.7 Windows 完整安装包](https://github.com/gengsha/HollowConnect/releases/download/v0.2.7/HollowConnect-0.2.7-windows.zip)，或前往 [GitHub Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.2.7)。GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
 3. 启动游戏，房主在 **选项 → 模组 → HollowConnect** 中设置本次联机规则。
-4. 房主从 HKMP 的 **Multiplayer → Host** 开房，选择存档和 UDP 端口，例如 `26950`。
-5. 队友选择 **Connect**，填写房主地址和对应端口，选择自己的存档，再选择 **确认加入**。
+4. IP 方式：主菜单选择 **局域网联机**，输入玩家名和 UDP 端口（例如 `26950`），房主选择 **主持游戏** 并选择存档。
+5. 队友在 **局域网联机** 填写房主地址和相同端口，选择 **加入游戏**，选择自己的存档，再选择 **确认加入**。该入口也支持直连和内网穿透。
 
 所有玩家须使用**同一版本的完整包**，更新后重新开房。本包已包含修改后的 HKMP 引擎和所需依赖，直接使用包内版本即可。
+
+Steam 方式：主菜单选择 **Steam 联机** 创建好友房间、查看好友主持的游戏；游戏内按 F10 打开房间菜单。邀请和存档选择见 [Steam 联机说明](docs/STEAM-MULTIPLAYER.md)。真实双账号邀请与跨机器连接仍待实测。
 
 安装器会备份原游戏文件、已有 HKMP 和存档。请保留解压后的配套文件；安装无需 .NET SDK 或命令行操作。
 
@@ -91,7 +93,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见[更新日志](docs/UPDATE-0.2.6.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.2.7.md)。
 
 ## 开发与许可
 

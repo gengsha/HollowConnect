@@ -35,7 +35,8 @@ internal static class LocalWorldInteractions {
         if (!ObserverEffect(self.gameObject) && !LocalWorldIsolation.Blocks(target, self.gameObject)) orig(self, target);
     }
     private static void Hit(On.HealthManager.orig_Hit orig, HealthManager self, HitInstance hit) {
-        if (!(hit.AttackType != AttackTypes.Generic && ObserverEffect(hit.Source)) && !LocalWorldIsolation.Blocks(self.gameObject, hit.Source)) orig(self, hit);
+        if (!(hit.AttackType != AttackTypes.Generic && ObserverEffect(hit.Source)) &&
+            !LocalWorldIsolation.Blocks(self.gameObject, hit.Source) && NailArtContactWindow.Accept(self, hit)) orig(self, hit);
     }
     private static void TakeDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hit) {
         if (!(hit.AttackType != AttackTypes.Generic && ObserverEffect(hit.Source)) && !LocalWorldIsolation.Blocks(self.gameObject, hit.Source)) orig(self, hit);

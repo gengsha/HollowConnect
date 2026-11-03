@@ -8,18 +8,29 @@ function Get-HollowDocumentationFiles {
     $taskNames=@($taskSelection.Player)+@($taskSelection.Evidence)
     if ($Audience -eq 'Repository') { $taskNames+=@($taskSelection.Developer) }
     $taskDocs=[IO.Path]::GetFullPath((Join-Path $Root 'docs')).TrimEnd('\','/')+[IO.Path]::DirectorySeparatorChar
+    $taskRequestFiles=@()
     if ($AuthorizationPath) {
         $taskAuthorization=[IO.Path]::GetFullPath((Join-Path $Root $AuthorizationPath))
         if (!$taskAuthorization.StartsWith($taskDocs,[StringComparison]::OrdinalIgnoreCase)) { throw 'Release request path escapes docs/.' }
         $taskNames+=$taskAuthorization.Substring($taskDocs.Length)
+        $taskRequestFiles+=@(Get-Item -LiteralPath $taskAuthorization)
     } else {
         # The source archive retains this version's release/playtest request records.
         # Player packages pass the selected mode explicitly when a request is required.
-        $taskNames+=@(Get-ChildItem -LiteralPath (Join-Path $taskDocs 'evidence') -Filter "*authorization-$Version*.json" -File |
-            Where-Object { $_.Name -match ('^(?:release|playtest)-authorization-'+[regex]::Escape($Version)+'(?:-[a-z0-9-]+)?\.json$') } |
-            ForEach-Object { 'evidence/'+$_.Name })
+        $taskRequestFiles=@(Get-ChildItem -LiteralPath (Join-Path $taskDocs 'evidence') -Filter "*authorization-$Version*.json" -File |
+            Where-Object { $_.Name -match ('^(?:release|playtest)-authorization-'+[regex]::Escape($Version)+'(?:-[a-z0-9-]+)?\.json$') })
+        $taskNames+=@($taskRequestFiles | ForEach-Object { 'evidence/'+$_.Name })
     }
-    foreach ($taskName in $taskNames) {
+    foreach($taskRequestFile in $taskRequestFiles){
+        $taskRequest=Get-Content -LiteralPath $taskRequestFile.FullName -Raw | ConvertFrom-Json
+        foreach($taskReference in @($taskRequest.additionalDocuments)){
+            if(!$taskReference){continue}
+            $taskReferencedPath=[IO.Path]::GetFullPath((Join-Path $Root $taskReference))
+            if(!$taskReferencedPath.StartsWith($taskDocs,[StringComparison]::OrdinalIgnoreCase)){throw 'Additional documentation path escapes docs/.'}
+            $taskNames+=@($taskReferencedPath.Substring($taskDocs.Length))
+        }
+    }
+    foreach ($taskName in @($taskNames | Sort-Object -Unique)) {
         $taskPath=[IO.Path]::GetFullPath((Join-Path $taskDocs $taskName.Replace('{version}',$Version)))
         if (!$taskPath.StartsWith($taskDocs,[StringComparison]::OrdinalIgnoreCase)) { throw 'Documentation path escapes docs/.' }
         if (!(Test-Path -LiteralPath $taskPath -PathType Leaf)) { throw ('Required documentation missing: '+$taskPath) }

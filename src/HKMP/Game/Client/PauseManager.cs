@@ -53,6 +53,14 @@ internal class PauseManager : IPauseManager {
         ModHooks.BeforePlayerDeadHook -= OnDeath;
     }
 
+    // Dynamic menus can be opened directly, without either native pause-input
+    // hook below. Keep the same live multiplayer simulation in that path.
+    internal void OpenDynamicMenu(MenuScreen screen) {
+        var gm = global::GameManager.instance;
+        gm.StartCoroutine(gm.PauseToggleDynamicMenu(screen, false));
+        if (_netClient.IsConnected && gm.gameState == GameState.PAUSED) SetTimeScale(1f);
+    }
+
     /// <summary>
     /// Callback method for the UIManager#TogglePauseGame method.
     /// </summary>

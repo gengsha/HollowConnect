@@ -1,0 +1,224 @@
+{
+  "version": "0.2.6-rc2",
+  "createdAtUtc": "2026-11-02T11:40:37.3953013Z",
+  "scope": "Development validation before the rc2 version/assembly metadata bump. Original results keep their original binary hashes; they do not certify the new package hashes.",
+  "validatedModVersion": "0.2.6",
+  "validatedSteamModuleVersion": "0.1.0-preview",
+  "corePassed": 14,
+  "sourceReceipt": ".analysis/steam-integration-20261102/final-evidence.json",
+  "sourceReceiptSha256": "9F643D95DF5E004FC9F566423AA8A78608E0E21E85E69F26F6395EB1EA463B9E",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "D2587703D93A451616C9BAD405719230F0DF48D90F9875EE6A57825A7EF3982E"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "B4498DC38C6B220828548A1C7FC798A5E5BAFA2C60FCA7651D021EB68D1BDD71"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "852B40607553E14AF52B974C8869359325F84B0BD46636EBD07CF75A13B46B85"
+    },
+    {
+      "name": "HollowConnect.Smoke.dll",
+      "sha256": "C40FD7125701FE1327479F283E57CF1111BB7C2C1AAB7929AF15EE7E77FAC27C"
+    }
+  ],
+  "gameCases": [
+    {
+      "strictLogs": true,
+      "name": "gateway",
+      "passed": true,
+      "run": "steam-20261102-gateway-104805990",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T10:48:05.9906941Z",
+      "stage": "preflight",
+      "ended": "2026-11-02T10:50:54.4257679Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "native-steam",
+      "passed": true,
+      "run": "steam-20261102-native-steam-104737903",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T10:47:37.903623Z",
+      "stage": "preflight",
+      "ended": "2026-11-02T10:48:05.6031316Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "native-guest",
+      "passed": true,
+      "run": "steam-20261102-native-guest-105909485",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T10:59:09.4856993Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:06:35.4523911Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "native-host",
+      "passed": true,
+      "run": "steam-20261102-native-host-105145483",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T10:51:45.4837832Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T10:59:09.0709119Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "lifecycle-host",
+      "passed": true,
+      "run": "steam-20261102-lifecycle-host-110635834",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:06:35.8345634Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:11:56.7065381Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "lifecycle-guest",
+      "passed": true,
+      "run": "steam-20261102-lifecycle-guest-111157009",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:11:57.0096909Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:16:50.0587615Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "boss",
+      "passed": true,
+      "run": "steam-20261102-boss-111650391",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:16:50.3917667Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:17:45.3625727Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "boss-late",
+      "passed": true,
+      "run": "steam-20261102-boss-late-111745721",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:17:45.7216135Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:18:47.3295935Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "grimm-host",
+      "passed": true,
+      "run": "steam-20261102-grimm-host-111847715",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:18:47.7157383Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:20:29.3292505Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "grimm-guest",
+      "passed": true,
+      "run": "steam-20261102-grimm-guest-112029692",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:20:29.6925384Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:22:11.1344713Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "rescue",
+      "passed": true,
+      "run": "steam-20261102-rescue-112211500",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:22:11.5010362Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:23:00.2119588Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "death-story",
+      "passed": true,
+      "run": "steam-20261102-death-story-112300556",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:23:00.5569794Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:23:59.2575947Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "full",
+      "passed": true,
+      "run": "steam-20261102-full-112359611",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:23:59.6118295Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:25:26.7275428Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "join",
+      "passed": true,
+      "run": "steam-20261102-join-112527083",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": true,
+      "started": "2026-11-02T11:25:27.0836809Z",
+      "stage": "matrix",
+      "ended": "2026-11-02T11:28:08.3110098Z"
+    },
+    {
+      "strictLogs": true,
+      "name": "ip-without-steam-module",
+      "passed": true,
+      "run": "steam-20261102-ip-without-steam-module-112823691",
+      "bothEndpoints": true,
+      "optionalSteamLoaded": false,
+      "started": "2026-11-02T11:28:23.6914263Z",
+      "stage": "postflight",
+      "ended": "2026-11-02T11:29:49.1937404Z"
+    }
+  ],
+  "roomMatrixPassed": 12,
+  "gameCasesPassed": 15,
+  "pending": [
+    "Two-account friend invite",
+    "Friend-list join",
+    "Cold-start invite",
+    "Cross-machine / different-network P2P and SDR"
+  ],
+  "retainedObservations": [
+    "Native fixture receive wait initially consumed the predicate twice; fixed the helper and retained failure evidence.",
+    "An existing direct-IP UDP ConnectionReset occurred during development close/rebind; retained the failed run and one passing retry. No IP protocol change suppressed that error."
+  ],
+  "versionOnlySourceChanges": [
+    "src/HollowConnect/CoopMod.cs: display version and derived addon network identifier",
+    "src/HollowConnect/HollowConnect.csproj: assembly version metadata",
+    "src/HollowConnect.Steam/SteamMod.cs: display version",
+    "src/HollowConnect.Steam/HollowConnect.Steam.csproj: assembly version metadata"
+  ],
+  "limits": [
+    "Same-machine existing isolated game copies; no real friend invitations were sent.",
+    "Native Steam check creates a real single-account Lobby and uses SDK network loopback; it is not a two-account Internet test.",
+    "Version bump changes the packaged HollowConnect and Steam DLL hashes; game regression was not rerun for these new hashes.",
+    "Historical findings from runtime-blockers-0.2.6.json remain open."
+  ],
+  "personalGameInstalled": false
+}

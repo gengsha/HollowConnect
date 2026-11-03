@@ -74,5 +74,7 @@ internal class GameManager {
             modSettings
         );
         ClientManager.Initialize(ServerManager);
+        ExternalConnectionGateway.Current = new ExternalConnectionGateway(uiManager, NetClient, netServer, modSettings,
+            (PauseManager)ClientManager.PauseManager);
     }
 }

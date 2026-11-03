@@ -1,4 +1,4 @@
-param([string]$RunName, [string]$Mode='full', [string]$EnginePath='', [switch]$NoBuild, [string]$PayloadPath='', [ValidateSet(2,3)][int]$Players=2)
+param([string]$RunName, [string]$Mode='full', [string]$EnginePath='', [switch]$NoBuild, [string]$PayloadPath='', [ValidateSet(2,3)][int]$Players=2, [switch]$SteamModule)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 if ($RunName -notmatch '^[a-z0-9][a-z0-9-]{0,95}$') { throw 'Invalid isolated run directory name.' }
@@ -37,7 +37,16 @@ foreach ($testRole in 'host','guest') {
 }
 if ([IO.Path]::GetFullPath($testRoot) -notlike ($root+'\.test-results\*')) { throw 'Run directory escapes the isolated workspace.' }
 New-Item -ItemType Directory -Path $testRoot | Out-Null
-$taskBinaries=@('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll') | ForEach-Object {
+$taskProductionNames=@('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll')
+if($SteamModule){
+    if($PayloadPath -or $EnginePath){throw 'Steam module checks use the current prepared production binaries.'}
+    $taskSteamPrepared=Join-Path $PSScriptRoot 'bin/Release/net472/HollowConnect.Steam.dll'
+    $taskSteamProduction=Join-Path $root 'src/HollowConnect.Steam/bin/Release/net472/HollowConnect.Steam.dll'
+    if(!(Test-Path -LiteralPath $taskSteamPrepared) -or
+        (Get-FileHash -LiteralPath $taskSteamPrepared).Hash -ne (Get-FileHash -LiteralPath $taskSteamProduction).Hash){throw 'Prepared Steam module is stale.'}
+    $taskProductionNames+='HollowConnect.Steam.dll'
+}
+$taskBinaries=$taskProductionNames | ForEach-Object {
     $taskDllPath=if($PayloadPath){Join-Path $PayloadPath $_}elseif($_ -eq 'HKMP.dll' -and $EnginePath){$EnginePath}else{Join-Path $root ('tests/Smoke/bin/Release/net472/'+$_)}
     [pscustomobject]@{name=$_;sha256=(Get-FileHash -LiteralPath $taskDllPath -Algorithm SHA256).Hash}
 }
@@ -55,6 +64,13 @@ foreach ($testRole in 'host','guest') {
     foreach ($dll in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll','BouncyCastle.Cryptography.dll','HollowConnect.Smoke.dll') {
         $taskDllPath=if($PayloadPath -and $dll -ne 'HollowConnect.Smoke.dll'){Join-Path $PayloadPath $dll}elseif($dll -eq 'HKMP.dll' -and $EnginePath){$EnginePath}else{"$root\tests\Smoke\bin\Release\net472\$dll"}
         Copy-Item -LiteralPath $taskDllPath -Destination "$gameDir\hollow_knight_Data\Managed\Mods\HKMP\$dll" -Force
+    }
+    $taskSteamIsolated=Join-Path $gameDir 'hollow_knight_Data/Managed/Mods/HKMP/HollowConnect.Steam.dll'
+    if($SteamModule){Copy-Item -LiteralPath $taskSteamPrepared -Destination $taskSteamIsolated -Force}
+    elseif(Test-Path -LiteralPath $taskSteamIsolated){
+        # Preserve the optional binary while keeping ordinary fixture runs
+        # free of an unrecorded module left by an earlier Steam check.
+        Move-Item -LiteralPath $taskSteamIsolated -Destination (Join-Path $testRoot ($testRole+'-HollowConnect.Steam.dll.inactive'))
     }
 }
 foreach ($testRole in $taskRoles) {

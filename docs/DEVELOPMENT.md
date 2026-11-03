@@ -12,6 +12,9 @@
 .\scripts\Build.ps1 -Target Core
 .\scripts\Build.ps1 -Target Smoke
 
+# 构建可选 Steam 联机模块；仍需同一次源码构建的 HKMP。
+.\scripts\Build.ps1 -Target Steam
+
 # 依赖已还原时可省去 restore 检查；依赖变化后不使用此选项。
 .\scripts\Build.ps1 -NoRestore
 
@@ -25,7 +28,7 @@
 .\scripts\Build.ps1 -Target Core -RunTests
 ```
 
-`-Target` 支持 `Mod`、`Core`、`Smoke`、`Installer`。`-RunTests` / `-TestSelection` 会先构建对应测试程序。没有指定名单的 `-RunTests` 执行全部核心回归；日常小改动按既定最近/相关项范围选择。暂未增加自动按 Git 判断最近 100 项的选择器。
+`-Target` 支持 `Mod`、`Core`、`Smoke`、`Installer`、`Steam`。`-RunTests` / `-TestSelection` 会先构建对应测试程序。没有指定名单的 `-RunTests` 执行全部核心回归；日常小改动按既定最近/相关项范围选择。暂未增加自动按 Git 判断最近 100 项的选择器。
 
 ## 双端专项
 
@@ -82,8 +85,12 @@
 
 `Package.ps1` 继续独立执行并保留已有证据门槛。压缩改为直接写 ZIP，源码枚举从入口跳过 `bin/obj` 和草稿；新包写完后才替换目标 ZIP。`SHA256SUMS.txt` 保留历史项，只计算本次新包及缺失记录的哈希。需要核验历史 ZIP 是否被外部更改时显式用 `-RebuildChecksums`；单包 `Verify-Release.ps1` 仍检查当前包的内容和校验和。
 
+本地候选版使用 `scripts/Package.ps1 -ReleaseCandidate rc2 -SteamModule`，核验使用 `scripts/Verify-Release.ps1 -ReleaseCandidate rc2 -SteamModule`。候选版沿用有明确请求与哈希记录的 playtest 通道，产物名为 `HollowConnect-0.2.6-rc2-*`，不会发布 GitHub。`-SteamModule` 加入匹配构建的 Steam DLL/PDB 和清单；安装器按清单复制。记录中的附加文档只能位于 `docs/`，用于携带候选版说明和原始哈希对应的验证摘要。升版后未重测的 DLL 不会追认为先前实机通过。
+
 生产代码、模组行为和已交付的 0.1.22 ZIP 未因本次流程调整而改变。没有自动移动/删除历史日志或旧安装包，以免破坏证据路径。目录搜索优先 `rg src scripts tests`；调查某次失败时再指定 `.test-results/具体运行名`，不递归整个历史目录。
 
 只验证本次脚本文件操作可运行 `tests/Workflow.Tests.ps1`，使用隔离文件夹，不启动游戏。它检查 ZIP 路径和内容、源码排除、失败时保留旧包、增量校验和及显式全量重算。
+
+安装脚本与游戏运行检测分别使用 `tests/Installer.Tests.ps1` 和 `tests/GamePath.Process.Tests.ps1`。后者检查零线程残留、活跃目标／其它目录、路径无权限及 CIM 不可用，并用同名休眠辅助程序验证实际 Windows PowerShell 的拦截；不会启动游戏。CIM 确认线程数为 0 才忽略残留记录，未知状态继续保守阻止并给出 PID。
 
 本次 9 项文件流程检查通过。用既有 0.1.22 安装目录作同机压缩对比：旧 `Compress-Archive` 约 1.66 秒，新直接写 ZIP 约 0.67 秒；492 个文件逐项与原内容哈希一致，压缩包大小相同。这是单次本机压缩阶段样本，不是完整打包或所有机器的耗时保证；默认无修改构建另测约 1.17 秒。未运行游戏测试、未重新发布 0.1.22 安装包。

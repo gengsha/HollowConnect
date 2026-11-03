@@ -1,0 +1,90 @@
+{
+  "version": "0.2.6",
+  "displayVersion": "0.2.6-rc2",
+  "buildLabel": "rc2",
+  "releaseChannel": "playtest",
+  "action": "package-for-user-playtest",
+  "createdAtUtc": "2026-11-02T11:40:37.8316051Z",
+  "userRequest": "打包新版0.2.6 rc2,暂时不发布github",
+  "localOnly": true,
+  "githubPublished": false,
+  "scope": "Local 0.2.6-rc2 Windows installer and matching source ZIP, including the optional Steam module and rescue invulnerability change. Incremental version-only builds and packaging checks; no repeated game matrix and no personal installation.",
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "D2587703D93A451616C9BAD405719230F0DF48D90F9875EE6A57825A7EF3982E"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "D16A685EF3DF553B26AA85986A69BE57B3E6A57869406007645A9FC18E403989"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "C55A5F7814F81024B7D4095FAD4EEE83CD119A03015CDB54179D826D770A478D"
+    }
+  ],
+  "optionalModules": [
+    "Steam"
+  ],
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified",
+    "colosseum-bilateral-permanent-freeze-unreproduced",
+    "shade-soul-downslam-multihit-unreproduced",
+    "unreliable-player-animation-attack-loss"
+  ],
+  "blockerLedgerSha256": "0000AEB8C03A7077DC81465BCACC75C824847BA05776360F9E49E2ECF8D8A439",
+  "additionalDocuments": [
+    "docs/UPDATE-0.2.6-rc2.md",
+    "docs/evidence/development-validation-0.2.6-rc2.json",
+    "docs/evidence/installer-fix-0.2.6-rc2.json"
+  ],
+  "runtimeValidation": {
+    "version": "0.2.6",
+    "engineVersion": "3.0.0-hc13",
+    "releaseReady": false,
+    "retestOmitted": true,
+    "runs": [],
+    "previousValidationSource": "docs/evidence/development-validation-0.2.6-rc2.json",
+    "previousValidationSha256": "49D5B73D119656B1D8B141571679DF1CDCB38CA72D4334BC481A5DA7A914354D",
+    "pending": [
+      "Two-account friend invite",
+      "Friend-list join",
+      "Cold-start invite",
+      "Cross-machine / different-network P2P and SDR"
+    ]
+  },
+  "installerMaintenance": {
+    "userRequest": "我安装0.2.6 rc2安装不上我游戏也没在开",
+    "source": "docs/evidence/installer-fix-0.2.6-rc2.json",
+    "sha256": "6EADE51533FF589FE7803925D1D9FD404E80E1FAB5532F204C921F6F90077D6E",
+    "productionDllsChanged": false
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "createdAtUtc": "2026-11-03T01:16:59.8577806Z",
+  "displayVersion": "0.2.6-rc2",
+  "wireVersion": "0.2.6-l13",
+  "delivery": "Unpublished development build; no new ZIP, personal installation or GitHub publication.",
+  "result": "Targeted arena/charged-art checks pass; selected regression retains one known unresolved lifecycle failure. Not a fully passing room matrix.",
+  "gameTotals": {
+    "passed": 17,
+    "roomPassed": 11,
+    "roomSelected": 12,
+    "failed": 1,
+    "roomFailed": 1,
+    "selected": 18
+  },
+  "binaries": {
+    "HollowConnect.dll": "D2ECBD239908C1118066B53AC7FA25A69EFE0362DA325177B5B31CED33D64F1D",
+    "HollowConnect.Core.dll": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A",
+    "HollowConnect.Smoke.dll": "F40A08C4D71D102F28125B96E5310EC04A780127D7270E28C923B3D1E557140B",
+    "HKMP.dll": "05197C13653D6D69B19FB054DF2507AA1528701137E54130D2425421EE6BCF95",
+    "HollowConnect.Steam.dll": "267983D88CDBDF54133E8EBB36F05DF36C144AE68A5E0E1AF2D737D2354C9604"
+  },
+  "gameDependencies": {
+    "guest/Assembly-CSharp-firstpass.dll": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7",
+    "host/UnityEngine.CoreModule.dll": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14",
+    "host/Assembly-CSharp-firstpass.dll": "2D6917B6C5FA1726FB3FF36926CAAAFD4013C90574A47A36DD05A646D6D14EA7",
+    "guest/PlayMaker.dll": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+    "guest/UnityEngine.CoreModule.dll": "0F0BEC6F864DA12EA7FE2D068AF73C04D8C4DC267B21490E5C3CA1E730E59B14",
+    "guest/Assembly-CSharp.dll": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+    "host/PlayMaker.dll": "0EF0E7829D125E1F632C8A189260EC6C6882630BE6932C8C7AE032EFBC53469A",
+    "host/Assembly-CSharp.dll": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+  },
+  "changes": [
+    "Compact obsolete full CombatState retries by scene/visit/epoch/entity identity while retaining original action receipts.",
+    "Remember bounded retired-carrier origin receipts so late ACKs cancel queued retries.",
+    "Compress large complete application messages before fragmentation; validate expansion and retain HCF2 decoding.",
+    "Pace retries once per three send ticks with an 8192-byte raw budget; indivisible oversized origins travel alone.",
+    "Refresh active stationary entities with staggered absolute pose/scale after 0.75-1.00 seconds.",
+    "Prevent a second replica HP debit while preserving native feedback/soul/evasion; limit managed Great/Dash contacts by HealthManager per activation.",
+    "Reject unrelated animators before loud missing-hero lookup; use the nontruncated 0.2.6-l13 addon wire version."
+  ],
+  "core": {
+    "passed": 93,
+    "selectionSha256": "849F890C22C2B425AADDB0D0256AB3974501D5FA34F778E67A7B50477F93163F",
+    "resultSha256": "AF10A8901E938CD650560AC1B7435F3E2E71D503D367420127438188973BA21D",
+    "selection": ".analysis/arena-lag-nailarts-20261102/core-final-selection.txt",
+    "failed": 0
+  },
+  "ownGreatSlashReproduction": {
+    "after": {
+      "run": "arena-20261102-native-art-alternate-hit-170341262",
+      "bloodCalls": 2,
+      "guestLogSha256": "BF0FC2B0929DEC892D89F076D66432628344A25653DBA35B02E946C994B03C4A",
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "callbacks": 1
+    },
+    "configuration": "Native alternate hit animation on both copies; three colliders sharing one managed HealthManager; native guest charge/release.",
+    "before": {
+      "bloodCalls": 16,
+      "callbacks": 10,
+      "guestLogSha256": "388FD423F393BBA9FF3383E2689B435D1FC5E85A688A9878DB8ED991B8EA36F3",
+      "run": "arena-20261102-native-art-alternate-hit-170202942"
+    },
+    "interpretation": "Two blood calls are the native paired blood emission from one accepted impact. Damage-only checks did not cover this feedback defect."
+  },
+  "gameCases": [
+    {
+      "started": "2026-11-02T17:10:40.779006Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-02T17:12:31.9256219Z",
+      "strictLogs": true,
+      "name": "native-arts-full",
+      "options": {
+        "HOLLOWCONNECT_NATIVE_NAIL_ARTS": "1",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "host",
+        "HOLLOWCONNECT_NATIVE_ART_MULTICOLLIDER": "1",
+        "HOLLOWCONNECT_GOLD_AUDIT_ATTACK_ONLY": "1",
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "network",
+        "HOLLOWCONNECT_NATIVE_ART_FULL": "1"
+      },
+      "state": "passed",
+      "run": "arena-20261102-native-arts-full-171040778",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-02T17:12:32.3830454Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-02T17:14:06.7516066Z",
+      "strictLogs": true,
+      "name": "native-arts-alternate-full",
+      "options": {
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_NATIVE_NAIL_ARTS": "1",
+        "HOLLOWCONNECT_NATIVE_ART_FULL": "1",
+        "HOLLOWCONNECT_NATIVE_ART_SINGLE_SLASHES": "1",
+        "HOLLOWCONNECT_NATIVE_ART_MULTICOLLIDER": "1",
+        "HOLLOWCONNECT_GOLD_AUDIT_ATTACK_ONLY": "1",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "host",
+        "HOLLOWCONNECT_NATIVE_ART_ALTERNATE_HIT": "1",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "network"
+      },
+      "state": "passed",
+      "run": "arena-20261102-native-arts-alternate-full-171232382",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-02T17:14:07.1854048Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-02T17:15:59.5498995Z",
+      "strictLogs": true,
+      "name": "native-arts-relay-profile",
+      "options": {
+        "HOLLOWCONNECT_RELAY_PROFILE": "1",
+        "HOLLOWCONNECT_GOLD_AUDIT_ATTACK_ONLY": "1",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "network",
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_NATIVE_ART_FULL": "1",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "host",
+        "HOLLOWCONNECT_NATIVE_NAIL_ARTS": "1",
+        "HOLLOWCONNECT_NATIVE_ART_MULTICOLLIDER": "1"
+      },
+      "state": "passed",
+      "run": "arena-20261102-native-arts-relay-profile-171407185",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-02T17:15:59.9836834Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-02T17:19:44.9325182Z",
+      "strictLogs": true,
+      "name": "gateway-relay-profile",
+      "options": {
+        "HOLLOWCONNECT_RELAY_PROFILE": "1",
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "host",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "network"
+      },
+      "state": "passed",
+      "run": "arena-20261102-gateway-relay-profile-171559983",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-02T17:19:45.4290338Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-02T17:20:31.6898774Z",
+      "strictLogs": true,
+      "name": "boss-damage",
+      "options": {
+        "HOLLOWCONNECT_BOSS_BALANCE_CHECK": "1"
+      },
+      "state": "passed",
+      "run": "arena-matrix-20261102-boss-damage-171945428",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T00:39:41.0407297Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T00:47:25.8376913Z",
+      "strictLogs": true,
+      "name": "native-host",
+      "options": {
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_CAMERA_RING": "1",
+        "HOLLOWCONNECT_NATIVE_ENTRANCE": "1"
+      },
+      "state": "passed",
+      "run": "arena-matrix-20261102-native-host-003941040",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T00:47:26.2785916Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T00:55:07.0067202Z",
+      "strictLogs": true,
+      "name": "native-guest",
+      "options": {
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_CAMERA_RING": "1",
+        "HOLLOWCONNECT_NATIVE_ENTRANCE": "1"
+      },
+      "state": "passed",
+      "run": "arena-matrix-20261102-native-guest-004726278",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T00:55:07.4343085Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T00:59:44.9340258Z",
+      "strictLogs": true,
+      "name": "lifecycle-host",
+      "options": {
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1"
+      },
+      "state": "passed",
+      "run": "arena-matrix-20261102-lifecycle-host-005507434",
+      "bothEndpoints": true
+    },
+    {
+      "name": "lifecycle-guest",
+      "knownIssue": "reconnect-inactive-needle-unresolved",
+      "bothEndpoints": false,
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "state": "failed",
+      "options": {
+        "HOLLOWCONNECT_PAUSE_MOTION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_CHECK": "1",
+        "HOLLOWCONNECT_FSM_HIERARCHY_CHECK": "1",
+        "HOLLOWCONNECT_FSM_SNAPSHOT_CHECK": "1",
+        "HOLLOWCONNECT_LIFECYCLE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_CONTINUATION_STRESS": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_COLLIDER_RECONNECT_STRESS": "1",
+        "HOLLOWCONNECT_TWEEN_CLONE_CHECK": "1",
+        "HOLLOWCONNECT_FSM_ENTRY_CHECK": "1",
+        "HOLLOWCONNECT_STATIC_IDENTITY_CHECK": "1"
+      },
+      "causeConfirmed": false,
+      "strictLogs": false,
+      "run": "arena-matrix-20261102-lifecycle-guest-005945244",
+      "failureSha256": "C844F7C8D5BF4BF263D484E62128CAF6DBD417E613E9EB4BF1B29AF19795B8D2",
+      "started": "2026-11-03T00:59:45.2443332Z",
+      "observation": "Authority transfer leaves Hornet in Thrown with an inactive needle. Same symptom as the unresolved October ledger; current change impact on trigger frequency is unknown.",
+      "ended": "2026-11-03T01:01:15.4679957Z"
+    },
+    {
+      "started": "2026-11-03T01:03:33.9375801Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:04:28.262777Z",
+      "strictLogs": true,
+      "name": "boss",
+      "options": {},
+      "state": "passed",
+      "run": "arena-matrix-20261102-boss-010333937",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:04:28.6415779Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:05:28.71251Z",
+      "strictLogs": true,
+      "name": "boss-late",
+      "options": {
+        "HOLLOWCONNECT_SMOKE_HANDOFF_DELAY": "2.5",
+        "HOLLOWCONNECT_SMOKE_BOSS_LATE": "1"
+      },
+      "state": "passed",
+      "run": "arena-matrix-20261102-boss-late-010428641",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:05:29.0797287Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:07:10.6125691Z",
+      "strictLogs": true,
+      "name": "grimm-host",
+      "options": {
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3",
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "host",
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm"
+      },
+      "state": "passed",
+      "run": "arena-matrix-20261102-grimm-host-010529079",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:07:11.002184Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:08:52.4101382Z",
+      "strictLogs": true,
+      "name": "grimm-guest",
+      "options": {
+        "HOLLOWCONNECT_GRIMM_ENTRY_DELAY": "3",
+        "HOLLOWCONNECT_GRIMM_AUTHORITY": "guest",
+        "HOLLOWCONNECT_GRIMM_SCENE": "GG_Grimm"
+      },
+      "state": "passed",
+      "run": "arena-matrix-20261102-grimm-guest-010711002",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:08:52.820001Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:09:44.2747226Z",
+      "strictLogs": true,
+      "name": "rescue",
+      "options": {},
+      "state": "passed",
+      "run": "arena-matrix-20261102-rescue-010852819",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:09:44.6308614Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:10:46.2650194Z",
+      "strictLogs": true,
+      "name": "death-story",
+      "options": {},
+      "state": "passed",
+      "run": "arena-matrix-20261102-death-story-010944630",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:10:46.637852Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:12:16.5108554Z",
+      "strictLogs": true,
+      "name": "full",
+      "options": {},
+      "state": "passed",
+      "run": "arena-matrix-20261102-full-011046637",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:12:16.8599882Z",
+      "runtimeBinariesSha256": "D70AC44949E49FC54A60E02A79ECFDCE45D28A737406D58FEC0EB436A2CB95B9",
+      "ended": "2026-11-03T01:15:01.23881Z",
+      "strictLogs": true,
+      "name": "join",
+      "options": {},
+      "state": "passed",
+      "run": "arena-matrix-20261102-join-011216859",
+      "bothEndpoints": true
+    },
+    {
+      "started": "2026-11-03T01:15:01.6529011Z",
+      "runtimeBinariesSha256": "C186E4AE80E80D0F39BAAAD56B770C0A4DF26CDFB8E6923528CE7C28F16F60D8",
+      "ended": "2026-11-03T01:16:31.2360924Z",
+      "strictLogs": true,
+      "name": "ip-without-steam-module",
+      "options": {},
+      "state": "passed",
+      "run": "arena-matrix-20261102-ip-without-steam-module-011501652",
+      "bothEndpoints": true
+    }
+  ],
+  "limitations": [
+    "Same-machine isolated host/guest processes; real two-account invitations and cross-machine Steam/FRP acceptance remain untested.",
+    "Guest-link profile is 40 ms one-way, 128 KiB/s each direction, 1% seeded individual-fragment loss and finite 2 s queues; host internal loopback bypassed.",
+    "Gold waves 1-34 use accelerated native damage and verify progression/HP/identity; not a full weapon clear or offline continuation certification.",
+    "Great/Dash repeated blood reproduced with native alternate-hit configuration and shared-health colliders; this configuration is controlled, not a claim about an unmodified miner prefab.",
+    "Cyclone normal native multi-hit damage, cadence and blood bound checked at 60/20 FPS; the reported abnormal Cyclone visuals were not independently reproduced.",
+    "Guest-first Hornet takeover stress failed on an inactive needle. Historical matching failures remain unresolved; no retry has replaced the current failure."
+  ]
+}

@@ -41,6 +41,15 @@ internal static class BossDamageScaling {
             observe(System.Math.Min(health.hp, damage), source);
         return damage;
     }
+    private static int AcceptedDamage(int damage, HealthManager health, HitInstance hit) {
+        if (hit.AttackType == AttackTypes.Generic || hit.DamageDealt >= 9999) return damage;
+        // Native hit events, soul, impact effects and evasion still follow
+        // their normal path. Only the HP debit belongs to authority:
+        // subtracting again on a replica after its absolute snapshot arrives
+        // makes one local strike appear to damage the enemy twice.
+        if (health != null && EntityReferences.IsReplica(health.gameObject)) return 0;
+        return Observe(health, Scale(health, damage), hit.Source);
+    }
     private static void PatchHit(ILContext il) {
         var c = new ILCursor(il);
         c.GotoNext(MoveType.Before, i => i.MatchLdarg(0), i => i.MatchLdfld<HealthManager>("hp"),
@@ -48,8 +57,7 @@ internal static class BossDamageScaling {
         c.Index += 3;
         c.Emit(OpCodes.Ldarg_0);
         c.Emit(OpCodes.Ldarg_1);
-        c.EmitDelegate<Func<int, HealthManager, HitInstance, int>>((damage, health, hit) =>
-            hit.AttackType == AttackTypes.Generic || hit.DamageDealt >= 9999 ? damage : Observe(health, Scale(health, damage), hit.Source));
+        c.EmitDelegate<Func<int, HealthManager, HitInstance, int>>(AcceptedDamage);
     }
     private static void PatchExtra(ILContext il) {
         var c = new ILCursor(il);

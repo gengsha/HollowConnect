@@ -817,8 +817,11 @@ internal class AnimationManager {
 
         if (!_netClient.IsConnected) return;
 
-        var localPlayer = HeroController.instance;
-        if (!localPlayer) {
+        // These hooks run for every scene animator, including loading scenes
+        // with no knight. Reject unrelated objects before a singleton lookup;
+        // the loud getter otherwise scans/logs once for every animation event.
+        var localPlayer = self.GetComponent<HeroController>();
+        if (!localPlayer || localPlayer != HeroController.SilentInstance) {
             return;
         }
 
@@ -863,8 +866,8 @@ internal class AnimationManager {
 
         if (!_netClient.IsConnected) return;
 
-        var localPlayer = HeroController.instance;
-        if (!localPlayer) {
+        var localPlayer = self.GetComponent<HeroController>();
+        if (!localPlayer || localPlayer != HeroController.SilentInstance) {
             return;
         }
 

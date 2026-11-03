@@ -16,6 +16,7 @@ public sealed partial class RescueProbe {
         var body = hero.GetComponent<Rigidbody2D>();
         var other = host ? "guest" : "host";
         var protectionBaseline = Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_NATIVE_CHECK") == "protection";
+        var immunityOnly = Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESCUE_NATIVE_CHECK") == "immunity";
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += (loaded, mode) => Log("NATIVE SCENE " + loaded.name + " " + mode);
         On.GameManager.BeginSceneTransition += (orig, gm, info) => {
             Log("NATIVE TRANSITION " + info.SceneName + "/" + info.EntryGateName + " from=" + gm.sceneName + " hero=" + hero.transform.position + " " + Environment.StackTrace);
@@ -31,7 +32,7 @@ public sealed partial class RescueProbe {
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
             yield return Until(() => !pd.GetBool("atBench") && hero.acceptingInput && !body.isKinematic, "native starting bench get-up");
         }
-        foreach (var scene in new[] { "Crossroads_01", "GG_Vengefly", "Dream_02_Mage_Lord" }) {
+        foreach (var scene in immunityOnly ? new[] { "Crossroads_01" } : new[] { "Crossroads_01", "GG_Vengefly", "Dream_02_Mage_Lord" }) {
             GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo {
                 SceneName = scene, EntryGateName = scene.StartsWith("GG_") ? "door_dreamEnter" : scene.StartsWith("Dream_") ? "door1" : "left1",
                 Visualization = GameManager.SceneLoadVisualizations.Default, WaitForSceneTransitionCameraFade = true
@@ -46,10 +47,12 @@ public sealed partial class RescueProbe {
             hero.AffectedByGravity(true); Physics2D.SyncTransforms();
             yield return Until(() => hero.cState.onGround, "native entry support " + scene);
             entry = hero.transform.position;
+            foreach (var stalwart in immunityOnly ? new[] { false, true } : new[] { false })
             foreach (var victimRole in new[] { "guest", "host" }) {
                 var victim = role == victimRole;
-                var step = scene + "." + victimRole;
+                var step = scene + "." + victimRole + (stalwart ? ".stalwart" : "");
                 var missingCheckpoint = scene == "Dream_02_Mage_Lord" && victimRole == "host";
+                pd.SetBool("equippedCharm_4", stalwart);
                 hero.takeNoDamage = true; hero.cState.invulnerable = false; hero.cState.recoiling = false;
                 pd.SetInt("health", 5); pd.SetInt("healthBlue", 0); pd.SetBool("isInvincible", false);
                 pd.SetInt("geo", 321); pd.SetInt("geoPool", 67); pd.SetString("shadeScene", "Crossroads_10");
@@ -59,6 +62,22 @@ public sealed partial class RescueProbe {
                 hero.AffectedByGravity(true); Physics2D.SyncTransforms();
                 yield return Together(step + ".ready");
                 if (victim) {
+                    var ordinaryImmunity = 0f;
+                    var expectedImmunity = hero.DAMAGE_FREEZE_DOWN + (stalwart ? hero.INVUL_TIME_STAL : hero.INVUL_TIME);
+                    if (immunityOnly) {
+                        hero.takeNoDamage = false;
+                        var hitStarted = Time.time;
+                        hero.TakeDamage(null, GlobalEnums.CollisionSide.right, 1, 1);
+                        Check(pd.health == 4 && hero.cState.invulnerable, "ordinary damage starts native immunity " + step);
+                        yield return Until(() => !hero.cState.invulnerable && !hero.cState.recoiling,
+                            "ordinary damage immunity expires " + step, expectedImmunity + 2);
+                        ordinaryImmunity = Time.time - hitStarted;
+                        Log("IMMUNITY ordinary " + step + " measured=" + ordinaryImmunity + " expected=" + expectedImmunity);
+                        Check(ordinaryImmunity >= expectedImmunity - .12f, "ordinary immunity lasts native duration " + step);
+                        hero.takeNoDamage = true;
+                        hero.transform.position = entry; body.velocity = Vector2.zero; Physics2D.SyncTransforms();
+                        yield return Until(() => hero.cState.onGround && hero.acceptingInput, "ordinary hit settles before lethal hit " + step);
+                    }
                     // Ordinary lethal hit in the air, independent of hazard type.
                     hero.transform.position = entry + new Vector3(runtime.IsGodhomeRescueScene() ? 4 : 2, 3, 0); Physics2D.SyncTransforms();
                     var origin = hero.transform.position;
@@ -101,9 +120,14 @@ public sealed partial class RescueProbe {
                     yield return new WaitForSeconds(hero.DAMAGE_FREEZE_DOWN + .15f);
                     Check(Field<bool>(hero.GetComponent<InvulnerablePulse>(), "pulsing") && sprite.color != normal, "native rescue pulse changes sprite colour " + step);
                     // Duplicate acceptance must not extend immunity.
-                    Inject(new Message { Kind = Kind.Revived, Id = runtime.LocalId, Target = runtime.Peers.Single().Key, Serial = runtime.DeathSerial, Scene = scene });
-                    yield return Until(() => !hero.cState.invulnerable, "rescue immunity expires " + step, hero.INVUL_TIME + 1);
-                    Check(Time.time - started < hero.INVUL_TIME + hero.DAMAGE_FREEZE_DOWN + .35f, "duplicate rescue cannot renew native protection " + step);
+                    Inject(new Message { Kind = Kind.Revived, Id = runtime.LocalId, Target = runtime.Peers.Single().Key,
+                        Serial = runtime.DeathSerial, Aux = Field<uint>(runtime, "localDownLifeVersion"), Scene = scene });
+                    yield return Until(() => !hero.cState.invulnerable, "rescue immunity expires " + step, expectedImmunity + 1);
+                    var rescueImmunity = Time.time - started;
+                    Log("IMMUNITY rescue " + step + " measured=" + rescueImmunity + " expected=" + expectedImmunity);
+                    Check(rescueImmunity >= expectedImmunity - .12f, "rescue immunity lasts full ordinary damage duration " + step);
+                    if (immunityOnly) Check(Math.Abs(rescueImmunity - ordinaryImmunity) < .15f, "rescue and ordinary damage immunity match " + step);
+                    Check(rescueImmunity < expectedImmunity + .35f, "duplicate rescue cannot renew native protection " + step);
                     Check(!Field<bool>(hero.GetComponent<InvulnerablePulse>(), "pulsing"), "native pulse stops with immunity " + step);
                     yield return Until(() => hero.cState.onGround && hero.acceptingInput, "rescued knight stands on native support " + step);
                     Check(!hero.GetComponent<Renderer>().forceRenderingOff, "rescued knight is visible " + step);
@@ -163,5 +187,6 @@ public sealed partial class RescueProbe {
                 yield return Together(step + ".parked");
             }
         }
+        pd.SetBool("equippedCharm_4", false);
     }
 }

@@ -1,0 +1,67 @@
+{
+  "version": "0.2.7",
+  "action": "package-release",
+  "releaseChannel": "release",
+  "userRequest": "打包0.2.7吧,github,release",
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "sha256": "58EABAF2F7FCCF7AF202A7FA0E5B1E2E7E43177C17F0319CC3B4214056E06EF3",
+      "name": "HKMP.dll"
+    },
+    {
+      "sha256": "BD47A5E2B13C85CAB45509271E9FB781E9C09732084BFDF36108CC298743A549",
+      "name": "HollowConnect.dll"
+    },
+    {
+      "sha256": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A",
+      "name": "HollowConnect.Core.dll"
+    },
+    {
+      "sha256": "E28DE495E36BD896AE6238109CD5C1DF2DA1EB068E4A69A4B86835E1E34CDE9A",
+      "name": "HollowConnect.Steam.dll"
+    }
+  ],
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified",
+    "colosseum-bilateral-permanent-freeze-unreproduced",
+    "shade-soul-downslam-multihit-unreproduced",
+    "unreliable-player-animation-attack-loss"
+  ],
+  "blockerLedgerSha256": "C6058074D81C3EAC55740C6AF41E1BD562EBD3C6B411FE7735AF49708050AE84",
+  "evidence": [
+    {
+      "path": "docs/evidence/development-validation-0.2.7.json",
+      "sha256": "422E0D0236F371238740FACA5042EAEA063C92FBD950794D906A79A545ECB73E"
+    },
+    {
+      "path": "docs/evidence/runtime-room-0.2.7.json",
+      "sha256": "E291CBB5A408BB9CA51E986E1499082E7400D7C5CD5EB6AAB2017A714551669A"
+    }
+  ],
+  "scope": "Build and publish HollowConnect 0.2.7 Windows/source ZIPs, checksums, tag v0.2.7 and a standard GitHub Release with bundled Steam module. Retain original validation hashes, limits and unresolved findings; no new game matrix for version-only packaging.",
+  "createdAtUtc": "2026-11-03T09:51:13.9970509Z"
+}

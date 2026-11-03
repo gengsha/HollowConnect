@@ -106,5 +106,6 @@ internal enum EntityComponentType : ushort {
     DreamWarrior,
     RadianceArena,
     BossCombatScope,
-    EncounterSummon
+    EncounterSummon,
+    Presentation
 }

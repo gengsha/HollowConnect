@@ -1,0 +1,38 @@
+{
+  "createdAtUtc": "2026-11-02T13:45:41.1186222Z",
+  "version": "0.2.6-rc2",
+  "scope": "Installer script maintenance only; no production DLL change or repeated game suite.",
+  "reportedError": "Close Hollow Knight in the selected directory before installing or restoring.",
+  "observedProcess": {
+    "pid": 11336,
+    "threadCount": 0,
+    "handleCount": 0,
+    "executablePath": null
+  },
+  "cause": "The old guard treated an unreadable path as a running game, including retained exited zero-thread process records.",
+  "correction": "Ignore only CIM-confirmed zero-thread records or positively exited fallback objects. Block live selected copies, allow known other directories, and identify unverified live processes by PID.",
+  "processChecksPassed": 14,
+  "installerChecksPassed": 13,
+  "processEvidence": ".analysis/installer-stale-process-20261102/process-tests-final.log",
+  "installerEvidence": ".analysis/installer-stale-process-20261102/installer-tests.log",
+  "productionDllsChanged": false,
+  "packagedBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "D2587703D93A451616C9BAD405719230F0DF48D90F9875EE6A57825A7EF3982E"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "D16A685EF3DF553B26AA85986A69BE57B3E6A57869406007645A9FC18E403989"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "C55A5F7814F81024B7D4095FAD4EEE83CD119A03015CDB54179D826D770A478D"
+    }
+  ],
+  "githubPublished": false
+}

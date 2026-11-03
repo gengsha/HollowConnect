@@ -48,6 +48,8 @@
 
 `rescue` 配合 `HOLLOWCONNECT_RESCUE_NATIVE_CHECK=1`（或 `placement`）在 `Crossroads_01`、`GG_Vengefly`、`Dream_02_Mage_Lord` 分别让双方受到空中普通致命伤，队友必须用实际骨钉救援。流程／梦境要求有支撑的死亡侧落地，神居保留原生本地危险复位点，并包含梦境复位点为零的夹具。救起后检查原生无敌、脉冲颜色、重复确认不续期、保护到期后正常受伤、真实落地和双端可见。为隔离保护逻辑，屏蔽额外战斗接触伤害；显式伤害检查仍执行原生 TakeDamage。救援者允许移位至经碰撞体净空检查的挥刀位置，该专项不是行走路线证明；路线使用下方独立流程专项。值为 `protection` 仅用于旧 DLL 无保护的失败对照，跳过落点断言，不可作为最终验收。
 
+值为 `immunity` 时只跑 `Crossroads_01`，分别让房主／客机在未装备和装备坚硬外壳时被救起；先测普通受伤的原生无敌，再比较救援的完整持续时间，检查立即挡伤、重复确认不续期和到期恢复受伤。
+
 `progress` 配合 `HOLLOWCONNECT_DREAM_WARRIORS=all` 检查七位普通战士之梦，`HOLLOWCONNECT_DREAM_SUMMONER=host|guest` 选择唯一交互发起者。双方实际加载原生场景，从 NPC 交互入口和 Yes/No 选择启动挑战，由原生 HealthManager.Hit 造成致命伤害，等原生死亡收尾后各自完成原生领奖。发起者先领并留在房间，队友再领；检查重复完成、旧挑战不能重复领奖或重启，副机通过真实 UDP 提交提前完成必须被服务器拒绝。`inspect` 只导出状态机，不算战斗验收。各战士之间经过中立场景并等旧 boss 附加场景卸载，避免直接强跳导致原生同名 Warrior 文件夹查错；不将该前置处理当作生产修复。
 
 无眼共享提灯专项：先构建一次 Smoke，执行 `Run-Dream-Warriors.ps1 -Prefix <全新前缀> -PayloadPath src/HollowConnect/bin/Release/net472 -Cases guest,host -Summoner guest`；交换 `-Summoner host` 再检查反向发起。`Cases` 指亲自取得提灯的玩家，双方均未战胜无眼，另一端能力经真实 UDP 共享；等待双方实际拥有提灯才进入房间。检查 NPC、单一权威原生无眼与远端实体、原生死亡、双方各领一次 200 精华、输入恢复、重复完成与伪造完成拒绝。提灯购买经历是内存夹具，不宣称执行了商店购买动画。`-Scenes RestingGrounds_02` 可检查泽若对照，或指定其他已知战士场景；`-Inspect` 只导出 FSM。默认 `Fungus1_35`。测试仅使用隔离副本、拦截保存，保留失败和二进制哈希。
@@ -292,3 +294,19 @@ Boss倒地索敌专项：构建一次Smoke，再运行 `Run-Boss-Targets.ps1 -Pr
 构建一次 Smoke，以 rescue 模式运行。设置 `HOLLOWCONNECT_FK_GATE_CHECK=standard|late-trigger|handoff|schema`、`HOLLOWCONNECT_FK_SHARED=0|1`、`HOLLOWCONNECT_FK_AUTHORITY=host|guest`；`Run-Two.ps1 -Players 2|3 -NoBuild -RunName <新目录>` 选择人数。三端使用现有 guest 副本启动第二个独立进程，各端独立身份、日志、结果；所有 DLL 在任何游戏启动前准备，启动按探针加载边界串行。三端选项目前用于此人数感知夹具，其它专项仍按既有双端范围执行。
 
 用原生触发器、HealthManager 破甲／露头伤害走完整演出，终局要求每端本地 Battle Enemies=0、Battle Control=End、五处原生门无阻挡碰撞，并用真实水平输入逐一穿门。`schema` 只检查三端场景结构、预战计数及第一次破甲，不能作通关验收。`late-trigger` 让最后一名角色在终局后才触发本地战斗；`handoff` 在第一次破甲后让权威离场再回来。可设置 `HOLLOWCONNECT_NETWORK_FAULTS=1` 检查真实数据报丢失、重排和重复。使用新鲜内存角色，禁止保存，不强制 Boss FSM 状态、不发送开门事件。持久运行器与本次选择见 `.analysis/false-knight-gate-fix-20261026/`。
+# Steam 专项
+
+`Run-Two.ps1 -RunName 'native-menus-example' -Mode connection-menu -SteamModule -NoBuild`
+检查主菜单独立的「局域网联机」与「Steam 联机」、原生导航、中文输入和焦点、取消主持选档返回，
+并保存游戏相机截图。去掉 `-SteamModule` 检查可选模块缺席时的局域网菜单与导航。
+好友房间分页使用明确标记的显示测试数据，不发邀请、不尝试加入。
+
+`Run-Two.ps1 -RunName 'steam-native-20261102-a' -Mode steam-native -SteamModule -NoBuild` 检查游戏原生 Steam
+初始化、真实单账号大厅创建／退出、好友加入状态、本地原生 SocketPair 双向收发及资源清理。
+配合 `HOLLOWCONNECT_STEAM_NATIVE_MENU=1`，从原生 Steam 入口创建房间，检查取消选档返回、
+游戏内 F10 对应的菜单动作、邀请控件可用、返回暂停菜单及继续游戏；不会点击发送邀请。
+`-RunName 'steam-join-20261102-a' -Mode join -SteamModule` 配合 `HOLLOWCONNECT_EXTERNAL_GATEWAY_CHECK=1`
+检查原生存档菜单取消、连接所有权隔离、直连历史不变和原有加入／重连路径。
+两项都只使用现有隔离副本，ProbeMod 拦截存档写入；不会发送好友邀请。
+单账号大厅、本地原生 socket 和内存桥接测试均不证明跨账号／跨机器 Steam 联机成功。
+`Run-Room-Suite.ps1 -SteamModule` 可在原有 12 项矩阵中同时加载并记录可选模块。

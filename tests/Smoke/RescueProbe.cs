@@ -164,6 +164,12 @@ public sealed partial class RescueProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PRESENTATION_CHECK"))) {
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_PRESENTATION_CHECK") == "fixture") yield return ReplicaVisualChecks.Run(Log);
+            else yield return NativePresentationChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS recoverable presentation checks"); Flag(role + ".done"); yield break;
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_CHECK") == "1") {
             yield return VoluntaryObservationChecks();
             yield return ProbeShutdown.Run(engine, root, role);

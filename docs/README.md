@@ -4,13 +4,14 @@
 
 | 面向玩家 | 内容 |
 |---|---|
-| [当前版本](UPDATE-0.2.6.md) | 0.2.6 更新、下载与验证范围 |
+| [当前版本](UPDATE-0.2.7.md) | 0.2.7、Steam／原生菜单、竞技场与显示同步修复及验证范围 |
 | [共享进度](SHARED-PROGRESS.md) | 共享项目、个人资源和存档规则 |
 | [共享血量（Beta）](LINKED-HEALTH.md) | 团队生命、护符限制与休息 |
 | [观战（Beta）](OBSERVATION.md) | 主动观战、死亡观战和退出方式 |
 | [皮肤兼容](SKIN-COMPATIBILITY.md) | Custom Knight 与视频皮肤的已知限制 |
 | [已知问题](KNOWN-ISSUES.md) | 尚未关闭的报告与反馈方法 |
 | [FRP 示例](frpc.example.toml) | 单个 UDP 端口转发配置 |
+| [Steam 好友联机（预览）](STEAM-MULTIPLAYER.md) | 独立模块、邀请／加入与双账号验收 |
 
 | 面向开发者 | 内容 |
 |---|---|

@@ -1,11 +1,16 @@
-﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$UserRequestedRelease)
+﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$UserRequestedRelease,
+    [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate, [switch]$SteamModule)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'PackageDocumentation.ps1')
-$version='0.2.6'
+$version='0.2.7'
+if($ReleaseCandidate){
+    if($Playtest -or $PlaytestBuild -or $UserRequestedRelease){throw 'Choose one release channel.'}
+    $Playtest=$true; $PlaytestBuild=$ReleaseCandidate
+}
 if($UserRequestedRelease -and $Playtest){throw 'Choose one release channel.'}
 if($PlaytestBuild -and (!$Playtest -or $PlaytestBuild -notmatch '^[a-z0-9][a-z0-9-]{0,63}$')){throw 'Invalid playtest build label.'}
-$taskPackageName="HollowConnect-$version"+$(if($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
+$taskPackageName="HollowConnect-$version"+$(if($ReleaseCandidate){'-'+$ReleaseCandidate}elseif($PlaytestBuild){'-playtest-'+$PlaytestBuild}else{''})
 $package=Join-Path $root ('dist\'+$taskPackageName)
 $taskBlockers=Get-Content -LiteralPath (Join-Path $root "docs/evidence/runtime-blockers-$version.json") -Raw | ConvertFrom-Json
 if($taskBlockers.version -ne $version){throw 'Wrong blocker ledger version.'}
@@ -16,6 +21,8 @@ if ($manifest.version -ne $version) { throw 'Wrong version.' }
 if($manifest.releaseChannel -ne $(if($Playtest){'playtest'}else{'release'})){throw 'Wrong release channel.'}
 if([bool]$manifest.userRequestedRelease -ne [bool]$UserRequestedRelease){throw 'Release request mode differs.'}
 if($manifest.buildLabel -ne $PlaytestBuild){throw 'Wrong playtest build label.'}
+if($ReleaseCandidate -and ($manifest.releaseCandidate -ne $ReleaseCandidate -or $manifest.displayVersion -ne ($version+'-'+$ReleaseCandidate))){throw 'Wrong release candidate identity.'}
+if([bool]('Steam' -in @($manifest.optionalModules)) -ne [bool]$SteamModule){throw 'Wrong optional module selection.'}
 if($UserRequestedRelease){
     $taskAuthorizationRelative="docs/evidence/release-authorization-$version.json"
     $taskAuthorization=Get-Content -LiteralPath (Join-Path $root $taskAuthorizationRelative) -Raw | ConvertFrom-Json
@@ -38,7 +45,10 @@ if($Playtest){
 }
 $taskSkipRetest=($Playtest -or $UserRequestedRelease) -and $taskAuthorization.retestOmitted -eq $true
 if([bool]$manifest.retestOmitted -ne [bool]$taskSkipRetest){throw 'Retest status differs from request.'}
-if (@($manifest.files).Count -ne 7) { throw 'Incomplete payload manifest.' }
+$taskPayloadNames=@('HKMP.dll','HKMP.pdb','BouncyCastle.Cryptography.dll','HollowConnect.dll','HollowConnect.pdb','HollowConnect.Core.dll','HollowConnect.Core.pdb')
+if($SteamModule){$taskPayloadNames+=@('HollowConnect.Steam.dll','HollowConnect.Steam.pdb')}
+if(@($manifest.files).Count -ne $taskPayloadNames.Count -or @(Compare-Object $taskPayloadNames @($manifest.files.name)).Count){throw 'Incomplete payload manifest.'}
+if(@(Compare-Object $taskPayloadNames @(Get-ChildItem -LiteralPath (Join-Path $package 'payload/HKMP') -File | ForEach-Object {$_.Name})).Count){throw 'Unexpected or missing payload file.'}
 foreach ($entry in $manifest.files) {
     $payload=Join-Path $package "payload\HKMP\$($entry.name)"
     if ((Get-FileHash -LiteralPath $payload -Algorithm SHA256).Hash -ne $entry.sha256) { throw "Bad payload: $($entry.name)" }
@@ -103,7 +113,7 @@ foreach ($kind in 'windows','source') {
         }
         foreach ($entry in $files) {
             $relative=$entry.FullName.Replace('\','/')
-            if ($relative -match '(^|/)(\.test-results|vendor|bin|obj)/|HollowConnect\.Smoke\.dll$|user\d+.*\.dat$|(?:unity|engine)\.log$|\.draft$') { throw "Private/build/draft file in $kind : $relative" }
+            if ($relative -match '(^|/)(\.test-results|vendor|bin|obj)/|HollowConnect\.(?:Smoke|SteamProbe)\.dll$|user\d+.*\.dat$|(?:unity|engine)\.log$|\.draft$') { throw "Private/build/draft file in $kind : $relative" }
             if ($kind -eq 'source' -and $relative -match '\.(dll|exe|pdb)$') { throw "Binary in source archive: $relative" }
             $base=if ($kind -eq 'windows') { $package } else { $root }
             $original=Join-Path $base $relative
@@ -113,6 +123,7 @@ foreach ($kind in 'windows','source') {
             if ($hash -ne (Get-FileHash -LiteralPath $original -Algorithm SHA256).Hash) { throw "Stale archive content: $relative" }
         }
         if ($kind -eq 'windows') {
+            if(@(Compare-Object @($taskPayloadNames | ForEach-Object {'payload/HKMP/'+$_}) @($files.FullName | Where-Object {$_.StartsWith('payload/HKMP/')})).Count){throw 'Archive payload selection differs from manifest.'}
             foreach ($name in 'manifest.json','Install.ps1','GamePath.ps1',([string][char]0x4e00+[char]0x952e+[char]0x5b89+[char]0x88c5+'.exe')) {
                 if (!($files | Where-Object { $_.FullName.Replace('\','/') -eq $name })) { throw "Missing installer file: $name" }
             }
@@ -145,4 +156,4 @@ foreach ($kind in 'windows','source') {
     $hash=(Get-FileHash -LiteralPath (Join-Path $root "dist\$name") -Algorithm SHA256).Hash.ToLowerInvariant()
     if (!(Get-Content -LiteralPath (Join-Path $root 'dist\SHA256SUMS.txt') | Where-Object { $_ -eq "$hash  $name" })) { throw "Bad published checksum: $name" }
 }
-Write-Output "PASS $($manifest.releaseChannel) $version $PlaytestBuild`: 7 payload files; $(@($runtime.runs).Count) new runtime records (retestOmitted=$taskSkipRetest); API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; published checksums; no test plugin or private saves."
+Write-Output "PASS $($manifest.releaseChannel) $version $PlaytestBuild`: $($taskPayloadNames.Count) payload files; $(@($runtime.runs).Count) new runtime records (retestOmitted=$taskSkipRetest); API hash; $($counts.windows) installer archive entries; $($counts.source) source archive entries; all archive content and markdown links; 49 audit entries; local checksums; no test plugin or private saves."

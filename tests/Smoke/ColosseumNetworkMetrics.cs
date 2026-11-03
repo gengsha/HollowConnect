@@ -10,6 +10,7 @@ using Hkmp.Networking;
 using Hkmp.Networking.Client;
 using Hkmp.Animation;
 using Hkmp.Networking.Packet;
+using Hkmp.Networking.Packet.Data;
 using Hkmp.Networking.Packet.Update;
 using Hkmp.Util;
 using MonoMod.RuntimeDetour;
@@ -36,9 +37,17 @@ public sealed class ColosseumNetworkMetrics : MonoBehaviour {
     internal sealed class ObservedCombatHit {
         public string phase, source, path;
         public int damage, sourceId, owner;
+        public float time;
         public bool remote, reference;
     }
     internal readonly List<ObservedCombatHit> ObservedCombatHits = new();
+    internal readonly List<ObservedCombatHit> ObservedReplicaContacts = new();
+    internal int LocalSoulCalls;
+    internal readonly Dictionary<string, int> ImpactCalls = new();
+    private GameObject hitSource;
+    private HealthManager hitHealth;
+    internal ulong CombatTargetId;
+    internal readonly Dictionary<string, int> BloodBursts = new();
     private Hkmp.Game.GameManager engine;
     private string root, role;
     public string Phase = "entry";
@@ -46,12 +55,43 @@ public sealed class ColosseumNetworkMetrics : MonoBehaviour {
     private float nextSample;
     private int frames;
     private double maxFrameMs, totalFrameMs;
+    private int packetDiagnosticThreshold = 65536;
     private static readonly FieldInfo Queue = typeof(ThreadUtil).GetField("ActionsToRun", BindingFlags.Static | BindingFlags.NonPublic);
     private static object Field(object o, string n) => o?.GetType().GetField(n, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(o);
     private static long Micros(long ticks) => ticks * 1000000 / Stopwatch.Frequency;
 
     internal void Initialize(Hkmp.Game.GameManager game, string output, string endpoint) {
         engine = game; root = output; role = endpoint;
+        hooks.Add(new Hook(typeof(UpdatePacket<ClientUpdatePacketId>).GetMethod("CreatePacket"),
+            new Action<Action<UpdatePacket<ClientUpdatePacketId>, Packet>, UpdatePacket<ClientUpdatePacketId>, Packet>((orig, update, packet) => {
+                try { orig(update, packet); }
+                finally {
+                    if (packet.Length >= packetDiagnosticThreshold) {
+                        packetDiagnosticThreshold = Math.Max(packetDiagnosticThreshold * 2, packet.Length + 1);
+                        var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                        object DescribeData(object value) {
+                            var data = (System.Collections.IDictionary)value;
+                            return data.Keys.Cast<object>().Select(k => {
+                                var payload = data[k];
+                                if (payload is IPacketData item) {
+                                    var encoded = new Packet(); item.WriteData(encoded);
+                                    return (object)new { key = k.ToString(), bytes = encoded.Length, type = payload.GetType().Name,
+                                        components = (payload as RawPacketDataCollection)?.DataInstances.OfType<Hkmp.Networking.Packet.Data.ReliableEntityUpdate>()
+                                            .SelectMany(u => u.GenericData).GroupBy(c => c.Type).Select(g => new { type = g.Key.ToString(), count = g.Count() }) };
+                                }
+                                return new { key = k.ToString(), data = DescribeData(payload) };
+                            }).ToArray();
+                        }
+                        var type = typeof(UpdatePacket<ClientUpdatePacketId>);
+                        var baseType = typeof(BasePacket<ClientUpdatePacketId>);
+                        File.AppendAllText(Path.Combine(root, role + ".packet-backlog.jsonl"), JsonConvert.SerializeObject(new {
+                            update.Sequence, bytes = packet.Length,
+                            normal = DescribeData(baseType.GetField("NormalPacketData", flags).GetValue(update)),
+                            resends = DescribeData(type.GetField("ResendPacketData", flags).GetValue(update))
+                        }) + "\n");
+                    }
+                }
+            })));
         hooks.Add(new Hook(typeof(DtlsTransport).GetMethod("Send", new[] { typeof(byte[]), typeof(int), typeof(int) }),
             new Action<Action<DtlsTransport, byte[], int, int>, DtlsTransport, byte[], int, int>((orig, transport, bytes, offset, length) => {
                 if (offset == 0 && DatagramFraming.ReadHeader(bytes, length, out _, out var total, out var index, out var count)) {
@@ -113,6 +153,52 @@ public sealed class ColosseumNetworkMetrics : MonoBehaviour {
                 orig(manager, packet);
             })));
         On.HealthManager.TakeDamage += ObserveHit;
+        On.HeroController.SoulGain += ObserveSoul;
+        On.EnemyHitEffectsUninfected.RecieveHitEffect += ObserveUninfectedImpact;
+        On.EnemyHitEffectsArmoured.RecieveHitEffect += ObserveArmouredImpact;
+        On.GlobalPrefabDefaults.SpawnBlood += ObserveBlood;
+        On.InfectedEnemyEffects.RecieveHitEffect += ObserveInfectedImpact;
+    }
+
+    private void ObserveSoul(On.HeroController.orig_SoulGain orig, HeroController hero) {
+        if (CombatPhase != "none") LocalSoulCalls++;
+        orig(hero);
+    }
+    private void Impact(UnityEngine.Component receiver) {
+        if (CombatPhase == "none" || EntityReferences.Owner(receiver.gameObject)?.Id != CombatTargetId) return;
+        ImpactCalls[CombatPhase] = ImpactCalls.TryGetValue(CombatPhase, out var count) ? count + 1 : 1;
+        File.AppendAllText(Path.Combine(root, role + ".impacts.jsonl"), JsonConvert.SerializeObject(new {
+            utc = DateTime.UtcNow, CombatPhase, target = receiver.name, receiver = receiver.GetType().Name,
+            replica = EntityReferences.IsReplica(receiver.gameObject), source = hitSource == null ? "none" : hitSource.name,
+            remote = hitSource != null && LocalWorldIsolation.IsRemote(hitSource)
+        }) + "\n");
+    }
+    private void ObserveUninfectedImpact(On.EnemyHitEffectsUninfected.orig_RecieveHitEffect orig, EnemyHitEffectsUninfected receiver, float direction) {
+        Impact(receiver); orig(receiver, direction);
+    }
+    private void ObserveArmouredImpact(On.EnemyHitEffectsArmoured.orig_RecieveHitEffect orig, EnemyHitEffectsArmoured receiver, float direction) {
+        Impact(receiver); orig(receiver, direction);
+    }
+    private void ObserveInfectedImpact(On.InfectedEnemyEffects.orig_RecieveHitEffect orig, InfectedEnemyEffects receiver, float direction) {
+        Impact(receiver);
+        var previous = hitHealth; hitHealth = receiver.GetComponent<HealthManager>();
+        try { orig(receiver, direction); } finally { hitHealth = previous; }
+    }
+    private void ObserveBlood(On.GlobalPrefabDefaults.orig_SpawnBlood orig, GlobalPrefabDefaults defaults, Vector3 position,
+        short minCount, short maxCount, float minSpeed, float maxSpeed, float minAngle, float maxAngle, Color? color) {
+        if (CombatPhase != "none" && EntityReferences.Entities.TryGetValue(CombatTargetId, out var target)) {
+            var body = target.IsNativeAuthority ? target.Object.Host : target.Object.Client;
+            if (body != null && hitHealth != null && EntityReferences.Owner(hitHealth.gameObject)?.Id == CombatTargetId) {
+                BloodBursts[CombatPhase] = BloodBursts.TryGetValue(CombatPhase, out var count) ? count + 1 : 1;
+                File.AppendAllText(Path.Combine(root, role + ".blood.jsonl"), JsonConvert.SerializeObject(new {
+                    utc = DateTime.UtcNow, CombatPhase, minCount, maxCount, position = position.ToString(),
+                    action = Hkmp.Game.Client.Entity.Action.FsmActionHooks.CurrentAction?.GetType().Name,
+                    owner = Hkmp.Game.Client.Entity.Action.FsmActionHooks.CurrentAction?.Owner?.name,
+                    stack = new StackTrace().ToString()
+                }) + "\n");
+            }
+        }
+        orig(defaults, position, minCount, maxCount, minSpeed, maxSpeed, minAngle, maxAngle, color);
     }
 
     private void Event(string direction, string clip, int frame) => File.AppendAllText(Path.Combine(root, role + ".attack-events.jsonl"),
@@ -120,13 +206,25 @@ public sealed class ColosseumNetworkMetrics : MonoBehaviour {
 
     private void ObserveHit(On.HealthManager.orig_TakeDamage orig, HealthManager health, HitInstance hit) {
         var before = health.hp;
-        orig(health, hit);
-        if (health != null && health.name == "Colosseum_Miner(Clone)" && before > health.hp && CombatPhase != "none" && hit.Source != null) {
+        var previousSource = hitSource;
+        var previousHealth = hitHealth;
+        hitSource = hit.Source;
+        hitHealth = health;
+        try { orig(health, hit); } finally { hitSource = previousSource; hitHealth = previousHealth; }
+        var combatTarget = health != null && health.name.Replace("(Clone)", "") == "Colosseum_Miner";
+        if (combatTarget && EntityReferences.IsReplica(health.gameObject) && CombatPhase != "none" && hit.Source != null) {
+            ObservedReplicaContacts.Add(new ObservedCombatHit { phase = CombatPhase, damage = before - health.hp,
+                time = Time.time,
+                source = hit.Source.name, sourceId = hit.Source.GetInstanceID(), owner = AttackOwnership.RemoteOwner(hit.Source),
+                path = PathOf(hit.Source.transform), remote = LocalWorldIsolation.IsRemote(hit.Source) });
+        }
+        if (combatTarget && before > health.hp && CombatPhase != "none" && hit.Source != null) {
             ObservedCombatHits.Add(new ObservedCombatHit { phase = CombatPhase, damage = before - health.hp,
+                time = Time.time,
                 source = hit.Source.name, sourceId = hit.Source.GetInstanceID(), owner = AttackOwnership.RemoteOwner(hit.Source), path = PathOf(hit.Source.transform),
                 remote = LocalWorldIsolation.IsRemote(hit.Source), reference = hit.Source.GetComponentInParent<NativeSpellReference>() != null });
         }
-        if (health != null && health.name == "Colosseum_Miner(Clone)" && before > health.hp && CombatPhase != "none" && AttackOwnership.RemoteOwner(hit.Source) >= 0) {
+        if (combatTarget && before > health.hp && CombatPhase != "none" && AttackOwnership.RemoteOwner(hit.Source) >= 0) {
             CombatHits++; CombatDamage += before - health.hp;
         }
         if (health != null && health.gameObject.scene.name == "Room_Colosseum_Gold" && (before != health.hp || CombatPhase != "none")) {
@@ -189,6 +287,11 @@ public sealed class ColosseumNetworkMetrics : MonoBehaviour {
 
     private void OnDestroy() {
         On.HealthManager.TakeDamage -= ObserveHit;
+        On.HeroController.SoulGain -= ObserveSoul;
+        On.EnemyHitEffectsUninfected.RecieveHitEffect -= ObserveUninfectedImpact;
+        On.EnemyHitEffectsArmoured.RecieveHitEffect -= ObserveArmouredImpact;
+        On.GlobalPrefabDefaults.SpawnBlood -= ObserveBlood;
+        On.InfectedEnemyEffects.RecieveHitEffect -= ObserveInfectedImpact;
         foreach (var hook in hooks) hook.Dispose();
     }
 }

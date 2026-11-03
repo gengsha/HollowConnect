@@ -3,6 +3,7 @@
   <ItemGroup>
     <Compile Remove="Smoke/**/*.cs" />
     <ProjectReference Include="../src/HollowConnect/HollowConnect.csproj" />
+    <ProjectReference Include="../src/HollowConnect.Steam/HollowConnect.Steam.csproj" />
     <Reference Include="Assembly-CSharp"><HintPath>../vendor/references/Assembly-CSharp.dll</HintPath></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>../vendor/references/UnityEngine.CoreModule.dll</HintPath></Reference>
     <Reference Include="UnityEngine"><HintPath>../vendor/references/UnityEngine.dll</HintPath></Reference>

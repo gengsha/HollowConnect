@@ -95,8 +95,8 @@ internal sealed class CombatStateComponent : EntityComponent {
         // hierarchy refreshes over their existing two-second period.
         rebuild=CombatSampling.Next(Time.unscaledTime,id,2);
     }
-    // Pure presentation leaves have no shared gameplay state. Their local
-    // renderer/particle playback follows the enclosing object's activation.
+    // Pure presentation leaves have no shared gameplay state. Their pose,
+    // activation and playback belong to PresentationComponent.
     // Keep anything with an FSM, collider, damage, rigidbody or unknown
     // controller: a visual-looking child can still carry a hitbox or drive a
     // gameplay transition through one of those components.
@@ -170,23 +170,12 @@ internal sealed class CombatStateComponent : EntityComponent {
                 p.Write((byte)(c is BoxCollider2D?1:c is CircleCollider2D?2:c is CapsuleCollider2D?3:0));
                 var size=c is BoxCollider2D box?box.size:c is CapsuleCollider2D cap?cap.size:c is CircleCollider2D cir?new Vector2(cir.radius,cir.radius):Vector2.zero;p.Write(size.x);p.Write(size.y);
             }
-            p.Write(Count(h.Renderers));for(var k=0;k<Count(h.Renderers);k++){
-                var r=h.Renderers[k];p.Write(r!=null&&r.enabled);p.Write(r is SpriteRenderer);if(r is SpriteRenderer sr)WriteColor(p,sr.color);
-                var m=r==null?null:r.sharedMaterial;var flags=(byte)((m!=null&&m.HasProperty("_Color")?1:0)|(m!=null&&m.HasProperty("_TintColor")?2:0));p.Write(flags);
-                if((flags&1)!=0)WriteColor(p,m.GetColor("_Color"));if((flags&2)!=0)WriteColor(p,m.GetColor("_TintColor"));
-            }
+            // Visual state has an independent, compact snapshot.
+            p.Write((byte)0);
             p.Write(Count(h.Damage));for(var k=0;k<Count(h.Damage);k++){
                 var d=h.Damage[k];p.Write(d!=null&&d.enabled);p.Write(d==null?0:d.damageDealt);p.Write(d==null?1:d.hazardType);p.Write(d!=null&&d.shadowDashHazard);
             }
-            p.Write(Count(h.Sprites));for(var k=0;k<Count(h.Sprites);k++){
-                // Root animation has its own stream; only child clips/frames belong here.
-                // Random clips retain authoritative frame selection.
-                var s=h.Sprites[k];p.Write(s==null||n.Path.Length==0?-1:s.spriteId);WriteColor(p,s==null?Color.white:s.color);
-                var a=h.Animators[k];var animated=n.Path.Length!=0&&a!=null&&a.enabled&&a.Playing&&a.CurrentClip!=null&&a.CurrentClip.fps>0&&a.CurrentClip.wrapMode!=tk2dSpriteAnimationClip.WrapMode.RandomFrame&&a.CurrentClip.wrapMode!=tk2dSpriteAnimationClip.WrapMode.RandomLoop;
-                p.Write(animated);
-                if(animated){p.Write(a.CurrentClip.name);p.Write(a.ClipTimeSeconds);p.Write(a.ClipFps);}
-            }
-            p.Write(Count(h.Particles));for(var k=0;k<Count(h.Particles);k++){var ps=h.Particles[k];p.Write(ps!=null&&ps.isPlaying);p.Write(ps!=null&&ps.isEmitting);}
+            p.Write((byte)0);p.Write((byte)0);
         }
         if(p.ContentEquals(previous))return;
         // Published packets can still be in the send queue or reliable history.

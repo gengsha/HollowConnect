@@ -1,0 +1,94 @@
+{
+  "version": "0.2.6",
+  "displayVersion": "0.2.6-rc3",
+  "buildLabel": "rc3",
+  "releaseChannel": "playtest",
+  "action": "package-for-user-playtest",
+  "createdAtUtc": "2026-11-03T01:26:14.6787100Z",
+  "userRequest": "那就先打包rc3吧,我们继续测",
+  "localOnly": true,
+  "githubPublished": false,
+  "scope": "Local 0.2.6-rc3 Windows installer and matching source ZIP, including the optional Steam module, arena transport and charged-art feedback fixes. The prior frozen development build passed 93 selected core checks and 17 of 18 selected dual-client cases; one Hornet takeover failure remains unresolved. This packaging step changes display/assembly versions and documents, rebuilds Mod/Steam/Installer, and verifies package integrity. It does not rerun the game matrix or install into a personal game.",
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "05197C13653D6D69B19FB054DF2507AA1528701137E54130D2425421EE6BCF95"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "74EC448F782BC0D1624B3C7F79AF036FF926DCB19CEEE3B0D5A45219AF2E59BE"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "E52936317C2E3266E916FD0DE7E9A2DB4E09182CBFA22ADBBEA734E1AA699D04"
+    }
+  ],
+  "optionalModules": [
+    "Steam"
+  ],
+  "acceptedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified",
+    "colosseum-bilateral-permanent-freeze-unreproduced",
+    "shade-soul-downslam-multihit-unreproduced",
+    "unreliable-player-animation-attack-loss"
+  ],
+  "blockerLedgerSha256": "C5679EA2AF7E551E8785CB3507E241E0E63C9ADE3F90C6CD7B3DFCB975D3A37B",
+  "additionalDocuments": [
+    "docs/UPDATE-0.2.6-rc3.md",
+    "docs/evidence/arena-lag-nailarts-development-2026-11-03.json",
+    "docs/UPDATE-0.2.6-rc2.md",
+    "docs/evidence/development-validation-0.2.6-rc2.json",
+    "docs/evidence/installer-fix-0.2.6-rc2.json"
+  ],
+  "runtimeValidation": {
+    "version": "0.2.6",
+    "engineVersion": "3.0.0-hc13",
+    "releaseReady": false,
+    "retestOmitted": true,
+    "runs": [],
+    "previousValidationSource": "docs/evidence/arena-lag-nailarts-development-2026-11-03.json",
+    "previousValidationSha256": "28C68CFDB96A8CF9902ECB706F8B6591D642FBB82BF2AF0A17169B24A7BB0B1D",
+    "pending": [
+      "Real cross-machine Steam P2P/SDR and IP/FRP arena performance",
+      "Two-account friend invite and friend-list join",
+      "Cold-start invite",
+      "User reproduction of own charged-art feedback; abnormal Cyclone blood remains unreproduced",
+      "Hornet inactive needle after disconnect/authority takeover remains unresolved; impact of current changes on frequency unknown"
+    ]
+  },
+  "packagingChanges": {
+    "behaviorChangedSincePriorValidation": false,
+    "versionMetadataChanged": true,
+    "wireVersion": "0.2.6-l13",
+    "retainedTestEvidenceIsForOriginalHashes": true,
+    "personalInstallation": false
+  }
+}

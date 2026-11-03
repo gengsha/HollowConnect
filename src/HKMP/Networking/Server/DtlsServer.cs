@@ -22,11 +22,15 @@ internal class DtlsServer {
     public event Action<DtlsServerClient, byte[], int> DataReceivedEvent;
     public event Action<DtlsServerClient> ClientClosedEvent;
 
-    public void Start(int port) {
+    public int BoundPort => (socket?.LocalEndPoint as IPEndPoint)?.Port ?? 0;
+
+    public void Start(int port) => Start(port, IPAddress.Any);
+
+    internal void Start(int port, IPAddress bindAddress) {
         if (socket != null) throw new InvalidOperationException("DTLS server is already started");
         var identity = new ServerTlsServer(new BcTlsCrypto());
         var listener = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        try { listener.Bind(new IPEndPoint(IPAddress.Any, port)); }
+        try { listener.Bind(new IPEndPoint(bindAddress, port)); }
         catch { listener.Dispose(); throw; }
         socket = listener; stop = new CancellationTokenSource();
         var token = stop.Token;

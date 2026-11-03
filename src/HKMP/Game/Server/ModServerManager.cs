@@ -56,6 +56,7 @@ internal class ModServerManager : ServerManager {
 
         // Register handlers for UI events
         _uiManager.RequestServerStartHostEvent += port => OnRequestServerStartHost(port, false);
+        _uiManager.RequestLoopbackHostEvent += StartLoopback;
         _uiManager.RequestServerStopHostEvent += Stop;
 
         // Register application quit handler

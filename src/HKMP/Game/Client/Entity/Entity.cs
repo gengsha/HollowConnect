@@ -122,11 +122,6 @@ internal class Entity {
     private readonly HostClientPair<tk2dSpriteAnimator> _animator;
 
     /// <summary>
-    /// Bi-directional lookup for animation clip names to IDs.
-    /// </summary>
-    private readonly BiLookup<string, byte> _animationClipNameIds;
-
-    /// <summary>
     /// Host-client pair for the lists of FSMs on the entity.
     /// </summary>
     private readonly HostClientPair<List<PlayMakerFSM>> _fsms;
@@ -167,6 +162,7 @@ internal class Entity {
     /// The last position of the entity.
     /// </summary>
     private Vector3 _lastPosition;
+    private float _nextTransformRefresh;
     /// <summary>
     /// The last scale of the entity.
     /// </summary>
@@ -175,11 +171,6 @@ internal class Entity {
     /// Whether the game object for the entity was last active.
     /// </summary>
     private bool _lastIsActive;
-
-    /// <summary>
-    /// Whether to allow the client entity to animate itself.
-    /// </summary>
-    private bool _allowClientAnimation;
 
     /// <summary>
     /// List of snapshots for each FSM of a host entity that contain latest values for state and FSM variables.
@@ -302,26 +293,6 @@ internal class Entity {
             Host = Object.Host.GetComponent<tk2dSpriteAnimator>(),
             Client = Object.Client.GetComponent<tk2dSpriteAnimator>()
         };
-        if (_animator.Host != null) {
-            _animationClipNameIds = new BiLookup<string, byte>();
-
-            var index = 0;
-            foreach (var animationClip in _animator.Host.Library.clips) {
-                if (_animationClipNameIds.ContainsFirst(animationClip.name)) {
-                    continue;
-                }
-
-                _animationClipNameIds.Add(animationClip.name, (byte)index++);
-
-                if (index > byte.MaxValue) {
-                    Logger.Error($"Too many animation clips to fit in a byte for entity: {Object.Client.name}");
-                    break;
-                }
-            }
-
-            EntityHooks.WatchAnimator(_animator.Host, _animator.Client, OnAnimationPlayed);
-        }
-        
         // Always disallow the client object from being recycled, because it will simply be destroyed
         EntityHooks.WatchRecycle(Object.Client, ObjectPoolOnRecycleGameObject);
         EntityHooks.WatchRecycle(Object.Host, ObjectPoolOnRecycleGameObject);
@@ -660,31 +631,13 @@ internal class Entity {
             addedComponentsString += " DamageHero";
         }
         
-        var hostMeshRenderer = Object.Host.GetComponent<MeshRenderer>();
-        var clientMeshRenderer = Object.Client.GetComponent<MeshRenderer>();
-        if (hostMeshRenderer != null && clientMeshRenderer != null) {
-            Logger.Debug($"Adding MeshRenderer component to entity: {Object.Host.name}");
-
-            var meshRenderer = new HostClientPair<MeshRenderer> {
-                Host = hostMeshRenderer,
-                Client = clientMeshRenderer
-            };
-
-            _components[EntityComponentType.MeshRenderer] = new MeshRendererComponent(
-                _netClient,
-                Id,
-                Object,
-                meshRenderer
-            );
-            
-            addedComponentsString += " MeshRenderer";
-        }
-
         EntityInitializer.RemoveClientTypes(Object.Client);
         _components[EntityComponentType.CombatState] = new CombatStateComponent(_netClient, Id, Object, FinalCorpse);
+        _components[EntityComponentType.Presentation] = new PresentationComponent(_netClient, Id, Object, FinalCorpse);
 
         // Instantiate all types defined in the entity registry, which are passed to the constructor
         foreach (var type in types) {
+            if (type is EntityComponentType.MeshRenderer or EntityComponentType.SpriteRenderer) continue;
             var component = ComponentFactory.InstantiateByType(type, _netClient, Id, Object);
             if (component == null) {
                 Logger.Debug($"Could not instantiate component for type: {type}");
@@ -888,11 +841,17 @@ internal class Entity {
         }
 
         var transform = Object.Host.transform;
+        // Motion is an unreliable latest-value stream. Repeat a stationary
+        // endpoint occasionally so losing its last movement/flip cannot leave
+        // the visible replica stranded until the entity moves again. Spread
+        // refreshes across entities and leave inactive room objects idle.
+        var refreshTransform = Object.Host.activeInHierarchy && Time.unscaledTime >= _nextTransformRefresh;
+        if (refreshTransform) _nextTransformRefresh = Time.unscaledTime + .75f + (Id % 251) / 1000f;
 
         // Registration ownership survives native reparenting. Position packets
         // use world space so that ownership cannot select an obsolete basis.
         var newPosition = transform.position;
-        if (newPosition != _lastPosition) {
+        if (newPosition != _lastPosition || refreshTransform) {
             _lastPosition = newPosition;
 
             _netClient.UpdateManager.UpdateEntityPosition(
@@ -904,34 +863,34 @@ internal class Entity {
         const float epsilon = 0.0001f;
 
         var newScale = _hasParent ? transform.localScale : transform.lossyScale;
-        if (newScale != _lastScale) {
+        if (newScale != _lastScale || refreshTransform) {
             var scaleData = new EntityUpdate.ScaleData {
                 origin = true
             };
 
-            if (newScale.x != _lastScale.x) {
+            if (newScale.x != _lastScale.x || refreshTransform) {
                 scaleData.x = true;
                 scaleData.xScale = newScale.x;
 
-                if (System.Math.Abs(newScale.x - _lastScale.x * -1) < epsilon) {
+                if (!refreshTransform && System.Math.Abs(newScale.x - _lastScale.x * -1) < epsilon) {
                     scaleData.xFlipped = true;
                 }
             }
             
-            if (newScale.y != _lastScale.y) {
+            if (newScale.y != _lastScale.y || refreshTransform) {
                 scaleData.y = true;
                 scaleData.yScale = newScale.y;
 
-                if (System.Math.Abs(newScale.y - _lastScale.y * -1) < epsilon) {
+                if (!refreshTransform && System.Math.Abs(newScale.y - _lastScale.y * -1) < epsilon) {
                     scaleData.yFlipped = true;
                 }
             }
             
-            if (newScale.z != _lastScale.z) {
+            if (newScale.z != _lastScale.z || refreshTransform) {
                 scaleData.z = true;
                 scaleData.zScale = newScale.z;
 
-                if (System.Math.Abs(newScale.z - _lastScale.z * -1) < epsilon) {
+                if (!refreshTransform && System.Math.Abs(newScale.z - _lastScale.z * -1) < epsilon) {
                     scaleData.zFlipped = true;
                 }
             }
@@ -1064,58 +1023,6 @@ internal class Entity {
         }
     }
 
-    /// <summary>
-    /// Callback method for when the sprite animator plays an animation.
-    /// </summary>
-    /// <param name="orig">The original method.</param>
-    /// <param name="self">The sprite animator instance.</param>
-    /// <param name="clip">The animation clip that was played.</param>
-    /// <param name="clipStartTime">The start time of the animation clip.</param>
-    /// <param name="overrideFps">The FPS override for the clip.</param>
-    private void OnAnimationPlayed(
-        On.tk2dSpriteAnimator.orig_Play_tk2dSpriteAnimationClip_float_float orig,
-        tk2dSpriteAnimator self,
-        tk2dSpriteAnimationClip clip,
-        float clipStartTime,
-        float overrideFps
-    ) {
-        if (self == _animator.Client) {
-            if (!_allowClientAnimation) {
-                Logger.Debug($"Entity '{Object.Client.name}' client animator tried playing animation");
-            } else {
-                // Logger.Debug($"Entity '{_object.Client.name}' client animator was allowed to play animation");
-
-                orig(self, clip, clipStartTime, overrideFps);
-
-                _allowClientAnimation = false;
-            }
-
-            return;
-        }
-
-        orig(self, clip, clipStartTime, overrideFps);
-
-        if (self != _animator.Host) {
-            return;
-        }
-
-        if (_isControlled) {
-            return;
-        }
-
-        if (!_animationClipNameIds.TryGetValue(clip.name, out var animationId)) {
-            Logger.Warn($"Entity '{Object.Client.name}' played unknown animation: {clip.name}");
-            return;
-        }
-
-        Logger.Debug($"Entity '{Object.Host.name}' sends animation: {clip.name}, {animationId}, {clip.wrapMode}");
-        _netClient.UpdateManager.UpdateEntityAnimation(
-            Id,
-            animationId,
-            (byte)clip.wrapMode
-        );
-    }
-    
     /// <summary>
     /// Callback method for when a game object is recycled. Used to prevent client objects from being recycled, which
     /// shouldn't happen because they are instantiated manually instead of from a pool.
@@ -1311,6 +1218,7 @@ internal class Entity {
         Object.Client.SetActive(false);
         EntityFsmActions.ForgetActions(Object.Client);
         foreach (var combat in _components.Values.OfType<CombatStateComponent>()) combat.PrepareTakeover();
+        foreach (var presentation in _components.Values.OfType<PresentationComponent>()) presentation.PrepareTakeover();
         EntityReferences.DisableDetachedParts(this, true);
         foreach (var fsm in _fsms.Host) {
             if (fsm != null) EntityInitializer.InitializeOwnerReferences(fsm);
@@ -1336,18 +1244,6 @@ internal class Entity {
         foreach (var component in _components.Values.Distinct()) {
             component.IsControlled = false;
                 component.InitializeHost();
-        }
-
-        if (_animator.Client != null) {
-            var currentClip = _animator.Client.CurrentClip;
-            if (currentClip != null) {
-                var clientAnimation = currentClip.name;
-                var wrapMode = currentClip.wrapMode;
-            
-                Logger.Debug($"  Animator and current clip present, updating animation: {clientAnimation}, {wrapMode}");
-            
-                LateUpdateAnimation(_animator.Host, clientAnimation, wrapMode);   
-            }
         }
 
         Logger.Debug("  Restoring FSMs from snapshots");
@@ -1530,71 +1426,7 @@ internal class Entity {
         tk2dSpriteAnimationClip.WrapMode wrapMode, 
         bool alreadyInSceneUpdate
     ) {
-        if (Object.Client == null || _animator.Client == null) return;
-
-        if (!_animationClipNameIds.TryGetValue(animationId, out var clipName)) {
-            Logger.Warn($"Entity '{Object.Client.name}' received unknown animation ID: {animationId}");
-            return;
-        }
-
-        Logger.Debug($"Entity '{Object.Client.name}' received animation: {animationId}, {clipName}, {wrapMode}");
-
-        // All paths lead to calling the Play method of the sprite animator that is hooked, so we allow the call
-        // through the hook
-        _allowClientAnimation = true;
-
-        if (alreadyInSceneUpdate) {
-            // Since this is an animation update from an entity that was already present in a scene,
-            // we need to determine where to start playing this specific animation
-            LateUpdateAnimation(_animator.Client, clipName, wrapMode);
-        }
-
-        // Otherwise, default to just playing the clip
-        _animator.Client.Play(clipName);
-    }
-
-    /// <summary>
-    /// Update the animation for the given animator with the given clip name and wrap mode. This assumes that we need
-    /// to replicate animation behaviour for a late update.
-    /// </summary>
-    /// <param name="animator">The sprite animator to update.</param>
-    /// <param name="clipName">The name of the animation clip.</param>
-    /// <param name="wrapMode">The wrap mode for the animation.</param>
-    private void LateUpdateAnimation(
-        tk2dSpriteAnimator animator, 
-        string clipName, 
-        tk2dSpriteAnimationClip.WrapMode wrapMode
-    ) {
-        if (animator == null) return;
-        var clip = animator.GetClipByName(clipName);
-        if (clip == null) {
-            Logger.Warn($"Entity ({Id}, {Type}) has no animation clip '{clipName}'");
-            return;
-        }
-        if (wrapMode == tk2dSpriteAnimationClip.WrapMode.Loop) {
-            animator.Play(clipName);
-            return;
-        }
-
-        Logger.Debug($"Entity ({Id}, {Type}) LateUpdateAnimation: {clip.name}, {wrapMode}");
-
-        if (wrapMode == tk2dSpriteAnimationClip.WrapMode.LoopSection) {
-            // The clip loops in a specific section in the frames, so we start playing
-            // it from the start of that section
-            animator.PlayFromFrame(clipName, clip.loopStart);
-            return;
-        }
-
-        if (wrapMode == tk2dSpriteAnimationClip.WrapMode.Once ||
-            wrapMode == tk2dSpriteAnimationClip.WrapMode.Single) {
-            // Since the clip was played once, it stops on the last frame,
-            // so we emulate that by only "playing" the last frame of the clip
-            var clipLength = clip.frames.Length;
-            animator.PlayFromFrame(clipName, clipLength - 1);
-
-            // Logger.Debug(
-            // $"  Played animation: {clipName}, {clipLength - 1} on {_animator.Client.name}, {_animator.Client.GetHashCode()}");
-        }
+        // l14 applies revisioned presentation snapshots instead of legacy clip events.
     }
 
     /// <summary>
@@ -1942,7 +1774,6 @@ internal class Entity {
         Cleanup(() => EntityReferences.DisableDetachedParts(this, true, true));
         Cleanup(() => EntityReferences.Forget(this));
         foreach (var type in _hookedTypes) Cleanup(() => FsmActionHooks.RemoveObserver(type, Object.Host, OnActionEntered));
-        Cleanup(() => EntityHooks.ForgetAnimator(_animator.Host, _animator.Client));
         Cleanup(() => EntityHooks.ForgetRecycle(Object.Client));
         Cleanup(() => EntityHooks.ForgetRecycle(Object.Host));
         foreach (var component in _components.Values.Distinct()) {

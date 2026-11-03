@@ -1,0 +1,389 @@
+{
+  "version": "0.2.7",
+  "createdAtUtc": "2026-11-03T09:51:13.9421922Z",
+  "releaseReady": false,
+  "postVersionRuntimeRetest": false,
+  "scope": "Preserve original pre-0.2.7 staged validation and hashes; no retroactive runtime certification for the release version.",
+  "stages": [
+    {
+      "core": {
+        "log": "core-10.log",
+        "failed": 0,
+        "passed": 102
+      },
+      "sourceRecordSha256": "61EED3533A37D5F4A54218063B67958A9AB33E5792656898E1CF40A4B1E0CD2E",
+      "networkVersion": "0.2.6-l14",
+      "binaries": {
+        "HollowConnect.Smoke.dll": "5D804C0541BB613B82C82CABC9B558DAD51DD56FF02B5C86453717A647690C6F",
+        "HollowConnect.dll": "7E513034F3C39619EF08A4E9CB17F594E42F191E49DE7018B0A2D62897488066",
+        "HKMP.dll": "6B00626CD21C90D8B2B6A3168EDB919B650BCEC5F65B1C66910D0685826C9778",
+        "HollowConnect.Steam.dll": "3A03D9A1E9EE48DE59277EDE56EB4EBDF5E505DB5C2D7B3274D7C447F54187B3",
+        "HollowConnect.Core.dll": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+      },
+      "runs": [
+        {
+          "name": "generic-display",
+          "stage": "Direct",
+          "state": "passed",
+          "run": "visual-20261103-generic-display-072658505",
+          "started": "2026-11-03T07:26:58.5058747Z",
+          "ended": "2026-11-03T07:27:30.5750851Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "native-beast",
+          "stage": "Direct",
+          "state": "passed",
+          "run": "visual-20261103-native-beast-073252801",
+          "started": "2026-11-03T07:32:52.802Z",
+          "ended": "2026-11-03T07:34:12.1783407Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "native-sheo",
+          "stage": "Direct",
+          "state": "passed",
+          "run": "visual-20261103-native-sheo-073412502",
+          "started": "2026-11-03T07:34:12.5021411Z",
+          "ended": "2026-11-03T07:35:31.6042888Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "gold-display",
+          "stage": "Specialty",
+          "state": "passed",
+          "run": "visual-20261103-gold-display-073531998",
+          "started": "2026-11-03T07:35:31.9990099Z",
+          "ended": "2026-11-03T07:39:22.2449809Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "gold-relay",
+          "stage": "Specialty",
+          "state": "passed",
+          "run": "visual-20261103-gold-relay-072730960",
+          "started": "2026-11-03T07:27:30.9608899Z",
+          "ended": "2026-11-03T07:31:22.5766178Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "final-corpse",
+          "stage": "Specialty",
+          "state": "passed",
+          "run": "visual-20261103-final-corpse-073122986",
+          "started": "2026-11-03T07:31:22.9864264Z",
+          "ended": "2026-11-03T07:32:52.2749164Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "native-host",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-native-host-073922644",
+          "started": "2026-11-03T07:39:22.6449733Z",
+          "ended": "2026-11-03T07:46:46.5540228Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "native-guest",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-native-guest-074647034",
+          "started": "2026-11-03T07:46:47.0343704Z",
+          "ended": "2026-11-03T07:54:08.5307395Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "lifecycle-host",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-lifecycle-host-075408921",
+          "started": "2026-11-03T07:54:08.9217156Z",
+          "ended": "2026-11-03T07:58:47.5163071Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "lifecycle-guest",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-lifecycle-guest-075847801",
+          "started": "2026-11-03T07:58:47.8016447Z",
+          "ended": "2026-11-03T08:03:54.4940999Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "boss",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-boss-080354786",
+          "started": "2026-11-03T08:03:54.7869354Z",
+          "ended": "2026-11-03T08:04:43.4620306Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "boss-late",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-boss-late-080443785",
+          "started": "2026-11-03T08:04:43.7857337Z",
+          "ended": "2026-11-03T08:05:43.1127675Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "grimm-host",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-grimm-host-080543453",
+          "started": "2026-11-03T08:05:43.4539618Z",
+          "ended": "2026-11-03T08:07:24.9401164Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "grimm-guest",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-grimm-guest-080725302",
+          "started": "2026-11-03T08:07:25.3021603Z",
+          "ended": "2026-11-03T08:09:07.0696336Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "rescue",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-rescue-080907432",
+          "started": "2026-11-03T08:09:07.4323292Z",
+          "ended": "2026-11-03T08:09:56.8814252Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "death-story",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-death-story-080957256",
+          "started": "2026-11-03T08:09:57.2567198Z",
+          "ended": "2026-11-03T08:10:56.1724537Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "full",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-full-081056485",
+          "started": "2026-11-03T08:10:56.4858942Z",
+          "ended": "2026-11-03T08:12:24.2107459Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "join",
+          "stage": "Matrix",
+          "state": "passed",
+          "run": "visual-20261103-join-081224555",
+          "started": "2026-11-03T08:12:24.5553152Z",
+          "ended": "2026-11-03T08:15:06.1629891Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "ip-without-steam-module",
+          "stage": "Postflight",
+          "state": "passed",
+          "run": "visual-20261103-ip-without-steam-module-081506580",
+          "started": "2026-11-03T08:15:06.58053Z",
+          "ended": "2026-11-03T08:16:34.104651Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        },
+        {
+          "name": "native-steam-link",
+          "stage": "Postflight",
+          "state": "passed",
+          "run": "visual-20261103-native-steam-link-081634441",
+          "started": "2026-11-03T08:16:34.4412837Z",
+          "ended": "2026-11-03T08:17:01.3687794Z",
+          "finalInputsVerified": true,
+          "bothEndpoints": true,
+          "strictLogs": true,
+          "failure": []
+        }
+      ],
+      "retainedFailureRuns": [
+        "visual-20261103-gold-relay-070614812",
+        "visual-20261103-gold-relay-071403295",
+        "arena-matrix-20261102-lifecycle-guest-005945244"
+      ],
+      "sourceRecord": ".analysis/visual-sync-20261103/results.json",
+      "name": "unified-visual-sync"
+    },
+    {
+      "sourceRecordSha256": "67CC2797EEC0B945566865EC074ED6239329CD652423A6BB4BEF8500897D4163",
+      "corePassed": 9,
+      "networkVersion": "0.2.6-l14",
+      "binaries": {
+        "HollowConnect.dll": "D06E7B752F79B4D383FB0E3D5576147D234EAE0CE44A14CEFF6E6FDECE31D8F8",
+        "HKMP.dll": "58EABAF2F7FCCF7AF202A7FA0E5B1E2E7E43177C17F0319CC3B4214056E06EF3",
+        "HollowConnect.Smoke.dll": "8C4E1C27D2EE38495D3B2960D789B068AD5EECFFC55D68180673743B2D8A7795",
+        "HollowConnect.Steam.dll": "EEA5A40BE4D308C3F6BA484F402335D025EAFF91E6B8A08E378F0854C2D602B7",
+        "HollowConnect.Core.dll": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+      },
+      "runs": [
+        {
+          "strictLogs": true,
+          "run": "native-menu-20261103-menu-steam-093840191",
+          "started": "2026-11-03T09:38:40.1938574Z",
+          "name": "menu-steam",
+          "bothEndpoints": true,
+          "options": {
+            "name": "menu-steam",
+            "env": {},
+            "mode": "connection-menu",
+            "steam": true
+          },
+          "result": "passed",
+          "ended": "2026-11-03T09:39:05.5728992Z",
+          "hashes": {
+            "HollowConnect.Steam.dll": "EEA5A40BE4D308C3F6BA484F402335D025EAFF91E6B8A08E378F0854C2D602B7",
+            "HollowConnect.Smoke.dll": "8C4E1C27D2EE38495D3B2960D789B068AD5EECFFC55D68180673743B2D8A7795",
+            "HKMP.dll": "58EABAF2F7FCCF7AF202A7FA0E5B1E2E7E43177C17F0319CC3B4214056E06EF3",
+            "HollowConnect.dll": "D06E7B752F79B4D383FB0E3D5576147D234EAE0CE44A14CEFF6E6FDECE31D8F8",
+            "HollowConnect.Core.dll": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+          }
+        },
+        {
+          "strictLogs": true,
+          "run": "native-menu-20261103-menu-ip-only-093905592",
+          "started": "2026-11-03T09:39:05.5924961Z",
+          "name": "menu-ip-only",
+          "bothEndpoints": true,
+          "options": {
+            "name": "menu-ip-only",
+            "env": {},
+            "mode": "connection-menu",
+            "steam": false
+          },
+          "result": "passed",
+          "ended": "2026-11-03T09:39:31.5093118Z",
+          "hashes": {
+            "HollowConnect.Steam.dll": "EEA5A40BE4D308C3F6BA484F402335D025EAFF91E6B8A08E378F0854C2D602B7",
+            "HollowConnect.Smoke.dll": "8C4E1C27D2EE38495D3B2960D789B068AD5EECFFC55D68180673743B2D8A7795",
+            "HKMP.dll": "58EABAF2F7FCCF7AF202A7FA0E5B1E2E7E43177C17F0319CC3B4214056E06EF3",
+            "HollowConnect.dll": "D06E7B752F79B4D383FB0E3D5576147D234EAE0CE44A14CEFF6E6FDECE31D8F8",
+            "HollowConnect.Core.dll": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+          }
+        },
+        {
+          "strictLogs": true,
+          "run": "native-menu-20261103-ip-join-093931516",
+          "started": "2026-11-03T09:39:31.5171191Z",
+          "name": "ip-join",
+          "bothEndpoints": true,
+          "options": {
+            "name": "ip-join",
+            "env": {},
+            "mode": "join",
+            "steam": false
+          },
+          "result": "passed",
+          "ended": "2026-11-03T09:42:15.2499541Z",
+          "hashes": {
+            "HollowConnect.Steam.dll": "EEA5A40BE4D308C3F6BA484F402335D025EAFF91E6B8A08E378F0854C2D602B7",
+            "HollowConnect.Smoke.dll": "8C4E1C27D2EE38495D3B2960D789B068AD5EECFFC55D68180673743B2D8A7795",
+            "HKMP.dll": "58EABAF2F7FCCF7AF202A7FA0E5B1E2E7E43177C17F0319CC3B4214056E06EF3",
+            "HollowConnect.dll": "D06E7B752F79B4D383FB0E3D5576147D234EAE0CE44A14CEFF6E6FDECE31D8F8",
+            "HollowConnect.Core.dll": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+          }
+        },
+        {
+          "strictLogs": true,
+          "run": "native-menu-20261103-steam-native-menu-093637964",
+          "started": "2026-11-03T09:36:37.9679092Z",
+          "name": "steam-native-menu",
+          "bothEndpoints": true,
+          "options": {
+            "env": {
+              "HOLLOWCONNECT_STEAM_NATIVE_MENU": "1"
+            },
+            "mode": "steam-native",
+            "steam": true,
+            "name": "steam-native-menu"
+          },
+          "result": "passed",
+          "ended": "2026-11-03T09:37:23.7979788Z",
+          "hashes": {
+            "HollowConnect.Steam.dll": "EEA5A40BE4D308C3F6BA484F402335D025EAFF91E6B8A08E378F0854C2D602B7",
+            "HKMP.dll": "58EABAF2F7FCCF7AF202A7FA0E5B1E2E7E43177C17F0319CC3B4214056E06EF3",
+            "HollowConnect.dll": "D06E7B752F79B4D383FB0E3D5576147D234EAE0CE44A14CEFF6E6FDECE31D8F8",
+            "HollowConnect.Smoke.dll": "8C4E1C27D2EE38495D3B2960D789B068AD5EECFFC55D68180673743B2D8A7795",
+            "HollowConnect.Core.dll": "A1048BBA3F9BCDA2E565479216FCB1BCA8FF83C0745B3684BF406DA3C2B5803A"
+          }
+        }
+      ],
+      "retainedHistory": ".analysis/native-connect-menu-20261103/status.json",
+      "sourceRecord": ".analysis/native-connect-menu-20261103/results.json",
+      "name": "native-connection-menu"
+    }
+  ],
+  "limits": [
+    "Version and network compatibility identifier changed after staged validation; no post-bump core/game matrix; old results retain original hashes.",
+    "Unified visual stage and native menu stage have distinct production hashes and do not form a single full-build certification.",
+    "Steam real two-account invitations, cold-start invitations, cross-machine P2P/SDR and actual FRP remain unverified for this release.",
+    "Historical Hornet Throw/Thrown authority-handoff failure is retained and not claimed repaired.",
+    "Visual sampling adds CPU work; selected local latency/bandwidth results do not guarantee higher FPS or explain every original Steam symptom.",
+    "Colosseum coverage uses accelerated native waves 1-34, not a complete normal-weapon clear or all-boss/Pantheon certification."
+  ]
+}

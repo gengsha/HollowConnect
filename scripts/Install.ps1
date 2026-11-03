@@ -7,6 +7,7 @@ $managed = Join-Path $game 'hollow_knight_Data\Managed'
 if (!(Test-Path -LiteralPath (Join-Path $game 'hollow_knight.exe'))) { throw 'Hollow Knight executable not found.' }
 Assert-HollowKnightStopped $game
 $manifest = Get-Content -LiteralPath (Join-Path $package 'manifest.json') -Raw | ConvertFrom-Json
+$taskDisplayVersion=if($manifest.displayVersion){$manifest.displayVersion}else{$manifest.version}
 $assemblyHash = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $managed 'Assembly-CSharp.dll')).Hash
 if ($assemblyHash -ne $manifest.vanillaAssemblySha256 -and $assemblyHash -ne $manifest.apiAssemblySha256) {
     throw "Unsupported game/API assembly ($assemblyHash). This package targets the documented 1.5.78 Windows build."
@@ -69,9 +70,9 @@ try {
     foreach ($entry in $manifest.files) {
         if ((Get-FileHash -LiteralPath (Join-Path $modDir $entry.name) -Algorithm SHA256).Hash -ne $entry.sha256) { throw "Installed checksum mismatch: $($entry.name)" }
     }
-    @{game=$game; version=$manifest.version; files=$records; modFiles=$manifest.files; originalBackup=$originalBackup} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $backup 'install-record.json') -Encoding UTF8
+    @{game=$game; version=$manifest.version; displayVersion=$taskDisplayVersion; files=$records; modFiles=$manifest.files; originalBackup=$originalBackup} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $backup 'install-record.json') -Encoding UTF8
     if (!$originalBackup) { Set-Content -LiteralPath $pointerPath -Value $backup -Encoding UTF8 }
-    Write-Output "Installed HollowConnect $($manifest.version). Backup: $backup"
+    Write-Output "Installed HollowConnect $taskDisplayVersion. Backup: $backup"
     if ($originalBackup) { Write-Output "Original uninstall backup retained: $originalBackup" }
 } catch {
     $installError = $_

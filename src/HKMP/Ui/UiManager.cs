@@ -79,6 +79,8 @@ internal partial class UiManager : IUiManager {
     /// Event that is fired when a server is requested to be hosted from the UI.
     /// </summary>
     public event Action<int> RequestServerStartHostEvent;
+    internal event Action RequestLoopbackHostEvent;
+    internal Func<bool> ExternalConnectionReserved;
 
     /// <summary>
     /// Event that is fired when a server is requested to be stopped.
@@ -122,9 +124,11 @@ internal partial class UiManager : IUiManager {
     private PingInterface _pingInterface;
     
     /// <summary>
-    /// The group that controls the connection UI.
+    /// Optional transport menu and the origin of native save selection.
     /// </summary>
-    private ComponentGroup _connectGroup;
+    private MenuScreen _externalMenu;
+    private Action _openExternalMenu;
+    private bool _returnToExternalMenu, _connectionMenuBusy;
 
     /// <summary>
     /// List of event trigger entries for the original back triggers for the save selection screen. These triggers are
@@ -186,12 +190,7 @@ internal partial class UiManager : IUiManager {
 
         var uiGroup = new ComponentGroup();
 
-        _connectGroup = new ComponentGroup(false);
-
-        _connectInterface = new ConnectInterface(
-            _modSettings,
-            _connectGroup
-        );
+        _connectInterface = new ConnectInterface(_modSettings);
 
         var inGameGroup = new ComponentGroup(parent: uiGroup);
 
@@ -229,9 +228,11 @@ internal partial class UiManager : IUiManager {
 
         ModHooks.LanguageGetHook += (key, sheet, orig) => {
             if (key == "StartMultiplayerBtn" && sheet == "MainMenu") {
-                return "Start Multiplayer";
+                return "局域网联机";
             }
             
+            if (key == "StartSteamMultiplayerBtn" && sheet == "MainMenu") return "Steam 联机";
+
             if (key == "MODAL_PROGRESS" && sheet == "MainMenu" && _netClient.IsConnected) {
                 return "You will be disconnected";
             }
@@ -248,6 +249,8 @@ internal partial class UiManager : IUiManager {
         TryAddMultiplayerScreen();
 
         _connectInterface.StartHostButtonPressed += (username, port) => {
+            _returnToExternalMenu = false;
+            if (ExternalConnectionReserved?.Invoke() == true) return;
             OpenSaveSlotSelection(saveSelected => {
                 if (!saveSelected) {
                     return;
@@ -259,6 +262,8 @@ internal partial class UiManager : IUiManager {
         };
 
         _connectInterface.ConnectButtonPressed += (address, port, username) => {
+            _returnToExternalMenu = false;
+            if (ExternalConnectionReserved?.Invoke() == true) return;
             RequestClientConnectEvent?.Invoke(address, port, username, false);
         };
 
@@ -272,6 +277,33 @@ internal partial class UiManager : IUiManager {
         InitializeEndings();
     }
 
+    internal void ConnectExternal(int port, string username, bool hosting) {
+        _returnToExternalMenu = true;
+        RequestClientConnectEvent?.Invoke(LocalhostAddress, port, username, hosting);
+    }
+
+    internal void StartExternalHost() => RequestLoopbackHostEvent?.Invoke();
+    internal void StopExternalHost() => RequestServerStopHostEvent?.Invoke();
+    internal void DisconnectExternal() => RequestClientDisconnectEvent?.Invoke();
+    internal void CancelExternalSelection(Action<bool> callback) {
+        if (_saveSlotSelectedAction == callback) CloseSaveSlotSelection();
+    }
+    internal bool HasSaveSelection => _saveSlotSelectedAction != null;
+    internal void SetExternalReservationCheck(Func<bool> reserved) => _connectInterface.ConnectionReserved = reserved;
+    internal void AddExternalMenuEntry(Action open) {
+        _openExternalMenu = open;
+        if (UM != null && UM.mainMenuButtons != null) TryAddMultiplayerScreen();
+    }
+    internal void SetExternalMenu(MenuScreen menu) => _externalMenu = menu;
+    internal void OpenExternalSaveSlotSelection(Action<bool> callback) {
+        _returnToExternalMenu = true;
+        OpenSaveSlotSelection(callback);
+    }
+    internal void ShowExternalMenu(MenuScreen menu) {
+        _externalMenu = menu; _returnToExternalMenu = true;
+        UM.StartCoroutine(GoToConnectionMenu(menu));
+    }
+
     /// <summary>
     /// Enter the game with the current PlayerData from the multiplayer menu. This assumes that the PlayerData
     /// instance is populated with values already.
@@ -279,7 +311,6 @@ internal partial class UiManager : IUiManager {
     public void EnterGameFromMultiplayerMenu(bool newGame) {
         IH.StopUIInput();
 
-        _connectGroup.SetActive(false);
 
         UM.uiAudioPlayer.PlayStartGame();
         if (MenuStyles.Instance) {
@@ -381,131 +412,101 @@ internal partial class UiManager : IUiManager {
         EnterSelectedSave(() => orig(self));
     }
 
-    /// <summary>
-    /// Try to add the "Start Multiplayer" button and multiplayer menu screen to the main menu. Will not add the button
-    /// or screen if they already exist.
-    /// </summary>
     private void TryAddMultiplayerScreen() {
-        var btnParent = UM.mainMenuButtons.gameObject;
-        if (!btnParent) {
-            return;
-        }
-
-        var startMultiBtn = btnParent.FindGameObjectInChildren("StartMultiplayerButton");
-        if (startMultiBtn) {
-            FixMultiplayerButtonNavigation(startMultiBtn);
-            
-            return;
-        }
-
-        var startGameBtn = UM.mainMenuButtons.startButton.gameObject;
-        if (!startGameBtn) {
-            return;
-        }
-
-        startMultiBtn = Object.Instantiate(startGameBtn, btnParent.transform);
-        if (!startMultiBtn) {
-            return;
-        }
-
-        startMultiBtn.name = "StartMultiplayerButton";
-        startMultiBtn.transform.SetSiblingIndex(1);
-
-        var autoLocalize = startMultiBtn.GetComponent<AutoLocalizeTextUI>();
-        autoLocalize.textKey = "StartMultiplayerBtn";
-        autoLocalize.RefreshTextFromLocalization();
-
-        var eventTrigger = startMultiBtn.GetComponent<EventTrigger>();
-        eventTrigger.triggers.Clear();
-        
-        ChangeBtnTriggers(eventTrigger, () => UM.StartCoroutine(GoToMultiplayerMenu()));
-        
-        // Fix navigation now and when the IH can accept input again
-        FixMultiplayerButtonNavigation(startMultiBtn);
-        
+        if (UM == null || UM.mainMenuButtons == null || UM.mainMenuButtons.startButton == null) return;
+        var parent = UM.mainMenuButtons.gameObject;
+        var lan = AddTitleConnectionButton(parent, "StartMultiplayerButton", "StartMultiplayerBtn", 1, () => {
+            _returnToExternalMenu = false;
+            UM.StartCoroutine(GoToMultiplayerMenu());
+        });
+        var steam = _openExternalMenu != null
+            ? AddTitleConnectionButton(parent, "StartSteamMultiplayerButton", "StartSteamMultiplayerBtn", 2, () => _openExternalMenu?.Invoke())
+            : null;
+        FixMultiplayerButtonNavigation(lan, steam);
         UM.StartCoroutine(WaitForInput());
         IEnumerator WaitForInput() {
             yield return new WaitUntil(() => IH.acceptingInput);
-            
-            FixMultiplayerButtonNavigation(startMultiBtn);   
+            if (lan != null) FixMultiplayerButtonNavigation(lan, steam);
         }
-        
-        _connectMenu = MenuUtils.CreateMenuBuilder("HKMP").AddControls(
-            new SingleContentLayout(
-                new AnchoredPosition(
-                    new Vector2(0.5f, 0.5f), 
-                    new Vector2(0.5f, 0.5f), 
-                    new Vector2(0.0f, -64f)
-                )
-            ),
-            c => {
-                Action<MenuSelectable> returnAction = _ => {
-                    UM.StartCoroutine(UM.HideCurrentMenu());
-                    UM.UIGoToMainMenu();
-                    
-                    _connectGroup.SetActive(false);
-                };
-                c.AddMenuButton("BackButton", new MenuButtonConfig {
-                    Label = Language.Language.Get("NAV_BACK", "MainMenu"),
-                    CancelAction = returnAction,
-                    SubmitAction = returnAction,
-                    Proceed = true
-                }, out _);
-            }
-        ).Build();
-    }
-    
-    /// <summary>
-    /// Fix the navigation for the multiplayer button that is added to the main menu.
-    /// </summary>
-    /// <param name="multiBtnObject">The game object for the multiplayer button.</param>
-    private void FixMultiplayerButtonNavigation(GameObject multiBtnObject) {
-        // Fix navigation for buttons
-        var startMultiBtnMenuBtn = multiBtnObject.GetComponent<MenuButton>();
-        if (startMultiBtnMenuBtn) {
-            var nav = UM.mainMenuButtons.startButton.navigation;
-            nav.selectOnDown = startMultiBtnMenuBtn;
-            UM.mainMenuButtons.startButton.navigation = nav;
-
-            nav = UM.mainMenuButtons.optionsButton.navigation;
-            nav.selectOnUp = startMultiBtnMenuBtn;
-            UM.mainMenuButtons.optionsButton.navigation = nav;
-
-            nav = startMultiBtnMenuBtn.navigation;
-            nav.selectOnUp = UM.mainMenuButtons.startButton;
-            startMultiBtnMenuBtn.navigation = nav;
-        }
+        if (_connectMenu == null) _connectMenu = _connectInterface.CreateMenu(() => UM.StartCoroutine(ReturnFromConnectionMenu()));
     }
 
-    /// <summary>
-    /// Coroutine to go to the multiplayer menu of the main menu. 
-    /// </summary>
-    private IEnumerator GoToMultiplayerMenu() {
-        IH.StopUIInput();
-
-        if (UM.menuState == MainMenuState.MAIN_MENU) {
-            UM.StartCoroutine(ReflectionHelper.CallMethod<UIManager, IEnumerator>(UM, "FadeOutSprite", UM.gameTitle));
-            UM.subtitleFSM.SendEvent("FADE OUT");
-            yield return UM.StartCoroutine(UM.FadeOutCanvasGroup(UM.mainMenuScreen));
-        } else if (UM.menuState == MainMenuState.SAVE_PROFILES) {
-            yield return UM.StartCoroutine(UM.HideSaveProfileMenu());
+    private GameObject AddTitleConnectionButton(GameObject parent, string name, string key, int index, Action open) {
+        var button = parent.FindGameObjectInChildren(name);
+        if (button == null) {
+            button = Object.Instantiate(UM.mainMenuButtons.startButton.gameObject, parent.transform);
+            button.name = name;
+            var trigger = button.GetComponent<EventTrigger>();
+            if (trigger != null) trigger.triggers.Clear();
         }
-        
-        IH.StartUIInput();
+        button.transform.SetSiblingIndex(index);
+        var localized = button.GetComponent<AutoLocalizeTextUI>();
+        localized.textKey = key; localized.RefreshTextFromLocalization();
+        foreach (var text in button.GetComponentsInChildren<Text>(true)) {
+            text.font = MenuResources.NotoSerifCJKSCRegular;
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+        }
+        var native = button.GetComponent<MenuButton>();
+        native.buttonType = MenuButton.MenuButtonType.CustomSubmit;
+        native.submitAction = _ => open(); native.proceed = true;
+        return button;
+    }
 
-        yield return UM.StartCoroutine(UM.ShowMenu(_connectMenu));
+    private void FixMultiplayerButtonNavigation(GameObject lanObject, GameObject steamObject) {
+        var lan = lanObject.GetComponent<MenuButton>();
+        var steam = steamObject != null ? steamObject.GetComponent<MenuButton>() : null;
+        var start = UM.mainMenuButtons.startButton;
+        var options = UM.mainMenuButtons.optionsButton;
+        var nav = start.navigation; nav.selectOnDown = lan; start.navigation = nav;
+        nav = lan.navigation; nav.selectOnUp = start; nav.selectOnDown = steam != null ? steam : options; lan.navigation = nav;
+        if (steam != null) {
+            nav = steam.navigation; nav.selectOnUp = lan; nav.selectOnDown = options; steam.navigation = nav;
+        }
+        nav = options.navigation; nav.selectOnUp = steam != null ? steam : lan; options.navigation = nav;
+    }
 
-        UM.currentDynamicMenu = _connectMenu;
-        UM.menuState = MainMenuState.DYNAMIC_MENU;
+    // Save selection returns to the transport that opened it, including the
+    // connection-failure path which interrupts the native join confirmation.
+    private IEnumerator GoToMultiplayerMenu() => GoToConnectionMenu(
+        _returnToExternalMenu && _externalMenu != null ? _externalMenu : _connectMenu);
 
-        _connectGroup.SetActive(true);
+    private IEnumerator GoToConnectionMenu(MenuScreen menu) {
+        if (_connectionMenuBusy || menu == null) yield break;
+        _connectionMenuBusy = true;
+        try {
+            IH.StopUIInput();
+            if (UM.menuState == MainMenuState.MAIN_MENU) {
+                UM.StartCoroutine(ReflectionHelper.CallMethod<UIManager, IEnumerator>(UM, "FadeOutSprite", UM.gameTitle));
+                UM.subtitleFSM.SendEvent("FADE OUT");
+                yield return UM.FadeOutCanvasGroup(UM.mainMenuScreen);
+            } else if (UM.menuState == MainMenuState.SAVE_PROFILES) yield return UM.HideSaveProfileMenu();
+            else yield return UM.HideCurrentMenu();
+            yield return UM.ShowMenu(menu);
+            // Main-menu sprite fades run independently of CanvasGroup fades.
+            // A quick return/open must not leave the large game logo over the page.
+            UM.gameTitle.gameObject.SetActive(false);
+            UM.currentDynamicMenu = menu;
+            UM.menuState = MainMenuState.DYNAMIC_MENU;
+            IH.StartUIInput();
+            menu.HighlightDefault();
+        } finally { _connectionMenuBusy = false; }
+    }
+
+    private IEnumerator ReturnFromConnectionMenu() {
+        if (_connectionMenuBusy) yield break;
+        _connectionMenuBusy = true;
+        try {
+            IH.StopUIInput();
+            yield return UM.HideCurrentMenu();
+            UM.UIGoToMainMenu();
+        } finally { _connectionMenuBusy = false; }
     }
 
     /// <summary>
     /// Coroutine to go to the saves menu from the multiplayer menu. Used whenever the user selects to host a server.
     /// </summary>
     private IEnumerator GoToSaveMenu() {
-        _connectGroup.SetActive(false);
 
         yield return UM.HideCurrentMenu();
         yield return UM.GoToProfileMenu();

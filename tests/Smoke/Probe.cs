@@ -37,6 +37,7 @@ public sealed class ProbeMod : Mod {
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-reentry")
             On.HeroController.EnterScene += (orig, hero, gate, delay) => SimulationFrames(orig(hero, gate, delay));
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_TRANSITION_CONTACT") == "1" ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PRESENTATION_CHECK")) ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_GATE_CHECK")) ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_EXIT_CHECK") == "1" ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_MOSS_RETARGET")) ||
@@ -52,6 +53,8 @@ public sealed class ProbeMod : Mod {
         On.GameManager.LoadFirstScene += (orig, gm) => SimulationFrames(orig(gm));
         var go = new GameObject("HollowConnect smoke probe"); Object.DontDestroyOnLoad(go);
         go.AddComponent<SilentProbe>();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "connection-menu") { go.AddComponent<ConnectionMenuProbe>(); return; }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "steam-native") { go.AddComponent<SteamNativeProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-reentry") { go.AddComponent<BossReentryProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "menu-layout") { go.AddComponent<MenuLayoutProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "damage-preview") { go.AddComponent<DamageRankingPreview>(); return; }

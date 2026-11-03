@@ -16,6 +16,9 @@ internal sealed class SequenceWindow {
 
     public bool TryAdd(ushort sequence) => TryAdd(sequence, out _);
 
+    internal bool Contains(ushort sequence) => _initialized &&
+        unchecked((ushort)(_latest - sequence)) < Size && _seen[sequence % Size];
+
     public bool TryAdd(ushort sequence, out long revision) {
         if (!_initialized) {
             _initialized = true;

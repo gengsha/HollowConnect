@@ -25,6 +25,8 @@ public sealed partial class ColosseumProbe {
 
     private IEnumerator ColosseumNetworkChecks() {
         Require(trial == "Gold", "audit uses actual third trial");
+        using var presentation=Environment.GetEnvironmentVariable("HOLLOWCONNECT_PRESENTATION_ARENA")=="1"
+            ?new PresentationWitness(e=>e.Type==EntityType.ColosseumSpike,Log):null;
         var metrics = GetComponent<ColosseumNetworkMetrics>();
         var hero = HeroController.instance;
         hero.AffectedByGravity(false); hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
@@ -34,7 +36,8 @@ public sealed partial class ColosseumProbe {
         if (ArenaManager.IsSceneHost)
             ArenaEntity.Object.Host.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Battle Control").Fsm.ManualUpdate = false;
         var followup = Environment.GetEnvironmentVariable("HOLLOWCONNECT_GOLD_AUDIT_FOLLOWUP") == "1";
-        if (followup) yield return ColosseumAttackChecks();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_NATIVE_NAIL_ARTS") == "1") yield return ColosseumNativeNailArtChecks();
+        else if (followup) yield return ColosseumAttackChecks();
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_GOLD_AUDIT_ATTACK_ONLY") == "1") {
             Log("GOLD AUDIT ATTACK-ONLY COMPLETE; native animation playback and real remote colliders, not player input progression");
             yield break;
@@ -44,6 +47,7 @@ public sealed partial class ColosseumProbe {
         var previous = ""; var changed = Time.realtimeSinceStartup; var deadline = changed + 360; var savedMawlek = false;
         HealthManager mawlek = null; var mawlekDeaths = 0; var checkedHealth = false;
         while (true) {
+            if(presentation?.Failure!=null)throw new Exception(presentation.Failure);
             var state = ArenaState("Battle Control"); metrics.Phase = state;
             if (state != previous) {
                 previous = state; changed = Time.realtimeSinceStartup;
@@ -107,6 +111,10 @@ public sealed partial class ColosseumProbe {
         Require(Has("host.mawlek-verified") && Has("guest.mawlek-verified"), "both native Mawlek observations passed before its death");
         Require(mawlekDeaths == 1, "Mawlek native death occurs once per endpoint: " + mawlekDeaths);
         Require(engine.NetClient.UpdateManager.PendingSentCount < 64, "lost carriers do not accumulate across the trial");
+        if(presentation!=null&&!ArenaManager.IsSceneHost) {
+            Require(presentation.Failure==null&&presentation.Snapshots>=20,"native spike display matches complete wire snapshots: "+presentation.Snapshots);
+            Require(presentation.Clips.Count>=2&&presentation.RootStops>0,"native spike extension/retraction and terminal frames observed: "+string.Join(",",presentation.Clips));
+        }
         SaveGoldActors("final-" + last); metrics.Sample();
         Flag(role + ".gold-complete");
         yield return Until(() => Has((host ? "guest" : "host") + ".gold-complete"), "both native gold wave observations completed", 60);

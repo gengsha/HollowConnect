@@ -84,6 +84,10 @@ public sealed partial class JoinProbe : MonoBehaviour {
         if (Has(role + ".failed")) yield break;
         runtime = Object.FindObjectOfType<CoopRuntime>();
         engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXTERNAL_GATEWAY_CHECK") == "1") {
+            yield return CheckExternalGateway();
+            if (Has(role + ".failed")) yield break;
+        }
         var settings = Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings");
         settings.AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         var sharedRoom = Environment.GetEnvironmentVariable("HOLLOWCONNECT_JOIN_SHARE") == "1";

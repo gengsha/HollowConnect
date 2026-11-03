@@ -55,6 +55,10 @@ internal static class EntityHooks {
         Put(Animators, host, handler); Put(Animators, client, handler);
     }
     internal static void ForgetAnimator(tk2dSpriteAnimator host, tk2dSpriteAnimator client) { Remove(Animators, host); Remove(Animators, client); }
+    internal static void ForgetAnimator(tk2dSpriteAnimator host, tk2dSpriteAnimator client, On.tk2dSpriteAnimator.hook_Play_tk2dSpriteAnimationClip_float_float handler) {
+        foreach(var a in new[]{host,client})
+            if(!ReferenceEquals(a,null)&&Animators.TryGetValue(a.GetInstanceID(),out var current)&&current==handler)Remove(Animators,a);
+    }
     internal static void WatchRecycle(GameObject client, On.ObjectPool.hook_Recycle_GameObject handler) => Put(Recyclers, client, handler);
     internal static void ForgetRecycle(GameObject client) => Remove(Recyclers, client);
     internal static void WatchActivation(GameObject host, On.HutongGames.PlayMaker.Actions.ActivateGameObject.hook_DoActivateGameObject handler) => Put(Activators, host, handler);

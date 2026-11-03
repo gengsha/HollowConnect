@@ -374,6 +374,12 @@ internal abstract class ServerManager : IServerManager {
     /// <param name="port">The port the server should run on.</param>
     /// <param name="fullSynchronisation">Whether full synchronisation should be enabled.</param>
     public virtual void Start(int port, bool fullSynchronisation) {
+        StartBound(port, fullSynchronisation, System.Net.IPAddress.Any);
+    }
+
+    internal void StartLoopback() => StartBound(0, false, System.Net.IPAddress.Loopback);
+
+    private void StartBound(int port, bool fullSynchronisation, System.Net.IPAddress bindAddress) {
         // Stop existing server
         if (_netServer.IsStarted) {
             Logger.Info("Server was running, shutting it down before starting");
@@ -387,7 +393,7 @@ internal abstract class ServerManager : IServerManager {
         RegisterPacketHandlers();
 
         // Start server again with given port
-        try { _netServer.Start(port); }
+        try { _netServer.Start(port, bindAddress); }
         catch {
             DeregisterCommands();
             DeregisterPacketHandlers();
@@ -1130,6 +1136,10 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (entityUpdate.UpdateTypes.Contains(EntityUpdateType.Data)) {
+            // Reject a late retry before both relay and cache replacement.
+            // Presentation packets are complete states with their own order.
+            entityUpdate.GenericData.RemoveAll(d => d.Type == EntityComponentType.Presentation &&
+                !entityData.PresentationOrder.Accept(entityUpdate.Epoch, PresentationState.ReadRevision(d.Packet)));
             var relayedData = entityUpdate.GenericData.Where(d => d.Type != EntityComponentType.DreamWarrior && d.Type != EntityComponentType.EncounterSummon).ToList();
             if (relayedData.Any(d => d.Type == EntityComponentType.DreamPlatform)) {
                 foreach (var data in relayedData.Where(d => d.Type == EntityComponentType.DreamPlatform))

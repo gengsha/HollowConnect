@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hkmp.Logging;
+using Hkmp.Game.Client.Entity.Component;
 using Hkmp.Networking.Packet.Data;
 
 namespace Hkmp.Networking.Packet.Update;
@@ -15,6 +16,8 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
     /// The sequence number of this packet.
     /// </summary>
     public ushort Sequence { get; set; }
+
+    internal int EncodedLength { get; private set; }
 
     /// <summary>
     /// The acknowledgement number of this packet.
@@ -42,6 +45,40 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
         
         ResendPacketData = new Dictionary<ushort, Dictionary<TPacketId, IPacketData>>();
         ResendAddonPacketData = new Dictionary<ushort, Dictionary<byte, AddonPacketData>>();
+    }
+
+    internal ushort[] ReliableOrigins() => ResendPacketData.Keys.Union(ResendAddonPacketData.Keys).Append(Sequence).ToArray();
+    internal void RemoveAcknowledgedResends(Func<ushort, bool> acknowledged) {
+        foreach (var sequence in ResendPacketData.Keys.Where(acknowledged).ToArray()) ResendPacketData.Remove(sequence);
+        foreach (var sequence in ResendAddonPacketData.Keys.Where(acknowledged).ToArray()) ResendAddonPacketData.Remove(sequence);
+        IsAllPacketDataCached = false;
+    }
+
+    // Bound a retry carrier instead of repeatedly merging the whole loss
+    // backlog into it. An origin is indivisible: its built-in and addon events
+    // must be received together under their original de-duplication identity.
+    // A single oversized origin (e.g. the initial room snapshot) may exceed the
+    // budget, but cannot drag every newer lost batch into that same message.
+    internal void DeferExcessResends(UpdatePacket<TPacketId> pending, int budget) {
+        CompactCombatResends();
+        var used = 0;
+        var full = budget <= 0;
+        foreach (var origin in ResendPacketData.Keys.Union(ResendAddonPacketData.Keys)
+                     .OrderByDescending(seq => unchecked((ushort)(Sequence - seq))).ToArray()) {
+            ResendPacketData.TryGetValue(origin, out var data);
+            ResendAddonPacketData.TryGetValue(origin, out var addons);
+            if (!full) {
+                var encoded = new Packet();
+                if (data != null) WritePacketData(encoded, data);
+                if (addons != null) WriteAddonDataDict(encoded, addons);
+                var size = encoded.Length + 4;
+                if (used == 0 || size <= budget - used) { used += size; continue; }
+                full = true;
+            }
+            if (data != null) { pending.ResendPacketData[origin] = data; ResendPacketData.Remove(origin); }
+            if (addons != null) { pending.ResendAddonPacketData[origin] = addons; ResendAddonPacketData.Remove(origin); }
+        }
+        pending.IsAllPacketDataCached = IsAllPacketDataCached = false;
     }
     
     /// <summary>
@@ -87,6 +124,7 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
 
     /// <inheritdoc />
     public override void CreatePacket(Packet packet) {
+        CompactCombatResends();
         WriteHeaders(packet);
         
         base.CreatePacket(packet);
@@ -149,6 +187,61 @@ internal abstract class UpdatePacket<TPacketId> : BasePacket<TPacketId> where TP
         }
         
         packet.WriteDatagramLength();
+        EncodedLength = packet.Length;
+    }
+
+    // CombatState is a complete subtree snapshot. Retrying every obsolete
+    // sample alongside the latest one turns fragment loss into ever larger
+    // carriers. Keep only the latest state per room/entity; reliable actions
+    // retain their original sequence and order. Copy containers because a
+    // lost carrier may still be retained elsewhere for acknowledgement.
+    private void CompactCombatResends() {
+        if (ResendPacketData.Count == 0) return;
+        var seen = new HashSet<(string Scene, uint Visit, uint Epoch, ulong Id, EntityComponentType Type)>();
+        void Compact(Dictionary<TPacketId, IPacketData> data) {
+            foreach (var pair in data.ToArray()) {
+                if (pair.Value is not RawPacketDataCollection collection) continue;
+                var copy = (RawPacketDataCollection)collection.EmptyCopy();
+                var changed = false;
+                for (var i = collection.DataInstances.Count - 1; i >= 0; i--) {
+                    var item = collection.DataInstances[i];
+                    if (item is ReliableEntityUpdate update && update.GenericData.Any(c => c.Type is EntityComponentType.CombatState or EntityComponentType.Presentation)) {
+                        var components = new List<EntityNetworkData>();
+                        for (var j = update.GenericData.Count - 1; j >= 0; j--) {
+                            var component = update.GenericData[j];
+                            var key = (update.SceneName, update.Visit, update.Epoch, update.Id, component.Type);
+                            if ((component.Type is EntityComponentType.CombatState or EntityComponentType.Presentation) && !seen.Add(key)) { changed = true; continue; }
+                            components.Add(component);
+                        }
+                        if (components.Count != update.GenericData.Count) {
+                            var filtered = new ReliableEntityUpdate { Id = update.Id, SceneName = update.SceneName,
+                                Visit = update.Visit, Epoch = update.Epoch, IsActive = update.IsActive };
+                            filtered.UpdateTypes.UnionWith(update.UpdateTypes);
+                            foreach (var fsm in update.HostFsmData) filtered.HostFsmData.Add(fsm.Key, fsm.Value);
+                            components.Reverse(); filtered.GenericData.AddRange(components);
+                            if (components.Count == 0) filtered.UpdateTypes.Remove(EntityUpdateType.Data);
+                            if (filtered.UpdateTypes.Count == 0) continue;
+                            item = filtered;
+                        }
+                    }
+                    copy.DataInstances.Add(item);
+                }
+                if (!changed) continue;
+                copy.DataInstances.Reverse();
+                if (copy.DataInstances.Count == 0) data.Remove(pair.Key);
+                else data[pair.Key] = (IPacketData)copy;
+            }
+        }
+        Compact(NormalPacketData);
+        foreach (var pair in ResendPacketData.OrderBy(p => unchecked((ushort)(Sequence - p.Key))).ToArray()) {
+            // Copy the dictionary as well: SetLostReliableData retained the
+            // original payload objects, not exclusive mutable ownership.
+            var copy = new Dictionary<TPacketId, IPacketData>(pair.Value);
+            Compact(copy);
+            if (copy.Count == 0) ResendPacketData.Remove(pair.Key);
+            else ResendPacketData[pair.Key] = copy;
+        }
+        IsAllPacketDataCached = false;
     }
 
     /// <inheritdoc />

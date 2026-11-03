@@ -1,5 +1,7 @@
 # 第三方来源与许可
 
+- **AHK Steam bridge**：[Muurrcc/AHK-asyncronus-hollow-knight](https://github.com/Muurrcc/AHK-asyncronus-hollow-knight)，固定提交 `622735cb788dc718c8de0ec5c0ab4522366bcf2f`。可选 Steam 模块复用其 UDP／Steam 消息桥接核心并适配当前游戏 SDK；来源、修改范围及 LGPL-2.1 原文见 [模块第三方说明](docs/STEAM-THIRD-PARTY.md) 和 [许可](docs/STEAM-BRIDGE-LICENSE.txt)。
+
 - **HKMP**：https://github.com/Extremelyd1/HKMP ，2026-10-11 获取的 `master` 源码快照（上游标记 3.0.0 开发版本）。修改副本完整置于 `src/HKMP`；LGPL-2.1-or-later，原许可见 `HKMP-LICENSE`。上游 README 声明："This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version." 本项目将其视为可选择 LGPL-3.0，以便与自有代码的 GPL-3.0-only 许可组合。此项目与官方发行的 HKMP 2.4.3 协议不同。
 - **Hollow Knight Modding API v77**：https://github.com/hk-modding/api/releases/tag/1.5.78.11833-77 。Windows 官方依赖包未经修改，SHA256 `bc9f0db3d0916b05cd5a2420bb602fb1b239ce3ff6c289fd84bffb682fb8f1d6`。参考官方仓库许可及发行说明；它包含对原游戏程序集的补丁产物，原游戏权利属于 Team Cherry。
 - **BouncyCastle.Cryptography 2.5.1**：https://www.nuget.org/packages/BouncyCastle.Cryptography/2.5.1 ，https://www.bouncycastle.org/licence.html ，Bouncy Castle License；由 HKMP 原项目依赖提供。许可正文附在依赖 NuGet 包中，发行包另含其许可副本。
