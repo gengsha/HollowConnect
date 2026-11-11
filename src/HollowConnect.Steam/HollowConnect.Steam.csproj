@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect.Steam</AssemblyName><Version>0.2.7</Version></PropertyGroup>
+  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect.Steam</AssemblyName><Version>0.2.8</Version></PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../HKMP/HKMP.csproj" />
     <InternalsVisibleTo Include="HollowConnect.Tests" />

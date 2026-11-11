@@ -2,6 +2,7 @@
   <PropertyGroup><TargetFramework>net472</TargetFramework><OutputType>Exe</OutputType><AssemblyName>HollowConnect.Tests</AssemblyName></PropertyGroup>
   <ItemGroup>
     <Compile Remove="Smoke/**/*.cs" />
+    <Compile Remove="FrameTrace/**/*.cs" />
     <ProjectReference Include="../src/HollowConnect/HollowConnect.csproj" />
     <ProjectReference Include="../src/HollowConnect.Steam/HollowConnect.Steam.csproj" />
     <Reference Include="Assembly-CSharp"><HintPath>../vendor/references/Assembly-CSharp.dll</HintPath></Reference>

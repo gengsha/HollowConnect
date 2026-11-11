@@ -1,0 +1,97 @@
+{
+  "version": "0.2.8",
+  "createdAtUtc": "2026-11-11T06:31:17.7895229Z",
+  "releaseReady": false,
+  "postVersionRuntimeRetest": false,
+  "scope": "Preserve 0.2.7 history and record the 0.2.8 reward, linked-health and hit-stop/Grimm scoped validation. No retroactive full-matrix certification after the 0.2.8 metadata bump.",
+  "preVersionValidatedBinaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "4BF52559BED08AF65A10B7F0C8016B8F5A515E91FD44C7AF5A6C39A3FF2BD9EB"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "4C28EE2A3FBB2A1C043F044AC0F29479BE01388DF4B87F972F384774F0742E24"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "23C48B3B6927F3C0578341F231E919129E838D0189E315CC27DBC7EA270C2F77"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "7E542A1D78DA70062E767B6D8006244D02D8718A9000EAA3FDE3DA7C33506AC3"
+    }
+  ],
+  "scopedValidation": [
+    {
+      "id": "core-final",
+      "state": "passed",
+      "passed": 53,
+      "failed": 0,
+      "source": ".analysis/boss-rewards-20261111/final-core.log",
+      "note": "Selected linked-health, resource receipt, Steam bridge and arena checks."
+    },
+    {
+      "id": "hitstop-roar",
+      "state": "passed",
+      "passed": 7,
+      "failed": 0,
+      "source": ".analysis/coop-hitstop-roar-fix-20261104/evidence.json",
+      "note": "Matched pre-version production hashes; Grimm missing-END, late-create, bow cleanup and online local hit-stop."
+    },
+    {
+      "id": "linked-f",
+      "state": "passed",
+      "passed": 2,
+      "failed": 0,
+      "source": ".analysis/boss-rewards-20261111/status-linked-f.json",
+      "note": "Mawlek linked-health threshold in both authority orders."
+    },
+    {
+      "id": "resources-h",
+      "state": "passed",
+      "passed": 2,
+      "failed": 0,
+      "source": ".analysis/boss-rewards-20261111/status-resources-h.json",
+      "note": "Resource regression plus both-player linked threshold."
+    },
+    {
+      "id": "silver-m",
+      "state": "passed",
+      "passed": 1,
+      "failed": 0,
+      "source": ".analysis/boss-rewards-20261111/status-silver-m.json",
+      "note": "Silver ordinary host flow."
+    },
+    {
+      "id": "silver-o",
+      "state": "passed",
+      "passed": 1,
+      "failed": 0,
+      "source": ".analysis/boss-rewards-20261111/status-silver-o.json",
+      "note": "Silver ordinary guest flow."
+    },
+    {
+      "id": "silver-p",
+      "state": "failed",
+      "passed": 0,
+      "failed": 1,
+      "source": ".analysis/boss-rewards-20261111/status-silver-p.json",
+      "note": "Authority handoff still fails at native reward inspect-range staging; retained as unresolved."
+    }
+  ],
+  "fullCoreAttempt": {
+    "passed": 347,
+    "failed": 1,
+    "source": "Build.ps1 -Target Core -RunTests",
+    "failure": "UdpSendContentionTests failed detached encoding preserves reliable data for a subsequent carrier with KeyNotFoundException; not used as the scoped release gate."
+  },
+  "limits": [
+    "0.2.8 version/network identifiers changed after scoped runtime evidence; no full 12-case matrix was rerun on final hashes.",
+    "Silver authority handoff during native reward pickup remains unresolved.",
+    "The two-player missing mask-fragment report was not reproduced; saved receipt and reconnect order are still needed.",
+    "Real two-account Steam invites, cold-start invites, cross-machine P2P/SDR and FRP remain unverified.",
+    "Historical Hornet Throw/Thrown authority-handoff failure remains open.",
+    "Scoped arena runs do not certify complete normal-weapon clears, all bosses, Pantheon or three-player coverage."
+  ]
+}

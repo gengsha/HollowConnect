@@ -254,6 +254,10 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 orig(gm, additive);
             };
         CoopMod.Settings.ShareProgress = !ProgressAuditDisabled; CoopMod.Settings.EntryProtection = false;
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE") == "mawlek") {
+            CoopMod.Settings.LinkedHealth = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE_LINKED") == "1";
+            CoopMod.Settings.ShareCharms = true;
+        }
         if (LinkedHealthCase) {
             CoopMod.Settings.LinkedHealth = Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_CASE") != "off";
             CoopMod.Settings.LinkedHealthBonusMasks = int.Parse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_BONUS") ?? "2");
@@ -355,6 +359,11 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 pd.SetBool("metGrimm", true); pd.SetBool("killedGrimm", false);
                 pd.SetInt("flamesRequired", 3);
             }
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE") == "mawlek") {
+            var initialFragments = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE_INITIAL") == "3" ? 3 : 0;
+            pd.SetInt("heartPieces", initialFragments);
+            for (var i = 1; i <= initialFragments; i++) CoopMod.Statistics.Resources.TryClaim("mask:slyShellFrag" + i, out _);
         }
         if (ColosseumProgressCase) {
             pd.SetBool("colosseumBronzeOpened", true); pd.SetBool("colosseumBronzeCompleted", true);

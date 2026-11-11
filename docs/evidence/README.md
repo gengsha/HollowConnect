@@ -4,10 +4,10 @@
 
 | 文件 | 用途 |
 |---|---|
-| [release-authorization-0.2.7.json](release-authorization-0.2.7.json) | 0.2.7 正式发布请求与交付哈希约束 |
-| [runtime-room-0.2.7.json](runtime-room-0.2.7.json) | 当前版本的交付哈希、升版未重跑游戏标记及范围 |
-| [development-validation-0.2.7.json](development-validation-0.2.7.json) | 显示同步与原生菜单两阶段的原始哈希和验证结果 |
-| [runtime-blockers-0.2.7.json](runtime-blockers-0.2.7.json) | 继承的完整问题状态和当前覆盖边界 |
+| [release-authorization-0.2.8.json](release-authorization-0.2.8.json) | 0.2.8 正式发布请求与交付哈希约束 |
+| [runtime-room-0.2.8.json](runtime-room-0.2.8.json) | 当前版本的交付哈希、升版未重跑游戏标记及范围 |
+| [development-validation-0.2.8.json](development-validation-0.2.8.json) | 显示同步与原生菜单两阶段的原始哈希和验证结果 |
+| [runtime-blockers-0.2.8.json](runtime-blockers-0.2.8.json) | 继承的完整问题状态和当前覆盖边界 |
 | [playtest-authorization-0.2.6-rc3.json](playtest-authorization-0.2.6-rc3.json) | 先前本地候选版请求、原交付哈希及待验证项 |
 | [arena-lag-nailarts-development-2026-11-03.json](arena-lag-nailarts-development-2026-11-03.json) | rc3 升版前验证：93 项核心通过，双端 17 组通过、1 组失败；保留原哈希 |
 | [playtest-authorization-0.2.6-rc2.json](playtest-authorization-0.2.6-rc2.json) | 上一候选版请求与交付哈希 |

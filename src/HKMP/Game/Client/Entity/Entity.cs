@@ -97,6 +97,7 @@ internal class Entity {
     internal BossRoarLock RoarLock { get; private set; }
     private BossIntroCamera introCamera;
     private LocalBattleSignals battleSignals;
+    private ColosseumRewardContinuation arenaReward;
 
     /// <summary>
     /// Host-client pair for the game objects.
@@ -305,6 +306,7 @@ internal class Entity {
             Host = Object.Host.GetComponents<PlayMakerFSM>().OrderBy(f => f.FsmName, StringComparer.Ordinal).ToList(),
             Client = Object.Client.GetComponents<PlayMakerFSM>().OrderBy(f => f.FsmName, StringComparer.Ordinal).ToList()
         };
+        arenaReward = ColosseumRewardContinuation.TryCreate(this, Object.Host, Object.Client);
         PrepareArenaMusic();
         battleSignals = new LocalBattleSignals(this, _fsms.Host, _fsms.Client, PublishFsmBool);
         if (Type == EntityType.Grimm || Type == EntityType.TheCollector)
@@ -332,6 +334,9 @@ internal class Entity {
         }
         foreach (var fsm in Object.Client.GetComponentsInChildren<PlayMakerFSM>(true)) {
             if (_fsms.Client.Contains(fsm)) continue;
+            // Collection and its UI belong to this player's save, even when
+            // the surrounding arena manager is controlled by another peer.
+            if (arenaReward?.IsClientReward(fsm.gameObject) == true) continue;
             // The arena manager's music controller is a child FSM rather than
             // the registered Battle Control FSM.  It must remain live on a
             // replica so the manager's native MUSIC events can reach its local
@@ -347,6 +352,7 @@ internal class Entity {
             fsm.enabled = false;
         }
         foreach (var body in Object.Client.GetComponentsInChildren<Rigidbody2D>(true)) {
+            if (arenaReward?.IsClientReward(body.gameObject) == true) continue;
             body.velocity = UnityEngine.Vector2.zero; body.angularVelocity = 0; body.gravityScale = 0;
             body.bodyType = RigidbodyType2D.Kinematic; body.useFullKinematicContacts = true;
         }
@@ -794,6 +800,7 @@ internal class Entity {
     /// </summary>
     [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
     private void OnUpdate() {
+        arenaReward?.Tick();
         RoarLock?.Tick();
         introCamera?.Tick();
         battleSignals?.Tick();
@@ -1329,6 +1336,7 @@ internal class Entity {
         var arenaSplit = arenaCue?.IndexOf(':') ?? -1;
         if (arenaSplit >= 0 && _arenaHostMusic != null)
             _arenaHostMusic.SendEvent(arenaCue.Substring(arenaSplit + 1));
+        arenaReward?.ResumeAuthority();
     }
 
     /// <summary>
@@ -1520,6 +1528,7 @@ internal class Entity {
                 if (data.CurrentState == byte.MaxValue) {
                     // Inactive FSMs have no current state.
                     snapshot.CurrentState = string.Empty;
+                    arenaReward?.ObserveState(hostFsm.FsmName, string.Empty);
                     if (_fsms.Client[fsmIndex] != null)
                         EntityFsmActions.RegisterStateChange(_fsms.Client[fsmIndex].Fsm, string.Empty);
                 } else if (states.Length <= data.CurrentState) {
@@ -1530,6 +1539,7 @@ internal class Entity {
                     var stateName = states[data.CurrentState].Name;
                     
                     snapshot.CurrentState = stateName;
+                    arenaReward?.ObserveState(hostFsm.FsmName, stateName);
                     
                     // Also propagate this state change to the EntityFsmActions class with the client FSM for the
                     // same index

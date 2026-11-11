@@ -1,0 +1,69 @@
+{
+  "version": "0.2.8",
+  "action": "package-release",
+  "releaseChannel": "release",
+  "userRequest": "打包0.2.8,github,release",
+  "retestOmitted": true,
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "4BF52559BED08AF65A10B7F0C8016B8F5A515E91FD44C7AF5A6C39A3FF2BD9EB"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "1C5D0C4865D23168B15815D20808A952FE72BB5BE2900F93CB850C9CE7D5D61F"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "23C48B3B6927F3C0578341F231E919129E838D0189E315CC27DBC7EA270C2F77"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "29D1DCCE639339B57ECDB9395C9C5A3E5E843ECD036CA7256A8AC573B4FB433B"
+    }
+  ],
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified",
+    "colosseum-bilateral-permanent-freeze-unreproduced",
+    "shade-soul-downslam-multihit-unreproduced",
+    "unreliable-player-animation-attack-loss",
+    "colosseum-silver-authority-handoff-reward-unresolved",
+    "mawlek-shared-health-fragment-report-unreproduced"
+  ],
+  "blockerLedgerSha256": "B1192E1CFF35E13BE288FAED237E3CDA961D4CAEC7EFE30DBF28C28938405112",
+  "evidence": [
+    {
+      "path": "docs/evidence/development-validation-0.2.8.json",
+      "sha256": "BCB23F62D5B08D36BB1209502B6EFC2BF65D09E8C86F03588518E81100F26827"
+    },
+    {
+      "path": "docs/evidence/runtime-room-0.2.8.json",
+      "sha256": "50F938ABAE2D8E08DEFD9F1742D6516AE2A097BBD76B165AE980B59692296599"
+    }
+  ],
+  "scope": "Build and publish HollowConnect 0.2.8 Windows/source ZIPs, checksums, tag v0.2.8 and a standard GitHub Release with bundled Steam module. Include the current scoped fixes and retain all unresolved findings; no full game matrix is claimed after the version bump.",
+  "createdAtUtc": "2026-11-11T06:31:18.0082516Z"
+}

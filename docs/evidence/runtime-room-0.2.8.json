@@ -1,0 +1,40 @@
+{
+  "version": "0.2.8",
+  "engineVersion": "3.0.0-hc13",
+  "addonNetworkVersion": "0.2.8-l15",
+  "releaseChannel": "release",
+  "releaseReady": false,
+  "fullRuntimeAcceptance": false,
+  "retestOmitted": true,
+  "createdAtUtc": "2026-11-11T06:31:17.9729779Z",
+  "scope": "User-requested standard GitHub Release including Steam: production/Steam/installer builds, packaging and install/workflow verification; scoped post-0.2.7 validation is recorded separately and no full game matrix is claimed for the final 0.2.8 hashes.",
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "4BF52559BED08AF65A10B7F0C8016B8F5A515E91FD44C7AF5A6C39A3FF2BD9EB"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "1C5D0C4865D23168B15815D20808A952FE72BB5BE2900F93CB850C9CE7D5D61F"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "23C48B3B6927F3C0578341F231E919129E838D0189E315CC27DBC7EA270C2F77"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "29D1DCCE639339B57ECDB9395C9C5A3E5E843ECD036CA7256A8AC573B4FB433B"
+    }
+  ],
+  "runs": [],
+  "previousValidationSource": "docs/evidence/development-validation-0.2.8.json",
+  "previousValidationSha256": "BCB23F62D5B08D36BB1209502B6EFC2BF65D09E8C86F03588518E81100F26827",
+  "productionSourceChange": "0.2.8 includes the hit-stop localization, Grimm roar/end cleanup, Colosseum reward continuation and scoped reward/linked-health test fixtures. Version and network identifiers were then bumped to 0.2.8-l15; final hashes are recorded here without retroactive runtime certification.",
+  "limits": [
+    "No full 12-case room matrix after the 0.2.8 version bump.",
+    "Silver authority handoff during native reward pickup remains unresolved.",
+    "Two-player missing mask-fragment report was not reproduced; cause and original receipt history remain unknown.",
+    "Real cross-machine Steam invite, cold-start, P2P/SDR relay and FRP remain unverified.",
+    "Historical Hornet Throw/Thrown handoff issue and inherited ledger findings remain open."
+  ]
+}

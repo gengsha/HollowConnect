@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect</AssemblyName><Version>0.2.7</Version></PropertyGroup>
+  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect</AssemblyName><Version>0.2.8</Version></PropertyGroup>
   <ItemGroup>
     <Reference Include="UnityEngine.UI"><HintPath>../../vendor/references/UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.UIModule"><HintPath>../../vendor/references/UnityEngine.UIModule.dll</HintPath><Private>false</Private></Reference>

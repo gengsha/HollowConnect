@@ -64,6 +64,9 @@ public sealed partial class ProgressProbe {
     }
 
     private IEnumerator Resources() {
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE") == "mawlek") {
+            yield return MawlekResourceChecks(); yield break;
+        }
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SHOP_SHARD_CASE"))) {
             yield return ShopShardRaceChecks(); yield break;
         }

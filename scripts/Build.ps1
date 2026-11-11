@@ -1,5 +1,5 @@
 ﻿param([string]$GamePath,
-    [ValidateSet('Mod','Core','Smoke','Installer','Steam')][string]$Target='Mod',
+    [ValidateSet('Mod','Core','Smoke','Installer','Steam','FrameTrace')][string]$Target='Mod',
     [switch]$RefreshReferences, [switch]$RunTests, [string]$TestSelection,
     [switch]$NoRestore)
 $ErrorActionPreference = 'Stop'
@@ -41,6 +41,7 @@ try {
         Smoke='tests/Smoke/HollowConnect.Smoke.csproj'
         Installer='src/HollowConnect.Installer/HollowConnect.Installer.csproj'
         Steam='src/HollowConnect.Steam/HollowConnect.Steam.csproj'
+        FrameTrace='tests/FrameTrace/HollowConnect.FrameTrace.csproj'
     }
     $taskExecuteTests = $RunTests -or $TestSelection
     $taskBuildTargets = @($Target)

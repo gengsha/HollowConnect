@@ -108,7 +108,7 @@ public sealed partial class ColosseumProbe : MonoBehaviour {
                 if (testCase == "air-rescue" && (source == null || airRescueLive && hazard != 1)) orig(self, source, side, damage, hazard);
             };
             On.HeroController.TakeDamage += rewardProtection;
-        } else if (testCase == "reward-continuation") {
+        } else if (testCase == "reward-continuation" || testCase == "victory" && trial == "Silver") {
             // This explicit reward-only fixture leaves Wave 1 held, so its
             // active enemies must not interrupt the real pickup animation.
             // Protect at the damage boundary because native control actions
@@ -349,6 +349,10 @@ public sealed partial class ColosseumProbe : MonoBehaviour {
     }
     private IEnumerator ArenaFlow() {
         Require(!Hkmp.Game.Client.Entity.LocalBattleCompletion.IsLocal(LocalArena), "network-owned trial control is excluded from local battle accounting");
+        if (trial == "Silver" && testCase == "victory") {
+            yield return SilverRewardFlow();
+            yield break;
+        }
         Require(trial == "Bronze", "reward flow is explicitly scoped to the first Bronze notch");
         // The first entrant already triggered the native manager in NormalEntry;
         // a late entrant must only observe its local replica and never send

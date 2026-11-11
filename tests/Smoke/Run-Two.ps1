@@ -1,9 +1,13 @@
-param([string]$RunName, [string]$Mode='full', [string]$EnginePath='', [switch]$NoBuild, [string]$PayloadPath='', [ValidateSet(2,3)][int]$Players=2, [switch]$SteamModule)
+param([string]$RunName, [string]$Mode='full', [string]$EnginePath='', [switch]$NoBuild, [string]$PayloadPath='', [ValidateSet(2,3)][int]$Players=2, [switch]$SteamModule, [string]$FrameTracePath='')
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 if ($RunName -notmatch '^[a-z0-9][a-z0-9-]{0,95}$') { throw 'Invalid isolated run directory name.' }
 $testRoot=Join-Path "$root\.test-results" $RunName
 if (Test-Path -LiteralPath $testRoot) { throw 'Preserve existing evidence; choose a new run name.' }
+if ($FrameTracePath) {
+    $FrameTracePath=(Resolve-Path -LiteralPath $FrameTracePath).Path
+    if (!(Test-Path -LiteralPath $FrameTracePath -PathType Leaf) -or [IO.Path]::GetFileName($FrameTracePath) -ne 'HollowConnect.FrameTrace.dll') { throw 'Expected the standalone HollowConnect.FrameTrace.dll.' }
+}
 if ($PayloadPath) {
     $PayloadPath=(Resolve-Path -LiteralPath $PayloadPath).Path
     foreach ($taskName in 'HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll','BouncyCastle.Cryptography.dll') {
@@ -39,17 +43,18 @@ if ([IO.Path]::GetFullPath($testRoot) -notlike ($root+'\.test-results\*')) { thr
 New-Item -ItemType Directory -Path $testRoot | Out-Null
 $taskProductionNames=@('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll')
 if($SteamModule){
-    if($PayloadPath -or $EnginePath){throw 'Steam module checks use the current prepared production binaries.'}
-    $taskSteamPrepared=Join-Path $PSScriptRoot 'bin/Release/net472/HollowConnect.Steam.dll'
+    if($EnginePath){throw 'Steam module checks require a complete matched production payload.'}
+    $taskSteamPrepared=if($PayloadPath){Join-Path $PayloadPath 'HollowConnect.Steam.dll'}else{Join-Path $PSScriptRoot 'bin/Release/net472/HollowConnect.Steam.dll'}
     $taskSteamProduction=Join-Path $root 'src/HollowConnect.Steam/bin/Release/net472/HollowConnect.Steam.dll'
     if(!(Test-Path -LiteralPath $taskSteamPrepared) -or
-        (Get-FileHash -LiteralPath $taskSteamPrepared).Hash -ne (Get-FileHash -LiteralPath $taskSteamProduction).Hash){throw 'Prepared Steam module is stale.'}
+        (!$PayloadPath -and (Get-FileHash -LiteralPath $taskSteamPrepared).Hash -ne (Get-FileHash -LiteralPath $taskSteamProduction).Hash)){throw 'Prepared Steam module is missing or stale.'}
     $taskProductionNames+='HollowConnect.Steam.dll'
 }
 $taskBinaries=$taskProductionNames | ForEach-Object {
     $taskDllPath=if($PayloadPath){Join-Path $PayloadPath $_}elseif($_ -eq 'HKMP.dll' -and $EnginePath){$EnginePath}else{Join-Path $root ('tests/Smoke/bin/Release/net472/'+$_)}
     [pscustomobject]@{name=$_;sha256=(Get-FileHash -LiteralPath $taskDllPath -Algorithm SHA256).Hash}
 }
+if ($FrameTracePath) { $taskBinaries=@($taskBinaries)+@([pscustomobject]@{name='HollowConnect.FrameTrace.dll';sha256=(Get-FileHash -LiteralPath $FrameTracePath).Hash}) }
 $taskBinaries | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $testRoot 'binaries.json') -Encoding UTF8
 $env:SteamAppId='367520'
 $env:SteamGameId='367520'
@@ -71,6 +76,14 @@ foreach ($testRole in 'host','guest') {
         # Preserve the optional binary while keeping ordinary fixture runs
         # free of an unrecorded module left by an earlier Steam check.
         Move-Item -LiteralPath $taskSteamIsolated -Destination (Join-Path $testRoot ($testRole+'-HollowConnect.Steam.dll.inactive'))
+    }
+    $taskTraceDir=Join-Path $gameDir 'hollow_knight_Data/Managed/Mods/HollowConnect.FrameTrace'
+    $taskTraceDll=Join-Path $taskTraceDir 'HollowConnect.FrameTrace.dll'
+    if($FrameTracePath){
+        New-Item -ItemType Directory -Path $taskTraceDir -Force | Out-Null
+        Copy-Item -LiteralPath $FrameTracePath -Destination $taskTraceDll -Force
+    } elseif(Test-Path -LiteralPath $taskTraceDll){
+        Move-Item -LiteralPath $taskTraceDll -Destination (Join-Path $testRoot ($testRole+'-HollowConnect.FrameTrace.dll.inactive'))
     }
 }
 foreach ($testRole in $taskRoles) {

@@ -53,7 +53,7 @@ internal static class LocalBarrierEvents {
     }
 
     internal static void Replay(HutongGames.PlayMaker.Fsm sender, FsmEventTarget target, string name, float delay, FsmState state = null) {
-        if (EntityReferences.Owner(sender.GameObject)?.RoarLock?.Handles(sender, name) == true) return;
+        if (EntityReferences.Owner(sender.GameObject)?.RoarLock?.Handles(sender, name, state) == true) return;
         var owner = sender.GameObject;
         if (owner == null) return;
         var visit = CoopContext.LocalVisit;

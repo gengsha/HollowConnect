@@ -70,6 +70,10 @@
 
 `coverage` 的 `HOLLOWCONNECT_COMBAT_SNAPSHOT_ASSERTIONS=1` 使用未连接的发送器检查真实战斗状态采样：未变化去重、复用缓冲后已发布包不变、压缩完整快照经生产编解码和序列过滤处理乱序/重传/回绕、缓存副本及接管。该夹具不冒充真实迟加入网络流程；`HOLLOWCONNECT_COMBAT_ASSERTIONS=1` 另走房间 UDP 与实际 HeroBox 受伤。性能输出的 `allocatedBytes` 仅在运行时提供当前线程分配计数器时有效；Unity Mono 输出 `allocation counter=unavailable` 时不能把零值当作零分配。
 
+`coverage` 的 `HOLLOWCONNECT_FRAME_PROFILE=1` 使用未保存角色和真实 LAN 连接，按站立、原生走路、原生跳跃加冲刺采集两端帧时间、GC 次数与模块调用耗时。配合 `HOLLOWCONNECT_COVERAGE_PERFORMANCE=1`；`HOLLOWCONNECT_FRAME_SCENES` 默认 `Town,GG_Painter`，`HOLLOWCONNECT_FRAME_SECONDS` 默认每段 12 秒，`HOLLOWCONNECT_FRAME_SHARED=1` 开启共享进度。走路必须有实际水平位移，跳跃和冲刺必须出现离地及冲刺状态，采样必须留在原场景，非 Town 场景必须存在受管实体，否则立即失败。每段输出 `<role>.frames-<scene>-<phase>.json`，包含原始帧记录与 p50/p95/p99；嵌套方法耗时不能相加。当前线程分配计数器不可用时，零字节不能作零分配结论。
+
+该性能夹具以反射探测可选的 PresentationComponent，因此可用 `Run-Two.ps1 -PayloadPath <历史版本提取目录> -NoBuild` 比较不同版本；实际载入的生产 DLL 与 Smoke 哈希必须另行记录、验证。`HOLLOWCONNECT_FRAME_ABLATE=1` **仅限因果实验**：在测试插件内跳过视觉采样 Tick，不是候选修复，也不验证完整同步功能。批处理、隐藏窗口及同机双端的显示调度均有局限，完成测量不等于真实玩家的 low 帧问题已修复。
+
 `coverage` 中的 `HOLLOWCONNECT_FSM_NULL_STRING_ASSERTIONS=1` 在双方各运行真实 PlayMaker 字符串夹具：初始 null 后赋值、再次改变、清回 null，经生产采样和实际编解码检查原生/副本变量、重复采样、迟加入缓存及接管恢复。夹具使用未连接的 NetClient，不将测试实体发进真实房间；它证明字符串遗漏问题，不证明用户 Mines_11 数组越界的根因。`HOLLOWCONNECT_FSM_LAYOUT_TRACE=1` 仅在测试插件观察登记、Awake 和首次字符串接收时的实体/FSM/变量表，用于继续定位该未解异常。
 
 已载入内存角色的游戏内探针连接时设置 `_autoConnect`，保留已选角色；从菜单开始的 JoinProbe 则仍走真正选档/新档路径。格林探针观察 ProfileMenu 请求，正常游戏内检查必须为零；`HOLLOWCONNECT_GRIMM_MENU_BASELINE=1` 保留旧夹具路径并在实际菜单请求后明确失败，用于对照，不触发 Boss 战或计入验收。原生崩溃标记在发布日志扫描中独立失败。
@@ -310,3 +314,18 @@ Boss倒地索敌专项：构建一次Smoke，再运行 `Run-Boss-Targets.ps1 -Pr
 两项都只使用现有隔离副本，ProbeMod 拦截存档写入；不会发送好友邀请。
 单账号大厅、本地原生 socket 和内存桥接测试均不证明跨账号／跨机器 Steam 联机成功。
 `Run-Room-Suite.ps1 -SteamModule` 可在原有 12 项矩阵中同时加载并记录可选模块。
+
+独立帧诊断插件的构建、使用和受控锁等待验证见 [FrameTrace](../FrameTrace/README.md)。
+`Run-Two.ps1 -FrameTracePath <DLL完整路径>` 只安装到现有隔离副本，并在 binaries.json 中记录哈希；普通运行会保留并移出残留诊断 DLL。
+
+受伤顿帧回归：`-Mode coverage`，设置 `HOLLOWCONNECT_HITSTOP_CHECK=1`；
+`HOLLOWCONNECT_HITSTOP_SCENE=GG_Grimm` 或 `GG_Grimm_Nightmare`，`HOLLOWCONNECT_HITSTOP_AUTHORITY=host` 或 `guest`。
+共享进度开启、共享血量关闭时，依次在原生气球弹幕中让场景权威和副本玩家各受伤一次，记录双方时间速度、角色状态、弹幕位置及原生 FreezeMoment 调用栈。
+夹具屏蔽其它自动接触，仅放行指定的原生 TakeDamage 调用；`takeNoDamage` 本身不能阻止受击顿帧。
+默认断言联机受伤不再修改全局时间，弹幕持续运动，受伤者保留硬直和无敌时间；未受伤者通过真实输入读取边界连续完成一次普通攻击和一次预输入攻击。
+同时检查不相关的原生 FreezeMoment、恢复中断线和离线原版顿帧。`HOLLOWCONNECT_HITSTOP_BASELINE=1` 仅用于固定旧包的原始冻结观察。
+不认证碰撞检测、实际键盘设备、性能指标或完整 Boss 生命周期。
+
+格林抢打残影回归使用 `-Mode boss-roar`，设置 `HOLLOWCONNECT_ROAR_SCENE=GG_Grimm`、`HOLLOWCONNECT_ROAR_FIRST=host|guest`。
+`HOLLOWCONNECT_ROAR_CASE=normal|visual-missing-end|visual-late-create|bow-normal|delayed-start` 分别覆盖原生抢打、遗漏特效结束动作、特效创建晚于战吼结束、正常敬礼，以及旧的迟到控制锁事件。
+断言原生战吼波纹销毁、独立 Grimm Bow 模型隐藏、人物控制恢复和真实扣血；输出每端 `.roar-visuals.json`。故障注入只作用于指定动作，不设置 Boss／特效 FSM 状态。

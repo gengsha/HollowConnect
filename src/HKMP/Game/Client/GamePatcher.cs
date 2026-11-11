@@ -30,6 +30,7 @@ internal class GamePatcher {
     /// The IL Hook for the bridge lever method.
     /// </summary>
     private ILHook _bridgeLeverIlHook;
+    private DamageRecoil _damageRecoil;
 
     public GamePatcher(NetClient netClient) {
         _netClient = netClient;
@@ -39,6 +40,7 @@ internal class GamePatcher {
     /// Register the hooks.
     /// </summary>
     public void RegisterHooks() {
+        _damageRecoil = new DamageRecoil(_netClient);
         Animation.RemotePlayerFeedback.Register();
         // World isolation remains conditional inside the guards. Observer
         // attack suppression is required in shared worlds as well.
@@ -70,6 +72,8 @@ internal class GamePatcher {
     /// De-register the hooks.
     /// </summary>
     public void DeregisterHooks() {
+        _damageRecoil?.Dispose();
+        _damageRecoil = null;
         Animation.RemotePlayerFeedback.Unregister();
         Entity.LocalWorldInteractions.Unregister();
         IL.TinkEffect.OnTriggerEnter2D -= TinkEffectOnTriggerEnter2D;

@@ -12,6 +12,7 @@ using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using Modding;
 using MonoMod.RuntimeDetour;
+using Newtonsoft.Json;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -29,6 +30,40 @@ public sealed class BossRoarProbe : MonoBehaviour {
     private float nextSample;
     private bool sawExit, sawLock, heldStart, replayedStart, allowDamage;
     private Hook replayHook;
+    private float nextVisual;
+    private readonly List<object> visualSamples = new();
+    private bool sawWave, visibleWave;
+    private float roarExitAt;
+    private object VisualTree(GameObject go) => go == null ? null : new {
+        name = go.name, parts = go.GetComponentsInChildren<Transform>(true).Select(t => new {
+            path = EntityIdentity.Path(t, go.transform), active = t.gameObject.activeSelf, visible = t.gameObject.activeInHierarchy,
+            position = t.position.ToString(), renderers = t.GetComponents<Renderer>().Select(r => new { enabled = r.enabled }).ToArray(),
+            sprites = t.GetComponents<tk2dBaseSprite>().Select(s => new { frame = s.spriteId, clip = s.GetComponent<tk2dSpriteAnimator>()?.CurrentClip?.name,
+                playing = s.GetComponent<tk2dSpriteAnimator>()?.Playing }).ToArray()
+        }).ToArray()
+    };
+    private void ObserveVisuals() {
+        if (Time.realtimeSinceStartup < nextVisual) return;
+        nextVisual = Time.realtimeSinceStartup + .05f;
+        var effects = Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.name.StartsWith("Roar Wave Emitter", StringComparison.Ordinal) && f.gameObject.scene.name == scene).ToArray();
+        visibleWave = effects.Any(f => f.GetComponentsInChildren<Renderer>(true).Any(r => r.name.StartsWith("wave ", StringComparison.Ordinal) && r.enabled && r.gameObject.activeInHierarchy));
+        sawWave |= visibleWave;
+        var boss = Entities.Values.FirstOrDefault(e => e.Type == EntityType.Grimm);
+        visualSamples.Add(new { utc = DateTime.UtcNow, authority = manager.IsSceneHost,
+            bowObjects = Object.FindObjectsOfType<Animator>(true).Where(a => a.gameObject.scene.name == scene && a.name.Contains("Grimm")).Select(a => new {
+                path = EntityIdentity.Path(a.transform), active = a.gameObject.activeSelf, visible = a.gameObject.activeInHierarchy,
+                owner = EntityReferences.Owner(a.gameObject)?.Id, tree = VisualTree(a.gameObject) }).ToArray(),
+            nativeBoss = VisualTree(boss?.Object.Host), replicaBoss = VisualTree(boss?.Object.Client), effects = effects.Select(f => new {
+            id = f.GetInstanceID(), name = f.name, enabled = f.enabled, state = f.ActiveStateName,
+            owner = EntityReferences.Owner(f.gameObject)?.Id, replica = EntityReferences.IsReplica(f.gameObject),
+            parts = f.GetComponentsInChildren<Transform>(true).Select(t => new {
+                path = EntityIdentity.Path(t, f.transform), active = t.gameObject.activeSelf, visible = t.gameObject.activeInHierarchy,
+                position = t.position.ToString(), components = t.GetComponents<UnityEngine.Component>().Select(c => c?.GetType().Name).ToArray(),
+                renderers = t.GetComponents<Renderer>().Select(r => new { enabled = r.enabled,
+                    color = r.sharedMaterial != null && r.sharedMaterial.HasProperty("_Color") ? r.sharedMaterial.color.ToString() : "" }).ToArray()
+            }).ToArray()
+        }).ToArray() });
+    }
     private static T Field<T>(object o, string n) => (T)o.GetType().GetField(n, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(o);
     private Dictionary<ulong, Entity> Entities => Field<Dictionary<ulong, Entity>>(manager, "_entities");
     private void Mark(string s) { using var f = new FileStream(Path.Combine(root, role + ".log"), FileMode.Append, FileAccess.Write, FileShare.ReadWrite); using var w = new StreamWriter(f); w.WriteLine(DateTime.UtcNow.ToString("O") + " " + s); }
@@ -59,7 +94,7 @@ public sealed class BossRoarProbe : MonoBehaviour {
         h.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
     private void Trace(On.HutongGames.PlayMaker.Fsm.orig_ProcessEvent orig, Fsm fsm, FsmEvent ev, FsmEventData data) {
-        if (fsm.Name == "Roar Lock" && ev?.Name == "ROAR EXIT") sawExit = true;
+        if (fsm.Name == "Roar Lock" && ev?.Name == "ROAR EXIT") { if (!sawExit) roarExitAt = Time.realtimeSinceStartup; sawExit = true; }
         if (ev != null && ev.Name.Contains("ROAR") && (fsm.Name == "Roar Lock" || fsm.GameObject?.name.Contains("Boss") == true))
             Mark("EVENT " + fsm.GameObject?.name + "/" + fsm.Name + "=" + fsm.ActiveStateName + " event=" + ev.Name +
                 " sender=" + data?.SentByFsm?.GameObject?.name + "/" + data?.SentByFsm?.Name);
@@ -90,6 +125,7 @@ public sealed class BossRoarProbe : MonoBehaviour {
     }
     private void Observe() {
         if (manager == null || !In(scene)) return;
+        ObserveVisuals();
         var h = HeroController.instance;
         var roar = h.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Roar Lock");
         if (roar.ActiveStateName == "Lock Grounded" || roar.ActiveStateName == "Lock Air") sawLock = true;
@@ -108,7 +144,8 @@ public sealed class BossRoarProbe : MonoBehaviour {
                 " input=" + h.acceptingInput + " relinquished=" + h.controlReqlinquished + " noDamage=" + h.takeNoDamage +
                 " paused=" + GameManager.instance.isPaused + " roarVars=" + string.Join(",", roar.FsmVariables.GameObjectVariables.Select(v => v.Name + "=" + v.Value?.name)));
         }
-        if (!hitBow && scene == "GG_Grimm" && manager.IsSceneHost && go.GetComponents<PlayMakerFSM>().Any(f => f.ActiveStateName == "GG Bow Wait" || f.ActiveStateName == "Bow")) {
+        var hitReady = manager.IsSceneHost && go.GetComponents<PlayMakerFSM>().Any(f => f.ActiveStateName == "GG Bow Wait" || f.ActiveStateName == "Bow");
+        if (!hitBow && scene == "GG_Grimm" && hitReady && scenario != "bow-normal") {
             hitBow = true;
             Mark("FIXTURE native nail hit during Bow");
             go.GetComponent<HealthManager>().Hit(new HitInstance { Source = h.gameObject, AttackType = AttackTypes.Nail, DamageDealt = 1, Multiplier = 1, IgnoreInvulnerable = true });
@@ -119,6 +156,7 @@ public sealed class BossRoarProbe : MonoBehaviour {
         scene = Environment.GetEnvironmentVariable("HOLLOWCONNECT_ROAR_SCENE") ?? "GG_Grimm";
         scenario = Environment.GetEnvironmentVariable("HOLLOWCONNECT_ROAR_CASE") ?? "diagnostic";
         Mark("START boss-roar scene=" + scene);
+        CoopMod.Settings.ShareProgress = true;
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += Trace;
         // Keep native hero damage flags intact; isolate the post-roar damage
         // assertion from unrelated projectiles killing the unsaved character.
@@ -144,6 +182,20 @@ public sealed class BossRoarProbe : MonoBehaviour {
                     orig(data, action);
                 }));
         }
+        if (scenario == "visual-missing-end" || scenario == "visual-late-create") {
+            replayHook = new Hook(typeof(EntityFsmActions).GetMethod("ApplyNetworkDataFromAction", BindingFlags.Static | BindingFlags.Public,
+                null, new[] { typeof(EntityNetworkData), typeof(FsmStateAction) }, null),
+                (Action<Action<EntityNetworkData, FsmStateAction>, EntityNetworkData, FsmStateAction>)((orig, data, action) => {
+                    if (scenario == "visual-missing-end" && action is SendEventByName cue && cue.sendEvent.Value == "END" && action.State.Name == "Roar End") {
+                        Mark("FIXTURE omit roar emitter END impulse; ordered boss state continues"); return;
+                    }
+                    if (scenario == "visual-late-create" && action is CreateObject create && create.gameObject.Value.name == "Roar Wave Emitter") {
+                        heldStart = true; Mark("FIXTURE hold roar emitter creation until after native roar exit");
+                        StartCoroutine(DelayStart(orig, data, action)); return;
+                    }
+                    orig(data, action);
+                }));
+        }
         var stack = new Stack<IEnumerator>(); stack.Push(Run()); var deadline = DateTime.UtcNow.AddMinutes(4);
         while (stack.Count > 0) {
             bool more; object current = null;
@@ -162,6 +214,12 @@ public sealed class BossRoarProbe : MonoBehaviour {
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1);
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => In("Town"), "unsaved character ready");
+        if (PlayerData.instance.GetBool("atBench")) {
+            var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
+            yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
+            bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<ListenForJump>().Single().wasPressed);
+            yield return Until(() => !PlayerData.instance.GetBool("atBench") && !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
+        }
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); } else yield return Until(() => Has("server.started"), "server started");
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "roar" + role });
@@ -195,7 +253,7 @@ public sealed class BossRoarProbe : MonoBehaviour {
                 yield return Until(() => Has("handoff.started") && manager.IsSceneHost, "survivor takes authority during roar");
             }
         }
-        if (scenario != "diagnostic") {
+        if (!scenario.Contains("diagnostic") && scenario != "bow-normal") {
             if (scenario != "handoff" || !initialAuthority) yield return Until(() => sawExit, "native roar exit observed", 18);
             if (!manager.IsSceneHost && scenario == "delayed-start") yield return Until(() => replayedStart, "held start delivered after exit", 5);
             yield return new WaitForSecondsRealtime(.5f);
@@ -214,7 +272,7 @@ public sealed class BossRoarProbe : MonoBehaviour {
             try { hero.TakeDamage(null, GlobalEnums.CollisionSide.left, 1, 1); } finally { allowDamage = false; }
             Mark("DAMAGE after health=" + PlayerData.instance.GetInt("health") + " blue=" + PlayerData.instance.GetInt("healthBlue"));
             Require(PlayerData.instance.GetInt("health") + PlayerData.instance.GetInt("healthBlue") < health + blue, "hero takes real damage after roar");
-            replayHook?.Dispose(); replayHook = null;
+            if (!scenario.StartsWith("visual", StringComparison.Ordinal)) { replayHook?.Dispose(); replayHook = null; }
             if (!manager.IsSceneHost) {
                 // A late end from this boss must not unlock a later native
                 // roar owned by a different local continuation.
@@ -229,8 +287,21 @@ public sealed class BossRoarProbe : MonoBehaviour {
             }
             Flag(role + ".verified"); yield return Until(() => Has((host ? "guest" : "host") + ".verified"), "both heroes recovered");
         }
-        var end = Time.realtimeSinceStartup + (scenario == "diagnostic" ? 22 : 1);
+        var end = Time.realtimeSinceStartup + (scenario.Contains("diagnostic") || scenario == "bow-normal" || scenario.StartsWith("visual", StringComparison.Ordinal) ? 9 : 1);
         while (Time.realtimeSinceStartup < end) { Observe(); yield return null; }
+        File.WriteAllText(Path.Combine(root, role + ".roar-visuals.json"), JsonConvert.SerializeObject(visualSamples));
+        if (scene == "GG_Grimm" && !scenario.Contains("diagnostic") && scenario != "handoff") {
+            if (scenario == "bow-normal") {
+                Require(!sawWave && !sawLock, "normal bow completes without a rage roar");
+            } else {
+                Require(sawExit && Time.realtimeSinceStartup - roarExitAt >= .8f, "native roar exit precedes visual cleanup assertion");
+                Require(sawWave || !manager.IsSceneHost && scenario == "visual-late-create" && heldStart && replayedStart, "real native wave effect exercised");
+                Require(!visibleWave, "no roar waves remain at the bow position after native exit");
+            }
+            Require(Object.FindObjectsOfType<Animator>(true).Where(a => a.gameObject.scene.name == scene && a.name == "Grimm Bow").All(a => !a.gameObject.activeInHierarchy),
+                "separate native bow model is hidden after the introduction");
+            Mark("PASS roar visual cleanup and native bow model lifecycle");
+        }
         yield return ProbeShutdown.Run(engine, root, role);
         Mark("FINAL PASS boss-roar " + scenario + " " + scene); Flag(role + ".done");
     }

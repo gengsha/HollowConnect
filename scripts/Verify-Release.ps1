@@ -3,7 +3,7 @@
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'PackageDocumentation.ps1')
-$version='0.2.7'
+$version='0.2.8'
 if($ReleaseCandidate){
     if($Playtest -or $PlaytestBuild -or $UserRequestedRelease){throw 'Choose one release channel.'}
     $Playtest=$true; $PlaytestBuild=$ReleaseCandidate

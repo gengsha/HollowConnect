@@ -4,7 +4,7 @@ Steam 模式已加入源码，使用游戏自带 Steam 接口和独立的 `Hollo
 Steam 消息通过本机 UDP 桥接进入现有局域网／IP 联机流程，继续使用同一套 HKMP
 数据包、伤害、Boss、救援、存档和房间逻辑。这些共用逻辑修复一次，两种方式同时生效；
 好友邀请、房间发现和 Steam 通道的建立／清理由新增接入模块负责。
-`0.2.7` Windows 完整包已包含本模块和匹配的 HKMP，可从 [GitHub Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.2.7) 下载。
+`0.2.8` Windows 完整包已包含本模块和匹配的 HKMP，可从 [GitHub Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.2.8) 下载。
 构建与本机自动检查不代表真实双账号邀请、中继或跨机器连接已经通过。
 
 当前模块面向 Windows 64 位 Steam 版空洞骑士。两端需要在线的 Steam 客户端、相同版本的 HollowConnect 和本模块。

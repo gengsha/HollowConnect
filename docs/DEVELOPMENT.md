@@ -15,6 +15,9 @@
 # 构建可选 Steam 联机模块；仍需同一次源码构建的 HKMP。
 .\scripts\Build.ps1 -Target Steam
 
+# 只构建独立帧诊断插件，不更换生产 DLL、不启动游戏。
+.\scripts\Build.ps1 -Target FrameTrace
+
 # 依赖已还原时可省去 restore 检查；依赖变化后不使用此选项。
 .\scripts\Build.ps1 -NoRestore
 
@@ -28,7 +31,7 @@
 .\scripts\Build.ps1 -Target Core -RunTests
 ```
 
-`-Target` 支持 `Mod`、`Core`、`Smoke`、`Installer`、`Steam`。`-RunTests` / `-TestSelection` 会先构建对应测试程序。没有指定名单的 `-RunTests` 执行全部核心回归；日常小改动按既定最近/相关项范围选择。暂未增加自动按 Git 判断最近 100 项的选择器。
+`-Target` 支持 `Mod`、`Core`、`Smoke`、`Installer`、`Steam`、`FrameTrace`。`-RunTests` / `-TestSelection` 会先构建对应测试程序。没有指定名单的 `-RunTests` 执行全部核心回归；日常小改动按既定最近/相关项范围选择。暂未增加自动按 Git 判断最近 100 项的选择器。
 
 ## 双端专项
 
