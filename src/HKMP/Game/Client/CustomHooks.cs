@@ -29,9 +29,15 @@ public static class CustomHooks {
     // IL_01b4: ldc.i4.0
     // IL_01b5: callvirt     instance void HeroController/HeroInPosition::Invoke(bool)
     private static readonly Func<Instruction, bool>[] HeroInPositionInstructions = [
+#if HOLLOW_UNITY6
+        i => i.MatchLdcI4(out _),
+        i => i.MatchCallvirt(typeof(HeroController), "SendHeroInPosition") ||
+             i.MatchCall(typeof(HeroController), "SendHeroInPosition")
+#else
         i => i.MatchLdfld(typeof(HeroController), "heroInPosition"),
         i => i.MatchLdcI4(out _),
         i => i.MatchCallvirt(typeof(HeroController.HeroInPosition), "Invoke")
+#endif
     ];
 
     /// <summary>
@@ -85,13 +91,17 @@ public static class CustomHooks {
     /// </summary>
     public static void Initialize() {
         IL.HeroController.Start += HeroControllerOnStart;
+#if HOLLOW_UNITY6
+        IL.HeroController.DoEnterSceneDreamGate += HeroControllerOnEnterSceneDreamGate;
+#else
         IL.HeroController.EnterSceneDreamGate += HeroControllerOnEnterSceneDreamGate;
+#endif
         
-        var type = typeof(HeroController).GetNestedType("<EnterScene>d__469", BindingFlags);
-        _heroControllerEnterSceneIlHook = new ILHook(type.GetMethod("MoveNext", BindingFlags), HeroControllerOnEnterScene);
+        _heroControllerEnterSceneIlHook = new ILHook(MonoMod.Utils.Extensions.GetStateMachineTarget(
+            typeof(HeroController).GetMethod("EnterScene", BindingFlags | System.Reflection.BindingFlags.Public)), HeroControllerOnEnterScene);
         
-        type = typeof(HeroController).GetNestedType("<Respawn>d__473", BindingFlags);
-        _heroControllerRespawnIlHook = new ILHook(type.GetMethod("MoveNext", BindingFlags), HeroControllerOnRespawn);
+        _heroControllerRespawnIlHook = new ILHook(MonoMod.Utils.Extensions.GetStateMachineTarget(
+            typeof(HeroController).GetMethod("Respawn", BindingFlags | System.Reflection.BindingFlags.Public)), HeroControllerOnRespawn);
         
         IL.HutongGames.PlayMaker.Actions.ApplyMusicCue.OnEnter += ApplyMusicCueOnEnter;
         IL.HutongGames.PlayMaker.Actions.TransitionToAudioSnapshot.OnEnter += TransitionToAudioSnapshotOnEnter;

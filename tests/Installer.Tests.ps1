@@ -158,5 +158,57 @@ Pass 'EXE uninstall after updates restores the first installation baseline'
 $detected = Invoke-Installer $package '--detect' $null
 Assert ($detected.Code -eq 0) 'EXE automatic detection failed'
 Pass 'standalone EXE automatic discovery runs through Windows PowerShell without developer tools'
+
+# A second API archive/profile must use its own exact hashes and backup chain.
+$unityApi = Join-Path $OutputRoot 'unity6-api-fixture'
+Write-Text (Join-Path $unityApi 'Assembly-CSharp.dll') 'Unity6 API assembly'
+Write-Text (Join-Path $unityApi 'MonoMod.Core.dll') 'Unity6 API dependency'
+$unityZip = Join-Path $package 'dependencies\moddingapi.unity6.fixture.windows.zip'
+[IO.Compression.ZipFile]::CreateFromDirectory($unityApi, $unityZip)
+$manifest['apiArchive'] = 'moddingapi.unity6.fixture.windows.zip'
+$manifest['gameProfile'] = 'Unity6'
+$manifest['gameVersion'] = '1.5.12620 Windows / Unity 6000.0.61f1'
+$manifest.apiAssemblySha256 = Hash (Join-Path $unityApi 'Assembly-CSharp.dll')
+$manifest.apiZipSha256 = Hash $unityZip
+$manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+$unityGame = Join-Path $OutputRoot 'Unity6 fixture game'; New-Game $unityGame
+$result = Invoke-Installer $package '--install' $unityGame
+Assert ($result.Code -eq 0) ('Manifest-selected API install failed: '+$result.Output)
+$unityManaged = Join-Path $unityGame 'hollow_knight_Data\Managed'
+Assert ((Hash (Join-Path $unityManaged 'Assembly-CSharp.dll')) -eq $manifest.apiAssemblySha256) 'Wrong API archive installed'
+$result = Invoke-Installer $package '--install' $unityGame
+Assert ($result.Code -eq 0) ('Matching Unity6 backup-chain update failed: '+$result.Output)
+$result = Invoke-Installer $package '--uninstall' $unityGame
+Assert ($result.Code -eq 0 -and (Hash (Join-Path $unityManaged 'Assembly-CSharp.dll')) -eq $manifest.vanillaAssemblySha256) 'Unity6 uninstall did not restore baseline'
+Assert (!(Test-Path -LiteralPath (Join-Path $unityManaged 'MonoMod.Core.dll'))) 'Unity6 uninstall left new API dependency'
+Pass 'manifest-selected Unity6 API archive installs, updates and uninstalls through the EXE'
+
+$beforeBackups = @(Get-ChildItem -LiteralPath (Join-Path $game '.HollowConnectBackups') -Directory).Count
+$result = Invoke-Installer $package '--install' $game
+Assert ($result.Code -ne 0 -and $result.Output.Contains('backup targets another game/API version')) 'Cross-version original backup chain accepted'
+Assert ((Hash $pointer) -eq $pointerHash -and (Hash (Join-Path $managed 'Assembly-CSharp.dll')) -eq $manifest.vanillaAssemblySha256) 'Rejected cross-version update changed baseline'
+Assert (@(Get-ChildItem -LiteralPath (Join-Path $game '.HollowConnectBackups') -Directory).Count -eq $beforeBackups) 'Rejected cross-version update created backup'
+Pass 'a legacy uninstall chain is rejected before a Unity6 update changes any game files'
+$result = Invoke-Installer $package '--uninstall' $game
+Assert ($result.Code -ne 0 -and $result.Output.Contains('backup targets another game/API version')) 'Unity6 uninstaller accepted a legacy backup chain'
+Assert ((Hash $pointer) -eq $pointerHash -and (Hash (Join-Path $managed 'Assembly-CSharp.dll')) -eq $manifest.vanillaAssemblySha256 -and (Test-Path -LiteralPath (Join-Path $mod 'old-mod.txt'))) 'Rejected cross-version uninstall changed original files'
+Pass 'Unity6 uninstall also rejects a legacy backup before moving mods or restoring assemblies'
+
+$wrongGame = Join-Path $OutputRoot 'unsupported game'; New-Game $wrongGame
+$wrongAssembly = Join-Path $wrongGame 'hollow_knight_Data\Managed\Assembly-CSharp.dll'
+Write-Text $wrongAssembly 'another game version'
+$wrongHash = Hash $wrongAssembly
+$result = Invoke-Installer $package '--install' $wrongGame
+Assert ($result.Code -ne 0 -and $result.Output.Contains('1.5.12620')) 'Unsupported game rejection lacks target version'
+Assert ((Hash $wrongAssembly) -eq $wrongHash -and !(Test-Path -LiteralPath (Join-Path $wrongGame '.HollowConnectBackups'))) 'Unsupported game rejection modified files'
+Pass 'wrong game versions are rejected with the manifest target before backup or writes'
+
+$manifest.apiArchive = '../escape.zip'
+$manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+$badArchiveGame = Join-Path $OutputRoot 'bad archive fixture'; New-Game $badArchiveGame
+$result = Invoke-Installer $package '--install' $badArchiveGame
+Assert ($result.Code -ne 0 -and $result.Output.Contains('Invalid API archive filename')) 'API path traversal accepted'
+Assert (!(Test-Path (Join-Path $badArchiveGame '.HollowConnectBackups'))) 'Invalid archive path created backup'
+Pass 'manifest API archive paths cannot escape dependencies'
 Write-Output "RESULT $script:passed passed, 0 failed"
 Write-Output "Evidence: $OutputRoot"

@@ -11,6 +11,10 @@ namespace Hkmp.Game.Client.Entity;
 // Native HP thresholds, phase resets, invulnerability and scripted kills keep
 // their own values. Replicas still receive the one authoritative absolute HP.
 internal static class BossDamageScaling {
+#if HOLLOW_UNITY6
+    [ThreadStatic] private static HitInstance currentHit;
+    [ThreadStatic] private static bool inHit;
+#endif
     private static readonly Dictionary<int, Func<int, int>> Targets = new();
     private static readonly Dictionary<int, Action<int, GameObject>> Observers = new();
     internal static void Watch(HealthManager health, Func<int, int> scale, Action<int, GameObject> observe) {
@@ -23,13 +27,23 @@ internal static class BossDamageScaling {
     }
     internal static void Clear() { Targets.Clear(); Observers.Clear(); }
     internal static void Register() {
+#if HOLLOW_UNITY6
+        IL.HealthManager.TakeDamage += PatchHitScope;
+        IL.HealthManager.SubtractHealth += PatchHit;
+#else
         IL.HealthManager.TakeDamage += PatchHit;
+#endif
         IL.ExtraDamageable.ApplyExtraDamageToHealthManager += PatchExtra;
         On.DamageEffectTicker.Update += AttackOwnership.TickExtra;
         On.SendExtraDamage.OnEnter += AttackOwnership.SendExtra;
     }
     internal static void Unregister() {
+#if HOLLOW_UNITY6
+        IL.HealthManager.TakeDamage -= PatchHitScope;
+        IL.HealthManager.SubtractHealth -= PatchHit;
+#else
         IL.HealthManager.TakeDamage -= PatchHit;
+#endif
         IL.ExtraDamageable.ApplyExtraDamageToHealthManager -= PatchExtra;
         On.DamageEffectTicker.Update -= AttackOwnership.TickExtra;
         On.SendExtraDamage.OnEnter -= AttackOwnership.SendExtra;
@@ -52,13 +66,38 @@ internal static class BossDamageScaling {
     }
     private static void PatchHit(ILContext il) {
         var c = new ILCursor(il);
+#if HOLLOW_UNITY6
+        c.GotoNext(MoveType.Before, i => i.MatchLdarg(0), i => i.MatchLdfld<HealthManager>("hp"),
+            i => i.MatchLdarg(1), i => i.MatchSub());
+        c.Index += 3;
+        c.Emit(OpCodes.Ldarg_0);
+        c.EmitDelegate<Func<int, HealthManager, int>>((damage, health) =>
+            inHit ? AcceptedDamage(damage, health, currentHit) : damage);
+#else
         c.GotoNext(MoveType.Before, i => i.MatchLdarg(0), i => i.MatchLdfld<HealthManager>("hp"),
             i => i.MatchLdloc(out _), i => i.MatchSub());
         c.Index += 3;
         c.Emit(OpCodes.Ldarg_0);
         c.Emit(OpCodes.Ldarg_1);
         c.EmitDelegate<Func<int, HealthManager, HitInstance, int>>(AcceptedDamage);
+#endif
     }
+#if HOLLOW_UNITY6
+    private static void PatchHitScope(ILContext il) {
+        var cursor = new ILCursor(il);
+        cursor.GotoNext(MoveType.Before, instruction => instruction.MatchCallOrCallvirt<HealthManager>("SubtractHealth"));
+        cursor.Remove();
+        cursor.Emit(OpCodes.Ldarg_1);
+        cursor.EmitDelegate<Action<HealthManager, int, HitInstance>>(HitScope);
+    }
+
+    private static void HitScope(HealthManager health, int damage, HitInstance hit) {
+        var previous = currentHit; var wasInHit = inHit;
+        currentHit = hit; inHit = true;
+        try { health.SubtractHealth(damage); }
+        finally { currentHit = previous; inHit = wasInHit; }
+    }
+#endif
     private static void PatchExtra(ILContext il) {
         var c = new ILCursor(il);
         c.GotoNext(MoveType.Before, i => i.MatchLdarg(1), i => i.MatchCallvirt<HealthManager>("ApplyExtraDamage"));

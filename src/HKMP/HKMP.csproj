@@ -59,7 +59,7 @@
             <HintPath>$(References)\Mono.Cecil.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="Newtonsoft.Json">
             <HintPath>$(References)\Newtonsoft.Json.dll</HintPath>
             <Private>False</Private>
         </Reference>

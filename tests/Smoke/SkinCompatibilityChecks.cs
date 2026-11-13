@@ -15,7 +15,11 @@ public sealed partial class ProgressProbe {
             if (selected == role || selected == "both") throw new Exception("Custom Knight missing on skin owner");
             yield break;
         }
+#if HOLLOW_UNITY6
+        On.TeamCherry.Cinematics.EmbeddedCinematicVideoPlayer.ctor += (orig, player, config) => {
+#else
         On.XB1CinematicVideoPlayer.ctor += (orig, player, config) => {
+#endif
             orig(player, config);
             var source = Field<object>(player, "videoPlayer");
             Mark("VIDEO constructed source=" + source.GetType().GetProperty("source").GetValue(source) + " url=" + source.GetType().GetProperty("url").GetValue(source));

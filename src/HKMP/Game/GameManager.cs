@@ -1,4 +1,5 @@
-﻿using Hkmp.Game.Client;
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
+using Hkmp.Game.Client;
 using Hkmp.Game.Server;
 using Hkmp.Game.Settings;
 using Hkmp.Networking.Client;
@@ -35,7 +36,7 @@ internal class GameManager {
     public GameManager(ModSettings modSettings) {
         ThreadUtil.Instantiate();
 
-        FontManager.LoadFonts();
+        HkmpFontManager.LoadFonts();
         TextureManager.LoadTextures();
 
         var packetManager = new PacketManager();

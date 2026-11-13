@@ -56,8 +56,8 @@ internal class GamePatcher {
 
         On.VinePlatformCut.OnTriggerEnter2D += VinePlatformCutOnTriggerEnter2D;
 
-        var type = typeof(BridgeLever).GetNestedType("<OpenBridge>d__13", BindingFlags);
-        _bridgeLeverIlHook = new ILHook(type.GetMethod("MoveNext", BindingFlags), BridgeLeverOnOpenBridge);
+        _bridgeLeverIlHook = new ILHook(MonoMod.Utils.Extensions.GetStateMachineTarget(
+            typeof(BridgeLever).GetMethod("OpenBridge", BindingFlags | System.Reflection.BindingFlags.Public)), BridgeLeverOnOpenBridge);
         
         On.HutongGames.PlayMaker.Actions.CallMethodProper.DoMethodCall += CallMethodProperOnDoMethodCall;
         

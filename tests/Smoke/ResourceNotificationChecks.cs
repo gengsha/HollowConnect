@@ -1,3 +1,8 @@
+#if HOLLOW_UNITY6
+using NativeTextMeshPro = TMProOld.TextMeshPro;
+#else
+using NativeTextMeshPro = TMPro.TextMeshPro;
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +25,7 @@ public sealed partial class ProgressProbe {
         get {
             var notifications = Field<ResourceNotifications>(runtime, "resourceNotifications");
             var popup = Field<GameObject>(notifications, "active");
-            return Field<Dictionary<ResourceKind, int>>(notifications, "pending").Count == 0 &&
+            return Field<Dictionary<string, int>>(notifications, "pending").Count == 0 &&
                 (popup == null || !popup.activeSelf);
         }
     }
@@ -36,7 +41,7 @@ public sealed partial class ProgressProbe {
                 sprite.name == "Charm_Notch" ? ResourceKind.CharmNotch : throw new Exception("unexpected notification icon " + sprite.name);
             var key = kind == ResourceKind.MaskShard ? "INV_NAME_HEARTPIECE_1" : kind == ResourceKind.VesselFragment ?
                 "INV_NAME_SOULORBS_1" : kind == ResourceKind.PaleOre ? "INV_NAME_ORE" : "INV_NAME_NOTCH";
-            var text = popup.transform.Find("Text").GetComponent<TMPro.TextMeshPro>().text;
+            var text = popup.transform.Find("Text").GetComponent<NativeTextMeshPro>().text;
             var split = text.Split('×');
             var amount = split.Length == 1 ? 1 : int.Parse(split[1]);
             if (amount <= 0 || split[0].TrimEnd() != Language.Language.Get(key, "UI")) throw new Exception("incorrect localized notification text " + text);
@@ -63,7 +68,7 @@ public sealed partial class ProgressProbe {
         yield return new WaitForSeconds(.6f);
         if (popup == null || !popup.activeInHierarchy) yield break;
         var hud = GameCameras.instance.hudCamera;
-        var text = popup.transform.Find("Text").GetComponent<TMPro.TextMeshPro>();
+        var text = popup.transform.Find("Text").GetComponent<NativeTextMeshPro>();
         // Batch mode skips normal rendering callbacks; build the native text mesh before the explicit camera render.
         text.ForceMeshUpdate();
         Mark("RESOURCE NOTIFICATION FONT " + kind + " language=" + Language.Language.CurrentLanguage() + " font=" + text.font?.name +

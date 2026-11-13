@@ -1,3 +1,4 @@
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
 using Hkmp.Ui.Resources;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -38,7 +39,7 @@ internal class HiddenInputComponent : InputComponent {
         defaultValue,
         placeholderText,
         TextureManager.InputFieldBg,
-        FontManager.UIFontRegular,
+        HkmpFontManager.UIFontRegular,
         fontSize,
         characterValidation
     ) {

@@ -1,0 +1,64 @@
+{
+  "version": "0.2.8",
+  "gameProfile": "Unity6",
+  "action": "package-local",
+  "userRequest": "打个新版的0.2.8的包",
+  "createdAtUtc": "2026-11-11T10:57:11.0951874Z",
+  "validationSource": "docs/evidence/development-validation-unity6-20261111.json",
+  "validationSha256": "E347451EE8BFF53F40EB73E8F5685106387A683286C38C4038C4BA4432CF5B34",
+  "blockerLedgerSha256": "B1192E1CFF35E13BE288FAED237E3CDA961D4CAEC7EFE30DBF28C28938405112",
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified",
+    "colosseum-bilateral-permanent-freeze-unreproduced",
+    "shade-soul-downslam-multihit-unreproduced",
+    "unreliable-player-animation-attack-loss",
+    "colosseum-silver-authority-handoff-reward-unresolved",
+    "mawlek-shared-health-fragment-report-unreproduced"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "E94B9BEEE68BBAAEDEB7374160BE35A5C610E650713EC18B11F2F3809973E2B5"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "165B88979DB3DE80406AAF0118A45A9AF2BF42A79748AC84DF192EBD28947579"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "0A043F13E04BCB14654AC3317CAE4F6F398ADD02165D378AA4B714950C01A2CA"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "95E2498573E424DFFBB3FFA4FA5C7612BE6B0FB086F341BFE47860457B31C027"
+    }
+  ],
+  "additionalDocuments": [
+    "docs/UNITY6-0.2.8.md",
+    "docs/UNITY6-API-LICENSE.txt",
+    "docs/evidence/development-validation-unity6-20261111.json"
+  ]
+}

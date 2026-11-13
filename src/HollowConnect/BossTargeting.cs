@@ -56,6 +56,24 @@ public sealed partial class CoopRuntime {
         return current != null && bestId != currentId && bestDistance > Distance(current) * .75f * .75f ? currentId : bestId;
     }
 
+    private GameObject NearestEnemyTarget(GameObject enemy) {
+        if (enemy == null) return null;
+        var origin = enemy.transform.position;
+        GameObject nearest = null;
+        var distance = float.MaxValue;
+        void Consider(int id) {
+            // Reuse the existing scene, life and stale-presence checks.
+            var target = BossTargetObject(id);
+            if (target == null) return;
+            var next = ((Vector2)(target.transform.position - origin)).sqrMagnitude;
+            if (next >= distance) return;
+            nearest = target; distance = next;
+        }
+        Consider(LocalId);
+        foreach (var id in Peers.Keys) Consider(id);
+        return nearest;
+    }
+
     // AI reads use the actual remote avatar, including HKMP interpolation.
     // Never move the hidden local hero, camera, or the rescue anchor to aim.
     private GameObject LivingBossTarget() {

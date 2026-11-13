@@ -1,0 +1,305 @@
+{
+  "createdAtUtc": "2026-11-13T08:10:48.9844552Z",
+  "revision": "hit-evasion",
+  "profile": "Unity6",
+  "game": "Windows Hollow Knight 1.5.12620 (Steam public-beta)",
+  "unity": "6000.0.61f1",
+  "api": {
+    "url": "https://github.com/hk-modding/api/pull/164",
+    "commit": "468f579f25e63da2188f39fe5ece15c25d2854d7",
+    "merged": false,
+    "assemblySha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46",
+    "freshCacheBuild": ".analysis/unity6-migration-20261111/fresh-references-b.out"
+  },
+  "apiOnlyTitleBaseline": {
+    "state": "observed",
+    "sameNativeSetupHeroRefsException": true,
+    "modsRestored": true,
+    "source": ".analysis/unity6-migration-20261111/api-title-baseline/status.json",
+    "note": "The same native GameManager.SetupHeroRefs NullReferenceException occurs during startup with the pinned API and an empty Mods directory. This API/game baseline issue is retained, not suppressed or fixed by the migration. Accepted gameplay flows continued to completion."
+  },
+  "scope": "Shared-source independent native hit evasion per attacker; Legacy/Unity6 production and Smoke builds, 17 related core checks, four Unity6 dual-client specialties on frozen production binaries. The earlier 20-case matrix is historical and was not rerun on these hashes.",
+  "corePassed": 17,
+  "coreFailed": 0,
+  "legacyRuntimeTested": false,
+  "baselineValidationSource": "docs/evidence/development-validation-unity6-20261111.json",
+  "baselineValidationSha256": "E347451EE8BFF53F40EB73E8F5685106387A683286C38C4038C4BA4432CF5B34",
+  "production": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "EA5DD1E8CFC022604EFA54F0229413026B613D79E92C25BA35FC9B4A4D17FEB0"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "CF8B81955466527BDF3B70EA6195745637A44B2AD66D2B706B44E4F9F8C00F8E"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "0A043F13E04BCB14654AC3317CAE4F6F398ADD02165D378AA4B714950C01A2CA"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "12412E762D00A54DDF9E1978A3FDFC510ED3F57D1A3D987C925F90C4945814C8"
+    }
+  ],
+  "checks": [
+    {
+      "ended": "2026-11-13T08:03:02.7707337Z",
+      "productionHashes": true,
+      "probeSha256": "EFD040E78641AA99599FDB39D7B6A1561CE4CC614BD9D7879CCE9641491329FD",
+      "run": ".test-results/hit-evasion-u6-evasion-host-20261113-080231841",
+      "options": {
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host",
+        "HOLLOWCONNECT_HIT_EVASION_CHECK": "1"
+      },
+      "case": "evasion-host",
+      "gameDependencies": [
+        {
+          "role": "host",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        },
+        {
+          "role": "guest",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        }
+      ],
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "started": "2026-11-13T08:02:31.8475756Z",
+      "state": "passed"
+    },
+    {
+      "ended": "2026-11-13T08:03:34.5338466Z",
+      "productionHashes": true,
+      "probeSha256": "EFD040E78641AA99599FDB39D7B6A1561CE4CC614BD9D7879CCE9641491329FD",
+      "run": ".test-results/hit-evasion-u6-evasion-guest-20261113-080302802",
+      "options": {
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "guest",
+        "HOLLOWCONNECT_HIT_EVASION_CHECK": "1"
+      },
+      "case": "evasion-guest",
+      "gameDependencies": [
+        {
+          "role": "host",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        },
+        {
+          "role": "guest",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        }
+      ],
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "started": "2026-11-13T08:03:02.8030302Z",
+      "state": "passed"
+    },
+    {
+      "ended": "2026-11-13T08:04:23.0329749Z",
+      "productionHashes": true,
+      "probeSha256": "EFD040E78641AA99599FDB39D7B6A1561CE4CC614BD9D7879CCE9641491329FD",
+      "run": ".test-results/hit-evasion-u6-balance-20261113-080334580",
+      "options": {
+        "HOLLOWCONNECT_BOSS_BALANCE_CHECK": "1"
+      },
+      "case": "balance",
+      "gameDependencies": [
+        {
+          "role": "host",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        },
+        {
+          "role": "guest",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        }
+      ],
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "started": "2026-11-13T08:03:34.5807709Z",
+      "state": "passed"
+    },
+    {
+      "ended": "2026-11-13T08:09:50.3682481Z",
+      "productionHashes": true,
+      "probeSha256": "1CCBB8E49727C34E003380471110A47853DBE5673B663F876AE9B31AE6B4622B",
+      "run": ".test-results/hit-evasion-u6-nailarts-20261113-080757855",
+      "options": {
+        "HOLLOWCONNECT_NATIVE_NAIL_ARTS": "1",
+        "HOLLOWCONNECT_COLOSSEUM_TRIAL": "Gold",
+        "HOLLOWCONNECT_GOLD_AUDIT_ATTACK_ONLY": "1",
+        "HOLLOWCONNECT_NATIVE_ART_MULTICOLLIDER": "1",
+        "HOLLOWCONNECT_COLOSSEUM_FIRST": "host",
+        "HOLLOWCONNECT_COLOSSEUM_CASE": "network",
+        "HOLLOWCONNECT_NATIVE_ART_FULL": "1"
+      },
+      "case": "nailarts",
+      "gameDependencies": [
+        {
+          "role": "host",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        },
+        {
+          "role": "guest",
+          "file": "UnityPlayer.dll",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+        }
+      ],
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "started": "2026-11-13T08:07:57.8640626Z",
+      "state": "passed"
+    }
+  ],
+  "builds": [
+    ".analysis/independent-hit-evasion-20261113/legacy-core.log",
+    ".analysis/independent-hit-evasion-20261113/legacy-smoke.log",
+    ".analysis/independent-hit-evasion-20261113/unity6-smoke.log",
+    ".analysis/independent-hit-evasion-20261113/unity6-smoke-fixture-b.log"
+  ],
+  "fixtureRepair": {
+    "run": ".test-results/hit-evasion-u6-nailarts-20261113-080423057",
+    "fix": "Omit only that optional diagnostic under HOLLOW_UNITY6; retain native damage, impact, blood, input, animation and transport observers/assertions.",
+    "reason": "Production hashes are identical; those fixtures never initialize ColosseumNetworkMetrics.",
+    "failure": "Unity6 RuntimeDetour rejects the optional generic packet-backlog diagnostic hook before entering a game scene.",
+    "reusedCases": [
+      "evasion-host",
+      "evasion-guest",
+      "balance"
+    ],
+    "classification": "fixture"
+  },
+  "analysis": ".analysis/independent-hit-evasion-20261113",
+  "limitations": [
+    "Legacy compiled and core checked; isolated runtime copies are Unity6 only.",
+    "Not a full current-hash 12-case room matrix or complete boss certification.",
+    "Optional generic packet-backlog dump is unavailable on the Unity6 test fixture; no network performance certification is claimed.",
+    "Personal game and save directories were not modified by this fix.",
+    "Unresolved 0.2.8 findings and the pinned API native startup limitation remain."
+  ]
+}

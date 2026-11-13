@@ -105,11 +105,19 @@ public sealed partial class CoopRuntime {
         api.ClientManager.Disconnect(); Notice(reason); return false;
     }
     private void LinkedSequence(On.BossSequenceController.orig_SetupNewSequence orig, BossSequence sequence,
-        BossSequenceController.ChallengeBindings bindings, string playerData) {
+        BossSequenceController.ChallengeBindings bindings, string playerData
+#if HOLLOW_UNITY6
+        , int overrideBossIndex
+#endif
+    ) {
         if ((bindings & BossSequenceController.ChallengeBindings.Shell) != 0) {
             Notice("共享血量：不能开启生命绑定"); return;
         }
+#if HOLLOW_UNITY6
+        orig(sequence, bindings, playerData, overrideBossIndex);
+#else
         orig(sequence, bindings, playerData);
+#endif
     }
 
     private void LinkedMaskUiEnter(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, Fsm fsm, FsmState state) {

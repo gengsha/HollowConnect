@@ -10,9 +10,12 @@ $manifest = Get-Content -LiteralPath (Join-Path $package 'manifest.json') -Raw |
 $taskDisplayVersion=if($manifest.displayVersion){$manifest.displayVersion}else{$manifest.version}
 $assemblyHash = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $managed 'Assembly-CSharp.dll')).Hash
 if ($assemblyHash -ne $manifest.vanillaAssemblySha256 -and $assemblyHash -ne $manifest.apiAssemblySha256) {
-    throw "Unsupported game/API assembly ($assemblyHash). This package targets the documented 1.5.78 Windows build."
+    $taskGameVersion=if($manifest.gameVersion){$manifest.gameVersion}else{'1.5.78 Windows'}
+    throw "Unsupported game/API assembly ($assemblyHash). This package targets $taskGameVersion."
 }
-$zip = Join-Path $package 'dependencies\moddingapi.v77.windows.zip'
+$taskApiArchive=if($manifest.apiArchive){[string]$manifest.apiArchive}else{'moddingapi.v77.windows.zip'}
+if ($taskApiArchive -notmatch '^[a-zA-Z0-9][a-zA-Z0-9.-]*\.zip$') { throw 'Invalid API archive filename.' }
+$zip = Join-Path $package ('dependencies\'+$taskApiArchive)
 if ((Get-FileHash -Algorithm SHA256 -LiteralPath $zip).Hash -ne $manifest.apiZipSha256) { throw 'API archive checksum mismatch.' }
 foreach ($entry in $manifest.files) {
     if ($entry.name -notmatch '^[\w.-]+$') { throw 'Invalid payload filename.' }
@@ -28,6 +31,9 @@ if (Test-Path -LiteralPath $pointerPath) {
     if (!$originalBackup.StartsWith($backupRoot + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'The backup pointer is outside this game directory.' }
     $originalRecord = Get-Content -LiteralPath (Join-Path $originalBackup 'install-record.json') -Raw | ConvertFrom-Json
     if ($originalRecord.game -ine $game) { throw 'The original backup belongs to another game directory.' }
+    if ($manifest.gameProfile -eq 'Unity6' -and @($originalRecord.files | Where-Object {
+        $_.name -eq 'Assembly-CSharp.dll' -and $_.installedSha256 -eq $manifest.apiAssemblySha256
+    }).Count -ne 1) { throw 'The original backup targets another game/API version. Preserve and archive the previous backup chain before installing this game version.' }
 }
 $backup = Join-Path $game ('.HollowConnectBackups\' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff'))
 New-Item -ItemType Directory -Path $backup | Out-Null

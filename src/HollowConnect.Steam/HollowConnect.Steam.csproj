@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect.Steam</AssemblyName><Version>0.2.8</Version></PropertyGroup>
+  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect.Steam</AssemblyName><Version>0.2.9</Version></PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../HKMP/HKMP.csproj" />
     <InternalsVisibleTo Include="HollowConnect.Tests" />
     <InternalsVisibleTo Include="HollowConnect.Smoke" />
-    <Reference Include="Assembly-CSharp"><HintPath>../../vendor/references/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Assembly-CSharp-firstpass"><HintPath>../../vendor/references/Assembly-CSharp-firstpass.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine"><HintPath>../../vendor/references/UnityEngine.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.CoreModule"><HintPath>../../vendor/references/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.IMGUIModule"><HintPath>../../vendor/references/UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>../../vendor/references/UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.TextRenderingModule"><HintPath>../../vendor/references/UnityEngine.TextRenderingModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.UI"><HintPath>../../vendor/references/UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.UIModule"><HintPath>../../vendor/references/UnityEngine.UIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(HollowReferences)/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp-firstpass"><HintPath>$(HollowReferences)/Assembly-CSharp-firstpass.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(HollowReferences)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(HollowReferences)/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(HollowReferences)/UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>$(HollowReferences)/UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.TextRenderingModule"><HintPath>$(HollowReferences)/UnityEngine.TextRenderingModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(HollowReferences)/UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UIModule"><HintPath>$(HollowReferences)/UnityEngine.UIModule.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
 </Project>

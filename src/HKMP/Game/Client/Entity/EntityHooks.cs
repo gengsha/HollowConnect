@@ -17,6 +17,7 @@ internal static class EntityHooks {
         registered = true;
         LocalBattleCompletion.Register();
         BossDamageScaling.Register();
+        SharedEnemyTargeting.Register();
         On.tk2dSpriteAnimator.Play_tk2dSpriteAnimationClip_float_float += Animate;
         On.ObjectPool.Recycle_GameObject += Recycle;
         On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += Activate;
@@ -33,6 +34,7 @@ internal static class EntityHooks {
         LocalBattleCompletion.Unregister();
         BossGateCompletion.Clear();
         BossDamageScaling.Unregister();
+        SharedEnemyTargeting.Unregister();
         On.tk2dSpriteAnimator.Play_tk2dSpriteAnimationClip_float_float -= Animate;
         On.ObjectPool.Recycle_GameObject -= Recycle;
         On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject -= Activate;
@@ -42,6 +44,7 @@ internal static class EntityHooks {
         On.HutongGames.PlayMaker.Fsm.EnterState -= EnterState;
         On.HutongGames.PlayMaker.Fsm.BroadcastEvent_FsmEvent_bool -= Broadcast;
         On.Recoil.RecoilByDirection -= Recoil;
+        IndependentHitEvasion.Clear();
         Animators.Clear(); Recyclers.Clear(); Activators.Clear(); Deaths.Clear(); Extras.Clear();
     }
     private static void Put<T>(Dictionary<int, T> table, Object obj, T handler) {

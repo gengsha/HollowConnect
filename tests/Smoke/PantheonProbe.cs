@@ -675,6 +675,7 @@ public sealed partial class PantheonProbe : MonoBehaviour {
         };
         CoopMod.Settings.ShareProgress=false;PlayerData.instance.SetString("respawnScene","Town");PlayerData.instance.SetString("respawnMarkerName","RestBench");PlayerData.instance.SetInt("respawnType",1);
         if (DamageRankingCase) { CoopMod.Settings.BossDamageRanking = host ? DamageRankingOn : !DamageRankingOn; CoopMod.Settings.BossHealthScaling = false; }
+        if (HitEvasionCheck) { CoopMod.Settings.BossHealthScaling = true; CoopMod.Settings.BossExtraHealthPerPlayer = .6f; }
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_ENDING_RETURN"))) CoopMod.Settings.AllowTeleport = true;
         GameManager.instance.profileID=99;GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(()=>In("Town"),"unsaved character");SafeHero();
@@ -704,6 +705,7 @@ public sealed partial class PantheonProbe : MonoBehaviour {
             yield return EndingReturnChecks(); yield break;
         }
         if (DamageRankingCase) { yield return DamageRankingChecks(); yield break; }
+        if (HitEvasionCheck) { yield return IndependentHitEvasionChecks(); yield break; }
         if(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SAME_ROOM_CHECK")=="1") {
             yield return Until(()=>manager.IsSceneHostDetermined,"connect in already loaded room initializes authority",8);
             yield return Until(()=>Field<Dictionary<ushort,Hkmp.Game.Client.ClientPlayerData>>(engine.ClientManager,"_playerData").Values.Any(p=>p.IsInLocalScene&&p.PlayerObject!=null&&p.PlayerObject.activeInHierarchy),"connect in already loaded room creates teammate",8);

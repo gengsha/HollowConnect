@@ -4,6 +4,12 @@
 
 | 文件 | 用途 |
 |---|---|
+| [release-authorization-0.2.9.json](release-authorization-0.2.9.json) | 0.2.9 双版本本地打包请求；Legacy 最终哈希与完整矩阵省略范围 |
+| [package-request-0.2.9-unity6.json](package-request-0.2.9-unity6.json) | Unity6 本地包、固定 API 与最终哈希约束 |
+| [development-validation-0.2.9.json](development-validation-0.2.9.json) | Legacy 三组最终哈希专项与 17 项核心检查 |
+| [development-validation-0.2.9-unity6.json](development-validation-0.2.9-unity6.json) | Unity6 三组专项、游戏依赖与底座限制 |
+| [runtime-room-0.2.9.json](runtime-room-0.2.9.json) | 本版交付范围，未重跑完整 12 项矩阵 |
+| [runtime-blockers-0.2.9.json](runtime-blockers-0.2.9.json) | 全部继承发现；水晶感知修复不关闭历史布局问题 |
 | [release-authorization-0.2.8.json](release-authorization-0.2.8.json) | 0.2.8 正式发布请求与交付哈希约束 |
 | [runtime-room-0.2.8.json](runtime-room-0.2.8.json) | 当前版本的交付哈希、升版未重跑游戏标记及范围 |
 | [development-validation-0.2.8.json](development-validation-0.2.8.json) | 显示同步与原生菜单两阶段的原始哈希和验证结果 |

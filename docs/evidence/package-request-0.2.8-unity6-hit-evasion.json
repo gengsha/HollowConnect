@@ -1,0 +1,67 @@
+{
+  "version": "0.2.8",
+  "gameProfile": "Unity6",
+  "revision": "hit-evasion",
+  "action": "package-local",
+  "userRequest": "打个新版的0.2.8的包；按最小改动修复多人合作中敌人受击无敌帧应按攻击玩家独立计算的问题。",
+  "createdAtUtc": "2026-11-13T08:10:49.0303668Z",
+  "validationSource": "docs/evidence/development-validation-hit-evasion-20261113.json",
+  "validationSha256": "CEFDEB93CBAA7633D618A8C0D28B122CEC03D8D06EC11EEFFB57B717B940BE5F",
+  "blockerLedgerSha256": "B1192E1CFF35E13BE288FAED237E3CDA961D4CAEC7EFE30DBF28C28938405112",
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified",
+    "colosseum-bilateral-permanent-freeze-unreproduced",
+    "shade-soul-downslam-multihit-unreproduced",
+    "unreliable-player-animation-attack-loss",
+    "colosseum-silver-authority-handoff-reward-unresolved",
+    "mawlek-shared-health-fragment-report-unreproduced"
+  ],
+  "binaries": [
+    {
+      "name": "HKMP.dll",
+      "sha256": "EA5DD1E8CFC022604EFA54F0229413026B613D79E92C25BA35FC9B4A4D17FEB0"
+    },
+    {
+      "name": "HollowConnect.dll",
+      "sha256": "CF8B81955466527BDF3B70EA6195745637A44B2AD66D2B706B44E4F9F8C00F8E"
+    },
+    {
+      "name": "HollowConnect.Core.dll",
+      "sha256": "0A043F13E04BCB14654AC3317CAE4F6F398ADD02165D378AA4B714950C01A2CA"
+    },
+    {
+      "name": "HollowConnect.Steam.dll",
+      "sha256": "12412E762D00A54DDF9E1978A3FDFC510ED3F57D1A3D987C925F90C4945814C8"
+    }
+  ],
+  "additionalDocuments": [
+    "docs/HIT-EVASION-0.2.8.md",
+    "docs/UNITY6-0.2.8.md",
+    "docs/UNITY6-API-LICENSE.txt",
+    "docs/evidence/development-validation-unity6-20261111.json",
+    "docs/evidence/development-validation-hit-evasion-20261113.json"
+  ]
+}

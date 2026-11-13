@@ -45,6 +45,18 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        Test("enemy hit evasion is independent per attacking player", () => {
+            var window = new IndependentHitWindow();
+            Near(window.Remaining(1, 10), 0);
+            window.Commit(1, 10, .2f);
+            Near(window.Remaining(1, 10.1f), .1f);
+            Near(window.Remaining(2, 10.1f), 0);
+            window.Commit(2, 10.1f, .15f);
+            Near(window.Remaining(1, 10.21f), 0);
+            Near(window.Remaining(2, 10.21f), .04f);
+            window.Commit(2, 10.21f, 0);
+            Near(window.Remaining(2, 10.21f), 0);
+        });
         PresentationTests.Register(Test);
         SteamBridgeTests.Register(Test);
         ObservationTests.Register(Test);

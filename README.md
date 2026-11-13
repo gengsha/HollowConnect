@@ -4,9 +4,9 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.2.8** · 支持 Windows 10 / 11 · 适配游戏版本 **1.5.78.11833**
+**当前版本：0.2.9** · 支持 Windows 10 / 11 · 分别提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
 
-0.2.8 加入 Steam 好友联机预览与独立的原生联机菜单，修复竞技场弱网重发堆积、部分剑技重复命中特效，并补齐地刺和 Boss 动作的可恢复显示同步。Steam 与原有 IP 连接共用 HKMP 游戏逻辑。大黄蜂重连掷针问题仍保留，详见 [0.2.8 更新说明](docs/UPDATE-0.2.8.md)。
+0.2.9 修复共享进度下水晶山峰部分敌人只响应先入图玩家、远端玩家靠近时飞虫不启动和激光不发射的问题，并包含按攻击玩家独立计算的敌人受击无敌帧修复。Steam 与 IP 连接共用游戏逻辑。两版使用同一套玩法源码，安装时选择匹配游戏版本的完整包，详见 [0.2.9 更新说明](docs/UPDATE-0.2.9.md)。
 
 ## 可以一起做什么
 
@@ -21,7 +21,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-下载 [0.2.8 Windows 完整安装包](https://github.com/gengsha/HollowConnect/releases/download/v0.2.8/HollowConnect-0.2.8-windows.zip)，或前往 [GitHub Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.2.8)。GitHub 的 “Code → Download ZIP” 提供的是源码。
+下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.2.9/HollowConnect-0.2.9-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.2.9/HollowConnect-0.2.9-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.2.9 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.2.9)。GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
@@ -93,7 +93,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.2.8.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.2.9.md)。
 
 ## 开发与许可
 

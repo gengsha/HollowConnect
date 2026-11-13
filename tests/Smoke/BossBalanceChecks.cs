@@ -8,7 +8,11 @@ using Hkmp.Util;
 using HollowConnect;
 using HollowConnect.Core;
 using Modding;
+#if HOLLOW_UNITY6
+using TMProOld;
+#else
 using TMPro;
+#endif
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -62,10 +66,12 @@ public sealed partial class BossProbe {
         typeof(Hkmp.Menu.ModMenu).GetMethod("ModifySkinHorizontalOption", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(menu, new object[] { true });
         // Use real pointer handling on the actual constructed selector; no
         // frame/click wait, so this check does not send a skin-change packet.
-        option.SetOptionTo(2);
         var menuScreen = Field<MenuScreen>(menu, "_clientSettingsMenu");
         menuScreen.gameObject.SetActive(true);
         menuScreen.transform.localScale = Vector3.one;
+        // OnEnable refreshes the native selector from game settings.
+        option.SetOptionTo(2);
+        Check(option.selectedOptionIndex == 2, "skin pointer fixture starts at option 2");
         var rect = (RectTransform)option.transform;
         var canvas = option.GetComponentInParent<Canvas>();
         var camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;

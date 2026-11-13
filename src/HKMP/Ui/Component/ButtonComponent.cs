@@ -1,4 +1,5 @@
-﻿using System;
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
+using System;
 using Hkmp.Ui.Resources;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -64,7 +65,7 @@ internal class ButtonComponent : Component, IButtonComponent {
         new Vector2(DefaultWidth, DefaultHeight),
         text,
         TextureManager.ButtonBg,
-        FontManager.UIFontRegular,
+        HkmpFontManager.UIFontRegular,
         UiManager.NormalFontSize) {
     }
 

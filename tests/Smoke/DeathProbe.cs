@@ -105,7 +105,11 @@ public sealed class DeathProbe : MonoBehaviour {
         Application.logMessageReceived += (message, trace, type) => {
             if ((type == LogType.Exception || type == LogType.Error) && !message.StartsWith("Couldn't find a Hero")) Log("UNITY " + message + " " + trace);
         };
+#if HOLLOW_UNITY6
+        On.HeroAudioController.PlaySound += (orig, self, sound, vibration) => { if ((int)sound == 8) sounds++; orig(self, sound, vibration); };
+#else
         On.HeroAudioController.PlaySound += (orig, self, sound) => { if ((int)sound == 8) sounds++; orig(self, sound); };
+#endif
         yield return Until(() => GameManager.instance != null && Object.FindObjectOfType<CoopRuntime>() != null &&
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Menu_Title", "menu ready");
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");

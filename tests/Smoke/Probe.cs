@@ -29,7 +29,12 @@ public sealed class ProbeMod : Mod {
         FsmSchemaTrace.Install();
         On.GameManager.SaveGame += (orig, gm) => { };
         On.GameManager.SaveGame_Action1 += (orig, gm, callback) => callback?.Invoke(true);
-        On.GameManager.SaveGame_int_Action1 += (orig, gm, slot, callback) => callback?.Invoke(true);
+        On.GameManager.SaveGame_int_Action1 += (orig, gm, slot, callback) => {
+#if HOLLOW_UNITY6
+            if (Unity6SaveFormat.Checking) { orig(gm, slot, callback); return; }
+#endif
+            callback?.Invoke(true);
+        };
         // Unity batch mode does not dispatch render-end waits. Preserve the
         // respawn routine while yielding the next simulation frame instead.
         On.HeroController.Respawn += (orig, hero) => SimulationFrames(orig(hero));
@@ -37,6 +42,7 @@ public sealed class ProbeMod : Mod {
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-reentry")
             On.HeroController.EnterScene += (orig, hero, gate, delay) => SimulationFrames(orig(hero, gate, delay));
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_TRANSITION_CONTACT") == "1" ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_CRYSTAL_RANGE")) ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PRESENTATION_CHECK")) ||
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_GATE_CHECK")) ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_MAP_EXIT_CHECK") == "1" ||

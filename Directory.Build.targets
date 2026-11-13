@@ -1,0 +1,31 @@
+<Project>
+  <PropertyGroup>
+    <HollowGameAssembly Condition="'$(TargetFramework)' == 'net472' and '$(MSBuildProjectName)' != 'HollowConnect.Installer'">true</HollowGameAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(HollowGameAssembly)' == 'true' and '$(HollowGameVersion)' == 'Unity6'">
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <FrameworkPathOverride>$(HollowReferences)</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(HollowGameAssembly)' == 'true' and '$(HollowGameVersion)' == 'Unity6'">
+    <Reference Include="$(HollowReferences)/mscorlib.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/System.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/System.Core.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/com.rlabrecque.steamworks.net.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/TeamCherry.*.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/MMHOOK_TeamCherry.*.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/Unity.TextMeshPro.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/MonoMod.Core.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/MonoMod.Backports.dll" Private="false" />
+    <Reference Include="$(HollowReferences)/MonoMod.ILHelpers.dll" Private="false" />
+  </ItemGroup>
+  <!-- Use Unity's netstandard facade while retaining the mod's net472 contract. -->
+  <Target Name="HollowUnity6CoreLibrary" BeforeTargets="CoreCompile" DependsOnTargets="ResolveReferences"
+          Condition="'$(HollowGameAssembly)' == 'true' and '$(HollowGameVersion)' == 'Unity6'">
+    <ItemGroup>
+      <ReferencePath Remove="@(ReferencePath)" Condition="'%(Filename)' == 'netstandard'" />
+      <ReferencePath Include="$(HollowReferences)/netstandard.dll" />
+      <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" Condition="'%(Filename)' == 'netstandard'" />
+      <ReferencePathWithRefAssemblies Include="$(HollowReferences)/netstandard.dll" />
+    </ItemGroup>
+  </Target>
+</Project>

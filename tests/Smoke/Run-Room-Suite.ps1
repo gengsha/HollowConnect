@@ -1,7 +1,9 @@
 param([switch]$ReuseNativeHost,[switch]$NoBuild,[switch]$SteamModule,[string]$StartAt,[string[]]$Only,
+    [ValidateSet('Legacy','Unity6')][string]$GameVersion='Legacy',[string]$StateDirectory,
     [ValidatePattern('^[a-z0-9][a-z0-9-]{0,50}$')][string]$RunPrefix)
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$taskOutput=if($GameVersion -eq 'Unity6'){'bin/Unity6/Release/net472'}else{'bin/Release/net472'}
 $taskCases=@(
     @{Name='final-native-host-013';Mode='pantheon';Existing=[bool]$ReuseNativeHost;Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='host';HOLLOWCONNECT_CAMERA_RING='1'}},
     @{Name='final-native-guest-013';Mode='pantheon';Env=@{HOLLOWCONNECT_NATIVE_ENTRANCE='1';HOLLOWCONNECT_PANTHEON_AUTHORITY='guest';HOLLOWCONNECT_CAMERA_RING='1'}},
@@ -23,21 +25,29 @@ if($Only){
 if($StartAt -and !($taskCases | Where-Object {$_.Name -eq $StartAt})){throw 'Unknown suite starting case'}
 $taskStarted=!$StartAt
 $taskSmokePrepared=[bool]$NoBuild
+if($StateDirectory){
+    New-Item -ItemType Directory -Path $StateDirectory -Force | Out-Null
+    $taskCases | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $StateDirectory 'selection.json')
+}
 foreach($taskCase in $taskCases){
     if($taskCase.Name -eq $StartAt){$taskStarted=$true}
     if(!$taskStarted){continue}
     $taskRunName=if($RunPrefix){$RunPrefix+'-'+$taskCase.Name}else{$taskCase.Name}
+    $taskStatus=[ordered]@{case=$taskCase.Name;run=$taskRunName;gameVersion=$GameVersion;runnerPID=$PID;started=[DateTime]::UtcNow.ToString('o');status='running';error=$null}
+    $taskStatusFile=if($StateDirectory){Join-Path $StateDirectory ($taskRunName+'.json')}else{$null}
+    if($taskStatusFile){$taskStatus | ConvertTo-Json | Set-Content -LiteralPath $taskStatusFile}
+    try {
     if(!$taskCase.Existing){
         if(!$taskSmokePrepared){
-            & (Join-Path $taskRoot 'scripts\Build.ps1') -Target Smoke
+            & (Join-Path $taskRoot 'scripts\Build.ps1') -Target Smoke -GameVersion $GameVersion
             $taskSmokePrepared=$true
         }
         foreach($taskEnv in @(Get-ChildItem Env: | Where-Object {$_.Name -like 'HOLLOWCONNECT_*'})){
             [Environment]::SetEnvironmentVariable($taskEnv.Name,$null,'Process')
         }
         foreach($taskKey in $taskCase.Env.Keys){[Environment]::SetEnvironmentVariable($taskKey,$taskCase.Env[$taskKey],'Process')}
-        & (Join-Path $PSScriptRoot 'Run-Two.ps1') -RunName $taskRunName -Mode $taskCase.Mode -NoBuild -SteamModule:$SteamModule *> (Join-Path $taskRoot ('.test-results/'+$taskRunName+'.launch.log'))
-        (Get-FileHash -LiteralPath (Join-Path $PSScriptRoot 'bin/Release/net472/HollowConnect.Smoke.dll')).Hash |
+        & (Join-Path $PSScriptRoot 'Run-Two.ps1') -RunName $taskRunName -Mode $taskCase.Mode -NoBuild -GameVersion $GameVersion -SteamModule:$SteamModule *> (Join-Path $taskRoot ('.test-results/'+$taskRunName+'.launch.log'))
+        (Get-FileHash -LiteralPath (Join-Path $PSScriptRoot "$taskOutput/HollowConnect.Smoke.dll")).Hash |
             Set-Content -LiteralPath (Join-Path $taskRoot ('.test-results/'+$taskRunName+'/probe-sha256.txt'))
     }
     $taskDir=Join-Path $taskRoot ('.test-results/'+$taskRunName)
@@ -56,10 +66,24 @@ foreach($taskCase in $taskCases){
         if(!(Select-String -LiteralPath $taskLog -SimpleMatch 'FINAL PASS' -Quiet)){throw ('Missing final pass '+$taskCase.Name+' '+$taskRole)}
     }
     foreach($taskBinary in (Get-Content -LiteralPath (Join-Path $taskDir 'binaries.json') -Raw | ConvertFrom-Json)){
-        $taskProduction=Join-Path $taskRoot ('src/HollowConnect/bin/Release/net472/'+$taskBinary.name)
-        if($taskBinary.name -eq 'HollowConnect.Steam.dll'){$taskProduction=Join-Path $taskRoot 'src/HollowConnect.Steam/bin/Release/net472/HollowConnect.Steam.dll'}
+        $taskProduction=Join-Path $taskRoot ('src/HollowConnect/'+$taskOutput+'/'+$taskBinary.name)
+        if($taskBinary.name -eq 'HollowConnect.Steam.dll'){$taskProduction=Join-Path $taskRoot "src/HollowConnect.Steam/$taskOutput/HollowConnect.Steam.dll"}
         if((Get-FileHash -LiteralPath $taskProduction -Algorithm SHA256).Hash -ne $taskBinary.sha256){throw ('Wrong runtime DLL '+$taskCase.Name+' '+$taskBinary.name)}
     }
     Write-Output ('PASS BOTH '+$taskCase.Name+'; final production hashes verified')
+    $taskStatus.status='passed'
+    } catch {
+        $taskStatus.status='failed';$taskStatus.error=$_.Exception.Message
+        throw
+    } finally {
+        $taskStatus['ended']=[DateTime]::UtcNow.ToString('o')
+        if($taskStatusFile){$taskStatus | ConvertTo-Json | Set-Content -LiteralPath $taskStatusFile}
+        foreach($taskRole in 'host','guest'){
+            $taskExecutable=[IO.Path]::GetFullPath((Join-Path $taskRoot ".test-results/game-$taskRole/hollow_knight.exe"))
+            foreach($taskProcess in @(Get-Process hollow_knight -ErrorAction SilentlyContinue | Where-Object Path -eq $taskExecutable)){
+                Stop-Process -Id $taskProcess.Id -Force -ErrorAction SilentlyContinue
+            }
+        }
+    }
 }
 Write-Output 'FINAL PASS selected final-binary dual-client runs; full evidence requires all 12 records'

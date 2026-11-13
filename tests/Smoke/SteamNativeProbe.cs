@@ -46,6 +46,11 @@ public sealed class SteamNativeProbe : MonoBehaviour {
             Mark("FINAL PASS"); File.WriteAllText(Path.Combine(root, role + ".done"), "pass"); yield break;
         }
         yield return NativeSocketPair();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_STEAM_SOCKET_ONLY") == "1") {
+            File.WriteAllText(Path.Combine(root, "host.native-complete"), "pass");
+            Mark("FINAL PASS game-owned Steam subsystem and native loopback sockets");
+            File.WriteAllText(Path.Combine(root, role + ".done"), "pass"); yield break;
+        }
         typeof(SteamRoomRuntime).GetField("username", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(runtime, "SteamFixture");
         var nativeMenu = Environment.GetEnvironmentVariable("HOLLOWCONNECT_STEAM_NATIVE_MENU") == "1";
         if (nativeMenu) {
@@ -133,12 +138,16 @@ public sealed class SteamNativeProbe : MonoBehaviour {
         var identity = new SteamNetworkingIdentity(); identity.SetSteamID64(SteamUser.GetSteamID().m_SteamID);
         var identity2 = identity;
         Check(SteamNetworkingSockets.CreateSocketPair(out var first, out var second, true, ref identity, ref identity2),
-            "old Steam SDK creates native network-loopback socket pair");
+            "game Steam SDK creates native network-loopback socket pair");
         var a = new SteamNativeLink(first, SteamUser.GetSteamID().m_SteamID);
         var b = new SteamNativeLink(second, SteamUser.GetSteamID().m_SteamID);
         try {
             yield return Until(() => a.State == SteamBridgeLinkState.Connected && b.State == SteamBridgeLinkState.Connected,
                 "native pair is connected");
+            var pingArguments = new object[] { first, 0 };
+            var pingMethod = typeof(SteamRoomRuntime).GetMethod("TryGetConnectionPing", BindingFlags.Static | BindingFlags.NonPublic);
+            var initialStatus = (bool)pingMethod.Invoke(null, pingArguments);
+            Mark("Native initial connection status=" + initialStatus + "; ping=" + pingArguments[1]);
             for (var i = 0; i < 12; i++) {
                 var payload = Enumerable.Range(0, i % 2 == 0 ? 64 : 1400).Select(n => (byte)(n + i)).ToArray();
                 Check(a.Send(payload, payload.Length, i % 2 == 0), "native adapter sends packet " + i);
@@ -149,6 +158,10 @@ public sealed class SteamNativeProbe : MonoBehaviour {
                 yield return Until(() => a.TryReceive(out received), "native adapter receives reverse packet " + i, 5);
                 Check(received.SequenceEqual(payload), "native reverse message preserved " + i);
             }
+            // A just-created pair may not have a latency sample yet.
+            yield return Until(() => (bool)pingMethod.Invoke(null, pingArguments) && (int)pingArguments[1] >= 0,
+                "game Steam SDK provides connection ping after traffic", 10);
+            Mark("Native measured ping=" + pingArguments[1]);
         } finally { a.Close(1000, "Native fixture finished"); b.Close(1000, "Native fixture finished"); }
         Check(a.State == SteamBridgeLinkState.Closed && b.State == SteamBridgeLinkState.Closed, "native adapter closes idempotently");
     }

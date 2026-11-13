@@ -68,7 +68,11 @@ public sealed partial class JoinProbe : MonoBehaviour {
         StartCoroutine(SkipOpening());
         yield return Until(() => InTutorial, prefix + " new game in Tutorial");
         if (Has(role + ".failed")) yield break;
-        Freeze(); Mark(prefix + " positioned " + Scope); Flag(role + "." + prefix + ".room");
+        Freeze();
+#if HOLLOW_UNITY6
+        if (prefix == "initial") Unity6SaveFormat.Check(root, role, Mark);
+#endif
+        Mark(prefix + " positioned " + Scope); Flag(role + "." + prefix + ".room");
     }
     private IEnumerator SkipOpening() {
         while (Scenes.GetActiveScene().name == "Opening_Sequence") {

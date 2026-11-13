@@ -6,7 +6,11 @@ using Hkmp.Util;
 using HollowConnect;
 using Modding;
 using Newtonsoft.Json;
+#if HOLLOW_UNITY6
+using TMProOld;
+#else
 using TMPro;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 

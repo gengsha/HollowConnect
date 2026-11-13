@@ -7,6 +7,17 @@ if (!$BackupPath) { $BackupPath = (Get-Content -LiteralPath (Join-Path $game '.H
 $record = Get-Content -LiteralPath (Join-Path $BackupPath 'install-record.json') -Raw | ConvertFrom-Json
 if ($record.game -ine $game) { throw 'Backup belongs to another game directory.' }
 $managed = Join-Path $game 'hollow_knight_Data\Managed'
+$taskManifestPath=Join-Path $PSScriptRoot 'manifest.json'
+$manifest = if(Test-Path -LiteralPath $taskManifestPath){Get-Content -LiteralPath $taskManifestPath -Raw | ConvertFrom-Json}else{$null}
+if ($manifest.gameProfile -eq 'Unity6') {
+    if (@($record.files | Where-Object {
+        $_.name -eq 'Assembly-CSharp.dll' -and $_.installedSha256 -eq $manifest.apiAssemblySha256
+    }).Count -ne 1) { throw 'The backup targets another game/API version; this package cannot restore it.' }
+    $taskAssemblyHash=(Get-FileHash -LiteralPath (Join-Path $managed 'Assembly-CSharp.dll')).Hash
+    if ($taskAssemblyHash -ne $manifest.apiAssemblySha256 -and $taskAssemblyHash -ne $manifest.vanillaAssemblySha256) {
+        throw 'The game has changed version since this backup; do not restore old assemblies into the updated game.'
+    }
+}
 $modDir = Join-Path $managed 'Mods\HKMP'
 if (Test-Path -LiteralPath $modDir) {
     $resolved = (Resolve-Path -LiteralPath $modDir).Path

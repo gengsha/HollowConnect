@@ -5,14 +5,14 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp"><HintPath>../../vendor/references/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine"><HintPath>../../vendor/references/UnityEngine.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.CoreModule"><HintPath>../../vendor/references/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.IMGUIModule"><HintPath>../../vendor/references/UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>../../vendor/references/UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="MonoMod.RuntimeDetour"><HintPath>../../vendor/references/MonoMod.RuntimeDetour.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="MonoMod.Utils"><HintPath>../../vendor/references/MonoMod.Utils.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Mono.Cecil"><HintPath>../../vendor/references/Mono.Cecil.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Newtonsoft.Json"><HintPath>../../vendor/references/Newtonsoft.Json.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(HollowReferences)/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(HollowReferences)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(HollowReferences)/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(HollowReferences)/UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>$(HollowReferences)/UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="MonoMod.RuntimeDetour"><HintPath>$(HollowReferences)/MonoMod.RuntimeDetour.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="MonoMod.Utils"><HintPath>$(HollowReferences)/MonoMod.Utils.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Mono.Cecil"><HintPath>$(HollowReferences)/Mono.Cecil.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>$(HollowReferences)/Newtonsoft.Json.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
 </Project>

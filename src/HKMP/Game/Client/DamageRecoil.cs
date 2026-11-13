@@ -25,11 +25,30 @@ internal sealed class DamageRecoil : IDisposable {
         hook = new ILHook(target, il => {
             bool Freeze(Instruction i) => i.Operand is MethodReference m && m.DeclaringType.FullName == typeof(global::GameManager).FullName &&
                 m.Name == "FreezeMoment" && m.Parameters.Count == 4 && m.Parameters.All(p => p.ParameterType.FullName == "System.Single");
+#if HOLLOW_UNITY6
+            bool Immune(Instruction i) => i.MatchCallOrCallvirt(typeof(HeroController), "StartInvulnerable");
+#else
             bool Immune(Instruction i) => i.MatchCallOrCallvirt(typeof(HeroController), "Invulnerable");
+#endif
             // Check the complete native shape before changing any instructions.
             if (il.Instrs.Count(Freeze) != 1 || il.Instrs.Count(Immune) != 2)
                 throw new InvalidOperationException($"Unsupported HeroController.StartRecoil damage coroutine: freeze={il.Instrs.Count(Freeze)}, immunity={il.Instrs.Count(Immune)}");
             var c = new ILCursor(il);
+#if HOLLOW_UNITY6
+            var startInvulnerable = ReflectionHelper.GetMethodInfo(typeof(HeroController), "StartInvulnerable");
+            while (c.TryGotoNext(MoveType.Before, Immune)) {
+                c.Remove();
+                c.EmitDelegate<Action<HeroController, float>>((hero, duration) => {
+                    startInvulnerable.Invoke(hero, new object[] { duration });
+                    if (!client.IsConnected) return;
+                    // Unity 6 tracks this delay separately from immunity. Keep
+                    // the native pulse and immunity after our local hit-stop.
+                    var delay = hero.DAMAGE_FREEZE_DOWN + hero.DAMAGE_FREEZE_WAIT + hero.DAMAGE_FREEZE_UP;
+                    var current = ReflectionHelper.GetField<HeroController, float>(hero, "invulnerableFreezeDuration");
+                    ReflectionHelper.SetField(hero, "invulnerableFreezeDuration", System.Math.Max(current, delay));
+                });
+            }
+#else
             while (c.TryGotoNext(MoveType.After, Immune)) {
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<IEnumerator, object, IEnumerator>>((native, iterator) => {
@@ -42,6 +61,7 @@ internal sealed class DamageRecoil : IDisposable {
                         (hero.DAMAGE_FREEZE_DOWN + hero.DAMAGE_FREEZE_UP) * .5f);
                 });
             }
+#endif
             c.Index = 0;
             c.GotoNext(MoveType.Before, Freeze);
             c.Remove();

@@ -1,4 +1,5 @@
-﻿using Hkmp.Ui.Resources;
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
+using Hkmp.Ui.Resources;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,7 +52,7 @@ internal class TextComponent : Component, ITextComponent {
         // Create the unity text object and set the corresponding details
         _textObject = GameObject.AddComponent<Text>();
         _textObject.text = text;
-        _textObject.font = FontManager.UIFontRegular;
+        _textObject.font = HkmpFontManager.UIFontRegular;
         _textObject.fontSize = fontSize;
         _textObject.fontStyle = fontStyle;
         _textObject.alignment = alignment;

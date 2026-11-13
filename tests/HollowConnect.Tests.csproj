@@ -5,11 +5,11 @@
     <Compile Remove="FrameTrace/**/*.cs" />
     <ProjectReference Include="../src/HollowConnect/HollowConnect.csproj" />
     <ProjectReference Include="../src/HollowConnect.Steam/HollowConnect.Steam.csproj" />
-    <Reference Include="Assembly-CSharp"><HintPath>../vendor/references/Assembly-CSharp.dll</HintPath></Reference>
-    <Reference Include="UnityEngine.CoreModule"><HintPath>../vendor/references/UnityEngine.CoreModule.dll</HintPath></Reference>
-    <Reference Include="UnityEngine"><HintPath>../vendor/references/UnityEngine.dll</HintPath></Reference>
-    <Reference Include="Assembly-CSharp-firstpass"><HintPath>../vendor/references/Assembly-CSharp-firstpass.dll</HintPath></Reference>
-    <Reference Include="PlayMaker"><HintPath>../vendor/references/PlayMaker.dll</HintPath></Reference>
-    <Reference Include="MonoMod.RuntimeDetour"><HintPath>../vendor/references/MonoMod.RuntimeDetour.dll</HintPath></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(HollowReferences)/Assembly-CSharp.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(HollowReferences)/UnityEngine.CoreModule.dll</HintPath></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(HollowReferences)/UnityEngine.dll</HintPath></Reference>
+    <Reference Include="Assembly-CSharp-firstpass"><HintPath>$(HollowReferences)/Assembly-CSharp-firstpass.dll</HintPath></Reference>
+    <Reference Include="PlayMaker"><HintPath>$(HollowReferences)/PlayMaker.dll</HintPath></Reference>
+    <Reference Include="MonoMod.RuntimeDetour"><HintPath>$(HollowReferences)/MonoMod.RuntimeDetour.dll</HintPath></Reference>
   </ItemGroup>
 </Project>

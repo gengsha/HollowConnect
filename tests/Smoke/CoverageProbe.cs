@@ -229,7 +229,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         if (!performance) On.HutongGames.PlayMaker.Actions.DestroyObject.OnEnter += (orig,a)=>{ Mark("NATIVE DESTROY "+Describe(a.gameObject.Value)+" from="+a.Fsm?.GameObject?.name+"/"+a.Fsm?.Name+"/"+a.State?.Name); orig(a); };
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += (orig,f,e,d)=>{ if(f.GameObject!=null&&f.GameObject.name.Contains("Mega Jellyfish"))Mark("UUMUU EVENT "+f.GameObject.name+"/"+f.Name+"/"+e?.Name+" active="+f.Active+" state="+f.ActiveStateName);orig(f,e,d); };
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager,"_modSettings").AuthKey=Hkmp.Util.AuthUtil.GenerateAuthKey();
-        CoopMod.Settings.ShareProgress=HitStopCase || FrameProfile && Environment.GetEnvironmentVariable("HOLLOWCONNECT_FRAME_SHARED") == "1" ||
+        CoopMod.Settings.ShareProgress=CrystalRangeCase || HitStopCase || FrameProfile && Environment.GetEnvironmentVariable("HOLLOWCONNECT_FRAME_SHARED") == "1" ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_CLIFFS_INTERIOR_CHECK") == "1" ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS") == "1" || StoryCutsceneCase || DreamTraversalCase;
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_SETTLEMENT"))) {
@@ -251,7 +251,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS") == "1" ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS") == "1" ||
             Environment.GetEnvironmentVariable("HOLLOWCONNECT_RADIANCE_FRESH_LATE") == "1" ||
-            Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1" || HitStopCase || FrameProfile || P5FourCheck || StoryCutsceneCase || DreamTraversalCase) && PlayerData.instance.GetBool("atBench")) {
+            Environment.GetEnvironmentVariable("HOLLOWCONNECT_SCENE_GEOMETRY_TRACE") == "1" || CrystalRangeCase || HitStopCase || FrameProfile || P5FourCheck || StoryCutsceneCase || DreamTraversalCase) && PlayerData.instance.GetBool("atBench")) {
             // Leave the initial native bench before forcing a room transition.
             // Its resting body is kinematic until the get-up flow finishes.
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
@@ -266,6 +266,13 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(engine.ClientManager,true);
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(engine.ClientManager,new object[]{"127.0.0.1",29650,"coverage"+role});
         yield return Until(()=>runtime.Connected,"connect");Flag(role+".connected");yield return Until(()=>Has((host?"guest":"host")+".connected"),"both connected");
+        if (CrystalRangeCase) {
+            yield return CrystalRangeChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS crystal range " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_CRYSTAL_RANGE"));
+            Flag(role + ".done");
+            yield break;
+        }
         if (HitStopCase) {
             yield return HitStopChecks();
             yield return ProbeShutdown.Run(engine, root, role);

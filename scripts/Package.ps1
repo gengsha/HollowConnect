@@ -1,10 +1,24 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums, [switch]$UserRequestedRelease,
-    [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate, [switch]$SteamModule)
+    [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate, [switch]$SteamModule,
+    [ValidateSet('Both','Legacy','Unity6')][string]$GameVersion='Both',
+    [ValidateSet('','hit-evasion')][string]$Unity6Revision='')
 $ErrorActionPreference = 'Stop'
+if ($GameVersion -eq 'Both') {
+    if ($Unity6Revision) { throw 'Historical Unity6 revisions require an explicit -GameVersion Unity6.' }
+    $taskArguments=@{}; foreach($taskKey in $PSBoundParameters.Keys){if($taskKey -ne 'GameVersion'){$taskArguments[$taskKey]=$PSBoundParameters[$taskKey]}}
+    foreach($taskProfile in 'Legacy','Unity6'){ & $PSCommandPath @taskArguments -GameVersion $taskProfile }
+    return
+}
+if ($GameVersion -eq 'Unity6') {
+    if ($Playtest -or $PlaytestBuild -or $ReleaseCandidate) { throw 'Unity6 uses its own package identity and matching validation record.' }
+    & (Join-Path $PSScriptRoot 'Package-Unity6.ps1') -SteamModule:$SteamModule -RebuildChecksums:$RebuildChecksums -Revision $Unity6Revision
+    return
+}
+if($Unity6Revision){throw 'Unity6 revision requires -GameVersion Unity6.'}
 $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'PackageTools.ps1')
 . (Join-Path $PSScriptRoot 'PackageDocumentation.ps1')
-$version = '0.2.8'
+$version = '0.2.9'
 if($ReleaseCandidate){
     if($Playtest -or $PlaytestBuild -or $UserRequestedRelease){throw 'Choose one release channel.'}
     $Playtest=$true; $PlaytestBuild=$ReleaseCandidate
@@ -112,7 +126,7 @@ $manifest = [ordered]@{
 $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $package 'manifest.json') -Encoding UTF8
 $taskWindowsZip=Join-Path $root ('dist\'+$taskPackageName+'-windows.zip')
 Write-HollowArchive -Destination $taskWindowsZip -BasePath $package -Files @(Get-HollowSourceFiles -Path $package)
-$sources = 'src','tests','scripts','README.md','LICENSE','HKMP-LICENSE','THIRD-PARTY.md','Directory.Build.props','.gitignore'
+$sources = 'src','tests','scripts','README.md','LICENSE','HKMP-LICENSE','THIRD-PARTY.md','Directory.Build.props','Directory.Build.targets','.gitignore'
 # Exclude build output and the user's game assemblies from the corresponding source archive.
 $sourceZip = Join-Path $root ('dist\'+$taskPackageName+'-source.zip')
 $taskSourceFiles=@(

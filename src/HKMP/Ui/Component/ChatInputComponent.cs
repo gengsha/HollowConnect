@@ -1,3 +1,4 @@
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
 using System;
 using System.Collections.Generic;
 using Hkmp.Networking.Packet.Data;
@@ -35,7 +36,7 @@ internal class ChatInputComponent : InputComponent {
         "",
         "",
         TextureManager.InputFieldBg,
-        FontManager.UIFontRegular,
+        HkmpFontManager.UIFontRegular,
         fontSize
     ) {
         Text.alignment = TextAnchor.MiddleLeft;

@@ -1,6 +1,6 @@
 # 版本记录
 
-当前版本见 [0.2.8 更新说明](UPDATE-0.2.8.md)：受击停顿隔离、Grimm 咆哮结束清理、竞技场奖励续接，以及共享血量面具碎片与资源回执的专项验证。0.2.7 的 Steam 好友联机预览、原生联机菜单、竞技场重发与显示同步修复见 [0.2.7 更新说明](UPDATE-0.2.7.md)。此前本地 [0.2.6-rc3 候选说明](UPDATE-0.2.6-rc3.md) 和 [0.2.6 更新说明](UPDATE-0.2.6.md) 保留原记录。下载包与逐版 Release 见 [GitHub Releases](https://github.com/gengsha/HollowConnect/releases)。
+当前版本见 [0.2.9 更新说明](UPDATE-0.2.9.md)：Legacy／Unity6 双版本交付、水晶山峰远端玩家感知与原生 AI 激活，以及按攻击玩家独立计算的受击无敌帧。此前 [0.2.8 更新说明](UPDATE-0.2.8.md) 保留受击停顿隔离、Grimm 咆哮结束清理、竞技场奖励续接及共享血量专项的原始范围。0.2.7 的 Steam 好友联机预览、原生联机菜单、竞技场重发与显示同步修复见 [0.2.7 更新说明](UPDATE-0.2.7.md)。此前本地 [0.2.6-rc3 候选说明](UPDATE-0.2.6-rc3.md) 和 [0.2.6 更新说明](UPDATE-0.2.6.md) 保留原记录。下载包与逐版 Release 见 [GitHub Releases](https://github.com/gengsha/HollowConnect/releases)。
 
 旧版更新与排障报告保留在 [0.2.5 发布提交的 docs 目录](https://github.com/gengsha/HollowConnect/tree/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs)。该链接固定到整理前的提交，后续目录调整不会改变其内容。历史通过、失败和未覆盖项继续对应各自记录的版本与二进制哈希。
 

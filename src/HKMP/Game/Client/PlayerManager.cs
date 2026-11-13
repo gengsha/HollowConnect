@@ -1,3 +1,4 @@
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
 using System;
 using System.Collections.Generic;
 using Hkmp.Fsm;
@@ -6,7 +7,11 @@ using Hkmp.Game.Settings;
 using Hkmp.Ui.Resources;
 using Hkmp.Util;
 using Modding.Utils;
+#if HOLLOW_UNITY6
+using TMProOld;
+#else
 using TMPro;
+#endif
 using UnityEngine;
 using Logger = Hkmp.Logging.Logger;
 using Object = UnityEngine.Object;
@@ -169,6 +174,7 @@ internal class PlayerManager {
         collider.offset = localCollider.offset;
         collider.size = localColliderBounds.size;
         collider.enabled = true;
+        Entity.SharedEnemyTargeting.AddActivationRegion(playerPrefab);
 
         // Copy collider bounds
         var bounds = collider.bounds;
@@ -795,7 +801,7 @@ internal class PlayerManager {
         var textMeshObject = nameObject.AddComponent<TextMeshPro>();
         textMeshObject.text = UsernameObjectName;
         textMeshObject.alignment = TextAlignmentOptions.Center;
-        textMeshObject.font = FontManager.InGameNameFont;
+        textMeshObject.font = HkmpFontManager.InGameNameFont;
         textMeshObject.fontSize = 22;
         textMeshObject.outlineWidth = 0.2f;
         textMeshObject.outlineColor = Color.black;

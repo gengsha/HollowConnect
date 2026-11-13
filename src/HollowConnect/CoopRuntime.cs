@@ -286,6 +286,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopContext.BossTargetSession = () => Session;
         CoopContext.ChooseBossTarget = ChooseBossTarget;
         CoopContext.BossTargetObject = BossTargetObject;
+        CoopContext.NearestEnemyTarget = NearestEnemyTarget;
         CoopContext.AttackSourcePlayer = AttackSourcePlayer;
         CoopMod.ActiveRoomSettingLabel = ActiveRoomSettingLabel;
         CoopContext.RemotePlayerOpacity = () => float.IsNaN(CoopMod.Settings.OtherPlayerOpacity) ? 1 : Mathf.Clamp01(CoopMod.Settings.OtherPlayerOpacity);
@@ -936,9 +937,17 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         try { orig(self, source, side, damage, hazard); }
         finally { takingDamage = false; damageHazard = 0; }
     }
-    private void TrackHitSound(On.HeroAudioController.orig_PlaySound orig, HeroAudioController self, GlobalEnums.HeroSounds sound) {
+    private void TrackHitSound(On.HeroAudioController.orig_PlaySound orig, HeroAudioController self, GlobalEnums.HeroSounds sound
+#if HOLLOW_UNITY6
+        , bool playVibration
+#endif
+    ) {
         if (takingDamage && (int)sound == 8) nativeHitPlayed = true;
+#if HOLLOW_UNITY6
+        orig(self, sound, playVibration);
+#else
         orig(self, sound);
+#endif
     }
     private int AfterTakeDamage(int hazard, int damage) => EntryProtected ? 0 : damage;
 
@@ -1514,6 +1523,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopContext.BossTargetSession = null;
         CoopContext.ChooseBossTarget = null;
         CoopContext.BossTargetObject = null;
+        CoopContext.NearestEnemyTarget = null;
         CoopContext.AttackSourcePlayer = null; CoopContext.NonCombatAttack = null; CoopContext.LocalObservation = null;
         CoopMod.ActiveRoomSettingLabel = null;
         CoopMod.RoomRuleRevision++;

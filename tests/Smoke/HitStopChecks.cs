@@ -76,7 +76,7 @@ public sealed partial class CoverageProbe {
                 if (!inputArmed || !inputReading) return false;
                 inputArmed = false; inputEdges++; edgeTimes.Add(Time.realtimeSinceStartup); return true;
             }));
-        using var attack = new Hook(typeof(HeroController).GetMethod("Attack"),
+        using var attack = new Hook(typeof(HeroController).GetMethod("Attack", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic),
             (Action<Action<HeroController, GlobalEnums.AttackDirection>, HeroController, GlobalEnums.AttackDirection>)((orig, self, direction) => {
                 attacks++; attackTimes.Add(Time.realtimeSinceStartup); orig(self, direction);
             }));

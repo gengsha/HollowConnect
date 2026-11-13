@@ -7,7 +7,7 @@ using Hkmp.Networking.Packet.Data;
 using Hkmp.Util;
 using Modding;
 using MonoMod.Cil;
-using MonoMod.RuntimeDetour.HookGen;
+using MonoMod.RuntimeDetour;
 using UnityEngine;
 using Logger = Hkmp.Logging.Logger;
 using Random = UnityEngine.Random;
@@ -19,16 +19,18 @@ namespace Hkmp.Game.Client.Entity.Component;
 internal class SpawnJarComponent : EntityComponent {
     private static readonly System.Collections.Generic.Dictionary<int, SpawnJarComponent> Instances = new();
     private static bool registered;
+    private static ILHook behaviourHook;
     private Coroutine effects;
     internal static void RegisterHooks() {
         if (registered) return; registered = true;
         On.SpawnJarControl.OnEnable += SpawnJarControlOnEnable;
-        HookEndpointManager.Modify(MonoMod.Utils.Extensions.GetStateMachineTarget(ReflectionHelper.GetMethodInfo(typeof(SpawnJarControl), "Behaviour")), SpawnJarControlOnBehaviour);
+        behaviourHook = new ILHook(MonoMod.Utils.Extensions.GetStateMachineTarget(ReflectionHelper.GetMethodInfo(typeof(SpawnJarControl), "Behaviour")), SpawnJarControlOnBehaviour);
     }
     internal static void DeregisterHooks() {
         if (!registered) return; registered = false;
         On.SpawnJarControl.OnEnable -= SpawnJarControlOnEnable;
-        HookEndpointManager.Unmodify(MonoMod.Utils.Extensions.GetStateMachineTarget(ReflectionHelper.GetMethodInfo(typeof(SpawnJarControl), "Behaviour")), SpawnJarControlOnBehaviour);
+        behaviourHook?.Dispose();
+        behaviourHook = null;
         Instances.Clear();
     }
     /// <summary>

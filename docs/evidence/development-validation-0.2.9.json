@@ -1,0 +1,256 @@
+{
+  "version": "0.2.9",
+  "profile": "Legacy",
+  "createdAtUtc": "2026-11-13T09:14:35.5824955Z",
+  "game": "Windows Hollow Knight 1.5.78.11833",
+  "unity": "2020.2.2f1",
+  "releaseReady": false,
+  "postVersionRuntimeRetest": true,
+  "fullMatrixRerun": false,
+  "scope": "0.2.9 shared-source crystal enemy remote perception and native FSM activation, plus the prior independent per-attacker hit evasion fix. Seventeen related core checks and three dual-client cases per game profile on final production hashes; no full 12-case room matrix rerun.",
+  "corePassed": 17,
+  "coreFailed": 0,
+  "coreLog": ".analysis/crystal-legacy-20261113/core-final.log",
+  "coreLogSha256": "4D494B3C4374CEF5D4587C374BAD2DA148027FCBF40FD722E446173E26E69848",
+  "coreSelection": ".analysis/crystal-legacy-20261113/core-selection.txt",
+  "production": [
+    {
+      "sha256": "61F391C1CD6D8983EDCAF2461FE8E5E6D5FA7B4BE87B2C64CB55A96641DDD356",
+      "name": "HKMP.dll"
+    },
+    {
+      "sha256": "82E8E1CAEED91C9E6D01147D0CA183A09806CB97A2A18982D27B5859F3E7D586",
+      "name": "HollowConnect.dll"
+    },
+    {
+      "sha256": "6DC03780540618F09493A95E7E0BF96FDC9256E125BEDAA360DC34C516C584EF",
+      "name": "HollowConnect.Core.dll"
+    },
+    {
+      "sha256": "AC16A98D3D36BD572A2C2F88B954155EBDB54F6C1A615768D33012C92DE4EBD5",
+      "name": "HollowConnect.Steam.dll"
+    }
+  ],
+  "checks": [
+    {
+      "case": "crystal-host",
+      "run": ".test-results/crystal-legacy-crystal-host-20261113-090305248",
+      "state": "passed",
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "productionHashes": true,
+      "started": "2026-11-13T09:03:05.4240544Z",
+      "ended": "2026-11-13T09:04:05.6908714Z",
+      "options": {
+        "HOLLOWCONNECT_CRYSTAL_SCENE": "Mines_20",
+        "HOLLOWCONNECT_CRYSTAL_RANGE": "crystal",
+        "HOLLOWCONNECT_COVERAGE_AUTHORITY": "host"
+      },
+      "probeSha256": "71D58728730DFACC221242E84B1E0CC759C5BB89FBD3839A61B4B292AB89E659",
+      "loadedBinaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "61F391C1CD6D8983EDCAF2461FE8E5E6D5FA7B4BE87B2C64CB55A96641DDD356"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "82E8E1CAEED91C9E6D01147D0CA183A09806CB97A2A18982D27B5859F3E7D586"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "6DC03780540618F09493A95E7E0BF96FDC9256E125BEDAA360DC34C516C584EF"
+        }
+      ],
+      "gameDependencies": [
+        {
+          "role": "host",
+          "file": "UnityPlayer.dll",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+        },
+        {
+          "role": "guest",
+          "file": "UnityPlayer.dll",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+        }
+      ],
+      "statusSource": ".analysis/crystal-legacy-20261113/crystal-host-Legacy.status.json"
+    },
+    {
+      "case": "crystal-guest",
+      "run": ".test-results/crystal-legacy-crystal-guest-20261113-090729083",
+      "state": "passed",
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "productionHashes": true,
+      "started": "2026-11-13T09:07:29.0879935Z",
+      "ended": "2026-11-13T09:08:29.0612811Z",
+      "options": {
+        "HOLLOWCONNECT_CRYSTAL_SCENE": "Mines_20",
+        "HOLLOWCONNECT_CRYSTAL_RANGE": "crystal",
+        "HOLLOWCONNECT_COVERAGE_AUTHORITY": "guest"
+      },
+      "probeSha256": "71D58728730DFACC221242E84B1E0CC759C5BB89FBD3839A61B4B292AB89E659",
+      "loadedBinaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "61F391C1CD6D8983EDCAF2461FE8E5E6D5FA7B4BE87B2C64CB55A96641DDD356"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "82E8E1CAEED91C9E6D01147D0CA183A09806CB97A2A18982D27B5859F3E7D586"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "6DC03780540618F09493A95E7E0BF96FDC9256E125BEDAA360DC34C516C584EF"
+        }
+      ],
+      "gameDependencies": [
+        {
+          "role": "host",
+          "file": "UnityPlayer.dll",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+        },
+        {
+          "role": "guest",
+          "file": "UnityPlayer.dll",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+        }
+      ],
+      "statusSource": ".analysis/crystal-legacy-20261113/crystal-guest-Legacy.status.json"
+    },
+    {
+      "case": "evasion-host",
+      "run": ".test-results/crystal-legacy-evasion-host-20261113-090829108",
+      "state": "passed",
+      "bothEndpoints": true,
+      "strictLogs": true,
+      "productionHashes": true,
+      "started": "2026-11-13T09:08:29.1084391Z",
+      "ended": "2026-11-13T09:09:05.1252248Z",
+      "options": {
+        "HOLLOWCONNECT_HIT_EVASION_CHECK": "1",
+        "HOLLOWCONNECT_PANTHEON_AUTHORITY": "host"
+      },
+      "probeSha256": "71D58728730DFACC221242E84B1E0CC759C5BB89FBD3839A61B4B292AB89E659",
+      "loadedBinaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "61F391C1CD6D8983EDCAF2461FE8E5E6D5FA7B4BE87B2C64CB55A96641DDD356"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "82E8E1CAEED91C9E6D01147D0CA183A09806CB97A2A18982D27B5859F3E7D586"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "6DC03780540618F09493A95E7E0BF96FDC9256E125BEDAA360DC34C516C584EF"
+        }
+      ],
+      "gameDependencies": [
+        {
+          "role": "host",
+          "file": "UnityPlayer.dll",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "role": "host",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+        },
+        {
+          "role": "guest",
+          "file": "UnityPlayer.dll",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+        },
+        {
+          "role": "guest",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+        }
+      ],
+      "statusSource": ".analysis/crystal-legacy-20261113/evasion-host-Legacy.status.json"
+    }
+  ],
+  "testSources": [
+    {
+      "sha256": "37EBDE7A2631707B9CBB29D46957EFCA7E549C249BCCE03D578BAC71990D9FFC",
+      "path": "tests/Smoke/CrystalRangeChecks.cs"
+    },
+    {
+      "sha256": "6EE738479922ADADADAA9F65DC2D925F6713B608104EC4DF44018405EBCFC719",
+      "path": "tests/Smoke/IndependentHitEvasionChecks.cs"
+    },
+    {
+      "sha256": "CBD1300C342F6858B59CE82138A744A4039A8E362BE4291765FE502DAFCE291F",
+      "path": "tests/Smoke/CoverageProbe.cs"
+    },
+    {
+      "sha256": "DA065D6E65290FC7EBD66FBCE4C27E19FD78766D6D360A98B280FB1BA7D980BA",
+      "path": "tests/Smoke/Probe.cs"
+    },
+    {
+      "sha256": "055949436FD42A386CD2DE8E111D93E1F59A9A97B25E4706723B2DFA4F2C2821",
+      "path": "tests/Smoke/PantheonProbe.cs"
+    }
+  ],
+  "steamRuntimeTested": false,
+  "unity6ValidationSource": "docs/evidence/development-validation-0.2.9-unity6.json",
+  "analysis": ".analysis/crystal-legacy-20261113",
+  "limitations": [
+    "Real cross-machine/two-account Steam invitations, P2P/SDR relay, FRP and mixed Legacy/Unity6 rooms were not tested.",
+    "The report that arbitrary ordinary enemies cannot lose HP was not fully reproduced. Confirmed scope is remote perception/activation, native beams and remote CrystalHunter nail death.",
+    "The Soul Master stagger report was excluded at the user's request.",
+    "Inherited unresolved findings remain open, including Mines FSM string layout.",
+    "Personal game and saves were not modified; only existing isolated game copies were used."
+  ]
+}

@@ -83,7 +83,11 @@ internal sealed class ResourceNotifications {
         Object.DontDestroyOnLoad(active);
         var text = kind == ResourceKind.Grub ? "共享幼虫" : kind == ResourceKind.DreamEssence ? "共享梦境精华" :
             kind == ResourceKind.UniqueKey ? KeyName(source.InventoryFlag) : Language.Language.Get(names[kind], "UI");
+#if HOLLOW_UNITY6
+        active.transform.Find("Text").GetComponent<TMProOld.TextMeshPro>().text = text + (count > 1 ? " ×" + count : "");
+#else
         active.transform.Find("Text").GetComponent<TMPro.TextMeshPro>().text = text + (count > 1 ? " ×" + count : "");
+#endif
         var icon = active.transform.Find("Icon").GetComponent<SpriteRenderer>();
         icon.enabled = icons.TryGetValue(kind, out var sprite);
         icon.sprite = sprite; icon.sortingOrder = 1;

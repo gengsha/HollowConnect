@@ -84,6 +84,9 @@ internal static class BossTargeting {
     }
 
     internal static GameObject Resolve(GameObject original, FsmStateAction action) {
+        if (original != null && HeroController.instance != null && original == HeroController.instance.gameObject &&
+            SharedEnemyTargeting.Allows(action?.Fsm?.GameObject))
+            return CoopContext.NearestEnemyTarget?.Invoke(action.Fsm.GameObject) ?? original;
         var bomb = EntityReferences.Owner(action?.Fsm?.GameObject);
         if (!CoopContext.Resetting && original != null && HeroController.instance != null && original == HeroController.instance.gameObject &&
             bomb?.Type == EntityType.OomaCore && bomb.IsNativeAuthority && !EntityReferences.IsReplica(action.Fsm.GameObject)) {

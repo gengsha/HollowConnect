@@ -1,4 +1,8 @@
-﻿using TMPro;
+#if HOLLOW_UNITY6
+using TMProOld;
+#else
+using TMPro;
+#endif
 using UnityEngine;
 using Logger = Hkmp.Logging.Logger;
 

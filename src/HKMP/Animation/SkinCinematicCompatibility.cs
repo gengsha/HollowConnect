@@ -15,7 +15,11 @@ internal static class SkinCinematicCompatibility {
 
     internal static void Initialize() {
         if (initialized) return;
+#if HOLLOW_UNITY6
+        IL.TeamCherry.Cinematics.EmbeddedCinematicVideoPlayer.ctor += DeferEmbeddedPreparation;
+#else
         IL.XB1CinematicVideoPlayer.ctor += DeferEmbeddedPreparation;
+#endif
         initialized = true;
     }
 

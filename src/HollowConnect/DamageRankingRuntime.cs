@@ -25,8 +25,16 @@ public sealed partial class CoopRuntime {
         damageView?.Dispose(); damageView = null;
     }
     private void StartDamageSequence(On.BossSequenceController.orig_SetupNewSequence orig, BossSequence sequence,
-        BossSequenceController.ChallengeBindings bindings, string playerData) {
+        BossSequenceController.ChallengeBindings bindings, string playerData
+#if HOLLOW_UNITY6
+        , int overrideBossIndex
+#endif
+    ) {
+#if HOLLOW_UNITY6
+        orig(sequence, bindings, playerData, overrideBossIndex);
+#else
         orig(sequence, bindings, playerData);
+#endif
         damageAttempt++; damageBeginSent = false; damageSequence = sequence.name;
     }
     private void ResetDamageRanking() {

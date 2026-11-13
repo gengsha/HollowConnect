@@ -1,3 +1,4 @@
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
 using System;
 using Hkmp.Game;
 using Hkmp.Game.Settings;
@@ -66,7 +67,7 @@ internal class ClientSettingsInterface {
             new Vector2(ButtonComponent.DefaultHeight, ButtonComponent.DefaultHeight),
             "",
             TextureManager.CloseButtonBg,
-            FontManager.UIFontRegular,
+            HkmpFontManager.UIFontRegular,
             UiManager.NormalFontSize
         );
         closeButton.SetOnPress(() => {

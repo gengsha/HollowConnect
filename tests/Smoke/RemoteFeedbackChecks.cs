@@ -17,10 +17,18 @@ public sealed partial class ProgressProbe {
         var hero = HeroController.instance;
         var vibrationCalls = 0;
         var recoilCalls = 0;
+#if HOLLOW_UNITY6
+        On.VibrationManager.hook_PlayVibrationClipOneShot_VibrationData_Nullable1_bool_string_bool vibration = (orig, data, target, looping, tag, children) => {
+#else
         On.VibrationManager.hook_PlayVibrationClipOneShot vibration = (orig, data, target, looping, tag) => {
+#endif
             vibrationCalls++; return null;
         };
+#if HOLLOW_UNITY6
+        On.VibrationManager.PlayVibrationClipOneShot_VibrationData_Nullable1_bool_string_bool += vibration;
+#else
         On.VibrationManager.PlayVibrationClipOneShot += vibration;
+#endif
         On.HeroController.hook_RecoilLeft recoilLeft = (orig, self) => { recoilCalls++; };
         On.HeroController.hook_RecoilRight recoilRight = (orig, self) => { recoilCalls++; };
         On.HeroController.RecoilLeft += recoilLeft;
@@ -71,7 +79,11 @@ public sealed partial class ProgressProbe {
             yield return null;
             ResourceCheck(slash == null || slash.GetComponent<NailSlash>() == null, "remote slash removes native local-player recoil component");
         } finally {
+#if HOLLOW_UNITY6
+            On.VibrationManager.PlayVibrationClipOneShot_VibrationData_Nullable1_bool_string_bool -= vibration;
+#else
             On.VibrationManager.PlayVibrationClipOneShot -= vibration;
+#endif
             On.HeroController.RecoilLeft -= recoilLeft;
             On.HeroController.RecoilRight -= recoilRight;
             if (nativeSlash != null) Object.Destroy(nativeSlash);

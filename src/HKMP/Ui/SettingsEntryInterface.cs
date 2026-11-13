@@ -1,4 +1,5 @@
-﻿using System;
+using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
+using System;
 using System.Collections;
 using Hkmp.Ui.Component;
 using Hkmp.Ui.Resources;
@@ -107,7 +108,7 @@ internal class SettingsEntryInterface {
                 currentValue.ToString(),
                 "",
                 TextureManager.InputFieldBg,
-                FontManager.UIFontRegular,
+                HkmpFontManager.UIFontRegular,
                 UiManager.NormalFontSize,
                 0,
                 InputField.CharacterValidation.Integer

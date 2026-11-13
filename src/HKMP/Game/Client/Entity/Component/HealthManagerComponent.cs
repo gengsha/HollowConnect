@@ -252,6 +252,7 @@ internal class HealthManagerComponent : EntityComponent {
 
     public override void Destroy() {
         BossDamageScaling.Forget(_healthManager.Host);
+        IndependentHitEvasion.Forget(_healthManager.Host);
         EntityHooks.ForgetHealth(_healthManager.Host, _healthManager.Client);
         MonoBehaviourUtil.Instance.OnUpdateEvent -= OnUpdate;
     }

@@ -62,6 +62,10 @@ public sealed class ColosseumNetworkMetrics : MonoBehaviour {
 
     internal void Initialize(Hkmp.Game.GameManager game, string output, string endpoint) {
         engine = game; root = output; role = endpoint;
+#if !HOLLOW_UNITY6
+        // The Unity6 RuntimeDetour rejects methods on generic declaring types.
+        // This optional backlog dump is independent of the native hit, impact,
+        // blood, animation and transport observers used by the art assertions.
         hooks.Add(new Hook(typeof(UpdatePacket<ClientUpdatePacketId>).GetMethod("CreatePacket"),
             new Action<Action<UpdatePacket<ClientUpdatePacketId>, Packet>, UpdatePacket<ClientUpdatePacketId>, Packet>((orig, update, packet) => {
                 try { orig(update, packet); }
@@ -92,6 +96,7 @@ public sealed class ColosseumNetworkMetrics : MonoBehaviour {
                     }
                 }
             })));
+#endif
         hooks.Add(new Hook(typeof(DtlsTransport).GetMethod("Send", new[] { typeof(byte[]), typeof(int), typeof(int) }),
             new Action<Action<DtlsTransport, byte[], int, int>, DtlsTransport, byte[], int, int>((orig, transport, bytes, offset, length) => {
                 if (offset == 0 && DatagramFraming.ReadHeader(bytes, length, out _, out var total, out var index, out var count)) {

@@ -1,3 +1,8 @@
+#if HOLLOW_UNITY6
+using NativeTextMeshPro = TMProOld.TextMeshPro;
+#else
+using NativeTextMeshPro = TMPro.TextMeshPro;
+#endif
 using System;
 using System.Collections;
 using System.Linq;
@@ -17,7 +22,7 @@ public sealed partial class ProgressProbe {
         On.HutongGames.PlayMaker.Fsm.EnterState += Observe;
         void Observe(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, HutongGames.PlayMaker.Fsm fsm, HutongGames.PlayMaker.FsmState state) {
             if (fsm.GameObject != null && fsm.GameObject.name == ResourceNotifications.PopupName && state.Name == "Up") {
-                var text = fsm.GameObject.transform.Find("Text").GetComponent<TMPro.TextMeshPro>().text;
+                var text = fsm.GameObject.transform.Find("Text").GetComponent<NativeTextMeshPro>().text;
                 if (text.StartsWith("共享幼虫", StringComparison.Ordinal)) {
                     var point = GameCameras.instance.hudCamera.WorldToViewportPoint(fsm.GameObject.transform.position);
                     ResourceCheck(point.x >= 0 && point.x <= .3f && point.y >= 0 && point.y <= .3f && point.z > 0,

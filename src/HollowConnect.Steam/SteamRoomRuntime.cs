@@ -11,7 +11,9 @@ using UnityEngine;
 namespace HollowConnect.Steam;
 
 internal sealed partial class SteamRoomRuntime : MonoBehaviour {
+#if !HOLLOW_UNITY6
     private static readonly FieldInfo InitializedField = typeof(SteamManager).GetField("m_bInitialized", BindingFlags.Instance | BindingFlags.NonPublic);
+#endif
     private static readonly FieldInfo OnlineSubsystemField = typeof(DesktopPlatform).GetField("onlineSubsystem", BindingFlags.Instance | BindingFlags.NonPublic);
     private static readonly FieldInfo OnlineInitializedField = typeof(SteamOnlineSubsystem).GetField("didInitialize", BindingFlags.Instance | BindingFlags.NonPublic);
     private enum Phase { Idle, SelectingSave, StartingHost, CreatingLobby, JoiningLobby, ConnectingBridge, ConnectingGame, Playing }
@@ -41,8 +43,12 @@ internal sealed partial class SteamRoomRuntime : MonoBehaviour {
             var platform = Platform.Current as DesktopPlatform;
             var subsystem = platform != null ? OnlineSubsystemField?.GetValue(platform) as SteamOnlineSubsystem : null;
             if (subsystem != null && OnlineInitializedField != null && (bool)OnlineInitializedField.GetValue(subsystem)) return true;
+#if HOLLOW_UNITY6
+            return false;
+#else
             var manager = UnityEngine.Object.FindObjectOfType<SteamManager>();
             return manager != null && InitializedField != null && (bool)InitializedField.GetValue(manager);
+#endif
         }
     }
 
@@ -291,8 +297,8 @@ internal sealed partial class SteamRoomRuntime : MonoBehaviour {
             (!IsMember(known.Remote) || info.m_identityRemote.GetSteamID64() != known.Remote))
             known.Close(1000, "Room identity changed");
         else if (info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected &&
-            SteamNetworkingSockets.GetQuickConnectionStatus(connection, out var quick))
-            Hkmp.Logging.Logger.Info("Steam connection established: pingMs=" + quick.m_nPing +
+            TryGetConnectionPing(connection, out var ping))
+            Hkmp.Logging.Logger.Info("Steam connection established: pingMs=" + ping +
                 "; relayPOP=" + info.m_idPOPRelay.m_SteamNetworkingPOPID +
                 "; remotePOP=" + info.m_idPOPRemote.m_SteamNetworkingPOPID);
         if (info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_ClosedByPeer ||
@@ -302,6 +308,17 @@ internal sealed partial class SteamRoomRuntime : MonoBehaviour {
         }
     }
 
+    private static bool TryGetConnectionPing(HSteamNetConnection connection, out int ping) {
+#if HOLLOW_UNITY6
+        var quick = new SteamNetConnectionRealTimeStatus_t();
+        var lane = new SteamNetConnectionRealTimeLaneStatus_t();
+        var ok = SteamNetworkingSockets.GetConnectionRealTimeStatus(connection, ref quick, 0, ref lane) == EResult.k_EResultOK;
+#else
+        var ok = SteamNetworkingSockets.GetQuickConnectionStatus(connection, out var quick);
+#endif
+        ping = quick.m_nPing;
+        return ok;
+    }
     private void PublishPresence() {
         presence = SteamRoomRules.ConnectString(lobby.m_SteamID);
         if (!SteamFriends.SetRichPresence("connect", presence)) status = "房间已创建；好友状态发布失败，请使用邀请按钮";

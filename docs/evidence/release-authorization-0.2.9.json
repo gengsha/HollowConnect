@@ -1,0 +1,76 @@
+{
+  "version": "0.2.9",
+  "action": "package-release",
+  "releaseChannel": "release",
+  "userRequest": "对了,这次修改完成后直接打包0.2.9双版本,以后有任何打包行为都考虑双版本",
+  "createdAtUtc": "2026-11-13T09:14:35.5824955Z",
+  "scope": "Local Legacy/Unity6 Windows and corresponding source ZIPs with Steam module and checksums only. No GitHub publishing or personal game installation requested in this turn.",
+  "retestOmitted": true,
+  "retestOmittedMeaning": "Only the full room matrix is omitted; current-hash scoped tests are recorded separately.",
+  "binaries": [
+    {
+      "sha256": "61F391C1CD6D8983EDCAF2461FE8E5E6D5FA7B4BE87B2C64CB55A96641DDD356",
+      "name": "HKMP.dll"
+    },
+    {
+      "sha256": "82E8E1CAEED91C9E6D01147D0CA183A09806CB97A2A18982D27B5859F3E7D586",
+      "name": "HollowConnect.dll"
+    },
+    {
+      "sha256": "6DC03780540618F09493A95E7E0BF96FDC9256E125BEDAA360DC34C516C584EF",
+      "name": "HollowConnect.Core.dll"
+    },
+    {
+      "sha256": "AC16A98D3D36BD572A2C2F88B954155EBDB54F6C1A615768D33012C92DE4EBD5",
+      "name": "HollowConnect.Steam.dll"
+    }
+  ],
+  "retainedUnresolvedFindings": [
+    "native-reentry-camera-freeze",
+    "reconnect-inactive-needle-unresolved",
+    "false-knight-repeat-head-unresolved",
+    "cornifer-purchase-peer-visibility-unresolved",
+    "mines-fsm-string-layout-unresolved",
+    "godhome-final-single-f8-timeout-unresolved",
+    "cliffs-room-overlap-unresolved",
+    "radiance-immediate-inventory-timing-unresolved",
+    "p5-watchers-premature-return-unresolved",
+    "isolated-native-setupherorefs-startup-exception",
+    "rescue-single-nail-collision-timeout",
+    "pantheon-1-oro-death-air-stall",
+    "acid-rescue-anchor-observation-unresolved",
+    "pleasure-house-peer-key-loss-unresolved",
+    "story-grimm-tent-three-player-stall-unresolved",
+    "duplicate-victory-settlement-extra-wait",
+    "entity-completion-emitter-unreachable",
+    "story-hornet-three-player-gate-unreproduced",
+    "downed-disconnect-death-save-validation-gap",
+    "godseeker-new-save-statistics-validation-gap",
+    "first-connection-during-combat-validation-gap",
+    "arrival-wait-timeout-recovery-gap",
+    "skin-cinematic-process-crash-unreproduced",
+    "false-knight-local-counter-first-failure-unclassified",
+    "colosseum-bilateral-permanent-freeze-unreproduced",
+    "shade-soul-downslam-multihit-unreproduced",
+    "unreliable-player-animation-attack-loss",
+    "colosseum-silver-authority-handoff-reward-unresolved",
+    "mawlek-shared-health-fragment-report-unreproduced"
+  ],
+  "blockerLedgerSha256": "848CB45120B79CA3C1C78BA55490C282364100EDE95F3CF02780C83E55E9CAF8",
+  "evidence": [
+    {
+      "sha256": "D1FCA6032F6A89657B950B56D4C9A14F860AA0046C535D4476EBA1812D559F76",
+      "path": "docs/evidence/development-validation-0.2.9.json"
+    },
+    {
+      "sha256": "26CF1D30CA64CFDBDEBE2F0D013AD8A3527C3437B36350CBD2AA333F01DA42E2",
+      "path": "docs/evidence/runtime-room-0.2.9.json"
+    }
+  ],
+  "additionalDocuments": [
+    "docs/evidence/development-validation-0.2.8.json",
+    "docs/evidence/development-validation-0.2.9-unity6.json",
+    "docs/evidence/package-request-0.2.9-unity6.json",
+    "docs/UNITY6-API-LICENSE.txt"
+  ]
+}
