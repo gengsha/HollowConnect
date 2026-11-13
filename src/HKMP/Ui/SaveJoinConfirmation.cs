@@ -77,6 +77,7 @@ internal partial class UiManager {
         foreach (var text in _joinSaveMenu.GetComponentsInChildren<Text>(true)) {
             text.font = MenuResources.NotoSerifCJKSCRegular;
         }
+        Localize.Screen(_joinSaveMenu);
     }
 
     private IEnumerator ShowJoinSaveMenu(int version) {

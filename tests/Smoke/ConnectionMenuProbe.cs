@@ -49,6 +49,10 @@ public sealed class ConnectionMenuProbe : MonoBehaviour {
         yield return new WaitForSecondsRealtime(1);
         var engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         ui = Field<UiManager>(engine.ClientManager, "_uiManager");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCALIZATION_CHECK") == "1") {
+            global::Language.Language.SwitchLanguage(global::Language.LanguageCode.ZH);
+            yield return null;
+        }
         var hasSteam = ModHooks.GetMod("HollowConnect Steam") != null;
         var lan = TitleButton("StartMultiplayerButton"); var steamTitle = TitleButton("StartSteamMultiplayerButton");
         Check(lan != null && lan.GetComponentInChildren<Text>(true).text.Trim() == "局域网联机", "LAN title is a native localized menu button");
@@ -72,6 +76,7 @@ public sealed class ConnectionMenuProbe : MonoBehaviour {
         Check(!Native.gameTitle.gameObject.activeInHierarchy, "LAN page hides the native main-menu logo");
         Check(menu.GetComponentsInChildren<MenuButton>(true).Length == 6, "LAN inputs and actions use native menu rows");
         var fields = menu.GetComponentsInChildren<InputField>(true);
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCALIZATION_CHECK") == "1") yield return CheckLocalization(menu, fields);
         Check(fields.Length == 3 && fields.All(f => f.textComponent.font == Modding.Menu.MenuResources.NotoSerifCJKSCRegular), "all native LAN text inputs support Chinese");
         var name = fields.Single(f => f.transform.parent.name == "Username");
         Submit(name.GetComponentInParent<MenuButton>().gameObject);
@@ -80,8 +85,14 @@ public sealed class ConnectionMenuProbe : MonoBehaviour {
         Check(EventSystem.current.currentSelectedGameObject == name.transform.parent.gameObject, "ending text entry restores native row selection");
         var address = fields.Single(f => f.transform.parent.name == "Address");
         var port = fields.Single(f => f.transform.parent.name == "Port");
+        // Exercise a complete native edit/end-edit cycle. Returning from a
+        // language menu can leave a field selected before it receives focus.
+        Submit(address.GetComponentInParent<MenuButton>().gameObject);
+        yield return Until(() => address.isFocused, "server address enters native editing");
         address.text = "127.0.0.1"; port.text = "29650";
-        Check(address.inputType == InputField.InputType.Password, "server address remains concealed when idle");
+        address.DeactivateInputField();
+        yield return Until(() => !address.isFocused && address.inputType == InputField.InputType.Password,
+            "server address is concealed after native end-edit");
         Capture("lan");
         Submit(menu.GetComponentsInChildren<MenuButton>(true).Single(b => b.name == "Host").gameObject);
         yield return Until(() => Native.menuState == MainMenuState.SAVE_PROFILES && InputHandler.Instance.acceptingInput, "LAN host opens native save selection");
@@ -93,7 +104,7 @@ public sealed class ConnectionMenuProbe : MonoBehaviour {
         // Keep optional Steam types out of this iterator's generated state machine.
         // The same fixture must load when that assembly is physically absent.
         if (hasSteam) yield return CheckSteamMenu();
-        Log("FINAL PASS native connection menus"); File.WriteAllText(Path.Combine(root, role + ".done"), "pass"); Application.Quit();
+        Log("FINAL PASS native connection menus"); File.WriteAllText(Path.Combine(root, role + ".done"), "pass"); GetComponent<RouteFrameRecorder>()?.Finish(); Application.Quit();
     }
     private IEnumerator CheckSteamMenu() {
             var steam = Object.FindObjectOfType<SteamRoomRuntime>();
@@ -118,8 +129,59 @@ public sealed class ConnectionMenuProbe : MonoBehaviour {
             Check(Field<int>(steam, "friendsPage") == 1 && Field<List<MenuButton>>(steam, "friendButtons").Count(b => b.gameObject.activeSelf) == 2,
                 "native next page shows remaining friend rooms");
             Capture("steam-friends");
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCALIZATION_CHECK") == "1") {
+                foreach (var code in new[] { global::Language.LanguageCode.EN, global::Language.LanguageCode.JA, global::Language.LanguageCode.ZH }) {
+                    global::Language.Language.SwitchLanguage(code); yield return null; yield return new WaitForEndOfFrame();
+                    Check(room.GetComponentsInChildren<Text>(true).Any(t => t.text.Contains("显示测试好友")), "Steam friend names remain opaque " + code);
+                    if (code == global::Language.LanguageCode.EN)
+                        Check(room.GetComponentsInChildren<Text>().Where(t => !t.text.Contains("显示测试好友")).All(t => !t.text.Any(c => c >= '\u4e00' && c <= '\u9fff')), "English Steam controls contain no untranslated Chinese: " + string.Join(" | ", room.GetComponentsInChildren<Text>().Where(t => !t.text.Contains("显示测试好友") && t.text.Any(c => c >= '\u4e00' && c <= '\u9fff')).Select(t => t.name + "=" + t.text)));
+                    Capture("language-" + code + "-steam");
+                }
+            }
             rooms.Clear(); Set(steam, "showFriends", false); Set(steam, "nextFriendsRefresh", 0d);
             yield return BackToTitle(room, "Steam back");
+    }
+    private IEnumerator CheckLocalization(MenuScreen lan, InputField[] fields) {
+        var settingMenu = CoopMod.Instance.GetMenuScreen(null, null);
+        var canonical = CoopMod.Instance.GetMenuData(null);
+        var name = fields.Single(f => f.transform.parent.name == "Username");
+        var originalName = name.text;
+        name.text = "开启关闭テスト";
+        foreach (var code in new[] { global::Language.LanguageCode.EN, global::Language.LanguageCode.JA, global::Language.LanguageCode.ZH }) {
+            global::Language.Language.SwitchLanguage(code);
+            yield return null; yield return null;
+            var expected = code == global::Language.LanguageCode.EN ? "Join game" : code == global::Language.LanguageCode.JA ? "ゲームに参加" : "加入游戏";
+            var join = lan.GetComponentsInChildren<MenuButton>(true).Single(b => b.name == "Connect").GetComponentInChildren<Text>(true);
+            Check(join.text.Trim() == expected, "live native language switch refreshes existing LAN menu: " + code + "=" + join.text);
+            Check(name.text == "开启关闭テスト", "language switch preserves opaque input: " + code);
+            Capture("language-" + code + "-lan");
+            Native.UIGoToDynamicMenu(settingMenu);
+            yield return Until(() => At(settingMenu), "localized settings menu opens " + code);
+            yield return null; yield return null;
+            foreach (var row in settingMenu.GetComponentsInChildren<MenuOptionHorizontal>(true)) {
+                var entry = canonical.FirstOrDefault(e => e.Name == row.gameObject.name);
+                if (entry.Loader == null) continue;
+                Check(row.transform.Find("Label").GetComponent<Text>().text.Trim() == Localize.T(entry.Name), "canonical row identity and translated label: " + code + "/" + row.name + "=" + row.transform.Find("Label").GetComponent<Text>().text);
+            }
+            if (code == global::Language.LanguageCode.EN) Check(settingMenu.GetComponentsInChildren<Text>(true).Where(t => t.name != "Selected option help").All(t => !t.text.Any(c => c >= '\u4e00' && c <= '\u9fff')), "English settings contain no untranslated Chinese");
+            if (code == global::Language.LanguageCode.JA) Check(Localize.Font.HasCharacter('あ') && Localize.Font.HasCharacter('救'), "Japanese menu font has kana and kanji");
+            Capture("language-" + code + "-settings");
+            Native.UIGoToDynamicMenu(lan);
+            yield return Until(() => At(lan), "return to existing LAN menu " + code);
+        }
+        name.text = originalName;
+        Object.Destroy(settingMenu.gameObject);
+        // Test save warnings and Steam rows on the same hot-switched language,
+        // with raw friend names preserved by template captures.
+        foreach (var code in new[] { global::Language.LanguageCode.EN, global::Language.LanguageCode.JA, global::Language.LanguageCode.ZH }) {
+            global::Language.Language.SwitchLanguage(code); yield return null; yield return null;
+            typeof(UiManager).GetMethod("CreateJoinSaveMenu", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(ui, null);
+            var confirm = Field<MenuScreen>(ui, "_joinSaveMenu");
+            confirm.gameObject.SetActive(true); yield return null; yield return null;
+            Check(Field<Text>(ui, "_joinSaveWarningText").text == Localize.T(UiManager.JoinSaveWarning), "save warning follows language " + code);
+            confirm.gameObject.SetActive(false);
+        }
+        Log("PASS all three live languages, canonical identities, opaque input and save warning");
     }
     private void Capture(string name) {
         Canvas.ForceUpdateCanvases();

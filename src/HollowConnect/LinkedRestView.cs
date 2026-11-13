@@ -32,11 +32,18 @@ internal sealed class LinkedRestView : IDisposable {
         root.SetActive(false);
     }
     internal void Show(LinkedRestCount count, string missing) {
-        label.text = count.Label + " " + count.Resting + "/" + count.Total + (string.IsNullOrEmpty(missing) ? "" : "\n等待：" + missing);
+        label.font = Hkmp.Ui.Localize.Font;
+        var peers = string.IsNullOrEmpty(missing) ? "" : string.Join(", ", missing.Split('、').Select(TranslateMissing));
+        label.text = Hkmp.Ui.Localize.T(count.Label) + " " + count.Resting + "/" + count.Total + (peers.Length == 0 ? "" : Hkmp.Ui.Localize.T("\n等待：") + peers);
         motion.Visible = true; root.SetActive(true);
     }
     internal void Hide() => motion.Visible = false;
     public void Dispose() { if (root != null) UnityEngine.Object.Destroy(root); }
+    private static string TranslateMissing(string value) {
+        foreach (var suffix in new[] { "（加载中）", "（等待响应）", "（未就位）" })
+            if (value.EndsWith(suffix, StringComparison.Ordinal)) return value.Substring(0, value.Length - suffix.Length) + Hkmp.Ui.Localize.T(suffix);
+        return value;
+    }
 }
 
 // Show/Hide are called every frame. Animate a target so repeated calls and a

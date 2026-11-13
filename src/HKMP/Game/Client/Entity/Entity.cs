@@ -36,9 +36,9 @@ internal class Entity {
         if (Type == EntityType.EncounterSummoner && _components.TryGetValue(EntityComponentType.EncounterSummon, out var component))
             ((EncounterSummonComponent)component).RequestNativeWave();
     }
-    internal void RequestBattleStart(HutongGames.PlayMaker.Fsm sender) {
+    internal void RequestBattleStart(FsmStateAction action) {
         if (_components.TryGetValue(EntityComponentType.EncounterSummon, out var component))
-            ((EncounterSummonComponent)component).RequestBattle(sender);
+            ((EncounterSummonComponent)component).RequestBattle(action);
     }
     internal bool OwnsHostObject;
     private float nextFsmSample;

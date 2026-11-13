@@ -122,7 +122,8 @@ foreach ($testRole in $taskRoles) {
     $env:HOLLOWCONNECT_SMOKE_ROLE=$testRole
     $taskArguments=@('-screen-fullscreen','0','-screen-width','800','-screen-height','600','-logFile',"$testRoot\$testRole-unity.log")
     if($env:HOLLOWCONNECT_RENDERED_TEST -ne '1'){$taskArguments=@('-batchmode')+$taskArguments}
-    $testProcess=Start-Process -FilePath "$gameDir\hollow_knight.exe" -ArgumentList $taskArguments -WorkingDirectory $gameDir -WindowStyle Hidden -PassThru
+    $taskWindowStyle=if($env:HOLLOWCONNECT_HUD_AUDIT -eq '1' -or $env:HOLLOWCONNECT_RENDERED_TEST -eq '1'){'Normal'}else{'Hidden'}
+    $testProcess=Start-Process -FilePath "$gameDir\hollow_knight.exe" -ArgumentList $taskArguments -WorkingDirectory $gameDir -WindowStyle $taskWindowStyle -PassThru
     Set-Content -LiteralPath "$testRoot\$testRole.pid" -Value $testProcess.Id
     Write-Output "$testRole started: $($testProcess.Id)"
     if ($testRole -ne $taskRoles[-1]) {

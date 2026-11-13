@@ -39,6 +39,7 @@ public sealed partial class CoopMod {
         }
         screen.gameObject.AddComponent<CoopMenuHelpPanel>().Initialize(screen);
         GroupSharedHealth(screen);
+        Hkmp.Ui.Localize.Screen(screen);
         return screen;
     }
 
@@ -121,6 +122,7 @@ internal sealed class CoopMenuHelpPanel : MonoBehaviour {
     private void LateUpdate() => Refresh();
     internal void Refresh() {
         if (help == null) return;
+        help.font = Hkmp.Ui.Localize.Font;
         var selected = EventSystem.current?.currentSelectedGameObject;
         var row = selected != null ? selected.GetComponentInParent<MenuOptionHorizontal>() : null;
         var value = row != null && descriptions.TryGetValue(row, out var description) ? description.text : "";

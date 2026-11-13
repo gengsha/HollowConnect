@@ -45,9 +45,11 @@ public sealed partial class ProgressProbe {
             "mageLordDefeated", "killedInfectedKnight", "infectedKnightDefeated", "killedDungDefender", "defeatedDungDefender",
             "dungDefenderEncounterReady", "brettaRescued", "zoteDefeated" }) pd.SetBool(key, true);
         pd.SetBool("dungDefenderSleeping", true); pd.SetInt("whiteDefenderDefeats", 1); pd.SetInt("greyPrinceDefeats", 1);
+        if (KeyEssenceMode == "shade-soul") pd.SetBool("gaveSlykey", true); // Shop stock prerequisite; Elegant Key is still purchased natively.
     }
     private IEnumerator KeyEssenceChecks() {
         yield return Until(() => runtime.Peers.Count == 1 && engine.ClientManager.SceneSnapshotReady, "key/essence roster ready");
+        if (KeyEssenceMode == "shade-soul") { yield return ShadeSoulChecks(); yield break; }
         if (KeyEssenceMode == "inspect") {
             var scenes = host ? new[] { "Crossroads_10", "Room_shop", "Fungus3_49", "Mines_11", "Ruins1_31", "Fungus2_21", "Ruins2_11" } :
                 ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.DreamEssence).Select(s => s.Scene).Distinct().ToArray();

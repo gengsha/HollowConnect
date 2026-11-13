@@ -4,9 +4,13 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.2.9** · 支持 Windows 10 / 11 · 分别提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
+**当前版本：0.3.1** · 支持 Windows 10 / 11 · 分别提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
 
-0.2.9 修复共享进度下水晶山峰部分敌人只响应先入图玩家、远端玩家靠近时飞虫不启动和激光不发射的问题，并包含按攻击玩家独立计算的敌人受击无敌帧修复。Steam 与 IP 连接共用游戏逻辑。两版使用同一套玩法源码，安装时选择匹配游戏版本的完整包，详见 [0.2.9 更新说明](docs/UPDATE-0.2.9.md)。
+0.3.1 修复黑波（暗影之魂）获取地钥匙门后 Boss 触发／召唤流程中的异常，新增 English / 日本語，游戏内跟随游戏语言；安装器内可独立选择语言。灵魂 HUD 附近的常驻名单和开发状态提示已移入日志。详见 [更新说明](docs/UPDATE-0.3.1.md)。
+
+**安装方式：** [一键安装器](#安装与开房) · [PowerShell 脚本安装](#脚本安装无需安装器) · [手动安装](#手动安装无需安装器)
+
+**Languages:** [English installation guide](docs/INSTALL-EN.md) · [日本語インストールガイド](docs/INSTALL-JA.md)
 
 ## 可以一起做什么
 
@@ -21,7 +25,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.2.9/HollowConnect-0.2.9-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.2.9/HollowConnect-0.2.9-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.2.9 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.2.9)。GitHub 的 “Code → Download ZIP” 提供的是源码。
+下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.3.1/HollowConnect-0.3.1-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.3.1/HollowConnect-0.3.1-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.3.1 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.1)。GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
@@ -34,6 +38,25 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 Steam 方式：主菜单选择 **Steam 联机** 创建好友房间、查看好友主持的游戏；游戏内按 F10 打开房间菜单。邀请和存档选择见 [Steam 联机说明](docs/STEAM-MULTIPLAYER.md)。真实双账号邀请与跨机器连接仍待实测。
 
 安装器会备份原游戏文件、已有 HKMP 和存档。请保留解压后的配套文件；安装无需 .NET SDK 或命令行操作。
+
+## 脚本安装（无需安装器）
+
+下载匹配游戏版本的 **Windows 完整包**并完整解压，关闭游戏，在解压目录运行：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GamePath "E:\SteamLibrary\steamapps\common\Hollow Knight"
+```
+
+脚本同样会校验配套 API、备份并安装。卸载用同目录的 `Uninstall.ps1 -GamePath "游戏目录"`，保留当前存档。
+
+## 手动安装（无需安装器）
+
+1. 关闭游戏，备份存档、`hollow_knight_Data/Managed` 中将被替换的文件以及已有 `Mods/HKMP`。
+2. 解压匹配 Windows 包的 `dependencies/` 中 **Modding API ZIP**，把内部文件放入 `hollow_knight_Data/Managed`，保留目录结构并覆盖同名 API 文件。Legacy 用 v77；Unity6 必须用该包自带的固定 Unity6 API。
+3. 把包内整个 **`payload/HKMP` 文件夹**放到 `hollow_knight_Data/Managed/Mods/HKMP`。更新时先移走旧 HKMP 文件夹，再放入完整新文件夹，避免残留；必须复制所有依赖。
+4. 启动游戏。所有队友使用匹配各自游戏版本的同版模组完整包。手动安装没有安装脚本的自动备份链；卸载时移走新 HKMP 文件夹并恢复自己备份的文件。
+
+游戏内选择 English / 日本語 后，模组界面随之切换。日常状态和开发提示保存在游戏日志及 F9 导出的诊断中；地图打开时仍可查看队友位置。
 
 ## 房主设置
 
@@ -93,7 +116,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.2.9.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.3.1.md)。
 
 ## 开发与许可
 

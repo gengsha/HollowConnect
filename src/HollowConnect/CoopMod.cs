@@ -38,10 +38,10 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
     public static DeathStatistics Statistics = new DeathStatistics();
-    public const string Version = "0.2.9";
+    public const string Version = "0.3.1";
     // HKMP truncates addon versions to ten characters. Keep the wire revision
     // inside that limit, including candidate builds with a longer display name.
-    public const string NetworkVersion = "0.2.9-l15";
+    public const string NetworkVersion = "0.3.1-l15";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override List<(string, string)> GetPreloadNames() => new List<(string, string)> {

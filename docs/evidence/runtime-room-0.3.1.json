@@ -1,0 +1,1042 @@
+{
+  "scope": "4 related dual-client cases per profile",
+  "version": "0.3.1",
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+        }
+      ],
+      "vanillaAssemblySha256": "FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0",
+      "runs": [
+        {
+          "ended": "2026-11-13T18:59:13.6798593Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ConnectionMenuProbe.cs",
+              "sha256": "BA13433FF366AFA7954F405DFB57F93E3453B3BA6D1362BF77DC1D6126E4550E"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_LOCALIZATION_CHECK": "1"
+          },
+          "started": "2026-11-13T18:58:33.0512586Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "8E7E4FB633F9B75EBA98A792A99FCEA406F8293274D522E7E89FDA0300E68E1A",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "A355D635FC5DE6D3D6DEF24397BCDED018FB9A06D623289E2F800CBC1396C50D",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-menus-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "menus"
+        },
+        {
+          "ended": "2026-11-13T19:00:57.1645823Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "guest",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "host",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul"
+          },
+          "started": "2026-11-13T18:59:13.7011535Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "B3CFC2F5E7EC2AF8EA859625CF7E20DAD9239310DED6E4C4E06DAE14558A89A1",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2116,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "15F9F3571438DD11B23B2DC8B84F719B0C4CFA094895D9605724D275BB52F2B0",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2168,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-blackwave-host-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "blackwave-host"
+        },
+        {
+          "ended": "2026-11-13T19:02:36.1118115Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "host",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "guest",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul"
+          },
+          "started": "2026-11-13T19:00:57.1827154Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "D61AC8F93F63C83721CF60D3F203A499798DEDDA95A6ACD17CDBAF059CD3DE43",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2130,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "BC26CA0A94754D7DFC1F207110101EB40D228F9867E08B0E6B6DAC98051833B7",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2116,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-blackwave-guest-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "blackwave-guest"
+        },
+        {
+          "ended": "2026-11-13T19:03:34.8973608Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            },
+            {
+              "file": "ProgressDefender.cs",
+              "sha256": "FC5ADCE94534B6BBC1B3650E151F183C3739C4FAFCCFB46F56268C46E2183D67",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            },
+            {
+              "file": "DefenderBarrierChecks.cs",
+              "sha256": "A0DAA36687262799B963778728F64337E3BD0B273B8A8ECBFF9B7AAE6F0E6882",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_DEFENDER_BARRIER_CHECK": "outside",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_DEFENDER_CHECK": "1"
+          },
+          "started": "2026-11-13T19:02:36.1264246Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "FB15A8A8086F326A72B5600CE5FA99FD704F9787B4225FA70F2D96C5DB6657E6",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2076,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "4AF164880F7A7498A5960F371D31CE4652EC4279D975ACED484EAB6813553010",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2080,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-defender-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "defender"
+        }
+      ],
+      "gameVersion": "1.5.78.11833 Windows / Unity 2020.2.2f1",
+      "apiAssemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "profile": "Unity6",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+        }
+      ],
+      "vanillaAssemblySha256": "E9048EF6A633970F735E01EC166D3959F610EAEA7A88D827D48D67B1E5FB87BD",
+      "runs": [
+        {
+          "ended": "2026-11-13T18:46:44.0240369Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ConnectionMenuProbe.cs",
+              "sha256": "E93EB8771B0549569F18C8DA24F7B94F09CFB8FAEB4B055C075DC99366BD1BCD"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_LOCALIZATION_CHECK": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1"
+          },
+          "started": "2026-11-13T18:46:10.1408041Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "C148D709279B3E35DC008DF0431F1B5E0A91842696F5E93DE74A5561082A2038",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "68E1681EF3BDC46D7916BB652B2AD4EB1CEB61C08CF02B17D2E78000AC897CA0",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-menus-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "menus"
+        },
+        {
+          "ended": "2026-11-13T18:48:22.0372043Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "guest",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "host"
+          },
+          "started": "2026-11-13T18:46:44.0392709Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "E0D197DF7599226FAD671EBF6346C689DF0ADDA497D389E3E940F1CB7B4B3D45",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1845,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "810F3EBE5D2681CFA2DE20D4FD6BE2D2186A1F4080DF6D4E166C837F314CF22E",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1975,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-blackwave-host-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "blackwave-host"
+        },
+        {
+          "ended": "2026-11-13T18:49:58.5689163Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "host",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "guest"
+          },
+          "started": "2026-11-13T18:48:22.082906Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "8C1F5E148783FDF910653C4F7074E8D407B85BD259E5889C575A4A5E9EC1E7A2",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1810,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "426CCC55F61F0C710D27B072C0654239FDA348A197637B153EB7CDEC1BD70DBA",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1910,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-blackwave-guest-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "blackwave-guest"
+        },
+        {
+          "ended": "2026-11-13T18:50:56.2073183Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            },
+            {
+              "file": "ProgressDefender.cs",
+              "sha256": "FC5ADCE94534B6BBC1B3650E151F183C3739C4FAFCCFB46F56268C46E2183D67",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            },
+            {
+              "file": "DefenderBarrierChecks.cs",
+              "sha256": "A0DAA36687262799B963778728F64337E3BD0B273B8A8ECBFF9B7AAE6F0E6882",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_DEFENDER_BARRIER_CHECK": "outside",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_DEFENDER_CHECK": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1"
+          },
+          "started": "2026-11-13T18:49:58.5856082Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "DAC9DE4220908826CCE14CF06C3D36F0880542D9F186A0B47BF7C35C2BA5A414",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1648,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "1430A3B701160698EF8F3C24F903E7B76E4B42579036DB934CBF873D275B22F5",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1733,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-defender-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "defender"
+        }
+      ],
+      "gameVersion": "1.5.12620 Windows / Unity 6000.0.61f1",
+      "apiAssemblySha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+    }
+  ],
+  "validationSha256": "0D50807380ABB637C614D259D2FCED8D3FFB4728D2C51141ABF0DAD92317C8F9",
+  "fullMatrixRerun": false,
+  "validationSource": "docs/evidence/development-validation-0.3.1.json",
+  "engineVersion": "3.0.0-hc13"
+}

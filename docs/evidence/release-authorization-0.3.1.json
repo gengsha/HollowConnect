@@ -1,0 +1,57 @@
+{
+  "releaseChannel": "release",
+  "retestOmitted": false,
+  "fullMatrixRerun": false,
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+        }
+      ]
+    }
+  ],
+  "additionalDocuments": [
+    "docs/evidence/runtime-blockers-0.2.9.json",
+    "docs/PERFORMANCE-0.3.1.md"
+  ],
+  "blockerLedgerSha256": "7C7FD61A57F1B0C3C254C6AEF063D13037F09DC2D02C457A0F49468CE9E61AA9",
+  "action": "publish-github-release",
+  "version": "0.3.1",
+  "userRequest": "做完后做必要测试，测完发布0.3.1双版本，github release；两种非安装器安装方式明显挂在GitHub上；小字移入日志。"
+}

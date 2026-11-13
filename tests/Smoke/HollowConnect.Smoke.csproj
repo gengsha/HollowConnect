@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect.Smoke</AssemblyName></PropertyGroup>
   <ItemGroup>
+    <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(HollowReferences)/UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MonoMod.Utils" Condition="'$(HollowGameVersion)' == 'Unity6'"><HintPath>$(HollowReferences)/MonoMod.Utils.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Mono.Cecil" Condition="'$(HollowGameVersion)' == 'Unity6'"><HintPath>$(HollowReferences)/Mono.Cecil.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.AnimationModule"><HintPath>$(HollowReferences)/UnityEngine.AnimationModule.dll</HintPath><Private>false</Private></Reference>

@@ -56,7 +56,7 @@ internal class ConnectInterface {
             ConnectionFailedReason.Other => ((ConnectionFailedMessageResult)result).Message,
             _ => "未知原因"
         };
-        SetFeedbackText(Color.white, "连接失败：" + reason); RestoreConnectButton();
+        SetFeedbackText(Color.white, "连接失败：" + Localize.T(reason)); RestoreConnectButton();
     }
     private void OnConnectButtonPressed() {
         if (ConnectionReserved?.Invoke() == true) { SetFeedbackText(Color.white, "请先离开 Steam 房间"); return; }

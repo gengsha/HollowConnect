@@ -1434,36 +1434,32 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         }
     }
 
-    internal void Notice(string message) { status = message; statusUntil = Time.unscaledTime + 5; }
+    internal void Notice(string message) {
+        status = message;
+        statusUntil = Time.unscaledTime + 5;
+        // Routine state transitions belong in diagnostics, not over gameplay.
+        Hkmp.Logging.Logger.Info("HollowConnect notice: " + message);
+        DebugEvent("notice", DebugEventSeverity.Info, message);
+    }
     private void OnGUI() {
         var emergencyNotice = emergencyStatusVisible && Time.unscaledTime < statusUntil;
         if (!Connected && !debugPanel && !emergencyNotice) return;
         if (!debugPanel && !(Connected && Input.GetKey(CoopMod.Settings.DeathLeaderboardKey)) && Event.current.type != EventType.Repaint) return;
         var style = overlayStyle ??= new GUIStyle(GUI.skin.label) { font = font, fontSize = 16, alignment = TextAnchor.MiddleCenter };
+        style.font = Hkmp.Ui.Localize.Font;
         style.normal.textColor = Color.white;
-        if ((Connected || emergencyNotice) && Time.unscaledTime < statusUntil) GUI.Label(new Rect(0, 70, Screen.width, 36), status, style);
         if (Connected) {
-            if (Observing && !ObservationReturning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 78),
-                "正在观战：" + ObservationName + "\n" + CoopMod.Settings.ObserveKey + " 退出 · " + CoopMod.Settings.SelectTeammateKey +
-                " 切换队友\n退出回德特茅斯长椅 · 暂停可打开菜单", style);
-            if (Down || Resetting || Returning) GUI.Label(new Rect(0, Screen.height * .7f, Screen.width, 70),
-                Resetting ? "全队失败 · 等待所有队友返回各自复活点" : Returning ? "正在返回自己的复活点" :
-                LinkedHealthRuleEnabled ? "团队生命耗尽 · 等待全队返回各自复活点" :
-                Spectating ? "正在观战 · 等待本场结束\n按 " + CoopMod.Settings.GiveUpKey + " 返回自己的复活点" :
-                "暗影形态 · 等待队友击破暗影，一血复活\n按 " + CoopMod.Settings.GiveUpKey +
-                (SpectateAfterExhaustion ? " 放弃救援并转入观战" : " 放弃救援并返回自己的复活点"), style);
-            if (RescueLimit > 0 && Now < rescueCountUntil) GUI.Label(new Rect(0, Screen.height - 42, Screen.width, 32), RescueRemainingText, style);
             map.DrawOverlay(style);
         }
         if (Connected && Input.GetKey(CoopMod.Settings.DeathLeaderboardKey)) {
             var width = Mathf.Min(350, Screen.width - 20);
             var height = Mathf.Min(430, Screen.height - 110);
             GUILayout.BeginArea(new Rect(Screen.width - width - 10, 100, width, height), GUI.skin.box);
-            GUILayout.Label("本存档累计死亡榜 · 倒地计一次", style);
+            Hkmp.Ui.Localize.LayoutLabel("本存档累计死亡榜 · 倒地计一次", style);
             deathScroll = GUILayout.BeginScrollView(deathScroll);
             var rank = 0;
             foreach (var entry in CoopMod.Statistics.Deaths.OrderByDescending(s => s.Value).ThenBy(s => s.Key, StringComparer.Ordinal))
-                GUILayout.Label(++rank + ". " + entry.Key + (entry.Key == localName ? "（你）" : "") + "   " + entry.Value + " 次", style);
+                GUILayout.Label(++rank + ". " + entry.Key + (entry.Key == localName ? Hkmp.Ui.Localize.T("（你）") : "") + "   " + string.Format(Hkmp.Ui.Localize.T("{0} 次倒地"), entry.Value), style);
             GUILayout.EndScrollView(); GUILayout.EndArea();
         }
         DrawDebugPanel(style);
@@ -1475,32 +1471,32 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         var width = Mathf.Min(560, Screen.width - 20);
         var height = Mathf.Min(680, Screen.height - 20);
         GUILayout.BeginArea(new Rect(10, 10, width, height), GUI.skin.box);
-        GUILayout.Label("HollowConnect 诊断（只读；F9 开关）", style);
+        Hkmp.Ui.Localize.LayoutLabel("HollowConnect 诊断（只读；F9 开关）", style);
         debugScroll = GUILayout.BeginScrollView(debugScroll, GUILayout.Height(height - 115));
-        GUILayout.Label("场景 " + snapshot.SceneName + " / GM " + snapshot.GameManagerScene + " / 入口 " + snapshot.EntryGateName, style);
-        GUILayout.Label("转换 " + snapshot.IsInSceneTransition + " · Finished " + snapshot.HasFinishedEnteringScene + " · Hero位置 " + snapshot.HeroInPosition, style);
-        GUILayout.Label("输入 " + snapshot.HeroAcceptingInput + " · 控制锁 " + snapshot.HeroControlRelinquished + " · HeroBox禁用 " + snapshot.HeroBoxInactive + " · 刚体 " + snapshot.BodySimulated, style);
-        GUILayout.Label("流程 changing=" + snapshot.ChangingScene + " down=" + snapshot.Down + " reset=" + snapshot.Resetting + " returning=" + snapshot.Returning + " observing=" + snapshot.VoluntaryObservation, style);
-        GUILayout.Label("warp=" + snapshot.WarpScene + " entry=" + snapshot.WarpEntry + " retry=" + snapshot.RetryScene, style);
-        GUILayout.Label("复活点=" + snapshot.RespawnScene + " / " + snapshot.RespawnMarkerName + " type=" + snapshot.RespawnType, style);
-        GUILayout.Label("Boss sequence=" + snapshot.BossSequenceName + " in=" + snapshot.InBossSequence + " guard=" + snapshot.HasBossContextGuard + " gate=" + snapshot.BossReturnEntryGate, style);
-        GUILayout.Label("回执=" + snapshot.ResourceReceiptCount + " 共享进度=" + snapshot.SharedProgressCount + " peers=" + snapshot.PeerCount, style);
+        Hkmp.Ui.Localize.LayoutLabel("场景 " + snapshot.SceneName + " / GM " + snapshot.GameManagerScene + " / 入口 " + snapshot.EntryGateName, style);
+        Hkmp.Ui.Localize.LayoutLabel("转换 " + snapshot.IsInSceneTransition + " · Finished " + snapshot.HasFinishedEnteringScene + " · Hero位置 " + snapshot.HeroInPosition, style);
+        Hkmp.Ui.Localize.LayoutLabel("输入 " + snapshot.HeroAcceptingInput + " · 控制锁 " + snapshot.HeroControlRelinquished + " · HeroBox禁用 " + snapshot.HeroBoxInactive + " · 刚体 " + snapshot.BodySimulated, style);
+        Hkmp.Ui.Localize.LayoutLabel("流程 changing=" + snapshot.ChangingScene + " down=" + snapshot.Down + " reset=" + snapshot.Resetting + " returning=" + snapshot.Returning + " observing=" + snapshot.VoluntaryObservation, style);
+        Hkmp.Ui.Localize.LayoutLabel("warp=" + snapshot.WarpScene + " entry=" + snapshot.WarpEntry + " retry=" + snapshot.RetryScene, style);
+        Hkmp.Ui.Localize.LayoutLabel("复活点=" + snapshot.RespawnScene + " / " + snapshot.RespawnMarkerName + " type=" + snapshot.RespawnType, style);
+        Hkmp.Ui.Localize.LayoutLabel("Boss sequence=" + snapshot.BossSequenceName + " in=" + snapshot.InBossSequence + " guard=" + snapshot.HasBossContextGuard + " gate=" + snapshot.BossReturnEntryGate, style);
+        Hkmp.Ui.Localize.LayoutLabel("回执=" + snapshot.ResourceReceiptCount + " 共享进度=" + snapshot.SharedProgressCount + " peers=" + snapshot.PeerCount, style);
         var risks = snapshot.RiskCodes();
-        GUILayout.Label(risks.Count == 0 ? "风险：未发现当前临时锁异常" : "风险：" + string.Join(", ", risks), style);
-        GUILayout.Label("事件（最近 " + debugEvents.Count + "/" + debugEvents.Capacity + "）", style);
+        Hkmp.Ui.Localize.LayoutLabel(risks.Count == 0 ? "风险：未发现当前临时锁异常" : "风险：" + string.Join(", ", risks), style);
+        Hkmp.Ui.Localize.LayoutLabel("事件（最近 " + debugEvents.Count + "/" + debugEvents.Capacity + "）", style);
         foreach (var e in debugEvents.Snapshot().Reverse().Take(20))
-            GUILayout.Label(e.Sequence + " " + e.Severity + " " + e.Code + (e.Detail.Length == 0 ? "" : " · " + e.Detail), style);
+            Hkmp.Ui.Localize.LayoutLabel(e.Sequence + " " + e.Severity + " " + e.Code + (e.Detail.Length == 0 ? "" : " · " + e.Detail), style);
         GUILayout.EndScrollView();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("导出诊断")) ExportDebugReport();
+        if (Hkmp.Ui.Localize.Button("导出诊断")) ExportDebugReport();
         if (!debugRecoveryArmed) {
-            if (GUILayout.Button("准备恢复临时状态")) debugRecoveryArmed = true;
+            if (Hkmp.Ui.Localize.Button("准备恢复临时状态")) debugRecoveryArmed = true;
         } else {
-            if (GUILayout.Button(Observing ? "退出观战并回椅" : "确认恢复（不改存档）")) { RecoverTransientState(); debugRecoveryArmed = false; }
+            if (Hkmp.Ui.Localize.Button(Observing ? "退出观战并回椅" : "确认恢复（不改存档）")) { RecoverTransientState(); debugRecoveryArmed = false; }
         }
-        if (GUILayout.Button("关闭")) { debugPanel = false; debugRecoveryArmed = false; }
+        if (Hkmp.Ui.Localize.Button("关闭")) { debugPanel = false; debugRecoveryArmed = false; }
         GUILayout.EndHorizontal();
-        if (debugExportPath.Length != 0) GUILayout.Label("最近导出：" + debugExportPath, style);
+        if (debugExportPath.Length != 0) Hkmp.Ui.Localize.LayoutLabel("最近导出：" + debugExportPath, style);
         GUILayout.EndArea();
     }
 

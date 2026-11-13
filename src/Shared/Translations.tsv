@@ -1,0 +1,225 @@
+# Chinese source	English	Japanese. Captured values are never translated.
+未发现好友房间，可让好友从 Steam 列表邀请你	No friends' rooms found. A friend can invite you from Steam.	フレンドの部屋が見つかりません。Steamから招待してもらえます。
+收到好友邀请；结束当前连接后可加入	Invitation received; end your current connection to join.	招待を受け取りました。現在の接続を終了すると参加できます。
+正在等待 Steam 完成上一条请求…	Waiting for Steam to finish the previous request…	Steamが前のリクエストを処理するのを待っています…
+HollowConnect 安装器	HollowConnect Installer	HollowConnect インストーラー
+安装 HollowConnect 协作联机模组	Install HollowConnect multiplayer	HollowConnect マルチプレイMODのインストール
+自动识别各盘的 Steam 游戏库。也可选择 hollow_knight.exe，或粘贴游戏目录。	Finds Steam libraries automatically. You can also select hollow_knight.exe or paste the game folder.	Steamライブラリを自動検索します。hollow_knight.exeを選ぶか、ゲームフォルダーを貼り付けることもできます。
+选择游戏…	Choose game…	ゲームを選択…
+重新查找	Scan again	再検索
+安装 / 更新	Install / Update	インストール / 更新
+卸载并恢复	Uninstall / Restore	アンインストール / 復元
+正在查找 Steam 游戏库…	Searching Steam libraries…	Steamライブラリを検索中…
+安装前请关闭游戏。自动备份；卸载保留当前存档。	Close the game first. Files are backed up; uninstall keeps your saves.	先にゲームを終了してください。ファイルはバックアップされ、アンインストール時もセーブは保持されます。
+正在完成操作，请稍候。	Finishing the operation. Please wait.	処理を完了しています。お待ちください。
+选择《空洞骑士》的 hollow_knight.exe	Select Hollow Knight's hollow_knight.exe	Hollow Knightのhollow_knight.exeを選択
+已选择游戏，点击“安装 / 更新”即可。	Game selected. Click Install / Update.	ゲームを選択しました。「インストール / 更新」を押してください。
+已找到游戏，点击“安装 / 更新”即可。	Game found. Click Install / Update.	ゲームが見つかりました。「インストール / 更新」を押してください。
+找到多个游戏副本，请从列表选择要安装的目录。	Several game copies found. Choose the target folder from the list.	複数のゲームが見つかりました。一覧からインストール先を選んでください。
+未自动找到游戏，请点击“选择游戏…”找到 hollow_knight.exe。	Game not found. Use Choose Game to select hollow_knight.exe.	ゲームが見つかりません。「ゲームを選択」でhollow_knight.exeを指定してください。
+自动查找失败，可手动选择游戏。	Automatic detection failed. You can choose the game manually.	自動検索に失敗しました。手動でゲームを選択してください。
+所选目录不是《空洞骑士》游戏目录，请重新选择。	This is not a Hollow Knight game folder. Choose another folder.	Hollow Knightのゲームフォルダーではありません。選び直してください。
+恢复安装前的模组和游戏文件？当前存档将保留。	Restore the mods and game files from before installation? Your current saves will be kept.	インストール前のMODとゲームファイルを復元しますか？現在のセーブは保持されます。
+卸载 HollowConnect	Uninstall HollowConnect	HollowConnectのアンインストール
+正在恢复安装前文件…	Restoring original files…	インストール前のファイルを復元中…
+正在校验、备份和安装…	Verifying, backing up and installing…	検証・バックアップ・インストール中…
+日志：{0}	Log: {0}	ログ：{0}
+卸载完成，当前存档已保留。	Uninstalled. Your current saves have been kept.	アンインストールしました。現在のセーブは保持されています。
+安装完成！可以启动游戏；所有队友请使用同一模组版本。	Installation complete. You can start the game. All players should use the same mod version.	インストールが完了しました。ゲームを起動できます。全員で同じMODバージョンを使ってください。
+操作失败，请查看下方日志。	Operation failed. See the log below.	処理に失敗しました。下のログを確認してください。
+ 写入权限不足时，请右键安装器选择“以管理员身份运行”。	 If write access is denied, right-click the installer and choose Run as administrator.	 書き込み権限がない場合は、インストーラーを右クリックして「管理者として実行」を選んでください。
+操作未完成，请查看下方日志。	Operation could not finish. See the log below.	処理を完了できませんでした。下のログを確認してください。
+请先完整解压安装包，保留安装器旁的所有文件。	Extract the complete package first, keeping every file beside the installer.	パッケージをすべて展開し、インストーラーの隣にあるファイルを残してください。
+确定	OK	OK
+{0} 次	{0} rescues	{0}回
+{0}% 不透明	{0}% opaque	不透明度{0}%
+开启（已锁定）	On (locked)	オン（ロック中）
+关闭（已锁定）	Off (locked)	オフ（ロック中）
+不限次数（已锁定）	Unlimited (locked)	無制限（ロック中）
+原版（已锁定）	Original (locked)	通常（ロック中）
+灵活（已锁定）	Flexible (locked)	柔軟（ロック中）
+{0} 次（已锁定）	{0} rescues (locked)	{0}回（ロック中）
+{0}（已锁定）	{0} (locked)	{0}（ロック中）
+加入 {0} 的游戏	Join {0}'s game	{0}のゲームに参加
+下一页（{0}/{1}）	Next page ({0}/{1})	次のページ（{0}/{1}）
+连接失败：{0}	Connection failed: {0}	接続に失敗しました：{0}
+Steam 房间连接失败：{0}	Steam room connection failed: {0}	Steamの部屋への接続に失敗しました：{0}
+Steam 联机错误：{0}	Steam multiplayer error: {0}	Steamマルチプレイのエラー：{0}
+Steam 创建房间失败：{0}	Steam room creation failed: {0}	Steamの部屋を作成できませんでした：{0}
+Steam 加入失败：{0}	Steam join failed: {0}	Steamの部屋に参加できませんでした：{0}
+读取好友列表失败：{0}	Could not read friends list: {0}	フレンド一覧を取得できませんでした：{0}
+休息	Resting	休息
+温泉	Hot spring	温泉
+椅子	Bench	ベンチ
+{0}. {1}（你）   {2} 次	{0}. {1} (you)   {2} downs	{0}. {1}（自分）   {2}回
+{0}. {1}   {2} 次	{0}. {1}   {2} downs	{0}. {1}   {2}回
+Boss 增血参数（%，房主）	Boss health factor (%, host)	ボスHP増加率（%、ホスト）
+联机中已锁定。请先断开联机；房主还需停止开房，再返回本模组配置修改。	Locked while connected. Disconnect first; the host must also stop hosting before changing these settings.	接続中は変更できません。接続を切り、ホストは部屋も閉じてから設定を変更してください。
+共享血量（Beta，房主）	Shared health (Beta, host)	HP共有（ベータ、ホスト）
+主动观战（Beta，本机）	Spectate (Beta, local)	観戦（ベータ、自分のみ）
+（已锁定）	 (locked)	（ロック中）
+共享永久进度（房主）	Shared progress (host)	進行状況の共有（ホスト）
+关闭	Off	オフ
+开启	On	オン
+默认开启，开房前设置。关闭后普通怪、机关、奖励与剧情各自推进，只保留同房 Boss 合作及队友位置；传送、救援按各自开关。开启时能力和列出的资源、世界标记共享，骨钉升级及矿石消费各自计算。	On by default. Set before hosting. When off, ordinary enemies, mechanisms, rewards and story progress are individual; boss cooperation and teammate positions remain. Teleport and rescue use their own settings. When on, abilities and listed resources/world flags are shared; nail upgrades and ore spending remain individual.	初期設定はオン。部屋を作る前に設定します。オフの場合、通常の敵・仕掛け・報酬・物語は各自で進行し、ボス共闘と仲間の位置共有は利用できます。転送と救援は個別設定に従います。オンの場合、能力と対象の資源・世界の記録を共有します。釘の強化と鉱石の消費は各自で行います。
+共享护符（房主）	Shared charms (host)	チャームの共有（ホスト）
+开房前设置，仅在共享永久进度开启时生效。共享护符获得状态；护符槽仍按原规则共享，装备各自独立。	Set before hosting. Requires shared progress. Shares charm ownership; charm notches follow the existing sharing rules. Equipped charms remain individual.	部屋を作る前に設定します。進行状況の共有が必要です。チャームの取得を共有し、スロットは既存の共有ルールに従います。装備は各自で選びます。
+屏外队友方位	Offscreen teammate markers	画面外の仲間の位置
+显示屏外队友名字和箭头；其他房间显示房间名。	Show names and arrows for offscreen teammates in this room. Open the map to view teammates in other rooms.	同じ部屋で画面外にいる仲間を名前と矢印で表示します。別の部屋にいる仲間はマップで確認できます。
+Beta 功能，默认关闭。开启后落地按 	Beta, off by default. After landing, press 	ベータ機能、初期設定はオフ。着地してから 
+ 观看同房存活队友，再按返回德特茅斯长椅并保持联机；	 to watch a living teammate in this room. Press again to return to the Dirtmouth bench while staying connected; 	 で同じ部屋の生存中の仲間を観戦します。もう一度押すと接続したままダートマウスのベンチに戻ります。
+ 切换观战队友。观战本体退出战斗，不受伤、不碰撞；无同房存活队友时自动回椅。暂停只打开菜单。	 switches the viewed teammate. Your character leaves combat and has no damage or collision. With no living teammate in the room, you return to the bench. Pause opens the menu.	 で観戦相手を切り替えます。観戦中の自分には攻撃も衝突も当たりません。同じ部屋に生存者がいない場合はベンチに戻ります。ポーズでメニューを開けます。
+队友名字配色（本机）	Colored teammate names (local)	仲間の名前に色を付ける（自分のみ）
+默认开启。队友头顶名字与地图/方位颜色一致，自己保持白色；关闭后名字为白色。仅影响本机，立即生效。	On by default. Teammate name colors match their map/marker colors; your own name stays white. Off makes names white. Applies immediately on this client only.	初期設定はオン。仲間の名前をマップや位置表示と同じ色で表示し、自分は白のままです。オフでは全員白になります。自分の画面に即時反映されます。
+动态 Boss 血量（房主）	Boss health scaling (host)	人数に応じたボスHP（ホスト）
+默认关闭，房主开房前设置。使用下方增血参数 p，N 人等效血量为 1+p+p²+…+p^(N-1)，最高十倍；60% 时两人160%、三人196%。队友设置不影响房间。	Off by default. Set before hosting. With factor p below, N players give 1+p+p²+…+p^(N-1) health, capped at 10×. At 60%: two players 160%, three 196%. The host sets the rule for everyone.	初期設定はオフ。部屋を作る前に設定します。下の係数をpとすると、N人でHPは1+p+p²+…+p^(N-1)倍、最大10倍です。60%なら2人で160%、3人で196%。ホストの設定が全員に適用されます。
+输入百分比，默认60，范围0–400。60 表示 p=0.6；80 时两人180%、三人244%。回车确认，开房前设置。	Enter a percentage: default 60, range 0–400. 60 means p=0.6; 80 gives 180% for two players and 244% for three. Press Enter to confirm before hosting.	百分率を入力します。初期値60、範囲0～400。60はp=0.6、80なら2人で180%、3人で244%です。Enterで確定し、部屋を作る前に設定してください。
+Boss 伤害占比榜（房主）	Boss damage ranking (host)	ボスへのダメージ割合（ホスト）
+默认关闭。实时显示本场 Boss 伤害占比；神居一至五门整门累计，最后结算。由房主开房前决定，F1 隐藏或显示本机榜单，隐藏时继续统计。	Off by default. Shows each player's boss damage share. Pantheons accumulate the whole run and show final results. Set by the host before hosting. F1 toggles the local board; damage is still counted while hidden.	初期設定はオフ。ボスへの各プレイヤーのダメージ割合を表示します。神殿では一巡分を合計して最後に集計します。部屋を作る前にホストが設定します。F1で表示を切り替え、非表示中も集計します。
+Boss 索敌模式（房主）	Boss targeting (host)	ボスの標的選択（ホスト）
+原版	Original	通常
+灵活	Flexible	柔軟
+默认原版。灵活模式优先选择同房存活玩家中最近的一人；至少锁定 4 秒，只在空闲或追逐的决策边界换人，新目标须近 25%。攻击生成物继承目标，目标倒地或离房时立即重选。由房主统一设置。	Original by default. Flexible targets the nearest living player in the room, keeps a target for at least 4 seconds, and switches only at idle/chase decisions when another player is 25% closer. Attacks inherit the target; a downed or departed target is replaced immediately. Set by the host.	初期設定は通常。柔軟では同じ部屋の最も近い生存者を狙い、最低4秒は標的を維持します。待機・追跡の判断時に限り、25%以上近い相手へ切り替えます。攻撃も同じ標的を狙い、標的のダウン・退室時は即座に選び直します。ホストが設定します。
+暗影救援（房主）	Shade rescue (host)	影による救援（ホスト）
+击破暗影后一血复活，救人者获得 33 点灵魂；按 	Break a teammate's shade to revive them with one mask; the rescuer gains 33 Soul. Press 	仲間の影を倒すとHP1で復活し、救援者はソウルを33得ます。
+ 放弃。Boss房内无人能继续战斗时，本场失败，不等待赶路队友。开房前设置。	 to give up. If nobody can fight in the boss room, the attempt fails without waiting for teammates outside. Set before hosting.	 で救援を諦めます。ボス部屋で戦える人がいなくなると、部屋の外の仲間を待たずに失敗となります。部屋を作る前に設定してください。
+救援耗尽后观战（Beta，房主）	Spectate after rescues run out (Beta, host)	救援不可時の観戦（ベータ、ホスト）
+默认关闭。开启时主动放弃救援直接观战；Boss战救援耗尽或关闭暗影救援时，死亡直接观战。Boss胜利后在本场存活队友处一血复活，不扣次数；房内无人能战斗时返回自己的复活点。观战时按 	Off by default. Giving up enters spectator mode. In boss fights, death also enters spectator mode if rescues are exhausted or disabled. Boss victory revives spectators beside a survivor with one mask, without using a rescue. If nobody can fight, return to your respawn point. While spectating, press 	初期設定はオフ。救援を諦めると観戦に移ります。ボス戦で救援回数が尽きた場合や救援オフ時も、死亡すると観戦に移ります。勝利すると生存者のそばでHP1で復活し、救援回数は消費しません。戦える人がいなくなると各自の復活地点に戻ります。観戦中に 
+ 可提前返回。开房前设置。	 to return early. Set before hosting.	 で先に戻れます。部屋を作る前に設定してください。
+Boss击败后解除暗影（房主）	Revive shades after boss victory (host)	ボス撃破後に影を復活（ホスト）
+默认开启。Boss真正击败时，本场暗影玩家在存活队友处一血复活，不消耗救援次数，参与本地结算。需开启暗影救援；观战者的结算复活由观战开关控制。开房前设置。	On by default. A confirmed boss defeat revives downed players in this encounter beside a survivor with one mask and no rescue cost, so they can receive local completion. Requires shade rescue. Spectator revival follows its own setting. Set before hosting.	初期設定はオン。ボス撃破が確定すると、この戦闘で影になった人を生存者のそばでHP1で復活させ、各自のクリア処理を受けられるようにします。救援回数は消費せず、影による救援が必要です。観戦者の復活は観戦設定に従います。部屋を作る前に設定してください。
+入场免伤（房主）	Entry protection (host)	入場時の無敵（ホスト）
+场景、战斗同步和镜头就绪并恢复操作后，再保留 1.5 秒反应时间。	Keeps you protected for 1.5 seconds after scene/combat sync, camera readiness and control recovery.	場面・戦闘の同期、カメラ、操作の準備が整った後、さらに1.5秒間保護します。
+默认关闭。必须同时开启共享永久进度和共享护符才生效；全队共用正常血量，蓝血各自独立。开启后暗影救援和死亡观战无效；主动观战仍可使用。面具碎片按唯一 ID 计数，每 4 个增加团队 1 格上限。	Off by default. Requires both shared progress and shared charms. Normal health is shared; Lifeblood is individual. Disables shade rescue and death spectating; voluntary spectating remains available. Unique mask shards are counted once: every four add one team mask.	初期設定はオフ。進行状況とチャームの共有が必要です。通常HPは全員で共有し、青いHPは各自で管理します。影による救援と死亡時の観戦は無効ですが、任意の観戦は使えます。仮面の破片は固有IDで一度だけ数え、4個ごとにチームの最大HPが1増えます。
+共享血量模式的额外正常面具数，默认 2，范围 0–10。它只增加团队上限，不计入面具碎片收集，也不写入个人存档。	Extra normal masks for shared health. Default 2, range 0–10. Adds team capacity only; does not count as collected mask shards or change personal saves.	HP共有時に追加する通常の仮面数です。初期値2、範囲0～10。チームの上限だけを増やし、仮面の破片の収集数や個人のセーブには反映しません。
+每人暗影救援次数（房主）	Rescues per player (host)	1人あたりの救援回数（ホスト）
+不限次数	Unlimited	無制限
+ 次	 rescues	回
+每名玩家可被骨钉救起的次数，坐椅子恢复；Boss结算复活不扣次数。消耗时短暂显示剩余次数。死亡返回、换房和重试不恢复。默认不限次数，开房前设置。	How many times each player can be revived by a nail hit. Resting on a bench refills this; boss victory revivals do not consume it. Death returns, room changes and retries do not refill it. Unlimited by default. Set before hosting.	釘で救援してもらえる回数です。ベンチで休むと回復し、ボス撃破時の復活では消費しません。死亡による帰還、部屋の移動、再挑戦では回復しません。初期設定は無制限。部屋を作る前に設定してください。
+关闭（不透明）	Off (opaque)	オフ（不透明）
+完全透明	Invisible	完全に透明
+队友透明度（本机）	Teammate opacity (local)	仲間の不透明度（自分のみ）
+默认关闭（不透明）。调整本机看到的队友身体、刀光、法术和粒子；名字保持可读，不影响自己或其他玩家，立即生效。	Off (opaque) by default. Changes teammate bodies, nail effects, spells and particles on this client. Names stay readable. Does not affect yourself or other clients; applies immediately.	初期設定はオフ（不透明）。自分の画面に表示する仲間の体、釘の軌跡、魔法、粒子を調整します。名前は読みやすいままです。自分や他の人の画面には影響せず、即時反映されます。
+本存档累计死亡榜 · 倒地计一次	Deaths in this save · each down counts once	このセーブのダウン回数
+（你）	 (you)	（自分）
+导出诊断	Export diagnostics	診断を出力
+准备恢复临时状态	Prepare recovery	一時状態の復旧を準備
+退出观战并回椅	Stop spectating and return	観戦を終了してベンチへ
+确认恢复（不改存档）	Confirm recovery (save unchanged)	復旧を確定（セーブは変更しません）
+本轮结算	Final results	最終結果
+本轮结束	Attempt ended	挑戦終了
+伤害占比	Damage share	ダメージ割合
+已完成	Completed	クリア
+已结束	Ended	終了
+ · 累计	 · Total	・累計
+Boss 已击败	Boss defeated	ボス撃破
+战斗已结束	Battle ended	戦闘終了
+Boss 战	Boss battle	ボス戦
+ · 你	 · You	・自分
+第一门	Pantheon I	第一の神殿
+第二门	Pantheon II	第二の神殿
+第三门	Pantheon III	第三の神殿
+第四门	Pantheon IV	第四の神殿
+第五门	Pantheon V	第五の神殿
+万神殿	Pantheon	神殿
+额外面具（房主）	Extra masks (host)	追加の仮面数（ホスト）
+（加载中）	 (loading)	（ロード中）
+（等待响应）	 (waiting)	（応答待ち）
+（未就位）	 (not ready)	（準備待ち）
+\n等待：	\nWaiting: 	\n待機中：
+ [暗影]	 [Shade]	［影］
+ [回椅中]	 [Returning]	［帰還中］
+（无地图坐标）	 (no map position)	（マップ座標なし）
+ · 定位更新中	 · Updating location	・位置を更新中
+定位更新中	Updating location	位置を更新中
+共享幼虫	Shared Grub	イモムシを共有
+共享梦境精华	Shared Essence	エッセンスを共有
+共享城市纹章	Shared City Crest	都の紋章を共有
+共享典雅的钥匙	Shared Elegant Key	優美な鍵を共有
+共享爱之钥	Shared Love Key	愛の鍵を共有
+共享店主的钥匙	Shared Shopkeeper's Key	店主の鍵を共有
+Steam 联机（F10）	Steam multiplayer (F10)	Steamマルチプレイ（F10）
+打开	Open	開く
+创建好友房间，邀请好友或加入好友主持的游戏。	Create a friends-only room, invite friends or join a friend's game.	フレンド用の部屋を作成し、招待するか、フレンドのゲームに参加します。
+等待游戏的 Steam 服务	Waiting for the game's Steam service	ゲームのSteamサービスを待っています
+游戏的 Steam 服务已关闭	The game's Steam service has stopped	ゲームのSteamサービスが停止しました
+请从 Steam 启动空洞骑士并保持在线	Launch Hollow Knight through Steam and stay online	SteamからHollow Knightを起動し、オンラインにしてください
+Steam 已离线或游戏 App ID 不匹配	Steam is offline or the game App ID differs	Steamがオフラインか、ゲームのApp IDが一致しません
+Steam 尚未在线登录，或不是 Steam 版空洞骑士	Steam is not signed in online, or this is not the Steam version	Steamがオンラインでログインしていないか、Steam版ではありません
+Steam 已就绪	Steam ready	Steamの準備ができました
+Steam 数据桥接已停止	Steam bridge stopped	Steam接続ブリッジが停止しました
+创建或连接房间超时，请重试	Room creation or connection timed out. Please retry.	部屋の作成または接続がタイムアウトしました。再試行してください。
+Steam 已连接，正在加入游戏…	Steam connected; joining the game…	Steamに接続しました。ゲームに参加中…
+已连接 Steam 房间；请按游戏提示选择并确认存档	Steam room connected; select and confirm your save in the game	Steamの部屋に接続しました。ゲーム内でセーブを選択し、確認してください
+游戏连接已结束	Game connection ended	ゲームへの接続が終了しました
+Steam 房主连接已结束	Steam host connection ended	Steamホストへの接続が終了しました
+收到邀请；请结束当前游戏并返回主菜单，再点击加入邀请	Invitation received. Return to the title screen, then join the invitation.	招待を受け取りました。タイトル画面に戻り、招待から参加してください。
+收到邀请，等待主菜单就绪…	Invitation received; waiting for the title screen…	招待を受け取りました。タイトル画面を待っています…
+请输入 1–20 位字母、汉字或数字的玩家名	Enter a player name of 1–20 letters or digits	プレイヤー名を1～20文字の文字または数字で入力してください
+请先结束当前连接并返回主菜单	End the current connection and return to the title screen first	現在の接続を終了して、タイトル画面に戻ってください
+请选择主持游戏使用的存档	Select the save to host with	ホストに使うセーブを選択してください
+已取消创建房间	Room creation cancelled	部屋の作成をキャンセルしました
+本机游戏服务器未启动	Local game server did not start	ローカルサーバーが起動しませんでした
+正在启动主持游戏…	Starting the hosted game…	ホストのゲームを起動中…
+正在创建 Steam 好友房间…	Creating a Steam friends room…	Steamのフレンド用の部屋を作成中…
+Steam P2P 监听失败	Steam P2P listen failed	Steam P2Pの待ち受けに失敗しました
+发布 Steam 房间信息失败	Failed to publish Steam room information	Steamの部屋情報を公開できませんでした
+好友房间已创建，可以邀请好友	Friends room created; you can invite friends	フレンド用の部屋を作成しました。フレンドを招待できます
+正在加入 Steam 好友房间…	Joining a Steam friends room…	Steamのフレンド用の部屋に参加中…
+房间版本不兼容、尚未就绪或原房主已离开	Room version differs, the room is not ready, or the host has left	部屋のバージョンが異なるか、準備ができていないか、ホストが退出しています
+Steam P2P 连接启动失败	Steam P2P connection could not start	Steam P2P接続を開始できませんでした
+正在连接 Steam 房主…	Connecting to the Steam host…	Steamホストに接続中…
+原房间已结束，请重新获取房主邀请	The room has ended. Ask the host for a new invitation.	部屋は終了しました。ホストに新しい招待を依頼してください。
+Steam 房主连接已断开	Steam host disconnected	Steamホストとの接続が切れました
+房间已创建；好友状态发布失败，请使用邀请按钮	Room created, but friend status could not be published. Use Invite Friends.	部屋は作成できましたが、フレンド状態を公開できませんでした。招待ボタンを使ってください。
+Steam 桥接线程仍在结束，请稍候	Steam bridge is still stopping. Please wait.	Steam接続ブリッジを停止中です。お待ちください。
+已关闭	Closed	終了しました
+Steam 联机	Steam multiplayer	Steamマルチプレイ
+玩家名	Player name	プレイヤー名
+创建好友房间	Create friends room	フレンド用の部屋を作成
+加入邀请的房间	Join invited room	招待された部屋に参加
+邀请 Steam 好友	Invite Steam friends	Steamフレンドを招待
+查看好友主持的游戏	Browse friends' games	フレンドのゲームを表示
+离开 Steam 房间	Leave Steam room	Steamの部屋から退出
+已离开房间	Left the room	部屋から退出しました
+忽略邀请	Ignore invitation	招待を無視
+下一页	Next page	次のページ
+返回	Back	戻る
+收起好友房间	Hide friends' games	フレンドのゲームを閉じる
+取消创建	Cancel creation	作成をキャンセル
+\n未发现好友房间，可让好友从 Steam 列表邀请你	\nNo friends' rooms found. A friend can invite you from Steam.	\nフレンドの部屋が見つかりません。Steamから招待してもらえます。
+\n收到好友邀请；结束当前连接后可加入	\nInvitation received; end your current connection to join.	\n招待を受け取りました。現在の接続を終了すると参加できます。
+\n正在等待 Steam 完成上一条请求…	\nWaiting for Steam to finish the previous request…	\nSteamが前のリクエストを処理するのを待っています…
+局域网联机	LAN multiplayer	LANマルチプレイ
+服务器地址	Server address	サーバーアドレス
+端口	Port	ポート
+加入游戏	Join game	ゲームに参加
+主持游戏	Host game	ゲームをホスト
+支持局域网、直连及内网穿透	LAN, direct connection and port forwarding supported	LAN、直接接続、ポート転送に対応
+已连接	Connected	接続しました
+双方模组不兼容	The players' mods are incompatible	プレイヤー間でMODに互換性がありません
+网络错误	Network error	ネットワークエラー
+连接超时	Connection timed out	接続がタイムアウトしました
+未知原因	Unknown reason	原因不明
+请先离开 Steam 房间	Leave the Steam room first	先にSteamの部屋から退出してください
+请输入服务器地址	Enter a server address	サーバーアドレスを入力してください
+正在连接…	Connecting…	接続中…
+请输入 1–65535 之间的端口	Enter a port between 1 and 65535	1～65535のポート番号を入力してください
+共享进度可能永久改变存档	Shared progress may permanently change this save	進行状況の共有により、セーブが永続的に変更される場合があります
+请确保你选择的存档不会覆盖房间原有进度	Make sure the selected save will not overwrite the room's existing progress	選択したセーブが部屋の既存の進行状況を上書きしないことを確認してください
+确认加入联机	Confirm multiplayer join	マルチプレイへの参加確認
+取消	Cancel	キャンセル
+确认加入	Confirm join	参加を確認
+保存未完成，已取消退出。请在暂停菜单重试“保存并退出”，进度仍保留在当前游戏中。	Save did not finish; quitting was cancelled. Retry Save & Quit from the pause menu. Your progress remains in the current game.	保存が完了しなかったため、終了を中止しました。ポーズメニューから「保存して終了」を再試行してください。現在のゲーム内の進行状況は保たれています。
+HollowConnect 诊断（只读；F9 开关）	HollowConnect diagnostics (F9)	HollowConnect 診断（F9）
+场景 {0} / GM {1} / 入口 {2}	Scene {0} / GM {1} / gate {2}	シーン {0} / GM {1} / 入口 {2}
+转换 {0} · Finished {1} · Hero位置 {2}	Transition {0} · finished {1} · hero positioned {2}	遷移 {0} · 完了 {1} · 主人公の配置 {2}
+输入 {0} · 控制锁 {1} · HeroBox禁用 {2} · 刚体 {3}	Input {0} · control lock {1} · HeroBox disabled {2} · body {3}	入力 {0} · 操作ロック {1} · HeroBox無効 {2} · 剛体 {3}
+流程 changing={0} down={1} reset={2} returning={3} observing={4}	Flow changing={0} down={1} reset={2} returning={3} observing={4}	状態 changing={0} down={1} reset={2} returning={3} observing={4}
+复活点={0} / {1} type={2}	Respawn={0} / {1} type={2}	復活地点={0} / {1} type={2}
+回执={0} 共享进度={1} peers={2}	Receipts={0} shared progress={1} peers={2}	受信確認={0} 共有進行={1} peers={2}
+风险：未发现当前临时锁异常	Risks: no current transient lock detected	リスク：一時ロックの異常は検出されていません
+风险：{0}	Risks: {0}	リスク：{0}
+事件（最近 {0}/{1}）	Events (recent {0}/{1})	イベント（直近 {0}/{1}）
+最近导出：{0}	Last export: {0}	最新の出力：{0}
+{0} 次倒地	{0} downs	{0}回

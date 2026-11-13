@@ -59,6 +59,8 @@ public sealed class ProbeMod : Mod {
         On.GameManager.LoadFirstScene += (orig, gm) => SimulationFrames(orig(gm));
         var go = new GameObject("HollowConnect smoke probe"); Object.DontDestroyOnLoad(go);
         go.AddComponent<SilentProbe>();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_HUD_AUDIT") == "1") go.AddComponent<HudAudit>();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_ROUTE_FRAMES") == "1") go.AddComponent<RouteFrameRecorder>();
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "connection-menu") { go.AddComponent<ConnectionMenuProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "steam-native") { go.AddComponent<SteamNativeProbe>(); return; }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE") == "boss-reentry") { go.AddComponent<BossReentryProbe>(); return; }

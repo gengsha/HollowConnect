@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Hkmp.Game.Client.Entity;
 using HollowConnect;
 using HollowConnect.Core;
 using HutongGames.PlayMaker.Actions;
@@ -68,6 +69,16 @@ public sealed partial class ProgressProbe {
         yield return new WaitForFixedUpdate();
         yield return Until(()=>inspect!=null && inspect.Fsm.ActiveState.Actions.OfType<ListenForUp>().Any(),"native key inspect in range " + id,10);
         yield return Until(()=>HeroController.instance.CanInspect(),"native grounded hero can inspect " + id,10);
+        if(inspect.ActiveStateName!="In Range") {
+            // Unity6 can advance the native inspect FSM out of range between
+            // the grounded check and the injected native press. Re-seat the
+            // hero through physics and wait for the original range state;
+            // the pickup action itself remains the game's FSM event.
+            KeyStandAt(collider,fsm.transform.position);
+            yield return new WaitForFixedUpdate();
+            yield return Until(()=>inspect.ActiveStateName=="In Range" && HeroController.instance.CanInspect(),
+                "native key inspect range restored " + id,5);
+        }
         Mark("KEY INSPECT " + inspect?.name + " state=" + inspect?.ActiveStateName);
         var up = inspect?.Fsm.ActiveState.Actions.OfType<ListenForUp>().FirstOrDefault();
         if (up != null) inspect.Fsm.Event(up.wasPressed);
@@ -116,8 +127,19 @@ public sealed partial class ProgressProbe {
         // Allow that native title to start, then wait for its Idle restoration.
         yield return new WaitForSecondsRealtime(3);
         var pd=PlayerData.instance; var before=pd.GetInt("simpleKeys");
-        var fsm=Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.gameObject.scene.name==scene &&
+        var fsm=Object.FindObjectsOfType<PlayMakerFSM>(true).FirstOrDefault(f => f.gameObject.scene.name==scene &&
             f.FsmStates.SelectMany(s=>s.Actions).OfType<SetPlayerDataBool>().Any(a=>a.boolName.Value==field));
+        if(fsm==null && scene=="Ruins1_05b" && field=="openedWaterwaysManhole") {
+            // Unity6's transplanted scene FSM does not retain the old
+            // SetPlayerDataBool action metadata on Waterways Machine, even
+            // though the native Conversation Control still owns the prompt.
+            var machine=Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f =>
+                f.gameObject.scene.name==scene && f.gameObject.name=="Waterways Machine").ToArray();
+            Mark("KEY DOOR Unity6 field action absent; machine="+string.Join(",",machine.Select(f=>f.FsmName+"="+f.ActiveStateName)));
+            foreach(var candidate in machine) Dump(candidate);
+            fsm=machine.FirstOrDefault(f=>f.FsmName=="Conversation Control");
+        }
+        if(fsm==null) throw new InvalidOperationException("Native key door FSM missing "+scene+"/"+field);
         Mark("KEY DOOR " + field + " object=" + fsm.name + "/" + fsm.FsmName + " state=" + fsm.ActiveStateName);
         var control=fsm.GetComponents<PlayMakerFSM>().FirstOrDefault(f=>f.FsmName=="npc_control") ?? fsm;
         var ranges=control.FsmVariables.FindFsmGameObject("Ranges Folder")?.Value ?? control.gameObject;
@@ -168,6 +190,119 @@ public sealed partial class ProgressProbe {
         Mark("PASS key balance, four doors and four source markers preserve local state on save replay");
     }
     private IEnumerator SimpleKeyChecks() {
+        if(SimpleKeyMode=="blackwave") {
+            // Reproduce the reported route with the actual Abyss key source,
+            // the native Waterways Machine prompt, and the native Dung
+            // Defender trigger. The fixture deliberately does not set any
+            // Dung Defender story flags or jump directly into the arena.
+            if(host) {
+                yield return KeyCollect("Abyss_20","key:Abyss_20/Shiny Item Stand");
+                Flag("host.blackwave.key");
+            } else yield return Until(()=>Has("host.blackwave.key"),"host obtains the Abyss simple key",100);
+            yield return ResourceBarrier("blackwave-key",100);
+            ResourceCheck(LocalResourceClaims.Contains("key:Abyss_20/Shiny Item Stand") &&
+                PlayerData.instance.GetInt("simpleKeys") > 0,
+                "Abyss key receipt reaches both personal inventories");
+
+            yield return KeyOpenDoor("Ruins1_05b","openedWaterwaysManhole");
+            Flag(role+".blackwave.door");
+            yield return Until(()=>Has(host ? "guest.blackwave.door" : "host.blackwave.door"),
+                "both personal Waterways key doors open",100);
+            ResourceCheck(PlayerData.instance.GetBool("openedWaterwaysManhole"),
+                "native Waterways Machine commits the local opened flag");
+
+            var first=Environment.GetEnvironmentVariable("HOLLOWCONNECT_BLACKWAVE_FIRST") ?? "host";
+            if(role!=first) yield return Until(()=>Has(first+".Waterways_05"),
+                first+" enters Waterways before the second client",100);
+            yield return Room("Waterways_05");
+            Flag(role+".blackwave.entered");
+
+            var manager=Field<Hkmp.Game.Client.Entity.EntityManager>(engine.ClientManager,"_entityManager");
+            yield return Until(()=>manager.IsSceneHostDetermined,"Waterways scene authority determined",20);
+            var battle=Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f =>
+                f.gameObject.scene.name=="Waterways_05" && f.name=="Battle Scene" && f.FsmName=="Battle Scene");
+            var entities=EntityReferences.Entities.Values.Where(e=>e.Type==EntityType.DungDefender).ToArray();
+            ResourceCheck(entities.Length==1,"one registered Dung Defender in its native additive scene");
+            var entity=entities.Single();
+            var visible=entity.IsNativeAuthority ? entity.Object.Host : entity.Object.Client;
+            var boss=visible.GetComponent<HealthManager>();
+            var snapshots=Field<List<FsmSnapshot>>(entity,"_fsmSnapshots");
+            var bossIndex=entity.GetClientFsms().FindIndex(f=>f.FsmName=="Dung Defender");
+            var hasLocalStart=LocalBattleStart.Find(entity.Object.Host,entity.Type)!=null;
+            string Continuation()=>snapshots[bossIndex].CurrentState;
+            string State(GameObject obj)=>obj==null ? "missing" : obj.name+"@"+obj.scene.name+":"+obj.activeInHierarchy+":"+
+                obj.LocateMyFSM("Dung Defender")?.ActiveStateName;
+            void Trace(string stage)=>Mark("BLACKWAVE "+stage+" battle="+battle.ActiveStateName+
+                " authority="+entity.IsNativeAuthority+" host="+State(entity.Object.Host)+" client="+State(entity.Object.Client)+
+                " continuation="+Continuation()+" localStart="+hasLocalStart);
+            Trace("REGISTERED");
+            Mark("BLACKWAVE WATERWAYS authority="+manager.IsSceneHost+" entry="+first+
+                " opened="+PlayerData.instance.GetBool("openedWaterwaysManhole")+
+                " key="+PlayerData.instance.GetInt("simpleKeys")+
+                " battle="+battle.ActiveStateName+" boss="+State(visible));
+            ResourceCheck(battle.ActiveStateName=="Detect" || battle.ActiveStateName=="Idle",
+                "Dung Defender battle starts in a dormant native state before the trigger");
+            var triggerRole=Environment.GetEnvironmentVariable("HOLLOWCONNECT_BLACKWAVE_TRIGGER") ?? first;
+            if(role==triggerRole) {
+                var hero=HeroController.instance;
+                var body=hero.GetComponent<Rigidbody2D>();
+                body.bodyType=RigidbodyType2D.Dynamic; body.simulated=true;
+                hero.AffectedByGravity(true); hero.RegainControl(); hero.StartAnimationControl();
+                hero.transform.position=new Vector3(56,12.5f,hero.transform.position.z);
+                body.velocity=Vector2.zero; Physics2D.SyncTransforms();
+                yield return new WaitForSecondsRealtime(.3f);
+                hero.transform.position=battle.GetComponent<Collider2D>().bounds.center;
+                body.velocity=Vector2.zero; Physics2D.SyncTransforms();
+                Mark("BLACKWAVE TRIGGER position="+hero.transform.position+" bounds="+battle.GetComponent<Collider2D>().bounds);
+            }
+            var nextTrace=0f;
+            yield return Until(()=> {
+                if(Time.realtimeSinceStartup>=nextTrace) { nextTrace=Time.realtimeSinceStartup+3; Trace("WAIT"); }
+                // Replica FSMs remain disabled. Read the received continuation
+                // snapshot and check the Client that actually renders combat.
+                return visible.activeInHierarchy && Continuation()!="Sleep" && Continuation()!="Init" &&
+                    !string.IsNullOrEmpty(Continuation());
+            },"visible Dung Defender and replicated native wake on both endpoints",20);
+            Trace("AWAKE");
+            Mark("PASS BLACKWAVE route key->door->Waterways->boss state="+
+                Continuation()+" hp="+boss.hp);
+            yield return ResourceBarrier("blackwave-boss-start",60);
+            if(role!=triggerRole) {
+                ResourceCheck(battle.ActiveStateName=="Idle","teammate wake preserves the local outside-arena controller");
+                var hero=HeroController.instance; var body=hero.GetComponent<Rigidbody2D>();
+                hero.transform.position=new Vector3(56,12.5f,hero.transform.position.z);
+                hero.AffectedByGravity(true); body.velocity=Vector2.zero; Physics2D.SyncTransforms();
+                yield return new WaitForSecondsRealtime(.3f);
+                hero.transform.position=battle.GetComponent<Collider2D>().bounds.center;
+                body.velocity=Vector2.zero; Physics2D.SyncTransforms();
+            }
+            yield return Until(()=>battle.ActiveStateName=="Dung Start","own native arena entry starts local controller",10);
+            yield return ResourceBarrier("blackwave-both-inside",30);
+            var binding=LocalBattleStart.Find(entity.Object.Host,entity.Type);
+            var signals=battle.FsmStates.SelectMany(s=>s.Actions).OfType<SendEventByName>().ToArray();
+            ResourceCheck(binding!=null && binding.Matches(signals.Single(a=>a.sendEvent.Value=="DUNG START")) &&
+                !binding.Matches(signals.Single(a=>a.sendEvent.Value=="BATTLE START")),
+                "only the native delayed DUNG START action requests the boss wake");
+            GetComponent<RouteFrameRecorder>()?.Phase("combat");
+            var renderer=visible.GetComponent<Renderer>();
+            var combatStates=new HashSet<string>(); var renderedFrames=0;
+            var startPosition=visible.transform.position; var maxTravel=0f;
+            var combatEnd=Time.realtimeSinceStartup+30;
+            while(Time.realtimeSinceStartup<combatEnd) {
+                combatStates.Add(Continuation());
+                if(renderer!=null && renderer.enabled && !renderer.forceRenderingOff && visible.activeInHierarchy) renderedFrames++;
+                maxTravel=Math.Max(maxTravel,Vector3.Distance(startPosition,visible.transform.position));
+                yield return null;
+            }
+            ResourceCheck(visible.activeInHierarchy && boss.hp>0 && !boss.isDead && Continuation()!="Sleep",
+                "native Defender combat continues for thirty seconds");
+            ResourceCheck(renderedFrames>30 && maxTravel>2 && combatStates.Count>3,
+                "visible native or replica boss renders and moves through multiple attacks");
+            Mark("BLACKWAVE MOTION renderedFrames="+renderedFrames+" maxTravel="+maxTravel+" states="+string.Join(",",combatStates));
+            Trace("COMBAT");
+            GetComponent<RouteFrameRecorder>()?.Finish();
+            yield break;
+        }
         if(SimpleKeyMode=="waterway") {
             if(host) {
                 PlayerData.instance.SetInt("simpleKeys",1);

@@ -3,6 +3,12 @@
     [ValidateSet('Both','Legacy','Unity6')][string]$GameVersion='Both',
     [ValidateSet('','hit-evasion')][string]$Unity6Revision='')
 $ErrorActionPreference='Stop'
+if(!$Unity6Revision -and !$Playtest -and !$PlaytestBuild -and !$ReleaseCandidate){
+    foreach($taskProfile in $(if($GameVersion -eq 'Both'){@('Legacy','Unity6')}else{@($GameVersion)})){
+        & "$PSScriptRoot/Package-Current.ps1" -GameVersion $taskProfile -VerifyOnly -SteamModule:$SteamModule -UserRequestedRelease:$UserRequestedRelease
+    }
+    return
+}
 if ($GameVersion -eq 'Both') {
     if ($Unity6Revision) { throw 'Historical Unity6 revisions require an explicit -GameVersion Unity6.' }
     $taskArguments=@{}; foreach($taskKey in $PSBoundParameters.Keys){if($taskKey -ne 'GameVersion'){$taskArguments[$taskKey]=$PSBoundParameters[$taskKey]}}

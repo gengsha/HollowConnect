@@ -74,7 +74,9 @@ public sealed partial class CoverageProbe {
     private IEnumerator FrameProfileChecks() {
         if (FrameTraceCheck) yield return StartFrameTraceValidation();
         else InstallFrameHooks();
-        Application.runInBackground = true; Application.targetFrameRate = 300; QualitySettings.vSyncCount = 0;
+        var targetFps = int.Parse(Environment.GetEnvironmentVariable("HOLLOWCONNECT_FRAME_TARGET_FPS") ?? "300", System.Globalization.CultureInfo.InvariantCulture);
+        if (targetFps < 30 || targetFps > 1000) throw new ArgumentOutOfRangeException("HOLLOWCONNECT_FRAME_TARGET_FPS");
+        Application.runInBackground = true; Application.targetFrameRate = targetFps; QualitySettings.vSyncCount = 0;
         PlayerData.instance.SetBool("hasDash", true); PlayerData.instance.SetBool("canDash", true);
         var input = InputHandler.Instance.inputActions;
         var motion = "idle"; var jumpFrame = -1; var dashFrame = -1; var releaseFrame = -1; var direction = 1f;
@@ -167,7 +169,7 @@ public sealed partial class CoverageProbe {
                     throw new Exception("Frame fixture did not execute native walk: movingFrames=" + moving + " range=" + (maxX - minX));
                 var frames = Enumerable.Range(1, n - 1).Select(i => new { index = i, unityMs = dt[i], wallMs = wall[i], gc = gc[i], costs = moduleMs.Select(v => v[i]).ToArray() }).ToArray();
                 var sorted = frames.Select(f => f.unityMs).OrderBy(v => v).ToArray();
-                var result = new { scene, phase, targetFps = 300, vSync = QualitySettings.vSyncCount, sceneAuthority = manager.IsSceneHost,
+                var result = new { scene, phase, targetFps, vSync = QualitySettings.vSyncCount, sceneAuthority = manager.IsSceneHost,
                     entities = Entities.Count, activeEntities = Entities.Values.Count(e => e.Object.Host != null && e.Object.Host.activeInHierarchy),
                     samples = frames.Length, elapsedSeconds = Time.realtimeSinceStartup - begin, jumps, dashFrames = dashes, airborne, movingFrames = moving, xRange = maxX - minX,
                     p50Ms = sorted[(int)((sorted.Length - 1) * .5)], p95Ms = sorted[(int)((sorted.Length - 1) * .95)],

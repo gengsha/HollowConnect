@@ -372,7 +372,7 @@ internal partial class UiManager : IUiManager {
 
     private static void ExitSaveFailed() {
         Logger.Warn("Disconnect exit cancelled: saving the loaded profile failed or was unsafe");
-        InternalChatBox?.AddMessage("保存未完成，已取消退出。请在暂停菜单重试“保存并退出”，进度仍保留在当前游戏中。");
+        InternalChatBox?.AddMessage(Localize.T("保存未完成，已取消退出。请在暂停菜单重试“保存并退出”，进度仍保留在当前游戏中。"));
     }
 
     /// <summary>
@@ -446,6 +446,7 @@ internal partial class UiManager : IUiManager {
             text.font = MenuResources.NotoSerifCJKSCRegular;
             text.horizontalOverflow = HorizontalWrapMode.Overflow;
             text.verticalOverflow = VerticalWrapMode.Overflow;
+            Localize.Attach(text);
         }
         var native = button.GetComponent<MenuButton>();
         native.buttonType = MenuButton.MenuButtonType.CustomSubmit;

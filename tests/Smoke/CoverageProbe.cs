@@ -450,6 +450,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                 foreach(var e in Entities.Values.Where(e=>e.Type is EntityType.SoulMaster or EntityType.SoulTyrant)) Dump(e.Object.Host);
             if(host && !performance) foreach(var e in Entities.Values.ToArray().Where(e=>e.Object.Host!=null&&e.Object.Host.GetComponent<HealthManager>()!=null)) {Mark("REGISTERED "+e.Id+" "+e.Type);Dump(e.Object.Host);}
             prefabTimes.Clear(); processTimes.Clear(); slowSteps.Clear(); samplingPerformance = performance;
+            GetComponent<RouteFrameRecorder>()?.Phase("sample");
             var end=Time.realtimeSinceStartup+seconds;var sample=0f;var frames=0;var start=Time.realtimeSinceStartup;
             var frameTimes = new List<float>(); var phaseStates = new HashSet<string>();
             var allFrameTimes = new List<float>(); var collections = GC.CollectionCount(0);
@@ -485,6 +486,7 @@ public sealed partial class CoverageProbe : MonoBehaviour {
                 foreach(var f in e.Object.Host.GetComponents<PlayMakerFSM>()) phaseStates.Add(e.Type + "/" + f.ActiveStateName);
             previousProbeWork=(System.Diagnostics.Stopwatch.GetTimestamp()-probeStamp)*1000.0/System.Diagnostics.Stopwatch.Frequency;
             yield return null;}
+            GetComponent<RouteFrameRecorder>()?.Phase("after-sample");
             if(performance) {
                 if(manager.IsSceneHost && (scene=="GG_Soul_Master" || scene=="GG_Soul_Tyrant") && !phaseStates.Any(s=>s.EndsWith("/Quake Down",StringComparison.Ordinal)))
                     throw new Exception("Native Soul slam was not observed " + scene);

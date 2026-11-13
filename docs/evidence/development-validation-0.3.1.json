@@ -1,0 +1,1484 @@
+{
+  "version": "0.3.1",
+  "date": "2026-11-14",
+  "status": "passed",
+  "fullMatrixRerun": false,
+  "scope": "15 related core checks, installer tests, four serial dual-client cases per game profile",
+  "route": "Native Sly Elegant Key purchase -> personal Ruins1_31 key prompt -> actual left3 target Ruins1_31b/right2 -> native Soul Warrior battle trigger; authority outside before wake, both inside during combat",
+  "fixturePrerequisites": "Unsaved slot 99; Sly rescued, shopkeeper key already returned, 30000 Geo. Fixture controls room transitions and positions, not boss FSM state. No personal saves modified.",
+  "core": {
+    "passed": 15,
+    "failed": 0,
+    "selection": [
+      "localization follows supported codes with English fallback",
+      "localization keeps player names and server errors opaque",
+      "localization keeps room values and locked numeric labels readable",
+      "localization catalog is complete and preserves runtime key bindings",
+      "encounter summon requires authority registration before peer requests",
+      "encounter summon receipt survives duplicate requests and authority registration on takeover",
+      "encounter summon rejects client acknowledgements and unknown actions",
+      "encounter summon reliable snapshots preserve identity visit epoch and following packet fields",
+      "debug event ring is bounded and keeps chronological tail",
+      "save safety risk model catches a stale transient lock",
+      "offline pending boss context is treated as a save safety risk",
+      "noncombat observation explains online body locks and exports its state",
+      "finished native load cannot hide a hero still exiting without input",
+      "diagnostic export is a state summary without identity or save dump",
+      "network stall diagnostics export bounded scalar state"
+    ],
+    "logSha256": "EC4DF58B3EE166A03CFB11962F8CA05A26F6A9EE5D4C46B77B0284DC57985327"
+  },
+  "installer": {
+    "processDetectionPassed": 14,
+    "languages": [
+      "ZH",
+      "EN",
+      "JA"
+    ],
+    "renderedAndInspected": true,
+    "sha256": "17E1EAA60B62638DB91CCEA028BC8BE1BE8ADB5D3B55435987717DAF7AB03D15",
+    "operationsPassed": 18
+  },
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+        }
+      ],
+      "vanillaAssemblySha256": "FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0",
+      "runs": [
+        {
+          "ended": "2026-11-13T18:59:13.6798593Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ConnectionMenuProbe.cs",
+              "sha256": "BA13433FF366AFA7954F405DFB57F93E3453B3BA6D1362BF77DC1D6126E4550E"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_LOCALIZATION_CHECK": "1"
+          },
+          "started": "2026-11-13T18:58:33.0512586Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "8E7E4FB633F9B75EBA98A792A99FCEA406F8293274D522E7E89FDA0300E68E1A",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "A355D635FC5DE6D3D6DEF24397BCDED018FB9A06D623289E2F800CBC1396C50D",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-menus-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "menus"
+        },
+        {
+          "ended": "2026-11-13T19:00:57.1645823Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "guest",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "host",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul"
+          },
+          "started": "2026-11-13T18:59:13.7011535Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "B3CFC2F5E7EC2AF8EA859625CF7E20DAD9239310DED6E4C4E06DAE14558A89A1",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2116,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "15F9F3571438DD11B23B2DC8B84F719B0C4CFA094895D9605724D275BB52F2B0",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2168,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-blackwave-host-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "blackwave-host"
+        },
+        {
+          "ended": "2026-11-13T19:02:36.1118115Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "host",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "guest",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul"
+          },
+          "started": "2026-11-13T19:00:57.1827154Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "D61AC8F93F63C83721CF60D3F203A499798DEDDA95A6ACD17CDBAF059CD3DE43",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2130,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "BC26CA0A94754D7DFC1F207110101EB40D228F9867E08B0E6B6DAC98051833B7",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2116,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-blackwave-guest-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "blackwave-guest"
+        },
+        {
+          "ended": "2026-11-13T19:03:34.8973608Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            },
+            {
+              "file": "ProgressDefender.cs",
+              "sha256": "FC5ADCE94534B6BBC1B3650E151F183C3739C4FAFCCFB46F56268C46E2183D67",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            },
+            {
+              "file": "DefenderBarrierChecks.cs",
+              "sha256": "A0DAA36687262799B963778728F64337E3BD0B273B8A8ECBFF9B7AAE6F0E6882",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_DEFENDER_BARRIER_CHECK": "outside",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_DEFENDER_CHECK": "1"
+          },
+          "started": "2026-11-13T19:02:36.1264246Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "FB15A8A8086F326A72B5600CE5FA99FD704F9787B4225FA70F2D96C5DB6657E6",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2076,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "4AF164880F7A7498A5960F371D31CE4652EC4279D975ACED484EAB6813553010",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 2080,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "6B3CE4B1B2E3EE9B2465180DCE97892F341B9560B99F67E7FF6D85965248C61C",
+          "run": "release-031-legacy-defender-final-c",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "0D0AAEC8AD76BFFDB9E9B65E2088315F8C0713FCBF014560534821A7CB0FB0E3"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "0B25013D4D5403D69040C8CC49ADB020AA379605235A576719B94F0CB6847768"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "B81961AA35E2B2C900683759FDDB24325B6B706C1AB13BBE993BC047A7A9525A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "98B9BB8131DF3BDCE671530E31C98DE90504A18A665881999F74EE30F2CE4434"
+            }
+          ],
+          "case": "defender"
+        }
+      ],
+      "gameVersion": "1.5.78.11833 Windows / Unity 2020.2.2f1",
+      "apiAssemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+    },
+    {
+      "profile": "Unity6",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+        }
+      ],
+      "vanillaAssemblySha256": "E9048EF6A633970F735E01EC166D3959F610EAEA7A88D827D48D67B1E5FB87BD",
+      "runs": [
+        {
+          "ended": "2026-11-13T18:46:44.0240369Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ConnectionMenuProbe.cs",
+              "sha256": "E93EB8771B0549569F18C8DA24F7B94F09CFB8FAEB4B055C075DC99366BD1BCD"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_LOCALIZATION_CHECK": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1"
+          },
+          "started": "2026-11-13T18:46:10.1408041Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "C148D709279B3E35DC008DF0431F1B5E0A91842696F5E93DE74A5561082A2038",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "68E1681EF3BDC46D7916BB652B2AD4EB1CEB61C08CF02B17D2E78000AC897CA0",
+              "hud": null,
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-menus-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "menus"
+        },
+        {
+          "ended": "2026-11-13T18:48:22.0372043Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "guest",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "host"
+          },
+          "started": "2026-11-13T18:46:44.0392709Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "E0D197DF7599226FAD671EBF6346C689DF0ADDA497D389E3E940F1CB7B4B3D45",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1845,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "810F3EBE5D2681CFA2DE20D4FD6BE2D2186A1F4080DF6D4E166C837F314CF22E",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1975,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-blackwave-host-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "blackwave-host"
+        },
+        {
+          "ended": "2026-11-13T18:49:58.5689163Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "KeyEssenceChecks.cs",
+              "sha256": "21E3A2BC1F5EACC2417A8DEE27EE8F1F212F298B7C87848E2C709E88C37FEA5F"
+            },
+            {
+              "file": "ShadeSoulChecks.cs",
+              "sha256": "1A7BE906261B86BC0D90F01C373409DC99A476B36FEE6C230B2D2FE61CAC8AC7"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_BLACKWAVE_TRIGGER": "host",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1",
+            "HOLLOWCONNECT_KEY_ESSENCE": "shade-soul",
+            "HOLLOWCONNECT_BLACKWAVE_FIRST": "guest"
+          },
+          "started": "2026-11-13T18:48:22.082906Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "8C1F5E148783FDF910653C4F7074E8D407B85BD259E5889C575A4A5E9EC1E7A2",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1810,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "426CCC55F61F0C710D27B072C0654239FDA348A197637B153EB7CDEC1BD70DBA",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1910,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-blackwave-guest-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "blackwave-guest"
+        },
+        {
+          "ended": "2026-11-13T18:50:56.2073183Z",
+          "dependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ],
+          "fixtures": [
+            {
+              "file": "Probe.cs",
+              "sha256": "DF937D2EDE627F6D0B5A041EE169083EAE20FEE218D8673A973D36EF37C0A91B"
+            },
+            {
+              "file": "RouteFrameRecorder.cs",
+              "sha256": "9D52313200C50AF3E8666F02480FD6347B425CFC95B6319EDFB8EDE91FF915B5"
+            },
+            {
+              "file": "ProbeShutdown.cs",
+              "sha256": "1FEEA80B3CB605CF36D08239BA0A4BF6D84E6D35326C22304220DA6053BA7897"
+            },
+            {
+              "file": "ProgressProbe.cs",
+              "sha256": "6D281F627CAC1CF1D078FC5FE72A4FD84DA1D64C21D030C54F773F3738C46002"
+            },
+            {
+              "file": "HudAudit.cs",
+              "sha256": "3C500E73BB09A8D27847412DB9A6E01F88700792EB9317754400F3A94278F0B9"
+            },
+            {
+              "file": "ProgressDefender.cs",
+              "sha256": "FC5ADCE94534B6BBC1B3650E151F183C3739C4FAFCCFB46F56268C46E2183D67",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            },
+            {
+              "file": "DefenderBarrierChecks.cs",
+              "sha256": "A0DAA36687262799B963778728F64337E3BD0B273B8A8ECBFF9B7AAE6F0E6882",
+              "note": "Supplemented unchanged defender fixture metadata; original per-run status retained"
+            }
+          ],
+          "status": "passed",
+          "options": {
+            "HOLLOWCONNECT_HUD_AUDIT": "1",
+            "HOLLOWCONNECT_DEFENDER_BARRIER_CHECK": "outside",
+            "HOLLOWCONNECT_RENDERED_TEST": "1",
+            "HOLLOWCONNECT_DEFENDER_CHECK": "1",
+            "HOLLOWCONNECT_ROUTE_FRAMES": "1"
+          },
+          "started": "2026-11-13T18:49:58.5856082Z",
+          "endpoints": [
+            {
+              "completed": true,
+              "framesSha256": "DAC9DE4220908826CCE14CF06C3D36F0880542D9F186A0B47BF7C35C2BA5A414",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1648,
+                "language": "EN",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "host"
+            },
+            {
+              "completed": true,
+              "framesSha256": "1430A3B701160698EF8F3C24F903E7B76E4B42579036DB934CBF873D275B22F5",
+              "hud": {
+                "routineLabels": 0,
+                "soulHudLabels": 0,
+                "repaintFrames": 1733,
+                "language": "JA",
+                "marker": "HC_HUD_LOG_ONLY_GIVE_UP"
+              },
+              "strictLogs": "passed",
+              "role": "guest"
+            }
+          ],
+          "smokeSha256": "8B5C8E2163C58ABD8B95E102D52DE57C8D103AF1DD83DB1375047D8FD5792FDA",
+          "run": "release-031-unity6-defender-final-a",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "8B06FBA22E89BBD4BE306C9B44D49C5CC085DC8CF6A586370F87D74C37637302"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "F0F5D361269BB1238A5B4161F08E943E987BFD2F53AFFD07B0C1A9927383DAB0"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "DF64AC5334AE38A10220B7390DDE31ACEF1490EA3595E282CAFEAD1FD9AD0BDE"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "A0CA04A95C2BD1866AC4F7D0B8D20D919E5A5E201F9C0A8959BAED6C4C0DF23D"
+            }
+          ],
+          "case": "defender"
+        }
+      ],
+      "gameVersion": "1.5.12620 Windows / Unity 6000.0.61f1",
+      "apiAssemblySha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+    }
+  ],
+  "frames": [
+    {
+      "profile": "Legacy",
+      "case": "blackwave-host",
+      "role": "host",
+      "scene": "Ruins1_31b",
+      "samples": 3261,
+      "averageFps": 108.71612695027174,
+      "onePercentLowFps": 40.54368840430854,
+      "p99Ms": 21.316,
+      "maxMs": 32.6044,
+      "over33ms": 0,
+      "over50ms": 0,
+      "collections": 13
+    },
+    {
+      "profile": "Legacy",
+      "case": "blackwave-host",
+      "role": "guest",
+      "scene": "Ruins1_31b",
+      "samples": 3500,
+      "averageFps": 116.6953748958452,
+      "onePercentLowFps": 76.67612923126265,
+      "p99Ms": 11.3952,
+      "maxMs": 19.3999,
+      "over33ms": 0,
+      "over50ms": 0,
+      "collections": 3
+    },
+    {
+      "profile": "Legacy",
+      "case": "blackwave-guest",
+      "role": "host",
+      "scene": "Ruins1_31b",
+      "samples": 3497,
+      "averageFps": 116.56744300583713,
+      "onePercentLowFps": 69.33926613301847,
+      "p99Ms": 11.5051,
+      "maxMs": 24.0396,
+      "over33ms": 0,
+      "over50ms": 0,
+      "collections": 7
+    },
+    {
+      "profile": "Legacy",
+      "case": "blackwave-guest",
+      "role": "guest",
+      "scene": "Ruins1_31b",
+      "samples": 3376,
+      "averageFps": 112.53411131915605,
+      "onePercentLowFps": 42.647806635848184,
+      "p99Ms": 19.8062,
+      "maxMs": 35.595,
+      "over33ms": 1,
+      "over50ms": 0,
+      "collections": 9
+    },
+    {
+      "profile": "Unity6",
+      "case": "blackwave-host",
+      "role": "host",
+      "scene": "Ruins1_31b",
+      "samples": 2854,
+      "averageFps": 95.15785487814968,
+      "onePercentLowFps": 30.763225004349287,
+      "p99Ms": 28.9961,
+      "maxMs": 43.5454,
+      "over33ms": 6,
+      "over50ms": 0,
+      "collections": 0
+    },
+    {
+      "profile": "Unity6",
+      "case": "blackwave-host",
+      "role": "guest",
+      "scene": "Ruins1_31b",
+      "samples": 3152,
+      "averageFps": 105.07018756865241,
+      "onePercentLowFps": 69.28802012297324,
+      "p99Ms": 13.3347,
+      "maxMs": 17.9789,
+      "over33ms": 0,
+      "over50ms": 0,
+      "collections": 0
+    },
+    {
+      "profile": "Unity6",
+      "case": "blackwave-guest",
+      "role": "host",
+      "scene": "Ruins1_31b",
+      "samples": 3400,
+      "averageFps": 113.34591661917663,
+      "onePercentLowFps": 78.89022796027459,
+      "p99Ms": 11.6544,
+      "maxMs": 18.6825,
+      "over33ms": 0,
+      "over50ms": 0,
+      "collections": 0
+    },
+    {
+      "profile": "Unity6",
+      "case": "blackwave-guest",
+      "role": "guest",
+      "scene": "Ruins1_31b",
+      "samples": 3215,
+      "averageFps": 107.17680916537401,
+      "onePercentLowFps": 38.6275242648158,
+      "p99Ms": 15.4618,
+      "maxMs": 34.2307,
+      "over33ms": 1,
+      "over50ms": 0,
+      "collections": 0
+    }
+  ],
+  "frameConditions": "Same machine, two existing isolated clients; rendered 800x600 windows for HUD audit; target 120 FPS, vSync off; wall-clock frame samples; no unmodded baseline. Lowest 1% means reciprocal of the slowest 1% mean time. Loading windows are separate.",
+  "knownIssues": [
+    {
+      "id": "native-reentry-camera-freeze",
+      "resolved": false,
+      "sourceRun": "native-reentry-camera-failure-013",
+      "observation": "Second host-first Vengefly entry had matching active camera locks and visible boss/peer, but camera mode FROZEN.",
+      "causeConfirmed": false,
+      "supplementalRuns": [
+        "native-camera-hazard-013",
+        "native-camera-shared-gate-013",
+        "camera-gate-nonhazard-013",
+        "camera-gate-persistent-013",
+        "camera-gate-native-recovery-013"
+      ],
+      "cameraGateEvidence": "camera-gate-0.1.13.json",
+      "cameraGateConfirmedScope": "Both peers reject actual non-hazard FreezeInPlace immediately and a real spike-triggered freeze with explicitly blocked native recovery after 15 real-time seconds. Normal actual spike recovery completes without forcing camera changes. These differential controls verify the acceptance gate, not the old host sample's unique cause. Final twelve-case production-hash suite passes independently; this historical finding remains unresolved.",
+      "confirmedScope": "Real native Cloud Hazard collisions invoke FreezeInPlace through PlayerDeadFromHazard and recover camera/input on both clients. The exact old guest coordinate can trigger this path. The shared room gate now permits only a known hazard animation with recovery within 15 seconds; it never forces camera mode. The unique old host freeze source was not recorded and remains unconfirmed.",
+      "releaseRequirement": "Identify the freeze source, distinguish a native transition from a persistent failure, and verify the resulting correction. Successful retries alone do not resolve this finding."
+    },
+    {
+      "id": "reconnect-inactive-needle-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "sourceRuns": [
+        "selective-ack-final-periodic-lifecycle-host-20261014",
+        "selective-ack-final-lifecycle-guest-20261014"
+      ],
+      "observation": "Authority transfer after disconnect left Hornet waiting in Thrown with an inactive needle; natural recovery timed out in two stress runs.",
+      "latestVerificationRuns": [
+        "datagram-frame-final-periodic-host-20261014",
+        "datagram-frame-final-seeded-guest-retry-20261014"
+      ],
+      "releaseRequirement": "The latest targeted runs passed, but do not uniquely explain or resolve the earlier failures. Capture reliable updates and activation across takeover before classifying the finding as resolved.",
+      "latestScopedValidation": "Story-placement pressure run story-rescue-full-20261021-final-lifecycle-host-013 timed out in Thrown; same-hash retry passed. Latest settlement pre-bump room matrix passed both authority orders. These do not resolve the historical intermittent root cause.",
+      "arenaFixValidation20261103": {
+        "run": "arena-matrix-20261102-lifecycle-guest-005945244",
+        "result": "failed",
+        "observation": "First needle-phase transfer left Hornet in Thrown with inactive Needle and no active native needle Control state; Throw Recover timed out after 20 seconds. Host-first stress passed eight transfers on the same frozen build.",
+        "classification": "Matching unresolved historical symptom; cause and current change impact on trigger frequency remain unconfirmed. Failure retained without unchanged retries."
+      }
+    },
+    {
+      "id": "false-knight-repeat-head-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "sourceRun": "reliability-closed-seeded-boss-late-20261014",
+      "observation": "After late entry and authority transfer, False Knight did not expose its head after the next armour break within the original 20-second assertion.",
+      "releaseRequirement": "Retain the original failure; successful later runs do not establish its cause. Capture damage and native phase transitions if it recurs."
+    },
+    {
+      "id": "cornifer-purchase-peer-visibility-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "source": "User two-machine 0.1.14 story playtest",
+      "observation": "Both players bought the Crossroads map with shared permanent progress enabled; peer avatars became persistently invisible, peer map/name positions continued updating, crossing rooms did not restore visibility, reopening the multiplayer room temporarily restored it.",
+      "diagnostic": "One private client log lacks committed room snapshots at visits 9 through 11. Localhost native purchase probes did not reproduce the issue. Room entry and stale-scope logging was added; no visibility repair is claimed.",
+      "releaseRequirement": "Capture both client and server logs at reproduction and identify the failed entry/snapshot/avatar lifecycle before marking resolved."
+    },
+    {
+      "id": "mines-fsm-string-layout-unresolved",
+      "resolved": false,
+      "observation": "User 0.1.15 logs contain four UpdateHostFsmData String snapshot index errors in Mines_11. The later null-string omission fix does not establish the cause or resolve the layout error.",
+      "causeConfirmed": false,
+      "evidence": "../CRYSTAL-SOUL-PERFORMANCE-2026-10-15.md",
+      "supplementalEvidence": "../FSM-STRING-SYNC-2026-10-15.md",
+      "releaseRequirement": "Reproduce with both peers entity and FSM variable layouts, then validate the cause-specific correction. Do not resize arrays or skip values to hide the error.",
+      "latestUpdate": "0.1.20 retains common bounds protection and deduplicates repeated state-index diagnostics. Actual Mines_11 layout-change source remains unconfirmed; not closed."
+    },
+    {
+      "id": "godhome-final-single-f8-timeout-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Runtime test observation; production defect not established",
+      "sourceRun": "version-017-godhome-faults-20261015",
+      "observation": "After earlier Godhome warp/Grimm/progression checks passed under fixed-seed message faults, a single final F8 did not produce the expected transition/disconnect/arrival within 45 seconds. The original run lacks per-press eligibility and request trace.",
+      "supplementalRuns": [
+        "version-017-godhome-faults-trace-20261016"
+      ],
+      "diagnostic": "Trace-only rerun on identical production DLLs passed. Final-step fixture originally waited for Playable/remote presence but did not explicitly wait for production CanStartWarp; later test changes add that precondition and request/eligibility diagnostics. This does not prove the unique original cause.",
+      "releaseRequirement": "Retain the failed run and distinguish local input eligibility, server rejection, delivery and response eligibility on recurrence. A later successful run does not resolve this observation."
+    },
+    {
+      "id": "cliffs-room-overlap-unresolved",
+      "resolved": false,
+      "category": "user-reported-gameplay",
+      "reportedBy": "user, guest only",
+      "observation": "Suspected overlapping room geometry blocks a downward passage near Howling Cliffs; host presence not required. Fungus1_28 is a candidate, not a confirmed location.",
+      "evidence": "cliffs-room-overlap-2026-10-16.json",
+      "causeConfirmed": false,
+      "resolution": "Not reproduced by the recorded scoped same-machine probes; remains open."
+    },
+    {
+      "id": "radiance-immediate-inventory-timing-unresolved",
+      "resolved": false,
+      "category": "unattributed-timing-observation",
+      "observation": "Inventory input immediately after the native Radiance return to bench was not accepted. Appeared in a control bypassing co-op death too; later normal actions and inventory open/close passed.",
+      "evidence": "rescue-edge-audit-2026-10-16.json",
+      "causeConfirmed": false,
+      "resolution": "Retain as a timing observation, not an additional confirmed gameplay bug."
+    },
+    {
+      "id": "p5-watchers-premature-return-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "category": "user-reported-gameplay",
+      "observation": "All players returned to the fifth-pantheon entrance after Watcher Knights. Players entered separately within seconds; no F8 or disconnects, no deaths at Watchers; preceding bosses involved deaths and rescues.",
+      "evidence": "../BOSS-MOTION-P5-AUDIT-2026-10-16.md",
+      "sourceRuns": [
+        "p5-watchers-018-baseline-20261016",
+        "p5-motion-persistent-rescue-20261016",
+        "p5-motion-persistent-final-20261016"
+      ],
+      "resolution": "Related context/ordering defect corrected and tested; full user terminal report remains open. No full continuous P5 or two-machine validation claimed.",
+      "latestUpdate": "2026-10-20: old 0.1.27 reproduced scene-context index rollback and empty-sequence propagation in both entry-order swaps. Related paths corrected; prior fix build passed 13 scoped cases, final 0.1.28 reran both failing order swaps. Exact user one-at-entrance/one-stuck-in-Watchers terminal distribution and complete P5 history remain unconfirmed; this historical finding stays unresolved.",
+      "latestRepairEvidence": "docs/evidence/p5-watchers-fix-2026-10-20.json",
+      "finalScopedValidation": "docs/evidence/runtime-room-0.1.28.json"
+    },
+    {
+      "id": "isolated-native-setupherorefs-startup-exception",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Isolated runtime observation; attribution to production mod not established",
+      "observation": "Recent isolated startup logs still contain native GameManager.SetupHeroRefs NullReferenceException, followed by successful targeted checks.",
+      "evidenceSource": "docs/evidence/boss-shade-targeting-2026-10-21.json",
+      "releaseRequirement": "Determine the startup conditions and source; do not equate strict mod-log acceptance with exception-free Unity output."
+    },
+    {
+      "id": "rescue-single-nail-collision-timeout",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Unresolved test observation; repeatable production defect not established",
+      "sourceRun": "shade-target-rescue-final-20261021",
+      "observation": "Second nail rescue emitted no shade collision and timed out. Four alternating real nail rescues later passed with additional fixture timing, terrain and gravity controls; all four terrain candidates were clear.",
+      "evidenceSource": "docs/evidence/boss-shade-targeting-2026-10-21.json",
+      "releaseRequirement": "Retain original miss; identify collision/attack cause on recurrence. Later pass does not prove terrain or timing caused the earlier failure."
+    },
+    {
+      "id": "pantheon-1-oro-death-air-stall",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Unresolved native runtime/fixture observation; production cause not established",
+      "sourceRun": "damage-ranking-20261023-on-c",
+      "supplementalRuns": [
+        "damage-ranking-20261023-on-final",
+        "damage-ranking-20261023-on-final-b"
+      ],
+      "observation": "Both clients reached the native first-Pantheon final arena after cumulative checks, but Oro stayed in Death Air. A focused check stopping hits at zero HP also did not complete. First-Pantheon final completion was not counted as passed.",
+      "evidenceSource": "docs/BOSS-DAMAGE-RANKING-2026-10-23.md",
+      "releaseRequirement": "Retain failures and identify native death/continuation conditions before claiming the final P1 encounter is fixed or certified. Sheo completion is an independent final-sequence control."
+    },
+    {
+      "id": "acid-rescue-anchor-observation-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Unresolved test observation; unsafe accepted rescue anchor not established",
+      "sourceRun": "rescue-risk-acid-20261024-d",
+      "observation": "Host anchor-outside-acid assertion failed at (25.9,7.2). Six diagnostic rescues later passed; later logs identify that coordinate as a native death origin, but the original run lacks search/return diagnostics.",
+      "evidenceSource": "docs/evidence/feedback-fixes-2026-10-24.json",
+      "releaseRequirement": "Capture landing search, accepted anchor and personal-return state on recurrence; do not count successful retries as a diagnosis."
+    },
+    {
+      "id": "pleasure-house-peer-key-loss-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "User report from 0.1.33; current personal-key defect not reproduced",
+      "observation": "User reports an uninvolved player lost a simple key. Native opening checks retained the peer key count at 2; missing shared door progress was independently reproduced and fixed.",
+      "evidenceSource": "docs/evidence/feedback-fixes-2026-10-24.json",
+      "releaseRequirement": "Reproduce and trace the non-opener key decrement before assigning a cause or changing personal inventory."
+    },
+    {
+      "id": "story-grimm-tent-three-player-stall-unresolved",
+      "resolved": false,
+      "observation": "User reports three players unable to act in the ordinary Grimm tent; only a screenshot is available, without reporter version, native FSM states or network history. Four selected current-build dual-client native intro/refight/angry-roar cases passed; the screenshot cause remains undetermined.",
+      "causeConfirmed": false,
+      "evidence": "docs/evidence/grimm-tent-audit-2026-10-25.json"
+    },
+    {
+      "id": "duplicate-victory-settlement-extra-wait",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "Repeated victory notifications can create a second ticket and approximately 15 seconds of additional settlement wait. Permanent softlock not established.",
+      "evidenceSource": "docs/A3-COMPLETION-INTENT-FIX-2026-10-26.md"
+    },
+    {
+      "id": "entity-completion-emitter-unreachable",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "The entity completion sender construction has no reachable production call site; controlled fallback checks do not demonstrate a live end-to-end insurance path.",
+      "evidenceSource": "docs/A3-COMPLETION-INTENT-FIX-2026-10-26.md"
+    },
+    {
+      "id": "story-hornet-three-player-gate-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "User 0.1.38 screenshot reports all three players trapped. Four three-player normal-flow old/current shared ON/OFF comparisons passed the left exit; original incident not reproduced.",
+      "evidenceSource": "docs/HORNET-STORY-GATE-COMPARISON-2026-10-26.md"
+    },
+    {
+      "id": "downed-disconnect-death-save-validation-gap",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Death/save accounting when disconnecting while downed still needs dedicated end-to-end validation; actual save corruption is not established.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "godseeker-new-save-statistics-validation-gap",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Godseeker new-game PlayerData replacement and statistics isolation still need runtime validation.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "first-connection-during-combat-validation-gap",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Delayed room entry after connecting does not cover the first network connection during active combat.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "arrival-wait-timeout-recovery-gap",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "Arrival/retry waiting recovery lacks a bounded timeout path; player consequences require scenario validation.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "skin-cinematic-process-crash-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Reporter described a high probability of one-client process exit with a custom StagTunnelRun.webm. No process crash reproduced locally, including old-build baseline video playback.",
+      "confirmedScope": "A distinct managed animation frame-index exception was reproduced and fixed. A duplicate native/Custom Knight video Prepare sequence was confirmed and guarded in this mod. Five corrected two-client cases passed, including 48 video plays; these results do not establish the reported native crash cause.",
+      "evidence": "docs/evidence/skin-compatibility-development-0.2.3.json"
+    },
+    {
+      "id": "false-knight-local-counter-first-failure-unclassified",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "First head-phase local battle counter/state assertion failed without before/after diagnostics. Later logging-only run passed.",
+      "confirmedScope": "Fixture now drives the guest native arena trigger and waits for 1/Start before the head-phase baseline. Ordinary and late/delayed takeover pass; exact cause of the original failure cannot be established retrospectively.",
+      "evidenceSource": "docs/evidence/boss-two-anomalies-2026-10-29.json"
+    },
+    {
+      "id": "colosseum-bilateral-permanent-freeze-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "User reports both endpoints permanently frozen in Gold Colosseum 0.2.5. Lost-carrier history accumulation was independently confirmed and repaired; the original permanent freeze was not reproduced and its unique cause remains unknown.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.6.json",
+      "releaseRequirement": "Capture both endpoint authority, callbacks, sent history, receive age and RTT on recurrence; passing controlled loss does not prove original cause."
+    },
+    {
+      "id": "shade-soul-downslam-multihit-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "User reports black wave and downslam duplicate damage. Selected 24 remote effects across authority choices and 60/20 FPS did not reproduce it. Native 30+15 black landing stages preserved; no generic damage cooldown added.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.6.json",
+      "releaseRequirement": "Reproduce full-input casting/falling contact and target conditions before changing legitimate multistage or piercing rules."
+    },
+    {
+      "id": "unreliable-player-animation-attack-loss",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "Under controlled application-fragment loss, one 20FPS Shade Soul animation emitted once, received zero times and caused no damage. Player animation events still travel in unreliable PlayerUpdate. Original failure retained; one unchanged retry passed.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.6.json",
+      "releaseRequirement": "Design and validate bounded delivery/deduplication before claiming weak-network missed attacks repaired."
+    },
+    {
+      "id": "colosseum-silver-authority-handoff-reward-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Current-build reward continuation boundary; normal authority and guest flows pass, handoff interaction range still fails",
+      "observation": "Silver ordinary host and guest native reward/exit flows pass. The authority-handoff case still fails while the survivor searches for the original native inspect range after authority departure; no claim of complete disconnect-during-pickup repair.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.8.json",
+      "releaseRequirement": "Reproduce a real Silver authority departure during native pickup and finish the original native interaction and exit on both endpoints."
+    },
+    {
+      "id": "mawlek-shared-health-fragment-report-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "User report not reproduced by current shared-health/native pickup checks",
+      "observation": "The reported two-player case where neither player receives a mask fragment remains unconfirmed. Current linked-health threshold and resource regression flows pass, but they do not identify the original save/reconnect receipt history.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.8.json",
+      "releaseRequirement": "Capture both saves, initial fragment count, source receipt IDs and connect/reconnect order when the report recurs."
+    }
+  ],
+  "limitations": [
+    "No full room matrix rerun",
+    "Occasional low frames remain unassigned; no claim of a general performance fix",
+    "Unity6 fixed community API retains known API-only title SetupHeroRefs exception",
+    "Steam real two-account invitations and cross-machine networking not exercised",
+    "Separate game profile validation does not certify mixed game-version rooms"
+  ],
+  "correctedHistoricalScope": "Earlier runs named blackwave tested Waterways/Dung Defender. Those are retained development evidence and do not certify Shade Soul. Correct route preflight e captured the GetRandomChild field-type error; g passed native behavior and logs but the runner originally looked for a notice in Unity instead of engine log. Final cases use corrected log checks and current production hashes.",
+  "fixtureRecovery": "Legacy menus final-a stalled before Mod startup with a hidden rendered window. final-b used visible rendering and passed three-language switching, then failed an idle concealment assertion before a complete address edit cycle. final-c explicitly verifies native address focus/end-edit and masking; no production code change. Earlier Unity6 results retain their actual Smoke hashes and the passing original concealment assertion."
+}

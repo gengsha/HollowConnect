@@ -283,8 +283,17 @@ internal static class EntityFsmActions {
             // We need to check whether the game object that is being spawned with this action is not an object
             // managed by the system. Because if so, we do not store the random values because the action for it
             // is not being networked. Only the game object spawn is networked with an EntitySpawn packet directly.
-            var fsmGameObject = ReflectionHelper.GetField<TObject, FsmGameObject>(instance, "gameObject");
-            if (fsmGameObject != null && fsmGameObject.Value != null && IsObjectInRegistry(fsmGameObject.Value)) {
+            // Some native actions (including GetRandomChild) store an owner
+            // selector here. Reading it through a generated FsmGameObject
+            // getter reinterprets its fields and can hand Unity an invalid
+            // Object reference. Resolve the actual field type before use.
+            var target = ReflectionHelper.GetField<TObject, object>(instance, "gameObject");
+            var gameObject = target switch {
+                FsmGameObject variable => variable.Value,
+                FsmOwnerDefault owner => instance.Fsm.GetOwnerDefaultTarget(owner),
+                _ => null
+            };
+            if (gameObject != null && IsObjectInRegistry(gameObject)) {
                 return value;
             }
             

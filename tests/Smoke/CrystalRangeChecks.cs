@@ -47,6 +47,7 @@ public sealed partial class CoverageProbe {
         if (manager.IsSceneHost && Environment.GetEnvironmentVariable("HOLLOWCONNECT_CRYSTAL_RANGE").StartsWith("inspect"))
             foreach (var e in targets.GroupBy(e => e.Type).Select(g => g.First())) Dump(e.Object.Host);
         var home = HeroController.instance.transform.position;
+        GetComponent<RouteFrameRecorder>()?.Phase("sample");
         foreach (var stage in new[] { "follower", "authority" }) {
             if (stage == "authority" && !manager.IsSceneHost) HeroController.instance.transform.position = home;
             foreach (var e in targets.Where(e => e.Type is EntityType.CrystalHunter or EntityType.CrystalCrawler).GroupBy(e => e.Type).Select(g => g.First())) {
@@ -97,6 +98,7 @@ public sealed partial class CoverageProbe {
                 yield return Until(() => Has(other + ".crystal.sample." + key), "both sampled " + key);
             }
         }
+        GetComponent<RouteFrameRecorder>()?.Phase("after-sample");
         var miner = targets.First(e => e.Type == EntityType.CrystalHunter);
         var minerObject = manager.IsSceneHost ? miner.Object.Host : miner.Object.Client;
         var health = minerObject.GetComponent<HealthManager>();

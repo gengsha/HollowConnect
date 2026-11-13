@@ -15,7 +15,8 @@ internal sealed class DamageRankingView : IDisposable {
     private readonly GameObject root;
     private readonly RectTransform panel;
     private readonly Text title, context;
-    private readonly Font textFont, numeralFont;
+    private Font textFont;
+    private readonly Font numeralFont;
     private readonly List<(GameObject Root, Text Name, Text Percent, RectTransform Bar)> rows = new();
     private uint board, revision;
     private ushort local;
@@ -51,12 +52,15 @@ internal sealed class DamageRankingView : IDisposable {
     }
     internal void Show(DamageRankingSnapshot value, ushort localId) {
         root.SetActive(true);
-        if (board == value.Board && revision == value.Revision && local == localId) return;
+        if (board == value.Board && revision == value.Revision && local == localId && language == Hkmp.Ui.Localize.Language) return;
+        language = Hkmp.Ui.Localize.Language;
+        textFont = Hkmp.Ui.Localize.Font;
+        title.font = context.font = textFont;
         board = value.Board; revision = value.Revision; local = localId;
-        title.text = value.Finished ? value.Completed ? "本轮结算" : "本轮结束" : "伤害占比";
+        title.text = value.Finished ? value.Completed ? Hkmp.Ui.Localize.T("本轮结算") : Hkmp.Ui.Localize.T("本轮结束") : Hkmp.Ui.Localize.T("伤害占比");
         var sequence = SequenceLabel(value.Sequence);
-        context.text = sequence.Length > 0 ? sequence + (value.Finished ? " · " + (value.Completed ? "已完成" : "已结束") : " · 累计")
-            : value.Finished ? (value.Completed ? "Boss 已击败" : "战斗已结束") : "Boss 战";
+        context.text = sequence.Length > 0 ? sequence + (value.Finished ? " · " + (value.Completed ? Hkmp.Ui.Localize.T("已完成") : Hkmp.Ui.Localize.T("已结束")) : Hkmp.Ui.Localize.T(" · 累计"))
+            : value.Finished ? (value.Completed ? Hkmp.Ui.Localize.T("Boss 已击败") : Hkmp.Ui.Localize.T("战斗已结束")) : Hkmp.Ui.Localize.T("Boss 战");
         // Large parties stay bounded: show leaders plus the local player's row.
         var visible = value.Players.Take(8).ToList();
         var own = value.Players.FirstOrDefault(p => p.Id == localId);
@@ -72,11 +76,12 @@ internal sealed class DamageRankingView : IDisposable {
         var total = value.Total;
         for (var i = 0; i < rows.Count; i++) {
             var row = rows[i]; row.Root.SetActive(i < visible.Count);
+            row.Name.font = textFont;
             if (i >= visible.Count) continue;
             var player = visible[i]; var ownRow = player.Id == localId;
             var ratio = total > 0 ? (double)player.Damage / total : 0;
             ((RectTransform)row.Root.transform).anchoredPosition = new Vector2(0, -101 - i * 47);
-            var name = player.Name; var suffix = ownRow ? " · 你" : "";
+            var name = player.Name; var suffix = ownRow ? Hkmp.Ui.Localize.T(" · 你") : "";
             row.Name.text = name + suffix;
             while (row.Name.preferredWidth > 170 && name.Length > 1) {
                 name = name.Substring(0, name.Length - 1);
@@ -97,10 +102,11 @@ internal sealed class DamageRankingView : IDisposable {
         shortcut.text = "F1";
     }
     internal void Hide() { if (root != null) root.SetActive(false); }
+    private string language;
     internal static string SequenceLabel(string sequence) {
         if (string.IsNullOrEmpty(sequence)) return "";
-        for (var i = 1; i <= 5; i++) if (sequence.EndsWith(i.ToString(), StringComparison.Ordinal)) return new[] { "第一门", "第二门", "第三门", "第四门", "第五门" }[i - 1];
-        return "万神殿";
+        for (var i = 1; i <= 5; i++) if (sequence.EndsWith(i.ToString(), StringComparison.Ordinal)) return new[] { Hkmp.Ui.Localize.T("第一门"), Hkmp.Ui.Localize.T("第二门"), Hkmp.Ui.Localize.T("第三门"), Hkmp.Ui.Localize.T("第四门"), Hkmp.Ui.Localize.T("第五门") }[i - 1];
+        return Hkmp.Ui.Localize.T("万神殿");
     }
     private static RectTransform Rect(string name, Transform parent, float x, float y, float width, float height) {
         var obj = new GameObject(name, typeof(RectTransform)); obj.transform.SetParent(parent, false);

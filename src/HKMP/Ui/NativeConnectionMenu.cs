@@ -80,6 +80,7 @@ internal static class NativeConnectionMenu {
     }
     internal static void Finish(MenuScreen screen, params MenuButton[] rows) {
         foreach (var text in screen.GetComponentsInChildren<Text>(true)) text.font = MenuResources.NotoSerifCJKSCRegular;
+        Localize.Screen(screen);
         Relink(screen, rows);
     }
     internal static void Relink(MenuScreen screen, IEnumerable<MenuButton> rows) {

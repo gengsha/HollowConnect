@@ -329,3 +329,12 @@ Boss倒地索敌专项：构建一次Smoke，再运行 `Run-Boss-Targets.ps1 -Pr
 格林抢打残影回归使用 `-Mode boss-roar`，设置 `HOLLOWCONNECT_ROAR_SCENE=GG_Grimm`、`HOLLOWCONNECT_ROAR_FIRST=host|guest`。
 `HOLLOWCONNECT_ROAR_CASE=normal|visual-missing-end|visual-late-create|bow-normal|delayed-start` 分别覆盖原生抢打、遗漏特效结束动作、特效创建晚于战吼结束、正常敬礼，以及旧的迟到控制锁事件。
 断言原生战吼波纹销毁、独立 Grimm Bow 模型隐藏、人物控制恢复和真实扣血；输出每端 `.roar-visuals.json`。故障注入只作用于指定动作，不设置 Boss／特效 FSM 状态。
+
+水道钥匙路线回归使用 `-Mode progress`、`HOLLOWCONNECT_SIMPLE_KEYS=blackwave`，从 `Abyss_20/Shiny Item Stand` 原生领取钥匙，经 `Ruins1_05b/Waterways Machine` 原生解锁后进入 `Waterways_05`。
+`HOLLOWCONNECT_BLACKWAVE_FIRST=host|guest` 指定先进入房间的一端，`HOLLOWCONNECT_BLACKWAVE_TRIGGER=host|guest` 指定实际触发竞技场的一端；两者不同可复现权威留在入口外时 Boss 不醒的问题。
+检查真正登记的 Host/Client 对象和接收的 FSM 快照，不把复制端故意停用的 Host 当作可见 Boss。验证原生延迟 `DUNG START`、个人入场控制器隔离，以及 30 秒内渲染、移动和多种战斗状态，不强置 Boss FSM。
+
+任意 Smoke 用例可选 `HOLLOWCONNECT_ROUTE_FRAMES=1`，在测试插件内以 120 FPS 目标、关闭 vSync 记录双端 `<role>.route-frames.json`。
+`coverage` 的性能观察在采样起止处分为 `sample`／`after-sample`，可与加载和初始化分开统计；`FrameProfile` 另用 `HOLLOWCONNECT_FRAME_TARGET_FPS`（30–1000，默认 300）指定目标上限，输出实际配置值。
+记录原始 wall/Unity 帧时间、平均 FPS、最慢 1% 帧均值折算 FPS、p50/p95/p99/max、超过 16.667/33.333/50ms 的帧和 GC 次数；加载窗口与主动标记的战斗窗口分别统计。采样期间不逐帧写日志，结束时一次性写文件。
+同机双端、800×600、批处理环境下的数据用于定位长帧；没有无模组对照时，不能据此把加载或 GC 卡顿归因于模组。

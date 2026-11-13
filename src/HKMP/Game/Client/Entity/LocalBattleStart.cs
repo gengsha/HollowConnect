@@ -13,13 +13,34 @@ internal sealed class LocalBattleStart {
     private readonly Collider2D trigger;
     private readonly FsmEvent start;
     private readonly FsmState entry;
+    private readonly PlayMakerFSM wake;
+    private readonly string wakeSignal;
+    private bool wakeFinished;
     private FsmStateAction[] presentation;
     private bool pendingPresentation;
 
     private LocalBattleStart(PlayMakerFSM battle, Collider2D trigger, FsmEvent start, FsmState entry) {
         this.battle = battle; this.trigger = trigger; this.start = start; this.entry = entry;
     }
+    private LocalBattleStart(PlayMakerFSM battle, PlayMakerFSM wake, string signal) {
+        this.battle = battle; this.wake = wake; wakeSignal = signal;
+    }
     internal static LocalBattleStart Find(GameObject boss, EntityType type) {
+        // The Waterways controller lives in the main scene; its boss lives
+        // in the additive scene. DUNG START follows a native 1.5s intro wait.
+        // Forward only that emitted wake, never the other player's gate/intro.
+        if (type == EntityType.DungDefender && boss.scene.name == "Waterways_05_boss" &&
+            CoopContext.LocalScene == "Waterways_05") {
+            var wake = boss.GetComponents<PlayMakerFSM>().SingleOrDefault(f => f.FsmName == "Dung Defender" &&
+                f.FsmStates.Any(s => s.Transitions.Any(t => t.EventName == "DUNG START")));
+            var controllers = UnityEngine.Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f =>
+                f.gameObject.scene.name == CoopContext.LocalScene && f.FsmName == "Battle Scene" &&
+                LocalBattleCompletion.IsLocal(f.gameObject) && f.GetComponent<Collider2D>() is { isTrigger: true } &&
+                f.FsmStates.SelectMany(s => s.Actions).OfType<SendEventByName>().Any(a => a.Enabled &&
+                    !a.everyFrame && a.sendEvent.Value == "DUNG START" && a.delay.Value < .001f &&
+                    a.eventTarget.target == FsmEventTarget.EventTarget.BroadcastAll)).ToArray();
+            if (wake != null && controllers.Length == 1) return new LocalBattleStart(controllers[0], wake, "DUNG START");
+        }
         if (!BossDefeatSignals.IsBoss(type) || !boss.GetComponents<PlayMakerFSM>()
             .Any(f => f.FsmStates.Any(s => s.Transitions.Any(t => t.EventName == "BATTLE START")))) return null;
         var candidates = UnityEngine.Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f =>
@@ -42,13 +63,23 @@ internal sealed class LocalBattleStart {
         }
         return null;
     }
-    internal bool Matches(HutongGames.PlayMaker.Fsm sender) => battle != null && ReferenceEquals(battle.Fsm, sender);
+    internal bool Matches(FsmStateAction action) => battle != null && ReferenceEquals(battle.Fsm, action.Fsm) &&
+        action is SendEventByName send && send.sendEvent.Value == (wakeSignal ?? "BATTLE START");
     private bool LocalHeroInside() {
         var hero = HeroController.instance;
         return hero != null && hero.gameObject.activeInHierarchy && trigger != null && trigger.enabled &&
             trigger.OverlapPoint(hero.transform.position);
     }
     internal void Tick() {
+        if (wake != null) {
+            // Accepted requests and takeover receipts may repeat. Only the
+            // native dormant transition consumes this event; never rewind AI.
+            if (wakeFinished || !wake.enabled || !wake.gameObject.activeInHierarchy ||
+                wake.Fsm.ActiveState == null || wake.ActiveStateName == "Init") return;
+            wakeFinished = true;
+            if (wake.Fsm.ActiveState.Transitions.Any(t => t.EventName == wakeSignal)) wake.SendEvent(wakeSignal);
+            return;
+        }
         if (battle == null || !battle.enabled || !battle.gameObject.activeInHierarchy) return;
         if (pendingPresentation) {
             var counter = battle.FsmVariables.FindFsmInt("Battle Enemies");

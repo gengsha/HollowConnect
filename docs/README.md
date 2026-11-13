@@ -4,7 +4,8 @@
 
 | 面向玩家 | 内容 |
 |---|---|
-| [当前版本](UPDATE-0.2.9.md) | 0.2.9 双版本安装、水晶山峰感知修复与独立受击无敌帧 |
+| [当前版本](UPDATE-0.3.1.md) | 0.3.1 双版本、英日语言与更简洁的 HUD |
+| [English installation](INSTALL-EN.md) / [日本語](INSTALL-JA.md) | 安装器、脚本及手动安装 |
 | [共享进度](SHARED-PROGRESS.md) | 共享项目、个人资源和存档规则 |
 | [共享血量（Beta）](LINKED-HEALTH.md) | 团队生命、护符限制与休息 |
 | [观战（Beta）](OBSERVATION.md) | 主动观战、死亡观战和退出方式 |

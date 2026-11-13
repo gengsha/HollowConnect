@@ -24,6 +24,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="../Shared/Translation.cs" Link="Localization/Translation.cs" />
+        <EmbeddedResource Include="../Shared/Translations.tsv" LogicalName="HollowConnect.Translations.tsv" />
         <EmbeddedResource Include="Ui\Resources\Images\*.png" />
         <EmbeddedResource Include="Ui\Resources\Images\*.dat" />
         <EmbeddedResource Include="Resource\entity-registry.json" />
@@ -35,6 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(References)/UnityEngine.IMGUIModule.dll</HintPath><Private>False</Private></Reference>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>$(References)\Assembly-CSharp.dll</HintPath>
             <Private>False</Private>

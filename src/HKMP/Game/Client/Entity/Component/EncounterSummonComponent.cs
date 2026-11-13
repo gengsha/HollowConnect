@@ -20,8 +20,8 @@ internal sealed class EncounterSummonComponent : EntityComponent {
         this.battle = battle;
         MonoBehaviourUtil.Instance.OnUpdateEvent += Tick;
     }
-    internal void RequestBattle(HutongGames.PlayMaker.Fsm sender) {
-        if (battle?.Matches(sender) == true && !CoopContext.Resetting) RequestNativeWave();
+    internal void RequestBattle(FsmStateAction action) {
+        if (battle?.Matches(action) == true && !CoopContext.Resetting) RequestNativeWave();
     }
     private void Send(byte action) {
         var data = new EntityNetworkData { Type = EntityComponentType.EncounterSummon };

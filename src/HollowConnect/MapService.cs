@@ -121,21 +121,23 @@ internal sealed class MapService : IDisposable {
                 if (viewport.z > 0 && viewport.x >= 0 && viewport.x <= 1 && viewport.y >= 0 && viewport.y <= 1) continue;
             }
             var selected = pair.Key == runtime.Selected ? "◆ " : "";
-            var label = selected + s.Name + (s.Value == (int)Life.Down ? " [暗影]" : s.Value == (int)Life.Returning ? " [回椅中]" : "");
+            var label = selected + s.Name + (s.Value == (int)Life.Down ? Hkmp.Ui.Localize.T(" [暗影]") : s.Value == (int)Life.Returning ? Hkmp.Ui.Localize.T(" [回椅中]") : "");
             style.normal.textColor = PeerColor(pair.Key);
             if (open) {
                 if (fresh && s.HasMap && icons.TryGetValue(pair.Key, out var icon) && icon != null) {
                     var point = camera.WorldToScreenPoint(icon.transform.position);
                     GUI.Label(new Rect(point.x - 90, Screen.height - point.y - 40, 180, 30), label, style);
                 } else {
-                    GUI.Label(new Rect(20, row, 350, 30), label + (fresh ? " · " + s.Scene + "（无地图坐标）" : " · 定位更新中"), style);
+                    GUI.Label(new Rect(20, row, 350, 30), label + (fresh ? " · " + s.Scene + Hkmp.Ui.Localize.T("（无地图坐标）") : Hkmp.Ui.Localize.T(" · 定位更新中")), style);
                     row += 28;
                 }
                 continue;
             }
             if (!CoopMod.Settings.OffscreenNames) continue;
             if (!fresh || s.Scene != CoopContext.LocalScene) {
-                GUI.Label(new Rect(20, row, 350, 30), label + " · " + (fresh ? s.Scene : "定位更新中"), style); row += 28; continue;
+                // Cross-room names used to cover the soul HUD. They remain
+                // available on the deliberately opened map and in presence logs.
+                continue;
             }
             var dx = (viewport.x - .5f) * Screen.width;
             var dy = (.5f - viewport.y) * Screen.height;

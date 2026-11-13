@@ -63,6 +63,7 @@ internal static class Program {
         GrimmFlameTests.Register(Test);
         LocalWorldIsolationTests.Register(Test);
         EncounterSummonTests.Register(Test);
+        LocalizationTests.Register(Test);
         BossHealthScaleTests.Register(Test);
         LinkedHealthTests.Register(Test);
         DamageRankingTests.Register(Test);

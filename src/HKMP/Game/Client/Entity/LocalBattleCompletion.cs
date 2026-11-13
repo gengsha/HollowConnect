@@ -33,11 +33,11 @@ internal static class LocalBattleCompletion {
 
     internal static bool IsLocal(GameObject battle) => battle != null && EntityReferences.Owner(battle) == null;
     internal static void NativeWaveAction(FsmStateAction action) {
-        if (!CoopContext.Resetting && action.Fsm?.Name == "Battle Control" && IsLocal(action.Fsm.GameObject) &&
-            action is SendEventByName { everyFrame: false } start && start.sendEvent.Value == "BATTLE START" &&
+        if (!CoopContext.Resetting && action.Fsm?.Name is "Battle Control" or "Battle Scene" && IsLocal(action.Fsm.GameObject) &&
+            action is SendEventByName { everyFrame: false } start && start.sendEvent.Value is "BATTLE START" or "DUNG START" &&
             start.delay.Value < .001f && start.eventTarget?.target == FsmEventTarget.EventTarget.BroadcastAll &&
             EntityReferences.Entities != null) {
-            foreach (var entity in EntityReferences.Entities.Values) entity.RequestBattleStart(action.Fsm);
+            foreach (var entity in EntityReferences.Entities.Values) entity.RequestBattleStart(action);
         }
         if (CoopContext.Resetting || action.Fsm?.Name != "Battle Control" || !IsLocal(action.Fsm.GameObject) ||
             action is not SendEventByName { everyFrame: false } send || send.sendEvent.Value != "SUMMON" ||

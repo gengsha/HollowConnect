@@ -81,7 +81,7 @@ internal sealed class ResourceNotifications {
         active = Object.Instantiate(template);
         active.name = PopupName;
         Object.DontDestroyOnLoad(active);
-        var text = kind == ResourceKind.Grub ? "共享幼虫" : kind == ResourceKind.DreamEssence ? "共享梦境精华" :
+        var text = kind == ResourceKind.Grub ? Hkmp.Ui.Localize.T("共享幼虫") : kind == ResourceKind.DreamEssence ? Hkmp.Ui.Localize.T("共享梦境精华") :
             kind == ResourceKind.UniqueKey ? KeyName(source.InventoryFlag) : Language.Language.Get(names[kind], "UI");
 #if HOLLOW_UNITY6
         active.transform.Find("Text").GetComponent<TMProOld.TextMeshPro>().text = text + (count > 1 ? " ×" + count : "");
@@ -93,6 +93,6 @@ internal sealed class ResourceNotifications {
         icon.sprite = sprite; icon.sortingOrder = 1;
         active.SetActive(true);
     }
-    private static string KeyName(string flag) => flag == "hasCityKey" ? "共享城市纹章" : flag == "hasWhiteKey" ? "共享典雅的钥匙" :
-        flag == "hasLoveKey" ? "共享爱之钥" : "共享店主的钥匙";
+    private static string KeyName(string flag) => flag == "hasCityKey" ? Hkmp.Ui.Localize.T("共享城市纹章") : flag == "hasWhiteKey" ? Hkmp.Ui.Localize.T("共享典雅的钥匙") :
+        flag == "hasLoveKey" ? Hkmp.Ui.Localize.T("共享爱之钥") : Hkmp.Ui.Localize.T("共享店主的钥匙");
 }

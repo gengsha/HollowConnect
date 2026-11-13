@@ -62,7 +62,9 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                     (f.FsmName=="npc_control" || f.FsmName=="Conversation Control"))) {
                     Mark("KEY WAIT FSM "+f.name+"/"+f.FsmName+" state="+f.ActiveStateName); Dump(f);
                 }
-                Mark("KEY WAIT Dialogue "+Dialogue.ActiveStateName+" requester="+Dialogue.FsmVariables.FindFsmGameObject("Requester")?.Value?.name);
+                var waitDialogue=Object.FindObjectsOfType<PlayMakerFSM>(true).FirstOrDefault(f=>f.name=="Text YN" && f.FsmName=="Dialogue Page Control");
+                var waitRequester=waitDialogue?.FsmVariables.FindFsmGameObject("Requester")?.Value;
+                Mark("KEY WAIT Dialogue "+(waitDialogue==null?"missing":waitDialogue.ActiveStateName)+" requester="+Describe(waitRequester));
             }
             if (ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase) {
                 Mark("RESOURCE WAIT hero=" + HeroController.instance?.transform.position + " input=" + HeroController.instance?.acceptingInput +

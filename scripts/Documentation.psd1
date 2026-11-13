@@ -2,6 +2,9 @@
     # Paths are relative to docs/. Keep player delivery separate from developer references.
     Player = @(
         'README.md'
+        'INSTALL-EN.md'
+        'INSTALL-JA.md'
+        'UNITY6-API-LICENSE.txt'
         'BOUNCYCASTLE-LICENSE.md'
         'SHARED-PROGRESS.md'
         'LINKED-HEALTH.md'

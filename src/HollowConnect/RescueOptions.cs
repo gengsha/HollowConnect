@@ -49,6 +49,7 @@ public sealed partial class CoopRuntime {
         if (rescueStatusInitialized && message.Aux == rescueStatusRest && message.Value > RescuesUsed)
             rescueCountUntil = Now + 4.5;
         RescuesUsed = message.Aux > rescueStatusRest ? Math.Max(0, message.Value) : Math.Max(RescuesUsed, message.Value);
+        if (message.Serial > rescueStatusSerial && message.Value != 0) Hkmp.Logging.Logger.Info("HollowConnect rescue budget: " + RescuesUsed + "/" + RescueLimit);
         rescueStatusInitialized = true;
         rescueStatusSerial = message.Serial; rescueStatusRest = message.Aux;
     }
