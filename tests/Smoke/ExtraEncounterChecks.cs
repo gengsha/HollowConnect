@@ -15,6 +15,7 @@ public sealed partial class RescueProbe {
         using var contactGuard = IgnoreExternalCombatDamage();
         if (selected != "schema") {
             if (selected == "Fungus3_archive_02") yield return UumuuFlowChecks();
+            else if (selected == "Fungus1_32") yield return GreenpathMossKnightCheck();
             else if (selected.StartsWith("Fungus3_", StringComparison.Ordinal)) yield return ExtraGardenChecks(selected);
             else yield return ExtraBossChecks(selected);
             yield break;
@@ -221,7 +222,9 @@ public sealed partial class RescueProbe {
         };
         On.HutongGames.PlayMaker.Fsm.EnterState += trace;
         try {
-            if (!authority) yield return Until(() => Has("extra.wave1.dead"), "Garden first wave dead before late entrant", 55);
+            var peerStarts = Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXTRA_PEER_START") == "1";
+            if (!authority) yield return Until(() => Has(peerStarts ? "extra.garden.authority-ready" : "extra.wave1.dead"),
+                "Garden scene authority arrived before peer", 55);
             var entry = scene == "Fungus3_05" ? "left1" : "bot1";
             TransitionPoint.lastEntered = entry; yield return RuleEnter(scene, entry);
             var manager = Field<EntityManager>(engine.ClientManager, "_entityManager");
@@ -234,10 +237,31 @@ public sealed partial class RescueProbe {
             var trigger = battle.GetComponent<Collider2D>();
             Check(trigger != null && trigger.isTrigger && trigger.enabled, "Garden original collision trigger exists");
             var hero = HeroController.instance; hero.AffectedByGravity(false); hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            hero.transform.position = new Vector3(trigger.bounds.center.x, scene == "Fungus3_05" ? 48 : 11.5f, 0); Physics2D.SyncTransforms();
-            yield return Until(() => battle.ActiveStateName != "Init" && gates.All(ExtraBlocks), "native local Garden trigger closes both gates");
+            var entryPosition = new Vector3(trigger.bounds.center.x, scene == "Fungus3_05" ? 48 : 11.5f, 0);
+            var outside = peerStarts && authority;
+            var enterDuringPause = outside && Environment.GetEnvironmentVariable("HOLLOWCONNECT_EXTRA_ENTER_DURING_PAUSE") == "1";
+            if (outside) {
+                Check(battle.ActiveStateName == "Init" && gates.All(g => !ExtraBlocks(g)) &&
+                    !trigger.bounds.Intersects(hero.GetComponent<Collider2D>().bounds), "Garden authority outside original encounter trigger");
+                Flag("extra.garden.authority-ready");
+                yield return Until(() => Has(peer + ".extra.garden.entered"), "Garden peer reached and closed original gates");
+            } else {
+                hero.transform.position = entryPosition; Physics2D.SyncTransforms();
+                yield return Until(() => battle.ActiveStateName != "Init" && gates.All(ExtraBlocks), "native local Garden trigger closes both gates");
+                Flag(role + ".extra.garden.entered");
+            }
             centers = gates.Select(ExtraGateCenter).ToArray();
-            Flag(role + ".extra.garden.entered");
+            if (peerStarts && !authority) {
+                yield return Until(() => EntityReferences.Entities.Values.Any(e => e.Type is EntityType.MantisPetra or EntityType.MantisTraitor &&
+                    e.Object.Client is { activeInHierarchy: true } body && body.scene.name == scene &&
+                    body.transform.position.x > centers.Min(c => c.x) && body.transform.position.x < centers.Max(c => c.x) &&
+                    Mathf.Abs(body.transform.position.y - entryPosition.y) < 7 &&
+                    body.GetComponents<Collider2D>().Any(c => c.enabled && !c.isTrigger)),
+                    "first Garden replica appears with combat collider while local gates closed", 12);
+                Flag("extra.garden.first-visible");
+            }
+            if (outside) yield return Until(() => Has("extra.garden.first-visible") && battle.ActiveStateName == "Wave 1",
+                "Garden authority runs the first wave while still outside", 12);
             var killed = new HashSet<ulong>(); var previous = ""; var firstWaveKilled = false;
             var battleField = typeof(HealthManager).GetField("battleScene", BindingFlags.Instance | BindingFlags.NonPublic);
             var deadline = Time.realtimeSinceStartup + 80;
@@ -252,13 +276,25 @@ public sealed partial class RescueProbe {
                 var observation = battle.ActiveStateName + "/" + counter.Value + "/" + string.Join(",", live.Select(e => e.Id + ":" + e.Type));
                 if (previous != observation) { previous = observation; Log("EXTRA GARDEN " + scene + " role=" + role + " state/counter/live=" + observation); }
                 if (authority && live.Length > 0 && (!firstWaveKilled || Has(peer + ".extra.garden.entered"))) {
-                    Check(gates.All(ExtraBlocks), "remaining native Garden wave keeps local gates closed");
+                    Check(outside ? gates.All(g => !ExtraBlocks(g)) && !trigger.bounds.Intersects(hero.GetComponent<Collider2D>().bounds)
+                        : gates.All(ExtraBlocks), outside ? "outside authority keeps its gates open" : "remaining native Garden wave keeps local gates closed");
                     foreach (var e in live) {
                         var h = e.Object.Host.GetComponent<HealthManager>();
                         Log("EXTRA GARDEN NATIVE KILL " + e.Id + ":" + e.Type + " at=" + e.Object.Host.transform.position + " state=" + battle.ActiveStateName);
                         h.ApplyExtraDamage(h.hp); killed.Add(e.Id);
                     }
-                    if (!firstWaveKilled) { firstWaveKilled = true; Flag("extra.wave1.dead"); }
+                    if (!firstWaveKilled) {
+                        firstWaveKilled = true;
+                        Flag("extra.wave1.dead");
+                        if (enterDuringPause) {
+                            yield return Until(() => battle.ActiveStateName == "Pause 1" && counter.Value == 0,
+                                "first wave died before the authority enters during the native pause", 3);
+                            Check(gates.All(g => !ExtraBlocks(g)), "native gates stayed open through the first wave for the outside authority");
+                            hero.transform.position = entryPosition; Physics2D.SyncTransforms();
+                            yield return Until(() => gates.All(ExtraBlocks), "deferred native gates close when the authority enters between waves", 3);
+                            outside = false;
+                        }
+                    }
                 }
                 yield return new WaitForSecondsRealtime(.15f);
             }
