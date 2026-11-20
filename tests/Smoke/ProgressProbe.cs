@@ -256,6 +256,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 orig(gm, additive);
             };
         CoopMod.Settings.ShareProgress = !ProgressAuditDisabled; CoopMod.Settings.EntryProtection = false;
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SHADE_ENTRY_ORDER") != null) CoopMod.Settings.BossDamageRanking = true;
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE") == "mawlek") {
             CoopMod.Settings.LinkedHealth = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE_LINKED") == "1";
             CoopMod.Settings.ShareCharms = true;

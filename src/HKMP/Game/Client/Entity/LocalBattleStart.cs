@@ -22,9 +22,9 @@ internal sealed class LocalBattleStart {
     private bool pendingPresentation;
 
     private LocalBattleStart(PlayMakerFSM battle, Collider2D trigger, FsmEvent start, FsmState entry,
-        SendEventByName waveStart = null) {
+        PlayMakerFSM wake = null, SendEventByName waveStart = null) {
         this.battle = battle; this.trigger = trigger; this.start = start; this.entry = entry;
-        this.waveStart = waveStart;
+        this.wake = wake; this.waveStart = waveStart;
     }
     private LocalBattleStart(PlayMakerFSM battle, PlayMakerFSM wake, string signal, string wakeState = null) {
         this.battle = battle; this.wake = wake; wakeSignal = signal; this.wakeState = wakeState;
@@ -100,7 +100,11 @@ internal sealed class LocalBattleStart {
                     a.eventTarget.target == FsmEventTarget.EventTarget.BroadcastAll)) continue;
                 // Only support the immediate native entry boundary. Do not
                 // defer asynchronous actions or arbitrary progression logic.
-                return new LocalBattleStart(battle, battle.GetComponent<Collider2D>(), action.sendEvent, entered);
+                var shadeWake = type == EntityType.SoulWarrior && boss.scene.name == "Ruins1_31b"
+                    ? boss.GetComponents<PlayMakerFSM>().SingleOrDefault(f => f.FsmName == "Mage Knight" &&
+                        f.FsmStates.Any(s => s.Name == "Sleep" && s.Transitions.Any(t => t.EventName == "BATTLE START")))
+                    : null;
+                return new LocalBattleStart(battle, battle.GetComponent<Collider2D>(), action.sendEvent, entered, shadeWake);
             }
         }
         return null;
@@ -126,6 +130,14 @@ internal sealed class LocalBattleStart {
             return;
         }
         if (battle == null || !battle.enabled || !battle.gameObject.activeInHierarchy) return;
+        // The arena can emit BATTLE START before the authority's Mage Knight
+        // initializes. Deliver it to the native Sleep transition when ready.
+        if (!wakeFinished && wake != null && wake.enabled && wake.ActiveStateName == "Sleep" &&
+            battle.ActiveStateName == "Battling" && battle.FsmVariables.FindFsmInt("Battle Enemies") is { Value: > 0 } &&
+            wake.GetComponent<HealthManager>() is { isDead: false, hp: > 0 }) {
+            wakeFinished = true;
+            wake.SendEvent("BATTLE START");
+        }
         if (pendingPresentation) {
             var counter = battle.FsmVariables.FindFsmInt("Battle Enemies");
             // A Garden wave legitimately reaches zero during a native pause.

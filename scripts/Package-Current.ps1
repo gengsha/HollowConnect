@@ -9,8 +9,8 @@ $root=Split-Path -Parent $PSScriptRoot
 $version=if($CandidateVersion){$CandidateVersion}else{'0.3.1'}
 $taskChannel=if($CandidateVersion){'prerelease'}else{'release'}
 $taskRequiredCore=if($CandidateVersion){13}else{15}
-$taskRequiredCases=if($CandidateVersion){@('green-host','garden05','garden10')}else{@('menus','blackwave-host','blackwave-guest','defender')}
-$taskValidationScope=if($CandidateVersion){'related core and three native encounter rooms per profile'}else{'related core, installer, menus and two native blackwave routes per profile'}
+$taskRequiredCases=if($CandidateVersion){@('green-host','garden05','garden10','shade-soul')}else{@('menus','blackwave-host','blackwave-guest','defender')}
+$taskValidationScope=if($CandidateVersion){'related core and four native encounter rooms per profile'}else{'related core, installer, menus and two native blackwave routes per profile'}
 if(!$SteamModule -or !$UserRequestedRelease){throw "$version delivery requires the requested release mode and tested Steam module."}
 $taskName="HollowConnect-$version"+$(if($GameVersion -eq 'Unity6'){'-unity6'})
 $package=Join-Path $root "dist/$taskName"
