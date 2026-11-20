@@ -1,12 +1,17 @@
-# Scoped 0.3.1 delivery. Historical evidence and packagers remain unchanged.
+# Package a release or candidate with its scoped validation records.
 param([ValidateSet('Legacy','Unity6')][string]$GameVersion,
+    [ValidatePattern('^\d+\.\d+\.\d+-rc[1-9][0-9]*$')][string]$CandidateVersion,
     [switch]$VerifyOnly,[switch]$RebuildChecksums,[switch]$SteamModule,[switch]$UserRequestedRelease)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 . "$PSScriptRoot/PackageTools.ps1"
 . "$PSScriptRoot/PackageDocumentation.ps1"
-$version='0.3.1'
-if(!$SteamModule -or !$UserRequestedRelease){throw '0.3.1 delivery requires the requested release mode and tested Steam module.'}
+$version=if($CandidateVersion){$CandidateVersion}else{'0.3.1'}
+$taskChannel=if($CandidateVersion){'prerelease'}else{'release'}
+$taskRequiredCore=if($CandidateVersion){13}else{15}
+$taskRequiredCases=if($CandidateVersion){@('green-host','garden05','garden10')}else{@('menus','blackwave-host','blackwave-guest','defender')}
+$taskValidationScope=if($CandidateVersion){'related core and three native encounter rooms per profile'}else{'related core, installer, menus and two native blackwave routes per profile'}
+if(!$SteamModule -or !$UserRequestedRelease){throw "$version delivery requires the requested release mode and tested Steam module."}
 $taskName="HollowConnect-$version"+$(if($GameVersion -eq 'Unity6'){'-unity6'})
 $package=Join-Path $root "dist/$taskName"
 $taskEvidencePath="docs/evidence/development-validation-$version.json"
@@ -14,9 +19,9 @@ $taskAuthPath="docs/evidence/release-authorization-$version.json"
 $taskEvidence=Get-Content "$root/$taskEvidencePath" -Raw | ConvertFrom-Json
 $taskAuth=Get-Content "$root/$taskAuthPath" -Raw | ConvertFrom-Json
 $taskProfile=$taskEvidence.profiles | Where-Object profile -eq $GameVersion
-if($taskEvidence.version -ne $version -or $taskEvidence.core.passed -ne 15 -or $taskEvidence.core.failed -ne 0 -or
-    @($taskProfile).Count -ne 1 -or @($taskProfile.runs).Count -ne 4 -or
-    $taskEvidence.fullMatrixRerun -ne $false -or $taskAuth.version -ne $version -or !$taskAuth.userRequest){throw 'Incomplete scoped release evidence'}
+if($taskEvidence.version -ne $version -or $taskEvidence.core.passed -ne $taskRequiredCore -or $taskEvidence.core.failed -ne 0 -or
+    @($taskProfile).Count -ne 1 -or @($taskProfile.runs).Count -ne $taskRequiredCases.Count -or
+    $taskEvidence.fullMatrixRerun -ne $false -or $taskAuth.version -ne $version -or $taskAuth.releaseChannel -ne $taskChannel -or !$taskAuth.userRequest){throw 'Incomplete scoped release evidence'}
 $taskOutput=if($GameVersion -eq 'Unity6'){'bin/Unity6/Release/net472'}else{'bin/Release/net472'}
 function Get-CurrentBinary([string]$Name){
     $taskProject=if($Name.StartsWith('HollowConnect.Steam.')){'HollowConnect.Steam'}else{'HollowConnect'}
@@ -25,7 +30,7 @@ function Get-CurrentBinary([string]$Name){
 foreach($taskBinary in $taskProfile.production){
     if((Get-FileHash (Get-CurrentBinary $taskBinary.name)).Hash -ne $taskBinary.sha256){throw 'Production differs from final scoped tests'}
 }
-if(@(Compare-Object @('menus','blackwave-host','blackwave-guest','defender') @($taskProfile.runs.case)).Count){throw 'Wrong runtime case list'}
+if(@(Compare-Object $taskRequiredCases @($taskProfile.runs.case)).Count){throw 'Wrong runtime case list'}
 foreach($taskRun in $taskProfile.runs){
     $taskRunDir=Join-Path $root ".test-results/$($taskRun.run)"
     if($taskRun.status -ne 'passed'){throw 'Failed selected runtime case'}
@@ -57,8 +62,8 @@ if(!$VerifyOnly){
     Copy-HollowPackageDocumentation -Root $root -Destination $package -Version $version -AuthorizationPath $taskAuthPath
     Update-HollowPackageMarkdownLinks -Root $root -Package $package
     $manifest=[ordered]@{
-        version=$version;displayVersion="$version ($GameVersion)";gameProfile=$GameVersion;releaseChannel='release';userRequestedRelease=$true;
-        validationScope='related core, installer, menus and two native blackwave routes per profile';fullMatrixRerun=$false;retestOmitted=$false;
+        version=$version;displayVersion="$version ($GameVersion)";gameProfile=$GameVersion;releaseChannel=$taskChannel;userRequestedRelease=$true;
+        validationScope=$taskValidationScope;fullMatrixRerun=$false;retestOmitted=$false;
         gameVersion=$taskProfile.gameVersion;optionalModules=@('Steam');
         vanillaAssemblySha256=$taskProfile.vanillaAssemblySha256;apiAssemblySha256=$taskProfile.apiAssemblySha256;
         apiArchive=$taskApiName;apiZipSha256=(Get-FileHash "$package/dependencies/$taskApiName").Hash;
@@ -76,7 +81,7 @@ if(!$VerifyOnly){
     Update-HollowChecksums -Directory "$root/dist" -ChangedArchives "$taskName-windows.zip","$taskName-source.zip" -Rebuild:$RebuildChecksums
 }
 $manifest=Get-Content "$package/manifest.json" -Raw | ConvertFrom-Json
-if($manifest.version -ne $version -or $manifest.gameProfile -ne $GameVersion -or $manifest.releaseChannel -ne 'release' -or
+if($manifest.version -ne $version -or $manifest.gameProfile -ne $GameVersion -or $manifest.releaseChannel -ne $taskChannel -or
     $manifest.fullMatrixRerun -ne $false -or $manifest.runtimeValidationSha256 -ne (Get-FileHash "$root/$taskEvidencePath").Hash -or
     $manifest.releaseAuthorizationSha256 -ne (Get-FileHash "$root/$taskAuthPath").Hash){throw 'Wrong package identity/evidence'}
 if(@(Compare-Object $taskFiles @($manifest.files.name)).Count -or @(Compare-Object $taskFiles @(Get-ChildItem "$package/payload/HKMP" -File | ForEach-Object Name)).Count){throw 'Wrong payload selection'}
@@ -108,4 +113,4 @@ foreach($taskKind in 'windows','source'){
     $taskHash=(Get-FileHash "$root/dist/$taskName-$taskKind.zip").Hash.ToLowerInvariant()
     if(!(Get-Content "$root/dist/SHA256SUMS.txt" | Where-Object {$_ -eq "$taskHash  $taskName-$taskKind.zip"})){throw 'Checksum index differs'}
 }
-Write-Output "PASS $GameVersion 0.3.1: scoped runtime evidence, payload/API, both ZIPs and checksums verified."
+Write-Output "PASS $GameVersion $($version): scoped runtime evidence, payload/API, both ZIPs and checksums verified."

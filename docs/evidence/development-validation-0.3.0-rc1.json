@@ -1,0 +1,766 @@
+{
+  "version": "0.3.0-rc1",
+  "date": "2026-11-20",
+  "core": {
+    "passed": 13,
+    "failed": 0
+  },
+  "fullMatrixRerun": false,
+  "retestOmitted": false,
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "gameVersion": "1.5.78.11833 Windows / Unity 2020.2.2f1",
+      "vanillaAssemblySha256": "FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0",
+      "apiAssemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "657BE9DE41CC47069C3A31742567E054EBD704DB808BD397FBDCA7C9C3258813"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "FE729F949E5DE54AE6FDAACDF232872C33AB1B19D8752FF727BB143F8894AF92"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "379C29BCB29DE786063C58270765CDE0861D274109DC75524E239EF31023843D"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "EDD12DED0DCB6F241B8FCA0C091E5864DF71FDB2BF02914F134B80CBD8C28278"
+        }
+      ],
+      "runs": [
+        {
+          "case": "green-host",
+          "run": "rc1-legacy-green-host",
+          "status": "passed",
+          "bothPassed": true,
+          "strictLogs": "passed",
+          "options": {
+            "HOLLOWCONNECT_EXTRA_SHARED": "1",
+            "HOLLOWCONNECT_EXTRA_AUTHORITY": "host",
+            "HOLLOWCONNECT_EXTRA_ENCOUNTER": "Fungus1_32"
+          },
+          "ended": "2026-11-20T07:01:52.8378249Z",
+          "probeSha256": "3A54890D0AF1B5D1DEF93B2134FE1D89FDA02E606D0532043F7CD99D5BB01378",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "657BE9DE41CC47069C3A31742567E054EBD704DB808BD397FBDCA7C9C3258813"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "FE729F949E5DE54AE6FDAACDF232872C33AB1B19D8752FF727BB143F8894AF92"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "379C29BCB29DE786063C58270765CDE0861D274109DC75524E239EF31023843D"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "EDD12DED0DCB6F241B8FCA0C091E5864DF71FDB2BF02914F134B80CBD8C28278"
+            }
+          ],
+          "gameDependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ]
+        },
+        {
+          "case": "garden05",
+          "run": "rc1-legacy-garden05",
+          "status": "passed",
+          "bothPassed": true,
+          "strictLogs": "passed",
+          "options": {
+            "HOLLOWCONNECT_EXTRA_SHARED": "1",
+            "HOLLOWCONNECT_EXTRA_PEER_START": "1",
+            "HOLLOWCONNECT_EXTRA_AUTHORITY": "host",
+            "HOLLOWCONNECT_EXTRA_ENCOUNTER": "Fungus3_05"
+          },
+          "ended": "2026-11-20T07:02:29.6413464Z",
+          "probeSha256": "3A54890D0AF1B5D1DEF93B2134FE1D89FDA02E606D0532043F7CD99D5BB01378",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "657BE9DE41CC47069C3A31742567E054EBD704DB808BD397FBDCA7C9C3258813"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "FE729F949E5DE54AE6FDAACDF232872C33AB1B19D8752FF727BB143F8894AF92"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "379C29BCB29DE786063C58270765CDE0861D274109DC75524E239EF31023843D"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "EDD12DED0DCB6F241B8FCA0C091E5864DF71FDB2BF02914F134B80CBD8C28278"
+            }
+          ],
+          "gameDependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ]
+        },
+        {
+          "case": "garden10",
+          "run": "rc1-legacy-garden10",
+          "status": "passed",
+          "bothPassed": true,
+          "strictLogs": "passed",
+          "options": {
+            "HOLLOWCONNECT_EXTRA_SHARED": "1",
+            "HOLLOWCONNECT_EXTRA_PEER_START": "1",
+            "HOLLOWCONNECT_EXTRA_AUTHORITY": "guest",
+            "HOLLOWCONNECT_EXTRA_ENCOUNTER": "Fungus3_10"
+          },
+          "ended": "2026-11-20T07:03:19.6314207Z",
+          "probeSha256": "3A54890D0AF1B5D1DEF93B2134FE1D89FDA02E606D0532043F7CD99D5BB01378",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "657BE9DE41CC47069C3A31742567E054EBD704DB808BD397FBDCA7C9C3258813"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "FE729F949E5DE54AE6FDAACDF232872C33AB1B19D8752FF727BB143F8894AF92"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "379C29BCB29DE786063C58270765CDE0861D274109DC75524E239EF31023843D"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "EDD12DED0DCB6F241B8FCA0C091E5864DF71FDB2BF02914F134B80CBD8C28278"
+            }
+          ],
+          "gameDependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "gameVersion": "1.5.12620 Windows / Unity 6000.0.61f1",
+      "vanillaAssemblySha256": "E9048EF6A633970F735E01EC166D3959F610EAEA7A88D827D48D67B1E5FB87BD",
+      "apiAssemblySha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "B88EA4AD280F8EBF6E8743D19C107D2ED9C27282CE8463FCBFCE30C50536AF30"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6E14A1E78FEBADC68A60C1DE95CCFF2173F1F31F9BCA0E4D937B0E8E79F94761"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "22964E95016053B2A33C2E47CF93DFEFEEB104229CD3562FE3213EFE9E363C0A"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "B1BE7FFE2F37D5820F25DCCF24DBF963E9A1A0C847B74B6051072AF4C04B1F6C"
+        }
+      ],
+      "runs": [
+        {
+          "case": "green-host",
+          "run": "rc1-unity6-green-host",
+          "status": "passed",
+          "bothPassed": true,
+          "strictLogs": "passed",
+          "options": {
+            "HOLLOWCONNECT_EXTRA_SHARED": "1",
+            "HOLLOWCONNECT_EXTRA_AUTHORITY": "host",
+            "HOLLOWCONNECT_EXTRA_ENCOUNTER": "Fungus1_32"
+          },
+          "ended": "2026-11-20T06:59:05.2029516Z",
+          "probeSha256": "B203E710D6BB0E5B1739C554C5B17B149FD7F8FBB1351CA5F805DA0D30383748",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "B88EA4AD280F8EBF6E8743D19C107D2ED9C27282CE8463FCBFCE30C50536AF30"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "6E14A1E78FEBADC68A60C1DE95CCFF2173F1F31F9BCA0E4D937B0E8E79F94761"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "22964E95016053B2A33C2E47CF93DFEFEEB104229CD3562FE3213EFE9E363C0A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "B1BE7FFE2F37D5820F25DCCF24DBF963E9A1A0C847B74B6051072AF4C04B1F6C"
+            }
+          ],
+          "gameDependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ]
+        },
+        {
+          "case": "garden05",
+          "run": "rc1-unity6-garden05",
+          "status": "passed",
+          "bothPassed": true,
+          "strictLogs": "passed",
+          "options": {
+            "HOLLOWCONNECT_EXTRA_SHARED": "1",
+            "HOLLOWCONNECT_EXTRA_PEER_START": "1",
+            "HOLLOWCONNECT_EXTRA_AUTHORITY": "host",
+            "HOLLOWCONNECT_EXTRA_ENCOUNTER": "Fungus3_05"
+          },
+          "ended": "2026-11-20T06:59:41.9551532Z",
+          "probeSha256": "B203E710D6BB0E5B1739C554C5B17B149FD7F8FBB1351CA5F805DA0D30383748",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "B88EA4AD280F8EBF6E8743D19C107D2ED9C27282CE8463FCBFCE30C50536AF30"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "6E14A1E78FEBADC68A60C1DE95CCFF2173F1F31F9BCA0E4D937B0E8E79F94761"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "22964E95016053B2A33C2E47CF93DFEFEEB104229CD3562FE3213EFE9E363C0A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "B1BE7FFE2F37D5820F25DCCF24DBF963E9A1A0C847B74B6051072AF4C04B1F6C"
+            }
+          ],
+          "gameDependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ]
+        },
+        {
+          "case": "garden10",
+          "run": "rc1-unity6-garden10",
+          "status": "passed",
+          "bothPassed": true,
+          "strictLogs": "passed",
+          "options": {
+            "HOLLOWCONNECT_EXTRA_SHARED": "1",
+            "HOLLOWCONNECT_EXTRA_PEER_START": "1",
+            "HOLLOWCONNECT_EXTRA_AUTHORITY": "guest",
+            "HOLLOWCONNECT_EXTRA_ENCOUNTER": "Fungus3_10"
+          },
+          "ended": "2026-11-20T07:00:30.2048304Z",
+          "probeSha256": "B203E710D6BB0E5B1739C554C5B17B149FD7F8FBB1351CA5F805DA0D30383748",
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "B88EA4AD280F8EBF6E8743D19C107D2ED9C27282CE8463FCBFCE30C50536AF30"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "6E14A1E78FEBADC68A60C1DE95CCFF2173F1F31F9BCA0E4D937B0E8E79F94761"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "22964E95016053B2A33C2E47CF93DFEFEEB104229CD3562FE3213EFE9E363C0A"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "B1BE7FFE2F37D5820F25DCCF24DBF963E9A1A0C847B74B6051072AF4C04B1F6C"
+            }
+          ],
+          "gameDependencies": [
+            {
+              "role": "host",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "host",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            },
+            {
+              "role": "guest",
+              "file": "UnityPlayer.dll",
+              "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll",
+              "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll",
+              "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7"
+            },
+            {
+              "role": "guest",
+              "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll",
+              "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "knownIssues": [
+    {
+      "id": "native-reentry-camera-freeze",
+      "resolved": false,
+      "sourceRun": "native-reentry-camera-failure-013",
+      "observation": "Second host-first Vengefly entry had matching active camera locks and visible boss/peer, but camera mode FROZEN.",
+      "causeConfirmed": false,
+      "supplementalRuns": [
+        "native-camera-hazard-013",
+        "native-camera-shared-gate-013",
+        "camera-gate-nonhazard-013",
+        "camera-gate-persistent-013",
+        "camera-gate-native-recovery-013"
+      ],
+      "cameraGateEvidence": "camera-gate-0.1.13.json",
+      "cameraGateConfirmedScope": "Both peers reject actual non-hazard FreezeInPlace immediately and a real spike-triggered freeze with explicitly blocked native recovery after 15 real-time seconds. Normal actual spike recovery completes without forcing camera changes. These differential controls verify the acceptance gate, not the old host sample's unique cause. Final twelve-case production-hash suite passes independently; this historical finding remains unresolved.",
+      "confirmedScope": "Real native Cloud Hazard collisions invoke FreezeInPlace through PlayerDeadFromHazard and recover camera/input on both clients. The exact old guest coordinate can trigger this path. The shared room gate now permits only a known hazard animation with recovery within 15 seconds; it never forces camera mode. The unique old host freeze source was not recorded and remains unconfirmed.",
+      "releaseRequirement": "Identify the freeze source, distinguish a native transition from a persistent failure, and verify the resulting correction. Successful retries alone do not resolve this finding."
+    },
+    {
+      "id": "reconnect-inactive-needle-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "sourceRuns": [
+        "selective-ack-final-periodic-lifecycle-host-20261014",
+        "selective-ack-final-lifecycle-guest-20261014"
+      ],
+      "observation": "Authority transfer after disconnect left Hornet waiting in Thrown with an inactive needle; natural recovery timed out in two stress runs.",
+      "latestVerificationRuns": [
+        "datagram-frame-final-periodic-host-20261014",
+        "datagram-frame-final-seeded-guest-retry-20261014"
+      ],
+      "releaseRequirement": "The latest targeted runs passed, but do not uniquely explain or resolve the earlier failures. Capture reliable updates and activation across takeover before classifying the finding as resolved.",
+      "latestScopedValidation": "Story-placement pressure run story-rescue-full-20261021-final-lifecycle-host-013 timed out in Thrown; same-hash retry passed. Latest settlement pre-bump room matrix passed both authority orders. These do not resolve the historical intermittent root cause.",
+      "arenaFixValidation20261103": {
+        "run": "arena-matrix-20261102-lifecycle-guest-005945244",
+        "result": "failed",
+        "observation": "First needle-phase transfer left Hornet in Thrown with inactive Needle and no active native needle Control state; Throw Recover timed out after 20 seconds. Host-first stress passed eight transfers on the same frozen build.",
+        "classification": "Matching unresolved historical symptom; cause and current change impact on trigger frequency remain unconfirmed. Failure retained without unchanged retries."
+      }
+    },
+    {
+      "id": "false-knight-repeat-head-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "sourceRun": "reliability-closed-seeded-boss-late-20261014",
+      "observation": "After late entry and authority transfer, False Knight did not expose its head after the next armour break within the original 20-second assertion.",
+      "releaseRequirement": "Retain the original failure; successful later runs do not establish its cause. Capture damage and native phase transitions if it recurs."
+    },
+    {
+      "id": "cornifer-purchase-peer-visibility-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "source": "User two-machine 0.1.14 story playtest",
+      "observation": "Both players bought the Crossroads map with shared permanent progress enabled; peer avatars became persistently invisible, peer map/name positions continued updating, crossing rooms did not restore visibility, reopening the multiplayer room temporarily restored it.",
+      "diagnostic": "One private client log lacks committed room snapshots at visits 9 through 11. Localhost native purchase probes did not reproduce the issue. Room entry and stale-scope logging was added; no visibility repair is claimed.",
+      "releaseRequirement": "Capture both client and server logs at reproduction and identify the failed entry/snapshot/avatar lifecycle before marking resolved."
+    },
+    {
+      "id": "mines-fsm-string-layout-unresolved",
+      "resolved": false,
+      "observation": "User 0.1.15 logs contain four UpdateHostFsmData String snapshot index errors in Mines_11. The later null-string omission fix does not establish the cause or resolve the layout error.",
+      "causeConfirmed": false,
+      "evidence": "../CRYSTAL-SOUL-PERFORMANCE-2026-10-15.md",
+      "supplementalEvidence": "../FSM-STRING-SYNC-2026-10-15.md",
+      "releaseRequirement": "Reproduce with both peers entity and FSM variable layouts, then validate the cause-specific correction. Do not resize arrays or skip values to hide the error.",
+      "latestUpdate": "0.1.20 retains common bounds protection and deduplicates repeated state-index diagnostics. Actual Mines_11 layout-change source remains unconfirmed; not closed."
+    },
+    {
+      "id": "godhome-final-single-f8-timeout-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Runtime test observation; production defect not established",
+      "sourceRun": "version-017-godhome-faults-20261015",
+      "observation": "After earlier Godhome warp/Grimm/progression checks passed under fixed-seed message faults, a single final F8 did not produce the expected transition/disconnect/arrival within 45 seconds. The original run lacks per-press eligibility and request trace.",
+      "supplementalRuns": [
+        "version-017-godhome-faults-trace-20261016"
+      ],
+      "diagnostic": "Trace-only rerun on identical production DLLs passed. Final-step fixture originally waited for Playable/remote presence but did not explicitly wait for production CanStartWarp; later test changes add that precondition and request/eligibility diagnostics. This does not prove the unique original cause.",
+      "releaseRequirement": "Retain the failed run and distinguish local input eligibility, server rejection, delivery and response eligibility on recurrence. A later successful run does not resolve this observation."
+    },
+    {
+      "id": "cliffs-room-overlap-unresolved",
+      "resolved": false,
+      "category": "user-reported-gameplay",
+      "reportedBy": "user, guest only",
+      "observation": "Suspected overlapping room geometry blocks a downward passage near Howling Cliffs; host presence not required. Fungus1_28 is a candidate, not a confirmed location.",
+      "evidence": "cliffs-room-overlap-2026-10-16.json",
+      "causeConfirmed": false,
+      "resolution": "Not reproduced by the recorded scoped same-machine probes; remains open."
+    },
+    {
+      "id": "radiance-immediate-inventory-timing-unresolved",
+      "resolved": false,
+      "category": "unattributed-timing-observation",
+      "observation": "Inventory input immediately after the native Radiance return to bench was not accepted. Appeared in a control bypassing co-op death too; later normal actions and inventory open/close passed.",
+      "evidence": "rescue-edge-audit-2026-10-16.json",
+      "causeConfirmed": false,
+      "resolution": "Retain as a timing observation, not an additional confirmed gameplay bug."
+    },
+    {
+      "id": "p5-watchers-premature-return-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "category": "user-reported-gameplay",
+      "observation": "All players returned to the fifth-pantheon entrance after Watcher Knights. Players entered separately within seconds; no F8 or disconnects, no deaths at Watchers; preceding bosses involved deaths and rescues.",
+      "evidence": "../BOSS-MOTION-P5-AUDIT-2026-10-16.md",
+      "sourceRuns": [
+        "p5-watchers-018-baseline-20261016",
+        "p5-motion-persistent-rescue-20261016",
+        "p5-motion-persistent-final-20261016"
+      ],
+      "resolution": "Related context/ordering defect corrected and tested; full user terminal report remains open. No full continuous P5 or two-machine validation claimed.",
+      "latestUpdate": "2026-10-20: old 0.1.27 reproduced scene-context index rollback and empty-sequence propagation in both entry-order swaps. Related paths corrected; prior fix build passed 13 scoped cases, final 0.1.28 reran both failing order swaps. Exact user one-at-entrance/one-stuck-in-Watchers terminal distribution and complete P5 history remain unconfirmed; this historical finding stays unresolved.",
+      "latestRepairEvidence": "docs/evidence/p5-watchers-fix-2026-10-20.json",
+      "finalScopedValidation": "docs/evidence/runtime-room-0.1.28.json"
+    },
+    {
+      "id": "isolated-native-setupherorefs-startup-exception",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Isolated runtime observation; attribution to production mod not established",
+      "observation": "Recent isolated startup logs still contain native GameManager.SetupHeroRefs NullReferenceException, followed by successful targeted checks.",
+      "evidenceSource": "docs/evidence/boss-shade-targeting-2026-10-21.json",
+      "releaseRequirement": "Determine the startup conditions and source; do not equate strict mod-log acceptance with exception-free Unity output."
+    },
+    {
+      "id": "rescue-single-nail-collision-timeout",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Unresolved test observation; repeatable production defect not established",
+      "sourceRun": "shade-target-rescue-final-20261021",
+      "observation": "Second nail rescue emitted no shade collision and timed out. Four alternating real nail rescues later passed with additional fixture timing, terrain and gravity controls; all four terrain candidates were clear.",
+      "evidenceSource": "docs/evidence/boss-shade-targeting-2026-10-21.json",
+      "releaseRequirement": "Retain original miss; identify collision/attack cause on recurrence. Later pass does not prove terrain or timing caused the earlier failure."
+    },
+    {
+      "id": "pantheon-1-oro-death-air-stall",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Unresolved native runtime/fixture observation; production cause not established",
+      "sourceRun": "damage-ranking-20261023-on-c",
+      "supplementalRuns": [
+        "damage-ranking-20261023-on-final",
+        "damage-ranking-20261023-on-final-b"
+      ],
+      "observation": "Both clients reached the native first-Pantheon final arena after cumulative checks, but Oro stayed in Death Air. A focused check stopping hits at zero HP also did not complete. First-Pantheon final completion was not counted as passed.",
+      "evidenceSource": "docs/BOSS-DAMAGE-RANKING-2026-10-23.md",
+      "releaseRequirement": "Retain failures and identify native death/continuation conditions before claiming the final P1 encounter is fixed or certified. Sheo completion is an independent final-sequence control."
+    },
+    {
+      "id": "acid-rescue-anchor-observation-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Unresolved test observation; unsafe accepted rescue anchor not established",
+      "sourceRun": "rescue-risk-acid-20261024-d",
+      "observation": "Host anchor-outside-acid assertion failed at (25.9,7.2). Six diagnostic rescues later passed; later logs identify that coordinate as a native death origin, but the original run lacks search/return diagnostics.",
+      "evidenceSource": "docs/evidence/feedback-fixes-2026-10-24.json",
+      "releaseRequirement": "Capture landing search, accepted anchor and personal-return state on recurrence; do not count successful retries as a diagnosis."
+    },
+    {
+      "id": "pleasure-house-peer-key-loss-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "User report from 0.1.33; current personal-key defect not reproduced",
+      "observation": "User reports an uninvolved player lost a simple key. Native opening checks retained the peer key count at 2; missing shared door progress was independently reproduced and fixed.",
+      "evidenceSource": "docs/evidence/feedback-fixes-2026-10-24.json",
+      "releaseRequirement": "Reproduce and trace the non-opener key decrement before assigning a cause or changing personal inventory."
+    },
+    {
+      "id": "story-grimm-tent-three-player-stall-unresolved",
+      "resolved": false,
+      "observation": "User reports three players unable to act in the ordinary Grimm tent; only a screenshot is available, without reporter version, native FSM states or network history. Four selected current-build dual-client native intro/refight/angry-roar cases passed; the screenshot cause remains undetermined.",
+      "causeConfirmed": false,
+      "evidence": "docs/evidence/grimm-tent-audit-2026-10-25.json"
+    },
+    {
+      "id": "duplicate-victory-settlement-extra-wait",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "Repeated victory notifications can create a second ticket and approximately 15 seconds of additional settlement wait. Permanent softlock not established.",
+      "evidenceSource": "docs/A3-COMPLETION-INTENT-FIX-2026-10-26.md"
+    },
+    {
+      "id": "entity-completion-emitter-unreachable",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "The entity completion sender construction has no reachable production call site; controlled fallback checks do not demonstrate a live end-to-end insurance path.",
+      "evidenceSource": "docs/A3-COMPLETION-INTENT-FIX-2026-10-26.md"
+    },
+    {
+      "id": "story-hornet-three-player-gate-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "User 0.1.38 screenshot reports all three players trapped. Four three-player normal-flow old/current shared ON/OFF comparisons passed the left exit; original incident not reproduced.",
+      "evidenceSource": "docs/HORNET-STORY-GATE-COMPARISON-2026-10-26.md"
+    },
+    {
+      "id": "downed-disconnect-death-save-validation-gap",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Death/save accounting when disconnecting while downed still needs dedicated end-to-end validation; actual save corruption is not established.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "godseeker-new-save-statistics-validation-gap",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Godseeker new-game PlayerData replacement and statistics isolation still need runtime validation.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "first-connection-during-combat-validation-gap",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Delayed room entry after connecting does not cover the first network connection during active combat.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "arrival-wait-timeout-recovery-gap",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "Arrival/retry waiting recovery lacks a bounded timeout path; player consequences require scenario validation.",
+      "evidenceSource": "docs/CHANGES-SINCE-0.1.39-2026-10-26.md"
+    },
+    {
+      "id": "skin-cinematic-process-crash-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "Reporter described a high probability of one-client process exit with a custom StagTunnelRun.webm. No process crash reproduced locally, including old-build baseline video playback.",
+      "confirmedScope": "A distinct managed animation frame-index exception was reproduced and fixed. A duplicate native/Custom Knight video Prepare sequence was confirmed and guarded in this mod. Five corrected two-client cases passed, including 48 video plays; these results do not establish the reported native crash cause.",
+      "evidence": "docs/evidence/skin-compatibility-development-0.2.3.json"
+    },
+    {
+      "id": "false-knight-local-counter-first-failure-unclassified",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "First head-phase local battle counter/state assertion failed without before/after diagnostics. Later logging-only run passed.",
+      "confirmedScope": "Fixture now drives the guest native arena trigger and waits for 1/Start before the head-phase baseline. Ordinary and late/delayed takeover pass; exact cause of the original failure cannot be established retrospectively.",
+      "evidenceSource": "docs/evidence/boss-two-anomalies-2026-10-29.json"
+    },
+    {
+      "id": "colosseum-bilateral-permanent-freeze-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "User reports both endpoints permanently frozen in Gold Colosseum 0.2.5. Lost-carrier history accumulation was independently confirmed and repaired; the original permanent freeze was not reproduced and its unique cause remains unknown.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.6.json",
+      "releaseRequirement": "Capture both endpoint authority, callbacks, sent history, receive age and RTT on recurrence; passing controlled loss does not prove original cause."
+    },
+    {
+      "id": "shade-soul-downslam-multihit-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "observation": "User reports black wave and downslam duplicate damage. Selected 24 remote effects across authority choices and 60/20 FPS did not reproduce it. Native 30+15 black landing stages preserved; no generic damage cooldown added.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.6.json",
+      "releaseRequirement": "Reproduce full-input casting/falling contact and target conditions before changing legitimate multistage or piercing rules."
+    },
+    {
+      "id": "unreliable-player-animation-attack-loss",
+      "resolved": false,
+      "causeConfirmed": true,
+      "observation": "Under controlled application-fragment loss, one 20FPS Shade Soul animation emitted once, received zero times and caused no damage. Player animation events still travel in unreliable PlayerUpdate. Original failure retained; one unchanged retry passed.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.6.json",
+      "releaseRequirement": "Design and validate bounded delivery/deduplication before claiming weak-network missed attacks repaired."
+    },
+    {
+      "id": "colosseum-silver-authority-handoff-reward-unresolved",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "Current-build reward continuation boundary; normal authority and guest flows pass, handoff interaction range still fails",
+      "observation": "Silver ordinary host and guest native reward/exit flows pass. The authority-handoff case still fails while the survivor searches for the original native inspect range after authority departure; no claim of complete disconnect-during-pickup repair.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.8.json",
+      "releaseRequirement": "Reproduce a real Silver authority departure during native pickup and finish the original native interaction and exit on both endpoints."
+    },
+    {
+      "id": "mawlek-shared-health-fragment-report-unreproduced",
+      "resolved": false,
+      "causeConfirmed": false,
+      "classification": "User report not reproduced by current shared-health/native pickup checks",
+      "observation": "The reported two-player case where neither player receives a mask fragment remains unconfirmed. Current linked-health threshold and resource regression flows pass, but they do not identify the original save/reconnect receipt history.",
+      "evidenceSource": "docs/evidence/development-validation-0.2.8.json",
+      "releaseRequirement": "Capture both saves, initial fragment count, source receipt IDs and connect/reconnect order when the report recurs."
+    }
+  ]
+}

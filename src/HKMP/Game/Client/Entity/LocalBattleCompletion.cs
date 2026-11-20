@@ -44,6 +44,12 @@ internal static class LocalBattleCompletion {
             send.delay.Value >= .001f || send.eventTarget?.target != FsmEventTarget.EventTarget.GameObject || !send.eventTarget.sendToChildren.Value) return;
         var group = action.Fsm.GetOwnerDefaultTarget(send.eventTarget.gameObject);
         if (group == null || !group.transform.IsChildOf(action.Fsm.GameObject.transform)) return;
+        if (group.name == "Wave 1" && LocalBattleStart.IsGardenScene(group.scene.name)) {
+            foreach (Transform child in group.transform) {
+                var entity = EntityReferences.Owner(child.gameObject);
+                if (entity?.Object.Host == child.gameObject) entity.RequestBattleStart(action);
+            }
+        }
         // Disabled replica FSMs are absent from PlayMaker's event recipients.
         // Observe the actual native wave action rather than relying on their
         // receiving a broadcast that the engine intentionally does not deliver.
