@@ -1,0 +1,57 @@
+{
+  "version": "0.3.2-rc2",
+  "action": "publish-github-release",
+  "releaseChannel": "prerelease",
+  "userRequest": "Build 0.3.2-rc2 and publish a GitHub release.",
+  "fullMatrixRerun": true,
+  "retestOmitted": false,
+  "sourceCommit": "f5f8f78f263480a6ad48614bc6c05dbe9c28a30a",
+  "profiles": [
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "EFEAC7248264CCDA100A92775B54234D6B8BDB6A6F59092F634D153AB339F9D8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "7F96AB8853D578B30757082B71E4A7B2578A37BF915C3E21E00A13E69BBA62FB"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "417437499EE56AE8E673944BF7CF04EA6808FC8FFA996C7C9D259750BA87589E"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "EAF691C1BED7A686BE6BD4322EC0E0A0E0E690CE7BE8A2ED96477FF1BB558B5C"
+        }
+      ],
+      "profile": "Legacy"
+    },
+    {
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "683743E1AB3B32B06A1A5DF6C5E11582E9B30909E4653D967D3703597389EC22"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5DC2586B53705183CBF69AD71C075AB8733940F99B78066ED59CFE1BD993582D"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "33ABDF99E091B0DBDDE006B88EBA75611A679439A7BB49BA59DA7F6866076DE3"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "ED66644CCD724EB8E7519912052604693F77478CB4BDC665551D2561C0422A3F"
+        }
+      ],
+      "profile": "Unity6"
+    }
+  ],
+  "additionalDocuments": [
+    "docs/evidence/runtime-blockers-0.3.2-rc2.json"
+  ],
+  "blockerLedgerSha256": "A59AAB25F5E72C4BFCE946C76C942B4B321F8424D399E581E5C1C0CF696167EE"
+}

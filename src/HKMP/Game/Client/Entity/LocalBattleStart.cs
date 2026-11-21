@@ -16,15 +16,17 @@ internal sealed class LocalBattleStart {
     private readonly PlayMakerFSM wake;
     private readonly string wakeSignal;
     private readonly string wakeState;
+    private readonly string activeBattleState;
     private readonly SendEventByName waveStart;
     private bool wakeFinished;
     private FsmStateAction[] presentation;
     private bool pendingPresentation;
 
     private LocalBattleStart(PlayMakerFSM battle, Collider2D trigger, FsmEvent start, FsmState entry,
-        PlayMakerFSM wake = null, SendEventByName waveStart = null) {
+        SendEventByName waveStart = null, PlayMakerFSM wake = null, string wakeState = null, string activeBattleState = null) {
         this.battle = battle; this.trigger = trigger; this.start = start; this.entry = entry;
         this.wake = wake; this.waveStart = waveStart;
+        this.wakeState = wakeState; this.activeBattleState = activeBattleState;
     }
     private LocalBattleStart(PlayMakerFSM battle, PlayMakerFSM wake, string signal, string wakeState = null) {
         this.battle = battle; this.wake = wake; wakeSignal = signal; this.wakeState = wakeState;
@@ -100,18 +102,24 @@ internal sealed class LocalBattleStart {
                     a.eventTarget.target == FsmEventTarget.EventTarget.BroadcastAll)) continue;
                 // Only support the immediate native entry boundary. Do not
                 // defer asynchronous actions or arbitrary progression logic.
-                var shadeWake = type == EntityType.SoulWarrior && boss.scene.name == "Ruins1_31b"
-                    ? boss.GetComponents<PlayMakerFSM>().SingleOrDefault(f => f.FsmName == "Mage Knight" &&
-                        f.FsmStates.Any(s => s.Name == "Sleep" && s.Transitions.Any(t => t.EventName == "BATTLE START")))
-                    : null;
-                return new LocalBattleStart(battle, battle.GetComponent<Collider2D>(), action.sendEvent, entered, shadeWake);
+                var (fsmName, dormant, active) = (type, boss.scene.name) switch {
+                    (EntityType.SoulWarrior, "Ruins1_31b") => ("Mage Knight", "Sleep", "Battling"),
+                    (EntityType.FalseKnight, "Crossroads_10_boss") => ("FalseyControl", "Dormant", "Start"),
+                    _ => (null, null, null)
+                };
+                var wake = fsmName == null ? null : boss.GetComponents<PlayMakerFSM>().SingleOrDefault(f =>
+                    f.FsmName == fsmName && f.FsmStates.Any(s => s.Name == dormant &&
+                        s.Transitions.Any(t => t.EventName == "BATTLE START")));
+                return new LocalBattleStart(battle, battle.GetComponent<Collider2D>(), action.sendEvent, entered,
+                    wake: wake, wakeState: dormant, activeBattleState: active);
             }
         }
         return null;
     }
     internal bool Matches(FsmStateAction action) => battle != null && ReferenceEquals(battle.Fsm, action.Fsm) &&
         (waveStart != null ? ReferenceEquals(waveStart, action) : action is SendEventByName send &&
-            send.sendEvent.Value == (wakeSignal ?? "BATTLE START") && (wakeState == null || action.State.Name == "Start"));
+            send.sendEvent.Value == (wakeSignal ?? "BATTLE START") &&
+            (wakeSignal == null || wakeState == null || action.State.Name == "Start"));
     private bool LocalHeroInside() {
         var hero = HeroController.instance;
         return hero != null && hero.gameObject.activeInHierarchy && trigger != null && trigger.enabled &&
@@ -130,10 +138,10 @@ internal sealed class LocalBattleStart {
             return;
         }
         if (battle == null || !battle.enabled || !battle.gameObject.activeInHierarchy) return;
-        // The arena can emit BATTLE START before the authority's Mage Knight
-        // initializes. Deliver it to the native Sleep transition when ready.
-        if (!wakeFinished && wake != null && wake.enabled && wake.ActiveStateName == "Sleep" &&
-            battle.ActiveStateName == "Battling" && battle.FsmVariables.FindFsmInt("Battle Enemies") is { Value: > 0 } &&
+        // The arena can emit BATTLE START while the boss is still in its
+        // entry FSM states. Let the native dormant transition consume it.
+        if (!wakeFinished && wake != null && wake.isActiveAndEnabled && wake.ActiveStateName == wakeState &&
+            battle.ActiveStateName == activeBattleState && battle.FsmVariables.FindFsmInt("Battle Enemies") is { Value: > 0 } &&
             wake.GetComponent<HealthManager>() is { isDead: false, hp: > 0 }) {
             wakeFinished = true;
             wake.SendEvent("BATTLE START");

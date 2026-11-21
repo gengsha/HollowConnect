@@ -223,3 +223,17 @@ HollowConnect 诊断（只读；F9 开关）	HollowConnect diagnostics (F9)	Holl
 事件（最近 {0}/{1}）	Events (recent {0}/{1})	イベント（直近 {0}/{1}）
 最近导出：{0}	Last export: {0}	最新の出力：{0}
 {0} 次倒地	{0} downs	{0}回
+房主未开启队友传送	The host has disabled teammate warps.	ホストは仲間へのワープを無効にしています。
+当前无法传送，请等待操作或复位完成	Warp unavailable until you regain control.	操作が戻るまでワープできません。
+没有可传送的队友	There is no teammate to warp to.	ワープできる仲間がいません。
+所选队友已不在房间	The selected teammate has left the lobby.	選んだ仲間はロビーを退出しました。
+暂时无法传送，请稍后再按传送键	Warp unavailable. Try again shortly.	現在ワープできません。少し待ってからやり直してください。
+传送没有收到回复，请重试	No warp response. Please try again.	ワープへの応答がありません。もう一度お試しください。
+正在等待传送条件恢复…	Waiting until the warp is ready…	ワープできるまで待機しています…
+当前传送目的地不可用	The warp destination is unavailable.	現在この場所にはワープできません。
+传送冷却中，请稍后重试	Warp on cooldown. Try again shortly.	ワープの再使用まで少しお待ちください。
+无法保存传送前的临时上下文，已取消传送	Warp cancelled. Could not preserve the current game state.	現在の状態を保持できなかったため、ワープを中止しました。
+无法恢复队友的神居上下文，请检查日志	Could not restore your teammate’s Godhome state. Check the log.	仲間の神の家の状態を復元できませんでした。ログを確認してください。
+传送加载被拒绝，已恢复原上下文	Warp load failed. Your previous state was restored.	ワープの読み込みに失敗したため、元の状態に戻しました。
+传送等待已结束；场景加载完成后可再次传送	Warp timed out. Try again after the room finishes loading.	ワープが時間切れになりました。読み込み後にもう一度お試しください。
+队友附近没有安全落点	No safe landing near your teammate.	仲間の近くに安全な着地点がありません。

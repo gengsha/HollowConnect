@@ -159,33 +159,66 @@ public sealed partial class BossProbe : MonoBehaviour {
         } else if (!host) yield return new WaitForSecondsRealtime(2);
         Enter("Crossroads_10"); yield return Until(() => In("Crossroads_10"), "native False Knight room"); Freeze();
         var manager = Field<EntityManager>(engine.ClientManager, "_entityManager");
-        yield return Until(() => manager.IsSceneHostDetermined, "boss authority initialized");
+        yield return Until(() => manager.IsSceneHostDetermined && engine.ClientManager.SceneSnapshotReady,
+            "boss authority and room snapshot initialized");
+        if (Has(role + ".failed")) yield break;
         var entities = Field<Dictionary<ulong, Entity>>(manager, "_entities");
         var boss = entities.Values.Single(e => e.Type == EntityType.FalseKnight);
         var head = entities.Values.Single(e => e.Type == EntityType.FalseKnightHead);
+        var battleControl = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f =>
+            f.FsmName == "Battle Control" && f.gameObject.scene.name == "Crossroads_10_boss");
+        var trigger = battleControl.GetComponent<Collider2D>();
+        if (!Check(trigger != null && trigger.isTrigger && trigger.enabled && battleControl.isActiveAndEnabled,
+            "native False Knight entry controller in Crossroads_10_boss state=" + battleControl.ActiveStateName)) yield break;
         if (!host) {
             // Local battle controllers are intentionally independent. Replica
             // boss snapshots do not prove that our own arena trigger ran.
-            var localBattle = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f =>
-                f.FsmName == "Battle Control" && f.gameObject.scene.name == "Crossroads_10_boss");
-            var localTrigger = localBattle.GetComponent<Collider2D>();
-            if (!Check(localTrigger != null && localTrigger.enabled && localTrigger.gameObject.activeInHierarchy,
-                "replica participant has native arena entry trigger")) yield break;
-            HeroController.instance.transform.position = localTrigger.bounds.center;
+            HeroController.instance.transform.position = trigger.bounds.center;
             Physics2D.SyncTransforms();
             yield return new WaitForSecondsRealtime(1);
         }
         Flag(role + ".room");
         if (!host || !LateGuest) yield return Until(() => Has(host ? "guest.room" : "host.room"), "both in arena");
         if (host) {
-            var trigger = Object.FindObjectsOfType<Collider2D>().First(c => c.isTrigger && c.gameObject.name == "Battle Scene");
+            var control = Control(boss);
+            var hm = boss.Object.Host.GetComponent<HealthManager>();
+            if (!Check(boss.IsNativeAuthority && boss.Object.Host.scene == battleControl.gameObject.scene,
+                "native authority owns False Knight in the additive scene")) yield break;
+            var counter = battleControl.FsmVariables.GetFsmInt("Battle Enemies");
+            Mark("ARENA before entry battle=" + battleControl.ActiveStateName + " enemies=" + counter.Value +
+                " boss=" + control.ActiveStateName + " trigger=" + trigger.bounds);
+            // Exercise the recovery path even when the normal trigger happens
+            // late enough for FalseyControl to hear the first broadcast.
+            var missWake = Environment.GetEnvironmentVariable("HOLLOWCONNECT_FK_MISSED_WAKE") == "1";
+            var missedWake = false;
+            using var broadcast = missWake ? new MonoMod.RuntimeDetour.Hook(
+                typeof(HutongGames.PlayMaker.Fsm).GetMethod("BroadcastEvent", new[] { typeof(HutongGames.PlayMaker.FsmEvent), typeof(bool) }),
+                (On.HutongGames.PlayMaker.Fsm.hook_BroadcastEvent_FsmEvent_bool)((orig, fsm, evt, excludeSelf) => {
+                    if (!missedWake && ReferenceEquals(fsm, battleControl.Fsm) && evt?.Name == "BATTLE START") {
+                        missedWake = true;
+                        Mark("ARENA simulated missed native BATTLE START boss=" + control.ActiveStateName);
+                        return;
+                    }
+                    orig(fsm, evt, excludeSelf);
+                })) : null;
             HeroController.instance.transform.position = trigger.bounds.center;
-            yield return new WaitForSecondsRealtime(1);
-            foreach (var e in entities.Values.Where(e => e.Type != EntityType.FalseKnight && e.Type != EntityType.FalseKnightHead &&
-                e.Object.Host != null && e.Object.Host.activeInHierarchy && e.Object.Host.GetComponent<HealthManager>() != null).ToArray())
+            Physics2D.SyncTransforms();
+            yield return new WaitForFixedUpdate();
+            var entryDeadline = Time.realtimeSinceStartup + 10;
+            while (counter.Value <= 0 && Time.realtimeSinceStartup < entryDeadline) yield return null;
+            if (!Check(counter.Value > 0, "native battle counter initialized battle=" + battleControl.ActiveStateName +
+                " boss=" + control.ActiveStateName + " hero=" + HeroController.instance.transform.position)) yield break;
+            var enemies = entities.Values.Where(e => e.Type != EntityType.FalseKnight && e.Type != EntityType.FalseKnightHead &&
+                e.Object.Host != null && e.Object.Host.activeInHierarchy && e.Object.Host.GetComponent<HealthManager>() != null).ToArray();
+            Mark("ARENA before clearing prebattle enemies battle=" + battleControl.ActiveStateName + " counter=" + counter.Value +
+                " entities=" + string.Join(",", enemies.Select(e => e.Type.ToString())));
+            foreach (var e in enemies)
                 e.Object.Host.GetComponent<HealthManager>().ApplyExtraDamage(1000);
-            var control = Control(boss); var hm = boss.Object.Host.GetComponent<HealthManager>();
-            yield return Until(() => control.ActiveStateName == "Idle", "arena trigger starts native boss AI", 20);
+            var introDeadline = Time.realtimeSinceStartup + 20;
+            while (control.ActiveStateName != "Idle" && Time.realtimeSinceStartup < introDeadline) yield return null;
+            if (!Check(control.ActiveStateName == "Idle", "arena trigger starts native boss AI battle=" + battleControl.ActiveStateName +
+                " enemies=" + counter.Value + " boss=" + control.ActiveStateName)) yield break;
+            if (missWake && !Check(missedWake, "native boss recovered after the first broadcast was missed")) yield break;
             if (BalanceCheck) {
                 if (!LateGuest) yield return Until(() => runtime.CurrentBossHealthMultiplier() > 1.5, "same arena roster ready for boss balance");
                 yield return BalanceDamageChecks(hm, LateGuest ? 1 : 1 + BalanceParameter);
@@ -194,7 +227,6 @@ public sealed partial class BossProbe : MonoBehaviour {
             hm.ApplyExtraDamage(hm.hp);
             yield return Until(() => control.ActiveStateName == "Opened", "native armor damage exposes head without terminal death", 20);
             if (!Check(boss.Object.Host.activeInHierarchy && !hm.isDead && hm.hp == 65, "armor phase remains alive and resets phase health")) yield break;
-            var battleControl = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.FsmName == "Battle Control");
             if (!Check(battleControl.FsmVariables.GetFsmInt("Battle Enemies").Value > 0,
                 "native armour special death leaves local battle unfinished")) yield break;
             var headHealth = head.Object.Host.GetComponent<HealthManager>(); headHealth.ApplyExtraDamage(7);

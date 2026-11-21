@@ -62,14 +62,14 @@ public sealed partial class JoinProbe {
         JoinCheck(JoinMenu.defaultHighlight == cancel && EventSystem.current.currentSelectedGameObject == cancel.gameObject,
             label + " cancel is selected by default");
         var warning = JoinMenu.GetComponentsInChildren<Text>(true).Single(t => t.name == "Progress warning");
-        JoinCheck(warning.text.StartsWith(UiManager.JoinSaveWarning) &&
-            warning.text.Contains(UiManager.JoinSaveRoomWarning) == runtime.Shared &&
-            !warning.text.Contains("前提") && !warning.text.Contains("!"),
-            label + " room-overwrite warning follows the host sharing rule without explanation or exclamation marks");
+        var expectedWarning = Localize.T(UiManager.JoinSaveWarning);
+        if (runtime.Shared) expectedWarning += "\n\n" + Localize.T(UiManager.JoinSaveRoomWarning);
+        JoinCheck(warning.text == expectedWarning && !warning.text.Contains("!") && !warning.text.Contains("！"),
+            label + " localized save warning follows the host sharing rule (" + Localize.Language + "): " + warning.text.Replace('\n', ' '));
         var generator = new TextGenerator();
         generator.Populate(warning.text, warning.GetGenerationSettings(warning.rectTransform.rect.size));
-        JoinCheck(warning.font == MenuResources.NotoSerifCJKSCRegular && warning.fontSize >= 50 &&
-            generator.characterCountVisible >= warning.text.Length, label + " prominent native CJK warning fits");
+        JoinCheck(warning.font == Localize.Font && warning.fontSize >= 50 &&
+            generator.characterCountVisible >= warning.text.Length, label + " prominent localized warning fits");
         JoinCheck(Scenes.GetActiveScene().name == "Menu_Title" && HeroController.instance == null,
             label + " gameplay has not started");
         JoinCheck(UIManager.instance.saveProfileScreen.alpha < .01f &&

@@ -331,6 +331,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopMod.RoomRuleRevision++;
         ResetLinkedHealth();
         flexibleBossTargeting = false;
+        pendingWarp = null; warpNotice = "";
         DebugEvent("connect-start", DebugEventSeverity.Info);
         BossTravel.RestoreTransientContext();
         teammateDream.Reset();
@@ -354,6 +355,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         ResetDamageRanking();
         CoopMod.RoomRuleRevision++;
         flexibleBossTargeting = false;
+        pendingWarp = null; warpNotice = "";
         DebugEvent("disconnect", DebugEventSeverity.Warning);
         BossTravel.RestoreTransientContext();
         teammateDream.Reset();
@@ -622,10 +624,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                 }
                 break;
             case Kind.Warp:
-                if (m.Serial <= handledWarp || !CanStartWarp || string.IsNullOrEmpty(m.Scene) || SceneUtil.IsNonGameplayScene(m.Scene)) break;
-                handledWarp = m.Serial;
-                var travel = StartCoroutine(WarpTo(m));
-                teammateWarp = changingScene ? travel : null;
+                ReceiveWarpReply(m);
                 break;
         }
     }
@@ -680,6 +679,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         }
         shades.Synchronize();
         if (Time.unscaledTime >= nextPresence) { nextPresence = Time.unscaledTime + .1f; SendPresence(); }
+        TickWarpRequest();
         if (Resetting && !readySent && !changingScene && Playable && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == retryScene) {
             Lock(true); readySent = true; Send(new Message { Kind = Kind.Ready, Scene = retryScene });
         }
@@ -698,12 +698,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                 Notice("已选队友：" + Peers[Selected].State.Name);
             }
         }
-        if (!Down && WarpEnabled && KeyPressed(CoopMod.Settings.TeleportKey)) {
-            if (!CanStartWarp) { Notice("当前无法传送，请等待操作或复位完成"); return; }
-            if (!Peers.ContainsKey(Selected)) Selected = Peers.Keys.OrderBy(i => i).FirstOrDefault();
-            if (Peers.ContainsKey(Selected)) Send(new Message { Kind = Kind.WarpRequest, Target = Selected, Serial = ++warpSerial });
-            else Notice("没有可传送的队友");
-        }
+        if (KeyPressed(CoopMod.Settings.TeleportKey)) RequestTeammateWarp();
     }
 
     // A dream-gate transition normally calls EnterSceneDreamGate, which
@@ -1166,6 +1161,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     private void CancelTransitions() {
+        pendingWarp = null; warpNotice = "";
         if (checkpointReload != null) StopCoroutine(checkpointReload);
         if (teammateWarp != null) StopCoroutine(teammateWarp);
         checkpointReload = teammateWarp = null; changingScene = false;
@@ -1355,14 +1351,14 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             try { rollback = BossTravel.SaveState(); }
             catch (Exception e) {
                 DebugEvent("warp-snapshot-failed", DebugEventSeverity.Critical, e.GetType().Name);
-                Notice("无法保存传送前的临时上下文，已取消传送");
+                ShowWarpNotice("无法保存传送前的临时上下文，已取消传送");
                 yield break;
             }
             var prepared = false;
             try { prepared = BossTravel.Prepare(m); }
             catch (Exception e) { UnityEngine.Debug.LogError("HollowConnect boss travel prepare: " + e); }
             if (!prepared) {
-                rollback(); rollback = null; commitWarpContext(); Notice("无法恢复队友的神居上下文，请检查日志");
+                rollback(); rollback = null; commitWarpContext(); ShowWarpNotice("无法恢复队友的神居上下文，请检查日志");
                 DebugEvent("warp-context-rejected", DebugEventSeverity.Warning);
                 changingScene = false; teammateWarp = null; yield break;
             }
@@ -1375,7 +1371,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                 catch (Exception e) {
                     rollback(); rollback = null; commitWarpContext(); DebugEvent("warp-native-transition-rejected", DebugEventSeverity.Critical, e.GetType().Name);
                     warpEntry = null; warpScene = null; changingScene = false; teammateWarp = null;
-                    Notice("传送加载被拒绝，已恢复原上下文"); UnityEngine.Debug.LogError(e); yield break;
+                    ShowWarpNotice("传送加载被拒绝，已恢复原上下文"); UnityEngine.Debug.LogError(e); yield break;
                 }
                 nativeTransitionAccepted = true;
                 var deadline = Time.realtimeSinceStartup + 30;
@@ -1385,7 +1381,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                     (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != m.Scene || !Playable ||
                      api.ClientManager is Hkmp.Game.Client.ClientManager manager && !manager.SceneSnapshotReady)) {
                     if (Time.realtimeSinceStartup >= deadline) {
-                        Notice("传送等待已结束；场景加载完成后可再次传送");
+                        ShowWarpNotice("传送等待已结束；场景加载完成后可再次传送");
                         DebugEvent("warp-timeout", DebugEventSeverity.Warning);
                         yield break;
                     }
@@ -1415,7 +1411,8 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                     nativeTransitionAccepted = true;
                 }
                 DebugEvent(found ? "warp-complete" : "warp-no-safe-landing", found ? DebugEventSeverity.Info : DebugEventSeverity.Warning);
-                Notice(found ? "已到达队友身边" : "队友附近没有安全落点");
+                if (found) Notice("已到达队友身边");
+                else ShowWarpNotice("队友附近没有安全落点");
             }
         } finally {
             // Once Unity accepted the native load, its destination context is
@@ -1450,6 +1447,8 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         style.normal.textColor = Color.white;
         if (Connected) {
             map.DrawOverlay(style);
+            if (warpNotice.Length != 0 && Time.realtimeSinceStartup < warpNoticeUntil)
+                Hkmp.Ui.Localize.Label(new Rect(0, Screen.height * .72f, Screen.width, 32), warpNotice, style);
         }
         if (Connected && Input.GetKey(CoopMod.Settings.DeathLeaderboardKey)) {
             var width = Mathf.Min(350, Screen.width - 20);

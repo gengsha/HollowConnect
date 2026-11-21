@@ -4,9 +4,9 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.3.2-rc1（候选版）** · 支持 Windows 10 / 11 · 提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
+**当前版本：0.3.2-rc2（候选版）** · 支持 Windows 10 / 11 · 提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
 
-0.3.2-rc1 包含 0.3.1 的全部更新，并修复灵魂战士未唤醒，以及苍绿之境和王后花园封门后不出怪的问题。详见 [更新说明](docs/UPDATE-0.3.2-rc1.md)。
+0.3.2-rc2 包含 0.3.2-rc1 的全部更新，并修复非房主按 F8 后无法传送到已选队友的问题。详见 [更新说明](docs/UPDATE-0.3.2-rc2.md)。
 
 **安装方式：** [一键安装器](#安装与开房) · [PowerShell 脚本安装](#脚本安装无需安装器) · [手动安装](#手动安装无需安装器)
 
@@ -25,7 +25,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2-rc1/HollowConnect-0.3.2-rc1-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2-rc1/HollowConnect-0.3.2-rc1-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.3.2-rc1 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.2-rc1)。GitHub 的 “Code → Download ZIP” 提供的是源码。
+下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2-rc2/HollowConnect-0.3.2-rc2-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2-rc2/HollowConnect-0.3.2-rc2-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.3.2-rc2 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.2-rc2)。GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
@@ -116,7 +116,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.3.2-rc1.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.3.2-rc2.md)。
 
 ## 开发与许可
 

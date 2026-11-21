@@ -8,7 +8,7 @@ namespace HollowConnect.Steam;
 public sealed class SteamMod : Mod, ICustomMenuMod {
     private SteamRoomRuntime runtime;
     public SteamMod() : base("HollowConnect Steam") { }
-    public override string GetVersion() => "0.3.2-rc1";
+    public override string GetVersion() => "0.3.2-rc2";
     public override void Initialize() {
         if (runtime != null) return;
         var owner = new GameObject("HollowConnect Steam");

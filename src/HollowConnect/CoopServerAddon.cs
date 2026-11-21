@@ -396,19 +396,40 @@ public sealed partial class CoopServerAddon : ServerAddon {
                 }
                 break;
             case Kind.WarpRequest:
-                if (!warp || party.Resetting || member.Life != Life.Alive ||
-                    !party.Members.TryGetValue(m.Target, out var target) || target.Life != Life.Alive || Now - target.Seen > 1.5 ||
-                    string.IsNullOrEmpty(target.Scene) || SceneUtil.IsNonGameplayScene(target.Scene) ||
-                    !destinations.TryGetValue(target.Id, out var destination) || !destination.IsReady ||
-                    lastWarp.TryGetValue(id, out var last) && Now - last < 3) break;
-                lastWarp[id] = Now;
-                Send(id, new Message { Kind = Kind.Warp, Target = target.Id, Serial = m.Serial,
-                    Scene = target.Scene, X = target.X, Y = target.Y, BossSequence = destination.BossSequence,
-                    BossDoor = destination.BossDoor, BossIndex = destination.BossIndex, BossBindings = destination.BossBindings,
-                    BossLevel = destination.BossLevel, BossPlan = destination.BossPlan, BossStatueKey = destination.BossStatueKey,
-                    BossReturnGate = destination.BossReturnGate, BossReturnScene = destination.BossReturnScene });
+                ReplyToWarpRequest(member, m);
                 break;
         }
+    }
+
+    private void ReplyToWarpRequest(Member requester, Message request) {
+        void Deny(WarpResult reason) => Send(requester.Id, new Message {
+            Kind = Kind.Warp, Target = request.Target, Serial = request.Serial, Value = (int)reason
+        });
+        if (!warp) { Deny(WarpResult.Disabled); return; }
+        if (party.Resetting || requester.Life != Life.Alive && requester.Life != Life.Loading) {
+            Deny(WarpResult.RequesterBusy); return;
+        }
+        if (requester.Id == request.Target || !party.Members.TryGetValue(request.Target, out var target)) {
+            Deny(WarpResult.TargetMissing); return;
+        }
+        var now = Now;
+        if (lastWarp.TryGetValue(requester.Id, out var last) && now - last < 3) {
+            Deny(WarpResult.CoolingDown); return;
+        }
+        if (target.Life != Life.Alive && target.Life != Life.Loading ||
+            !string.IsNullOrEmpty(target.Scene) && SceneUtil.IsNonGameplayScene(target.Scene)) {
+            Deny(WarpResult.TargetBusy); return;
+        }
+        if (requester.Life == Life.Loading || target.Life == Life.Loading || now - target.Seen > 1.5 ||
+            string.IsNullOrEmpty(target.Scene) || !destinations.TryGetValue(target.Id, out var destination) || !destination.IsReady) {
+            Deny(WarpResult.TryAgain); return;
+        }
+        if (Send(requester.Id, new Message { Kind = Kind.Warp, Target = target.Id, Serial = request.Serial,
+            Scene = target.Scene, X = target.X, Y = target.Y, BossSequence = destination.BossSequence,
+            BossDoor = destination.BossDoor, BossIndex = destination.BossIndex, BossBindings = destination.BossBindings,
+            BossLevel = destination.BossLevel, BossPlan = destination.BossPlan, BossStatueKey = destination.BossStatueKey,
+            BossReturnGate = destination.BossReturnGate, BossReturnScene = destination.BossReturnScene }))
+            lastWarp[requester.Id] = now;
     }
 
     private void SendRescueStatus(Member member) => Send(member.Id, new Message {

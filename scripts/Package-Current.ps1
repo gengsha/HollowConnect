@@ -8,9 +8,11 @@ $root=Split-Path -Parent $PSScriptRoot
 . "$PSScriptRoot/PackageDocumentation.ps1"
 $version=if($CandidateVersion){$CandidateVersion}else{'0.3.1'}
 $taskChannel=if($CandidateVersion){'prerelease'}else{'release'}
-$taskRequiredCore=if($CandidateVersion){13}else{15}
-$taskRequiredCases=if($CandidateVersion){@('green-host','garden05','garden10','shade-soul')}else{@('menus','blackwave-host','blackwave-guest','defender')}
-$taskValidationScope=if($CandidateVersion){'related core and four native encounter rooms per profile'}else{'related core, installer, menus and two native blackwave routes per profile'}
+$taskRc2=$CandidateVersion -eq '0.3.2-rc2'
+$taskRequiredCore=if($taskRc2){353}elseif($CandidateVersion){13}else{15}
+$taskRequiredCases=if($taskRc2){@('f8-return','f8-travel','f8-landing','final-native-host-013','final-native-guest-013','final-lifecycle-host-013','final-lifecycle-guest-013','final-boss-013','final-boss-late-013','final-grimm-host-013','final-grimm-guest-013','final-rescue-013','final-death-story-013','final-full-013','final-join-013','fk-missed-wake','shade-soul-wake')}elseif($CandidateVersion){@('green-host','garden05','garden10','shade-soul')}else{@('menus','blackwave-host','blackwave-guest','defender')}
+$taskRequiredFullMatrix=$taskRc2
+$taskValidationScope=if($taskRc2){'353 core checks, the 12-case room matrix, three teammate-warp checks and two boss-wake checks per profile'}elseif($CandidateVersion){'related core and four native encounter rooms per profile'}else{'related core, installer, menus and two native blackwave routes per profile'}
 if(!$SteamModule -or !$UserRequestedRelease){throw "$version delivery requires the requested release mode and tested Steam module."}
 $taskName="HollowConnect-$version"+$(if($GameVersion -eq 'Unity6'){'-unity6'})
 $package=Join-Path $root "dist/$taskName"
@@ -21,7 +23,22 @@ $taskAuth=Get-Content "$root/$taskAuthPath" -Raw | ConvertFrom-Json
 $taskProfile=$taskEvidence.profiles | Where-Object profile -eq $GameVersion
 if($taskEvidence.version -ne $version -or $taskEvidence.core.passed -ne $taskRequiredCore -or $taskEvidence.core.failed -ne 0 -or
     @($taskProfile).Count -ne 1 -or @($taskProfile.runs).Count -ne $taskRequiredCases.Count -or
-    $taskEvidence.fullMatrixRerun -ne $false -or $taskAuth.version -ne $version -or $taskAuth.releaseChannel -ne $taskChannel -or !$taskAuth.userRequest){throw 'Incomplete scoped release evidence'}
+    $taskEvidence.fullMatrixRerun -ne $taskRequiredFullMatrix -or $taskEvidence.retestOmitted -ne $false -or
+    $taskAuth.version -ne $version -or $taskAuth.releaseChannel -ne $taskChannel -or !$taskAuth.userRequest -or
+    $taskAuth.fullMatrixRerun -ne $taskRequiredFullMatrix -or $taskAuth.retestOmitted -ne $false){throw 'Incomplete scoped release evidence'}
+if($taskRc2){
+    $taskBlockerPath="docs/evidence/runtime-blockers-$version.json"
+    if($taskAuth.action -ne 'publish-github-release' -or !$taskAuth.blockerLedgerSha256 -or
+        $taskAuth.blockerLedgerSha256 -ne (Get-FileHash "$root/$taskBlockerPath").Hash){throw 'RC2 release authorization does not bind the current issue ledger'}
+    if(@($taskAuth.profiles).Count -ne 2){throw 'RC2 authorization must bind both game profiles'}
+    foreach($taskAuthProfile in $taskAuth.profiles){
+        $taskEvidenceProfile=$taskEvidence.profiles | Where-Object profile -eq $taskAuthProfile.profile
+        if(@($taskEvidenceProfile).Count -ne 1 -or @($taskAuthProfile.binaries).Count -ne @($taskEvidenceProfile.production).Count){throw 'RC2 authorization profile scope differs'}
+        foreach($taskBinary in $taskEvidenceProfile.production){
+            if(@($taskAuthProfile.binaries | Where-Object {$_.name -eq $taskBinary.name -and $_.sha256 -eq $taskBinary.sha256}).Count -ne 1){throw 'RC2 authorization hashes differ from final validation'}
+        }
+    }
+}
 $taskOutput=if($GameVersion -eq 'Unity6'){'bin/Unity6/Release/net472'}else{'bin/Release/net472'}
 function Get-CurrentBinary([string]$Name){
     $taskProject=if($Name.StartsWith('HollowConnect.Steam.')){'HollowConnect.Steam'}else{'HollowConnect'}
@@ -63,7 +80,7 @@ if(!$VerifyOnly){
     Update-HollowPackageMarkdownLinks -Root $root -Package $package
     $manifest=[ordered]@{
         version=$version;displayVersion="$version ($GameVersion)";gameProfile=$GameVersion;releaseChannel=$taskChannel;userRequestedRelease=$true;
-        validationScope=$taskValidationScope;fullMatrixRerun=$false;retestOmitted=$false;
+        validationScope=$taskValidationScope;fullMatrixRerun=$taskRequiredFullMatrix;retestOmitted=$false;
         gameVersion=$taskProfile.gameVersion;optionalModules=@('Steam');
         vanillaAssemblySha256=$taskProfile.vanillaAssemblySha256;apiAssemblySha256=$taskProfile.apiAssemblySha256;
         apiArchive=$taskApiName;apiZipSha256=(Get-FileHash "$package/dependencies/$taskApiName").Hash;
@@ -82,7 +99,7 @@ if(!$VerifyOnly){
 }
 $manifest=Get-Content "$package/manifest.json" -Raw | ConvertFrom-Json
 if($manifest.version -ne $version -or $manifest.gameProfile -ne $GameVersion -or $manifest.releaseChannel -ne $taskChannel -or
-    $manifest.fullMatrixRerun -ne $false -or $manifest.runtimeValidationSha256 -ne (Get-FileHash "$root/$taskEvidencePath").Hash -or
+    $manifest.fullMatrixRerun -ne $taskRequiredFullMatrix -or $manifest.retestOmitted -ne $false -or $manifest.runtimeValidationSha256 -ne (Get-FileHash "$root/$taskEvidencePath").Hash -or
     $manifest.releaseAuthorizationSha256 -ne (Get-FileHash "$root/$taskAuthPath").Hash){throw 'Wrong package identity/evidence'}
 if(@(Compare-Object $taskFiles @($manifest.files.name)).Count -or @(Compare-Object $taskFiles @(Get-ChildItem "$package/payload/HKMP" -File | ForEach-Object Name)).Count){throw 'Wrong payload selection'}
 foreach($taskFile in $manifest.files){if((Get-FileHash "$package/payload/HKMP/$($taskFile.name)").Hash -ne $taskFile.sha256 -or (Get-FileHash (Get-CurrentBinary $taskFile.name)).Hash -ne $taskFile.sha256){throw 'Stale production payload'}}

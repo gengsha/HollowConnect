@@ -2,6 +2,8 @@
 
 这里只保留当前版本打包／验证脚本直接使用的 JSON、既有 49 项机制审计，以及旧版套件汇总仍读取的两份基线账本。JSON 原始内容与 SHA-256 关系保持不变；记录中的历史路径是当时的来源，不表示这些文件仍随安装包提供。
 
+0.3.2-rc2 的发布请求、运行范围及最终哈希记录见 [发布授权](release-authorization-0.3.2-rc2.json)、[开发验证](development-validation-0.3.2-rc2.json)、[实机范围](runtime-room-0.3.2-rc2.json) 和 [问题账本](runtime-blockers-0.3.2-rc2.json)。
+
 | 文件 | 用途 |
 |---|---|
 | [release-authorization-0.2.9.json](release-authorization-0.2.9.json) | 0.2.9 双版本本地打包请求；Legacy 最终哈希与完整矩阵省略范围 |

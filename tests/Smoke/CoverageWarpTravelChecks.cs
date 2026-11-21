@@ -17,6 +17,10 @@ public sealed partial class CoverageProbe {
     // interrupted wait cleanup, and successful F8 in both directions. It does
     // not claim to run the complete native stag-ride cinematic.
     private IEnumerator WarpTravelAssertions(int round) {
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARP_RETURN_REPRO") == "1") {
+            yield return WarpReturnRepro();
+            yield break;
+        }
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
         const string cinematic = "Cinematic_Stag_travel";
         var hero = HeroController.instance;
@@ -69,9 +73,12 @@ public sealed partial class CoverageProbe {
                 orig(self, m);
             })));
         hooks.Add(new Hook(typeof(CoopServerAddon).GetMethod("Send", flags),
-            (Action<Action<CoopServerAddon, ushort, Message>, CoopServerAddon, ushort, Message>)((orig, self, id, m) => {
-                if (m.Kind == Kind.Warp) { serverResponses++; Mark("WARP TRAVEL UDP GRANT id=" + id + " serial=" + m.Serial); }
-                orig(self, id, m);
+            (Func<Func<CoopServerAddon, ushort, Message, bool>, CoopServerAddon, ushort, Message, bool>)((orig, self, id, m) => {
+                var sent = orig(self, id, m);
+                if (sent && m.Kind == Kind.Warp && m.Value == 0) {
+                    serverResponses++; Mark("WARP TRAVEL UDP GRANT id=" + id + " serial=" + m.Serial);
+                }
+                return sent;
             })));
         hooks.Add(new Hook(typeof(CoopServerAddon).GetMethod("Receive", flags),
             (Action<Action<CoopServerAddon, ushort, Message>, CoopServerAddon, ushort, Message>)((orig, self, id, m) => {
