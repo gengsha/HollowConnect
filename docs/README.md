@@ -4,7 +4,7 @@
 
 | 面向玩家 | 内容 |
 |---|---|
-| [当前版本](UPDATE-0.3.1.md) | 0.3.1 双版本、英日语言与更简洁的 HUD |
+| [当前版本](UPDATE-0.3.2.md) | 0.3.2 聊天传送、四门相机、队友状态条与兼容皮肤 |
 | [English installation](INSTALL-EN.md) / [日本語](INSTALL-JA.md) | 安装器、脚本及手动安装 |
 | [共享进度](SHARED-PROGRESS.md) | 共享项目、个人资源和存档规则 |
 | [共享血量（Beta）](LINKED-HEALTH.md) | 团队生命、护符限制与休息 |

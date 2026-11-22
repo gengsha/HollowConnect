@@ -1,0 +1,53 @@
+{
+  "version": "0.3.2",
+  "action": "publish-github-release",
+  "releaseChannel": "release",
+  "userRequest": "打包0.3.2，合并可合并改动，执行必要测试，发布 GitHub Release。",
+  "fullMatrixRerun": false,
+  "retestOmitted": false,
+  "blockerLedgerSha256": "525BBB1112734E7AF37CF6BE84ACE47CF76B0414BB92EF65D5CCB8520C461AFA",
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "ADC631891AAEA0E37E309803B4519BEB6384511C579E8CE6714546AF1B78E202"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "18B6C49A81F7F03690FF565DDA3C44FB5749353ED662CBF72B4118B5AA1BC462"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "33FB202F0C7EBAB14A89BDF5F7483194C71278A8C986E82AB1BA9FEA48267560"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "EBE95CDEB15C180FC6C395AC2B7277D29A5E05DE295FFA4EC14ED9CDCFB888C7"
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "8E9E613C022516EE5FB08253BAD5A0D4F91FB83A79251FFA8D005C7B0EDA4FE3"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6AFB2611A271651AA644DA5F8D14DA1D55DB9332B9819FF2ADED5DBFDBBC26C2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E809FC991202CCDAE9728E6CF9A52722DE2D1D3CF24054B53C6452992D49871A"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "93485167E3CE98EA11422760BA6D849EBE35292AA1B50D12B5E5F6B7BEDB8597"
+        }
+      ]
+    }
+  ]
+}

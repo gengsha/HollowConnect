@@ -1,0 +1,93 @@
+{
+  "version": "0.3.2",
+  "scope": "Scoped dual-client checks on 0.3.2 binaries. Previous full-room and encounter checks retain their RC2 hashes.",
+  "fullMatrixRerun": false,
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "ADC631891AAEA0E37E309803B4519BEB6384511C579E8CE6714546AF1B78E202"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "18B6C49A81F7F03690FF565DDA3C44FB5749353ED662CBF72B4118B5AA1BC462"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "33FB202F0C7EBAB14A89BDF5F7483194C71278A8C986E82AB1BA9FEA48267560"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "EBE95CDEB15C180FC6C395AC2B7277D29A5E05DE295FFA4EC14ED9CDCFB888C7"
+        }
+      ],
+      "runs": [
+        {
+          "case": "status-linked",
+          "run": "release032-status-linked-a",
+          "status": "passed"
+        },
+        {
+          "case": "skin-ck",
+          "run": "release032-skin-ck-a",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "8E9E613C022516EE5FB08253BAD5A0D4F91FB83A79251FFA8D005C7B0EDA4FE3"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "6AFB2611A271651AA644DA5F8D14DA1D55DB9332B9819FF2ADED5DBFDBBC26C2"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "E809FC991202CCDAE9728E6CF9A52722DE2D1D3CF24054B53C6452992D49871A"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "93485167E3CE98EA11422760BA6D849EBE35292AA1B50D12B5E5F6B7BEDB8597"
+        }
+      ],
+      "runs": [
+        {
+          "case": "tp-retry",
+          "run": "release032-tp-retry-a",
+          "status": "passed"
+        },
+        {
+          "case": "chat",
+          "run": "release032-chat-a",
+          "status": "passed"
+        },
+        {
+          "case": "camera-p4",
+          "run": "release032-camera-p4-a",
+          "status": "passed"
+        },
+        {
+          "case": "camera-p5",
+          "run": "release032-camera-p5-a",
+          "status": "passed"
+        },
+        {
+          "case": "status",
+          "run": "release032-status-a",
+          "status": "passed"
+        },
+        {
+          "case": "skin-atlas",
+          "run": "release032-skin-atlas-a",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

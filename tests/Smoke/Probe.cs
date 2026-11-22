@@ -613,7 +613,9 @@ public sealed class Probe : MonoBehaviour {
             yield return Until(() => runtime.Connected && runtime.Peers.Count == 1, "reconnect before transition cancellation");
             Flag("host.transition-ready");
             yield return Until(() => Has("guest.transition-ready"), "guest ready for transition cancellation");
-            typeof(CoopRuntime).GetMethod("Receive", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime,
+            // This fixture begins after acceptance. The F8 probes exercise the
+            // real request and reply independently of disconnect timing.
+            typeof(CoopRuntime).GetMethod("StartTeammateWarp", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime,
                 new object[] { new Message { Kind = Kind.Warp, Session = runtime.Session, Round = Hkmp.CoopContext.Epoch,
                     Serial = 100000, Scene = "Crossroads_01", X = 20, Y = 10 } });
             if (Field<Coroutine>(runtime, "teammateWarp") == null || !Field<bool>(runtime, "changingScene")) {

@@ -1,0 +1,51 @@
+{
+  "version": "0.3.2-rc1",
+  "userRequest": "Publish 0.3.2-rc1 to GitHub Releases with all 0.3.1 changes, the Soul Warrior wake fix, and the Greenpath and Gardens encounter fixes",
+  "releaseChannel": "prerelease",
+  "fullMatrixRerun": false,
+  "retestOmitted": false,
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "D282F99EBF086C176C341EA7F3A6010E3DBD3E14B5AAFE75E7D453836694E5D2"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "AF2167715F16D876EB5EA6F49478A0C990A386266747117495A38967DEC92E24"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "6CFDD0DA3E5A0CA432AEB07CF95E432E1874143A92E4AF498137DC8A0D00DF00"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "8294F91A5598D54C811CC12CBED2F9986AEDB37578177B819F0802D0E59213C5"
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "binaries": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "F40B0DD411945DF7E9DF18F64D8001E8DE920023936AC2C6AE3500104262788B"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "D1B4F1AF92C32639D09DA76743C46FB0653BF13674D7A5873F9D4B6ED96DE651"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "361A59A259B765B69519E5BA9E8B2B4890E7E8F889DC68A7C21CB58932A2667D"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "24380BAAE2DE323F4B3A10E3B86C6469E232C42586C5EBA2B0CD37E911CEE851"
+        }
+      ]
+    }
+  ]
+}

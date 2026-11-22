@@ -98,9 +98,16 @@ internal static class UdpSendContentionTests {
             if (manager.BuildUpdatePacket() != null) throw new Exception("failed encoding returned bytes");
             manager.Position(3);
             var next = Read(manager.BuildUpdatePacket());
-            if (((ChatMessage)next.GetPacketData()[ServerUpdatePacketId.ChatMessage]).Message != "first receipt" ||
-                ((PlayerUpdate)next.GetPacketData()[ServerUpdatePacketId.PlayerUpdate]).Position.X != 3 || next.Sequence != 1)
-                throw new Exception("failed encoding lost the reliable receipt");
+            if (((PlayerUpdate)next.GetPacketData()[ServerUpdatePacketId.PlayerUpdate]).Position.X != 3 || next.Sequence != 1)
+                throw new Exception("the detached failure blocked the next gameplay update");
+            // Retransmissions use every third carrier. A deferred receipt
+            // must keep its original sequence and appear on the next one.
+            var retry = next;
+            for (var i = 0; i < 2 && !retry.GetPacketData().ContainsKey(ServerUpdatePacketId.ChatMessage); i++)
+                retry = Read(manager.BuildUpdatePacket());
+            if (!retry.GetPacketData().TryGetValue(ServerUpdatePacketId.ChatMessage, out var data) ||
+                ((ChatMessage)data).Message != "first receipt" || !retry.ReliableOrigins().Contains((ushort)0))
+                throw new Exception("failed encoding lost the reliable receipt or its original sequence");
         });
     }
 }

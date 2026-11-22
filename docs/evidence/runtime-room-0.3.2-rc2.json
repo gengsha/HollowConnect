@@ -1,0 +1,176 @@
+{
+  "version": "0.3.2-rc2",
+  "scope": "Full 353-case managed core suite, 12-case room matrix, three teammate-warp cases and two boss-wake cases on each supported game profile.",
+  "fullMatrixRerun": true,
+  "retestOmitted": false,
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "gameVersion": "1.5.78.11833 Windows / Unity 2020.2.2f1",
+      "vanillaAssemblySha256": "FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0",
+      "apiAssemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "EFEAC7248264CCDA100A92775B54234D6B8BDB6A6F59092F634D153AB339F9D8"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "7F96AB8853D578B30757082B71E4A7B2578A37BF915C3E21E00A13E69BBA62FB"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "417437499EE56AE8E673944BF7CF04EA6808FC8FFA996C7C9D259750BA87589E"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "EAF691C1BED7A686BE6BD4322EC0E0A0E0E690CE7BE8A2ED96477FF1BB558B5C"
+        }
+      ],
+      "runtimeCasesPassed": 17,
+      "warpCasesPassed": 3,
+      "roomMatrixPassed": 12,
+      "bossWakePassed": 2,
+      "runs": [
+        "f8-return",
+        "f8-travel",
+        "f8-landing",
+        "final-native-host-013",
+        "final-native-guest-013",
+        "final-lifecycle-host-013",
+        "final-lifecycle-guest-013",
+        "final-boss-013",
+        "final-boss-late-013",
+        "final-grimm-host-013",
+        "final-grimm-guest-013",
+        "final-rescue-013",
+        "final-death-story-013",
+        "final-full-013",
+        "final-join-013",
+        "fk-missed-wake",
+        "shade-soul-wake"
+      ],
+      "gameDependencies": [
+        {
+          "role": "host",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E",
+          "file": "UnityPlayer.dll"
+        },
+        {
+          "role": "host",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll"
+        },
+        {
+          "role": "host",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll"
+        },
+        {
+          "role": "guest",
+          "sha256": "D97E92A7640B10580B4E60139EACF01828F74BAAEF53F75E08B9FDD6193FBE5E",
+          "file": "UnityPlayer.dll"
+        },
+        {
+          "role": "guest",
+          "sha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll"
+        },
+        {
+          "role": "guest",
+          "sha256": "EB9675467415EEE630DEAAAB6564CD8CF21A8B560CFC831D212B869D74F3732F",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll"
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "gameVersion": "1.5.12620 Windows / Unity 6000.0.61f1",
+      "vanillaAssemblySha256": "E9048EF6A633970F735E01EC166D3959F610EAEA7A88D827D48D67B1E5FB87BD",
+      "apiAssemblySha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "683743E1AB3B32B06A1A5DF6C5E11582E9B30909E4653D967D3703597389EC22"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "5DC2586B53705183CBF69AD71C075AB8733940F99B78066ED59CFE1BD993582D"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "33ABDF99E091B0DBDDE006B88EBA75611A679439A7BB49BA59DA7F6866076DE3"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "ED66644CCD724EB8E7519912052604693F77478CB4BDC665551D2561C0422A3F"
+        }
+      ],
+      "runtimeCasesPassed": 17,
+      "warpCasesPassed": 3,
+      "roomMatrixPassed": 12,
+      "bossWakePassed": 2,
+      "runs": [
+        "f8-return",
+        "f8-travel",
+        "f8-landing",
+        "final-native-host-013",
+        "final-native-guest-013",
+        "final-lifecycle-host-013",
+        "final-lifecycle-guest-013",
+        "final-boss-013",
+        "final-boss-late-013",
+        "final-grimm-host-013",
+        "final-grimm-guest-013",
+        "final-rescue-013",
+        "final-death-story-013",
+        "final-full-013",
+        "final-join-013",
+        "fk-missed-wake",
+        "shade-soul-wake"
+      ],
+      "gameDependencies": [
+        {
+          "role": "host",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B",
+          "file": "UnityPlayer.dll"
+        },
+        {
+          "role": "host",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll"
+        },
+        {
+          "role": "host",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll"
+        },
+        {
+          "role": "host",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll"
+        },
+        {
+          "role": "guest",
+          "sha256": "8F2D601F8D3C7F4D29D80BA786C0BE873102BB7E6041EB03964A90B99724D90B",
+          "file": "UnityPlayer.dll"
+        },
+        {
+          "role": "guest",
+          "sha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46",
+          "file": "hollow_knight_Data/Managed/Assembly-CSharp.dll"
+        },
+        {
+          "role": "guest",
+          "sha256": "B443474E6CF6EB03DEBE5346884A51893621CC39A9B2666C160034FBD5783DA7",
+          "file": "hollow_knight_Data/Managed/TeamCherry.TK2D.dll"
+        },
+        {
+          "role": "guest",
+          "sha256": "320F600916396BC779D3F88F29EA3E862A1E05A0BBD5704D9B864B0E99330E69",
+          "file": "hollow_knight_Data/Managed/MonoMod.RuntimeDetour.dll"
+        }
+      ]
+    }
+  ]
+}

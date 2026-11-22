@@ -39,7 +39,9 @@ internal static class LocalWorldIsolationTests {
             expected.Write((byte)1); expected.Write("HollowConnect"); expected.Write(CoopMod.NetworkVersion);
             Check(packet.ToArray().SequenceEqual(expected.ToArray()), "rejection cannot be read by older client");
             var result = new ServerInfo(); result.ReadData(new Packet(packet.ToArray()));
-            Check(result.AddonData.Single().Version != CoopMod.Version, "old addon may accept the new layout");
+            var reported = result.AddonData.Single().Version;
+            Check(reported == CoopMod.NetworkVersion && reported != "0.3.1-l15",
+                "rejection failed to identify the current and previous network versions");
         });
         test("local worlds retain boss roots while ordinary enemies and mechanisms stay native", () => InMode(true, () => {
             foreach (EntityType type in Enum.GetValues(typeof(EntityType))) {

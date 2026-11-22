@@ -1,6 +1,6 @@
-# HollowConnect 0.3.1 のインストール
+# HollowConnect 0.3.2 のインストール
 
-[Releases](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.1)から **Windows版の完全なZIP**をダウンロードしてください。ゲームが1.5.78.11833なら **Legacy**、1.5.12620なら **Unity6** を選択し、すべて展開してゲームを終了します。
+[Releases](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.2)から **Windows版の完全なZIP**をダウンロードしてください。ゲームが1.5.78.11833なら **Legacy**、1.5.12620なら **Unity6** を選択し、すべて展開してゲームを終了します。
 
 ## インストーラー
 
@@ -29,4 +29,4 @@ APIの検証、バックアップ、導入が実行されます。元に戻す�
 
 ゲーム内表示はゲームの言語に追従します。F6で救援待ちを放棄し、F7で観戦対象を切り替えます。HKMPチャットに `/tp <仲間の名前>` と入力すると、ホストが許可している場合に転送をリクエストします。名前に空白がある場合は引用符で囲みます。F5長押しで死亡ランキング、F9で診断を表示します。別の部屋の仲間の位置はマップを開いて確認できます。
 
-[更新内容と検証範囲](UPDATE-0.3.1.md) · [既知の問題](KNOWN-ISSUES.md)
+[更新内容と検証範囲](UPDATE-0.3.2.md) · [既知の問題](KNOWN-ISSUES.md)

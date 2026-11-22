@@ -1,5 +1,6 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums, [switch]$UserRequestedRelease,
-    [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate, [switch]$SteamModule,
+    [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate,
+    [ValidatePattern('^\d+\.\d+\.\d+-rc[1-9][0-9]*$')][string]$CandidateVersion, [switch]$SteamModule,
     [ValidateSet('Both','Legacy','Unity6')][string]$GameVersion='Both',
     [ValidateSet('','hit-evasion')][string]$Unity6Revision='',
     [ValidatePattern('^\d+\.\d+\.\d+-rc[1-9][0-9]*$')][string]$LocalCandidateVersion)
@@ -12,8 +13,10 @@ if ($LocalCandidateVersion) {
     return
 }
 if(!$Unity6Revision -and !$Playtest -and !$PlaytestBuild -and !$ReleaseCandidate){
+    $taskChannelArguments=@{}
+    if($CandidateVersion){$taskChannelArguments.CandidateVersion=$CandidateVersion}
     foreach($taskProfile in $(if($GameVersion -eq 'Both'){@('Legacy','Unity6')}else{@($GameVersion)})){
-        & "$PSScriptRoot/Package-Current.ps1" -GameVersion $taskProfile -SteamModule:$SteamModule -UserRequestedRelease:$UserRequestedRelease -RebuildChecksums:$RebuildChecksums
+        & "$PSScriptRoot/Package-Current.ps1" -GameVersion $taskProfile @taskChannelArguments -SteamModule:$SteamModule -UserRequestedRelease:$UserRequestedRelease -RebuildChecksums:$RebuildChecksums
     }
     return
 }

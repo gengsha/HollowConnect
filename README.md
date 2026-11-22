@@ -4,9 +4,9 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.3.1** · 支持 Windows 10 / 11 · 分别提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
+**当前版本：0.3.2** · 支持 Windows 10 / 11 · 提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
 
-0.3.1 修复黑波（暗影之魂）获取地钥匙门后 Boss 触发／召唤流程中的异常，新增 English / 日本語，游戏内跟随游戏语言；安装器内可独立选择语言。灵魂 HUD 附近的常驻名单和开发状态提示已移入日志。详见 [更新说明](docs/UPDATE-0.3.1.md)。
+0.3.2 加入聊天传送、输入历史和 Tab 补全，修复神居四门开场镜头，并加入队友状态条和兼容皮肤入口。详见 [更新说明](docs/UPDATE-0.3.2.md)。
 
 **安装方式：** [一键安装器](#安装与开房) · [PowerShell 脚本安装](#脚本安装无需安装器) · [手动安装](#手动安装无需安装器)
 
@@ -25,7 +25,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.3.1/HollowConnect-0.3.1-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.3.1/HollowConnect-0.3.1-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.3.1 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.1)。GitHub 的 “Code → Download ZIP” 提供的是源码。
+下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2/HollowConnect-0.3.2-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2/HollowConnect-0.3.2-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.3.2 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.2)。GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
@@ -95,8 +95,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GamePath "E:\
 | **聊天命令** | 输入 `/tp 队友名` 传送；队友名含空格时写作 `/tp "队友 名"`，需房主允许传送。 |
 | **F9** | 打开诊断面板，可导出诊断信息用于反馈。 |
 
-聊天框打开后，按 ↑ / ↓ 浏览本次游戏已提交的消息和命令。输入 `/` 会看到半透明的命令提示，按 Tab 补全。在 `/tp ` 后可以用 Tab 补全在线队友名，多人匹配时连续按 Tab 切换。按回车才会发送。
 | **Ctrl + Alt + F12** | 紧急回椅：断开本机联机，返回德特茅斯长椅并自动保存，不扣吉欧。 |
+
+聊天框打开后，按 ↑ / ↓ 浏览本次游戏已提交的消息和命令。输入 `/` 会看到半透明的命令提示，按 Tab 补全。在 `/tp ` 后可以用 Tab 补全在线队友名，多人匹配时连续按 Tab 切换。按回车才会发送。
 
 紧急回椅需先载入存档，并能正常接收按键。部分按键可在游戏关闭后通过 `%USERPROFILE%\AppData\LocalLow\Team Cherry\Hollow Knight\CoopMod.GlobalSettings.json` 调整。
 
@@ -119,7 +120,7 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.3.1.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.3.2.md)。
 
 ## 开发与许可
 
