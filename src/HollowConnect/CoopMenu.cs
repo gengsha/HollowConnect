@@ -12,6 +12,10 @@ namespace HollowConnect;
 
 public sealed partial class CoopMod {
     internal const string RoomSettingLockHint = "联机中已锁定。请先断开联机；房主还需停止开房，再返回本模组配置修改。";
+    internal const string TeammateStatusOptionName = "队友状态条（本机）";
+    internal static bool TeammateStatusLocked => CoopRuntime.Current?.Connected == true ? CoopRuntime.Current.LinkedHealthRuleEnabled :
+        Settings.LinkedHealth && Settings.ShareProgress && Settings.ShareCharms;
+    internal static bool OptionLocked(string name) => name == TeammateStatusOptionName ? TeammateStatusLocked : RoomSettingsLocked;
     internal const string SharedHealthOptionName = "共享血量（Beta，房主）";
     internal const string ObservationOptionName = "主动观战（Beta，本机）";
     internal static bool RoomSettingsLocked => CoopContext.RoomSettingsLocked?.Invoke() == true;
@@ -35,7 +39,7 @@ public sealed partial class CoopMod {
             var entry = entries.FirstOrDefault(e => e.Name == option.gameObject.name);
             if (entry.Name == BossHealthParameterRow.OptionName) option.gameObject.AddComponent<BossHealthParameterRow>().Initialize(option, screen);
             else if (entry.Name == LinkedHealthBonusRow.OptionName) option.gameObject.AddComponent<LinkedHealthBonusRow>().Initialize(option, screen);
-            else if (entry.Loader != null && IsRoomSetting(entry.Name)) option.gameObject.AddComponent<CoopMenuLockRow>().Initialize(option, entry);
+            else if (entry.Loader != null && (IsRoomSetting(entry.Name) || entry.Name == TeammateStatusOptionName)) option.gameObject.AddComponent<CoopMenuLockRow>().Initialize(option, entry);
         }
         screen.gameObject.AddComponent<CoopMenuHelpPanel>().Initialize(screen);
         GroupSharedHealth(screen);
@@ -150,10 +154,10 @@ internal sealed class CoopMenuLockRow : MonoBehaviour {
         Refresh();
     }
     private void OnEnable() => Refresh();
-    private void Update() { if (option != null && (locked != CoopMod.RoomSettingsLocked || ruleRevision != CoopMod.RoomRuleRevision)) Refresh(); }
+    private void Update() { if (option != null && (locked != CoopMod.OptionLocked(entry.Name) || ruleRevision != CoopMod.RoomRuleRevision)) Refresh(); }
     internal void Refresh() {
         if (option == null) return;
-        var isLocked = CoopMod.RoomSettingsLocked;
+        var isLocked = CoopMod.OptionLocked(entry.Name);
         locked = isLocked;
         ruleRevision = CoopMod.RoomRuleRevision;
         var index = Math.Max(0, Math.Min(entry.Values.Length - 1, entry.Loader()));
@@ -161,7 +165,7 @@ internal sealed class CoopMenuLockRow : MonoBehaviour {
         option.SetOptionList(isLocked ? new[] { roomValue + "（已锁定）" } : entry.Values);
         option.SetOptionTo(isLocked ? 0 : index);
         option.menuSetting.customApplySetting = (_, i) => {
-            if (CoopMod.RoomSettingsLocked) { Refresh(); return; }
+            if (CoopMod.OptionLocked(entry.Name)) { Refresh(); return; }
             entry.Saver(i);
         };
         option.menuSetting.customRefreshSetting = (setting, _) => Refresh();
@@ -170,6 +174,7 @@ internal sealed class CoopMenuLockRow : MonoBehaviour {
             label.color = isLocked ? new Color(.65f, .65f, .65f, normalLabel.a) : normalLabel;
         }
         option.optionText.color = isLocked ? new Color(.65f, .65f, .65f, normalValue.a) : normalValue;
-        if (description != null) description.text = isLocked ? entry.Description : entry.Description.Replace(CoopMod.RoomSettingLockHint + "\n", "");
+        if (description != null) description.text = entry.Name == CoopMod.TeammateStatusOptionName ? entry.Description :
+            isLocked ? entry.Description : entry.Description.Replace(CoopMod.RoomSettingLockHint + "\n", "");
     }
 }

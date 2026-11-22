@@ -117,10 +117,9 @@ public sealed partial class CoverageProbe {
                 "pre-challenge F8 both published ready in destination");
             runtime.Selected = runtime.Peers.Keys.Single();
             var handled = Field<uint>(runtime, "handledWarp");
-            var pressed = false;
-            runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-            yield return Until(() => pressed && Field<uint>(runtime, "handledWarp") > handled, "pre-challenge F8 granted");
-            runtime.KeyPressed = _ => false;
+            if (!TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected))
+                throw new Exception("Pre-challenge /tp command was not handled locally");
+            yield return Until(() => Field<uint>(runtime, "handledWarp") > handled, "pre-challenge /tp granted");
         } else Enter(scene, "door1");
         yield return Until(() => InArena() && manager.IsSceneHostDetermined && engine.ClientManager.SceneSnapshotReady,
             "entry scene and snapshot ready");

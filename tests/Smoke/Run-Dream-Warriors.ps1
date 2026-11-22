@@ -2,7 +2,7 @@ param([Parameter(Mandatory)][string]$Prefix,[Parameter(Mandatory)][string]$Paylo
     [ValidateSet('host','guest','both')][string[]]$Cases=@('guest'),
     [string]$Scenes='Fungus1_35',[ValidateSet('host','guest')][string]$Summoner='guest',[switch]$Inspect,
     [ValidateSet('0','1','2')][string]$GuestHistory='0',
-    [ValidateSet('none','native','f8')][string]$ExitMode='none')
+    [ValidateSet('none','native','tp')][string]$ExitMode='none')
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $taskKeys=@('HOLLOWCONNECT_DREAM_WARRIORS','HOLLOWCONNECT_DREAM_SCENES','HOLLOWCONNECT_DREAM_LANTERN_OWNER','HOLLOWCONNECT_DREAM_SUMMONER','HOLLOWCONNECT_DREAM_GUEST_HISTORY','HOLLOWCONNECT_NETWORK_FAULTS','HOLLOWCONNECT_WARRIOR_EXIT')
@@ -11,7 +11,7 @@ try {
     $env:HOLLOWCONNECT_DREAM_WARRIORS=$(if($Inspect){'inspect'}else{'all'})
     $env:HOLLOWCONNECT_DREAM_SCENES=$Scenes; $env:HOLLOWCONNECT_DREAM_SUMMONER=$Summoner; $env:HOLLOWCONNECT_NETWORK_FAULTS='0'
     $env:HOLLOWCONNECT_DREAM_GUEST_HISTORY=$GuestHistory
-    if($ExitMode -eq 'f8' -and $Scenes -ne 'Cliffs_02'){throw 'The F8 cleanup probe is scoped to Gorb.'}
+    if($ExitMode -eq 'tp' -and $Scenes -ne 'Cliffs_02'){throw 'The /tp cleanup probe is scoped to Gorb.'}
     $env:HOLLOWCONNECT_WARRIOR_EXIT=$(if($ExitMode -eq 'none'){''}else{$ExitMode})
     foreach($taskCase in $Cases){
         $env:HOLLOWCONNECT_DREAM_LANTERN_OWNER=$taskCase

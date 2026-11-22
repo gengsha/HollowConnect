@@ -170,23 +170,20 @@ public sealed partial class CoverageProbe {
             yield return Until(() => runtime.Peers.Values.Single().State?.Scene == "GG_Radiance" &&
                 runtime.Peers.Values.Single().State.IsReady, "late target ready");
             yield return Until(() => (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic)
-                .GetValue(runtime, null), "late requester native transition completes before F8");
+                .GetValue(runtime, null), "late requester native transition completes before /tp");
             yield return new WaitForSecondsRealtime(.3f);
             runtime.Selected = runtime.Peers.Keys.Single();
             var handled = Field<uint>(runtime, "handledWarp");
-            var pressed = false;
-            var canWarp = typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic);
-            runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed &&
-                (bool)canWarp.GetValue(runtime, null) && (pressed = true);
-            yield return Until(() => pressed && Field<uint>(runtime, "handledWarp") > handled, "late cross-room F8 accepted via UDP");
-            runtime.KeyPressed = _ => false;
+            if (!TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected))
+                throw new Exception("Fresh late-entry /tp command was not handled locally");
+            yield return Until(() => Field<uint>(runtime, "handledWarp") > handled, "late cross-room /tp accepted via UDP");
             yield return Until(() => In("GG_Radiance") && !Field<bool>(runtime, "changingScene") &&
-                engine.ClientManager.SceneSnapshotReady, "late cross-room F8 snapshot applied");
+                engine.ClientManager.SceneSnapshotReady, "late cross-room /tp snapshot applied");
             RadianceDumpFsm(Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "Boss Control" && f.FsmName == "Control"));
             HeroController.instance.AffectedByGravity(true);
             yield return RadianceWait(RadiancePlayable, "late cross-room camera settles once", 3);
-            if (Field<string>(runtime, "status") != "已到达队友身边") throw new Exception("Late F8 has no successful landing");
-            yield return RadianceWait(RadianceSupported, "late F8 stands on active native platform", 3);
+            if (Field<string>(runtime, "status") != "已到达队友身边") throw new Exception("Late /tp has no successful landing");
+            yield return RadianceWait(RadianceSupported, "late /tp stands on active native platform", 3);
             var presentation = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "Boss Control" && f.FsmName == "Control");
             if (presentation.ActiveStateName != "Battle Start") throw new Exception("Radiance late presentation still in " + presentation.ActiveStateName);
             Mark("PASS radiance late arrival skips title presentation");
@@ -277,14 +274,13 @@ public sealed partial class CoverageProbe {
             if (role == actor) {
                 runtime.Selected = runtime.Peers.Keys.Single();
                 var handled = Field<uint>(runtime, "handledWarp");
-                var pressed = false;
-                runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-                yield return RadianceWait(() => pressed && Field<uint>(runtime, "handledWarp") > handled, "F8 accepted via UDP " + actor);
-                runtime.KeyPressed = _ => false;
+                if (!TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected))
+                    throw new Exception("Late cross-room /tp command was not handled locally");
+                yield return RadianceWait(() => Field<uint>(runtime, "handledWarp") > handled, "/tp accepted via UDP " + actor);
                 yield return RadianceWait(() => !Field<bool>(runtime, "changingScene"), "warp completes " + actor);
                 var status = Field<string>(runtime, "status");
                 if (status != "已到达队友身边") throw new Exception("Radiance initial floor warp must succeed: " + status);
-                Mark("PASS radiance F8 lands on initial native arena floor " + actor);
+                Mark("PASS radiance /tp lands on initial native arena floor " + actor);
                 yield return RadianceWait(RadiancePlayable, "warp keeps control and hero visible " + actor);
             }
             yield return RadianceTogether(round, "warp " + actor + " complete");

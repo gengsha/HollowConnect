@@ -87,6 +87,18 @@ public sealed partial class RescueProbe : MonoBehaviour {
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Menu_Title", "menu ready");
         runtime = Object.FindObjectOfType<CoopRuntime>(); engine = Field<Hkmp.Game.GameManager>(ModHooks.GetMod("HKMP"), "_gameManager");
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
+        bool statusCheck = Environment.GetEnvironmentVariable("HOLLOWCONNECT_TEAMMATE_STATUS_CHECK") == "1";
+        var chatCheck = Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHAT_EDITING_CHECK") == "1";
+        if (chatCheck) {
+            global::Language.Language.SwitchLanguage(global::Language.LanguageCode.ZH);
+            CoopMod.Settings.AllowTeleport = true;
+        }
+        if (statusCheck) {
+            global::Language.Language.SwitchLanguage(global::Language.LanguageCode.ZH);
+            CoopMod.Settings.TeammateStatus = false;
+            CoopMod.Settings.LinkedHealth = false;
+            CoopMod.Settings.BossDamageRanking = Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_LINKED") == "1";
+        }
         CoopMod.Settings.Rescue = true;
         CoopMod.Settings.RescueLimit = 0;
         CoopMod.Settings.SpectateAfterExhaustion = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SETTLEMENT_SPECTATOR") == "1";
@@ -161,14 +173,29 @@ public sealed partial class RescueProbe : MonoBehaviour {
         if (host) { engine.ServerManager.Start(29650, false); Flag("server.started"); } else yield return Until(() => Has("server.started"), "server ready");
         yield return new WaitForSecondsRealtime(1);
         typeof(Hkmp.Game.Client.ClientManager).GetField("_autoConnect", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(engine.ClientManager, true);
-        typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "rescue" + role });
+        typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, chatCheck ? (host ? "小骑士" : "旅人玩家") : statusCheck ? StatusPlayerName(host) : "rescue" + role });
         yield return Until(() => runtime.Connected, "real UDP handshake"); Flag(role + ".connected");
         yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
+        if (chatCheck) {
+            yield return ChatEditingChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS chat history and command completion"); Flag(role + ".done"); yield break;
+        }
+        if (statusCheck) {
+            yield return TeammateStatusChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS native teammate HUD and independent damage ranking"); Flag(role + ".done"); yield break;
+        }
         if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PRESENTATION_CHECK"))) {
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_PRESENTATION_CHECK") == "fixture") yield return ReplicaVisualChecks.Run(Log);
             else yield return NativePresentationChecks();
             yield return ProbeShutdown.Run(engine, root, role);
             Log("FINAL PASS recoverable presentation checks"); Flag(role + ".done"); yield break;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SHORTCUT_F6") == "1") {
+            yield return GiveUpShortcutChecks();
+            yield return ProbeShutdown.Run(engine, root, role);
+            Log("FINAL PASS F6 personal return for both roles"); Flag(role + ".done"); yield break;
         }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_OBSERVATION_CHECK") == "1") {
             yield return VoluntaryObservationChecks();

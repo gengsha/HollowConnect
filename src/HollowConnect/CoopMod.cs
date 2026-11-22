@@ -18,6 +18,7 @@ public sealed class Settings {
     public bool ColoredPlayerNames = true;
     public bool BossHealthScaling = false;
     public bool BossDamageRanking = false;
+    public bool TeammateStatus = false;
     public int BossTargetingMode = 0;
     public float BossExtraHealthPerPlayer = .6f;
     public bool Rescue = true;
@@ -29,7 +30,6 @@ public sealed class Settings {
     public bool VoluntaryObservation = false;
     public KeyCode ObserveKey = KeyCode.F4;
     public KeyCode SelectTeammateKey = KeyCode.F7;
-    public KeyCode TeleportKey = KeyCode.F8;
     public KeyCode GiveUpKey = KeyCode.F6;
     public KeyCode DeathLeaderboardKey = KeyCode.F5;
 }
@@ -38,10 +38,10 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
     public static DeathStatistics Statistics = new DeathStatistics();
-    public const string Version = "0.3.1";
+    public const string Version = "0.3.2-rc3";
     // HKMP truncates addon versions to ten characters. Keep the wire revision
     // inside that limit, including candidate builds with a longer display name.
-    public const string NetworkVersion = "0.3.1-l15";
+    public const string NetworkVersion = "0.3.2-rc3";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override List<(string, string)> GetPreloadNames() => new List<(string, string)> {
@@ -76,6 +76,9 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
         new IMenuMod.MenuEntry("队友名字配色（本机）", new[]{"关闭", "开启"}, "默认开启。队友头顶名字与地图/方位颜色一致，自己保持白色；关闭后名字为白色。仅影响本机，立即生效。", i=>{ Settings.ColoredPlayerNames=i==1; Hkmp.CoopContext.RefreshPlayerVisuals(); }, ()=>Settings.ColoredPlayerNames?1:0),
         new IMenuMod.MenuEntry("动态 Boss 血量（房主）", new[]{"关闭", "开启"}, "默认关闭，房主开房前设置。使用下方增血参数 p，N 人等效血量为 1+p+p²+…+p^(N-1)，最高十倍；60% 时两人160%、三人196%。队友设置不影响房间。", i=>Settings.BossHealthScaling=i==1, ()=>Settings.BossHealthScaling?1:0),
         new IMenuMod.MenuEntry(BossHealthParameterRow.OptionName, new[]{BossHealthParameterRow.Format(Settings.BossExtraHealthPerPlayer)}, "输入百分比，默认60，范围0–400。60 表示 p=0.6；80 时两人180%、三人244%。回车确认，开房前设置。", _=>{}, ()=>0),
+        new IMenuMod.MenuEntry(TeammateStatusOptionName, new[]{"关闭", "开启"}, "默认关闭。显示名字、到房间服务器的延迟和当前面具。共享血量开启时此项停用。", i => {
+            if (!TeammateStatusLocked) Settings.TeammateStatus = i == 1;
+        }, () => !TeammateStatusLocked && Settings.TeammateStatus ? 1 : 0),
         new IMenuMod.MenuEntry("Boss 伤害占比榜（房主）", new[]{"关闭", "开启"}, "默认关闭。实时显示本场 Boss 伤害占比；神居一至五门整门累计，最后结算。由房主开房前决定，F1 隐藏或显示本机榜单，隐藏时继续统计。", i=>Settings.BossDamageRanking=i==1, ()=>Settings.BossDamageRanking?1:0),
         new IMenuMod.MenuEntry("Boss 索敌模式（房主）", new[]{"原版", "灵活"}, "默认原版。灵活模式优先选择同房存活玩家中最近的一人；至少锁定 4 秒，只在空闲或追逐的决策边界换人，新目标须近 25%。攻击生成物继承目标，目标倒地或离房时立即重选。由房主统一设置。", i=>Settings.BossTargetingMode=i==1?1:0, ()=>Settings.BossTargetingMode==1?1:0),
         new IMenuMod.MenuEntry("暗影救援（房主）", new[]{"关闭", "开启"}, "击破暗影后一血复活，救人者获得 33 点灵魂；按 " + Settings.GiveUpKey + " 放弃。Boss房内无人能继续战斗时，本场失败，不等待赶路队友。开房前设置。", i=>Settings.Rescue=i==1, ()=>Settings.Rescue?1:0),

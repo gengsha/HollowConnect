@@ -75,12 +75,8 @@ public sealed partial class RescueProbe {
                 Flag("hornet-entry.approach");
                 yield return Until(() => Has("hornet-entry.intro"), "authority has started native intro dialogue");
                 if (warp) {
-                    var pressed = false;
-                    var keys = runtime.KeyPressed;
-                    try {
-                        runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-                        yield return Until(() => GameManager.instance.IsInSceneTransition, "guest F8 starts actual network warp", 15);
-                    } finally { runtime.KeyPressed = keys; }
+                    runtime.RequestTeammateWarp("");
+                    yield return Until(() => GameManager.instance.IsInSceneTransition, "guest /tp starts actual network warp", 15);
                 } else {
                     using (new MonoMod.RuntimeDetour.Hook(typeof(HeroController).GetMethod("LookForInput", BindingFlags.Instance | BindingFlags.NonPublic),
                         new Action<Action<HeroController>, HeroController>((orig, self) => { orig(self); if (self.acceptingInput) self.move_input = -1; })))

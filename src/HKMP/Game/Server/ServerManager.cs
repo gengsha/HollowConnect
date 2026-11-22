@@ -517,6 +517,7 @@ internal abstract class ServerManager : IServerManager {
                     playerData.Scale,
                     playerData.Team,
                     playerData.SkinId,
+                    playerData.CustomSkinId,
                     playerData.AnimationId,
                     playerData.SceneVisit
                 );
@@ -535,6 +536,7 @@ internal abstract class ServerManager : IServerManager {
                     Scale = otherPlayerData.Scale,
                     Team = otherPlayerData.Team,
                     SkinId = otherPlayerData.SkinId,
+                    CustomSkinId = otherPlayerData.CustomSkinId,
                     AnimationClipId = otherPlayerData.AnimationId
                 });
             }
@@ -1470,6 +1472,13 @@ internal abstract class ServerManager : IServerManager {
     /// <param name="reason">The reason if the skin could not be updated, otherwise null.</param>
     /// <returns>True if the player's team was updated, false otherwise.</returns>
     public bool TryUpdatePlayerSkin(ushort id, byte skinId, out string reason) {
+        return TryUpdatePlayerSkin(id, skinId, "", out reason);
+    }
+
+    /// <summary>
+    /// Try to update both the numeric HKMP skin and the Custom Knight skin for a player.
+    /// </summary>
+    public bool TryUpdatePlayerSkin(ushort id, byte skinId, string customSkinId, out string reason) {
         if (!_playerData.TryGetValue(id, out var playerData)) {
             Logger.Warn($"Received PlayerSkinUpdate data, but player with ID {id} is not in mapping");
             
@@ -1477,7 +1486,13 @@ internal abstract class ServerManager : IServerManager {
             return false;
         }
         
-        Logger.Info($"Received PlayerSkinUpdate data from ({id}, {playerData.Username}) for skin ID: {skinId}");
+        customSkinId ??= "";
+        if (customSkinId.Length > 128) {
+            reason = "Custom Knight skin ID is too long";
+            return false;
+        }
+
+        Logger.Info($"Received PlayerSkinUpdate data from ({id}, {playerData.Username}) for skin ID: {skinId}, custom skin: '{customSkinId}'");
         
         if (!ServerSettings.AllowSkins) {
             Logger.Info("  Skins are not allowed, won't update skin");
@@ -1486,7 +1501,7 @@ internal abstract class ServerManager : IServerManager {
             return false;
         }
 
-        if (playerData.SkinId == skinId) {
+        if (playerData.SkinId == skinId && string.Equals(playerData.CustomSkinId, customSkinId, StringComparison.Ordinal)) {
             Logger.Info("  Skins is the same as current, won't update skin");
             
             reason = "Skin is already in use";
@@ -1495,12 +1510,16 @@ internal abstract class ServerManager : IServerManager {
 
         // Update the skin ID in the player data
         playerData.SkinId = skinId;
+        playerData.CustomSkinId = customSkinId;
         
         foreach (var idPlayerDataPair in _playerData) {
             var otherId = idPlayerDataPair.Key;
             
             if (otherId == id) {
-                _netServer.GetUpdateManagerForClient(id)?.AddPlayerSettingUpdateData(skinId: skinId);
+                _netServer.GetUpdateManagerForClient(id)?.AddPlayerSettingUpdateData(
+                    skinId: skinId,
+                    customSkinId: customSkinId
+                );
                 continue;
             }
             
@@ -1511,7 +1530,11 @@ internal abstract class ServerManager : IServerManager {
                 continue;
             }
             
-            _netServer.GetUpdateManagerForClient(otherId)?.AddOtherPlayerSettingUpdateData(id, skinId: skinId);
+            _netServer.GetUpdateManagerForClient(otherId)?.AddOtherPlayerSettingUpdateData(
+                id,
+                skinId: skinId,
+                customSkinId: customSkinId
+            );
         }
         
         reason = null;
@@ -1839,7 +1862,7 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (playerSettingUpdate.UpdateTypes.Contains(PlayerSettingUpdateType.Skin)) {
-            if (TryUpdatePlayerSkin(id, playerSettingUpdate.SkinId, out var reason)) {
+            if (TryUpdatePlayerSkin(id, playerSettingUpdate.SkinId, playerSettingUpdate.CustomSkinId, out var reason)) {
                 SendMessage(id, $"Skin ID changed to '{playerSettingUpdate.SkinId}'");
             } else {
                 SendMessage(id, reason);

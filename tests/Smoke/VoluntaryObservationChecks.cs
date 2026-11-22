@@ -11,6 +11,36 @@ namespace HollowConnect.Smoke;
 
 public sealed partial class RescueProbe {
     private Vector3 observationFixtureAnchor;
+    private IEnumerator GiveUpShortcutChecks() {
+        using var externalDamage = IgnoreExternalCombatDamage();
+        Check(!runtime.LinkedHealthRuleEnabled, "individual health for F6");
+        var peer = host ? "guest" : "host";
+        const string arena = "Crossroads_01";
+        foreach (var actor in new[] { "guest", "host" }) {
+            if (GameManager.instance.sceneName != arena) yield return RuleEnter(arena);
+            Freeze();
+            var round = Hkmp.CoopContext.Epoch;
+            var step = "f6-" + actor;
+            Flag(role + "." + step + "-ready");
+            yield return Until(() => Has(peer + "." + step + "-ready") && runtime.Peers.Values.SingleOrDefault()?.State?.Scene == arena,
+                "both in arena before " + actor + " F6");
+            if (role == actor) {
+                Die();
+                yield return Until(() => runtime.Down, actor + " native death intercepted for rescue");
+                yield return ObservationKey(KeyCode.F6);
+                yield return RuleArrived(actor + " F6");
+                Check(runtime.Connected && Hkmp.CoopContext.Epoch == round, actor + " F6 keeps the room and round");
+                yield return RuleBenchUp();
+                Flag(step + "-returned");
+            } else {
+                yield return Until(() => Has(step + "-returned"), actor + " finished return", 70);
+                Check(runtime.Connected && !runtime.Down && !runtime.Resetting && GameManager.instance.sceneName == arena &&
+                    Hkmp.CoopContext.Epoch == round, role + " remains alive in the original room");
+                Flag(step + "-survivor");
+            }
+            yield return Until(() => Has(step + "-survivor"), "survivor verified before the next step");
+        }
+    }
     private IEnumerator ObservationKey(KeyCode key) {
         var previous = runtime.KeyPressed;
         var pressed = false;
@@ -29,12 +59,13 @@ public sealed partial class RescueProbe {
     }
     private IEnumerator ObservationStand() {
         var hero = HeroController.instance;
-        hero.transform.position = StoryFloor(new Vector3(host ? 20 : 25, 25, 0), "Crossroads_01");
+        hero.transform.position = StoryFloor(new Vector3(host ? 20 : 25, 12, 0), "Crossroads_01");
         hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         hero.AffectedByGravity(true); Physics2D.SyncTransforms();
-        yield return Until(() => hero.cState.onGround && hero.acceptingInput && !hero.controlReqlinquished &&
-            GameCameras.instance.cameraController.mode != CameraController.CameraMode.FROZEN,
-            "observation fixture native ground and camera ready");
+        // The old onGround flag can still reflect the previous position.
+        yield return new WaitForSecondsRealtime(.3f);
+        var canStart = typeof(CoopRuntime).GetMethod("CanStartObservation", BindingFlags.Instance | BindingFlags.NonPublic);
+        yield return Until(() => (bool)canStart.Invoke(runtime, null), "observation fixture native ground, camera and input ready");
         hero.SetHazardRespawn(hero.transform.position, true);
     }
 

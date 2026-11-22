@@ -38,6 +38,11 @@ internal class ClientPlayerEnterScene : GenericClientData {
     public byte SkinId { get; set; }
 
     /// <summary>
+    /// The Custom Knight skin directory ID of the player, or an empty string for the default skin.
+    /// </summary>
+    public string CustomSkinId { get; set; } = "";
+
+    /// <summary>
     /// The ID of the animation clip of the player.
     /// </summary>
     public ushort AnimationClipId { get; set; }
@@ -60,6 +65,7 @@ internal class ClientPlayerEnterScene : GenericClientData {
         packet.Write(Scale);
         packet.Write((byte) Team);
         packet.Write(SkinId);
+        packet.Write(CustomSkinId);
 
         packet.Write(AnimationClipId);
     }
@@ -74,6 +80,7 @@ internal class ClientPlayerEnterScene : GenericClientData {
         Scale = packet.ReadBool();
         Team = (Team) packet.ReadByte();
         SkinId = packet.ReadByte();
+        CustomSkinId = packet.ReadString(128);
         AnimationClipId = packet.ReadUShort();
     }
 }

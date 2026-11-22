@@ -47,7 +47,11 @@ public sealed partial class ProgressProbe : MonoBehaviour {
     private Hkmp.Game.GameManager engine;
     private static T Field<T>(object o, string name) => (T)o.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(o);
     private void Mark(string s) => File.AppendAllText(Path.Combine(root, role + ".log"), DateTime.UtcNow.ToString("O") + " " + s + "\n");
-    private void Flag(string s) => File.WriteAllText(Path.Combine(root, s), "ready");
+    private void Flag(string s) {
+        // Runners may stop both clients as soon as the terminal marker appears.
+        if (s == role + ".done" || s == role + ".failed") GetComponent<RouteFrameRecorder>()?.Finish();
+        File.WriteAllText(Path.Combine(root, s), "ready");
+    }
     private bool Has(string s) => File.Exists(Path.Combine(root, s));
     private IEnumerator Until(Func<bool> ready, string name, float seconds = 45) {
         var deadline = Time.realtimeSinceStartup + seconds;
@@ -241,7 +245,7 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         if (EmergencyBenchCase) yield return EmergencyMenuShortcut();
         Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings").AuthKey = Hkmp.Util.AuthUtil.GenerateAuthKey();
         Hkmp.Logging.Logger.AddLogger(new FileLogger(Path.Combine(root, role + "-engine.log")));
-        if (KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase || GrimmFlameCase || ColosseumProgressCase)
+        if (SkinCompatibilityCase || KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || DefenderCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase || GrimmFlameCase || ColosseumProgressCase)
             On.GameManager.EnterHero += (orig, gm, additive) => {
                 var gates = Object.FindObjectsOfType<TransitionPoint>();
                 if (MapExitCase && gm.sceneName == "Crossroads_33") {
@@ -256,6 +260,11 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 orig(gm, additive);
             };
         CoopMod.Settings.ShareProgress = !ProgressAuditDisabled; CoopMod.Settings.EntryProtection = false;
+        if (ShortcutCase) {
+            CoopMod.Settings.BossDamageRanking = host;
+            CoopMod.Settings.SelectTeammateKey = KeyCode.F7;
+        }
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_SHADE_ENTRY_ORDER") != null) CoopMod.Settings.BossDamageRanking = true;
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE") == "mawlek") {
             CoopMod.Settings.LinkedHealth = Environment.GetEnvironmentVariable("HOLLOWCONNECT_BOSS_RESOURCE_LINKED") == "1";
             CoopMod.Settings.ShareCharms = true;
@@ -277,20 +286,26 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             if (Has(role + ".failed")) yield break;
         } else {
         var pd = PlayerData.instance; pd.SetString("respawnScene", "Town"); pd.SetString("respawnMarkerName", "RestBench"); pd.SetInt("respawnType", 1); pd.SetInt("geo", 500);
+        // Skin tests start on the ground. The fixture does not exercise a bench
+        // load, and Custom Knight's first-load UI can overlap the bench intro.
+        if (SkinCompatibilityCase || ShortcutCase) {
+            pd.SetInt("respawnType", 0);
+            // The hidden client is driven by the probe. Ignore physical menu
+            // navigation so a shared controller cannot activate Quit during loading.
+            if (UnityEngine.EventSystems.EventSystem.current is { } events) {
+                events.SetSelectedGameObject(null);
+                events.sendNavigationEvents = false;
+            }
+        }
         GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
-        if ((SkinCompatibilityCase || LinkedHealthCase || KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
+        if ((LinkedHealthCase || KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
             var bench = Object.FindObjectsOfType<PlayMakerFSM>().Single(f => f.name == "RestBench" && f.FsmName == "Bench Control");
             yield return Until(() => bench.ActiveStateName == "Resting", "initial native bench ready");
             bench.Fsm.Event(bench.Fsm.ActiveState.Actions.OfType<HutongGames.PlayMaker.Actions.ListenForJump>().Single().wasPressed);
             yield return Until(() => !pd.GetBool("atBench") && HeroController.instance.acceptingInput &&
                 !HeroController.instance.GetComponent<Rigidbody2D>().isKinematic, "initial native bench get-up complete");
-        }
-        if (SkinCompatibilityCase) {
-            pd.SetBool("openedTown", true); pd.SetBool("openedCrossroads", true); pd.SetBool("metStag", true);
-            pd.SetInt("stagPosition", 0);
-            yield return PrepareCompatibilitySkin();
         }
         if (StagNestCase) {
             pd.SetBool("openedStagNest", host);
@@ -322,6 +337,11 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             }
         }
         HeroController.instance.RegainControl(); HeroController.instance.StartAnimationControl(); Freeze();
+        if (SkinCompatibilityCase) {
+            pd.SetBool("openedTown", true); pd.SetBool("openedCrossroads", true); pd.SetBool("metStag", true);
+            pd.SetInt("stagPosition", 0);
+            yield return PrepareCompatibilitySkin();
+        }
         if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_REST") == "on") {
             foreach (var id in new[] { 1, 8, 29 }) { pd.SetBool("equippedCharm_" + id, true); pd.EquipCharm(id); }
             pd.CalculateNotchesUsed(); pd.overcharmed = true; HeroController.instance.CharmUpdate();
@@ -410,6 +430,19 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             if (Has(role + ".failed")) yield break;
             yield return ProbeShutdown.Run(engine, root, role);
             Mark("FINAL PASS skin compatibility " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_SKIN_CASE")); Flag(role + ".done"); yield break;
+        }
+        if (ShortcutCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(ShortcutChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (Has(role + ".failed")) yield break;
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS shortcut menus and teammate selection"); Flag(role + ".done"); yield break;
         }
         if (LinkedHealthCase) {
             var checks = new Stack<IEnumerator>(); checks.Push(LinkedHealthChecks());

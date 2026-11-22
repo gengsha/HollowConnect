@@ -131,7 +131,8 @@ public sealed partial class ProgressProbe {
         pd.SetInt("ore", 2); pd.SetString("shadeScene", "Crossroads_04"); pd.SetInt("geoPool", 37);
         yield return new WaitForSecondsRealtime(1);
         yield return EmergencyBarrier("fixtures");
-        foreach (var actor in new[] { "host", "guest" }) {
+        var singleActor = Environment.GetEnvironmentVariable("HOLLOWCONNECT_EMERGENCY_ROLE");
+        foreach (var actor in singleActor == null ? new[] { "host", "guest" } : new[] { singleActor }) {
             if (role == actor) {
                 var gm = GameManager.instance;
                 var hero = HeroController.instance;
@@ -145,11 +146,13 @@ public sealed partial class ProgressProbe {
             } else {
                 yield return Until(() => Has(actor + ".emergency-actor-done"), actor + " emergency completes independently", 75);
                 if (Has(role + ".failed")) throw new Exception("peer recovery failed");
-                if (actor == "host") EmergencyRequire(runtime.Connected && Scenes.GetActiveScene().name == "Crossroads_01",
-                    "host shortcut leaves guest in their room and session");
+                if (actor == "host" || singleActor != null) EmergencyRequire(runtime.Connected && Scenes.GetActiveScene().name == "Crossroads_01",
+                    actor + " shortcut leaves " + role + " in their room and session (connected=" + runtime.Connected +
+                    ", scene=" + Scenes.GetActiveScene().name + ")");
             }
             yield return EmergencyBarrier(actor + "-done");
         }
+        if (singleActor != null) yield break;
 
         // Native loading has already started when the key is pressed. A second
         // load must wait for it rather than discarding Unity's AsyncOperation.

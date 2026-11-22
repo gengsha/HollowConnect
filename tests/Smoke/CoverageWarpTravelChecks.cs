@@ -125,12 +125,10 @@ public sealed partial class CoverageProbe {
             hero.RelinquishControl();
             Presence();
             Assert(lastPresence != null && !lastPresence.IsReady, "relinquished hero advertises IsReady=false");
-            var pressed = false;
-            runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-            yield return Wait(() => pressed, "F8 evaluated during native relinquishment");
-            runtime.KeyPressed = _ => false;
+            var rejected = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Peers.Keys.Single());
+            Assert(rejected, "/tp rejects native relinquishment through the chat command path");
             Assert(outgoingRequests == requestsBefore && Field<uint>(runtime, "warpSerial") == serialBefore,
-                "relinquished local F8 does not send or consume request serial");
+                "relinquished local /tp does not send or consume request serial");
             hero.RegainControl(); Presence();
             yield return Wait(CanWarp, "native regain restores local eligibility");
             yield return Together("regained");
@@ -159,10 +157,8 @@ public sealed partial class CoverageProbe {
                     runtime.Selected = runtime.Peers.Keys.Single();
                     handled = Field<uint>(runtime, "handledWarp");
                     requestsBefore = outgoingRequests;
-                    pressed = false;
-                    runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-                    yield return Wait(() => pressed && outgoingRequests > requestsBefore, "negative F8 request sent over UDP " + role);
-                    runtime.KeyPressed = _ => false;
+                    Assert(TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected), "negative /tp command is consumed locally " + role);
+                    yield return Wait(() => outgoingRequests > requestsBefore, "negative /tp request sent over UDP " + role);
                     yield return Wait(() => Has(ServerFlag(stage + "-rejected")), "server observed and rejected negative request " + role);
                     yield return new WaitForSecondsRealtime(.3f);
                     Assert(Field<uint>(runtime, "handledWarp") == handled && !Field<bool>(runtime, "changingScene"),
@@ -222,12 +218,10 @@ public sealed partial class CoverageProbe {
                     hero.transform.position += new Vector3(0, 6, 0);
                     Physics2D.SyncTransforms();
                     var start = hero.transform.position;
-                    pressed = false;
-                    runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-                    yield return Wait(() => pressed && Field<uint>(runtime, "handledWarp") > handled, "regained F8 accepted over real UDP " + actor);
-                    runtime.KeyPressed = _ => false;
-                    yield return Wait(() => !Field<bool>(runtime, "changingScene"), "regained F8 completes " + actor);
-                    Assert(Vector2.Distance(start, hero.transform.position) > 2 && CanWarp(), "regained F8 relocates and leaves control eligible " + actor);
+                    Assert(TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected), "positive /tp command is consumed locally " + actor);
+                    yield return Wait(() => Field<uint>(runtime, "handledWarp") > handled, "regained /tp accepted over real UDP " + actor);
+                    yield return Wait(() => !Field<bool>(runtime, "changingScene"), "regained /tp completes " + actor);
+                    Assert(Vector2.Distance(start, hero.transform.position) > 2 && CanWarp(), "regained /tp relocates and leaves control eligible " + actor);
                 }
                 yield return Together("udp-" + actor + "-complete");
             }

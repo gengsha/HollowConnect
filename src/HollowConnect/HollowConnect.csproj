@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect</AssemblyName><Version>0.3.1</Version></PropertyGroup>
+  <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect</AssemblyName><Version>0.3.2-rc3</Version></PropertyGroup>
   <ItemGroup>
     <Reference Include="UnityEngine.UI"><HintPath>$(HollowReferences)/UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.UIModule"><HintPath>$(HollowReferences)/UnityEngine.UIModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.AudioModule"><HintPath>$(HollowReferences)/UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MonoMod.RuntimeDetour"><HintPath>$(HollowReferences)/MonoMod.RuntimeDetour.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MMHOOK_PlayMaker"><HintPath>$(HollowReferences)/MMHOOK_PlayMaker.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp-firstpass"><HintPath>$(HollowReferences)/Assembly-CSharp-firstpass.dll</HintPath><Private>false</Private></Reference>
     <InternalsVisibleTo Include="HollowConnect.Smoke" />
     <ProjectReference Include="../HKMP/HKMP.csproj" />
     <ProjectReference Include="../HollowConnect.Core/HollowConnect.Core.csproj" />

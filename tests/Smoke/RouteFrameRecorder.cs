@@ -53,6 +53,7 @@ public sealed class RouteFrameRecorder : MonoBehaviour {
         nextCheck = Time.realtimeSinceStartup + 1;
         if (File.Exists(Path.Combine(root, role + ".done")) || File.Exists(Path.Combine(root, role + ".failed"))) Finish();
     }
+    private void OnApplicationQuit() => Finish();
     internal void Finish() {
         if (finished) return; finished = true;
         var results = windows.Where(w => w.frames.Count > 0).Select(w => {
@@ -64,10 +65,16 @@ public sealed class RouteFrameRecorder : MonoBehaviour {
                 over16ms = sorted.Count(v => v > 16.667), over33ms = sorted.Count(v => v > 33.333),
                 over50ms = sorted.Count(v => v > 50), collections = w.frames.Sum(f => f.gc), w.frames };
         }).ToArray();
-        File.WriteAllText(Path.Combine(root, role + ".route-frames.json"), JsonConvert.SerializeObject(new {
+        var path = Path.Combine(root, role + ".route-frames.json");
+        // A visible trace file is complete, even if a runner is polling it.
+        File.WriteAllText(path + ".tmp", JsonConvert.SerializeObject(new {
             targetFps = Application.targetFrameRate, vSync = QualitySettings.vSyncCount,
-            rendered = Environment.GetEnvironmentVariable("HOLLOWCONNECT_RENDERED_TEST") == "1",
-            environment = "same machine, two isolated clients, 800x600", windows = results
+            rendered = !Application.isBatchMode, unity = Application.unityVersion,
+            resolution = $"{Screen.width}x{Screen.height}",
+            mode = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_MODE"),
+            roles = Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLES"),
+            windows = results
         }));
+        File.Move(path + ".tmp", path);
     }
 }

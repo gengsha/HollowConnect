@@ -55,7 +55,7 @@ public sealed partial class ProgressProbe {
                 yield return DreamWarriorBattle(scene);
                 if (Has(role + ".failed")) yield break;
             }
-            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARRIOR_EXIT") == "f8") yield return WarriorF8Exit();
+            if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARRIOR_EXIT") == "tp") yield return WarriorTeleportExit();
             if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_WARRIOR_EXIT") == "native") yield return WarriorNativeExit();
             yield break;
         }
@@ -69,24 +69,23 @@ public sealed partial class ProgressProbe {
         }
     }
 
-    private IEnumerator WarriorF8Exit() {
+    private IEnumerator WarriorTeleportExit() {
         if (host) {
             Enter("Town");
-            yield return Until(() => AliveScene("Town"), "F8 target leaves completed warrior room");
+            yield return Until(() => AliveScene("Town"), "/tp target leaves completed warrior room");
             HeroController.instance.AffectedByGravity(true);
-            yield return Until(() => HeroController.instance.cState.onGround, "F8 target has native ground support");
+            yield return Until(() => HeroController.instance.cState.onGround, "/tp target has native ground support");
             Flag("warrior.f8-target");
         } else {
             yield return Until(() => Has("warrior.f8-target") && runtime.Peers.Values.Any(p => p.State?.Scene == "Town" && p.State.IsReady), "completed warrior guest sees ready Town target");
             runtime.Selected = runtime.Peers.Keys.Single();
-            var pressed = false;
-            runtime.KeyPressed = key => key == HollowConnect.CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-            yield return Until(() => pressed && AliveScene("Town") && !runtime.Returning && !runtime.Down, "F8 leaves completed warrior additive room");
-            runtime.KeyPressed = _ => false;
+            if (!TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected))
+                throw new Exception("Gorb exit /tp command was not handled locally");
+            yield return Until(() => AliveScene("Town") && !runtime.Returning && !runtime.Down, "/tp leaves completed warrior additive room");
         }
-        yield return Until(() => !UnityEngine.SceneManagement.SceneManager.GetSceneByName("Cliffs_02_boss").isLoaded, "F8 path cleans up Gorb additive scene");
+        yield return Until(() => !UnityEngine.SceneManagement.SceneManager.GetSceneByName("Cliffs_02_boss").isLoaded, "/tp path cleans up Gorb additive scene");
         Flag(role + ".warrior-exit");
-        yield return Until(() => Has((host ? "guest" : "host") + ".warrior-exit"), "both completed warrior F8 exit");
+        yield return Until(() => Has((host ? "guest" : "host") + ".warrior-exit"), "both completed warrior /tp exit");
     }
 
     private IEnumerator WarriorNativeExit() {

@@ -40,6 +40,8 @@ internal class ModSettings {
     /// </summary>
     public bool DisplayPing { get; set; }
 
+    public string AtlasSkinId { get; set; } = "";
+
     /// <summary>
     /// Set of addon names for addons that are disabled by the user.
     /// </summary>

@@ -161,6 +161,7 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
     /// <param name="scale">The scale of the player.</param>
     /// <param name="team">The team of the player.</param>
     /// <param name="skinId">The ID of the skin of the player.</param>
+    /// <param name="customSkinId">The Custom Knight skin directory ID of the player.</param>
     /// <param name="animationClipId">The ID of the animation clip of the player.</param>
     /// <param name="playerVisit">The entrant's source room visit.</param>
     public void AddPlayerEnterSceneData(
@@ -170,6 +171,7 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
         bool scale,
         Team team,
         byte skinId,
+        string customSkinId,
         ushort animationClipId,
         uint playerVisit
     ) {
@@ -184,6 +186,7 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
             playerEnterScene.Scale = scale;
             playerEnterScene.Team = team;
             playerEnterScene.SkinId = skinId;
+            playerEnterScene.CustomSkinId = customSkinId ?? "";
             playerEnterScene.AnimationClipId = animationClipId;
         }
     }
@@ -526,8 +529,9 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
     /// </param>
     /// <param name="skinId">An optional byte for the ID of the skin, if the player's skin changed, or null if no skin
     /// ID was supplied.</param>
-    public void AddPlayerSettingUpdateData(Team? team = null, byte? skinId = null) {
-        if (!team.HasValue && !skinId.HasValue) {
+    /// <param name="customSkinId">An optional Custom Knight skin directory ID.</param>
+    public void AddPlayerSettingUpdateData(Team? team = null, byte? skinId = null, string customSkinId = null) {
+        if (!team.HasValue && !skinId.HasValue && customSkinId == null) {
             return;
         }
         
@@ -545,9 +549,10 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
                 playerSettingUpdate.Team = team.Value;
             }
 
-            if (skinId.HasValue) {
+            if (skinId.HasValue || customSkinId != null) {
                 playerSettingUpdate.UpdateTypes.Add(PlayerSettingUpdateType.Skin);
-                playerSettingUpdate.SkinId = skinId.Value;
+                playerSettingUpdate.SkinId = skinId ?? 0;
+                playerSettingUpdate.CustomSkinId = customSkinId ?? "";
             }
         }
     }
@@ -560,7 +565,8 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
     /// </param>
     /// <param name="skinId">An optional byte for the ID of the skin, if the player's skin changed, or null if no such
     /// ID was supplied.</param>
-    public void AddOtherPlayerSettingUpdateData(ushort id, Team? team = null, byte? skinId = null) {
+    /// <param name="customSkinId">An optional Custom Knight skin directory ID.</param>
+    public void AddOtherPlayerSettingUpdateData(ushort id, Team? team = null, byte? skinId = null, string customSkinId = null) {
         lock (Lock) {
             var playerSettingUpdate = FindOrCreatePacketData(
                 ClientUpdatePacketId.PlayerSetting,
@@ -575,9 +581,10 @@ internal class ServerUpdateManager : UdpUpdateManager<ClientUpdatePacket, Client
                 playerSettingUpdate.Team = team.Value;
             }
 
-            if (skinId.HasValue) {
+            if (skinId.HasValue || customSkinId != null) {
                 playerSettingUpdate.UpdateTypes.Add(PlayerSettingUpdateType.Skin);
-                playerSettingUpdate.SkinId = skinId.Value;
+                playerSettingUpdate.SkinId = skinId ?? 0;
+                playerSettingUpdate.CustomSkinId = customSkinId ?? "";
             }
         }
     }

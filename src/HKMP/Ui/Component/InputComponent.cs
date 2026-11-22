@@ -89,7 +89,8 @@ internal class InputComponent : Component, IInputComponent {
         int fontSize,
         int characterLimit = 0,
         InputField.CharacterValidation characterValidation = InputField.CharacterValidation.None,
-        InputField.OnValidateInput onValidateInput = null
+        InputField.OnValidateInput onValidateInput = null,
+        Func<GameObject, InputField> createInputField = null
     ) : base(componentGroup, position, size) {
         _bgSprite = bgSprite;
 
@@ -129,7 +130,7 @@ internal class InputComponent : Component, IInputComponent {
         Object.DontDestroyOnLoad(textObject);
 
         // Create the actual inputField component
-        InputField = GameObject.AddComponent<InputField>();
+        InputField = createInputField?.Invoke(GameObject) ?? GameObject.AddComponent<InputField>();
         InputField.targetGraphic = Image;
         InputField.placeholder = placeholderTextComponent;
         InputField.textComponent = Text;

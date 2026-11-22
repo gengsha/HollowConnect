@@ -56,7 +56,7 @@
 
 战士之梦测试的内存角色预先具备梦之钉和灯笼；无眼的原生 NPC 在没有灯笼时会自行停用，不能将缺少挑战资格的运行记为同步失败。
 
-`godhome` 的主动观察器故障注入需显式设置 `HOLLOWCONNECT_GODHOME_FAULT_ASSERTIONS=1`，故障日志仍须被严格日志门槛拒绝，不能与普通通过的运行合并。F8 夹具先等待本机原生入场允许操作，再发送一次按键；不会修改生产输入门槛。
+`godhome` 的主动观察器故障注入需显式设置 `HOLLOWCONNECT_GODHOME_FAULT_ASSERTIONS=1`，故障日志仍须被严格日志门槛拒绝，不能与普通通过的运行合并。传送夹具先等待本机原生入场允许操作，再经 HKMP 客户端命令管理器发送 `/tp "队友名"`；不会修改生产输入门槛。
 
 末步“传送已接受后断线”同样等待生产 `CanStartWarp`，保留一次按键、原 45 秒超时和断线到达断言。诊断记录传送资格、发出/已处理序号和本地提示；0.1.17 首次末步超时缺少相应轨迹，追踪和补前置后通过不能唯一解释旧失败。该失败单独保留，不因重跑通过自动关闭。
 
@@ -134,7 +134,7 @@
 
 Coverage 还要求大黄蜂的原生 Needle 在副本上有至少三个位置匹配且渲染/碰撞/伤害组件有效的样本；纯粹容器至少三个横斩或冲刺子判定启用且位置匹配样本。`HOLLOWCONNECT_NATIVE_CONTACT_ASSERTIONS=1` 另在纯粹容器房等待原生横斩/冲刺，将角色置入其有效碰撞判定，要求两端实际扣血且伤害来源是 Slash1/2/3 或 Dash Stab。不会强迫 Boss FSM 或直接调用 TakeDamage；这仍不代表全部招式的伤害验收。
 
-0.1.7 的 godhome 探针另覆盖：带血量 Boss 的 FSM 改名与歧义拒绝、脱离父体的注册子体、同名/不可见子体及特殊字符路径引用、倒地期间延后结算，以及同房 F8 修复错误序号和束缚。日志记录器支持网络线程并发，异常与超过五分钟会明确生成 .failed，不能把没有终态的探针算作通过。
+0.1.7 的 godhome 探针另覆盖：带血量 Boss 的 FSM 改名与歧义拒绝、脱离父体的注册子体、同名/不可见子体及特殊字符路径引用、倒地期间延后结算，以及同房 `/tp` 修复错误序号和束缚。日志记录器支持网络线程并发，异常与超过五分钟会明确生成 .failed，不能把没有终态的探针算作通过。
 
 构建：`dotnet build tests/Smoke/HollowConnect.Smoke.csproj -c Release`。先按根目录 Build.ps1 准备本机游戏引用。
 
@@ -142,12 +142,12 @@ Coverage 还要求大黄蜂的原生 Needle 在副本上有至少三个位置匹
 `HOLLOWCONNECT_COVERAGE_SCENES=GG_Radiance`、`HOLLOWCONNECT_COVERAGE_SECONDS=2`、
 `HOLLOWCONNECT_RADIANCE_WARP_ASSERTIONS=1`、`HOLLOWCONNECT_RADIANCE_PHASE_ASSERTIONS=1`，
 分别设置 `HOLLOWCONNECT_COVERAGE_AUTHORITY=host` 和 `guest`，每次用全新 RunName 调用 `Run-Two.ps1 -NoBuild`。
-专项包含原生入场、两端 F8 初始地面落点、正常 Hit 推进阶段、真实深渊碰撞复位、平台支撑、5 秒生命稳定、从 Town 跨房迟入后 28 秒镜头/控制与 Boss 阶段保持。单独 coverage 采样不包含这些验收。
+专项包含原生入场、两端 `/tp` 初始地面落点、正常 Hit 推进阶段、真实深渊碰撞复位、平台支撑、5 秒生命稳定、从 Town 跨房迟入后 28 秒镜头/控制与 Boss 阶段保持。单独 coverage 采样不包含这些验收。
 结束后停止对应隔离进程并运行 `Assert-ProbeLogs.ps1 -RunPath <本轮目录> -RequireRuntimeFiles`。
 
 辐光完整平台／爬升迟入矩阵：`tests/Smoke/Run-Radiance-Arena-Suite.ps1 -Prefix <全新前缀>`。
-0.1.24 起默认显式调用实际 D3D 游戏镜头渲染，渲染后按原版数量核对平台显示与碰撞，并逐平台检查重力支撑；纯批处理未渲染的旧通过记录不足以覆盖 Unity 可见回调。增加 `-ArrivalStage before-challenge` 运行普通辐光宣战前四组（F8／原生入口 × 双方先入）；默认六组继续覆盖二阶段与爬升。相关复查见 [渲染回调审计](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/RADIANCE-RENDER-CALLBACK-AUDIT-2026-10-18.md)。
-一次构建后运行雕像、五门、普通辐光 × F8／原生入口六组，交换先入者，其中一组注入并验收丢包／乱序／重复。
+0.1.24 起默认显式调用实际 D3D 游戏镜头渲染，渲染后按原版数量核对平台显示与碰撞，并逐平台检查重力支撑；纯批处理未渲染的旧通过记录不足以覆盖 Unity 可见回调。增加 `-ArrivalStage before-challenge` 运行普通辐光宣战前四组（`/tp`／原生入口 × 双方先入）；默认六组继续覆盖二阶段与爬升。相关复查见 [渲染回调审计](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/RADIANCE-RENDER-CALLBACK-AUDIT-2026-10-18.md)。
+一次构建后运行雕像、五门、普通辐光 × `/tp`／原生入口六组，交换先入者，其中一组注入并验收丢包／乱序／重复。
 支持 `-Only` 选择 case 和 `-NoBuild` 复用当前 Smoke。逐平台、锁区、爬升激活时间、低中高台阶承重与 viewport 均有断言；双方有序断开和退出后执行严格日志门槛。
 单组使用 `HOLLOWCONNECT_RADIANCE_FRESH_LATE=1`，可选 `RADIANCE_FRESH_SCENE=Dream_Final_Boss`、`RADIANCE_FRESH_ENTRY=native`、`RADIANCE_FRESH_P5=1`（均带 `HOLLOWCONNECT_` 前缀）。运行边界及证据见 [平台修复记录](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/RADIANCE-PLATFORM-FIX-2026-10-18.md)。
 
@@ -167,7 +167,7 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 
 0.1.5 完整探针新增：第二轮 Release 后重放同轮 Wipe，确认屏障不再打开；随后在真实跨房传送与检查点加载启动后立即断线，确认协程、入口、锁定状态和隐藏渲染均清理。新增 `HOLLOWCONNECT_SMOKE_MODE=boss`：进入 Crossroads_10，用原生竞技场触发器与 HealthManager 伤害驱动假骑士开战、盔甲倒地和头部部分受伤；在头部暴露期间移交权威，击败头部推进阶段，确认 AI 继续运动和再伤害，并让原权威回房核对血量与 Stunned Amount 阶段计数。没有强行设置 Boss FSM 状态，也没有覆盖所有 Boss。
 
-0.1.6 新增 `HOLLOWCONNECT_SMOKE_MODE=godhome`：使用内置三门从格林段开始，观察原生火蝠、火柱、气球火球和地刺，原生伤害及死亡后双方进入休息房；双向普通 / 神居 F8 检查淡入、镜头与输入，故意损坏落后端连战序号后核对恢复，再在已接受跨房加载后立即断线并检查正常抵达。`HOLLOWCONNECT_GODHOME_AUTHORITY=host` 让服务器房主先入房，否则客机先入房，分别覆盖房主作为显示副本和模拟权威。动态弹幕每 0.1 秒观测本地源位置，小于 3 世界单位的副本样本计为匹配；每种弹幕至少三次匹配。角色固定在指定位置并免伤，直接调用 HealthManager 伤害；没有强制 Boss FSM 状态，也没有完成完整三门。`HOLLOWCONNECT_GALIEN_ONLY=1` 单独验证加利安迟加入接管的 GetOwner 本机引用及原生音效异常。故障注入与原生音效诊断只存在于此测试插件。
+0.1.6 新增 `HOLLOWCONNECT_SMOKE_MODE=godhome`：使用内置三门从格林段开始，观察原生火蝠、火柱、气球火球和地刺，原生伤害及死亡后双方进入休息房；双向普通／神居 `/tp` 检查淡入、镜头与输入，故意损坏落后端连战序号后核对恢复，再在已接受跨房加载后立即断线并检查正常抵达。`HOLLOWCONNECT_GODHOME_AUTHORITY=host` 让服务器房主先入房，否则客机先入房，分别覆盖房主作为显示副本和模拟权威。动态弹幕每 0.1 秒观测本地源位置，小于 3 世界单位的副本样本计为匹配；每种弹幕至少三次匹配。角色固定在指定位置并免伤，直接调用 HealthManager 伤害；没有强制 Boss FSM 状态，也没有完成完整三门。`HOLLOWCONNECT_GALIEN_ONLY=1` 单独验证加利安迟加入接管的 GetOwner 本机引用及原生音效异常。故障注入与原生音效诊断只存在于此测试插件。
 
 探针拦截三个 SaveGame 重载，不读取现有存档；角色在内存中创建。测试插件在批处理模式下将 Respawn 和 LoadFirstScene 中的渲染帧等待改为下一模拟帧，发行模块没有这一行为。测试结束停止这两个测试进程，移除测试副本中的插件；不要把它复制到日常游戏。验证内容与局限见 docs/VERIFICATION.md。
 ## FSM 快照与接管专项
@@ -210,7 +210,7 @@ Unity 的 PlayerSettings `forceSingleInstance` 需要仅在测试副本中关闭
 
 梦之钉剧情平台专项复用 `coverage`：设置 `HOLLOWCONNECT_COVERAGE_SCENES=Dream_Nailcollection`、`HOLLOWCONNECT_COVERAGE_ENTRY_GATE=door_dreamReturn`、`HOLLOWCONNECT_COVERAGE_SECONDS=1`、`HOLLOWCONNECT_DREAM_PLATFORM_ASSERTIONS=1`。该专项开启共享进度，确认首次守梦人梦境仍没有网络实体或平台副本，迟到注册也不能接管平台。等待原生入口就绪后，双方轮流通过真实碰撞靠近、自然下落站立并离开；要求各自平台显隐独立，队友靠近不会改变本机平台。探针不调用 Show/Hide，不设置平台 FSM；不代表完整剧情或真实 FRP 已验收。2026-10-15 的同步人数/接管探针已由这项本地行为检查替代，历史结果保留。
 
-`HOLLOWCONNECT_WARP_ASSERTIONS=1` 在 `Fungus1_02` 或 `Dream_Nailcollection` 验证真实窄平台上的 F8 落点。双方各传送三次，`HOLLOWCONNECT_WARP_CROSS_ROOM=1` 使第一次跨 Town，后两次同房；苍绿场景另用真实酸水碰撞检查复位点、复位期间拒绝 F8 请求和注入的延迟回复、恢复后两次跳跃落地。`HOLLOWCONNECT_WARP_UNSUPPORTED=1` 再验证无支撑目标：同房不移动角色或复位点，跨房回到可操作的原版入口。落点断言使用真实角色碰撞体和地形，死亡复位走原生流程；延迟回复是探针注入，并非真实网络故障测试。
+`HOLLOWCONNECT_WARP_ASSERTIONS=1` 在 `Fungus1_02` 或 `Dream_Nailcollection` 验证真实窄平台上的 `/tp` 落点。双方各传送三次，`HOLLOWCONNECT_WARP_CROSS_ROOM=1` 使第一次跨 Town，后两次同房；苍绿场景另用真实酸水碰撞检查复位点、复位期间拒绝 `/tp` 请求和注入的延迟回复、恢复后两次跳跃落地。`HOLLOWCONNECT_WARP_UNSUPPORTED=1` 再验证无支撑目标：同房不移动角色或复位点，跨房回到可操作的原版入口。落点断言使用真实角色碰撞体和地形，死亡复位走原生流程；延迟回复是探针注入，并非真实网络故障测试。
 
 水晶翻转平台本地运行专项：`coverage` 中设置 `HOLLOWCONNECT_COVERAGE_SCENES=Mines_35`、`HOLLOWCONNECT_LOCAL_FLIP_ASSERTIONS=1`。要求真实场景 21 个平台均未注册为实体且没有复制；双方轮流实际落在同一平台上，触发原生翻转、尖刺切换及自然恢复，另一端的平台须保持原位。`HOLLOWCONNECT_ROOT_ANIMATION_ASSERTIONS=1` 在 `Ruins2_04` 另要求两端原生大盾守卫动画至少出现三个不同精灵帧，拒绝通过停动画减少流量。二者可配合既有性能计数，对比修改前后的整房 CombatState 生成量；初次/接管完整快照和命中盒仍用现有专项验证。
 
@@ -263,7 +263,7 @@ Smoke 同时拦截原生 SaveGame 三个入口与 `Mod.SaveGlobalSettings`，后
 
 梦境Boss修复专项：构建一次Smoke，再运行 `Run-Dream-Variants.ps1 -Prefix <全新前缀> -PayloadPath <生产DLL目录> -Scenes Dream_01_False_Knight -DamageCheck`，检查真实开战后本体／头部登记与原生17伤害收敛。`-LifecycleCheck` 包含伤害检查并继续原生多轮破甲、露头、最终死亡、个人返回与起身输入，随后与未领奖主机的真实灵魂对话领取300精华；已领奖客机应保持230精华、无可交互灵魂。场景入口仍是测试直切，不是梦钉入梦；致命伤害及结束对话输入由探针提供，不代表手动全场战斗。
 
-戈布离房回归：`Run-Dream-Warriors.ps1 -Prefix <全新前缀> -PayloadPath <生产DLL目录> -Cases both -Scenes Cliffs_02 -Summoner host -GuestHistory 2 -ExitMode native`，另用独立前缀运行 `-ExitMode f8`。`both` 表示双方预置共享提灯；仍是未领奖主机／已领奖客机。native将角色放进真实出口触发区，f8使用运行时按键入口跟随已离房主机。两者要求原生目标房间进入完成、控制正常且旧附加场景卸载。默认 `-ExitMode none` 不额外离房；连续 `-Scenes Cliffs_02,Fungus2_32` 可检查切房后继续胡长老。每组必须完整停止退出后再运行下一组。
+戈布离房回归：`Run-Dream-Warriors.ps1 -Prefix <全新前缀> -PayloadPath <生产DLL目录> -Cases both -Scenes Cliffs_02 -Summoner host -GuestHistory 2 -ExitMode native`，另用独立前缀运行 `-ExitMode tp`。`both` 表示双方预置共享提灯；仍是未领奖主机／已领奖客机。native 将角色放进真实出口触发区，tp 通过聊天命令跟随已离房主机。两者要求原生目标房间进入完成、控制正常且旧附加场景卸载。默认 `-ExitMode none` 不额外离房；连续 `-Scenes Cliffs_02,Fungus2_32` 可检查切房后继续胡长老。每组必须完整停止退出后再运行下一组。
 
 通用Probe的Freeze必须保留原生输入就绪：永久能力与资源在原版UI、对话或过场期间等待发放，主动RelinquishControl会让螳螂爪断言一直等待。不能通过绕过生产Idle判断修复此类测试。原生梦境返回的Dream Return/Ready等待起身按键，精华由返回房间的灵魂对话发放；探针必须实际完成这些步骤。
 
@@ -334,7 +334,25 @@ Boss倒地索敌专项：构建一次Smoke，再运行 `Run-Boss-Targets.ps1 -Pr
 `HOLLOWCONNECT_BLACKWAVE_FIRST=host|guest` 指定先进入房间的一端，`HOLLOWCONNECT_BLACKWAVE_TRIGGER=host|guest` 指定实际触发竞技场的一端；两者不同可复现权威留在入口外时 Boss 不醒的问题。
 检查真正登记的 Host/Client 对象和接收的 FSM 快照，不把复制端故意停用的 Host 当作可见 Boss。验证原生延迟 `DUNG START`、个人入场控制器隔离，以及 30 秒内渲染、移动和多种战斗状态，不强置 Boss FSM。
 
+爱之塔回归使用 `-Mode progress`、`HOLLOWCONNECT_KEY_ESSENCE=collector`、`HOLLOWCONNECT_TRANSITION_CONTACT=1`，用 `HOLLOWCONNECT_COLLECTOR_AUTHORITY=host|guest` 选择先到的一端。两端分别用爱之钥开门。后到的玩家先触发原版竞技场，随后检查两端都能看到存活的收藏家、闸门会在自己入场时关闭，以及击败后原版闸门解除阻挡。只检查塔内激活时可设 `HOLLOWCONNECT_COLLECTOR_ARENA_ONLY=1`。
+
+Custom Knight 身体图集回归使用 `-Mode progress`、`HOLLOWCONNECT_SKIN_CASE=boundaries`。在隔离游戏里安装与游戏版本匹配的 Custom Knight 和皮肤。设置 `HOLLOWCONNECT_SKIN_OWNER=host|guest|both` 和 `HOLLOWCONNECT_CUSTOM_SKIN_ID`。可用 `HOLLOWCONNECT_CUSTOM_SKIN_GUEST_ID` 给客机选择不同的皮肤，用 `HOLLOWCONNECT_SKIN_LIVE_SWITCH=1` 检查房主换回默认再切回。夹具调用 Custom Knight 菜单使用的换肤方法，按远端待机和冲刺动画的实际帧检查材质。
+
 任意 Smoke 用例可选 `HOLLOWCONNECT_ROUTE_FRAMES=1`，在测试插件内以 120 FPS 目标、关闭 vSync 记录双端 `<role>.route-frames.json`。
 `coverage` 的性能观察在采样起止处分为 `sample`／`after-sample`，可与加载和初始化分开统计；`FrameProfile` 另用 `HOLLOWCONNECT_FRAME_TARGET_FPS`（30–1000，默认 300）指定目标上限，输出实际配置值。
 记录原始 wall/Unity 帧时间、平均 FPS、最慢 1% 帧均值折算 FPS、p50/p95/p99/max、超过 16.667/33.333/50ms 的帧和 GC 次数；加载窗口与主动标记的战斗窗口分别统计。采样期间不逐帧写日志，结束时一次性写文件。
 同机双端、800×600、批处理环境下的数据用于定位长帧；没有无模组对照时，不能据此把加载或 GC 卡顿归因于模组。
+
+以后修其他 bug 时，沿用对应的 Smoke 用例，先设置 `$env:HOLLOWCONNECT_ROUTE_FRAMES='1'`，再照常运行 `Run-Two.ps1`。
+测试可在关键边界调用 `RouteFrameRecorder.Phase`，将故障注入等待、稳定战斗和收尾分开；黑波回归的稳定战斗为 `shade-combat`。
+在仓库根目录对一个或多个已完成的跑次汇总：
+
+```powershell
+.\tests\Smoke\Summarize-RouteFrames.ps1 -RunPath .test-results/before,.test-results/after `
+    -Scene Ruins1_31b -Phase shade-combat -CsvPath .analysis/shade-frames.csv |
+    Format-Table Run,Role,Samples,AvgFps,Low1Fps,P99Ms,MaxMs,Over33Ms,Result
+```
+
+汇总按跑次、端、场景和阶段从原始帧重新计算；CSV 保留运行设置、DLL 哈希、最慢帧编号和原始文件路径。
+缺少某端采样时会提示。强制结束进程的跑测脚本应等到各端采样写完再清理；进度用例会先写采样，再发完成或失败标记。
+比较前后版本时保持相同场景、阶段、渲染模式、帧率上限和跑法；`Over33WithGen0` 只表示长帧和 Gen 0 GC 同帧出现。

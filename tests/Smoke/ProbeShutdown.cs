@@ -11,6 +11,10 @@ internal static class ProbeShutdown {
         var roles=(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SMOKE_ROLES") ?? "host,guest").Split(',');
         File.WriteAllText(Path.Combine(root,role+".shutdown-ready"),"ready");
         yield return Wait(()=>roles.All(r=>File.Exists(Path.Combine(root,r+".shutdown-ready"))),"all probes finished");
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_KEEP_VISIBLE") == "1") {
+            File.WriteAllText(Path.Combine(root,role+".shutdown-kept"),"kept");
+            yield break;
+        }
         engine.ClientManager.Disconnect();
         File.WriteAllText(Path.Combine(root,role+".shutdown-offline"),"offline");
         yield return Wait(()=>roles.All(r=>File.Exists(Path.Combine(root,r+".shutdown-offline"))),"all clients disconnected");

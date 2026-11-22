@@ -35,17 +35,12 @@ public sealed partial class PantheonProbe {
             });
             yield return Until(() => In(atrium), "guest native Godhome staging entry");
             yield return Until(() => Has("ending.host.entered") && runtime.Peers.Values.Any(p => p.State?.IsReady == true), "host native door context ready", 120);
-            Mark("F8 PRECHECK " + Newtonsoft.Json.JsonConvert.SerializeObject(runtime.BuildDebugSnapshot()) + " paused=" + GameManager.instance.isPaused + " scale=" + Time.timeScale);
+            Mark("/tp PRECHECK " + Newtonsoft.Json.JsonConvert.SerializeObject(runtime.BuildDebugSnapshot()) + " paused=" + GameManager.instance.isPaused + " scale=" + Time.timeScale);
             runtime.Selected = runtime.Peers.Single(p => p.Value.State?.IsReady == true).Key;
-            var original = runtime.KeyPressed;
-            yield return Until(() => (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime), "guest eligible for F8");
-            var pressed = false;
-            try {
-                runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-                yield return Until(() => pressed, "one F8 input consumed", 5);
-                runtime.KeyPressed = _ => false;
-                yield return Until(() => In(sequence.GetSceneAt(0)), "guest F8 joins native sequence");
-            } finally { runtime.KeyPressed = original; }
+            yield return Until(() => (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime), "guest eligible for /tp");
+            if (!TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected))
+                throw new Exception("Pantheon join /tp command was not handled locally");
+            yield return Until(() => In(sequence.GetSceneAt(0)), "guest /tp joins native sequence");
             SafeHero();
         }
         yield return Both("ending.joined");
@@ -54,7 +49,7 @@ public sealed partial class PantheonProbe {
         var expectedGate = pd.GetString("bossReturnEntryGate");
         if (pd.GetString("dreamReturnScene") != atrium || string.IsNullOrEmpty(expectedGate))
             throw new Exception("Sequence join lost native return destination: " + pd.GetString("dreamReturnScene") + "/" + expectedGate);
-        Mark("PASS full native return destination captured after UDP/F8 join " + atrium + "/" + expectedGate);
+        Mark("PASS full native return destination captured after UDP /tp join " + atrium + "/" + expectedGate);
 
         // Rejected updates and a cancelled overlay must preserve both fields.
         var rollback = BossTravel.SaveState();
@@ -92,7 +87,7 @@ public sealed partial class PantheonProbe {
             throw new Exception("Returned through a different gate");
         if (runtime.BuildDebugSnapshot().RiskCodes().Contains("hero-exit-without-native-load"))
             throw new Exception("Return retained an unfinished hero exit");
-        Mark("FINAL PASS native Pantheon " + tier + " source door, guest F8 join, result UI and interactive return");
+        Mark("FINAL PASS native Pantheon " + tier + " source door, guest /tp join, result UI and interactive return");
         yield return Finish();
     }
 }

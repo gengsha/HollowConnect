@@ -33,6 +33,12 @@ internal static class LocalBattleCompletion {
 
     internal static bool IsLocal(GameObject battle) => battle != null && EntityReferences.Owner(battle) == null;
     internal static void NativeWaveAction(FsmStateAction action) {
+        if (!CoopContext.Resetting && action is SendEventByName { everyFrame: false } wake && wake.sendEvent.Value == "WAKE" &&
+            action.Fsm?.Name == "Control" && action.State.Name == "Start" && action.Fsm.GameObject is { } tower &&
+            tower.scene.name == "Ruins2_11_boss" && tower.name == "Battle Scene" && IsLocal(tower)) {
+            var boss = EntityReferences.Owner(tower.transform.Find("Jar Collector")?.gameObject);
+            if (boss?.Type == EntityType.TheCollector) boss.RequestBattleStart(action);
+        }
         if (!CoopContext.Resetting && action.Fsm?.Name is "Battle Control" or "Battle Scene" && IsLocal(action.Fsm.GameObject) &&
             action is SendEventByName { everyFrame: false } start && start.sendEvent.Value is "BATTLE START" or "DUNG START" &&
             start.delay.Value < .001f && start.eventTarget?.target == FsmEventTarget.EventTarget.BroadcastAll &&
@@ -44,6 +50,12 @@ internal static class LocalBattleCompletion {
             send.delay.Value >= .001f || send.eventTarget?.target != FsmEventTarget.EventTarget.GameObject || !send.eventTarget.sendToChildren.Value) return;
         var group = action.Fsm.GetOwnerDefaultTarget(send.eventTarget.gameObject);
         if (group == null || !group.transform.IsChildOf(action.Fsm.GameObject.transform)) return;
+        if (group.name == "Wave 1" && LocalBattleStart.IsGardenScene(group.scene.name)) {
+            foreach (Transform child in group.transform) {
+                var entity = EntityReferences.Owner(child.gameObject);
+                if (entity?.Object.Host == child.gameObject) entity.RequestBattleStart(action);
+            }
+        }
         // Disabled replica FSMs are absent from PlayMaker's event recipients.
         // Observe the actual native wave action rather than relying on their
         // receiving a broadcast that the engine intentionally does not deliver.

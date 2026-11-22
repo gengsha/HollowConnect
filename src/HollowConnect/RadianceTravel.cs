@@ -96,25 +96,31 @@ public sealed partial class CoopRuntime {
             }
         return true;
     }
-    private static void RestoreRadianceWarpCamera(string sceneName) {
+    private static void RestoreWarpCamera(string sceneName, bool snapToHero) {
         var hero = HeroController.instance;
         var camera = GameCameras.instance?.cameraController;
         if (hero == null || camera == null) return;
-        // Changing CameraMode alone leaves CameraTarget's lock bounds intact.
-        // A teleport also skips the trigger exit/enter pair. Reconcile those
-        // native locks once at the actual landing position.
+        // Teleports skip lock-area trigger exits and entries. Rebuild the
+        // native lock set from the actual landing position before positioning.
         var oldLocks = ReflectionHelper.GetField<CameraController, List<CameraLockArea>>(camera, "lockZoneList");
         if (oldLocks != null)
             foreach (var area in oldLocks.ToArray())
                 if (area != null) camera.ReleaseLock(area);
-        var areas = Object.FindObjectsOfType<CameraLockArea>()
-            .Where(a => a.isActiveAndEnabled && a.gameObject.scene.name == sceneName &&
-                a.GetComponents<Collider2D>().Any(c => c.enabled && c.OverlapPoint(hero.transform.position)))
+        var heroColliders = hero.GetComponents<Collider2D>().Where(c => c.isActiveAndEnabled).ToArray();
+        bool OverlapsHero(CameraLockArea area) {
+            var areaColliders = area.GetComponents<Collider2D>().Where(c => c.isActiveAndEnabled).ToArray();
+            if (heroColliders.Length == 0)
+                return areaColliders.Any(c => c.OverlapPoint(hero.transform.position));
+            return areaColliders.Any(areaCollider => heroColliders.Any(heroCollider =>
+                Physics2D.Distance(areaCollider, heroCollider).isOverlapped));
+        }
+        var areas = Object.FindObjectsOfType<CameraLockArea>(true)
+            .Where(a => a.isActiveAndEnabled && a.gameObject.scene.name == sceneName && OverlapsHero(a))
             .OrderBy(a => a.maxPriority).ToArray();
         foreach (var area in areas) camera.LockToArea(area);
         camera.SetMode(areas.Length > 0 ? CameraController.CameraMode.LOCKED : CameraController.CameraMode.FOLLOWING);
         // PositionToHero starts a coroutine that briefly freezes the camera.
         // Call it once; starting one every LateUpdate races its restore step.
-        camera.PositionToHero(true);
+        camera.PositionToHero(snapToHero);
     }
 }

@@ -311,7 +311,8 @@ internal class Entity {
         battleSignals = new LocalBattleSignals(this, _fsms.Host, _fsms.Client, PublishFsmBool);
         if (Type == EntityType.Grimm || Type == EntityType.TheCollector)
             RoarLock = new BossRoarLock(this, _fsms.Host, _fsms.Client, PublishFsmBool);
-        if (Type == EntityType.FalseKnight && SourceScene == "GG_Failed_Champion")
+        if ((Type == EntityType.FalseKnight && SourceScene == "GG_Failed_Champion") ||
+            (Type == EntityType.PureVessel && SourceScene == "GG_Hollow_Knight"))
             introCamera = new BossIntroCamera(this, _fsms.Host, _fsms.Client, PublishFsmBool);
         BossTargeting.Prepare(this, _fsms.Host.ToArray(), _fsms.Client.ToArray(), bossTargetSource);
 

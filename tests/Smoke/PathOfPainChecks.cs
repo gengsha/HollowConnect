@@ -44,11 +44,10 @@ public sealed partial class RescueProbe {
             yield return Until(() => Has("palace.guest-triggered"), "guest starts native guardian battle before host teleport");
             yield return Until(() => runtime.Peers.Values.Any(p => p.State?.Scene == scene && p.State.IsReady), "guest advertises warp readiness inside palace battle");
             runtime.Selected = runtime.Peers.Single().Key;
-            var pressed = false;
-            runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
+            runtime.RequestTeammateWarp("");
             yield return Until(() => runtime.Playable && GameManager.instance.sceneName == scene && hero.acceptingInput &&
-                !GameManager.instance.IsInSceneTransition && engine.ClientManager.SceneSnapshotReady, "host joins through actual configured teammate teleport key");
-            runtime.KeyPressed = _ => false; hero.AffectedByGravity(false); body.velocity = Vector2.zero;
+                !GameManager.instance.IsInSceneTransition && engine.ClientManager.SceneSnapshotReady, "host joins through /tp teammate command");
+            hero.AffectedByGravity(false); body.velocity = Vector2.zero;
             DumpPalace();
         }
         Flag(role + ".palace.joined");

@@ -238,10 +238,10 @@ public sealed class GodhomeProbe : MonoBehaviour {
         else {
             yield return Until(() => Has("guest.galien"), "guest next boss ready");
             // Reproduce a stranded participant whose local sequence counter
-            // diverged, then use the real F8 request/response transport.
+            // diverged, then use the real chat-command request/response path.
             indexField.SetValue(null, 0);
             yield return Warp("GG_Ghost_Galien");
-            Check((int)indexField.GetValue(null) == Enumerable.Range(0, sequence.Count).First(i => sequence.GetSceneAt(i) == "GG_Ghost_Galien"), "F8 repairs stale native sequence counter");
+            Check((int)indexField.GetValue(null) == Enumerable.Range(0, sequence.Count).First(i => sequence.GetSceneAt(i) == "GG_Ghost_Galien"), "/tp repairs stale native sequence counter");
             Flag("host.galien-warp");
         }
         if (!host) yield return Until(() => Has("host.galien-warp"), "stranded host catches up to next boss");
@@ -252,10 +252,10 @@ public sealed class GodhomeProbe : MonoBehaviour {
             indexField.SetValue(null, 0);
             yield return new WaitForSecondsRealtime(3.2f);
             runtime.Selected = runtime.Peers.First(p => p.Value.State?.Scene == "GG_Ghost_Galien").Key;
-            var pressed = false; runtime.KeyPressed = key => key == KeyCode.F8 && !pressed && (pressed = true);
-            yield return Until(() => pressed && (int)indexField.GetValue(null) == 6 && !BossSequenceController.BoundNail && !BossSequenceController.BoundShell,
-                "same-room F8 repairs sequence counter and bindings");
-            runtime.KeyPressed = _ => false; Flag("host.same-room");
+            var commandHandled = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected);
+            yield return Until(() => commandHandled && (int)indexField.GetValue(null) == 6 && !BossSequenceController.BoundNail && !BossSequenceController.BoundShell,
+                "same-room /tp repairs sequence counter and bindings");
+            Flag("host.same-room");
         } else yield return Until(() => Has("host.same-room"), "same-room context repair observed");
         if (!host) { Enter("GG_Spa"); yield return Until(() => In("GG_Spa"), "guest returns to rest room for reverse test"); Freeze(); Flag("guest.spa-again"); }
         else yield return Until(() => Has("guest.spa-again"), "guest away for reverse godhome warp");
@@ -277,7 +277,7 @@ public sealed class GodhomeProbe : MonoBehaviour {
             yield return Until(() => runtime.Peers.Values.Any(p => p.State?.Scene == "Town" && p.State.IsReady), "ordinary target presence");
             runtime.Selected = runtime.Peers.First(p => p.Value.State?.Scene == "Town").Key;
             yield return Until(() => (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime),
-                "native local entrance permits final disconnect F8");
+                "native local entrance permits final disconnect /tp");
             if (Has(role + ".failed")) yield break;
             yield return new WaitForSecondsRealtime(.5f);
             var armed = true; var before = fades;
@@ -287,16 +287,13 @@ public sealed class GodhomeProbe : MonoBehaviour {
                 armed = false; Field<NetClient>(engine.ClientManager, "_netClient").Disconnect();
             }
             On.GameManager.BeginSceneTransition += DisconnectAcceptedWarp;
-            var pressed = false; runtime.KeyPressed = key => {
-                if (key != KeyCode.F8 || pressed) return false;
-                pressed = true;
-                Mark("OFFLINE WARP PRESS canStart=" + typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime) +
-                    " input=" + HeroController.instance.acceptingInput + " transitioning=" + HeroController.instance.cState.transitioning +
-                    " transition=" + HeroController.instance.transitionState);
-                return true;
-            };
+            var commandHandled = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected);
+            if (!commandHandled) throw new Exception("The /tp chat command was not registered");
+            Mark("OFFLINE /tp canStart=" + typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime) +
+                " input=" + HeroController.instance.acceptingInput + " transitioning=" + HeroController.instance.cState.transitioning +
+                " transition=" + HeroController.instance.transitionState);
             yield return Until(() => !armed && !runtime.Connected && In("Town"), "in-flight warp arrives after disconnect");
-            runtime.KeyPressed = _ => false; On.GameManager.BeginSceneTransition -= DisconnectAcceptedWarp;
+            On.GameManager.BeginSceneTransition -= DisconnectAcceptedWarp;
             yield return new WaitForSecondsRealtime(2);
             Check(fades > before && !HeroController.instance.controlReqlinquished && !BossSequenceController.IsInSequence &&
                 !Resources.FindObjectsOfTypeAll<PlayMakerFSM>().Any(f => f.FsmName == "CameraFade" && f.gameObject.activeInHierarchy && f.ActiveStateName == "FadingOut"),
@@ -347,18 +344,27 @@ public sealed class GodhomeProbe : MonoBehaviour {
         yield return Until(() => runtime.Peers.Values.Any(p => p.State?.Scene == scene && p.State.IsReady), "warp target presence");
         runtime.Selected = runtime.Peers.First(p => p.Value.State?.Scene == scene).Key;
         yield return Until(() => (bool)typeof(CoopRuntime).GetProperty("CanStartWarp", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime),
-            "native local entrance permits F8");
+            "native local entrance permits /tp");
         if (Has(role + ".failed")) yield break;
-        yield return new WaitForSecondsRealtime(.5f); // Current room heartbeat reaches the server before F8.
-        var before = fades; var pressed = false;
-        runtime.KeyPressed = key => key == KeyCode.F8 && !pressed && (pressed = true);
-        yield return Until(() => pressed && In(scene), "F8 cross-room arrival"); runtime.KeyPressed = _ => false;
+        yield return new WaitForSecondsRealtime(.5f); // Current room heartbeat reaches the server before /tp.
+        var before = fades;
+        var commandHandled = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected);
+        yield return Until(() => commandHandled && In(scene), "/tp cross-room arrival");
         yield return new WaitForSecondsRealtime(2); Freeze();
         Mark("WARP FADE before=" + before + " after=" + fades + " control=" + HeroController.instance.controlReqlinquished + " camera=" + GameCameras.instance.cameraController.mode);
         foreach (var f in Resources.FindObjectsOfTypeAll<PlayMakerFSM>().Where(f => f.FsmName.IndexOf("Fade", StringComparison.OrdinalIgnoreCase) >= 0 && f.gameObject.activeInHierarchy)) Mark("FADE FSM " + f.name + "/" + f.FsmName + "=" + f.ActiveStateName);
+        var camera = GameCameras.instance.cameraController;
+        var heroColliders = HeroController.instance.GetComponents<Collider2D>().Where(c => c.isActiveAndEnabled).ToArray();
+        var expectedLocks = Object.FindObjectsOfType<CameraLockArea>(true).Where(a => a.isActiveAndEnabled && a.gameObject.scene.name == scene &&
+            a.GetComponents<Collider2D>().Any(area => area.isActiveAndEnabled && heroColliders.Any(hero => area.Distance(hero).isOverlapped)))
+            .OrderBy(a => a.maxPriority).ToArray();
+        var actualLocks = camera.lockZoneList.Where(a => a != null).ToArray();
+        Check(expectedLocks.SequenceEqual(actualLocks) && camera.mode == (expectedLocks.Length > 0
+                ? CameraController.CameraMode.LOCKED : CameraController.CameraMode.FOLLOWING),
+            "/tp rebuilds destination camera locks from the hero's collider overlap");
         Check(fades > before && !HeroController.instance.controlReqlinquished && GameCameras.instance.cameraController.mode != CameraController.CameraMode.FROZEN &&
             !Resources.FindObjectsOfTypeAll<PlayMakerFSM>().Any(f => f.FsmName == "CameraFade" && f.gameObject.activeInHierarchy && f.ActiveStateName == "FadingOut"),
-            "F8 restores fade, input and camera");
+            "/tp restores fade, input and camera");
     }
     private IEnumerator Arsenal(float seconds) {
         var end = Time.realtimeSinceStartup + seconds;

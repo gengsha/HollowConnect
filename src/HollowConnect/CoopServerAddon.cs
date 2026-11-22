@@ -177,6 +177,12 @@ public sealed partial class CoopServerAddon : ServerAddon {
                     roster.BossBindings = destination.BossBindings; roster.BossDoor = destination.BossDoor;
                     roster.BossPlan = destination.BossPlan;
                 }
+                if (!linkedHealth) {
+                    destinations.TryGetValue(m.Id, out var status);
+                    var update = (api.NetServer as NetServer)?.GetUpdateManagerForClient(m.Id);
+                    int? rtt = update?.ReceivedAgeMilliseconds >= 0 ? update.AverageRtt : (int?)null;
+                    roster.BossReturnScene = TeammateStatusData.Relay(status?.Target ?? 0, rtt, now - m.Seen < 2);
+                }
                 Broadcast(roster);
             }
         });

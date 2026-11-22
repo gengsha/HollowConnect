@@ -249,10 +249,9 @@ public sealed partial class CoverageProbe {
                 } else {
                     runtime.Selected = runtime.Peers.Keys.Single();
                     var handled = Field<uint>(runtime, "handledWarp");
-                    var pressed = false;
-                    runtime.KeyPressed = key => key == CoopMod.Settings.TeleportKey && !pressed && (pressed = true);
-                    yield return Until(() => pressed && Field<uint>(runtime, "handledWarp") > handled, "fresh late F8 granted");
-                    runtime.KeyPressed = _ => false;
+                    if (!TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected))
+                        throw new Exception("Radiance /tp command was not handled locally");
+                    yield return Until(() => Field<uint>(runtime, "handledWarp") > handled, "fresh late /tp granted");
                 }
                 yield return Until(() => InArena() && !Field<bool>(runtime, "changingScene") &&
                     engine.ClientManager.SceneSnapshotReady, "first ever arena visit applies snapshot");

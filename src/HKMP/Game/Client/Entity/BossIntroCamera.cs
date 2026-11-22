@@ -13,6 +13,7 @@ namespace Hkmp.Game.Client.Entity;
 internal sealed class BossIntroCamera {
     private const string Variable = "HollowConnect Intro Released";
     private const string Signal = "INTRO OFF";
+    private const string PureVesselLock = "CameraLockArea Intro";
     private readonly Entity entity;
     private readonly uint visit;
     private readonly Action<int, FsmBool> publish;
@@ -35,8 +36,14 @@ internal sealed class BossIntroCamera {
             Append(client[i]);
         }
     }
-    private static bool ReleasesIntro(FsmState state) => state.Actions.OfType<SendEventToRegister>()
-        .Any(a => a.Enabled && a.eventName.Value == Signal);
+    private bool ReleasesIntro(FsmState state) {
+        // Pure Vessel deactivates a scene object through a native FSM variable.
+        // A replica may never resolve that variable or replay the one-shot action.
+        if (entity.Type == EntityType.PureVessel)
+            return state.Fsm.Name == "Control" && state.Name == "Intro Roar End";
+        return state.Actions.OfType<SendEventToRegister>()
+            .Any(a => a.Enabled && a.eventName.Value == Signal);
+    }
 
     internal void StateEntered(FsmState state) {
         foreach (var binding in bindings) {
@@ -53,6 +60,12 @@ internal sealed class BossIntroCamera {
         // local. Deliver only to this scene's native self-deactivating intro.
         foreach (var area in UnityEngine.Object.FindObjectsOfType<CameraLockArea>()) {
             if (area.gameObject.scene.name != entity.SourceScene) continue;
+            if (entity.Type == EntityType.PureVessel) {
+                if (area.name != PureVesselLock) continue;
+                area.gameObject.SetActive(false);
+                applied = true;
+                return;
+            }
             foreach (var receiver in area.GetComponents<PlayMakerFSM>()) {
                 if (receiver.Fsm.ActiveState?.Transitions.Any(t => t.EventName == Signal &&
                     receiver.FsmStates.Any(s => s.Name == t.ToState && s.Actions.OfType<ActivateGameObject>().Any(a =>

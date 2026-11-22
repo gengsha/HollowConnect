@@ -127,6 +127,7 @@ Boss 战	Boss battle	ボス戦
 （等待响应）	 (waiting)	（応答待ち）
 （未就位）	 (not ready)	（準備待ち）
 \n等待：	\nWaiting: 	\n待機中：
+暗影	Shade	影
  [暗影]	 [Shade]	［影］
  [回椅中]	 [Returning]	［帰還中］
 （无地图坐标）	 (no map position)	（マップ座標なし）
@@ -223,3 +224,9 @@ HollowConnect 诊断（只读；F9 开关）	HollowConnect diagnostics (F9)	Holl
 事件（最近 {0}/{1}）	Events (recent {0}/{1})	イベント（直近 {0}/{1}）
 最近导出：{0}	Last export: {0}	最新の出力：{0}
 {0} 次倒地	{0} downs	{0}回
+队友状态条（本机）	Teammate status bar (local)	仲間のステータスバー（ローカル）
+默认关闭。显示名字、到房间服务器的延迟和当前面具。共享血量开启时此项停用。	Off by default. Shows names, latency to the room server, and current masks. Unavailable while shared health is active.	初期設定はオフ。名前、ルームサーバーへの通信遅延、現在の仮面を表示します。共有ライフ中は使用できません。
+兼容皮肤（本机）	Compatible skin (local)	互換スキン（ローカル）
+原版外观	Default appearance	標準の外見
+使用本机已安装的 PNG 皮肤包。队友安装同一皮肤包后即可看到。	Uses an installed PNG skin pack. Teammates with the same pack can see it.	インストール済みの PNG スキンを使用します。同じスキンを持つ仲間にも表示されます。
+无法读取皮肤图集，请检查这套皮肤的 PNG 文件。	Could not read this skin. Check the PNG files in the pack.	スキンを読み込めません。パック内の PNG ファイルを確認してください。

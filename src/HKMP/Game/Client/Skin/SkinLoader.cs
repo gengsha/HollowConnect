@@ -216,7 +216,7 @@ internal class SkinLoader {
     /// Get the mods folder based on the underlying operating system.
     /// </summary>
     /// <returns>The full path to the mods directory.</returns>
-    private static string GetModsFolder() {
+    internal static string GetModsFolder() {
         switch (SystemInfo.operatingSystemFamily) {
             case OperatingSystemFamily.MacOSX:
                 return Path.GetFullPath($"{Application.dataPath}/Resources/Data/Managed/Mods");

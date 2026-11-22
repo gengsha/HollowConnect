@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using Hkmp.Game;
 using Hkmp.Game.Client;
+using Hkmp.Game.Client.Skin;
+using Hkmp.Ui;
 using Hkmp.Game.Server;
 using Hkmp.Game.Settings;
 using Hkmp.Networking.Client;
@@ -217,10 +219,37 @@ internal class ModMenu {
     /// <returns>A <see cref="MenuScreen"/> for the client settings menu.</returns>
     private MenuScreen CreateClientSettingsMenu() {
         var builder = MenuUtils.CreateMenuBuilderWithBackButton("HKMP Client Settings", _hkmpMenu, out _);
+        var atlasIds = CustomKnightSkinBridge.IsAvailable ? Array.Empty<string>() : AtlasSkinPacks.GetIds();
+        var atlasOptions = new string[atlasIds.Length + 1];
+        atlasOptions[0] = Localize.T("原版外观");
+        Array.Copy(atlasIds, 0, atlasOptions, 1, atlasIds.Length);
+        int SelectedAtlasIndex() => Array.IndexOf(atlasIds, _modSettings.AtlasSkinId) + 1;
 
         builder.AddContent(
-            RegularGridLayout.CreateVerticalLayout(150f),
+            RegularGridLayout.CreateVerticalLayout(atlasIds.Length == 0 ? 150f : 125f),
             c => {
+                if (atlasIds.Length != 0) {
+                    c.AddHorizontalOption(
+                        "AtlasSkinOption",
+                        new HorizontalOptionConfig {
+                            Options = atlasOptions,
+                            Label = "兼容皮肤（本机）",
+                            ApplySetting = (setting, _) => {
+                                var index = setting.optionList.selectedOptionIndex;
+                                if (index < 0 || index >= atlasOptions.Length) return;
+                                if (!_clientManager.TrySelectAtlasSkin(index == 0 ? "" : atlasIds[index - 1])) {
+                                    setting.optionList.SetOptionTo(SelectedAtlasIndex());
+                                    UiManager.InternalChatBox.AddMessage(Localize.T("无法读取皮肤图集，请检查这套皮肤的 PNG 文件。"));
+                                }
+                            },
+                            RefreshSetting = (setting, _) => setting.optionList.SetOptionTo(SelectedAtlasIndex()),
+                            CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(_hkmpMenu),
+                            Description = new DescriptionInfo { Text = "使用本机已安装的 PNG 皮肤包。队友安装同一皮肤包后即可看到。" }
+                        },
+                        out var atlasOption
+                    );
+                    foreach (var text in atlasOption.GetComponentsInChildren<Text>(true)) Localize.Attach(text);
+                }
                 c.AddHorizontalOption(
                     "TeamOption",
                     new HorizontalOptionConfig {
@@ -530,7 +559,7 @@ internal class ModMenu {
             applySetting = (_, i) => {
                 if (_netClient.IsConnected) {
                     RunActionWhenNoChanges(() => {
-                        _netClient.UpdateManager.AddPlayerSettingUpdate(skinId: (byte) i);
+                        _netClient.UpdateManager.AddPlayerSettingUpdate(skinId: (byte) i, customSkinId: "");
                     }, ref _delayedApplySkinRoutine);
                 }
             };

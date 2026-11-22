@@ -50,6 +50,7 @@ public sealed partial class ProgressProbe {
     private IEnumerator KeyEssenceChecks() {
         yield return Until(() => runtime.Peers.Count == 1 && engine.ClientManager.SceneSnapshotReady, "key/essence roster ready");
         if (KeyEssenceMode == "shade-soul") { yield return ShadeSoulChecks(); yield break; }
+        if (KeyEssenceMode == "collector") { yield return CollectorKeyChecks(); yield break; }
         if (KeyEssenceMode == "inspect") {
             var scenes = host ? new[] { "Crossroads_10", "Room_shop", "Fungus3_49", "Mines_11", "Ruins1_31", "Fungus2_21", "Ruins2_11" } :
                 ResourceCatalog.Sources.Where(s => s.Kind == ResourceKind.DreamEssence).Select(s => s.Scene).Distinct().ToArray();
@@ -233,20 +234,45 @@ public sealed partial class ProgressProbe {
         yield return ResourceIdle(source.Id);
     }
     private IEnumerator OpenUniqueDoor(string scene, string spent, string inventory) {
-        yield return KeyRoom(scene);
-        yield return new WaitForSecondsRealtime(3);
-        var fsm = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.gameObject.scene.name == scene && f.FsmName == "Conversation Control" &&
-            f.FsmStates.SelectMany(s => s.Actions).OfType<SetPlayerDataBool>().Any(a => a.boolName.Value == spent));
+        if (scene == "Ruins1_31" || scene == "Ruins2_11_b") {
+            // Arrive from the far side of the room so the original entry
+            // movement cannot overlap a nearby exit during the fixture setup.
+            GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo {
+                SceneName = scene, EntryGateName = scene == "Ruins2_11_b" ? "left1" : "right1", WaitForSceneTransitionCameraFade = true
+            });
+            yield return Until(() => AliveScene(scene) && engine.ClientManager.SceneSnapshotReady, "native key door room " + scene, 35);
+            Freeze();
+        } else yield return KeyRoom(scene);
+        var candidates = Object.FindObjectsOfType<PlayMakerFSM>(true).Where(f => f.gameObject.scene.name == scene && f.FsmName == "Conversation Control").ToArray();
+        var fsm = candidates.SingleOrDefault(f => f.FsmStates.SelectMany(s => s.Actions).OfType<SetPlayerDataBool>().Any(a => a.boolName.Value == spent));
+        if (fsm == null) {
+            foreach (var candidate in candidates) Dump(candidate);
+            var exits = Object.FindObjectsOfType<TransitionPoint>(true).Where(p => p.gameObject.scene.name == scene);
+            throw new Exception($"Missing native key door {scene}/{spent}. Current scene: {GameManager.instance.sceneName}. NPCs: {string.Join(",", candidates.Select(f => f.name))}. Exits: {string.Join(",", exits.Select(p => p.name + "->" + p.targetScene + "/" + p.entryPoint))}");
+        }
         var control = fsm.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "npc_control");
+        var exitsNearDoor = Object.FindObjectsOfType<TransitionPoint>(true).Where(p => p.gameObject.scene.name == scene).ToArray();
         var ranges = control.FsmVariables.FindFsmGameObject("Ranges Folder")?.Value ?? control.gameObject;
-        KeyStandAt(ranges.GetComponentsInChildren<Collider2D>(true).FirstOrDefault(c => c.enabled && c.isTrigger), fsm.transform.position);
+        var near = ranges.GetComponentsInChildren<Collider2D>(true).Where(c => c.enabled && c.isTrigger).ToArray();
+        Mark("KEY DOOR " + spent + " npc=" + fsm.transform.position + " ranges=" +
+            string.Join(", ", near.Select(c => c.name + ":" + c.bounds)) + " exits=" +
+            string.Join(", ", exitsNearDoor.Select(p => p.name + "->" + p.targetScene + " " + p.GetComponent<Collider2D>()?.bounds)));
+        var range = near.OrderBy(c => Vector2.Distance(c.bounds.center, fsm.transform.position)).FirstOrDefault();
+        KeyStandAt(range, fsm.transform.position);
         yield return new WaitForFixedUpdate();
-        yield return Until(() => HeroController.instance.CanTalk() && control.ActiveStateName != "Inert", "native unique door can interact " + spent, 10);
-        control.SetState("Take Control");
+        ListenForUp DoorListener() => control != null && control.gameObject.activeInHierarchy
+            ? control.Fsm.ActiveState?.Actions.OfType<ListenForUp>().FirstOrDefault(a => a.Enabled) : null;
+        yield return Until(() => DoorListener() != null && HeroController.instance.CanTalk(), "native unique door can interact " + spent, 10);
+        if (DoorListener() is not { } listener) {
+            if (control != null) Dump(control);
+            throw new Exception($"Door listener unavailable for {spent}: {control?.ActiveStateName} in {GameManager.instance.sceneName}");
+        }
+        control.Fsm.Event(listener.wasPressed);
         yield return Until(() => fsm.ActiveStateName == "Send Text" && Dialogue.ActiveStateName == "Ready for Input", "native unique key yes/no prompt " + spent, 12);
         ChooseYes();
         yield return Until(() => PlayerData.instance.GetBool(spent) && HeroController.instance.acceptingInput,
             "native unique key consumer completed " + spent, 20);
+        Freeze();
         Mark("PASS native unique key spent " + inventory + " remains=" + PlayerData.instance.GetBool(inventory));
     }
     private void SourceNotice(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, HutongGames.PlayMaker.Fsm fsm, HutongGames.PlayMaker.FsmState state) {

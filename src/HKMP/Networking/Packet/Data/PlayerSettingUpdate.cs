@@ -28,6 +28,11 @@ internal class ClientPlayerSettingUpdate : GenericClientData {
     /// </summary>
     public byte SkinId { get; set; }
 
+    /// <summary>
+    /// The Custom Knight skin directory ID, or an empty string for the default skin.
+    /// </summary>
+    public string CustomSkinId { get; set; } = "";
+
     public ClientPlayerSettingUpdate() {
         UpdateTypes = new HashSet<PlayerSettingUpdateType>();
     }
@@ -48,6 +53,7 @@ internal class ClientPlayerSettingUpdate : GenericClientData {
 
         if (UpdateTypes.Contains(PlayerSettingUpdateType.Skin)) {
             packet.Write(SkinId);
+            packet.Write(CustomSkinId);
         }
     }
 
@@ -67,6 +73,7 @@ internal class ClientPlayerSettingUpdate : GenericClientData {
 
         if (UpdateTypes.Contains(PlayerSettingUpdateType.Skin)) {
             SkinId = packet.ReadByte();
+            CustomSkinId = packet.ReadString(128);
         }
     }
 }
@@ -97,6 +104,11 @@ internal class ServerPlayerSettingUpdate : IPacketData {
     /// </summary>
     public byte SkinId { get; set; }
 
+    /// <summary>
+    /// The Custom Knight skin directory ID, or an empty string for the default skin.
+    /// </summary>
+    public string CustomSkinId { get; set; } = "";
+
     public ServerPlayerSettingUpdate() {
         UpdateTypes = new HashSet<PlayerSettingUpdateType>();
     }
@@ -111,6 +123,7 @@ internal class ServerPlayerSettingUpdate : IPacketData {
 
         if (UpdateTypes.Contains(PlayerSettingUpdateType.Skin)) {
             packet.Write(SkinId);
+            packet.Write(CustomSkinId);
         }
     }
 
@@ -124,6 +137,7 @@ internal class ServerPlayerSettingUpdate : IPacketData {
 
         if (UpdateTypes.Contains(PlayerSettingUpdateType.Skin)) {
             SkinId = packet.ReadByte();
+            CustomSkinId = packet.ReadString(128);
         }
     }
 }

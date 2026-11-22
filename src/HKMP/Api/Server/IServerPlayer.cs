@@ -71,4 +71,9 @@ public interface IServerPlayer {
     /// The ID of the skin of the player.
     /// </summary>
     byte SkinId { get; }
+
+    /// <summary>
+    /// The Custom Knight skin directory ID of the player, or an empty string for the default skin.
+    /// </summary>
+    string CustomSkinId { get; }
 }

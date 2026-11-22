@@ -1,9 +1,15 @@
 # 皮肤兼容
 
-HollowConnect 不附带皮肤或 Custom Knight。皮肤与模组应分别从各自作者提供的渠道安装；联机双方仍须使用同一版本的 HollowConnect 完整包。
+## 使用兼容皮肤包
 
-当前已修复联机动画观察中的循环帧越界和动画事件切换后的旧范围访问。检测到 Custom Knight 时，也会协调钟道兽视频的准备时序，避免原生与皮肤替换重复准备同一播放器。
+1. 将 ZIP 解压至 `hollow_knight_Data/Managed/Mods/HKMP/SkinPacks/`。以《死亡细胞》为例，解压后应有 `SkinPacks/死亡细胞/Knight.png`。多套一层解压目录也能识别，皮肤名称取直接存放 PNG 的文件夹名。
+2. 重启游戏，在 **模组 → HKMP → 客户端设置 → 兼容皮肤（本机）** 选择皮肤。这个选项在发现皮肤包且 Custom Knight 未启用时显示。兼容入口也会读取 `Mods/CustomKnight/Skins/` 里已经解压的皮肤。
+3. 联机时，双方使用支持此功能的 HollowConnect，并各自放置同一套同名皮肤。房间需要开启允许皮肤。联机传递皮肤目录名，接收端从本机读取图集。缺失或损坏的单张图集使用原版外观。
 
-含自定义视频的皮肤与普通逐帧皮肤存在不同路径。用户报告的单端进程闪退未在本地复现，以上修复不能视为已经确认解决该闪退。遇到问题请附皮肤名、Custom Knight 版本、双方诊断和崩溃日志，并说明是否替换了 `Cinematics/StagTunnelRun.webm`。
+兼容入口支持角色、冲刺、原版血量 HUD、嚎叫和黑吼图集，对应 `Knight.png`、`Sprint.png`、`Hud.png`、`Wraiths.png`、`VoidSpells.png`。支持的部分图集可单独使用。视频、场景替换、护符、背包和皮肤自带脚本仍需要相应的 Custom Knight 功能。
 
-既有隔离检查使用 Custom Knight 3.5.0、Satchel 0.9.4，覆盖单方／双方使用视频皮肤、移除插件对照、原生钟道兽播放／跳过与到站。范围和原失败见 [原始兼容报告](https://github.com/gengsha/HollowConnect/blob/c1a6d16fb5cf14b1f8470bf8c8b18b8f74349a2b/docs/SKIN-COMPATIBILITY.md)，当前未解项见 [已知问题](KNOWN-ISSUES.md)。
+在 Unity 6 上可直接用这个入口加载《死亡细胞》原包。旧版 Custom Knight 3.5.0 使用了 Unity 6 已变更的游戏类型，加载此插件需要对应游戏版本的构建。
+
+## 使用 Custom Knight
+
+Windows Legacy 1.5.78.11833 已验证可用 Custom Knight 3.5.0。按插件说明安装后，将皮肤解压至 `hollow_knight_Data/Managed/Mods/CustomKnight/Skins/<皮肤目录名>`，在 Custom Knight 菜单选择。HollowConnect 会同步该选择，队友安装同名皮肤包后即可看到。Custom Knight 负责其支持的本地附加素材和替换规则。

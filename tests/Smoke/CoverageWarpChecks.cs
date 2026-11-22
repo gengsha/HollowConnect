@@ -91,15 +91,9 @@ public sealed partial class CoverageProbe {
                 var before = Field<uint>(runtime, "handledWarp");
                 var originalPosition = hero.transform.position;
                 var originalCheckpoint = PlayerData.instance.GetVector3("hazardRespawnLocation");
-                var pressed = false;
-                runtime.KeyPressed = key => {
-                    if (key != KeyCode.F8 || pressed) return false;
-                    pressed = true;
-                    if (repeat != 3) { hero.AffectedByGravity(true); hero.takeNoDamage = false; }
-                    return true;
-                };
-                yield return Check(() => pressed && Field<uint>(runtime, "handledWarp") > before, actor + " F8 accepted over real UDP");
-                runtime.KeyPressed = _ => false;
+                if (repeat != 3) { hero.AffectedByGravity(true); hero.takeNoDamage = false; }
+                var commandHandled = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected);
+                yield return Check(() => commandHandled && Field<uint>(runtime, "handledWarp") > before, actor + " /tp accepted over real UDP");
                 yield return Check(() => !Field<bool>(runtime, "changingScene"), actor + " relocation completed");
                 Mark("WARP RELOCATED " + State() + " active=" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name +
                     " loaded=" + UnityEngine.SceneManagement.SceneManager.GetSceneByName(scene).isLoaded +
@@ -136,7 +130,7 @@ public sealed partial class CoverageProbe {
                 Mark("PASS warp grounded with native map, attack and jump available " + actor);
                 if (repeat == 2 && scene == "Fungus1_02") {
                     // Step off the actual platform into native acid. The new
-                    // checkpoint must recover naturally, even if F8 is pressed
+                    // checkpoint must recover naturally, even if /tp is entered
                     // or a previously accepted reply arrives during recovery.
                     hero.takeNoDamage = false;
                     hero.transform.position += Vector3.right * 1.5f;
@@ -144,14 +138,12 @@ public sealed partial class CoverageProbe {
                     yield return Check(() => hero.cState.hazardDeath, "native acid death begins");
                     var requestBefore = Field<uint>(runtime, "warpSerial");
                     var handledBefore = Field<uint>(runtime, "handledWarp");
-                    pressed = false;
-                    runtime.KeyPressed = key => key == KeyCode.F8 && !pressed && (pressed = true);
+                    var rejectedCommandHandled = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected);
                     typeof(CoopRuntime).GetMethod("Receive", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(runtime, new object[] {
                         new Message { Kind = Kind.Warp, Session = runtime.Session, Round = Hkmp.CoopContext.Epoch,
                             Serial = handledBefore + 100000, Target = runtime.Selected, Scene = scene, X = floor.bounds.center.x, Y = floor.bounds.max.y + 2 }
                     });
-                    yield return Check(() => pressed, "F8 attempted during actual acid recovery");
-                    runtime.KeyPressed = _ => false;
+                    yield return Check(() => rejectedCommandHandled, "/tp is consumed during actual acid recovery");
                     if (Field<uint>(runtime, "warpSerial") != requestBefore || Field<uint>(runtime, "handledWarp") != handledBefore)
                         throw new Exception("Warp interrupted native hazard recovery " + State());
                     Mark("PASS warp request and injected delayed reply refused during native acid recovery");

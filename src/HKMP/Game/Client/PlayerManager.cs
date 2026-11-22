@@ -84,6 +84,14 @@ internal class PlayerManager {
     /// </summary>
     private readonly Dictionary<ushort, GameObject> _activePlayers;
 
+    internal event Action<string> CustomSkinChangedEvent {
+        add => _skinManager.CustomSkinChangedEvent += value;
+        remove => _skinManager.CustomSkinChangedEvent -= value;
+    }
+
+    internal byte LocalSkinId => _skinManager.LocalSkinId;
+    internal string LocalCustomSkinId => _skinManager.LocalCustomSkinId;
+
     public PlayerManager(
         ServerSettings serverSettings,
         Dictionary<ushort, ClientPlayerData> playerData
@@ -101,15 +109,20 @@ internal class PlayerManager {
     /// <summary>
     /// Intialize the player manager by register packet handlers and initialize the skin manager.
     /// </summary>
-    public void Initialize() {
-        _skinManager.Initialize();
+    public void Initialize(ModSettings settings) {
+        _skinManager.Initialize(settings);
     }
+
+    internal void RegisterLocalAtlasHook() => _skinManager.RegisterLocalAtlasHook();
+
+    internal bool TrySelectAtlasSkin(string id) => _skinManager.TrySelectAtlasSkin(id);
 
     /// <summary>
     /// Register the relevant hooks for player-related operations.
     /// </summary>
     public void RegisterHooks() {
         _skinManager.RegisterHooks();
+        Animation.RemotePlayerVisuals.SkinApplier = ApplyRemoteSkin;
         
         CustomHooks.HeroControllerStartAction += HeroControllerOnStart;
         CoopContext.PlayerVisualSettingsChanged += RefreshNameColors;
@@ -119,6 +132,7 @@ internal class PlayerManager {
     /// Deregister the relevant hooks for player-related operations.
     /// </summary>
     public void DeregisterHooks() {
+        Animation.RemotePlayerVisuals.SkinApplier = null;
         _skinManager.DeregisterHooks();
         
         CustomHooks.HeroControllerStartAction -= HeroControllerOnStart;
@@ -412,13 +426,15 @@ internal class PlayerManager {
     /// <param name="scale">The boolean representing the scale of the player.</param>
     /// <param name="team">The team the player is on.</param>
     /// <param name="skinId">The ID of the skin the player is using.</param>
+    /// <param name="customSkinId">The Custom Knight skin directory ID.</param>
     public void SpawnPlayer(
         ClientPlayerData playerData,
         string name,
         Vector2 position,
         bool scale,
         Team team,
-        byte skinId
+        byte skinId,
+        string customSkinId = ""
     ) {
         // First recycle the player by player data if they have an active container
         RecyclePlayerByData(playerData);
@@ -449,17 +465,19 @@ internal class PlayerManager {
         playerContainer.SetActiveChildren(true);
 
         AddNameToPlayer(playerContainer, name, team, playerData.Id);
-        Animation.RemotePlayerVisuals.Track(playerObject);
+
+        // Store the state before tracking the object so the visual callback can apply the correct skin.
+        playerData.Team = team;
+        playerData.SkinId = skinId;
+        playerData.CustomSkinId = customSkinId ?? "";
+        Animation.RemotePlayerVisuals.Track(playerObject, ownerId: playerData.Id, applySkin: false);
 
         // Let the SkinManager update the skin
-        _skinManager.UpdatePlayerSkin(playerObject, skinId);
+        _skinManager.UpdatePlayerSkin(playerObject, skinId, playerData.CustomSkinId, playerContainer);
 
         // Store the player data
         playerData.PlayerContainer = playerContainer;
         playerData.PlayerObject = playerObject;
-        playerData.Team = team;
-        playerData.SkinId = skinId;
-
         // Set whether this player should have body damage
         // Only if:
         // PvP is enabled and body damage is enabled AND
@@ -644,17 +662,18 @@ internal class PlayerManager {
     /// </summary>
     /// <param name="self">Whether this update is for the local player.</param>
     /// <param name="skinId">The ID of the new skin of the player.</param>
+    /// <param name="customSkinId">The Custom Knight skin directory ID.</param>
     /// <param name="playerId">The ID of the player that has updated their skin if <paramref name="self"/> is true.
     /// </param>
-    public void OnPlayerSkinUpdate(bool self, byte skinId, ushort playerId = 0) {
+    public void OnPlayerSkinUpdate(bool self, byte skinId, string customSkinId, ushort playerId = 0) {
         if (self) {
-            Logger.Debug($"Received PlayerSkinUpdate for local player: {skinId}");
+            Logger.Debug($"Received PlayerSkinUpdate for local player: {skinId}, custom skin: '{customSkinId}'");
             
-            _skinManager.UpdateLocalPlayerSkin(skinId);
+            _skinManager.UpdateLocalPlayerSkin(skinId, customSkinId);
             return;
         }
         
-        Logger.Debug($"Received PlayerSkinUpdate for ID: {playerId}, skin ID: {skinId}");
+        Logger.Debug($"Received PlayerSkinUpdate for ID: {playerId}, skin ID: {skinId}, custom skin: '{customSkinId}'");
 
         if (!_playerData.TryGetValue(playerId, out var playerData)) {
             Logger.Debug("  Could not find player");
@@ -662,13 +681,14 @@ internal class PlayerManager {
         }
 
         playerData.SkinId = skinId;
+        playerData.CustomSkinId = customSkinId ?? "";
 
         // If the player is not in the local scene, we don't have to apply the skin update to the player object
         if (!playerData.IsInLocalScene) {
             return;
         }
 
-        _skinManager.UpdatePlayerSkin(playerData.PlayerObject, skinId);
+        _skinManager.UpdatePlayerSkin(playerData.PlayerObject, skinId, playerData.CustomSkinId, playerData.PlayerContainer);
     }
 
     /// <summary>
@@ -677,11 +697,19 @@ internal class PlayerManager {
     public void ResetAllPlayerSkins() {
         // For each registered player, reset their skin
         foreach (var playerData in _playerData.Values) {
-            _skinManager.ResetPlayerSkin(playerData.PlayerObject);
+            _skinManager.ResetPlayerSkin(playerData.PlayerObject, playerData.PlayerContainer);
         }
 
         // Also reset our local players skin
         _skinManager.ResetLocalPlayerSkin();
+    }
+
+    private void ApplyRemoteSkin(GameObject visual, int playerId) {
+        if (visual == null || playerId < 0 || !_playerData.TryGetValue((ushort) playerId, out var playerData)) {
+            return;
+        }
+
+        CustomKnightSkinBridge.ApplyEffect(visual, _serverSettings.AllowSkins ? playerData.CustomSkinId : "");
     }
 
     private void RefreshNameColors() {

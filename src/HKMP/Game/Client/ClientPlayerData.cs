@@ -27,6 +27,11 @@ internal class ClientPlayerData : IClientPlayer {
     /// <inheritdoc />
     public byte SkinId { get; set; }
 
+    /// <summary>
+    /// The Custom Knight skin directory ID of the player, or an empty string for the default skin.
+    /// </summary>
+    public string CustomSkinId { get; set; } = "";
+
     public ClientPlayerData(
         ushort id,
         string username

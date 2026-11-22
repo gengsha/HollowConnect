@@ -258,7 +258,8 @@ internal class ClientManager : IClientManager {
     /// that only need to be done once.
     /// </summary>
     public void Initialize(ServerManager serverManager) {
-        _playerManager.Initialize();
+        _playerManager.Initialize(_modSettings);
+        _playerManager.CustomSkinChangedEvent += OnLocalCustomSkinChanged;
         _animationManager.Initialize(_serverSettings);
         _mapManager.Initialize();
         
@@ -267,6 +268,7 @@ internal class ClientManager : IClientManager {
         _saveManager.Initialize();
         
         CustomHooks.Initialize();
+        _playerManager.RegisterLocalAtlasHook();
         
         RegisterCommands();
         
@@ -295,6 +297,7 @@ internal class ClientManager : IClientManager {
         };
 
         UiManager.InternalChatBox.ChatInputEvent += OnChatInput;
+        UiManager.InternalChatBox.CompleteCommand = input => _commandManager.GetCompletions(input, _netClient.IsConnected);
 
         _netClient.ConnectEvent += _ => _uiManager.OnSuccessfulConnect();
         _netClient.ConnectFailedEvent += OnConnectFailed;
@@ -696,6 +699,12 @@ internal class ClientManager : IClientManager {
             Logger.Warn(
                 $"Exception thrown while invoking Connect event:\n{e}");
         }
+
+        // The server creates player data during the handshake. Send the local selection once so a
+        // Custom Knight skin selected before connecting is visible to the room immediately.
+        if (_playerManager.LocalSkinId != 0 || !string.IsNullOrEmpty(_playerManager.LocalCustomSkinId)) {
+            OnLocalCustomSkinChanged(_playerManager.LocalCustomSkinId);
+        }
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
         if (HeroController.instance != null && HeroController.instance.isHeroInPosition &&
             !global::GameManager.instance.IsInSceneTransition && !SceneUtil.IsNonGameplayScene(scene.name)) {
@@ -864,7 +873,8 @@ internal class ClientManager : IClientManager {
             enterSceneData.Position,
             enterSceneData.Scale,
             enterSceneData.Team,
-            enterSceneData.SkinId
+            enterSceneData.SkinId,
+            enterSceneData.CustomSkinId
         );
         _animationManager.UpdatePlayerAnimation(id, enterSceneData.AnimationClipId, 0);
         var pending = _pendingPeers.Take(id, enterSceneData.PlayerVisit);
@@ -1320,13 +1330,26 @@ internal class ClientManager : IClientManager {
 
         if (settingUpdate.UpdateTypes.Contains(PlayerSettingUpdateType.Skin)) {
             if (settingUpdate.Self) {
-                _playerManager.OnPlayerSkinUpdate(true, settingUpdate.SkinId);
+                _playerManager.OnPlayerSkinUpdate(true, settingUpdate.SkinId, settingUpdate.CustomSkinId);
                 
                 SkinChangedEvent?.Invoke(settingUpdate.SkinId);
             } else {
-                _playerManager.OnPlayerSkinUpdate(false, settingUpdate.SkinId, settingUpdate.Id);
+                _playerManager.OnPlayerSkinUpdate(false, settingUpdate.SkinId, settingUpdate.CustomSkinId, settingUpdate.Id);
             }
         }
+    }
+
+    internal bool TrySelectAtlasSkin(string id) => _playerManager.TrySelectAtlasSkin(id);
+
+    private void OnLocalCustomSkinChanged(string customSkinId) {
+        if (!_netClient.IsConnected || !_serverSettings.AllowSkins) {
+            return;
+        }
+
+        _netClient.UpdateManager.AddPlayerSettingUpdate(
+            skinId: _playerManager.LocalSkinId,
+            customSkinId: customSkinId ?? ""
+        );
     }
     
     /// <summary>

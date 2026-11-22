@@ -1003,6 +1003,7 @@ internal class AnimationManager {
             playerObject.transform.position,
             Quaternion.Euler(Vector3.zero)
         );
+        RemotePlayerVisuals.Track(nailGameObject, ownerId: id);
 
         // Get the rigidbody component that we need to throw around
         var nailRigidBody = nailGameObject.GetComponent<Rigidbody2D>();
@@ -1038,6 +1039,7 @@ internal class AnimationManager {
             playerObject.transform.position + new Vector3(facingRight ? 0.2f : -0.2f, -0.02f, -0.01f),
             Quaternion.identity
         );
+        RemotePlayerVisuals.Track(headGameObject, ownerId: id);
 
         // Get the rigidbody component of the head object
         var headRigidBody = headGameObject.GetComponent<Rigidbody2D>();

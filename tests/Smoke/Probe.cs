@@ -547,15 +547,14 @@ public sealed class Probe : MonoBehaviour {
             var selected = false;
             runtime.KeyPressed = key => key == KeyCode.F7 && !selected && (selected = true);
             yield return Until(() => selected && runtime.Peers.ContainsKey(runtime.Selected), "F7 selects teammate");
-            var pressed = false;
             var targetPosition = File.ReadAllText(Path.Combine(root, "guest.warp-position")).Split(',');
             var warpTarget = new Vector2(float.Parse(targetPosition[0], System.Globalization.CultureInfo.InvariantCulture), float.Parse(targetPosition[1], System.Globalization.CultureInfo.InvariantCulture));
-            runtime.KeyPressed = key => key == KeyCode.F8 && !pressed && (pressed = true);
-            yield return Until(() => pressed && AliveScene("Town") && Vector2.Distance(HeroController.instance.transform.position, warpTarget) < 4,
-                "F8 authorized cross-room teleport arrives beside teammate");
+            var commandHandled = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected);
+            yield return Until(() => commandHandled && AliveScene("Town") && Vector2.Distance(HeroController.instance.transform.position, warpTarget) < 4,
+                "/tp teammate name arrives beside teammate");
             yield return Until(() => !Field<bool>(runtime, "changingScene") && Field<Coroutine>(runtime, "teammateWarp") == null &&
                 HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished,
-                "F8 completes native arrival and releases its travel lifecycle");
+                "/tp completes native arrival and releases its travel lifecycle");
             runtime.KeyPressed = _ => false;
             if (Has(role + ".failed")) yield break;
             if (dreamScene != pd.GetString("dreamGateScene") || dreamX != pd.GetFloat("dreamGateX") || dreamY != pd.GetFloat("dreamGateY")) {
@@ -642,7 +641,7 @@ public sealed class Probe : MonoBehaviour {
         }
         Mark("PASS disconnect cancels pending " + (host ? "warp" : "checkpoint") + " and restores hero");
         yield return ProbeShutdown.Run(engine,root,role);
-        Mark("FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, F6 personal bench return for guest and scene authority without combat reset, native shade nail rescue, both wipe orders and F7/F8 warp");
+        Mark("FINAL PASS real UDP: enemy health/position/invincibility, remote nail, authority transfer, late death, shared ability, map projection/icon, F6 personal bench return for guest and scene authority without combat reset, native shade nail rescue, both wipe orders, F7 selection and /tp warp");
         Flag(role + ".done");
     }
 

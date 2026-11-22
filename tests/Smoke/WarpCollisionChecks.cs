@@ -141,25 +141,22 @@ public sealed partial class RescueProbe {
             if (role == actor) {
                 runtime.Selected = runtime.Peers.Keys.Single();
                 var before = Field<uint>(runtime, "handledWarp");
-                var pressed = false;
-                runtime.KeyPressed = key => {
-                    if (key != CoopMod.Settings.TeleportKey || pressed) return false;
-                    pressed = true; hero.AffectedByGravity(true); return true;
-                };
-                yield return Until(() => pressed && Field<uint>(runtime, "handledWarp") > before, "actual F8 accepted over UDP " + step);
-                runtime.KeyPressed = _ => false;
-                yield return Until(() => !Field<bool>(runtime, "changingScene") && GameManager.instance.sceneName == scene &&
-                    HeroController.instance.acceptingInput, "actual F8 finishes native arrival " + step);
                 hero.AffectedByGravity(true);
-                yield return Until(() => hero.cState.onGround, "actual F8 lands on native Waterways support " + step);
+                var commandHandled = TeammateTeleportCommandProbe.Execute(engine.ClientManager, runtime.Selected);
+                Check(commandHandled, "chat /tp is handled locally before network dispatch " + step);
+                yield return Until(() => Field<uint>(runtime, "handledWarp") > before, "actual /tp accepted over UDP " + step);
+                yield return Until(() => !Field<bool>(runtime, "changingScene") && GameManager.instance.sceneName == scene &&
+                    HeroController.instance.acceptingInput, "actual /tp finishes native arrival " + step);
+                hero.AffectedByGravity(true);
+                yield return Until(() => hero.cState.onGround, "actual /tp lands on native Waterways support " + step);
                 var box = hero.GetComponent<Collider2D>();
                 Check(!Physics2D.OverlapBoxAll(box.bounds.center, box.bounds.size, 0).Any(c => c != box &&
                     !c.transform.IsChildOf(hero.transform) && c.gameObject.scene.name == scene && !c.isTrigger &&
                     !Physics2D.GetIgnoreLayerCollision(hero.gameObject.layer, c.gameObject.layer) &&
                     Physics2D.Distance(box, c).isOverlapped && Physics2D.Distance(box, c).distance < -.01f),
-                    "actual F8 full body clears native platform and walls " + step);
+                    "actual /tp full body clears native platform and walls " + step);
                 Check(Vector2.Distance(hero.transform.position, Platform().bounds.center) < 5,
-                    "actual F8 stays beside the requested Waterways platform " + step);
+                    "actual /tp stays beside the requested Waterways platform " + step);
             }
             yield return Together(step + "-finished");
             yield return new WaitForSecondsRealtime(3.1f);

@@ -64,6 +64,7 @@ internal static class Program {
         LocalWorldIsolationTests.Register(Test);
         EncounterSummonTests.Register(Test);
         LocalizationTests.Register(Test);
+        ChatCompletionTests.Register(Test);
         BossHealthScaleTests.Register(Test);
         LinkedHealthTests.Register(Test);
         DamageRankingTests.Register(Test);
@@ -359,8 +360,12 @@ internal static class Program {
             Check(p.Members[2].ReturnRespawnType == 2 && p.Round == 0 && p.Members[1].Life == Life.Alive);
         });
         Test("avatar room and both participants' visits survive all scene packets", () => {
-            var enter=Roundtrip(new ClientPlayerEnterScene{Id=7,Username="probe",Position=Hkmp.Math.Vector2.Zero,SceneName="GG_Hornet_1",Visit=11,Epoch=3,PlayerVisit=13});
-            Check(enter.SceneName=="GG_Hornet_1"&&enter.Visit==11&&enter.Epoch==3&&enter.PlayerVisit==13);
+            var enter=Roundtrip(new ClientPlayerEnterScene{Id=7,Username="probe",Position=Hkmp.Math.Vector2.Zero,SceneName="GG_Hornet_1",Visit=11,Epoch=3,PlayerVisit=13,CustomSkinId="简约线条2.0"});
+            Check(enter.SceneName=="GG_Hornet_1"&&enter.Visit==11&&enter.Epoch==3&&enter.PlayerVisit==13&&enter.CustomSkinId=="简约线条2.0");
+            var skin = new ClientPlayerSettingUpdate { Self = true, SkinId = 0, CustomSkinId = "空洞前辈" };
+            skin.UpdateTypes.Add(PlayerSettingUpdateType.Skin);
+            var skinCopy = Roundtrip(skin);
+            Check(skinCopy.SkinId == 0 && skinCopy.CustomSkinId == "空洞前辈" && skinCopy.UpdateTypes.Contains(PlayerSettingUpdateType.Skin));
             var leave=Roundtrip(new ClientPlayerLeaveScene{Id=7,SceneName="GG_Hornet_1",Visit=11,Epoch=3,PlayerVisit=13});
             Check(leave.SceneName==enter.SceneName&&leave.Visit==11&&leave.Epoch==3&&leave.PlayerVisit==13);
             var update=Roundtrip(new PlayerUpdate{Id=7,SceneName="GG_Hornet_1",Visit=11,Epoch=3,PlayerVisit=13});

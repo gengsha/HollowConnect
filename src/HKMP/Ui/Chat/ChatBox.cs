@@ -1,5 +1,6 @@
 using HkmpFontManager = Hkmp.Ui.Resources.FontManager;
 using System;
+using System.Collections.Generic;
 using GlobalEnums;
 using Hkmp.Api.Client;
 using Hkmp.Game.Settings;
@@ -103,6 +104,10 @@ internal class ChatBox : IChatBox {
     /// </summary>
     public event Action<string> ChatInputEvent;
 
+    internal Func<string, IReadOnlyList<string>> CompleteCommand {
+        set => _chatInput.CompleteCommand = value;
+    }
+
     /// <summary>
     /// Construct the chat box in the given group and with the given mod settings.
     /// </summary>
@@ -122,6 +127,7 @@ internal class ChatBox : IChatBox {
             UiManager.ChatFontSize
         );
         _chatInput.SetActive(false);
+        _chatInput.OnCancel += HideChatInput;
         _chatInput.OnSubmit += chatInput => {
             if (chatInput.Length > 0) {
                 ChatInputEvent?.Invoke(chatInput);
@@ -169,8 +175,8 @@ internal class ChatBox : IChatBox {
         }
 
         if (_isOpen) {
-            if (InputHandler.Instance.inputActions.pause.WasPressed) {
-                HideChatInput();
+            if (InputHandler.Instance.inputActions.pause.WasPressed && !_chatInput.IsComposing) {
+                _chatInput.Cancel();
             }
         } else if (modSettings.Keybinds.OpenChat.IsPressed) {
             var gameManager = GameManager.instance;
@@ -221,20 +227,24 @@ internal class ChatBox : IChatBox {
                 }
             }
 
-            _isOpen = true;
-
-            for (var i = 0; i < MaxMessages; i++) {
-                _messages[i]?.OnChatToggle(true);
-            }
-
-            _chatInput.SetActive(true);
-            _chatInput.Focus();
-
-            InputHandler.Instance.StopMouseInput();
-            InputHandler.Instance.PreventPause();
-            SetEnabledHeroActions(false);
-            DebugMod.SetLockKeyBinds(true);
+            OpenChatInput();
         }
+    }
+
+    internal void OpenChatInput() {
+        if (_isOpen) return;
+        _isOpen = true;
+        for (var i = 0; i < MaxMessages; i++) {
+            _messages[i]?.OnChatToggle(true);
+        }
+
+        _chatInput.SetActive(true);
+        _chatInput.Focus();
+
+        InputHandler.Instance.StopMouseInput();
+        InputHandler.Instance.PreventPause();
+        SetEnabledHeroActions(false);
+        DebugMod.SetLockKeyBinds(true);
     }
 
     /// <summary>

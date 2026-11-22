@@ -2,6 +2,7 @@
   <PropertyGroup><TargetFramework>net472</TargetFramework><AssemblyName>HollowConnect.Smoke</AssemblyName></PropertyGroup>
   <ItemGroup>
     <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(HollowReferences)/UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>$(HollowReferences)/UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="MonoMod.Utils" Condition="'$(HollowGameVersion)' == 'Unity6'"><HintPath>$(HollowReferences)/MonoMod.Utils.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Mono.Cecil" Condition="'$(HollowGameVersion)' == 'Unity6'"><HintPath>$(HollowReferences)/Mono.Cecil.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.AnimationModule"><HintPath>$(HollowReferences)/UnityEngine.AnimationModule.dll</HintPath><Private>false</Private></Reference>
@@ -19,6 +20,7 @@
     <Reference Include="MMHOOK_Assembly-CSharp"><HintPath>$(HollowReferences)/MMHOOK_Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine"><HintPath>$(HollowReferences)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(HollowReferences)/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule"><HintPath>$(HollowReferences)/UnityEngine.ScreenCaptureModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.ImageConversionModule"><HintPath>$(HollowReferences)/UnityEngine.ImageConversionModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.Physics2DModule"><HintPath>$(HollowReferences)/UnityEngine.Physics2DModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.ParticleSystemModule"><HintPath>$(HollowReferences)/UnityEngine.ParticleSystemModule.dll</HintPath><Private>false</Private></Reference>

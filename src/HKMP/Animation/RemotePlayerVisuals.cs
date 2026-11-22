@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,17 +10,21 @@ namespace Hkmp.Animation;
 // spells keep their own tint component; no scene-wide renderer scans/material edits.
 internal static class RemotePlayerVisuals {
     private static readonly HashSet<RemoteVisualOpacity> tracked = new();
+    internal static Action<GameObject, int> SkinApplier;
     static RemotePlayerVisuals() => CoopContext.PlayerVisualSettingsChanged += Refresh;
     internal static void Register(RemoteVisualOpacity visual) => tracked.Add(visual);
     internal static void Forget(RemoteVisualOpacity visual) => tracked.Remove(visual);
     private static void Refresh() {
         foreach (var visual in tracked) if (visual != null) visual.Refresh();
     }
-    internal static GameObject Track(GameObject obj, GameObject origin = null) {
+    internal static GameObject Track(GameObject obj, GameObject origin = null, int ownerId = -1, bool applySkin = true) {
         if (obj != null && obj.GetComponent<RemoteVisualOpacity>() == null)
             obj.AddComponent<RemoteVisualOpacity>();
-        var owner = AttackOwnership.CreatingPlayer >= 0 ? AttackOwnership.CreatingPlayer : AttackOwnership.RemoteOwner(origin);
+        var owner = ownerId >= 0
+            ? ownerId
+            : AttackOwnership.CreatingPlayer >= 0 ? AttackOwnership.CreatingPlayer : AttackOwnership.RemoteOwner(origin);
         if (obj != null && owner >= 0) obj.GetComponent<RemoteVisualOpacity>().PlayerId = owner;
+        if (obj != null && owner >= 0 && applySkin) SkinApplier?.Invoke(obj, owner);
         return obj;
     }
     internal static GameObject Instantiate(GameObject source) {

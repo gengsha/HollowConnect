@@ -103,6 +103,8 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     private Font font;
     private readonly DebugEventRing debugEvents = new DebugEventRing(256);
     private CoopDebugCommand debugCommand;
+    private TeammateTeleportCommand teleportCommand;
+    private bool clientCommandsRegistered;
     private bool debugPanel;
     private bool debugRecoveryArmed;
     private Vector2 debugScroll;
@@ -119,6 +121,66 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         !HeroController.instance.cState.hazardRespawning && !HeroController.instance.cState.transitioning &&
         HeroController.instance.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION &&
         !GameManager.instance.isPaused && Time.timeScale > 0;
+
+    internal string RequestTeammateWarp(string targetName) {
+        if (!Connected) return "请先加入联机房间";
+        if (!WarpEnabled) return "房主已关闭队友传送";
+        if (!CanStartWarp) return "当前无法传送，请等待操作或复位完成";
+
+        var available = AvailableWarpTeammates().OrderBy(id => id).ToArray();
+        ushort target;
+        if (!string.IsNullOrWhiteSpace(targetName)) {
+            if (ushort.TryParse(targetName, out var parsed) && available.Contains(parsed)) target = parsed;
+            else {
+                var matches = available.Where(id => string.Equals(TeammateDisplayName(id), targetName, StringComparison.OrdinalIgnoreCase)).ToArray();
+                if (matches.Length == 0) return "没有找到在线队友：" + targetName;
+                if (matches.Length > 1) return "队友名重复，请在消息中使用玩家编号";
+                target = matches[0];
+            }
+        } else if (available.Length == 1) target = available[0];
+        else if (available.Length == 0) return "没有可传送的在线队友";
+        else return "用法：/tp <队友名>；在线队友：" + string.Join("、", available.Select(TeammateDisplayName));
+
+        Selected = target;
+        Send(new Message { Kind = Kind.WarpRequest, Target = target, Serial = ++warpSerial });
+        return "已请求传送到队友：" + TeammateDisplayName(target);
+    }
+
+    private IEnumerable<ushort> AvailableWarpTeammates() => Peers.Where(p => p.Value.State != null && Now - p.Value.Seen < 2)
+        .Select(p => p.Key);
+
+    internal IEnumerable<string> TeammateWarpCompletions() {
+        if (!Connected || !WarpEnabled) yield break;
+        var players = AvailableWarpTeammates().Select(id => (Id: id, Name: TeammateDisplayName(id))).ToArray();
+        foreach (var player in players) {
+            var name = player.Name;
+            // A player ID is always accepted and disambiguates names that the command cannot represent.
+            if (ushort.TryParse(name, out _) || name.IndexOf('"') >= 0 || name.Any(char.IsControl) ||
+                string.IsNullOrWhiteSpace(name) || players.Count(other =>
+                    string.Equals(other.Name, name, StringComparison.OrdinalIgnoreCase)) > 1) {
+                yield return player.Id.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            } else {
+                yield return name;
+            }
+        }
+    }
+
+    private string TeammateDisplayName(ushort id) => api?.ClientManager.GetPlayer(id)?.Username ?? "玩家 " + id;
+
+    private void RegisterClientCommands() {
+        if (api == null || clientCommandsRegistered) return;
+        api.CommandManager.RegisterCommand(debugCommand);
+        try { api.CommandManager.RegisterCommand(teleportCommand); }
+        catch (Exception e) { CoopMod.Instance?.Log("Could not register teammate /tp command: " + e.Message); }
+        clientCommandsRegistered = true;
+    }
+
+    private void UnregisterClientCommands() {
+        if (api == null || !clientCommandsRegistered) return;
+        try { api.CommandManager.DeregisterCommand(teleportCommand); } catch { }
+        try { api.CommandManager.DeregisterCommand(debugCommand); } catch { }
+        clientCommandsRegistered = false;
+    }
 
     private void DebugEvent(string code, DebugEventSeverity severity = DebugEventSeverity.Info, string detail = "") {
         var scene = UnitySceneManager.GetActiveScene().name;
@@ -317,7 +379,8 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         ModHooks.SetPlayerIntHook += OnSetInt;
         font = Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial" }, 18);
         debugCommand = new CoopDebugCommand(this);
-        api.CommandManager.RegisterCommand(debugCommand);
+        teleportCommand = new TeammateTeleportCommand(this);
+        RegisterClientCommands();
         DebugEvent("runtime-initialized", DebugEventSeverity.Info);
     }
 
@@ -352,6 +415,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         var linkedDeath = linkedHealthMode && !wasObserving ? personalDeath ?? CaptureLinkedDisconnectDeath() : null;
         ResetLinkedHealth();
         ResetDamageRanking();
+        DisposeTeammateStatus();
         CoopMod.RoomRuleRevision++;
         flexibleBossTargeting = false;
         DebugEvent("disconnect", DebugEventSeverity.Warning);
@@ -479,6 +543,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
             case Kind.BossSettlementReady:
                 ReceiveBossSettlementReady(m); break;
             case Kind.Left:
+                RememberDepartedTeammate(m.Id);
                 shades.Remove(m.Id); Peers.Remove(m.Id); map.Remove(m.Id); break;
             case Kind.Down:
                 var downLife = m.Value == (int)Life.Spectating ? Life.Spectating : Life.Down;
@@ -638,7 +703,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
 
     private void Update() {
         if (EmergencyShortcutPressed()) RequestEmergencyDirtmouthBench();
-        if (emergencyBenchActive) return;
+        if (emergencyBenchActive) { teammateStatusView?.Hide(); return; }
         TickObservation();
         if (KeyPressed(KeyCode.F9)) ToggleDebugPanel();
         SampleDebugState();
@@ -669,6 +734,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         RecoverWhiteDefenderDreamEntry();
         RecoverPendingWarpEntry();
         if (!Connected) return;
+        TickTeammateStatus();
         TickDamageRanking();
         TickRescueOptions();
         TickStoryRescuePlacement();
@@ -697,12 +763,6 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                 Selected = ids[(index + 1) % ids.Length];
                 Notice("已选队友：" + Peers[Selected].State.Name);
             }
-        }
-        if (!Down && WarpEnabled && KeyPressed(CoopMod.Settings.TeleportKey)) {
-            if (!CanStartWarp) { Notice("当前无法传送，请等待操作或复位完成"); return; }
-            if (!Peers.ContainsKey(Selected)) Selected = Peers.Keys.OrderBy(i => i).FirstOrDefault();
-            if (Peers.ContainsKey(Selected)) Send(new Message { Kind = Kind.WarpRequest, Target = Selected, Serial = ++warpSerial });
-            else Notice("没有可传送的队友");
         }
     }
 
@@ -797,6 +857,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         var message = new Message { Kind = Kind.Presence, Serial = ++sequence, Scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
             Aux = (InBossEncounter() ? 1u : 0u) | (LinkedHealthRuleEnabled ? (uint)LocalLinkedRest() << 1 : 0u),
             LinkedRestEpoch = linkedRestEpoch,
+            Target = LinkedHealthRuleEnabled ? (ushort)0 : TeammateStatusData.Pack(pd.health, pd.healthBlue),
             X = pos.x, Y = pos.y, HasMap = hasMap, MapX = hasMap ? location.x : 0, MapY = hasMap ? location.y : 0,
             IsReady = CanStartWarp, Key = pd.GetString("respawnScene") ?? "",
             Name = pd.GetString("respawnMarkerName") ?? "", Value = pd.GetInt("respawnType") };
@@ -1326,7 +1387,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         }
         orig(self);
         // Native dream-gate travel relies on the Dream Nail FSM to fade in
-        // and release control. F8 does not run that FSM. Complete our own
+        // and release control. A teammate teleport bypasses that FSM. Complete our own
         // scoped arrival while retaining native entry/hero-in-position events.
         if (!ownArrival) return;
         self.RegainControl(); self.StartAnimationControl();
@@ -1410,8 +1471,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
                     hero.transform.position = new Vector3(pos.x, pos.y, hero.transform.position.z);
                     Physics2D.SyncTransforms();
                     hero.SetHazardRespawn(hero.transform.position, hero.cState.facingRight); hero.ResetAirMoves();
-                    if (IsRadianceScene(m.Scene)) RestoreRadianceWarpCamera(m.Scene);
-                    else GameCameras.instance?.cameraController?.PositionToHero(false);
+                    RestoreWarpCamera(m.Scene, IsRadianceScene(m.Scene));
                     nativeTransitionAccepted = true;
                 }
                 DebugEvent(found ? "warp-complete" : "warp-no-safe-landing", found ? DebugEventSeverity.Info : DebugEventSeverity.Warning);
@@ -1527,6 +1587,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopContext.BossDefeated = null;
         CoopContext.BossEncounter = null; CoopContext.BossDamage = null;
         UnregisterDamageRanking();
+        DisposeTeammateStatus();
         CoopContext.FinishRadianceIntro = null;
         StopSpectating();
         RestoreSpectatorPeers();
@@ -1543,8 +1604,6 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         On.HeroController.EnterSceneDreamGate -= CompleteWarpEntry;
         ModHooks.SetPlayerBoolHook -= OnSetBool; ModHooks.SetPlayerIntHook -= OnSetInt;
         if (api != null) { api.ClientManager.ConnectEvent -= OnConnect; api.ClientManager.DisconnectEvent -= OnDisconnect; }
-        if (api != null && debugCommand != null) {
-            try { api.CommandManager.DeregisterCommand(debugCommand); } catch { }
-        }
+        UnregisterClientCommands();
     }
 }

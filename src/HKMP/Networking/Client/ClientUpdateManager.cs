@@ -444,8 +444,9 @@ internal class ClientUpdateManager : UdpUpdateManager<ServerUpdatePacket, Server
     /// updated.</param>
     /// <param name="skinId">The ID of the skin that the player would like to switch to, or null, if the skin does not
     /// need to be updated.</param>
-    public void AddPlayerSettingUpdate(Team? team = null, byte? skinId = null) {
-        if (!team.HasValue && !skinId.HasValue) {
+    /// <param name="customSkinId">The Custom Knight skin directory ID, or null if it does not need to be updated.</param>
+    public void AddPlayerSettingUpdate(Team? team = null, byte? skinId = null, string customSkinId = null) {
+        if (!team.HasValue && !skinId.HasValue && customSkinId == null) {
             return;
         }
         
@@ -465,9 +466,10 @@ internal class ClientUpdateManager : UdpUpdateManager<ServerUpdatePacket, Server
                 playerSettingUpdate.Team = team.Value;
             }
 
-            if (skinId.HasValue) {
+            if (skinId.HasValue || customSkinId != null) {
                 playerSettingUpdate.UpdateTypes.Add(PlayerSettingUpdateType.Skin);
-                playerSettingUpdate.SkinId = skinId.Value;
+                playerSettingUpdate.SkinId = skinId ?? 0;
+                playerSettingUpdate.CustomSkinId = customSkinId ?? "";
             }
         }
     }

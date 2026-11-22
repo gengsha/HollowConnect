@@ -13,15 +13,17 @@ using Object = UnityEngine.Object;
 
 namespace HollowConnect.Smoke;
 
-// Unsaved native P5 entry. Observe camera ownership without overriding it.
+// Unsaved native pantheon entry. Observe camera ownership without overriding it.
 public sealed class BossCameraProbe : MonoBehaviour {
     private string root, role, scene, scenario, first;
     private bool host;
+    private int tier;
     private CoopRuntime runtime;
     private Hkmp.Game.GameManager engine;
     private EntityManager manager;
     private readonly HashSet<int> dumped = new();
     private string previous;
+    private string previousPhase;
     private float nextSample;
     private static T Field<T>(object o, string n) => (T)o.GetType().GetField(n, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).GetValue(o);
     private Dictionary<ulong, Entity> Entities => Field<Dictionary<ulong, Entity>>(manager, "_entities");
@@ -61,8 +63,16 @@ public sealed class BossCameraProbe : MonoBehaviour {
         var camera = GameCameras.instance.cameraController;
         var areas = Object.FindObjectsOfType<CameraLockArea>(true).Where(a => a.gameObject.scene.name == scene).ToArray();
         foreach (var area in areas) foreach (var fsm in area.GetComponents<PlayMakerFSM>()) Dump(fsm);
-        foreach (var entity in Entities.Values.Where(e => e.Type == EntityType.FalseKnight))
+        foreach (var entity in Entities.Values.Where(e => e.Type == EntityType.FalseKnight || e.Type == EntityType.PureVessel))
             if (entity.Object.Host != null) foreach (var fsm in entity.Object.Host.GetComponents<PlayMakerFSM>()) Dump(fsm);
+        if (scene == "GG_Hollow_Knight") {
+            var control = Entities.Values.FirstOrDefault(e => e.Type == EntityType.PureVessel)?.Object.Host?.GetComponents<PlayMakerFSM>().FirstOrDefault(f => f.FsmName == "Control");
+            var phase = control?.ActiveStateName;
+            if (!string.IsNullOrEmpty(phase) && phase != previousPhase) {
+                previousPhase = phase;
+                Mark("PURE VESSEL phase=" + phase + " authority=" + manager.IsSceneHost);
+            }
+        }
         var current = "authority=" + manager.IsSceneHost + " mode=" + camera.mode + " current=" + Field<CameraLockArea>(camera, "currentLockArea")?.name +
             " locks=" + string.Join(",", camera.lockZoneList.Select(a => a == null ? "null" : a.name)) +
             " areas=" + string.Join(",", areas.Select(a => a.name + ":" + a.gameObject.activeInHierarchy + ":" + string.Join("/", a.GetComponents<PlayMakerFSM>().Select(f => f.ActiveStateName))));
@@ -77,12 +87,19 @@ public sealed class BossCameraProbe : MonoBehaviour {
         scene = Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_SCENE") ?? "GG_Failed_Champion";
         scenario = Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_CASE") ?? "diagnostic";
         first = Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_FIRST") ?? "host";
-        Mark("START boss-camera " + scene + " " + scenario);
+        tier = Environment.GetEnvironmentVariable("HOLLOWCONNECT_CAMERA_TIER") == "4" ? 4 : 5;
+        Mark("START boss-camera P" + tier + " " + scene + " " + scenario);
         On.HeroController.TakeDamage += (orig, hero, source, side, damage, hazard) => { };
         On.HutongGames.PlayMaker.Fsm.ProcessEvent += (orig, fsm, ev, data) => {
             if (fsm.GameObject != null && fsm.GameObject.GetComponent<CameraLockArea>() != null)
                 Mark("CAMERA EVENT " + fsm.GameObject.name + "/" + fsm.Name + " state=" + fsm.ActiveStateName + " event=" + ev?.Name + " sender=" + data?.SentByFsm?.GameObject?.name + "/" + data?.SentByFsm?.Name);
             orig(fsm, ev, data);
+        };
+        On.HutongGames.PlayMaker.Actions.ActivateGameObject.DoActivateGameObject += (orig, action) => {
+            var target = action.Fsm.GetOwnerDefaultTarget(action.gameObject);
+            if (target != null && target.name == "CameraLockArea Intro" && target.scene.name == scene)
+                Mark("INTRO TARGET " + action.Fsm.GameObject.name + "/" + action.Fsm.Name + "/" + action.State.Name + " active=" + action.activate.Value);
+            orig(action);
         };
         var stack = new Stack<IEnumerator>(); stack.Push(Run()); var deadline = DateTime.UtcNow.AddMinutes(4);
         while (stack.Count > 0) {
@@ -108,28 +125,28 @@ public sealed class BossCameraProbe : MonoBehaviour {
         typeof(Hkmp.Game.Client.ClientManager).GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(engine.ClientManager, new object[] { "127.0.0.1", 29650, "camera" + role });
         yield return Until(() => runtime.Connected, "connected"); Flag(role + ".connected"); yield return Until(() => Has((host ? "guest" : "host") + ".connected"), "both connected");
         BossSequenceController.Reset();
-        var sequence = Resources.Load<BossSequence>("GG/Boss Sequence Tier 5");
-        Require(sequence != null, "native fifth sequence asset");
+        var sequence = Resources.Load<BossSequence>("GG/Boss Sequence Tier " + tier);
+        Require(sequence != null, "native sequence asset P" + tier);
         var index = Enumerable.Range(0, sequence.Count).First(i => sequence.GetSceneAt(i) == scene);
-        BossSequenceController.SetupNewSequence(sequence, BossSequenceController.ChallengeBindings.None, "bossDoorStateTier5");
+        BossSequenceController.SetupNewSequence(sequence, BossSequenceController.ChallengeBindings.None, "bossDoorStateTier" + tier);
         typeof(BossSequenceController).GetField("bossIndex", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, index);
-        Mark("P5 CONTEXT index=" + index + " scene=" + scene);
+        Mark("P" + tier + " CONTEXT index=" + index + " scene=" + scene);
         if (role != first && scenario == "late") yield return Until(() => Has(first + ".native-intro-ended"), "authority finished intro before late entry");
         else if (role != first) yield return new WaitForSecondsRealtime(.8f);
         Enter(scene); yield return Until(() => In(scene), "native arena entry");
         yield return Until(() => manager.IsSceneHostDetermined && Entities.Count > 0, "native authority determined");
-        Require(manager.IsSceneHost == (role == first) && BossSequenceController.IsInSequence, "requested authority in native P5 context");
+        Require(manager.IsSceneHost == (role == first) && BossSequenceController.IsInSequence, "requested authority in native P" + tier + " context");
         if (role == first && scenario == "late") {
             yield return Until(() => Object.FindObjectsOfType<CameraLockArea>(true).Any(a => a.gameObject.scene.name == scene && a.name.Contains("Intro") && !a.gameObject.activeInHierarchy), "authority native intro has ended");
             yield return new WaitForSecondsRealtime(2);
             Flag(role + ".native-intro-ended");
         }
-        yield return new WaitForSecondsRealtime(16);
+        yield return new WaitForSecondsRealtime(scene == "GG_Hollow_Knight" ? 19 : 16);
         Observe();
         Flag(role + ".observed"); yield return Until(() => Has((host ? "guest" : "host") + ".observed"), "both camera observations complete");
         if (scenario != "diagnostic") {
             yield return CheckCamera();
-            yield return LocalBarrierEventChecks.Run(Require);
+            if (scene == "GG_Failed_Champion") yield return LocalBarrierEventChecks.Run(Require);
             if (scenario == "handoff") {
                 Flag(role + ".before-handoff");
                 yield return Until(() => Has((host ? "guest" : "host") + ".before-handoff"), "both checked camera before authority departure");
@@ -149,21 +166,30 @@ public sealed class BossCameraProbe : MonoBehaviour {
         var hero = HeroController.instance;
         yield return Until(() => hero.acceptingInput && !hero.controlReqlinquished && camera.mode != CameraController.CameraMode.FROZEN, "native hero and camera ready");
         var areas = Object.FindObjectsOfType<CameraLockArea>(true).Where(a => a.gameObject.scene.name == scene).ToArray();
-        var intro = areas.Where(a => a.GetComponents<PlayMakerFSM>().Any(f => f.FsmStates.SelectMany(s => s.Transitions).Any(t => t.EventName == "INTRO OFF" || t.EventName == "BATTLE STARTED"))).ToArray();
+        var intro = areas.Where(a => scene == "GG_Hollow_Knight" ? a.name == "CameraLockArea Intro" :
+            a.GetComponents<PlayMakerFSM>().Any(f => f.FsmStates.SelectMany(s => s.Transitions).Any(t => t.EventName == "INTRO OFF" || t.EventName == "BATTLE STARTED"))).ToArray();
         Require(intro.Length > 0 && intro.All(a => !a.gameObject.activeInHierarchy && !camera.lockZoneList.Contains(a)), "native intro locks deactivate and release camera");
         Require(camera.lockZoneList.Any(a => a != null && a.gameObject.scene.name == scene && !intro.Contains(a)), "normal native arena camera remains active");
+        if (scene == "GG_Hollow_Knight") {
+            Require(camera.mode == CameraController.CameraMode.LOCKED && Field<CameraLockArea>(camera, "currentLockArea")?.name == "CameraLockArea", "Pure Vessel uses the native arena lock after roar");
+            yield return CheckHorizontalFollow(hero, camera, 41, 53, hero.transform.position.y, 2);
+            yield break;
+        }
         if (scene != "GG_Failed_Champion") yield break;
         Require(Entities.Values.Where(e => e.Type == EntityType.FalseKnight).Any(e => e.Object.Host.GetComponents<PlayMakerFSM>().Any(f => f.FsmVariables.FindFsmBool("HollowConnect Intro Released")?.Value == true)), "versioned intro completion retained after release state");
+        yield return CheckHorizontalFollow(hero, camera, 49, 68, 27.4f, 4);
+    }
+    private IEnumerator CheckHorizontalFollow(HeroController hero, CameraController camera, float leftX, float rightX, float y, float minimumDelta) {
         var start = hero.transform.position;
         // Move the actor within the floor; the actual camera controller must
         // follow it. Never set camera position/mode or disable lock objects.
-        hero.transform.position = new Vector3(49, 27.4f, start.z);
+        hero.transform.position = new Vector3(leftX, y, start.z);
         hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         yield return new WaitForSecondsRealtime(2);
         var left = camera.transform.position;
-        hero.transform.position = new Vector3(68, 27.4f, start.z);
+        hero.transform.position = new Vector3(rightX, y, start.z);
         hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        yield return Until(() => camera.transform.position.x > left.x + 4, "native camera follows actor across arena", 5);
+        yield return Until(() => camera.transform.position.x > left.x + minimumDelta, "native camera follows actor across arena", 5);
         var view = camera.cam.WorldToViewportPoint(hero.transform.position);
         Require(view.x > 0 && view.x < 1 && view.y > 0 && view.y < 1, "actor stays visible in native arena camera");
         hero.transform.position = start;

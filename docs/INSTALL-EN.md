@@ -27,6 +27,6 @@ The script verifies the API, creates backups and installs the mod. To restore th
 
 All players need the same mod version and a package matching their game. The main menu provides **LAN multiplayer** (IP / UDP port) and **Steam multiplayer**. Set room rules under Options → Mods → HollowConnect before hosting. Back up existing saves before enabling shared progress.
 
-In-game text follows the game's language; other unsupported languages use English. F6 gives up waiting for rescue, F7 selects a teammate, F8 teleports if allowed. Routine status text stays in logs. Hold F5 for the death board; F9 opens diagnostics. Cross-room teammate locations are available while the map is open.
+In-game text follows the game's language; other unsupported languages use English. F6 gives up waiting for rescue; F7 cycles the spectator target. Enter `/tp <teammate name>` in the HKMP chat to request a teleport if the host allows it; quote names containing spaces, for example `/tp "Knight Two"`. Hold F5 for the death board; F9 opens diagnostics. Cross-room teammate locations are available while the map is open.
 
 [Release notes and validation limits](UPDATE-0.3.1.md) · [Known issues](KNOWN-ISSUES.md)

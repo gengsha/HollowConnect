@@ -48,11 +48,16 @@ internal sealed class EncounterSummonComponent : EntityComponent {
         Tick();
     }
     private void Tick() {
-        if (CoopContext.Resetting || GameObject.Host == null) return;
+        var sceneController = battle?.UsesSceneController == true;
+        if (CoopContext.Resetting || (!sceneController && GameObject.Host == null)) return;
         if (requested && !accepted && Time.unscaledTime >= nextRequest) {
             nextRequest = Time.unscaledTime + .5f; Send(EncounterSummonState.Request);
         }
-        if (IsControlled || !accepted || !GameObject.Host.activeInHierarchy) return;
+        if (IsControlled || (!sceneController && !GameObject.Host.activeInHierarchy)) return;
+        // A local native entry can precede authority assignment or the server
+        // receipt. It already proves the wake on this endpoint is legitimate.
+        battle?.ResumeDormantBoss();
+        if (!accepted) return;
         if (battle != null) {
             applying = true;
             try { battle.Tick(); } finally { applying = false; }
