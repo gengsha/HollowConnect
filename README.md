@@ -6,7 +6,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 **当前版本 0.3.3** · Windows 10 / 11 · **1.5.78.11833（Legacy）** 和 **1.5.12620（Unity6）**
 
-0.3.3 带来皮肤管理器与聊天输入修复。梦之钉命中移动中的队友也能获得灵魂，新配置默认启用灵活 Boss 索敌。[0.3.3 更新说明](docs/UPDATE-0.3.3.md)
+0.3.3 带来皮肤管理器与聊天输入修复。梦之钉命中移动中的队友也能获得灵魂，新配置默认启用灵活 Boss 索敌。同时适配 Benchwarp、Enemy HP Bar、地图模组和 QoL 的常用场景。[0.3.3 更新说明](docs/UPDATE-0.3.3.md)
 
 **安装方式：** [一键安装器](#安装与开房) · [PowerShell 脚本安装](#脚本安装无需安装器) · [手动安装](#手动安装无需安装器)
 
@@ -101,12 +101,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GamePath "E:\
 | **按住 F5** | 查看死亡排行榜。 |
 | **F6** | 放弃等待救援：开启“救援耗尽后观战”时转入死亡观战，否则按原版返回复活点；死亡观战中再次按下可提前返回。 |
 | **F7** | 循环选择观战目标。 |
-| **聊天命令** | 输入 `/tp 队友名` 传送；队友名含空格时写作 `/tp "队友 名"`，需房主允许传送。 |
+| **聊天命令** | 输入 `/tp 队友名` 传送。队友名含空格时写作 `/tp "队友 名"`。房间默认允许传送，满足条件时自动放行。 |
 | **F9** | 打开诊断面板，可导出诊断信息用于反馈。 |
 
 | **Ctrl + Alt + F12** | 紧急回椅：断开本机联机，返回德特茅斯长椅并自动保存，不扣吉欧。 |
 
 聊天框打开后，按 ↑ / ↓ 浏览本次游戏已提交的消息和命令。输入 `/` 会看到半透明的命令提示，按 Tab 补全。在 `/tp ` 后可以用 Tab 补全在线队友名，多人匹配时连续按 Tab 切换。按回车才会发送。
+
+房主可在退出游戏后编辑 `%USERPROFILE%\AppData\LocalLow\Team Cherry\Hollow Knight\CoopMod.GlobalSettings.json`，将 `AllowTeleport` 设为 `true`（开）或 `false`（关），重启游戏并重新开房后生效。
 
 紧急回椅需先载入存档，并能正常接收按键。部分按键可在游戏关闭后通过 `%USERPROFILE%\AppData\LocalLow\Team Cherry\Hollow Knight\CoopMod.GlobalSettings.json` 调整。
 
