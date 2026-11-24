@@ -36,7 +36,11 @@ public sealed partial class CoopRuntime {
         if (NativeSceneLoad.GetValue(gm) == null) trackedTransition = routine;
         return routine;
     }
-    private void TrackNativeLoader(SceneLoad loader) { if (Observing && !ObservationReturning) RequestObservationReturn(); trackedLoader = loader; }
+    private void TrackNativeLoader(SceneLoad loader) {
+        benchwarpStartDeadline = 0;
+        if (Observing && !ObservationReturning) RequestObservationReturn();
+        trackedLoader = loader;
+    }
     private IEnumerator IgnoreEmergencyTransition() {
         DebugEvent("emergency-bench-obsolete-transition-suppressed", DebugEventSeverity.Warning);
         yield break;

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Hkmp.Menu;
 using Modding.Converters;
 using Newtonsoft.Json;
@@ -40,7 +40,21 @@ internal class ModSettings {
     /// </summary>
     public bool DisplayPing { get; set; }
 
-    public string AtlasSkinId { get; set; } = "";
+    // An empty or unset value uses the original appearance or the Custom Knight selection.
+    public string AtlasSkinId { get; set; }
+
+    // This preference only controls how this client draws other players.
+    public bool ShowTeammateSkins { get; set; } = true;
+
+    public bool SkinDefaultsApplied { get; set; }
+
+    internal void ApplySkinDefaults() {
+        ServerSettings ??= new ServerSettings();
+        if (SkinDefaultsApplied) return;
+
+        ServerSettings.AllowSkins = true;
+        SkinDefaultsApplied = true;
+    }
 
     /// <summary>
     /// Set of addon names for addons that are disabled by the user.

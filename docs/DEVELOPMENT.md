@@ -114,6 +114,8 @@
 
 ## 打包与文件
 
+0.3.3 正式交付使用 `Package.ps1 -SteamModule -UserRequestedRelease`，核验使用 `Verify-Release.ps1 -SteamModule -UserRequestedRelease`，默认打包两版。0.3.3 使用冻结的生产二进制，校验 10 项核心、19 项安装器及 5 组双客户端记录。选择 `-ReleaseVersion 0.3.2` 可用原有验证要求核对历史交付。
+
 0.3.1 正式交付使用 `Package.ps1 -SteamModule -UserRequestedRelease`，核验使用 `Verify-Release.ps1 -SteamModule -UserRequestedRelease`，默认两版。当前入口转到 `Package-Current.ps1`，校验本版 15 项核心、安装器，以及每版菜单、两种典雅钥匙门后灵魂战士入场、水道原生屏障四组最终生产哈希结果；不要求或声称重跑完整矩阵。打包不重建已冻结生产 DLL。历史候选版和受击修订仍走原记录。证据见 `docs/evidence/development-validation-0.3.1.json`。
 
 安装器三语言控件渲染检查为 `tests/Installer.Localization.Tests.ps1 -OutputRoot <本次隔离目录>`，使用 Windows PowerShell STA 和 WinForms 实际布局，仅执行只读查找，不提交安装动作。既有安装/卸载与进程检测单独运行。菜单 `HOLLOWCONNECT_LOCALIZATION_CHECK=1` 覆盖原生三语切换；`HOLLOWCONNECT_HUD_AUDIT=1` 通过实际 IMGUI 重绘记录小字提交，启动器为该审计显示隔离游戏窗口以确保有 Repaint。`HOLLOWCONNECT_KEY_ESSENCE=shade-soul` 是黑波获取地实际典雅钥匙路线；旧的 `HOLLOWCONNECT_SIMPLE_KEYS=blackwave` 名称指水道，不能用来证明黑波房间通过。

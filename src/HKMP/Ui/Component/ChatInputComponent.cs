@@ -37,6 +37,9 @@ internal class ChatInputComponent : InputComponent {
         HkmpFontManager.UIFontRegular, fontSize, createInputField: obj => obj.AddComponent<ChatKeyboardField>()
     ) {
         Text.alignment = TextAnchor.MiddleLeft;
+        // Canvas scaling can round the localized font line taller than the input rect.
+        // Keep the single line visible while InputField still scrolls it horizontally.
+        Text.verticalOverflow = VerticalWrapMode.Overflow;
         Text.supportRichText = false;
         Text.font = Localize.Font ?? Text.font;
         InputField.characterLimit = ChatMessage.MaxMessageLength;

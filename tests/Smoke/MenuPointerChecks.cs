@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
 using Hkmp.Menu;
 using Modding;
 using Modding.Menu;
@@ -20,9 +19,9 @@ public sealed partial class RescueProbe {
         var entries = CoopMod.Instance.GetMenuData(null);
         foreach (var option in flexibleMenu.GetComponentsInChildren<MenuOptionHorizontal>(true)) {
             var entry = entries.Single(e => e.Name == option.name);
-            if (option.name == HollowConnect.BossHealthParameterRow.OptionName) {
+            if (option.name == HollowConnect.BossHealthParameterRow.OptionName || option.name == HollowConnect.LinkedHealthBonusRow.OptionName) {
                 var input = option.GetComponentInChildren<InputField>(true);
-                Check(input != null && !input.readOnly, "typed health parameter has editable native input before opening a room");
+                Check(input != null && !input.readOnly, "typed room rule has editable native input before opening a room");
                 continue;
             }
             CheckPointerRow(option, entry.Loader, "HollowConnect " + option.name);
@@ -33,14 +32,14 @@ public sealed partial class RescueProbe {
         if (Field<MenuScreen>(menu, "_clientSettingsMenu") == null) menu.CreateMenu(null);
         var client = Field<MenuScreen>(menu, "_clientSettingsMenu");
         ShowPointerMenu(client);
-        var skinEnabled = Field<bool>(menu, "_skinHorizontalOptionEnabled");
-        typeof(ModMenu).GetMethod("ModifySkinHorizontalOption", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(menu, new object[] { true });
-        var skin = Field<MenuOptionHorizontal>(menu, "_skinHorizontalOption");
-        CheckPointerRow(skin, () => skin.selectedOptionIndex, "HKMP skin");
-        typeof(ModMenu).GetMethod("ModifySkinHorizontalOption", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(menu, new object[] { skinEnabled });
-        var ping = client.GetComponentsInChildren<MenuOptionHorizontal>(true).Single(o => o.name == "Ping Display");
+        foreach (var name in new[] { "SkinOption", "TeamOption" }) {
+            var locked = client.GetComponentsInChildren<MenuOptionHorizontal>(true).Single(o => o.name == name);
+            ClickMenuHalf(locked, true);
+            ClickMenuHalf(locked, false);
+            Check(locked.optionList.Length == 1 && locked.selectedOptionIndex == 0,
+                "pointer preserves the locked HKMP row " + name);
+        }
+        var ping = client.GetComponentsInChildren<MenuOptionHorizontal>(true).Single(o => o.name == "延迟显示");
         var settings = Field<Hkmp.Game.Settings.ModSettings>(engine.ClientManager, "_modSettings");
         CheckPointerRow(ping, () => settings.DisplayPing ? 1 : 0, "HKMP ping");
         client.gameObject.SetActive(false);
@@ -100,7 +99,7 @@ public sealed partial class RescueProbe {
         option.SetOptionTo(initial);
     }
 
-    private void ClickMenuHalf(MenuOptionHorizontal option, bool left) {
+    internal static void ClickMenuHalf(MenuOptionHorizontal option, bool left) {
         var rect = (RectTransform)option.transform;
         var canvas = option.GetComponentInParent<Canvas>();
         var camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
@@ -118,6 +117,7 @@ public sealed partial class RescueProbe {
         var before = Newtonsoft.Json.JsonConvert.SerializeObject(CoopMod.Settings);
         foreach (var row in flexibleMenu.GetComponentsInChildren<CoopMenuLockRow>(true)) {
             var option = row.GetComponent<MenuOptionHorizontal>();
+            if (option.name == CoopMod.TeammateStatusOptionName) continue;
             ClickMenuHalf(option, true); ClickMenuHalf(option, false);
             Check(option.selectedOptionIndex == 0 && option.optionList.Length == 1 && option.optionText.text.Contains("已锁定"),
                 "both mouse halves preserve connected room lock: " + option.name);

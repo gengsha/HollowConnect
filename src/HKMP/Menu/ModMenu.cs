@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Hkmp.Game;
 using Hkmp.Game.Client;
-using Hkmp.Game.Client.Skin;
 using Hkmp.Ui;
 using Hkmp.Game.Server;
 using Hkmp.Game.Settings;
@@ -63,6 +61,7 @@ internal class ModMenu {
     /// lambdas and modified.
     /// </summary>
     private MenuScreen _clientSettingsMenu;
+    private SkinLibraryMenu _skinLibrary;
 
     /// <summary>
     /// The menu containing the server settings. Needs to be a static variable here to allow it to be accessed by
@@ -80,36 +79,6 @@ internal class ModMenu {
     /// Coroutine that delays applying new server settings until no more changes are made within a certain time period.
     /// </summary>
     private Coroutine _delayedApplyServerSettingsRoutine;
-
-    /// <summary>
-    /// Coroutine that delays applying the team setting until no more changes are made within a certain time period.
-    /// </summary>
-    private Coroutine _delayedApplyTeamRoutine;
-    
-    /// <summary>
-    /// Coroutine that delays applying the skin setting until no more changes are made within a certain time period.
-    /// </summary>
-    private Coroutine _delayedApplySkinRoutine;
-
-    /// <summary>
-    /// The horizontal option for changing teams.
-    /// </summary>
-    private MenuOptionHorizontal _teamHorizontalOption;
-    
-    /// <summary>
-    /// The horizontal option for changing skins.
-    /// </summary>
-    private MenuOptionHorizontal _skinHorizontalOption;
-
-    /// <summary>
-    /// Whether the horizontal option for changing teams is enabled (as in, whether the user can modify their team).
-    /// </summary>
-    private bool _teamHorizontalOptionEnabled;
-    
-    /// <summary>
-    /// Whether the horizontal option for changing skins is enabled (as in, whether the user can modify their skin).
-    /// </summary>
-    private bool _skinHorizontalOptionEnabled;
 
     /// <summary>
     /// Constructs the mod menu class for HKMP.
@@ -142,27 +111,7 @@ internal class ModMenu {
         On.UnityEngine.UI.MenuOptionHorizontal.OnPointerClick += (orig, option, pointer) => {
             if (!MenuPointerNavigation.HandleClick(option, pointer)) orig(option, pointer);
         };
-        _netClient.ConnectEvent += _ => {
-            OnClientConnectionChange(true);
-        };
-        _netClient.DisconnectEvent += () => {
-            OnClientConnectionChange(false);
-        };
-        _clientManager.TeamChangedEvent += team => {
-            _teamHorizontalOption?.SetOptionTo((int) team);
-        };
-        _clientManager.SkinChangedEvent += skinId => {
-            _skinHorizontalOption?.SetOptionTo(skinId);
-        };
         _clientManager.ServerSettingsChangedEvent += newSettings => {
-            if (newSettings.TeamsEnabled != _teamHorizontalOptionEnabled) {
-                ModifyTeamHorizontalOption(newSettings.TeamsEnabled);
-            }
-
-            if (newSettings.AllowSkins != _skinHorizontalOptionEnabled) {
-                ModifySkinHorizontalOption(newSettings.AllowSkins);
-            }
-
             foreach (var action in _serverSettingsChangedCallbacks) {
                 action.Invoke(newSettings);
             }
@@ -184,29 +133,31 @@ internal class ModMenu {
             RegularGridLayout.CreateVerticalLayout(150f),
             c => {
                 c.AddMenuButton("Client Settings", new MenuButtonConfig {
-                    Label = "Client Settings",
+                    Label = "客户端设置",
                     SubmitAction = _ => UIManager.instance.UIGoToDynamicMenu(_clientSettingsMenu),
                     Proceed = true,
                     CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(modListMenu),
                     Description = new DescriptionInfo {
-                        Text = "Menu for changing the settings of the client"
+                        Text = "调整本机的联机显示与操作。"
                     }
                 });
 
                 c.AddMenuButton("Server Settings", new MenuButtonConfig {
-                    Label = "Server Settings",
+                    Label = "服务器设置",
                     SubmitAction = _ => UIManager.instance.UIGoToDynamicMenu(_serverSettingsMenu),
                     Proceed = true,
                     CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(modListMenu),
                     Description = new DescriptionInfo {
-                        Text = "Menu for changing the settings of the server for authorized players"
+                        Text = "有权限的玩家可以调整房间设置。"
                     }
                 });
             }
         );
 
         _hkmpMenu = MenuPointerNavigation.Attach(builder.Build());
+        Localize.Screen(_hkmpMenu);
 
+        _skinLibrary = new SkinLibraryMenu(_clientManager);
         _clientSettingsMenu = CreateClientSettingsMenu();
         _serverSettingsMenu = CreateServerSettingsMenu();
 
@@ -218,81 +169,26 @@ internal class ModMenu {
     /// </summary>
     /// <returns>A <see cref="MenuScreen"/> for the client settings menu.</returns>
     private MenuScreen CreateClientSettingsMenu() {
-        var builder = MenuUtils.CreateMenuBuilderWithBackButton("HKMP Client Settings", _hkmpMenu, out _);
-        var atlasIds = CustomKnightSkinBridge.IsAvailable ? Array.Empty<string>() : AtlasSkinPacks.GetIds();
-        var atlasOptions = new string[atlasIds.Length + 1];
-        atlasOptions[0] = Localize.T("原版外观");
-        Array.Copy(atlasIds, 0, atlasOptions, 1, atlasIds.Length);
-        int SelectedAtlasIndex() => Array.IndexOf(atlasIds, _modSettings.AtlasSkinId) + 1;
-
+        var builder = MenuUtils.CreateMenuBuilderWithBackButton("HKMP 客户端设置", _hkmpMenu, out _);
         builder.AddContent(
-            RegularGridLayout.CreateVerticalLayout(atlasIds.Length == 0 ? 150f : 125f),
+            RegularGridLayout.CreateVerticalLayout(112f),
             c => {
-                if (atlasIds.Length != 0) {
-                    c.AddHorizontalOption(
-                        "AtlasSkinOption",
-                        new HorizontalOptionConfig {
-                            Options = atlasOptions,
-                            Label = "兼容皮肤（本机）",
-                            ApplySetting = (setting, _) => {
-                                var index = setting.optionList.selectedOptionIndex;
-                                if (index < 0 || index >= atlasOptions.Length) return;
-                                if (!_clientManager.TrySelectAtlasSkin(index == 0 ? "" : atlasIds[index - 1])) {
-                                    setting.optionList.SetOptionTo(SelectedAtlasIndex());
-                                    UiManager.InternalChatBox.AddMessage(Localize.T("无法读取皮肤图集，请检查这套皮肤的 PNG 文件。"));
-                                }
-                            },
-                            RefreshSetting = (setting, _) => setting.optionList.SetOptionTo(SelectedAtlasIndex()),
-                            CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(_hkmpMenu),
-                            Description = new DescriptionInfo { Text = "使用本机已安装的 PNG 皮肤包。队友安装同一皮肤包后即可看到。" }
-                        },
-                        out var atlasOption
-                    );
-                    foreach (var text in atlasOption.GetComponentsInChildren<Text>(true)) Localize.Attach(text);
-                }
-                c.AddHorizontalOption(
-                    "TeamOption",
-                    new HorizontalOptionConfig {
-                        Options = Enum.GetNames(typeof(Team)),
-                        Label = "Team",
-                        ApplySetting = (_, _) => { },
-                        RefreshSetting = (s, _) => s.optionList.SetOptionTo((int) _clientManager.Team),
-                        CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(_hkmpMenu),
-                        Description = new DescriptionInfo {
-                            Text = ""
-                        }
-                    },
-                    out _teamHorizontalOption
-                );
-                ModifyTeamHorizontalOption(false);
+                c.AddMenuButton("SkinManager", new MenuButtonConfig {
+                    Label = "皮肤管理器",
+                    SubmitAction = _ => _skinLibrary.Open(_clientSettingsMenu),
+                    CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(_hkmpMenu),
+                    Proceed = true
+                }, out var skinButton);
+                foreach (var text in skinButton.GetComponentsInChildren<Text>(true)) Localize.Attach(text);
+                AddLockedOption(c, "SkinOption", "旧版皮肤");
+                AddLockedOption(c, "TeamOption", "队伍");
 
-                var skinOptions = new string[256];
-                for (var i = 0; i < 256; i++) {
-                    skinOptions[i] = i.ToString();
-                }
-                
-                c.AddHorizontalOption(
-                    "SkinOption",
-                    new HorizontalOptionConfig {
-                        Options = skinOptions,
-                        Label = "Skin",
-                        ApplySetting = (_, _) => { },
-                        RefreshSetting = (s, _) => s.optionList.SetOptionTo(0),
-                        CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(_hkmpMenu),
-                        Description = new DescriptionInfo {
-                            Text = ""
-                        }
-                    },
-                    out _skinHorizontalOption
-                );
-                ModifySkinHorizontalOption(false);
-                
                 MenuUtils.AddModMenuContent(
                     [
                         new IMenuMod.MenuEntry {
-                            Name = "Ping Display",
-                            Description = "HUD element that shows the player's ping in multiplayer games",
-                            Values = ["Off", "On"],
+                            Name = "延迟显示",
+                            Description = "联机时在画面上显示延迟。",
+                            Values = ["关闭", "开启"],
                             Saver = index => _modSettings.DisplayPing = index == 1,
                             Loader = () => _modSettings.DisplayPing ? 1 : 0
                         }
@@ -305,14 +201,28 @@ internal class ModMenu {
                     "OpenChatKeybind",
                     _modSettings.Keybinds.OpenChat,
                     new KeybindConfig {
-                        Label = "Key to open the chat",
+                        Label = "打开聊天的按键",
                         CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(_hkmpMenu)
                     }
                 );
             }
         );
 
-        return MenuPointerNavigation.Attach(builder.Build());
+        var screen = MenuPointerNavigation.Attach(builder.Build());
+        Localize.Screen(screen);
+        return screen;
+    }
+
+    private void AddLockedOption(ContentArea content, string name, string label) {
+        // Keep the original options visible and focusable with a single read-only value.
+        content.AddHorizontalOption(name, new HorizontalOptionConfig {
+            Label = label,
+            Options = ["已锁定"],
+            ApplySetting = (_, _) => { },
+            RefreshSetting = (setting, _) => setting.optionList.SetOptionTo(0),
+            CancelAction = _ => UIManager.instance.UIGoToDynamicMenu(_hkmpMenu)
+        }, out var option);
+        option.SetOptionTo(0);
     }
 
     /// <summary>
@@ -491,93 +401,6 @@ internal class ModMenu {
         RunActionWhenNoChanges(() => {
             _netClient.UpdateManager.SetServerSettingsUpdate(_localServerSettings);
         }, ref _delayedApplyServerSettingsRoutine);
-    }
-
-    /// <summary>
-    /// Callback method for the client connection changes, when either connected or disconnected from a server.
-    /// This will modify the team selection depending on whether team selection should be allowed or not.
-    /// </summary>
-    /// <param name="connected"></param>
-    private void OnClientConnectionChange(bool connected) {
-        if (!connected) {
-            ModifyTeamHorizontalOption(false);
-            ModifySkinHorizontalOption(false);
-            return;
-        }
-
-        if (_localServerSettings.TeamsEnabled) {
-            ModifyTeamHorizontalOption(true);
-        }
-
-        if (_localServerSettings.AllowSkins) {
-            ModifySkinHorizontalOption(true);
-        }
-    }
-
-    /// <summary>
-    /// Modify the horizontal option for teams to either allow or disallow team selection.
-    /// </summary>
-    /// <param name="allowTeams">Whether to allow the player to select a team.</param>
-    private void ModifyTeamHorizontalOption(bool allowTeams) {
-        string description;
-        MenuSetting.ApplySetting applySetting;
-
-        if (allowTeams) {
-            applySetting = (_, i) => {
-                if (_netClient.IsConnected) {
-                    RunActionWhenNoChanges(() => {
-                        _netClient.UpdateManager.AddPlayerSettingUpdate(team: (Team) i);
-                    }, ref _delayedApplyTeamRoutine);
-                }
-            };
-
-            description = "Select one of several teams";
-        } else {
-            applySetting = (m, _) => {
-                m.optionList.SetOptionTo(0);
-            };
-
-            description = "Team selection is currently disabled";
-        }
-        
-        _teamHorizontalOption.menuSetting.customApplySetting = applySetting;
-
-        _teamHorizontalOption.gameObject.transform.Find("Description").GetComponent<Text>().text = description;
-
-        _teamHorizontalOptionEnabled = allowTeams;
-    }
-    
-    /// <summary>
-    /// Modify the horizontal option for skins to either allow or disallow skin selection.
-    /// </summary>
-    /// <param name="allowSkins">Whether to allow the player to select a skin.</param>
-    private void ModifySkinHorizontalOption(bool allowSkins) {
-        string description;
-        MenuSetting.ApplySetting applySetting;
-
-        if (allowSkins) {
-            applySetting = (_, i) => {
-                if (_netClient.IsConnected) {
-                    RunActionWhenNoChanges(() => {
-                        _netClient.UpdateManager.AddPlayerSettingUpdate(skinId: (byte) i, customSkinId: "");
-                    }, ref _delayedApplySkinRoutine);
-                }
-            };
-
-            description = "Select a skin";
-        } else {
-            applySetting = (m, _) => {
-                m.optionList.SetOptionTo(0);
-            };
-
-            description = "Skin selection is currently disabled";
-        }
-        
-        _skinHorizontalOption.menuSetting.customApplySetting = applySetting;
-
-        _skinHorizontalOption.gameObject.transform.Find("Description").GetComponent<Text>().text = description;
-
-        _skinHorizontalOptionEnabled = allowSkins;
     }
 
     /// <summary>

@@ -1,17 +1,22 @@
-# Package a release or candidate with its scoped validation records.
+﻿# Package a release or candidate with its scoped validation records.
 param([ValidateSet('Legacy','Unity6')][string]$GameVersion,
+    [ValidateSet('0.3.2','0.3.3')][string]$ReleaseVersion = '0.3.3',
     [ValidatePattern('^\d+\.\d+\.\d+-rc[1-9][0-9]*$')][string]$CandidateVersion,
     [switch]$VerifyOnly,[switch]$RebuildChecksums,[switch]$SteamModule,[switch]$UserRequestedRelease)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 . "$PSScriptRoot/PackageTools.ps1"
 . "$PSScriptRoot/PackageDocumentation.ps1"
-$version=if($CandidateVersion){$CandidateVersion}else{'0.3.2'}
+$version=if($CandidateVersion){$CandidateVersion}else{$ReleaseVersion}
 $taskChannel=if($CandidateVersion){'prerelease'}else{'release'}
 $taskRc2=$CandidateVersion -eq '0.3.2-rc2'
 $taskFinal=!$CandidateVersion
-$taskRequiredCore=if($taskFinal){355}elseif($taskRc2){353}elseif($CandidateVersion){13}else{15}
-$taskRequiredCases=if($taskFinal){
+$task033=$version -eq '0.3.3'
+$taskRequiredCore=if($task033){10}elseif($taskFinal){355}elseif($taskRc2){353}elseif($CandidateVersion){13}else{15}
+$taskRequiredCases=if($task033){
+    'moving-dream','live-language'
+    if($GameVersion -eq 'Legacy'){'menu-pointer'}
+}elseif($taskFinal){
     if($GameVersion -eq 'Unity6'){@('tp-retry','chat','camera-p4','camera-p5','status','skin-atlas')}
     else{@('status-linked','skin-ck')}
 }elseif($taskRc2){@('f8-return','f8-travel','f8-landing','final-native-host-013','final-native-guest-013','final-lifecycle-host-013','final-lifecycle-guest-013','final-boss-013','final-boss-late-013','final-grimm-host-013','final-grimm-guest-013','final-rescue-013','final-death-story-013','final-full-013','final-join-013','fk-missed-wake','shade-soul-wake')}elseif($CandidateVersion){@('green-host','garden05','garden10','shade-soul')}else{@('menus','blackwave-host','blackwave-guest','defender')}
@@ -48,6 +53,18 @@ function Get-CurrentBinary([string]$Name){
     $taskProject=if($Name.StartsWith('HollowConnect.Steam.')){'HollowConnect.Steam'}else{'HollowConnect'}
     Join-Path $root "src/$taskProject/$taskOutput/$Name"
 }
+if($task033){
+    if($taskEvidence.installer.passed -ne 19 -or $taskEvidence.installer.failed -ne 0){throw 'Incomplete installer validation'}
+    $taskInstallerDirectory="$root/src/HollowConnect.Installer/bin/Release/net472"
+    $taskInstallerInputs=@('Install.ps1','Uninstall.ps1','GamePath.ps1','一键安装.exe','一键安装.exe.config')
+    if(@(Compare-Object $taskInstallerInputs @($taskEvidence.installer.files.name)).Count){throw 'Wrong installer input inventory'}
+    foreach($taskInstallerFile in $taskEvidence.installer.files){
+        $taskInputDirectory=if($taskInstallerFile.name -like '*.ps1'){$PSScriptRoot}else{$taskInstallerDirectory}
+        if((Get-FileHash -LiteralPath "$taskInputDirectory/$($taskInstallerFile.name)").Hash -ne $taskInstallerFile.sha256){throw 'Installer differs from validated inputs'}
+    }
+    $taskProductionNames=@('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll','HollowConnect.Steam.dll','BouncyCastle.Cryptography.dll')
+    if(@(Compare-Object $taskProductionNames @($taskProfile.production.name)).Count){throw 'Wrong production binary inventory'}
+}
 foreach($taskBinary in $taskProfile.production){
     if((Get-FileHash (Get-CurrentBinary $taskBinary.name)).Hash -ne $taskBinary.sha256){throw 'Production differs from final scoped tests'}
 }
@@ -56,6 +73,11 @@ foreach($taskRun in $taskProfile.runs){
     $taskRunDir=Join-Path $root ".test-results/$($taskRun.run)"
     if($taskRun.status -ne 'passed'){throw 'Failed selected runtime case'}
     & "$root/tests/Smoke/Assert-ProbeLogs.ps1" -RunPath $taskRunDir -RequireRuntimeFiles
+    if($task033){
+        foreach($taskArtifact in $taskRun.artifacts){
+            if((Get-FileHash -LiteralPath "$taskRunDir/$($taskArtifact.name)").Hash -ne $taskArtifact.sha256){throw "Runtime evidence differs for $($taskRun.run)"}
+        }
+    }
     $taskBinaries=Get-Content "$taskRunDir/binaries.json" -Raw | ConvertFrom-Json
     if($taskFinal){
         $requiredRuntimeNames=@('HKMP.dll','HollowConnect.dll','HollowConnect.Core.dll')
@@ -70,8 +92,14 @@ foreach($taskRun in $taskProfile.runs){
 $taskFiles=@('HKMP.dll','HKMP.pdb','HollowConnect.dll','HollowConnect.pdb','HollowConnect.Core.dll','HollowConnect.Core.pdb','BouncyCastle.Cryptography.dll','HollowConnect.Steam.dll','HollowConnect.Steam.pdb')
 $taskApiName=if($GameVersion -eq 'Unity6'){'moddingapi.unity6.468f579.windows.zip'}else{'moddingapi.v77.windows.zip'}
 $taskCache=Join-Path $root 'vendor/unity6-api/468f579f25e63da2188f39fe5ece15c25d2854d7'
+$taskSources=@(
+    foreach($taskPath in 'src','tests','scripts','README.md','LICENSE','HKMP-LICENSE','THIRD-PARTY.md','Directory.Build.props','Directory.Build.targets','.gitignore'){Get-HollowSourceFiles "$root/$taskPath"}
+    Get-HollowDocumentationFiles -Root $root -Version $version -Audience Repository -AuthorizationPath $taskAuthPath
+)
 if(!$VerifyOnly){
-    if(Test-Path $package){throw 'Preserve an existing delivery; verify it or archive the unpacked folder explicitly first'}
+    foreach($taskDestination in $package,"$root/dist/$taskName-windows.zip","$root/dist/$taskName-source.zip"){
+        if(Test-Path -LiteralPath $taskDestination){throw "Preserve an existing delivery: $taskDestination"}
+    }
     New-Item -ItemType Directory -Path "$package/payload/HKMP","$package/dependencies" -Force | Out-Null
     foreach($taskFile in $taskFiles){Copy-Item (Get-CurrentBinary $taskFile) "$package/payload/HKMP/$taskFile"}
     if($GameVersion -eq 'Unity6'){
@@ -86,7 +114,7 @@ if(!$VerifyOnly){
         $instructions=$instructions -replace '(?m)^HollowConnect .+$',"HollowConnect $version / HKMP 3.0.0-hc13"
         $instructions=$instructions -replace '(?m)^网络标识：.+$',"网络标识：$version。所有玩家均需升级至同一模组版本。"
         $instructions=$instructions -replace '(?m)^本包适用游戏 .+$',"适用游戏：$($taskProfile.gameVersion)"
-        $instructions=$instructions -replace '(?m)^本版执行.+$','本版验证范围见 docs\UPDATE-0.3.2.md。'
+        $instructions=$instructions -replace '(?m)^本版执行.+$',"本版验证范围见 docs\UPDATE-$version.md。"
         Set-Content -LiteralPath "$package/安装说明.txt" -Value $instructions -Encoding utf8 -NoNewline
     }
     foreach($taskFile in '一键安装.exe','一键安装.exe.config'){Copy-Item "$root/src/HollowConnect.Installer/bin/Release/net472/$taskFile" $package}
@@ -107,10 +135,7 @@ if(!$VerifyOnly){
     }
     $manifest | ConvertTo-Json -Depth 15 | Set-Content "$package/manifest.json" -Encoding utf8
     Write-HollowArchive -Destination "$root/dist/$taskName-windows.zip" -BasePath $package -Files @(Get-HollowSourceFiles $package)
-    $taskSources=@(
-        foreach($taskPath in 'src','tests','scripts','README.md','LICENSE','HKMP-LICENSE','THIRD-PARTY.md','Directory.Build.props','Directory.Build.targets','.gitignore'){Get-HollowSourceFiles "$root/$taskPath"}
-        Get-HollowDocumentationFiles -Root $root -Version $version -Audience Repository -AuthorizationPath $taskAuthPath
-    )
+
     Write-HollowArchive -Destination "$root/dist/$taskName-source.zip" -BasePath $root -Files $taskSources
     Update-HollowChecksums -Directory "$root/dist" -ChangedArchives "$taskName-windows.zip","$taskName-source.zip" -Rebuild:$RebuildChecksums
 }
@@ -128,6 +153,18 @@ try{
     try{$taskApiHash=[BitConverter]::ToString($taskHasher.ComputeHash($taskStream)).Replace('-','')}finally{$taskStream.Dispose();$taskHasher.Dispose()}
     if($taskApiHash -ne $taskProfile.apiAssemblySha256){throw 'Wrong profile API'}
 }finally{$taskApiZip.Dispose()}
+if($task033){
+    foreach($taskInstallerFile in $taskEvidence.installer.files){
+        if((Get-FileHash -LiteralPath "$package/$($taskInstallerFile.name)").Hash -ne $taskInstallerFile.sha256){throw 'Packaged installer differs from validated inputs'}
+    }
+    foreach($taskSuffix in '.exe','.exe.config'){
+        if((Get-FileHash -LiteralPath "$package/HollowConnectInstaller$taskSuffix").Hash -ne
+            (Get-FileHash -LiteralPath "$package/一键安装$taskSuffix").Hash){throw 'Installer aliases differ'}
+    }
+    foreach($taskRecord in $taskEvidencePath,$taskAuthPath,$taskBlockerPath){
+        if((Get-FileHash -LiteralPath "$package/$taskRecord").Hash -ne (Get-FileHash -LiteralPath "$root/$taskRecord").Hash){throw 'Packaged evidence differs'}
+    }
+}
 foreach($taskKind in 'windows','source'){
     $taskZip=[IO.Compression.ZipFile]::OpenRead("$root/dist/$taskName-$taskKind.zip")
     try{
@@ -139,6 +176,10 @@ foreach($taskKind in 'windows','source'){
             $taskStream=$taskEntry.Open();$taskHasher=[Security.Cryptography.SHA256]::Create()
             try{$taskHash=[BitConverter]::ToString($taskHasher.ComputeHash($taskStream)).Replace('-','')}finally{$taskStream.Dispose();$taskHasher.Dispose()}
             if($taskHash -ne (Get-FileHash "$taskBase/$taskRelative").Hash){throw "Stale ZIP entry: $taskRelative"}
+        }
+        if($taskKind -eq 'source' -and $task033){
+            $taskExpectedSources=@($taskSources.FullName | ForEach-Object {$_.Substring($root.Length+1).Replace('\','/')})
+            if(@(Compare-Object $taskExpectedSources @($taskEntries.FullName)).Count){throw 'Source ZIP file list differs from release sources'}
         }
         if($taskKind -eq 'windows'){
             if(@(Compare-Object @((Get-HollowSourceFiles $package).FullName | ForEach-Object {$_.Substring($package.Length+1).Replace('\','/')} ) @($taskEntries.FullName)).Count){throw 'ZIP file list differs from package'}

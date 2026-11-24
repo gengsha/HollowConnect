@@ -36,6 +36,7 @@ internal class HealthManagerComponent : EntityComponent {
     private readonly HostClientPair<HealthManager> _healthManager;
     private readonly EntityType _entityType;
     private readonly ulong _bossId;
+    private readonly EnemyHpBarCompatibility _enemyHpBar;
     private bool _allowDeath, _known, _dead;
     private bool _bossVictorySignaled;
     private int _hp = -1, _direction = -1;
@@ -57,6 +58,7 @@ internal class HealthManagerComponent : EntityComponent {
         _healthManager = healthManager;
         _entityType = entityType;
         _bossId = entityId;
+        if (healthManager.Host != null) _enemyHpBar = EnemyHpBarCompatibility.TryCreate(healthManager.Host.hp);
         EntityHooks.WatchHealth(healthManager.Host, healthManager.Client, OnDie, OnExtraDamage);
         if (BossDefeatSignals.IsBoss(entityType) || entityType is EntityType.FalseKnightHead or EntityType.BroodingMawlekHead)
             BossDamageScaling.Watch(healthManager.Host, ScaleBossDamage, ObserveDamage);
@@ -126,7 +128,11 @@ internal class HealthManagerComponent : EntityComponent {
     }
 
     private void OnUpdate() {
-        if (IsControlled || CoopContext.Resetting || _healthManager.Host == null) return;
+        if (IsControlled) {
+            if (_known && !_dead) _enemyHpBar?.UpdateReplica(_healthManager.Client);
+            return;
+        }
+        if (CoopContext.Resetting || _healthManager.Host == null) return;
         var host = _healthManager.Host;
         if (BossDefeatSignals.IsBoss(_entityType) && !host.isDead && host.hp > 0 && host.gameObject.activeInHierarchy &&
             Time.unscaledTime >= _nextDamageEncounter) {
@@ -149,6 +155,7 @@ internal class HealthManagerComponent : EntityComponent {
             _direction == host.InvincibleFromDirection && flags == _flags && stun == _stun && battle == _battle && !reset && Time.unscaledTime < _nextSnapshot) return;
         if (reset) { _dead = false; _bossVictorySignaled = false; LocalBattleCompletion.ResetDeath(_bossId); }
         _flags = flags; _stun = stun; _battle = battle;
+        _enemyHpBar?.Observe(host.hp);
         _hp = host.hp; _invincible = host.IsInvincible; _direction = host.InvincibleFromDirection;
         _known = true; _nextSnapshot = Time.unscaledTime + 1f;
         var data = new EntityNetworkData { Type = reset ? EntityComponentType.HealthReset : EntityComponentType.Health };
@@ -217,6 +224,7 @@ internal class HealthManagerComponent : EntityComponent {
                 foreach (var hm in new[] { _healthManager.Host, _healthManager.Client })
                     if (hm != null) Notified.SetValue(hm, false);
             }
+            _enemyHpBar?.Observe(hp);
             _flags = flags; _stun = stun; _battle = battle;
             _receivedRevision = revision; _hp = hp; _invincible = invincible; _direction = direction; _known = true;
             foreach (var hm in new[] { _healthManager.Host, _healthManager.Client }) {

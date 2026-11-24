@@ -12,6 +12,7 @@ using Scenes = UnityEngine.SceneManagement.SceneManager;
 namespace HollowConnect.Smoke;
 
 public sealed partial class CoverageProbe {
+    private bool QolStoryCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_QOL_STORY") == "1";
     private bool StoryCutsceneCase => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_SCENE"));
     private void StorySchema(string scene) {
         foreach (var gate in Object.FindObjectsOfType<TransitionPoint>(true).Where(g => g.gameObject.scene.name == scene))
@@ -40,8 +41,16 @@ public sealed partial class CoverageProbe {
             }
         }
     }
+    private static bool QolCutsceneField(string field) => (bool)Modding.ModHooks.GetMod("QoL", onlyEnabled: true)
+        .GetType().Assembly.GetType("QoL.Modules.SkipCutscenes", true).GetField(field).GetValue(null);
+
     private IEnumerator StoryCutsceneChecks() {
         var scene = Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_SCENE");
+        if (QolStoryCase) {
+            if (QolCutsceneField("DreamersGet") || !QolCutsceneField("AutoSkipCinematics") || !QolCutsceneField("InstantSceneFadeIns"))
+                throw new Exception("QoL should suspend only the Dreamer shortcut while connected");
+            Mark("PASS QoL Dreamer shortcut suspended and other cutscene settings still enabled");
+        }
         var pd = PlayerData.instance;
         pd.SetBool("hasDreamNail", true);
         pd.SetBool("hasDash", true); pd.SetBool("canDash", true);

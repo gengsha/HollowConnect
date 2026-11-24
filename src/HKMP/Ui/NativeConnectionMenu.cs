@@ -78,12 +78,12 @@ internal static class NativeConnectionMenu {
         text.supportRichText = false;
         if (text.text != label) text.text = label;
     }
-    internal static void Finish(MenuScreen screen, params MenuButton[] rows) {
+    internal static void Finish(MenuScreen screen, params MenuSelectable[] rows) {
         foreach (var text in screen.GetComponentsInChildren<Text>(true)) text.font = MenuResources.NotoSerifCJKSCRegular;
         Localize.Screen(screen);
         Relink(screen, rows);
     }
-    internal static void Relink(MenuScreen screen, IEnumerable<MenuButton> rows) {
+    internal static void Relink(MenuScreen screen, IEnumerable<MenuSelectable> rows) {
         var active = rows.Where(b => b != null && b.gameObject.activeSelf && b.interactable).ToArray();
         if (active.Length == 0) return;
         for (var i = 0; i < active.Length; i++) active[i].navigation = new Navigation { mode = Navigation.Mode.Explicit,
@@ -94,7 +94,7 @@ internal static class NativeConnectionMenu {
             (!selected.activeInHierarchy || selected.GetComponent<Selectable>()?.IsInteractable() == false) && screen.gameObject.activeInHierarchy)
             UIManager.instance.StartCoroutine(RestoreSelection(screen, active[0], selected));
     }
-    private static IEnumerator RestoreSelection(MenuScreen screen, MenuButton target, GameObject previous) {
+    private static IEnumerator RestoreSelection(MenuScreen screen, MenuSelectable target, GameObject previous) {
         // Newly shown native rows initialize their audio player in Start.
         yield return null;
         if (screen != null && screen.gameObject.activeInHierarchy && target != null && target.IsActive() && target.IsInteractable() &&

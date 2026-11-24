@@ -45,6 +45,33 @@ internal static class Program {
         Down(p, 2, 0, 1); return p;
     }
     private static int Main() {
+        Test("hosted rooms enable skins by default and migrate old settings once", () => {
+            var fresh = new Hkmp.Game.Settings.ModSettings();
+            fresh.ApplySkinDefaults();
+            Check(fresh.ServerSettings.AllowSkins && fresh.AtlasSkinId == null);
+            var migrated = Newtonsoft.Json.JsonConvert.DeserializeObject<Hkmp.Game.Settings.ModSettings>("{}");
+            Check(migrated.ShowTeammateSkins);
+            migrated.ShowTeammateSkins = false;
+            migrated.ApplySkinDefaults();
+            var saved = Newtonsoft.Json.JsonConvert.SerializeObject(migrated);
+            Check(!Newtonsoft.Json.JsonConvert.DeserializeObject<Hkmp.Game.Settings.ModSettings>(saved).ShowTeammateSkins);
+
+            var existing = new Hkmp.Game.Settings.ModSettings {
+                ServerSettings = new Hkmp.Game.Settings.ServerSettings { AllowSkins = false, TeamsEnabled = true },
+                AtlasSkinId = ""
+            };
+            existing.ApplySkinDefaults();
+            Check(existing.ServerSettings.AllowSkins && existing.ServerSettings.TeamsEnabled && existing.AtlasSkinId == "");
+
+            existing.ServerSettings.AllowSkins = false;
+            existing.AtlasSkinId = "";
+            existing.ApplySkinDefaults();
+            Check(!existing.ServerSettings.AllowSkins && existing.AtlasSkinId == "");
+
+            var previouslySelected = new Hkmp.Game.Settings.ModSettings { AtlasSkinId = "my-skin" };
+            previouslySelected.ApplySkinDefaults();
+            Check(previouslySelected.AtlasSkinId == "my-skin");
+        });
         Test("enemy hit evasion is independent per attacking player", () => {
             var window = new IndependentHitWindow();
             Near(window.Remaining(1, 10), 0);

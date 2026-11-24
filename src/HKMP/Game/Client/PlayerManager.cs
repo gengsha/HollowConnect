@@ -57,6 +57,7 @@ internal class PlayerManager {
     /// The skin manager instance.
     /// </summary>
     private readonly SkinManager _skinManager;
+    private ModSettings _modSettings;
 
     /// <summary>
     /// Reference to the client player data dictionary (<see cref="ClientManager._playerData"/>)
@@ -84,9 +85,9 @@ internal class PlayerManager {
     /// </summary>
     private readonly Dictionary<ushort, GameObject> _activePlayers;
 
-    internal event Action<string> CustomSkinChangedEvent {
-        add => _skinManager.CustomSkinChangedEvent += value;
-        remove => _skinManager.CustomSkinChangedEvent -= value;
+    internal event Action SkinSelectionChanged {
+        add => _skinManager.SelectionChanged += value;
+        remove => _skinManager.SelectionChanged -= value;
     }
 
     internal byte LocalSkinId => _skinManager.LocalSkinId;
@@ -110,12 +111,29 @@ internal class PlayerManager {
     /// Intialize the player manager by register packet handlers and initialize the skin manager.
     /// </summary>
     public void Initialize(ModSettings settings) {
+        _modSettings = settings;
         _skinManager.Initialize(settings);
     }
 
+    internal bool ShowTeammateSkins {
+        get => _modSettings.ShowTeammateSkins;
+        set {
+            if (_modSettings.ShowTeammateSkins == value) return;
+            _modSettings.ShowTeammateSkins = value;
+            RefreshPlayerSkins();
+        }
+    }
+    private bool RenderTeammateSkins => _serverSettings.AllowSkins && ShowTeammateSkins;
+
     internal void RegisterLocalAtlasHook() => _skinManager.RegisterLocalAtlasHook();
 
-    internal bool TrySelectAtlasSkin(string id) => _skinManager.TrySelectAtlasSkin(id);
+    internal string LocalDisplaySkinId => _skinManager.LocalDisplaySkinId;
+    internal string SavedAtlasId => _skinManager.SavedAtlasId;
+    internal bool TrySelectSkin(string id) => _skinManager.TrySelectSkin(id);
+    internal void RescanSkins() {
+        _skinManager.Rescan();
+        RefreshPlayerSkins();
+    }
 
     /// <summary>
     /// Register the relevant hooks for player-related operations.
@@ -473,7 +491,7 @@ internal class PlayerManager {
         Animation.RemotePlayerVisuals.Track(playerObject, ownerId: playerData.Id, applySkin: false);
 
         // Let the SkinManager update the skin
-        _skinManager.UpdatePlayerSkin(playerObject, skinId, playerData.CustomSkinId, playerContainer);
+        ApplyRoomSkin(playerObject, playerContainer, playerData);
 
         // Store the player data
         playerData.PlayerContainer = playerContainer;
@@ -669,7 +687,8 @@ internal class PlayerManager {
         if (self) {
             Logger.Debug($"Received PlayerSkinUpdate for local player: {skinId}, custom skin: '{customSkinId}'");
             
-            _skinManager.UpdateLocalPlayerSkin(skinId, customSkinId);
+            // A delayed acknowledgement must not replace a more recent local menu selection.
+            if (_serverSettings.AllowSkins && string.IsNullOrEmpty(customSkinId)) _skinManager.ApplyLegacyCommand(skinId);
             return;
         }
         
@@ -688,20 +707,19 @@ internal class PlayerManager {
             return;
         }
 
-        _skinManager.UpdatePlayerSkin(playerData.PlayerObject, skinId, playerData.CustomSkinId, playerData.PlayerContainer);
+        ApplyRoomSkin(playerData.PlayerObject, playerData.PlayerContainer, playerData);
     }
 
-    /// <summary>
-    /// Reset the skins of all players.
-    /// </summary>
-    public void ResetAllPlayerSkins() {
-        // For each registered player, reset their skin
-        foreach (var playerData in _playerData.Values) {
-            _skinManager.ResetPlayerSkin(playerData.PlayerObject, playerData.PlayerContainer);
+    internal void RefreshPlayerSkins() {
+        foreach (var player in _playerData.Values) {
+            ApplyRoomSkin(player.PlayerObject, player.PlayerContainer, player);
         }
+        Animation.RemotePlayerVisuals.RefreshSkins();
+    }
 
-        // Also reset our local players skin
-        _skinManager.ResetLocalPlayerSkin();
+    private void ApplyRoomSkin(GameObject body, GameObject container, ClientPlayerData player) {
+        _skinManager.UpdatePlayerSkin(body, RenderTeammateSkins ? player.SkinId : (byte)0,
+            RenderTeammateSkins ? player.CustomSkinId : "", container);
     }
 
     private void ApplyRemoteSkin(GameObject visual, int playerId) {
@@ -709,7 +727,8 @@ internal class PlayerManager {
             return;
         }
 
-        CustomKnightSkinBridge.ApplyEffect(visual, _serverSettings.AllowSkins ? playerData.CustomSkinId : "");
+        var id = string.IsNullOrEmpty(playerData.CustomSkinId) ? AtlasSkinPacks.LegacyId(playerData.SkinId) : playerData.CustomSkinId;
+        CustomKnightSkinBridge.ApplyEffect(visual, RenderTeammateSkins ? id : "");
     }
 
     private void RefreshNameColors() {

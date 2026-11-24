@@ -32,16 +32,20 @@ internal sealed class DreamWarriorSynchronizer {
     internal void Clear() { conversation = null; collectedNpc = null; desired = applied = offered = 0; applying = false; next = 0; }
     private static bool Owns(string scene) => scene == CoopContext.LocalScene || scene == CoopContext.LocalScene + "_boss" || scene == CoopContext.LocalScene + "_boss_defeated";
     private void Enter(On.HutongGames.PlayMaker.Fsm.orig_EnterState orig, HutongGames.PlayMaker.Fsm fsm, FsmState state) {
-        var npc = client.IsConnected && !CoopContext.Resetting &&
-            fsm.GameObject.name == "Ghost Warrior NPC" && Owns(fsm.GameObject.scene.name) && Keys.ContainsKey(CoopContext.LocalScene);
-        var warrior = npc && fsm.Name == "Conversation Control";
+        // AdditionalMaps can start standalone PlayMaker FSMs without a scene object.
+        if (!client.IsConnected || CoopContext.Resetting || !Keys.TryGetValue(CoopContext.LocalScene, out var key) ||
+            fsm.GameObject is not { } owner || owner == null || owner.name != "Ghost Warrior NPC" || !Owns(owner.scene.name)) {
+            orig(fsm, state);
+            return;
+        }
+        var warrior = fsm.Name == "Conversation Control";
         // A previously collected NPC exits Init before constructing its text
         // keys and object references. It must stay inert even when the shared
         // boss broadcasts GHOST DEFEAT. Do not interrupt a new native claim's
         // vanish/reward animation when its own PlayerData changes to 2.
         if (warrior && (state.Name == "Init" || state.Name == "Inert") &&
-            PlayerData.instance.GetInt(Keys[CoopContext.LocalScene]) >= 2) collectedNpc = fsm.GameObject;
-        if (npc && collectedNpc == fsm.GameObject && !entities.IsPrivateBossScene(fsm.GameObject.scene.name) &&
+            PlayerData.instance.GetInt(key) >= 2) collectedNpc = owner;
+        if (collectedNpc == owner && !entities.IsPrivateBossScene(owner.scene.name) &&
             (!CoopContext.LocalWorldOnly || entities.HasSharedBoss)) {
             // SwitchState assigned ActiveState before calling this hook.
             // Switch again through PlayMaker instead of just replacing the
@@ -55,7 +59,7 @@ internal sealed class DreamWarriorSynchronizer {
         }
         // The participant runs native presentation, but only the scene
         // authority may activate the original warrior and its AI.
-        var activation = warrior && !entities.IsPrivateBossScene(fsm.GameObject.scene.name) && state.Name == "Start Fight" && entities.IsSceneHostDetermined && !entities.IsSceneHost
+        var activation = warrior && !entities.IsPrivateBossScene(owner.scene.name) && state.Name == "Start Fight" && entities.IsSceneHostDetermined && !entities.IsSceneHost
             ? state.Actions.OfType<ActivateAllChildren>().FirstOrDefault() : null;
         var enabled = activation?.Enabled ?? false;
         if (activation != null) activation.Enabled = false;

@@ -16,6 +16,8 @@ public sealed partial class ProgressProbe {
         if (Has(role + ".failed")) yield break;
         var hero = HeroController.instance;
         var pd = PlayerData.instance;
+        ResourceCheck(runtime.flexibleBossTargeting && CoopMod.Settings.BossTargetingMode == (host ? 1 : 0),
+            "fresh host settings default to Flexible and override guest's saved Original in the room");
         ResourceCheck(JsonConvert.DeserializeObject<Settings>("{\"ShareProgress\":true}").ShareCharms,
             "old settings JSON retains charm default");
         ResourceCheck(runtime.Shared && runtime.ShareCharms == shared, "host charm rule overrides opposite guest config");
@@ -81,6 +83,8 @@ public sealed partial class ProgressProbe {
         ResourceCheck(!runtime.CanDreamNail(targetId), "other-scene teammate cannot grant dream soul"); peer.State.Scene = scene;
         yield return DreamPair("host");
         yield return DreamPair("guest");
+        yield return DreamMovingPeer("host");
+        yield return DreamMovingPeer("guest");
         yield return ResourceBarrier("dream-complete");
     }
     private IEnumerator DreamPair(string caster) {
@@ -121,7 +125,48 @@ public sealed partial class ProgressProbe {
         }
         yield return ResourceBarrier("dream-pair-" + caster);
     }
-    private IEnumerator DreamSwing() {
+    private IEnumerator DreamMovingPeer(string caster) {
+        var peerMoving = caster + ".dream-peer-moving";
+        var castComplete = caster + ".dream-moving-hit";
+        var hero = HeroController.instance;
+        var pd = PlayerData.instance;
+        if (role == caster) {
+            yield return Until(() => Has(peerMoving), "remote teammate starts moving before dream charge", 5);
+            var peer = runtime.PlayerObject(runtime.Peers.Keys.Single());
+            var box = peer.GetComponent<BoxCollider2D>();
+            var bodyEnabled = box.enabled;
+            var start = peer.transform.position;
+            pd.SetInt("MPCharge", 0);
+            try {
+                // Model the replica's PvP box during shadow dash, while live
+                // positions still arrive from the other client.
+                box.enabled = false;
+                yield return DreamSwing(() => ResourceCheck(!box.enabled, "moving teammate's PvP box is disabled at contact"));
+                ResourceCheck((peer.transform.position - start).sqrMagnitude > .001f,
+                    "received a new position from the moving teammate");
+                var soul = pd.GetInt("MPCharge");
+                ResourceCheck(soul == 16 || soul == 17, "moving teammate grants exactly one dream soul reward with PvP box disabled");
+                Mark("DREAM MOVING SOUL " + caster + "=" + soul);
+            } finally { box.enabled = bodyEnabled; }
+            Flag(castComplete);
+        } else {
+            var body = hero.GetComponent<Rigidbody2D>();
+            var start = body.position;
+            var deadline = Time.realtimeSinceStartup + 12;
+            var started = Time.time;
+            Flag(peerMoving);
+            while (!Has(castComplete) && !Has(caster + ".failed") && Time.realtimeSinceStartup < deadline) {
+                // Move horizontally along the floor while remaining within
+                // the normal swing's reach on the correct side of the caster.
+                body.position = new Vector2(start.x + Mathf.Sin((Time.time - started) * 4) * .75f, body.position.y);
+                yield return new WaitForFixedUpdate();
+            }
+            body.position = new Vector2(start.x, body.position.y);
+            ResourceCheck(Has(castComplete), "other player completed the moving dream swing");
+        }
+        yield return ResourceBarrier("dream-moving-" + caster);
+    }
+    private IEnumerator DreamSwing(Action onContact = null) {
         var hero = HeroController.instance;
         var fsm = hero.GetComponents<PlayMakerFSM>().Single(f => f.FsmName == "Dream Nail");
         var box = hero.transform.Find("Dream Effects/Hitbox").gameObject;
@@ -133,6 +178,7 @@ public sealed partial class ProgressProbe {
         using (new Hook(typeof(InControl.OneAxisInputControl).GetProperty("IsPressed").GetGetMethod(),
             new Func<Func<InControl.OneAxisInputControl, bool>, InControl.OneAxisInputControl, bool>((orig, self) => ReferenceEquals(self, action) ? Time.frameCount >= frame : orig(self)))) {
             yield return Until(() => box.activeInHierarchy, "native input charges and activates dream hitbox", 5);
+            onContact?.Invoke();
             var target = runtime.PlayerObject(runtime.Peers.Keys.Single());
             Mark("DREAM BOUNDS hero=" + hero.transform.position + " box=" + box.GetComponent<Collider2D>().bounds +
                 " peer=" + target?.transform.position + " targetBounds=" + target?.GetComponent<Collider2D>()?.bounds +

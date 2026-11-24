@@ -1,8 +1,8 @@
 # 版本记录
 
-[0.3.2 更新说明](UPDATE-0.3.2.md)
+[0.3.3 更新说明](UPDATE-0.3.3.md) · [0.3.2 更新说明](UPDATE-0.3.2.md)
 
-当前候选版见 [0.3.2-rc2 更新说明](UPDATE-0.3.2-rc2.md)：修复非房主无法通过 F8 传送到队友，并保留 0.3.2-rc1 的 Boss 唤醒修复。此前 [0.3.1 更新说明](UPDATE-0.3.1.md) 保留 Legacy／Unity6 双版本、Steam 好友联机预览及玩法修复。更早版本与逐版 Release 见 [GitHub Releases](https://github.com/gengsha/HollowConnect/releases)。
+此前候选版见 [0.3.2-rc2 更新说明](UPDATE-0.3.2-rc2.md)：修复非房主无法通过 F8 传送到队友，并保留 0.3.2-rc1 的 Boss 唤醒修复。此前 [0.3.1 更新说明](UPDATE-0.3.1.md) 保留 Legacy／Unity6 双版本、Steam 好友联机预览及玩法修复。更早版本与逐版 Release 见 [GitHub Releases](https://github.com/gengsha/HollowConnect/releases)。
 
 历史范围见 [0.2.9 更新说明](UPDATE-0.2.9.md)：Legacy／Unity6 双版本交付、水晶山峰远端玩家感知与原生 AI 激活，以及按攻击玩家独立计算的受击无敌帧。此前 [0.2.8 更新说明](UPDATE-0.2.8.md) 保留受击停顿隔离、Grimm 咆哮结束清理、竞技场奖励续接及共享血量专项的原始范围。0.2.7 的 Steam 好友联机预览、原生联机菜单、竞技场重发与显示同步修复见 [0.2.7 更新说明](UPDATE-0.2.7.md)。此前本地 [0.2.6-rc3 候选说明](UPDATE-0.2.6-rc3.md) 和 [0.2.6 更新说明](UPDATE-0.2.6.md) 保留原记录。下载包与逐版 Release 见 [GitHub Releases](https://github.com/gengsha/HollowConnect/releases)。
 

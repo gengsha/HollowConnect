@@ -10,6 +10,7 @@
     <Reference Include="UnityEngine"><HintPath>$(HollowReferences)/UnityEngine.dll</HintPath></Reference>
     <Reference Include="Assembly-CSharp-firstpass"><HintPath>$(HollowReferences)/Assembly-CSharp-firstpass.dll</HintPath></Reference>
     <Reference Include="PlayMaker"><HintPath>$(HollowReferences)/PlayMaker.dll</HintPath></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>$(HollowReferences)/Newtonsoft.Json.dll</HintPath></Reference>
     <Reference Include="MonoMod.RuntimeDetour"><HintPath>$(HollowReferences)/MonoMod.RuntimeDetour.dll</HintPath></Reference>
   </ItemGroup>
 </Project>

@@ -1,0 +1,86 @@
+{
+  "version": "0.3.3",
+  "scope": "Scoped core, installer, moving-teammate Dream Nail, live language switching, and Legacy menu pointer checks. Full room matrix and Steam multiplayer were outside this run.",
+  "fullMatrixRerun": false,
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FD7D82FDA7274F25C4F1085DA4049BE929BAB8628265E5FB39B9F659FA2A6D56"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "662CD1B9AB3310A50DF1CE963613BEDADEA31C6731C2F14239A768F4453B0164"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "F70F004C28F595CCD278A9D612C15F5960A28CF552B4FE90EBEAA26BC028C6C6"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "4D56CF315A714AA674E5C01278EA3E6CD3FD95A3467F841E4AD02ADF97C3127F"
+        },
+        {
+          "name": "BouncyCastle.Cryptography.dll",
+          "sha256": "3D7CED058D7264036323F8CFD87D3203761B5FE45DFDDF1EBCE069C1E36B81B8"
+        }
+      ],
+      "runs": [
+        {
+          "case": "moving-dream",
+          "run": "v033-moving-dream-legacy-final-1124",
+          "status": "passed"
+        },
+        {
+          "case": "live-language",
+          "run": "v033-live-language-legacy-1125",
+          "status": "passed"
+        },
+        {
+          "case": "menu-pointer",
+          "run": "v033-menu-pointer-legacy-1125-r2",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "2DBB2794B255379755E3BFB0AEF52FA2821CD2E7C05B4F22A8A0B6C2A1FB7B0F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "E9A1285FD4FC9E0F07450DDEBCAF875916A7CC8C5024397EF70E427C0D0C7551"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "1074203F09CB1F6E66018E2A2756124356737E278F9F24600E621BAD45AFFED3"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "232FA71371280392C80E3FE6FF1CD1AE4E2102834CD0D4E7438F62BA0C735E4E"
+        },
+        {
+          "name": "BouncyCastle.Cryptography.dll",
+          "sha256": "3D7CED058D7264036323F8CFD87D3203761B5FE45DFDDF1EBCE069C1E36B81B8"
+        }
+      ],
+      "runs": [
+        {
+          "case": "moving-dream",
+          "run": "v033-moving-dream-unity6-final-1125",
+          "status": "passed"
+        },
+        {
+          "case": "live-language",
+          "run": "v033-live-language-unity6-1125-r2",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

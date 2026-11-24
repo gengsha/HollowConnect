@@ -29,7 +29,12 @@ public sealed partial class RescueProbe {
         Check(!CoopMod.RoomSettingsLocked, "room configuration is editable before hosting or connecting");
         flexibleMenu = CoopMod.Instance.GetMenuScreen(null, null);
         var rows = flexibleMenu.GetComponentsInChildren<CoopMenuLockRow>(true);
-        Check(rows.Length == originalRoomEntries.Count && rows.Length >= 9, "every captured room rule has a lockable native menu row");
+        // The two numeric fields own their lock state, and the local status row
+        // is locked only by shared health. Check the room pickers by identity.
+        var expected = originalRoomEntries.Select(e => e.Name).Where(name => name != BossHealthParameterRow.OptionName && name != LinkedHealthBonusRow.OptionName);
+        var actual = rows.Select(row => row.name).Where(name => name != CoopMod.TeammateStatusOptionName);
+        Check(new HashSet<string>(actual).SetEquals(expected) && actual.Count() >= 9,
+            "every room picker has a lockable native menu row");
         flexibleMenu.gameObject.SetActive(false);
     }
 
@@ -43,6 +48,7 @@ public sealed partial class RescueProbe {
         foreach (var entry in originalRoomEntries) entry.Saver((entry.Loader() + 1) % entry.Values.Length);
         foreach (var row in flexibleMenu.GetComponentsInChildren<CoopMenuLockRow>(true)) {
             var option = row.GetComponent<MenuOptionHorizontal>();
+            if (option.name == CoopMod.TeammateStatusOptionName) continue;
             Check(option.optionList.Length == 1 && option.optionList[0].Contains("已锁定") && option.interactable,
                 "locked row remains focusable with explicit fixed value: " + option.name);
             var description = row.transform.Find("Description")?.GetComponent<Text>();

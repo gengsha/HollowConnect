@@ -1,12 +1,15 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$UserRequestedRelease,
     [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate,
+    [ValidateSet('0.3.2','0.3.3')][string]$ReleaseVersion,
     [ValidatePattern('^\d+\.\d+\.\d+-rc[1-9][0-9]*$')][string]$CandidateVersion, [switch]$SteamModule,
     [ValidateSet('Both','Legacy','Unity6')][string]$GameVersion='Both',
     [ValidateSet('','hit-evasion')][string]$Unity6Revision='')
 $ErrorActionPreference='Stop'
 if($CandidateVersion -and ($Unity6Revision -or $Playtest -or $PlaytestBuild -or $ReleaseCandidate)){throw 'Choose one release channel.'}
+if($ReleaseVersion -and ($CandidateVersion -or $Unity6Revision -or $Playtest -or $PlaytestBuild -or $ReleaseCandidate)){throw 'Choose one release channel.'}
 if(!$Unity6Revision -and !$Playtest -and !$PlaytestBuild -and !$ReleaseCandidate){
     $taskChannelArguments=@{}
+    if($ReleaseVersion){$taskChannelArguments.ReleaseVersion=$ReleaseVersion}
     if($CandidateVersion){$taskChannelArguments.CandidateVersion=$CandidateVersion}
     foreach($taskProfile in $(if($GameVersion -eq 'Both'){@('Legacy','Unity6')}else{@($GameVersion)})){
         & "$PSScriptRoot/Package-Current.ps1" -GameVersion $taskProfile @taskChannelArguments -VerifyOnly -SteamModule:$SteamModule -UserRequestedRelease:$UserRequestedRelease

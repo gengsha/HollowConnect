@@ -296,6 +296,10 @@ public sealed partial class CoverageProbe : MonoBehaviour {
         if (StoryCutsceneCase) {
             yield return StoryCutsceneChecks();
             yield return ProbeShutdown.Run(engine, root, role);
+            if (QolStoryCase) {
+                if (!QolCutsceneField("DreamersGet")) throw new Exception("QoL Dreamer preference was not restored on disconnect");
+                Mark("PASS QoL Dreamer preference restored on disconnect");
+            }
             Mark("FINAL PASS story cutscene " + Environment.GetEnvironmentVariable("HOLLOWCONNECT_STORY_STAGE"));
             Flag(role + ".done");
             yield break;

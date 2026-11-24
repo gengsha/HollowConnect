@@ -1862,11 +1862,7 @@ internal abstract class ServerManager : IServerManager {
         }
 
         if (playerSettingUpdate.UpdateTypes.Contains(PlayerSettingUpdateType.Skin)) {
-            if (TryUpdatePlayerSkin(id, playerSettingUpdate.SkinId, playerSettingUpdate.CustomSkinId, out var reason)) {
-                SendMessage(id, $"Skin ID changed to '{playerSettingUpdate.SkinId}'");
-            } else {
-                SendMessage(id, reason);
-            }
+            TryUpdatePlayerSkin(id, playerSettingUpdate.SkinId, playerSettingUpdate.CustomSkinId, out _);
         }
     }
 

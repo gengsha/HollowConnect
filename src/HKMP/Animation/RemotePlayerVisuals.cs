@@ -17,14 +17,24 @@ internal static class RemotePlayerVisuals {
     private static void Refresh() {
         foreach (var visual in tracked) if (visual != null) visual.Refresh();
     }
+    internal static void RefreshSkins() {
+        if (SkinApplier == null) return;
+        foreach (var visual in tracked) {
+            if (visual != null && visual.UsesEffectSkin) SkinApplier(visual.gameObject, visual.PlayerId);
+        }
+    }
     internal static GameObject Track(GameObject obj, GameObject origin = null, int ownerId = -1, bool applySkin = true) {
         if (obj != null && obj.GetComponent<RemoteVisualOpacity>() == null)
             obj.AddComponent<RemoteVisualOpacity>();
         var owner = ownerId >= 0
             ? ownerId
             : AttackOwnership.CreatingPlayer >= 0 ? AttackOwnership.CreatingPlayer : AttackOwnership.RemoteOwner(origin);
-        if (obj != null && owner >= 0) obj.GetComponent<RemoteVisualOpacity>().PlayerId = owner;
-        if (obj != null && owner >= 0 && applySkin) SkinApplier?.Invoke(obj, owner);
+        if (obj != null && owner >= 0) {
+            var visual = obj.GetComponent<RemoteVisualOpacity>();
+            visual.PlayerId = owner;
+            visual.UsesEffectSkin = applySkin;
+            if (applySkin) SkinApplier?.Invoke(obj, owner);
+        }
         return obj;
     }
     internal static GameObject Instantiate(GameObject source) {
@@ -56,6 +66,7 @@ internal static class RemotePlayerVisuals {
 [DefaultExecutionOrder(-10000)]
 internal sealed class RemoteVisualOpacity : MonoBehaviour {
     [SerializeField] internal int PlayerId = -1;
+    internal bool UsesEffectSkin;
     private tk2dBaseSprite[] sprites;
     private SpriteRenderer[] images;
     private ParticleSystem[] particles;

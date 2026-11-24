@@ -19,7 +19,7 @@ public sealed class Settings {
     public bool BossHealthScaling = false;
     public bool BossDamageRanking = false;
     public bool TeammateStatus = false;
-    public int BossTargetingMode = 0;
+    public int BossTargetingMode = 1;
     public float BossExtraHealthPerPlayer = .6f;
     public bool Rescue = true;
     public int RescueLimit = 0;
@@ -38,10 +38,10 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
     public static CoopMod Instance;
     public static Settings Settings = new Settings();
     public static DeathStatistics Statistics = new DeathStatistics();
-    public const string Version = "0.3.2";
+    public const string Version = "0.3.3";
     // HKMP truncates addon versions to ten characters. Keep the wire revision
     // inside that limit, including candidate builds with a longer display name.
-    public const string NetworkVersion = "0.3.2";
+    public const string NetworkVersion = "0.3.3";
     public CoopMod() : base("HollowConnect") { Instance = this; }
     public override string GetVersion() => Version;
     public override List<(string, string)> GetPreloadNames() => new List<(string, string)> {
@@ -80,7 +80,7 @@ public sealed partial class CoopMod : Mod, IGlobalSettings<Settings>, ILocalSett
             if (!TeammateStatusLocked) Settings.TeammateStatus = i == 1;
         }, () => !TeammateStatusLocked && Settings.TeammateStatus ? 1 : 0),
         new IMenuMod.MenuEntry("Boss 伤害占比榜（房主）", new[]{"关闭", "开启"}, "默认关闭。实时显示本场 Boss 伤害占比；神居一至五门整门累计，最后结算。由房主开房前决定，F1 隐藏或显示本机榜单，隐藏时继续统计。", i=>Settings.BossDamageRanking=i==1, ()=>Settings.BossDamageRanking?1:0),
-        new IMenuMod.MenuEntry("Boss 索敌模式（房主）", new[]{"原版", "灵活"}, "默认原版。灵活模式优先选择同房存活玩家中最近的一人；至少锁定 4 秒，只在空闲或追逐的决策边界换人，新目标须近 25%。攻击生成物继承目标，目标倒地或离房时立即重选。由房主统一设置。", i=>Settings.BossTargetingMode=i==1?1:0, ()=>Settings.BossTargetingMode==1?1:0),
+        new IMenuMod.MenuEntry("Boss 索敌模式（房主）", new[]{"原版", "灵活"}, "默认灵活。Boss 优先锁定同房最近的存活玩家，至少保持 4 秒，只在空闲或追逐时切换到近 25% 的玩家。目标倒地或离房时立即重选。房主可在开房前切回原版。", i=>Settings.BossTargetingMode=i==1?1:0, ()=>Settings.BossTargetingMode==1?1:0),
         new IMenuMod.MenuEntry("暗影救援（房主）", new[]{"关闭", "开启"}, "击破暗影后一血复活，救人者获得 33 点灵魂；按 " + Settings.GiveUpKey + " 放弃。Boss房内无人能继续战斗时，本场失败，不等待赶路队友。开房前设置。", i=>Settings.Rescue=i==1, ()=>Settings.Rescue?1:0),
         RescueLimitMenuEntry(),
         new IMenuMod.MenuEntry("救援耗尽后观战（Beta，房主）", new[]{"关闭", "开启"}, "默认关闭。开启时主动放弃救援直接观战；Boss战救援耗尽或关闭暗影救援时，死亡直接观战。Boss胜利后在本场存活队友处一血复活，不扣次数；房内无人能战斗时返回自己的复活点。观战时按 " + Settings.GiveUpKey + " 可提前返回。开房前设置。", i=>Settings.SpectateAfterExhaustion=i==1, ()=>Settings.SpectateAfterExhaustion?1:0),

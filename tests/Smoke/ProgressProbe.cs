@@ -19,6 +19,7 @@ namespace HollowConnect.Smoke;
 public sealed partial class ProgressProbe : MonoBehaviour {
     private string root, role;
     private bool host;
+    private bool PackCompatibilityCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_PACK_COMPAT") == "1";
     private bool ResourcesCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_RESOURCE_CHECK") == "1";
     private bool SkinCompatibilityCase => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("HOLLOWCONNECT_SKIN_CASE"));
     private bool LinkedHealthCase => Environment.GetEnvironmentVariable("HOLLOWCONNECT_LINKED_CASE") != null;
@@ -278,9 +279,10 @@ public sealed partial class ProgressProbe : MonoBehaviour {
         }
         if (LocalWorldCase) CoopMod.Settings.ShareProgress = !host;
         if (ProgressAuditCase) CoopMod.Settings.ShareCharms = !ProgressAuditNoCharms;
-        if (TeammateDreamCase) CoopMod.Settings.ShareCharms = host
-            ? Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHARM_SHARE") != "0"
-            : Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHARM_SHARE") == "0";
+        if (TeammateDreamCase) {
+            CoopMod.Settings.ShareCharms = host == (Environment.GetEnvironmentVariable("HOLLOWCONNECT_CHARM_SHARE") != "0");
+            CoopMod.Settings.BossTargetingMode = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(host ? "{}" : "{\"BossTargetingMode\":0}").BossTargetingMode;
+        }
         if (!host && MenuResourceCase) {
             yield return MenuResourceEntry();
             if (Has(role + ".failed")) yield break;
@@ -297,7 +299,13 @@ public sealed partial class ProgressProbe : MonoBehaviour {
                 events.sendNavigationEvents = false;
             }
         }
-        GameManager.instance.profileID = 99; GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
+        GameManager.instance.profileID = 99;
+        if (PackCompatibilityCase) {
+            pd.SetInt("respawnType", 0);
+            CoopMod.Settings.ShareCharms = true;
+            CoopMod.Settings.LinkedHealth = Environment.GetEnvironmentVariable("HOLLOWCONNECT_PACK_LINKED") == "1";
+            GameManager.instance.ContinueGame();
+        } else GameManager.instance.StartCoroutine(GameManager.instance.RunContinueGame());
         yield return Until(() => HeroController.instance != null && HeroController.instance.isHeroInPosition && !GameManager.instance.IsInSceneTransition && Scenes.GetActiveScene().name == "Town", "fresh unsaved hero");
         if (Has(role + ".failed")) yield break;
         if ((LinkedHealthCase || KeyEssenceCase || Environment.GetEnvironmentVariable("HOLLOWCONNECT_DREAM_WARRIORS") != null || ResourcesCase || TeammateDreamCase || DefenderCase || EmergencyBenchCase || ProgressAuditCase || LocalWorldCase || StagNestCase || MapExitCase || RemoteFeedbackCase || SimpleKeyCase || BankerCase || MidwifeCase || DreamDialogueCase || GrimmFlameCase || ColosseumProgressCase) && pd.GetBool("atBench")) {
@@ -417,6 +425,19 @@ public sealed partial class ProgressProbe : MonoBehaviour {
             yield return Until(() => Has("guest.special.connected"), "real mismatched transport connected before rule rejection");
         else yield return Until(() => runtime.Connected, "real UDP handshake");
         if (!host && LinkedSpecial == "host-first") Flag("guest.special.connected");
+        }
+        if (PackCompatibilityCase) {
+            var checks = new Stack<IEnumerator>(); checks.Push(PackCompatibilityChecks());
+            while (checks.Count > 0) {
+                object current = null; bool more;
+                try { more = checks.Peek().MoveNext(); if (more) current = checks.Peek().Current; }
+                catch (Exception e) { Mark("FAIL " + e); Flag(role + ".failed"); yield break; }
+                if (!more) { checks.Pop(); continue; }
+                if (current is IEnumerator nested) checks.Push(nested); else yield return current;
+            }
+            if (Has(role + ".failed")) yield break;
+            yield return ProbeShutdown.Run(engine, root, role);
+            Mark("FINAL PASS pack compatibility"); Flag(role + ".done"); yield break;
         }
         if (SkinCompatibilityCase) {
             var checks = new Stack<IEnumerator>(); checks.Push(SkinCompatibilityChecks());

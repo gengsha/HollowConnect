@@ -65,19 +65,6 @@ internal static class CustomKnightSkinBridge {
         }
     }
 
-    internal static void Deregister() {
-        if (_onSetSkin != null && _onSetSkinHandler != null) {
-            try {
-                _onSetSkin.RemoveEventHandler(null, _onSetSkinHandler);
-            } catch (Exception e) {
-                Logger.Warn($"Could not unsubscribe from Custom Knight skin changes: {e.Message}");
-            }
-        }
-
-        _onSetSkinHandler = null;
-        _skinChanged = null;
-    }
-
     internal static string GetCurrentSkinId() {
         EnsureInitialized();
         if (_getCurrentSkin == null) {
@@ -93,6 +80,18 @@ internal static class CustomKnightSkinBridge {
         }
     }
 
+    internal static bool HasSkin(string id) {
+        if (string.IsNullOrEmpty(id) || id == "Default" || AtlasSkinPacks.IsLegacy(id)) return false;
+        EnsureInitialized();
+        if (_getSkinById == null) return false;
+        try {
+            return GetStringMember(_getSkinById.Invoke(null, new object[] { id }), "GetId", true) == id;
+        } catch (Exception e) {
+            Logger.Warn($"Could not check Custom Knight skin '{id}': {e.Message}");
+            return false;
+        }
+    }
+
     internal static bool SetLocalSkin(string skinId) {
         EnsureInitialized();
         if (_setSkinById == null) {
@@ -101,7 +100,7 @@ internal static class CustomKnightSkinBridge {
 
         try {
             _setSkinById.Invoke(null, new object[] { string.IsNullOrEmpty(skinId) ? "Default" : skinId });
-            return true;
+            return GetCurrentSkinId() == (skinId ?? "");
         } catch (Exception e) {
             Logger.Warn($"Could not set the Custom Knight skin '{skinId}': {e.Message}");
             return false;
@@ -111,7 +110,8 @@ internal static class CustomKnightSkinBridge {
     internal static Texture2D GetSkinTexture(string skinId, string fileName) {
         EnsureInitialized();
         if (string.IsNullOrEmpty(skinId) || string.IsNullOrEmpty(fileName)) return null;
-        return GetPluginTexture(skinId, fileName) ?? AtlasSkinPacks.GetTexture(skinId, fileName);
+        return (AtlasSkinPacks.IsLegacy(skinId) ? null : GetPluginTexture(skinId, fileName)) ??
+            AtlasSkinPacks.GetTexture(skinId, fileName);
     }
 
     private static Texture2D GetPluginTexture(string skinId, string fileName) {

@@ -4,9 +4,9 @@
 
 HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪物与 Boss 同步、可选的进度共享、队友定位和暗影救援，并附带 Windows 一键安装器。
 
-**当前版本：0.3.2** · 支持 Windows 10 / 11 · 提供 **1.5.78.11833（Legacy）** 与 **1.5.12620（Unity6）** 安装包
+**当前版本 0.3.3** · Windows 10 / 11 · **1.5.78.11833（Legacy）** 和 **1.5.12620（Unity6）**
 
-0.3.2 加入聊天传送、输入历史和 Tab 补全，修复神居四门开场镜头，并加入队友状态条和兼容皮肤入口。详见 [更新说明](docs/UPDATE-0.3.2.md)。
+0.3.3 带来皮肤管理器与聊天输入修复。梦之钉命中移动中的队友也能获得灵魂，新配置默认启用灵活 Boss 索敌。[0.3.3 更新说明](docs/UPDATE-0.3.3.md)
 
 **安装方式：** [一键安装器](#安装与开房) · [PowerShell 脚本安装](#脚本安装无需安装器) · [手动安装](#手动安装无需安装器)
 
@@ -25,7 +25,7 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 
 ## 安装与开房
 
-下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2/HollowConnect-0.3.2-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.3.2/HollowConnect-0.3.2-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.3.2 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.2)。GitHub 的 “Code → Download ZIP” 提供的是源码。
+下载匹配游戏版本的完整包：[Legacy / 1.5.78](https://github.com/gengsha/HollowConnect/releases/download/v0.3.3/HollowConnect-0.3.3-windows.zip) 或 [Unity6 / 1.5.12620](https://github.com/gengsha/HollowConnect/releases/download/v0.3.3/HollowConnect-0.3.3-unity6-windows.zip)，均含 Steam 好友联机预览模块。源码包、校验文件和更新说明见 [0.3.3 Release](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.3)。GitHub 的 “Code → Download ZIP” 提供的是源码。
 
 1. 关闭游戏，把安装包完整解压。
 2. 双击 **一键安装.exe**，选择游戏后点击 **安装 / 更新**。安装器会自动查找 Steam 游戏库；也可点击 **选择游戏…**，手动找到 `hollow_knight.exe`。
@@ -38,6 +38,15 @@ HollowConnect 是面向《空洞骑士》一代的协作联机模组，提供怪
 Steam 方式：主菜单选择 **Steam 联机** 创建好友房间、查看好友主持的游戏；游戏内按 F10 打开房间菜单。邀请和存档选择见 [Steam 联机说明](docs/STEAM-MULTIPLAYER.md)。真实双账号邀请与跨机器连接仍待实测。
 
 安装器会备份原游戏文件、已有 HKMP 和存档。请保留解压后的配套文件；安装无需 .NET SDK 或命令行操作。
+
+## 皮肤管理器（0.3.3）
+
+1. 在游戏主菜单或暂停菜单进入 **模组 → HKMP → 客户端设置 → 皮肤管理器**。
+2. 点击 **打开皮肤目录**，将每套 PNG 皮肤解压成独立文件夹，例如 `hollow_knight_Data/Managed/Mods/HKMP/SkinPacks/死亡细胞/Knight.png`。
+3. 点击 **重新扫描**，在 **本机皮肤** 一行左右切换。首次使用显示 **原版外观**。选择会保存在本机，单人游戏也能换装。
+4. 联机时，双方保留相同的皮肤文件夹名。**查看队友皮肤** 默认开启，装有队友所用的皮肤包就能看到对应外观。游戏通过皮肤标识匹配各自本机的文件，缺少皮肤包时会显示原版外观。
+
+[旧版皮肤、Custom Knight 和图集格式说明](docs/SKIN-COMPATIBILITY.md)
 
 ## 脚本安装（无需安装器）
 
@@ -56,7 +65,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GamePath "E:\
 3. 把包内整个 **`payload/HKMP` 文件夹**放到 `hollow_knight_Data/Managed/Mods/HKMP`。更新时先移走旧 HKMP 文件夹，再放入完整新文件夹，避免残留；必须复制所有依赖。
 4. 启动游戏。所有队友使用匹配各自游戏版本的同版模组完整包。手动安装没有安装脚本的自动备份链；卸载时移走新 HKMP 文件夹并恢复自己备份的文件。
 
-游戏内选择 English / 日本語 后，模组界面随之切换。日常状态和开发提示保存在游戏日志及 F9 导出的诊断中；地图打开时仍可查看队友位置。
+模组界面支持简体中文、English 和日本語，跟随游戏语言。其他游戏语言使用英文。安装器有独立的语言选项。
 
 ## 房主设置
 
@@ -71,7 +80,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GamePath "E:\
 | 入场免伤 | 开启 | 进入房间并恢复操作后，提供 1.5 秒反应时间。 |
 | 动态 Boss 血量 | 关闭 | 根据同房人数增加 Boss 等效血量，适合希望提高挑战的队伍。 |
 | Boss 增血参数 | 60% | 开启动态血量后生效；可输入 0–400。例如 80 时，两人 180%、三人 244%。 |
-| Boss 索敌模式 | 原版 | 可选“灵活”，让 Boss 在合适时机切换目标。 |
+| Boss 索敌模式 | 灵活（0.3.3） | 适配的 Boss 优先锁定最近的同房存活玩家，在空闲或追逐时可以换目标。房主可在开房前选择「原版」。已保存的选择会被沿用。 |
 | Boss 伤害占比榜 | 关闭 | 普通 Boss 按单场统计，神居一至五门按整门累计。 |
 | 救援耗尽后观战（Beta） | 关闭 | 可在 Boss 战中跟随存活队友观战，也可提前返回自己的复活点。 |
 | 队友状态条（本机） | 关闭 | 在右上角显示名字、到房间服务器的延迟和当前面具，使用游戏原版面具图样。可独立于伤害榜开关。开启共享血量时停用队友状态条。 |
@@ -114,13 +123,13 @@ HollowConnect 使用**一个 UDP 端口**，房主与队友按自己的网络条
 
 ## 更新、卸载与反馈
 
-**更新**：关闭游戏，解压新版本完整包，在安装器中点击 **安装 / 更新**。所有队友一起更新，再重新开房。
+**更新**时先关闭游戏，再完整解压新版安装包并点击 **安装 / 更新**。0.3.3 安装器会对带原始备份记录的安装原地更新包内文件，保留本地皮肤。所有队友更新到同一模组版本后重新开房。
 
 **卸载**：在安装器中选择游戏，点击 **卸载并恢复**。安装器会恢复最初安装前的游戏文件，保留当前存档；备份位于游戏目录的 `.HollowConnectBackups`。
 
 安装时遇到写入权限不足，可右键安装器选择“以管理员身份运行”。安装日志位于 `%LOCALAPPDATA%\HollowConnect\Installer`。
 
-遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [更新日志](docs/UPDATE-0.3.2.md)。
+遇到问题或有功能建议，欢迎提交 [Issue](https://github.com/gengsha/HollowConnect/issues)。反馈时附上模组版本、人数、所在场景、复现步骤和 F9 导出的诊断信息，方便定位。版本变更见 [历史版本](docs/CHANGELOG.md)。
 
 ## 开发与许可
 

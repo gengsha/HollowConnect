@@ -14,8 +14,6 @@ using TMProOld;
 using TMPro;
 #endif
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace HollowConnect.Smoke;
@@ -57,39 +55,6 @@ public sealed partial class BossProbe {
         if (feather != null) Check(feather.GetComponent<RemoteVisualOpacity>() != null, "remote feather particles carry opacity");
         yield return new WaitForSecondsRealtime(.2f);
         Check(Math.Abs(observation.Alpha - alpha) < .001f, "opacity remains stable across frames");
-        var menu = Field<Hkmp.Menu.ModMenu>(ModHooks.GetMod("HKMP"), "_modMenu");
-        var option = Field<MenuOptionHorizontal>(menu, "_skinHorizontalOption");
-        if (option == null) {
-            menu.CreateMenu(null);
-            option = Field<MenuOptionHorizontal>(menu, "_skinHorizontalOption");
-        }
-        typeof(Hkmp.Menu.ModMenu).GetMethod("ModifySkinHorizontalOption", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(menu, new object[] { true });
-        // Use real pointer handling on the actual constructed selector; no
-        // frame/click wait, so this check does not send a skin-change packet.
-        var menuScreen = Field<MenuScreen>(menu, "_clientSettingsMenu");
-        menuScreen.gameObject.SetActive(true);
-        menuScreen.transform.localScale = Vector3.one;
-        // OnEnable refreshes the native selector from game settings.
-        option.SetOptionTo(2);
-        Check(option.selectedOptionIndex == 2, "skin pointer fixture starts at option 2");
-        var rect = (RectTransform)option.transform;
-        var canvas = option.GetComponentInParent<Canvas>();
-        var camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
-        void Click(float x) {
-            var point = RectTransformUtility.WorldToScreenPoint(camera, rect.TransformPoint(new Vector3(x, rect.rect.center.y)));
-            Mark("SKIN pointer=" + point + " rect=" + rect.rect + " scale=" + rect.lossyScale + " active=" + option.gameObject.activeInHierarchy + " interact=" + option.interactable + " before=" + option.selectedOptionIndex);
-            option.OnPointerClick(new PointerEventData(EventSystem.current) { position = point,
-                pointerPressRaycast = new RaycastResult { module = canvas == null ? null : canvas.GetComponent<UnityEngine.UI.GraphicRaycaster>() } });
-            Mark("SKIN after=" + option.selectedOptionIndex);
-        }
-        Click(rect.rect.xMin + 5);
-        Check(option.selectedOptionIndex == 1, "skin left mouse click decrements 2 to 1");
-        Click(rect.rect.xMin + 5);
-        Check(option.selectedOptionIndex == 0, "skin left mouse click returns to default 0");
-        Click(rect.rect.xMax - 5);
-        Check(option.selectedOptionIndex == 1, "skin right mouse click increments");
-        option.SetOptionTo(0);
-        menuScreen.gameObject.SetActive(false);
         Flag(role + ".balance-visuals");
         yield return Until(() => Has((host ? "guest" : "host") + ".balance-visuals"), "both local presentation checks complete");
     }

@@ -104,6 +104,7 @@ public sealed class ConnectionMenuProbe : MonoBehaviour {
         // Keep optional Steam types out of this iterator's generated state machine.
         // The same fixture must load when that assembly is physically absent.
         if (hasSteam) yield return CheckSteamMenu();
+        if (Environment.GetEnvironmentVariable("HOLLOWCONNECT_LOCALIZATION_CHECK") == "1") yield return CheckHkmpLocalization();
         Log("FINAL PASS native connection menus"); File.WriteAllText(Path.Combine(root, role + ".done"), "pass"); GetComponent<RouteFrameRecorder>()?.Finish(); Application.Quit();
     }
     private IEnumerator CheckSteamMenu() {
@@ -182,6 +183,30 @@ public sealed class ConnectionMenuProbe : MonoBehaviour {
             confirm.gameObject.SetActive(false);
         }
         Log("PASS all three live languages, canonical identities, opaque input and save warning");
+    }
+    private IEnumerator CheckHkmpLocalization() {
+        var hkmp = Field<Hkmp.Menu.ModMenu>(ModHooks.GetMod("HKMP"), "_modMenu");
+        var hkmpMenu = hkmp.CreateMenu(null);
+        var client = Field<MenuScreen>(hkmp, "_clientSettingsMenu");
+        foreach (var (code, clientLabel, skinLabel, lockedLabel) in new[] {
+            (global::Language.LanguageCode.EN, "Client Settings", "Skin Manager", "Locked"),
+            (global::Language.LanguageCode.JA, "クライアント設定", "スキン管理", "ロック中"),
+            (global::Language.LanguageCode.ZH, "客户端设置", "皮肤管理器", "已锁定")
+        }) {
+            global::Language.Language.SwitchLanguage(code);
+            Native.UIGoToDynamicMenu(hkmpMenu);
+            yield return Until(() => At(hkmpMenu), "HKMP menu opens " + code);
+            yield return null;
+            var clientButton = hkmpMenu.GetComponentsInChildren<MenuButton>(true).Single(b => b.name == "Client Settings");
+            Check(clientButton.GetComponentInChildren<Text>(true).text.Trim() == clientLabel, "localized HKMP client entry " + code);
+            Submit(clientButton.gameObject);
+            yield return Until(() => At(client), "HKMP client settings open " + code);
+            yield return null;
+            var skinButton = client.GetComponentsInChildren<MenuButton>(true).Single(b => b.name == "SkinManager");
+            Check(skinButton.GetComponentInChildren<Text>(true).text.Trim() == skinLabel, "localized Skin Manager entry " + code);
+            foreach (var row in client.GetComponentsInChildren<MenuOptionHorizontal>(true).Where(o => o.name == "SkinOption" || o.name == "TeamOption"))
+                Check(row.optionText.text.Trim() == lockedLabel, "localized locked " + row.name + " " + code);
+        }
     }
     private void Capture(string name) {
         Canvas.ForceUpdateCanvases();

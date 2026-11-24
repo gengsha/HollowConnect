@@ -1,6 +1,6 @@
-# Install HollowConnect 0.3.2
+# Install HollowConnect
 
-Download the complete **Windows ZIP** from [Releases](https://github.com/gengsha/HollowConnect/releases/tag/v0.3.2). Choose **Legacy** for Hollow Knight 1.5.78.11833, or **Unity6** for 1.5.12620. Extract every file and close the game.
+Download the complete **Windows ZIP** from [Releases](https://github.com/gengsha/HollowConnect/releases). Choose **Legacy** for Hollow Knight 1.5.78.11833, or **Unity6** for 1.5.12620. Extract every file and close the game.
 
 ## Installer
 
@@ -29,4 +29,12 @@ All players need the same mod version and a package matching their game. The mai
 
 In-game text follows the game's language; other unsupported languages use English. F6 gives up waiting for rescue; F7 cycles the spectator target. Enter `/tp <teammate name>` in the HKMP chat to request a teleport if the host allows it; quote names containing spaces, for example `/tp "Knight Two"`. Hold F5 for the death board; F9 opens diagnostics. Cross-room teammate locations are available while the map is open.
 
-[Release notes and validation limits](UPDATE-0.3.2.md) · [Known issues](KNOWN-ISSUES.md)
+## Skin Manager in 0.3.3
+
+Open **Mods → HKMP → Client Settings → Skin Manager**. Choose **Open skin folder**, extract each PNG skin pack into its own folder under `Mods/HKMP/SkinPacks`, then choose **Rescan**. Use the arrows on **My skin** to cycle through the original appearance and installed skins. Your selection works offline.
+
+**Show teammate skins** is on by default. To see a teammate’s skin, install the same pack and keep the exact folder name. If the pack is missing, that teammate uses the original appearance on your screen.
+
+Flexible boss targeting is the default for fresh settings. Hosts can choose **Original** before opening a room. A saved choice carries over when updating.
+
+[0.3.3 release notes](UPDATE-0.3.3.md) · [Known issues](KNOWN-ISSUES.md)

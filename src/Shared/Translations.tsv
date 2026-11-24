@@ -79,7 +79,7 @@ Boss 伤害占比榜（房主）	Boss damage ranking (host)	ボスへのダメ�
 Boss 索敌模式（房主）	Boss targeting (host)	ボスの標的選択（ホスト）
 原版	Original	通常
 灵活	Flexible	柔軟
-默认原版。灵活模式优先选择同房存活玩家中最近的一人；至少锁定 4 秒，只在空闲或追逐的决策边界换人，新目标须近 25%。攻击生成物继承目标，目标倒地或离房时立即重选。由房主统一设置。	Original by default. Flexible targets the nearest living player in the room, keeps a target for at least 4 seconds, and switches only at idle/chase decisions when another player is 25% closer. Attacks inherit the target; a downed or departed target is replaced immediately. Set by the host.	初期設定は通常。柔軟では同じ部屋の最も近い生存者を狙い、最低4秒は標的を維持します。待機・追跡の判断時に限り、25%以上近い相手へ切り替えます。攻撃も同じ標的を狙い、標的のダウン・退室時は即座に選び直します。ホストが設定します。
+默认灵活。Boss 优先锁定同房最近的存活玩家，至少保持 4 秒，只在空闲或追逐时切换到近 25% 的玩家。目标倒地或离房时立即重选。房主可在开房前切回原版。	Flexible by default. The boss locks onto the nearest living player in the room for at least 4 seconds. While idle or chasing, it can switch to someone 25% closer. It picks a new target immediately if the current one falls or leaves. The host can choose Original before opening the room.	初期設定は柔軟です。ボスは同じ部屋で最も近い生存者を4秒以上狙います。待機中か追跡中に限り、25%以上近い相手に切り替えます。標的が倒れるか部屋を出ると、すぐに選び直します。ホストは部屋を開く前に通常へ戻せます。
 暗影救援（房主）	Shade rescue (host)	影による救援（ホスト）
 击破暗影后一血复活，救人者获得 33 点灵魂；按 	Break a teammate's shade to revive them with one mask; the rescuer gains 33 Soul. Press 	仲間の影を倒すとHP1で復活し、救援者はソウルを33得ます。
  放弃。Boss房内无人能继续战斗时，本场失败，不等待赶路队友。开房前设置。	 to give up. If nobody can fight in the boss room, the attempt fails without waiting for teammates outside. Set before hosting.	 で救援を諦めます。ボス部屋で戦える人がいなくなると、部屋の外の仲間を待たずに失敗となります。部屋を作る前に設定してください。
@@ -230,3 +230,26 @@ HollowConnect 诊断（只读；F9 开关）	HollowConnect diagnostics (F9)	Holl
 原版外观	Default appearance	標準の外見
 使用本机已安装的 PNG 皮肤包。队友安装同一皮肤包后即可看到。	Uses an installed PNG skin pack. Teammates with the same pack can see it.	インストール済みの PNG スキンを使用します。同じスキンを持つ仲間にも表示されます。
 无法读取皮肤图集，请检查这套皮肤的 PNG 文件。	Could not read this skin. Check the PNG files in the pack.	スキンを読み込めません。パック内の PNG ファイルを確認してください。
+皮肤管理器	Skin Manager	スキン管理
+查看队友皮肤	Show teammate skins	仲間のスキンを表示
+本机装有队友正在用的皮肤包时，才能看到这套皮肤。缺少皮肤包时显示原版。	You can see a teammate’s skin if you have the same skin pack installed. Otherwise, they use the default appearance.	仲間と同じスキンパックを入れていると、そのスキンが見えます。未導入の場合は標準の外見が表示されます。
+旧版皮肤	Legacy skin	旧形式スキン
+队伍	Team	チーム
+已锁定	Locked	ロック中
+打开皮肤目录	Open skin folder	スキンフォルダーを開く
+重新扫描	Rescan	再スキャン
+无法打开皮肤目录。	Could not open the skin folder.	スキンフォルダーを開けませんでした。
+本机皮肤	My skin	自分のスキン
+已保存的皮肤不可用：{0}	Saved skin unavailable: {0}	保存したスキンを使用できません：{0}
+{0}（旧版皮肤）	{0} (legacy skin)	{0}（旧形式スキン）
+无法读取皮肤「{0}」，已跳过。	Skipped “{0}” because it could not be loaded.	「{0}」を読み込めないためスキップしました。
+客户端设置	Client Settings	クライアント設定
+服务器设置	Server Settings	サーバー設定
+调整本机的联机显示与操作。	Adjust multiplayer display and controls on this device.	この端末のマルチプレイ表示と操作を調整します。
+有权限的玩家可以调整房间设置。	Players with permission can change room settings.	権限のあるプレイヤーがルーム設定を変更できます。
+HKMP 客户端设置	HKMP Client Settings	HKMP クライアント設定
+延迟显示	Latency Display	通信遅延の表示
+联机时在画面上显示延迟。	Show network latency during multiplayer.	マルチプレイ中に通信遅延を画面に表示します。
+打开聊天的按键	Open Chat Key	チャットを開くキー
+当前无法使用 Benchwarp，请等切图、救援或挑战结束	Benchwarp is unavailable until the current scene transition, rescue, or challenge ends.	画面の切り替え、救援、または挑戦が終わるまで Benchwarp は使用できません。
+共享血量房间不支持 Benchwarp 回椅，请正常坐椅	Benchwarp cannot return you to a bench in a shared-health room. Rest at a bench in-game.	共有ライフのルームでは Benchwarp でベンチに戻れません。ゲーム内でベンチに座ってください。

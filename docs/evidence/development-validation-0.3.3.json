@@ -1,0 +1,551 @@
+{
+  "version": "0.3.3",
+  "date": "2026-11-25",
+  "status": "passed",
+  "scope": "Scoped core, installer, moving-teammate Dream Nail, live language switching, and Legacy menu pointer checks. Full room matrix and Steam multiplayer were outside this run.",
+  "fullMatrixRerun": false,
+  "retestOmitted": false,
+  "core": {
+    "passed": 10,
+    "failed": 0,
+    "logSha256": "3E2CF5F47D5521A05AB7CB143D4A01CFE6A9417602D1FD7C69D3E42BE5BA14D7",
+    "selection": [
+      "localization follows supported codes with English fallback",
+      "localization keeps player names and server errors opaque",
+      "localization keeps room values and locked numeric labels readable",
+      "localization covers 0.3.3 skin navigation and compatibility notices",
+      "localization catalog is complete and preserves runtime key bindings",
+      "boss target commitment survives takeover with player ID and hold",
+      "boss target commitment rejects prior sessions rounds and malformed snapshots",
+      "boss target commitment cannot switch during attack or in inherited attacks after hold",
+      "boss target decision boundaries exclude attack preparation and auxiliary names",
+      "boss targeting host rule survives existing reliable welcome envelope"
+    ]
+  },
+  "installer": {
+    "passed": 19,
+    "failed": 0,
+    "logSha256": "980F1101F861B51B1A900DB29180F2CE48313354B37F96F7F051125C69E735F8",
+    "files": [
+      {
+        "name": "Install.ps1",
+        "sha256": "F1C25EE1F3A4F176DB076F9A197BD2C8FA6BADE963F19334106620627FB95945"
+      },
+      {
+        "name": "Uninstall.ps1",
+        "sha256": "46CB1B9F19821FD4AEFA1578D125767B21C2DFCE062C515E153C3E79A65AA0C9"
+      },
+      {
+        "name": "GamePath.ps1",
+        "sha256": "C0E96EE54C48D6AEFD46FCFFCC03A36E937B7CB2686C78982A746ABEF2578E97"
+      },
+      {
+        "name": "一键安装.exe",
+        "sha256": "0D7AA98508A50B92936E7C59986E4CA0B8499A9BDA5B506FBD2C9BAA4C65D600"
+      },
+      {
+        "name": "一键安装.exe.config",
+        "sha256": "AD8267122C40D37DCD9D99E1412D763187A1825732F378DB8867F3ECF675CF70"
+      }
+    ]
+  },
+  "profiles": [
+    {
+      "profile": "Legacy",
+      "gameVersion": "1.5.78.11833 Windows / Unity 2020.2.2f1",
+      "vanillaAssemblySha256": "FCC01E0DF1B841A8FAF6B5E39F27030F63204AD02F430B3DEFA262134AE4E8A0",
+      "apiAssemblySha256": "5944411BD93830369390A4B51766EE68C4AB26195B299E25A07B5E7D0E00086D",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "FD7D82FDA7274F25C4F1085DA4049BE929BAB8628265E5FB39B9F659FA2A6D56"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "662CD1B9AB3310A50DF1CE963613BEDADEA31C6731C2F14239A768F4453B0164"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "F70F004C28F595CCD278A9D612C15F5960A28CF552B4FE90EBEAA26BC028C6C6"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "4D56CF315A714AA674E5C01278EA3E6CD3FD95A3467F841E4AD02ADF97C3127F"
+        },
+        {
+          "name": "BouncyCastle.Cryptography.dll",
+          "sha256": "3D7CED058D7264036323F8CFD87D3203761B5FE45DFDDF1EBCE069C1E36B81B8"
+        }
+      ],
+      "runs": [
+        {
+          "case": "moving-dream",
+          "run": "v033-moving-dream-legacy-final-1124",
+          "scope": "charm sharing off",
+          "status": "passed",
+          "endpoints": [
+            "host",
+            "guest"
+          ],
+          "strictLogsPassed": true,
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "FD7D82FDA7274F25C4F1085DA4049BE929BAB8628265E5FB39B9F659FA2A6D56"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "662CD1B9AB3310A50DF1CE963613BEDADEA31C6731C2F14239A768F4453B0164"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "F70F004C28F595CCD278A9D612C15F5960A28CF552B4FE90EBEAA26BC028C6C6"
+            }
+          ],
+          "artifacts": [
+            {
+              "name": "binaries.json",
+              "sha256": "F0FCF7EC5C8C6BC5CC495BFB309067F11282DC3E35E3439E9C93034C154D1EE6"
+            },
+            {
+              "name": "game-dependencies.json",
+              "sha256": "38EEF87D2615604B441169F4C5661204FEF7706E9B17CC37059A4AA3F4CECDF1"
+            },
+            {
+              "name": "host.log",
+              "sha256": "00EED34A4BF2F9DC343575DD616D3125821D059E876EEB28B4031DBC83078C42"
+            },
+            {
+              "name": "guest.log",
+              "sha256": "0B105C5DF5A4AE286F7746428B5299D3C2616A93AC90820BEAE21378FE439791"
+            },
+            {
+              "name": "host-unity.log",
+              "sha256": "98F80BBFB819FED3B152E693C8ABFE67A994AC3582FA9088156EEA6CF3690A0F"
+            },
+            {
+              "name": "guest-unity.log",
+              "sha256": "C027892B57171355F1FB004162B08625C17FF866C1D580056A3F1AED4E530AD4"
+            },
+            {
+              "name": "host-HollowConnect.Smoke.dll.inactive",
+              "sha256": "515623F792DC5B466D40F12A1D377F37E979EC9A122C409B9AFA628D36789756"
+            },
+            {
+              "name": "guest-HollowConnect.Smoke.dll.inactive",
+              "sha256": "515623F792DC5B466D40F12A1D377F37E979EC9A122C409B9AFA628D36789756"
+            },
+            {
+              "name": "guest-engine.log",
+              "sha256": "B8D989269303A8762D522330EB43059D95BA7B1BA2605F711F5E960D27441C48"
+            },
+            {
+              "name": "host-engine.log",
+              "sha256": "FC68D0E51D7F71936857E3F9D53D8ADE72643142EDC087CC65B74FB3E3F1C536"
+            }
+          ]
+        },
+        {
+          "case": "live-language",
+          "run": "v033-live-language-legacy-1125",
+          "scope": "ZH, EN, JA",
+          "status": "passed",
+          "endpoints": [
+            "host",
+            "guest"
+          ],
+          "strictLogsPassed": true,
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "FD7D82FDA7274F25C4F1085DA4049BE929BAB8628265E5FB39B9F659FA2A6D56"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "662CD1B9AB3310A50DF1CE963613BEDADEA31C6731C2F14239A768F4453B0164"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "F70F004C28F595CCD278A9D612C15F5960A28CF552B4FE90EBEAA26BC028C6C6"
+            }
+          ],
+          "artifacts": [
+            {
+              "name": "binaries.json",
+              "sha256": "F0FCF7EC5C8C6BC5CC495BFB309067F11282DC3E35E3439E9C93034C154D1EE6"
+            },
+            {
+              "name": "game-dependencies.json",
+              "sha256": "38EEF87D2615604B441169F4C5661204FEF7706E9B17CC37059A4AA3F4CECDF1"
+            },
+            {
+              "name": "host.log",
+              "sha256": "BB511A829C487C64F95CFE5A39A5691BE3B08820DD1F9E723EAD50B39554A12D"
+            },
+            {
+              "name": "guest.log",
+              "sha256": "6AC0E5C63BEE8DA8D82C593C393BA6193D285928B8FF061553C5DBD25714CB96"
+            },
+            {
+              "name": "host-unity.log",
+              "sha256": "087E5C4D7EAF662EF1DD43788993380883B5FF85443C0D8A361EC25E8C6863FD"
+            },
+            {
+              "name": "guest-unity.log",
+              "sha256": "C67609F54C2B2065BD8DF085307FBB15949D9BD1791BEDBFC7E460DFA2AAFB81"
+            },
+            {
+              "name": "host-HollowConnect.Smoke.dll.inactive",
+              "sha256": "688ADF4CF104BBBD845765432DBDB0504516EA8DB26FA734F287EA1FE9014EFA"
+            },
+            {
+              "name": "guest-HollowConnect.Smoke.dll.inactive",
+              "sha256": "688ADF4CF104BBBD845765432DBDB0504516EA8DB26FA734F287EA1FE9014EFA"
+            }
+          ]
+        },
+        {
+          "case": "menu-pointer",
+          "run": "v033-menu-pointer-legacy-1125-r2",
+          "scope": null,
+          "status": "passed",
+          "endpoints": [
+            "host",
+            "guest"
+          ],
+          "strictLogsPassed": true,
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "FD7D82FDA7274F25C4F1085DA4049BE929BAB8628265E5FB39B9F659FA2A6D56"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "662CD1B9AB3310A50DF1CE963613BEDADEA31C6731C2F14239A768F4453B0164"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "F70F004C28F595CCD278A9D612C15F5960A28CF552B4FE90EBEAA26BC028C6C6"
+            }
+          ],
+          "artifacts": [
+            {
+              "name": "binaries.json",
+              "sha256": "F0FCF7EC5C8C6BC5CC495BFB309067F11282DC3E35E3439E9C93034C154D1EE6"
+            },
+            {
+              "name": "game-dependencies.json",
+              "sha256": "38EEF87D2615604B441169F4C5661204FEF7706E9B17CC37059A4AA3F4CECDF1"
+            },
+            {
+              "name": "host.log",
+              "sha256": "BD39F510A79556DC90BD3059F51458D40B75DC7D6E9D45C4C6D70941BB716507"
+            },
+            {
+              "name": "guest.log",
+              "sha256": "1873AB9659774AEFE06014D7A129077AD5E196AA64C3A4E8C05ED0DC9CFC5DC0"
+            },
+            {
+              "name": "host-unity.log",
+              "sha256": "ADCB40F60637FB06B8CBB3D9ADBD41670635BD31A439D341E13D3DECDE06199C"
+            },
+            {
+              "name": "guest-unity.log",
+              "sha256": "0BD7099C662AEC4584EC24990494B5603794889F8114CDF79C67F29135046FF1"
+            },
+            {
+              "name": "host-HollowConnect.Smoke.dll.inactive",
+              "sha256": "A522744211FAD7247A6BBF4894DE98B0A6541012C54EEFE2ABDBB59199C5D66A"
+            },
+            {
+              "name": "guest-HollowConnect.Smoke.dll.inactive",
+              "sha256": "A522744211FAD7247A6BBF4894DE98B0A6541012C54EEFE2ABDBB59199C5D66A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "Unity6",
+      "gameVersion": "1.5.12620 Windows / Unity 6000.0.61f1",
+      "vanillaAssemblySha256": "E9048EF6A633970F735E01EC166D3959F610EAEA7A88D827D48D67B1E5FB87BD",
+      "apiAssemblySha256": "DF301E643028BD5C96FE5034138B8694C08FBFA685947B93D6401EE3FCC0CD46",
+      "production": [
+        {
+          "name": "HKMP.dll",
+          "sha256": "2DBB2794B255379755E3BFB0AEF52FA2821CD2E7C05B4F22A8A0B6C2A1FB7B0F"
+        },
+        {
+          "name": "HollowConnect.dll",
+          "sha256": "E9A1285FD4FC9E0F07450DDEBCAF875916A7CC8C5024397EF70E427C0D0C7551"
+        },
+        {
+          "name": "HollowConnect.Core.dll",
+          "sha256": "1074203F09CB1F6E66018E2A2756124356737E278F9F24600E621BAD45AFFED3"
+        },
+        {
+          "name": "HollowConnect.Steam.dll",
+          "sha256": "232FA71371280392C80E3FE6FF1CD1AE4E2102834CD0D4E7438F62BA0C735E4E"
+        },
+        {
+          "name": "BouncyCastle.Cryptography.dll",
+          "sha256": "3D7CED058D7264036323F8CFD87D3203761B5FE45DFDDF1EBCE069C1E36B81B8"
+        }
+      ],
+      "runs": [
+        {
+          "case": "moving-dream",
+          "run": "v033-moving-dream-unity6-final-1125",
+          "scope": "charm sharing on",
+          "status": "passed",
+          "endpoints": [
+            "host",
+            "guest"
+          ],
+          "strictLogsPassed": true,
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "2DBB2794B255379755E3BFB0AEF52FA2821CD2E7C05B4F22A8A0B6C2A1FB7B0F"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "E9A1285FD4FC9E0F07450DDEBCAF875916A7CC8C5024397EF70E427C0D0C7551"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "1074203F09CB1F6E66018E2A2756124356737E278F9F24600E621BAD45AFFED3"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "232FA71371280392C80E3FE6FF1CD1AE4E2102834CD0D4E7438F62BA0C735E4E"
+            }
+          ],
+          "artifacts": [
+            {
+              "name": "binaries.json",
+              "sha256": "BD55BC0D823308464D1418C6214173C47CD73525445555B85FA30E6A684AF124"
+            },
+            {
+              "name": "game-dependencies.json",
+              "sha256": "F1E2621A0186132717DAE56D439406EFD4C07E9FE8078CDE17EE823879A81F26"
+            },
+            {
+              "name": "host.log",
+              "sha256": "2981984B86FF5E9819DD9D1C3C2A9C06FAA3687228B6BEBBB6323017794CC1C6"
+            },
+            {
+              "name": "guest.log",
+              "sha256": "BC55DB42CECC59AB19F1A619533F0BFB2A8BA96989FAA59CFF5B2333B848B276"
+            },
+            {
+              "name": "host-unity.log",
+              "sha256": "DDB4A3D4C38A84D7FA880411CA97B634537B632E99226B8C64604081668C59A3"
+            },
+            {
+              "name": "guest-unity.log",
+              "sha256": "147154FE5482A815B6DE59D98FC2E03B7C002E0DCE1A87D7D84B81493B9AEC28"
+            },
+            {
+              "name": "host-HollowConnect.Smoke.dll.inactive",
+              "sha256": "C33850F3BDA13EAC3566E715747F6CE194366CC315B9DA801F785DEC0BE87027"
+            },
+            {
+              "name": "guest-HollowConnect.Smoke.dll.inactive",
+              "sha256": "C33850F3BDA13EAC3566E715747F6CE194366CC315B9DA801F785DEC0BE87027"
+            },
+            {
+              "name": "guest-engine.log",
+              "sha256": "9061D7FB00162D898478EDE38A3BF37095E3EFA83098554AB946DFBFE5C43E0B"
+            },
+            {
+              "name": "host-engine.log",
+              "sha256": "8C4E6B78E2B9BC95AF68C0108998E19470327FCA2E998A5DFC5759FE74BDF90E"
+            }
+          ]
+        },
+        {
+          "case": "live-language",
+          "run": "v033-live-language-unity6-1125-r2",
+          "scope": "ZH, EN, JA",
+          "status": "passed",
+          "endpoints": [
+            "host",
+            "guest"
+          ],
+          "strictLogsPassed": true,
+          "binaries": [
+            {
+              "name": "HKMP.dll",
+              "sha256": "2DBB2794B255379755E3BFB0AEF52FA2821CD2E7C05B4F22A8A0B6C2A1FB7B0F"
+            },
+            {
+              "name": "HollowConnect.dll",
+              "sha256": "E9A1285FD4FC9E0F07450DDEBCAF875916A7CC8C5024397EF70E427C0D0C7551"
+            },
+            {
+              "name": "HollowConnect.Core.dll",
+              "sha256": "1074203F09CB1F6E66018E2A2756124356737E278F9F24600E621BAD45AFFED3"
+            },
+            {
+              "name": "HollowConnect.Steam.dll",
+              "sha256": "232FA71371280392C80E3FE6FF1CD1AE4E2102834CD0D4E7438F62BA0C735E4E"
+            }
+          ],
+          "artifacts": [
+            {
+              "name": "binaries.json",
+              "sha256": "BD55BC0D823308464D1418C6214173C47CD73525445555B85FA30E6A684AF124"
+            },
+            {
+              "name": "game-dependencies.json",
+              "sha256": "F1E2621A0186132717DAE56D439406EFD4C07E9FE8078CDE17EE823879A81F26"
+            },
+            {
+              "name": "host.log",
+              "sha256": "6B3D45522E554472B9CCE6E16FDAAD8E2331CA57AF4D89FE4881D85D2F336097"
+            },
+            {
+              "name": "guest.log",
+              "sha256": "293B2B233EEBDE3DD7B4D753FDF1A3E29DCD35A3426C3B1A4D4AF826CB6EA5E6"
+            },
+            {
+              "name": "host-unity.log",
+              "sha256": "1E634CAD114994221601EEB6C746C02C584125ACF24E2F6F5A402B0FA4B3B6E4"
+            },
+            {
+              "name": "guest-unity.log",
+              "sha256": "1B547626D6652DD0A300053E10EA087ADE0197E855A6C814CA82EB6F3FDFA0DE"
+            },
+            {
+              "name": "host-HollowConnect.Smoke.dll.inactive",
+              "sha256": "C33850F3BDA13EAC3566E715747F6CE194366CC315B9DA801F785DEC0BE87027"
+            },
+            {
+              "name": "guest-HollowConnect.Smoke.dll.inactive",
+              "sha256": "C33850F3BDA13EAC3566E715747F6CE194366CC315B9DA801F785DEC0BE87027"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "knownIssues": [
+    {
+      "id": "native-reentry-camera-freeze",
+      "resolved": false
+    },
+    {
+      "id": "reconnect-inactive-needle-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "false-knight-repeat-head-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "cornifer-purchase-peer-visibility-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "mines-fsm-string-layout-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "godhome-final-single-f8-timeout-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "cliffs-room-overlap-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "radiance-immediate-inventory-timing-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "p5-watchers-premature-return-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "isolated-native-setupherorefs-startup-exception",
+      "resolved": false
+    },
+    {
+      "id": "rescue-single-nail-collision-timeout",
+      "resolved": false
+    },
+    {
+      "id": "pantheon-1-oro-death-air-stall",
+      "resolved": false
+    },
+    {
+      "id": "acid-rescue-anchor-observation-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "pleasure-house-peer-key-loss-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "story-grimm-tent-three-player-stall-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "duplicate-victory-settlement-extra-wait",
+      "resolved": false
+    },
+    {
+      "id": "entity-completion-emitter-unreachable",
+      "resolved": false
+    },
+    {
+      "id": "story-hornet-three-player-gate-unreproduced",
+      "resolved": false
+    },
+    {
+      "id": "downed-disconnect-death-save-validation-gap",
+      "resolved": false
+    },
+    {
+      "id": "godseeker-new-save-statistics-validation-gap",
+      "resolved": false
+    },
+    {
+      "id": "first-connection-during-combat-validation-gap",
+      "resolved": false
+    },
+    {
+      "id": "arrival-wait-timeout-recovery-gap",
+      "resolved": false
+    },
+    {
+      "id": "skin-cinematic-process-crash-unreproduced",
+      "resolved": false
+    },
+    {
+      "id": "false-knight-local-counter-first-failure-unclassified",
+      "resolved": false
+    },
+    {
+      "id": "colosseum-bilateral-permanent-freeze-unreproduced",
+      "resolved": false
+    },
+    {
+      "id": "shade-soul-downslam-multihit-unreproduced",
+      "resolved": false
+    },
+    {
+      "id": "unreliable-player-animation-attack-loss",
+      "resolved": false
+    },
+    {
+      "id": "colosseum-silver-authority-handoff-reward-unresolved",
+      "resolved": false
+    },
+    {
+      "id": "mawlek-shared-health-fragment-report-unreproduced",
+      "resolved": false
+    }
+  ]
+}

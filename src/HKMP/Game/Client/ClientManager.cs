@@ -259,7 +259,7 @@ internal class ClientManager : IClientManager {
     /// </summary>
     public void Initialize(ServerManager serverManager) {
         _playerManager.Initialize(_modSettings);
-        _playerManager.CustomSkinChangedEvent += OnLocalCustomSkinChanged;
+        _playerManager.SkinSelectionChanged += PublishLocalSkin;
         _animationManager.Initialize(_serverSettings);
         _mapManager.Initialize();
         
@@ -703,7 +703,7 @@ internal class ClientManager : IClientManager {
         // The server creates player data during the handshake. Send the local selection once so a
         // Custom Knight skin selected before connecting is visible to the room immediately.
         if (_playerManager.LocalSkinId != 0 || !string.IsNullOrEmpty(_playerManager.LocalCustomSkinId)) {
-            OnLocalCustomSkinChanged(_playerManager.LocalCustomSkinId);
+            PublishLocalSkin();
         }
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
         if (HeroController.instance != null && HeroController.instance.isHeroInPosition &&
@@ -1165,12 +1165,9 @@ internal class ClientManager : IClientManager {
             // _uiManager.OnTeamSettingChange();
         }
 
-        // If the allow skins setting changed, and it is no longer allowed, we reset all existing skins and call the
-        // event
-        if (allowSkinsChanged && !_serverSettings.AllowSkins) {
-            _playerManager.ResetAllPlayerSkins();
-            
-            SkinChangedEvent?.Invoke(0);
+        if (allowSkinsChanged) {
+            _playerManager.RefreshPlayerSkins();
+            if (_serverSettings.AllowSkins) PublishLocalSkin();
         }
     }
 
@@ -1339,19 +1336,24 @@ internal class ClientManager : IClientManager {
         }
     }
 
-    internal bool TrySelectAtlasSkin(string id) => _playerManager.TrySelectAtlasSkin(id);
+    internal bool ShowTeammateSkins {
+        get => _playerManager.ShowTeammateSkins;
+        set => _playerManager.ShowTeammateSkins = value;
+    }
+    internal bool RoomAllowsSkins => _serverSettings.AllowSkins;
+    internal string LocalDisplaySkinId => _playerManager.LocalDisplaySkinId;
+    internal string SavedAtlasId => _playerManager.SavedAtlasId;
+    internal bool TrySelectSkin(string id) => _playerManager.TrySelectSkin(id);
+    internal void RescanSkins() => _playerManager.RescanSkins();
 
-    private void OnLocalCustomSkinChanged(string customSkinId) {
-        if (!_netClient.IsConnected || !_serverSettings.AllowSkins) {
-            return;
-        }
-
+    private void PublishLocalSkin() {
+        if (!_netClient.IsConnected || !_serverSettings.AllowSkins) return;
         _netClient.UpdateManager.AddPlayerSettingUpdate(
             skinId: _playerManager.LocalSkinId,
-            customSkinId: customSkinId ?? ""
+            customSkinId: _playerManager.LocalCustomSkinId
         );
     }
-    
+
     /// <summary>
     /// Callback method for when a player death packet is received.
     /// </summary>

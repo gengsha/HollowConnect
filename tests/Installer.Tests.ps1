@@ -1,4 +1,4 @@
-﻿param([string]$OutputRoot)
+param([string]$OutputRoot)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 if (!$OutputRoot) { $OutputRoot = Join-Path $root ('.test-results\installer-portable-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff')) }
@@ -91,13 +91,16 @@ Write-Text (Join-Path $mod 'skins\custom.txt') 'keep player skin'
 Write-Text (Join-Path $mod 'authorized.json') 'keep local server configuration'
 Write-Text $payloadFile 'mod version two'; $manifest.version='fixture2'; $manifest.files[0].sha256=Hash $payloadFile
 $manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
-$result = Invoke-Installer $package '--install' $game
-Assert ($result.Code -eq 0) ('Update failed: ' + $result.Output)
+$skin = Join-Path $mod 'skins\custom.txt'
+$skinHandle = [IO.File]::Open($skin, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
+try { $result = Invoke-Installer $package '--install' $game }
+finally { $skinHandle.Dispose() }
+Assert ($result.Code -eq 0) ('Update with a skin file held open failed: ' + $result.Output)
 Assert ((Hash $pointer) -eq $pointerHash) 'Update replaced the original uninstall backup'
 Assert ((Hash (Join-Path $mod 'HollowConnect.dll')) -eq (Hash $payloadFile)) 'Update did not apply new payload'
 Assert ((Get-Content -LiteralPath (Join-Path $mod 'skins\custom.txt') -Raw) -eq 'keep player skin') 'Update lost custom skin'
 Assert ((Get-Content -LiteralPath (Join-Path $mod 'authorized.json') -Raw) -eq 'keep local server configuration') 'Update lost local settings'
-Pass 'updates preserve the original uninstall backup and player skins/server configuration'
+Pass 'update succeeds with a skin file held open and preserves local files and the uninstall backup'
 $beforeBackups = @(Get-ChildItem -LiteralPath (Join-Path $game '.HollowConnectBackups') -Directory).Count
 $goodPayload = [IO.File]::ReadAllText($payloadFile); Write-Text $payloadFile 'tampered'
 $result = Invoke-Installer $package '--install' $game
@@ -110,14 +113,36 @@ Pass 'checksum failure rejects the package before modifying game files'
 $installScript = Join-Path $package 'Install.ps1'
 $originalScript = [IO.File]::ReadAllText($installScript)
 $needle = "Copy-Item -LiteralPath (Join-Path `$package 'payload\HKMP') -Destination (Join-Path `$managed 'Mods') -Recurse -Force"
-Assert ($originalScript.Contains($needle)) 'Failure injection point missing'
-Write-Text $installScript ($originalScript.Replace($needle, "throw 'Injected installer failure'"))
+$updateNeedle = 'Copy-Item -LiteralPath (Join-Path $package "payload\HKMP\$($entry.name)") -Destination $destination -Force'
+Assert ($originalScript.Contains($needle) -and $originalScript.Contains($updateNeedle)) 'Failure injection point missing'
 $installedHash = Hash (Join-Path $mod 'HollowConnect.dll')
+Write-Text $payloadFile 'new update that will be rolled back'
+$newPayloadFile = Join-Path $package 'payload\HKMP\new-file.dll'
+Write-Text $newPayloadFile 'new package file'
+$manifest.files = @(@{name='new-file.dll';sha256=(Hash $newPayloadFile)},@{name='HollowConnect.dll';sha256=(Hash $payloadFile)})
+$manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+$updateInjection = $updateNeedle + "`r`n            if (`$entry.name -eq 'HollowConnect.dll') { throw 'Injected installer failure' }"
+Write-Text $installScript ($originalScript.Replace($updateNeedle, $updateInjection))
 $result = Invoke-Installer $package '--install' $game
 Assert ($result.Code -ne 0 -and $result.Output.Contains('Injected installer failure')) 'Injected update failure not reached'
 Assert ((Hash (Join-Path $mod 'HollowConnect.dll')) -eq $installedHash -and (Hash $pointer) -eq $pointerHash) 'Failed update did not restore current version'
+Assert (!(Test-Path -LiteralPath (Join-Path $mod 'new-file.dll'))) 'Failed update left a new package file'
 Assert (Test-Path -LiteralPath (Join-Path $mod 'skins\custom.txt')) 'Failed update lost skin'
-Pass 'failed update restores the current mod and keeps the original backup pointer'
+Pass 'failed in-place update restores replaced files, removes added files and preserves the original backup pointer'
+
+Write-Text $installScript $originalScript
+$installedDll = Join-Path $mod 'HollowConnect.dll'
+$lockedDll = [IO.File]::Open($installedDll, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
+try { $result = Invoke-Installer $package '--install' $game }
+finally { $lockedDll.Dispose() }
+Assert ($result.Code -ne 0 -and $result.Output.Contains('[Install HKMP payload]') -and $result.Output.Contains('HollowConnect.dll')) 'Locked DLL update did not fail at payload replacement'
+Assert ($result.Output.Contains('Pre-install files restored.')) 'Locked DLL was already intact but recovery did not complete'
+Assert ((Hash $installedDll) -eq $installedHash -and (Hash $pointer) -eq $pointerHash) 'Locked upgrade changed installed DLL or uninstall backup pointer'
+Assert (!(Test-Path -LiteralPath (Join-Path $mod 'new-file.dll'))) 'Locked upgrade left a file installed before the failure'
+Assert ((Get-Content -LiteralPath $skin -Raw) -eq 'keep player skin') 'Locked upgrade changed player skin'
+Pass 'a DLL held open for reading blocks the write and the installer rolls back earlier payload writes'
+
+Write-Text $installScript ($originalScript.Replace($needle, "throw 'Injected installer failure'"))
 $failureGame = Join-Path $OutputRoot 'fresh failure game'; New-Game $failureGame
 $result = Invoke-Installer $package '--install' $failureGame
 Assert ($result.Code -ne 0 -and $result.Output.Contains('Injected installer failure')) 'Injected initial install failure not reached'

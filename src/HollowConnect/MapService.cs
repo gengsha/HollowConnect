@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using GlobalEnums;
 using Hkmp;
 using Hkmp.Game.Client;
 using HollowConnect.Core;
@@ -16,6 +18,8 @@ internal sealed class MapService : IDisposable {
     private GameMap currentMap;
     private bool open;
     private Font mapFont;
+    private Func<bool> mapChangerEnabled;
+    private Func<string, MapZone> mapChangerZone;
     private Vector3 lastLocation;
     private string lastScene = "";
     private int lastMapHandle = int.MinValue;
@@ -32,6 +36,17 @@ internal sealed class MapService : IDisposable {
         ? GameManager.instance.gameMap.GetComponent<GameMap>() : null;
     public void Register() {
         On.GameMap.PositionCompass += OnPositionCompass;
+        On.GameMap.WorldMap += OnWorldMap;
+        var mapChanger = ModHooks.GetMod("MapChangerMod", onlyEnabled: true)?.GetType().Assembly;
+        if (mapChanger != null) {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.Static;
+            var enabled = mapChanger.GetType("MapChanger.MapChangerMod")?.GetMethod("IsEnabled", flags, null, Type.EmptyTypes, null);
+            var zone = mapChanger.GetType("MapChanger.Finder")?.GetMethod("GetMapZone", flags, null, new[] { typeof(string) }, null);
+            if (enabled?.ReturnType == typeof(bool) && zone?.ReturnType == typeof(MapZone)) {
+                mapChangerEnabled = (Func<bool>)Delegate.CreateDelegate(typeof(Func<bool>), enabled);
+                mapChangerZone = (Func<string, MapZone>)Delegate.CreateDelegate(typeof(Func<string, MapZone>), zone);
+            }
+        }
         On.GameMap.CloseQuickMap += OnClose;
         Hkmp.Util.MonoBehaviourUtil.Instance.OnUpdateEvent += Update;
         mapFont = Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial" }, 36);
@@ -39,6 +54,14 @@ internal sealed class MapService : IDisposable {
     private void OnPositionCompass(On.GameMap.orig_PositionCompass orig, GameMap self, bool shade) {
         orig(self, shade);
         if (shade || ReflectionHelper.GetField<GameMap, bool>(self, "posGate")) return;
+        MarkOpen(self);
+    }
+    private void OnWorldMap(On.GameMap.orig_WorldMap orig, GameMap self) {
+        orig(self);
+        MarkOpen(self);
+    }
+    private void MarkOpen(GameMap map) {
+        if (currentMap != map) { Clear(); currentMap = map; }
         open = true;
     }
     private void OnClose(On.GameMap.orig_CloseQuickMap orig, GameMap self) { orig(self); open = false; }
@@ -51,17 +74,14 @@ internal sealed class MapService : IDisposable {
             return TryCachedLocation(map, activeScene, out location);
         var zone = map.inRoom ? map.doorMapZone : gm.GetCurrentMapZone();
         var mapScene = map.inRoom ? map.doorScene : gm.sceneName;
-        var area = MapManager.GetAreaObjectByName(map, zone);
-        if (area == null || string.IsNullOrEmpty(mapScene)) return TryCachedLocation(map, activeScene, out location);
-        Transform room = null;
-        for (var i = 0; i < area.transform.childCount; i++) {
-            var child = area.transform.GetChild(i);
-            if (child.name == mapScene) { room = child; break; }
-        }
+        if (string.IsNullOrEmpty(mapScene)) return TryCachedLocation(map, activeScene, out location);
+        // MapChanger overrides GetCurrentMapZone only during PositionCompass.
+        // Resolve the same zone here even when the map and compass are closed.
+        var room = FindRoom(map, mapScene, zone);
         if (room == null) return TryCachedLocation(map, activeScene, out location);
         var renderer = room.GetComponent<SpriteRenderer>();
         if (renderer == null || renderer.sprite == null) return TryCachedLocation(map, activeScene, out location);
-        var center = room.localPosition + area.transform.localPosition;
+        var center = room.localPosition + room.parent.localPosition;
         var size = renderer.sprite.bounds.size;
         var width = map.inRoom ? map.doorSceneWidth : ReflectionHelper.GetField<GameMap, float>(map, "sceneWidth");
         var height = map.inRoom ? map.doorSceneHeight : ReflectionHelper.GetField<GameMap, float>(map, "sceneHeight");
@@ -74,6 +94,34 @@ internal sealed class MapService : IDisposable {
         location = new Vector3(mx, my, -1);
         lastLocation = location; lastScene = activeScene.name; lastMapHandle = map.GetInstanceID(); lastLocationAt = Time.unscaledTime;
         return true;
+    }
+
+    private Transform FindRoom(GameMap map, string scene, string nativeZone) {
+        if (mapChangerEnabled?.Invoke() == true) {
+            var mappedZone = mapChangerZone(global::GameManager.GetBaseSceneName(scene));
+            if (mappedZone != MapZone.NONE && mappedZone.ToString() != nativeZone) {
+                var mappedRoom = RoomInArea(map, mappedZone.ToString(), scene);
+                if (mappedRoom != null) return mappedRoom;
+            }
+        }
+        return RoomInArea(map, nativeZone, scene);
+    }
+
+    private static Transform RoomInArea(GameMap map, string zone, string scene) {
+        var area = MapManager.GetAreaObjectByName(map, zone);
+        return area == null ? null : area.transform.Find(scene);
+    }
+
+    private static bool ExtraMapVisible(GameMap map, string scene) {
+        // The presence packet carries map coordinates in the sender's layout.
+        // Show the room name when the receiver lacks that extra map or its layer is closed.
+        if (string.IsNullOrEmpty(scene)) return false;
+        var baseScene = global::GameManager.GetBaseSceneName(scene);
+        var zone = baseScene.StartsWith("White_Palace_", StringComparison.Ordinal) ? "WHITE_PALACE" :
+            baseScene is "GG_Atrium" or "GG_Atrium_Roof" ? "GODS_GLORY" : null;
+        if (zone == null) return true;
+        var room = map == null ? null : RoomInArea(map, zone, baseScene);
+        return room != null && room.parent.gameObject.activeInHierarchy;
     }
 
     internal static Color PeerColor(ushort id) => Color.HSVToRGB((id * .618034f + .1f) % 1, .65f, 1);
@@ -97,7 +145,7 @@ internal sealed class MapService : IDisposable {
                 foreach (var r in icon.GetComponentsInChildren<tk2dSprite>(true)) r.color = PeerColor(pair.Key);
                 icons[pair.Key] = icon;
             }
-            icon.SetActive(open && valid);
+            icon.SetActive(open && valid && ExtraMapVisible(map, state.Scene));
             if (valid) icon.transform.localPosition = new Vector3(state.MapX, state.MapY, map.compassIcon.transform.localPosition.z - .01f);
         }
         removedIcons.Clear();
@@ -124,7 +172,7 @@ internal sealed class MapService : IDisposable {
             var label = selected + s.Name + (s.Value == (int)Life.Down ? Hkmp.Ui.Localize.T(" [暗影]") : s.Value == (int)Life.Returning ? Hkmp.Ui.Localize.T(" [回椅中]") : "");
             style.normal.textColor = PeerColor(pair.Key);
             if (open) {
-                if (fresh && s.HasMap && icons.TryGetValue(pair.Key, out var icon) && icon != null) {
+                if (fresh && s.HasMap && icons.TryGetValue(pair.Key, out var icon) && icon != null && icon.activeInHierarchy) {
                     var point = camera.WorldToScreenPoint(icon.transform.position);
                     GUI.Label(new Rect(point.x - 90, Screen.height - point.y - 40, 180, 30), label, style);
                 } else {
@@ -151,7 +199,7 @@ internal sealed class MapService : IDisposable {
     public void Remove(ushort id) { if (icons.TryGetValue(id, out var icon) && icon != null) Object.Destroy(icon); icons.Remove(id); }
     public void Clear() { foreach (var id in icons.Keys.ToArray()) Remove(id); open = false; }
     public void Dispose() {
-        Clear(); On.GameMap.PositionCompass -= OnPositionCompass; On.GameMap.CloseQuickMap -= OnClose;
+        Clear(); On.GameMap.PositionCompass -= OnPositionCompass; On.GameMap.WorldMap -= OnWorldMap; On.GameMap.CloseQuickMap -= OnClose;
         Hkmp.Util.MonoBehaviourUtil.Instance.OnUpdateEvent -= Update;
         if (mapFont != null) Object.Destroy(mapFont);
     }

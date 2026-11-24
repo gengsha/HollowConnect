@@ -282,7 +282,9 @@ public sealed partial class RescueProbe : MonoBehaviour {
             yield return ProbeShutdown.Run(engine, root, role);
             Log(Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK") == "schema"
                 ? "FINAL PASS Path of Pain schema preflight only"
-                : "FINAL PASS Path of Pain native completion and abandoned shade return");
+                : Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK") == "qol"
+                    ? "FINAL PASS QoL Path of Pain native battle and replay"
+                    : "FINAL PASS Path of Pain native completion and abandoned shade return");
             Flag(role + ".done"); yield break;
         }
         if (MenuPointerCheck) {

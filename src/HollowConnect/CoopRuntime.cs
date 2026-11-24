@@ -115,7 +115,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     internal bool Playable => HeroController.instance != null && GameManager.instance != null &&
         !GameManager.instance.IsInSceneTransition && HeroController.instance.isHeroInPosition;
     private bool CanStartWarp => Playable && !SceneUtil.IsNonGameplayScene(UnitySceneManager.GetActiveScene().name) &&
-        !Down && !Resetting && !Returning && !changingScene && !Observing &&
+        !Down && !Resetting && !Returning && !changingScene && !Observing && !BenchwarpStarting &&
         HeroController.instance.acceptingInput && !HeroController.instance.controlReqlinquished &&
         !HeroController.instance.cState.dead && !HeroController.instance.cState.hazardDeath &&
         !HeroController.instance.cState.hazardRespawning && !HeroController.instance.cState.transitioning &&
@@ -361,6 +361,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopContext.FinishRadianceIntro = scene => Playable && !Down && !Resetting && !Returning &&
             HeroController.instance.transitionState == GlobalEnums.HeroTransitionState.WAITING_TO_TRANSITION && FinishRadianceWarpPresentation(scene);
         map.Register();
+        RegisterBenchwarp();
         On.HeroController.Die += OnDie;
         On.HeroController.TakeDamage += TakeDamage;
         On.HeroController.RelinquishControl += ObservationRelinquishControl;
@@ -394,7 +395,8 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         CoopMod.RoomRuleRevision++;
         ResetLinkedHealth();
         flexibleBossTargeting = false;
-        pendingWarp = null; warpNotice = "";
+        pendingWarp = null; warpNotice = ""; benchwarpStartDeadline = 0;
+        SuspendQolDreamerSkip();
         DebugEvent("connect-start", DebugEventSeverity.Info);
         BossTravel.RestoreTransientContext();
         teammateDream.Reset();
@@ -411,6 +413,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         Send(new Message { Kind = Kind.Hello });
     }
     private void OnDisconnect() {
+        RestoreQolDreamerSkip();
         var wasObserving = Observing;
         if (wasObserving) observationOffline = true;
         var linkedDeath = linkedHealthMode && !wasObserving ? personalDeath ?? CaptureLinkedDisconnectDeath() : null;
@@ -852,7 +855,7 @@ public sealed partial class CoopRuntime : MonoBehaviour {
         if (hero == null) return;
         var pos = hero.transform.position;
         var location = Vector3.zero;
-        var hasMap = Playable && !changingScene && !Returning && map.TryLocation(out location);
+        var hasMap = Playable && !changingScene && !Returning && !BenchwarpStarting && map.TryLocation(out location);
         var pd = PlayerData.instance;
         var message = new Message { Kind = Kind.Presence, Serial = ++sequence, Scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
             Aux = (InBossEncounter() ? 1u : 0u) | (LinkedHealthRuleEnabled ? (uint)LocalLinkedRest() << 1 : 0u),
@@ -1565,7 +1568,9 @@ public sealed partial class CoopRuntime : MonoBehaviour {
     }
 
     private void OnDestroy() {
+        RestoreQolDreamerSkip();
         StopObservation();
+        UnregisterBenchwarp();
         On.HeroController.RelinquishControl -= ObservationRelinquishControl;
         On.HeroController.RegainControl -= ObservationRegainControl;
         On.HeroController.IgnoreInput -= ObservationIgnoreInput;

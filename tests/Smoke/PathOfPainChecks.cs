@@ -12,7 +12,8 @@ namespace HollowConnect.Smoke;
 public sealed partial class RescueProbe {
     private IEnumerator PathOfPainChecks() {
         const string scene = "White_Palace_20";
-        var late = Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK") == "late";
+        var mode = Environment.GetEnvironmentVariable("HOLLOWCONNECT_PATH_OF_PAIN_CHECK");
+        var late = mode == "late";
         var hero = HeroController.instance;
         var body = hero.GetComponent<Rigidbody2D>();
         using var damage = IgnoreExternalCombatDamage();
@@ -84,6 +85,10 @@ public sealed partial class RescueProbe {
         yield return StoryWalk(250, "through the native palace seal");
         Flag(role + ".palace.passed");
         yield return Until(() => Has(other + ".palace.passed"), "both players physically pass the opened seal");
+        if (mode == "qol") {
+            yield return QolPalaceReplay();
+            yield break;
+        }
         // Return to the supported arena floor before the ordinary shade death.
         hero.transform.position = hero.FindGroundPoint(new Vector3(230, 124, 0), true) + Vector3.up * .1f;
         body.velocity = Vector2.zero; Physics2D.SyncTransforms();
@@ -109,6 +114,51 @@ public sealed partial class RescueProbe {
             Check(runtime.Playable && !runtime.Down && GameManager.instance.sceneName == "White_Palace_03_hub",
                 "living hub teammate remains in own room");
         }
+    }
+
+    private IEnumerator QolPalaceReplay() {
+        const string scene = "White_Palace_20";
+        const string seal = "newDataBindingSeal";
+        Check(Modding.ModHooks.GetMod("QoL", onlyEnabled: true) != null && PlayerData.instance.GetBool(seal),
+            "QoL InfinitePoP hook is active");
+        var counters = new[] {
+            new PersistentBoolData { sceneName = "White_Palace_17", id = "WP Lever", activated = true },
+            new PersistentBoolData { sceneName = "White_Palace_17", id = "Collapser Small", activated = true },
+            new PersistentBoolData { sceneName = "White_Palace_06", id = "Breakable Wall Ruin Lift", activated = true }
+        };
+        foreach (var counter in counters) SceneData.instance.SaveMyState(counter);
+        var savedSeal = PlayerData.instance.GetBoolInternal(seal);
+        // Exercise the replay hook's exact completion write after the native
+        // battle and seal gate, then verify saved reset state and room reload.
+        PlayerData.instance.SetBool(seal, true);
+        Check(PlayerData.instance.GetBoolInternal(seal) == savedSeal && counters.All(counter =>
+            SceneData.instance.persistentBoolItems.Any(data => data.sceneName == counter.sceneName && data.id == counter.id && !data.activated)),
+            "QoL resets its three replay objects without rewriting the stored journal flag");
+        yield return RuleEnter("White_Palace_03_hub");
+        yield return StoryTogether("qol-palace-left");
+        yield return RuleEnter(scene, "bot1");
+        yield return StoryTogether("qol-palace-reentered");
+        var battle = Object.FindObjectsOfType<PlayMakerFSM>(true).Single(f => f.gameObject.scene.name == scene && f.FsmName == "Battle Control");
+        var manager = Field<EntityManager>(engine.ClientManager, "_entityManager");
+        var guards = EntityReferences.Entities.Values.Where(e => e.Type == EntityType.Kingsmould && e.SourceScene == scene)
+            .Select(e => e.Object.Host?.GetComponent<HealthManager>()).ToArray();
+        DumpPalace();
+        Check(battle.ActiveStateName != "Open" && guards.Length == 2 && guards.All(hp => hp != null && !hp.isDead && hp.hp > 0),
+            "re-entry loads two live guardians and an unfinished battle: state=" + battle.ActiveStateName +
+            " authority=" + manager.IsSceneHost + " hp=" + string.Join(",", guards.Select(hp => hp?.hp)));
+        var hero = HeroController.instance;
+        hero.AffectedByGravity(false); hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        hero.transform.position = battle.GetComponent<Collider2D>().bounds.center;
+        Physics2D.SyncTransforms();
+        yield return Until(() => battle.ActiveStateName == "Start", "native palace trigger starts the rematch");
+        yield return StoryTogether("qol-palace-rematch");
+        if (manager.IsSceneHost) {
+            foreach (var hp in guards) {
+                hp.ApplyExtraDamage(hp.hp);
+                yield return new WaitForSecondsRealtime(.5f);
+            }
+        }
+        yield return Until(() => battle.ActiveStateName == "Open", "native palace seal opens a second time");
     }
 
     private void DumpPalace() {

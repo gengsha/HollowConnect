@@ -23,6 +23,16 @@ internal static class LocalizationTests {
             Equal(Translation.Get("60%（已锁定）", "EN"), "60% (locked)");
             Equal(Translation.Get("35% 不透明", "JA"), "不透明度35%");
         });
+        test("localization covers 0.3.3 skin navigation and compatibility notices", () => {
+            Equal(Translation.Get("客户端设置", "EN"), "Client Settings");
+            Equal(Translation.Get("HKMP 客户端设置", "JA"), "HKMP クライアント設定");
+            Equal(Translation.Get("查看队友皮肤", "EN"), "Show teammate skins");
+            Equal(Translation.Get("{0}（旧版皮肤）", "JA"), "{0}（旧形式スキン）");
+            Equal(Translation.Get("死亡细胞（旧版皮肤）", "JA"), "死亡细胞（旧形式スキン）");
+            var notice = "共享血量房间不支持 Benchwarp 回椅，请正常坐椅";
+            if (Translation.Get(notice, "EN") == notice || Translation.Get(notice, "JA") == notice)
+                throw new Exception("Benchwarp compatibility notice missing");
+        });
         test("localization catalog is complete and preserves runtime key bindings", () => {
             if (Translation.Sources.Count() < 180) throw new Exception("Incomplete catalog");
             foreach (var source in Translation.Sources) foreach (var code in new[] { "EN", "JA", "ZH" }) {

@@ -4,12 +4,12 @@
 
 | 面向玩家 | 内容 |
 |---|---|
-| [当前版本](UPDATE-0.3.2.md) | 0.3.2 聊天传送、四门相机、队友状态条与兼容皮肤 |
+| [0.3.3 更新说明](UPDATE-0.3.3.md) | 皮肤管理器、移动队友梦钉奖励、灵活索敌默认值与安装更新 |
 | [English installation](INSTALL-EN.md) / [日本語](INSTALL-JA.md) | 安装器、脚本及手动安装 |
 | [共享进度](SHARED-PROGRESS.md) | 共享项目、个人资源和存档规则 |
 | [共享血量（Beta）](LINKED-HEALTH.md) | 团队生命、护符限制与休息 |
 | [观战（Beta）](OBSERVATION.md) | 主动观战、死亡观战和退出方式 |
-| [皮肤兼容](SKIN-COMPATIBILITY.md) | Custom Knight 与视频皮肤的已知限制 |
+| [皮肤兼容](SKIN-COMPATIBILITY.md) | 本地换装、联机分享和 Custom Knight 兼容范围 |
 | [已知问题](KNOWN-ISSUES.md) | 尚未关闭的报告与反馈方法 |
 | [FRP 示例](frpc.example.toml) | 单个 UDP 端口转发配置 |
 | [Steam 好友联机（预览）](STEAM-MULTIPLAYER.md) | 独立模块、邀请／加入与双账号验收 |

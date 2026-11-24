@@ -46,9 +46,7 @@ internal class GameManager {
         CoopContext.RoomSettingsLocked = () => netServer.IsStarted || NetClient.ConnectionStatus != ClientConnectionStatus.NotConnected;
 
         var clientServerSettings = new ServerSettings();
-        if (modSettings.ServerSettings == null) {
-            modSettings.ServerSettings = new ServerSettings();
-        }
+        modSettings.ApplySkinDefaults();
         var serverServerSettings = modSettings.ServerSettings;
 
         var uiManager = new UiManager(

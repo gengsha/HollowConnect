@@ -1,4 +1,4 @@
-﻿param([string]$GamePath)
+param([string]$GamePath)
 $ErrorActionPreference = 'Stop'
 $package = $PSScriptRoot
 . (Join-Path $PSScriptRoot 'GamePath.ps1')
@@ -58,21 +58,50 @@ if (Test-Path -LiteralPath $modDir) {
     $resolved = (Resolve-Path -LiteralPath $modDir).Path
     if (!$resolved.StartsWith($managed + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Invalid mod directory.' }
 }
+$backupMod = Join-Path $backup 'original-HKMP'
+$updateInPlace = $originalBackup -and (Test-Path -LiteralPath $modDir -PathType Container)
 $oldModMoved = $false
 $newModStarted = $false
+$apiStarted = $false
+$updatedModFiles = [Collections.Generic.List[string]]::new()
+$phase = 'Back up existing HKMP'
 try {
-    if (Test-Path -LiteralPath $modDir) {
-        Move-Item -LiteralPath $modDir -Destination (Join-Path $backup 'original-HKMP')
+    if ($updateInPlace) {
+        # Existing skins or other local files can be open while their directory
+        # is being browsed. Keep HKMP in place and change only package files.
+        foreach ($directory in (Split-Path -Parent $modDir),$modDir) {
+            if ((Get-Item -LiteralPath $directory -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                throw "Cannot update through a linked mod directory: $directory"
+            }
+        }
+        foreach ($entry in $manifest.files) {
+            $destination = Join-Path $modDir $entry.name
+            $existing = Get-Item -LiteralPath $destination -Force -ErrorAction SilentlyContinue
+            if ($existing -and ($existing.PSIsContainer -or ($existing.Attributes -band [IO.FileAttributes]::ReparsePoint))) {
+                throw "Package file conflicts with an existing directory or link: $destination"
+            }
+        }
+        Copy-Item -LiteralPath $modDir -Destination $backupMod -Recurse -Force
+    } elseif (Test-Path -LiteralPath $modDir) {
+        Move-Item -LiteralPath $modDir -Destination $backupMod
         $oldModMoved = $true
     }
+    $phase = 'Install Modding API'
+    $apiStarted = $true
     Get-ChildItem -LiteralPath $api -File | Copy-Item -Destination $managed -Force
-    New-Item -ItemType Directory -Path (Join-Path $managed 'Mods') -Force | Out-Null
-    $newModStarted = $true
-    if ($originalBackup -and $oldModMoved) {
-        # Updates keep the player's skins, server lists and other local files.
-        Copy-Item -LiteralPath (Join-Path $backup 'original-HKMP') -Destination $modDir -Recurse
+    $phase = 'Install HKMP payload'
+    if ($updateInPlace) {
+        foreach ($entry in $manifest.files) {
+            $destination = Join-Path $modDir $entry.name
+            $updatedModFiles.Add($entry.name)
+            Copy-Item -LiteralPath (Join-Path $package "payload\HKMP\$($entry.name)") -Destination $destination -Force
+        }
+    } else {
+        New-Item -ItemType Directory -Path (Join-Path $managed 'Mods') -Force | Out-Null
+        $newModStarted = $true
+        Copy-Item -LiteralPath (Join-Path $package 'payload\HKMP') -Destination (Join-Path $managed 'Mods') -Recurse -Force
     }
-    Copy-Item -LiteralPath (Join-Path $package 'payload\HKMP') -Destination (Join-Path $managed 'Mods') -Recurse -Force
+    $phase = 'Verify payload and record installation'
     foreach ($entry in $manifest.files) {
         if ((Get-FileHash -LiteralPath (Join-Path $modDir $entry.name) -Algorithm SHA256).Hash -ne $entry.sha256) { throw "Installed checksum mismatch: $($entry.name)" }
     }
@@ -89,12 +118,28 @@ try {
         try { Move-Item -LiteralPath $modDir -Destination (Join-Path $backup 'failed-HKMP') }
         catch { $rollbackErrors.Add('Keep partial HKMP: ' + $_.Exception.Message) }
     }
-    foreach ($record in $records) {
+    foreach ($name in $updatedModFiles) {
         try {
-            $destination = Join-Path $managed $record.name
-            if ($record.existed) { Copy-Item -LiteralPath (Join-Path $original $record.name) -Destination $destination -Force }
-            elseif (Test-Path -LiteralPath $destination) { Remove-Item -LiteralPath $destination }
-        } catch { $rollbackErrors.Add('Restore ' + $record.name + ': ' + $_.Exception.Message) }
+            $destination = Join-Path $modDir $name
+            $previous = Join-Path $backupMod $name
+            if (Test-Path -LiteralPath $previous -PathType Leaf) {
+                if (!(Test-Path -LiteralPath $destination -PathType Leaf) -or
+                    (Get-FileHash -LiteralPath $destination).Hash -ne (Get-FileHash -LiteralPath $previous).Hash) {
+                    Copy-Item -LiteralPath $previous -Destination $destination -Force
+                }
+            } elseif (Test-Path -LiteralPath $destination -PathType Leaf) {
+                Remove-Item -LiteralPath $destination -Force
+            }
+        } catch { $rollbackErrors.Add('Restore HKMP/' + $name + ': ' + $_.Exception.Message) }
+    }
+    if ($apiStarted) {
+        foreach ($record in $records) {
+            try {
+                $destination = Join-Path $managed $record.name
+                if ($record.existed) { Copy-Item -LiteralPath (Join-Path $original $record.name) -Destination $destination -Force }
+                elseif (Test-Path -LiteralPath $destination) { Remove-Item -LiteralPath $destination }
+            } catch { $rollbackErrors.Add('Restore ' + $record.name + ': ' + $_.Exception.Message) }
+        }
     }
     if ($oldModMoved) {
         try {
@@ -102,7 +147,7 @@ try {
             Move-Item -LiteralPath (Join-Path $backup 'original-HKMP') -Destination $modDir
         } catch { $rollbackErrors.Add('Restore original HKMP: ' + $_.Exception.Message) }
     }
-    $recoveryMessage = "Installation failed: $($installError.Exception.Message)`r`nBackup: $backup"
+    $recoveryMessage = "Installation failed: [$phase] $($installError.Exception.Message)`r`nBackup: $backup"
     if ($rollbackErrors.Count -gt 0) {
         $recoveryMessage += "`r`nRecovery incomplete; close programs holding game files before restoring from this backup:`r`n" + ($rollbackErrors -join "`r`n")
     } else {

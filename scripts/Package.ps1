@@ -1,19 +1,22 @@
 ﻿param([switch]$Playtest, [string]$PlaytestBuild='', [switch]$RebuildChecksums, [switch]$UserRequestedRelease,
     [ValidatePattern('^rc[1-9][0-9]*$')][string]$ReleaseCandidate,
+    [ValidateSet('0.3.2','0.3.3')][string]$ReleaseVersion,
     [ValidatePattern('^\d+\.\d+\.\d+-rc[1-9][0-9]*$')][string]$CandidateVersion, [switch]$SteamModule,
     [ValidateSet('Both','Legacy','Unity6')][string]$GameVersion='Both',
     [ValidateSet('','hit-evasion')][string]$Unity6Revision='',
     [ValidatePattern('^\d+\.\d+\.\d+-rc[1-9][0-9]*$')][string]$LocalCandidateVersion)
 $ErrorActionPreference = 'Stop'
 if ($LocalCandidateVersion) {
-    if ($Playtest -or $PlaytestBuild -or $ReleaseCandidate -or $UserRequestedRelease -or $Unity6Revision) {
+    if ($Playtest -or $PlaytestBuild -or $ReleaseCandidate -or $UserRequestedRelease -or $Unity6Revision -or $ReleaseVersion) {
         throw 'Choose one package channel.'
     }
     & "$PSScriptRoot/Package-LocalCandidate.ps1" -Version $LocalCandidateVersion -GameVersion $GameVersion -SteamModule:$SteamModule -RebuildChecksums:$RebuildChecksums
     return
 }
+if($ReleaseVersion -and ($CandidateVersion -or $Unity6Revision -or $Playtest -or $PlaytestBuild -or $ReleaseCandidate -or $LocalCandidateVersion)){throw 'Choose one release channel.'}
 if(!$Unity6Revision -and !$Playtest -and !$PlaytestBuild -and !$ReleaseCandidate){
     $taskChannelArguments=@{}
+    if($ReleaseVersion){$taskChannelArguments.ReleaseVersion=$ReleaseVersion}
     if($CandidateVersion){$taskChannelArguments.CandidateVersion=$CandidateVersion}
     foreach($taskProfile in $(if($GameVersion -eq 'Both'){@('Legacy','Unity6')}else{@($GameVersion)})){
         & "$PSScriptRoot/Package-Current.ps1" -GameVersion $taskProfile @taskChannelArguments -SteamModule:$SteamModule -UserRequestedRelease:$UserRequestedRelease -RebuildChecksums:$RebuildChecksums
